@@ -133,7 +133,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		Body: (1) TEXT
 		Color: (?) ENUM [red, green, blue]
 		Body Content: (?) @Body Content
-		Metadata (com.google.html): (0,1)
+		Metadata (org.example.meta): (0,1)
 		
 	Content >>
 		Notas:
@@ -188,11 +188,11 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 						Sección: (+) TEXT
 					Description: (1) TEXT
 					Tipo Documento: (1)
-					***Metadata (com.google.html): (?)***
+					***Metadata (org.example.meta): (?)***
 				Resumen (com.dokumentando.doc):
 					***Título: (1) @Título***
 					Contenido: (1) TEXT
-					***Metadata (com.google.html): (?)***
+					***Metadata (org.example.meta): (?)***
 		
 	Subheader: 7. Cardinalidades
 	
@@ -318,7 +318,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		Cada línea puede incluir un namespace explícito para el nodo plantilla:
 		
 	Code >>
-		Metadata (com.google.html): (?)
+		Metadata (org.example.meta): (?)
 		
 	Content >>
 		Reglas:
@@ -472,14 +472,14 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		Template (@stxt.template): com.example.docs
 			Structure >>
 				Document (com.example.docs):
-					Metadata (com.google.html): (?)
+					Metadata (org.example.meta): (?)
 					Content: (1) TEXT
 					
 	Content >>
 		En este caso:
 		
-		* `Metadata` pertenece a `com.google.html`.
-		* La validación profunda de `Metadata` dependerá de si existe un schema/template para `com.google.html`.
+		* `Metadata` pertenece a `org.example.meta`.
+		* La validación profunda de `Metadata` dependerá de si existe un schema/template para `org.example.meta`.
 		
 	Subheader: 17. Apéndice A — Gramática (informal)
 	

@@ -63,7 +63,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		        	Child: Content
 		        		Min: 1
 		        		Max: 1
-		        	Child: Metadata (com.google.html)
+		        	Child: Metadata (org.example.meta)
 		        		Max: 1
 		    Node: Autor
 		    Node: Fecha
@@ -150,7 +150,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		
 		Esto implica:
 		
-		* Si aparece `Child: Metadata (com.google.html)`, entonces **DEBE** existir un schema para `com.google.html` y dentro de él **DEBE** existir `Node: Metadata`.
+		* Si aparece `Child: Metadata (org.example.meta)`, entonces **DEBE** existir un schema para `org.example.meta` y dentro de él **DEBE** existir `Node: Metadata`.
 		* Una implementación **PUEDE** diferir esta comprobación hasta el momento de validación del documento, pero el schema sigue siendo semánticamente incompleto hasta que dicha definición exista.
 
 		
@@ -280,7 +280,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		    Node: Document
 		        Type: GROUP
 		        Children:
-		            Child: Metadata (com.google.html)
+		            Child: Metadata (org.example.meta)
 		            	Max: 1
 		            Child: Content
 		            	Min: 1
@@ -288,10 +288,10 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		    Node: Content
 		        Type: BLOCK
 
-	Content: Y en `com.google.html`:
+	Content: Y en `org.example.meta`:
 	
 	Code >>
-		Schema (@stxt.schema): com.google.html
+		Schema (@stxt.schema): org.example.meta
 		    Node: Metadata
 		    	Type: INLINE
 		
@@ -299,7 +299,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		
 	Code >>
 		Document (com.example.docs):
-		    Metadata (com.google.html): info
+		    Metadata (org.example.meta): info
 		    Content>>
 		        Línea 1
 		        Línea 2
@@ -470,7 +470,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		        		Min: 1
 		        		Max: 1
 		        	Child: Author
-		        	Child: Metadata (com.google.html)
+		        	Child: Metadata (org.example.meta)
 		        		Max: 1
 		    Node: Title
 		        Type: INLINE

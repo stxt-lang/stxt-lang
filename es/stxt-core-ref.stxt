@@ -685,7 +685,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 					Child: Body Content
 						Min: 1
 						Max: 1
-					Child: Metadata (com.google)
+					Child: Metadata (org.example.meta)
 						Max: 1
 			Node: From
 			Node: To
@@ -755,7 +755,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 					Bcc:
 					Title: (?)
 					Body    Content: (1) TEXT
-					Metadata (com.google): (?)
+					Metadata (org.example.meta): (?)
 					
 	Content>>
 		Una vez definido, un template cumple la misma función que un schema.
