@@ -45,7 +45,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		Rules:
 		
 		* `<target_namespace>` **MUST** be a valid namespace according to *STXT-SPEC*.
-		* The root node `Schema` **MUST** belong to the namespace `@stxt.schema`.
+		* The root node `Schema` **MUST** belong to the `@stxt.schema` namespace.
 		* The schema document **MAY** include a `Description` node.
 		* The schema document **MUST** include one or more `Node` nodes.
 		
@@ -120,7 +120,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		If `Values` exists, it **MUST** contain at least one `Value` node.
 		If a `Node` declares `Type: ENUM`, it **MUST** include `Values`.
 
-	Subheader: 7. Children (`Children:`) and cross-namespace references
+	Subheader: 7. Children (`Children:`) and cross-namespace
 		
 	Content >>
 		A node **MAY** have a `Children` entry.
@@ -193,7 +193,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* The type **does NOT control requiredness**; only the form and validity of the value.
 		  Requiredness of appearance is controlled through cardinality.
 		* The value of `Type` **MUST** match exactly one of the types defined in this section.
-		* Types that admit only `BLOCK` or `INLINE/BLOCK` form and are defined as not compatible with children **MUST NOT** coexist with `Children`.
+		* Types that allow only `BLOCK` or `INLINE/BLOCK` form and are defined as not compatible with children **MUST NOT** coexist with `Children`.
 		* An incompatible definition between `Type` and `Children` **MUST** cause a schema error.
 		
 	Subsubheader: 9.1. Basic structural types 
@@ -203,9 +203,9 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 	
 		| Type      | Text forms      | Compatible children | Description / Validation                                  |
 		|-----------|-----------------|---------------------|-----------------------------------------------------------|
-		| INLINE    | INLINE          | YES                 | Inline text `:`. **Default type.** May have children.     |
-		| BLOCK     | BLOCK           | NO                  | Only `>>` text block. Cannot have children.               |
-		| TEXT      | INLINE/BLOCK    | NO                  | Generic text. May be inline `:` or block `>>`.            |
+		| INLINE    | INLINE          | YES                 | Inline text `:`. **Default type.** It may have children.  |
+		| BLOCK     | BLOCK           | NO                  | Only `>>` text block. It cannot have children.            |
+		| TEXT      | INLINE/BLOCK    | NO                  | Generic text. It may be inline `:` or block `>>`.         |
 		| GROUP     | NONE            | YES                 | Does not allow textual value. Only structured children.   |
 		
 	Subsubheader: 9.2. Basic INLINE content types
@@ -213,38 +213,38 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		
 		A conforming implementation **MUST** support these types and **MUST** validate their structure.
 		 
-		| Type             | Text forms      | Compatible children | Description / Validation             |
-		|------------------|-----------------|---------------------|--------------------------------------|
-		| BOOLEAN          | INLINE          | YES                 | `true` or `false`.                   |
-		| NUMBER           | INLINE          | YES                 | Number in JSON format.               |
-		| ENUM             | INLINE          | YES                 | Only specified values (see 9.5)      |
+		| Type             | Text forms      | Compatible children | Description / Validation         |
+		|------------------|-----------------|---------------------|----------------------------------|
+		| BOOLEAN          | INLINE          | YES                 | `true` or `false`.               |
+		| NUMBER           | INLINE          | YES                 | Number in JSON format.           |
+		| ENUM             | INLINE          | YES                 | Only specified values (see 9.5)  |
 
 	Subsubheader: 9.3. Extended INLINE content types
 	Content>>
 		
 		A conforming implementation **MUST** support these types and **SHOULD** validate their structure.
 		
-		| Type             | Text forms      | Compatible children | Description / Validation                         |
-		|------------------|-----------------|---------------------|--------------------------------------------------|
+		| Type             | Text forms      | Compatible children | Description / Validation                      |
+		|------------------|-----------------|---------------------|-----------------------------------------------|
 		| INTEGER          | INLINE          | YES                 | Number without decimals (positive and negative). |
 		| NATURAL          | INLINE          | YES                 | Numbers greater than or equal to 0 without decimals. |
-		| DATE             | INLINE          | YES                 | Date `YYYY-MM-DD`.                               |
-		| TIME             | INLINE          | YES                 | ISO 8601 time, `hh:mm:ss`.                       |
-		| TIMESTAMP        | INLINE          | YES                 | Full ISO 8601 timestamp.                         |
-		| UUID             | INLINE          | YES                 | Canonical UUID.                                  |
-		| URL              | INLINE          | YES                 | Valid URL or URI.                                |
-		| EMAIL            | INLINE          | YES                 | Valid email address.                             |
+		| DATE             | INLINE          | YES                 | Date `YYYY-MM-DD`.                            |
+		| TIME             | INLINE          | YES                 | ISO 8601 time, `hh:mm:ss`.                    |
+		| TIMESTAMP        | INLINE          | YES                 | Full ISO 8601 timestamp.                      |
+		| UUID             | INLINE          | YES                 | Canonical UUID.                               |
+		| URL              | INLINE          | YES                 | Valid URL or URI.                             |
+		| EMAIL            | INLINE          | YES                 | Valid email address.                          |
 
 	Subsubheader: 9.4. Extended INLINE/BLOCK binary content types
 	
 	Content >>
 		A conforming implementation **MUST** support these types and **MAY** validate their structure.
 		
-		| Type             | Text forms      | Compatible children | Description / Validation              |
-		|------------------|-----------------|--------------------|---------------------------------------|
-		| HEXADECIMAL      | INLINE / BLOCK  | NO                 | `[0-9A-Fa-f]+`. Hexadecimal string.   |
-		| BINARY           | INLINE / BLOCK  | NO                 | `[01]+`. Binary string.               |
-		| BASE64           | INLINE / BLOCK  | NO                 | Valid Base64 content.                 |
+		| Type             | Text forms      | Compatible children | Description / Validation                |
+		|------------------|-----------------|---------------------|-----------------------------------------|
+		| HEXADECIMAL      | INLINE / BLOCK  | NO                  | `[0-9A-Fa-f]+`. Hexadecimal string.     |
+		| BINARY           | INLINE / BLOCK  | NO                  | `[01]+`. Binary string.                 |
+		| BASE64           | INLINE / BLOCK  | NO                  | Valid Base64 content.                   |
 		
 	Subsubheader: 9.5. ENUM type
 	
@@ -254,7 +254,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		
 		* Comparison **MUST** be made on the inline value already normalized by trimming left and right, as defined by *STXT-SPEC*.
 		* Comparison **MUST** be exact and **CASE-SENSITIVE**.
-		* Comparison **MUST NOT** apply additional canonicalization, removal of diacritics, or normalizations equivalent to the canonical name of nodes.
+		* Comparison **MUST NOT** apply additional canonization, removal of diacritics, or normalizations equivalent to the canonical name of nodes.
 		* The node **MUST** define `Values` with `Value` nodes, which represent the allowed values.
 		* Each `Value` **MUST** be unique after inline normalization by trim.
 		
@@ -309,7 +309,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 	Content >>
 		A schema is invalid if:
 		
-		1. It defines two `Node` entries with the same canonical name.
+		1. It defines two `Node` with the same canonical name.
 		2. It uses an unknown `Type`.
 		3. It defines `Children` in a `Node` whose type does not allow children.
 		4. The cardinality is invalid.
@@ -354,7 +354,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* Each `Values`:
 			* May only appear in `Node` nodes of type `ENUM`.
 			* Contains one or more `Value` nodes.
-		* The names (`Schema`, `Node`, `Type`, `Children`, `Child`, `Description`, `Min`, `Max`, `Values`, `Value`) belong to the namespace `@stxt.schema`.
+		* The names (`Schema`, `Node`, `Type`, `Children`, `Child`, `Description`, `Min`, `Max`, `Values`, `Value`) belong to the `@stxt.schema` namespace.
 		
 	Subsubheader: 13.2. Complete Meta-Schema
 		
@@ -433,7 +433,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		  Optional children:
 		
 		  * `Type`: specific type (if missing ⇒ `INLINE`).
-		  * `Children`: Node with list of allowed `Child` entries
+		  * `Children`: Node with list of allowed `Child`
 		  * `Description`: explanatory text.
 		  * `Values`: Allowed values (ENUM type only)
 		
