@@ -22,7 +22,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* Ser trivial de parsear en cualquier lenguaje.
 		* Permitir tanto contenido estructurado como texto libre.
 		* Extender su semántica mediante `@stxt.schema` o `@stxt.template`.
-		* Facilitar la creación de parsers intentando minimizar errores de seguridad
+		* Facilitar la creación de parsers intentando minimizar errores de seguridad.
 		
 		Este documento describe la **sintaxis base** del lenguaje.
 
@@ -93,7 +93,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Sobre ese fragmento se aplica:
 		
 		- Eliminación de espacios y tabuladores iniciales y finales (trim).
-		- Compactación de espacios en uno sólo
+		- Compactación de espacios en uno solo
 		
 		El resultado de esta normalización es el **nombre del nodo**.
 		
@@ -147,8 +147,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Content >>
 		Las normas de estilo recomendables son las siguientes:
 		
-		* Separar el nombre de la definición de un namespace con un sólo espacio
-		* Separar `:` del valor con un sólo espacio
+		* Separar el nombre de la definición de un namespace con un solo espacio
+		* Separar `:` del valor con un solo espacio
 		* `:` va inmediatamente después del nombre o del namespace si lo hubiera
 		* `>>` no tiene ningún carácter después
 		* Separar el nombre del nodo o el namespace con un espacio antes de `>>`
@@ -178,7 +178,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Ejemplos:
 		
 	Code >>
-		Titulo: Informe
+		Título: Informe
 		Autor: Joan
 		Nodo:
 		Nodo: Valor
@@ -186,7 +186,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		    SubNodo 1: 123
 		    Otro subnodo: 456
 
-	SubSubheader: 5.1 Normalización del valor
+	Subsubheader: 5.1 Normalización del valor
 	
 	Content>>
 		El valor (INLINE) de un nodo debe normalizarse con un trim (derecha e izquierda).
@@ -210,12 +210,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Ejemplos válidos:
 
 	Code >>		
-		Descripcion >>
+		Descripción >>
 		    Línea 1
 		    Línea 2
 
 	Code >>	
-		Seccion>>
+		Sección>>
 		    Acepta el operador sin espacio
 		
 	Subsubheader: 6.1 Reglas formales
@@ -370,7 +370,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 		Nivel 0:
 		....Nivel 1:
-		..........Nivel mas que 2: ***ERROR: 4 espacios, 4 espacios, 2 espacios*** 
+		..........Nivel más que 2: ***ERROR: 4 espacios, 4 espacios, 2 espacios*** 
 		
 	Subsubheader: 8.4 Jerarquía
 		
@@ -735,7 +735,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		y cuyo objetivo es definir las reglas estructurales, tipos de valor y cardinalidades de los nodos pertenecientes a un namespace concreto.
 		
 		El sistema de templates es análogo a los schemas, pero con una sintaxis simplificada, orientada a prototipos rápidos. 
-		Aún así, es un sistema perfectamente válido para todo tipo de documentos. Podría considerarse *azúcar sintáctico*, ya que internamente puede usar 
+		Aun así, es un sistema perfectamente válido para todo tipo de documentos. Podría considerarse *azúcar sintáctico*, ya que internamente puede usar 
 		la misma representación que un schema.
 		
 		El sistema de templates **PUEDE** convivir junto a un sistema con schemas, ya que al final un template define la misma información que un schema.

@@ -53,7 +53,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 
 	Code >>
 		Schema (@stxt.schema): com.example.docs
-		    Description: Schema for example documents
+		    Description: Schema de ejemplo
 		    Node: Document
 		        Type: GROUP
 		        Children:
@@ -462,7 +462,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		
 	Code >>
 		Schema (@stxt.schema): com.example.docs
-		    Description: Example schema
+		    Description: Schema de ejemplo
 		    Node: Document
 		        Type: GROUP
 		        Children:

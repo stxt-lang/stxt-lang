@@ -20,7 +20,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		
 		Relación con `@stxt.schema`:
 		
-		* Un validador **PUEDE** soportar sólo schemas, sólo templates, o ambos.
+		* Una implementación **PUEDE** soportar sólo schemas, sólo templates, o ambos.
 		* Si existen ambos (schema y template) para el mismo namespace objetivo,
 		  una implementación conforme **DEBERÍA** establecer un criterio consistente de priorización.
 		* Para una validación concreta, una implementación **DEBE** usar una única fuente semántica efectiva: o bien schema, o bien template.
@@ -63,7 +63,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		
 	Code >>
 		Template (@stxt.template): com.example.docs
-			Description: Template de ejemplo
+			Description: Plantilla de ejemplo
 			Structure >>
 				Document (com.example.docs):
 					Title: (1)
@@ -83,7 +83,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		Para cada namespace lógico:
 		
 		* **NO DEBE** existir más de un template efectivo simultáneamente.
-		* Si existen varios templates candidatos para el mismo namespace, el validador **DEBERÍA** tener un criterio claro,
+		* Si existen varios templates candidatos para el mismo namespace, la implementación **DEBERÍA** tener un criterio claro,
 		  estable y determinista para decidir cuál aplica.
 		* Para una validación concreta, una implementación **NO DEBE** aplicar varios templates a la vez sobre el mismo namespace objetivo.
 		
@@ -281,7 +281,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Content >>
 		El conjunto de tipos recomendado es el mismo que *STXT-SCHEMA-SPEC*.
 		
-		Un validador de templates:
+		Una implementación de templates:
 		
 		* **DEBE** soportar al menos: `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `NUMBER`, `BOOLEAN`, `DATE`, `ENUM`.
 		* **DEBERÍA** soportar el resto de tipos definidos en @STXT@ Schema (por ejemplo `INTEGER`, `NATURAL`, 
@@ -340,7 +340,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* Todo nodo local definido en `Structure` pasa a formar parte del conjunto de nodos del template.
 		* Si un template referencia nodos cross-namespace, un sistema de validación completo **DEBERÍA**
 		  disponer de template o schema correspondiente para ese namespace externo si desea validar profundamente esos nodos.
-		* Un validador **PUEDE** validar sólo cardinalidad y estructura del namespace objetivo, tratando nodos cross-namespace
+		* Una implementación **PUEDE** validar sólo cardinalidad y estructura del namespace objetivo, tratando nodos cross-namespace
 		  como “caja negra”, según configuración.
 		
 	Subheader: 12. Compilación a Schema (equivalencia semántica)
@@ -377,7 +377,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		3. Falta `Structure >>` o `Structure` no es bloque `>>`.
 		4. Una línea no vacía dentro de `Structure` no contiene `:`.
 		5. Cardinalidad mal formada o con números inválidos.
-		6. Tipo desconocido (según el conjunto de tipos soportado por el validador).
+		6. Tipo desconocido (según el conjunto de tipos soportado por la implementación).
 		7. Uso de `[...]` si el tipo no es `ENUM`.
 		8. Tipo BLOCK-only con hijos definidos en `Structure`.
 		9. Redefinir un nodo local que ya ha aparecido previamente sin usar referencia `@Nombre Nodo`.
