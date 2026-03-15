@@ -26,13 +26,13 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 	Subheader: 3. Relationship between @STXT@ and Schema
 		
 	Content >>
-		Schema-based validation occurs **after** @STXT@ parsing:
+		Validation through schema occurs **after** @STXT@ parsing:
 		
 		1. Parsing the document into a hierarchical @STXT@ structure.
 		2. Resolving the effective namespace of each node.
 		3. Applying the corresponding schema.
 		
-		An implementation **MAY** apply validation **during** the parsing process, provided that such validation remains weakly coupled to the base parser.
+		An implementation **MAY** apply validation **during** the parsing process, provided that such validation remains loosely coupled to the base parser.
 		This allows errors to be detected before the full parsing is completed.
 		
 	Subheader: 4. General Structure of a Schema
@@ -45,7 +45,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		Rules:
 		
 		* `<target_namespace>` **MUST** be a valid namespace according to *STXT-SPEC*.
-		* The root node `Schema` **MUST** belong to the namespace `@stxt.schema`.
+		* The root node `Schema` **MUST** belong to the `@stxt.schema` namespace.
 		* The schema document **MAY** include a `Description` node.
 		* The schema document **MUST** include one or more `Node` nodes.
 		
@@ -63,7 +63,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		        	Child: Content
 		        		Min: 1
 		        		Max: 1
-		        	Child: Metadata (com.google.html)
+		        	Child: Metadata (org.example.meta)
 		        		Max: 1
 		    Node: Author
 		    Node: Date
@@ -80,7 +80,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* If an implementation has several candidate schemas for the same namespace, it **SHOULD** apply a clear and deterministic selection policy.
 		* For a specific validation, there **MUST** be only one effective schema.
 		
-	Subheader: 6. Node Definitions (`Node:`)
+	Subheader: 6. Node Definition (`Node:`)
 		
 	Subsubheader: 6.1 Basic form
 		
@@ -124,7 +124,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		
 	Content >>
 		A node **MAY** have a `Children` entry.
-		If `Children` exists, it **MUST** contain one or more `Child` nodes with the information of the allowed children.
+		If `Children` exists, it **MUST** contain one or more `Child` nodes with the information about the allowed children.
 		
 		A `Child` **MAY** belong to another namespace, in which case it is indicated in the name of the `Child` itself.
 		Example:
@@ -150,8 +150,8 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		
 		This implies:
 		
-		* If `Child: Metadata (com.google.html)` appears, then there **MUST** be a schema for `com.google.html` and within it there **MUST** be `Node: Metadata`.
-		* An implementation **MAY** defer this check until the moment of document validation, but the schema remains semantically incomplete until such definition exists.
+		* If `Child: Metadata (org.example.meta)` appears, then there **MUST** be a schema for `org.example.meta` and within it there **MUST** be `Node: Metadata`.
+		* An implementation **MAY** defer this check until the moment of document validation, but the schema remains semantically incomplete until that definition exists.
 
 		
 	Subheader: 8. Cardinalities
@@ -280,7 +280,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		    Node: Document
 		        Type: GROUP
 		        Children:
-		            Child: Metadata (com.google.html)
+		            Child: Metadata (org.example.meta)
 		            	Max: 1
 		            Child: Content
 		            	Min: 1
@@ -288,10 +288,10 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		    Node: Content
 		        Type: BLOCK
 
-	Content: And in `com.google.html`:
+	Content: And in `org.example.meta`:
 	
 	Code >>
-		Schema (@stxt.schema): com.google.html
+		Schema (@stxt.schema): org.example.meta
 		    Node: Metadata
 		    	Type: INLINE
 		
@@ -299,7 +299,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		
 	Code >>
 		Document (com.example.docs):
-		    Metadata (com.google.html): info
+		    Metadata (org.example.meta): info
 		    Content>>
 		        Line 1
 		        Line 2
@@ -354,7 +354,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* Each `Values`:
 			* May only appear in `Node` nodes of type `ENUM`.
 			* Contains one or more `Value` nodes.
-		* The names (`Schema`, `Node`, `Type`, `Children`, `Child`, `Description`, `Min`, `Max`, `Values`, `Value`) belong to the namespace `@stxt.schema`.
+		* The names (`Schema`, `Node`, `Type`, `Children`, `Child`, `Description`, `Min`, `Max`, `Values`, `Value`) belong to the `@stxt.schema` namespace.
 		
 	Subsubheader: 13.2. Complete Meta-Schema
 		
@@ -429,7 +429,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		  Children: `Description` (?), `Node` (*).
 		
 		* `Node`
-		  Inline value = target node name (e.g. `Document`, `Author`).
+		  Inline value = name of the target node (e.g. `Document`, `Author`).
 		  Optional children:
 		
 		  * `Type`: specific type (if missing ⇒ `INLINE`).
@@ -438,7 +438,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		  * `Values`: Allowed values (ENUM type only)
 		
 		* `Type`
-		  Inline (`INLINE`), with the type name (`GROUP`, `INLINE`, `NUMBER`, etc.).
+		  Inline (`INLINE`), with the name of the type (`GROUP`, `INLINE`, `NUMBER`, etc.).
 		
 		* `Children`
 		  `GROUP`: contains one or more `Child` nodes.
@@ -452,7 +452,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* `Value`
 		  Inline value with one of the allowed values for the `ENUM`.
 		
-	Subsubheader: 13.4. Minimum valid example
+	Subsubheader: 13.4. Minimal valid example
 		
 	Code >>
 		Schema (@stxt.schema): com.example.docs
@@ -470,7 +470,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		        		Min: 1
 		        		Max: 1
 		        	Child: Author
-		        	Child: Metadata (com.google.html)
+		        	Child: Metadata (org.example.meta)
 		        		Max: 1
 		    Node: Title
 		        Type: INLINE
