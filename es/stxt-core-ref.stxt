@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-01-03
+		Last modif: 2026-03-15
 		
 	Header: @STXT@ Documentos
 	
@@ -738,12 +738,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Aún así, es un sistema perfectamente válido para todo tipo de documentos. Podría considerarse *azúcar sintáctico*, ya que internamente puede usar 
 		la misma representación que un schema.
 		
-		El sistema de templates **PUEDE** convivir junto a un sistema con esquemas, ya que al final un Template define la misma información que un schema.
+		El sistema de templates **PUEDE** convivir junto a un sistema con schemas, ya que al final un template define la misma información que un schema.
 	
-	Subsubheader: 18.1. Asociación de un schema a un template
+	Subsubheader: 18.1. Asociación de un template a un namespace
 		
 	Content >>
-		Para asociar un schema al namespace `com.example.docs` con templates, se escribe un documento:
+		Para asociar un template al namespace `com.example.docs`, se escribe un documento:
 		
 	Code>>
 		Template (@stxt.template): com.example.docs
@@ -761,7 +761,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Una vez definido, un template cumple la misma función que un schema.
 		Si una implementación encuentra varios schemas o templates aplicables al mismo namespace,
 		**DEBERÍA** definir una política de prioridad clara y determinista.
-		Para una validación concreta, **DEBERÍA** seleccionarse un único schema o template efectivo.
+		Para una validación concreta, **DEBE** seleccionarse una única fuente semántica efectiva: o bien un schema, o bien un template.
 	
 	Subheader: 19. Fin del Documento
 			

@@ -266,7 +266,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Subsubheader: 8.2 Compatibilidad con hijos
 	
 	Content >>
-		Un validador conforme **DEBE** aplicar estas reglas:
+		Una implementación conforme **DEBE** aplicar estas reglas:
 		
 		* Tipos **BLOCK-only** (por ejemplo `BLOCK`, `TEXT`, `BASE64`, etc.) **NO** son compatibles con hijos.
 		  Si un nodo plantilla tiene hijos en `Structure >>` y su tipo efectivo es BLOCK-only, el template **DEBE** considerarse inválido.

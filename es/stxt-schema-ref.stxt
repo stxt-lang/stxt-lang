@@ -168,7 +168,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		* Si existen ambos, `Min` **NO DEBE** ser mayor que `Max`.
 		* La cardinalidad se aplica por instancia del nodo padre.
 		* La cardinalidad cuenta sólo hijos **directos** con el mismo nombre canónico y el mismo namespace efectivo.
-		* Un validador conforme **DEBE** comprobar las cardinalidades.
+		* Una implementación conforme **DEBE** comprobar las cardinalidades.
 
 	Subheader: 9. Tipos
 		
