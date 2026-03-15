@@ -29,7 +29,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* `@stxt.schema` — validación formal y exhaustiva.
 		* `@stxt.template` — validación mediante plantillas de estructura, orientada a prototipos.
 	
-	Subheader: Herramientas
+	Subheader: 2. Herramientas
 
 	Content >>
 		* Repositorio del tutorial:
@@ -41,7 +41,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* Instalación rápida:
 		  `code --install-extension stxt-lang.stxt`
 
-	Subheader: 2. Ejemplo básico: ficha de un libro
+	Subheader: 3. Ejemplo básico: ficha de un libro
 	
 	Content >>
 		Veamos un ejemplo sencillo de un documento @STXT@ que describe un libro (tutorial/book-raw.stxt).
@@ -74,7 +74,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* `Summary >>` y `Content >>` son bloques de texto literal: su contenido no se interpreta como @STXT@.
 		* No existe ningún tipo implícito: todo es texto mientras no se valide.
 		
-	Subheader: 3. Uso de namespaces
+	Subheader: 4. Uso de namespaces
 	
 	Assert >>
 		Los namespaces permiten agrupar nodos en categorías. Además, si se define un
@@ -116,7 +116,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* El lenguaje @STXT@ **no valida** el namespace, sólo define las reglas de 
 		  propagación.
 		
-	Subsubheader: 3.1 Namespaces especiales con `@`
+	Subsubheader: 4.1 Namespaces especiales con `@`
 	Content >>
 		Los namespace pueden empezar o no con `@`. Esto nos indica que son 
 		**namespaces especiales o reservados**. Por ejemplo, tanto los plantillas
@@ -124,7 +124,7 @@ Document (dev.stxt.website): STXT Tutorial
 		
 		Esto es sólo una indicación semántica, pero el funcionamiento es el mismo.
 	
-	Subsubheader: 3.2 Validación de documentos
+	Subsubheader: 4.2 Validación de documentos
 	
 	Content >>
 		Para poder validar semánticamente un documento, debe asociarse a un **namespace**.
@@ -136,7 +136,7 @@ Document (dev.stxt.website): STXT Tutorial
 		Para validar un documento **es necesario que pertenezca a un namespace**.\\
 		Por otro lado, un documento con namespace no es obligatorio validarlo.
 			
-	Subheader: 4. Validación con Plantillas
+	Subheader: 5. Validación con Plantillas
 	
 	Content >>
 		Las **Plantillas** permiten definir reglas estructurales y de tipo
@@ -144,7 +144,7 @@ Document (dev.stxt.website): STXT Tutorial
 		
 		Un template es un documento @STXT@ cuyo namespace es `@stxt.template`.
 		
-	Subsubheader: 4.1 Template para libros
+	Subsubheader: 5.1 Template para libros
 	
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -172,7 +172,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* `Summary` y `Content` son bloques de texto (`TEXT`).
 		* Al menos debe haber un `Chapter`.
 		
-	Subsubheader: 4.2 Formas permitidas para la numeración
+	Subsubheader: 5.2 Formas permitidas para la numeración
 	
 	Content >>
 		
@@ -186,7 +186,7 @@ Document (dev.stxt.website): STXT Tutorial
 		| `num-`     | Hasta `num` (`0..num`).      |
 		| `min,max`  | Entre `min` y `max`.         |
 	
-	Subsubheader: 4.3 Aplicación del template
+	Subsubheader: 5.3 Aplicación del template
 	
 	Content >>
 		Un validador que soporte plantillas debe:
@@ -199,7 +199,7 @@ Document (dev.stxt.website): STXT Tutorial
 		Dependiendo del parser, puede validar al mismo tiempo que parsea el contenido. 
 		
 		
-	Subheader: 5. Validación con Schemas
+	Subheader: 6. Validación con Schemas
 	
 	Content >>
 		Los **Schemas** proporcionan la misma información que un template,
@@ -211,7 +211,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* Define nodos, tipos y cardinalidades por separado.
 		* Es la representación “canónica” de validación.
 		
-	Subsubheader: 5.1 Schema equivalente al template
+	Subsubheader: 6.1 Schema equivalente al template
 	
 	Code >>
 		Schema (@stxt.schema): com.acme.book
@@ -269,7 +269,7 @@ Document (dev.stxt.website): STXT Tutorial
 		  existen esquemas y templates de forma simultánea para un mismo namespace. **Sólo puede
 		  haber uno activo**.
 		
-	Subheader: 6. Documento final validable
+	Subheader: 7. Documento final validable
 	
 	Content >>
 		Documento @STXT@ completo que puede validarse con el template o el schema anterior:
@@ -294,7 +294,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* Cumple el template `com.acme.book`.
 		* Cumple el schema `com.acme.book`.
 		
-	Subheader: 7. Buenas prácticas
+	Subheader: 8. Buenas prácticas
 	
 	Content >>
 		* Usar bloques `>>` para texto largo o literal.
