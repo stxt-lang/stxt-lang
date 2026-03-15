@@ -9,11 +9,11 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	
 	Content >>
 		Este documento define la especificación del lenguaje **STXT Template**, un mecanismo para describir reglas semánticas 
-		(estructura, tipos y cardinalidades) aplicables a documentos STXT.
+		(estructura, tipos y cardinalidades) aplicables a documentos @STXT@.
 		
 		Un **template**:
 		
-		* Es un documento STXT cuyo namespace es `@stxt.template`.
+		* Es un documento @STXT@ cuyo namespace es `@stxt.template`.
 		* Se asocia a un **namespace objetivo**, de forma análoga a un schema.
 		* Describe la **estructura esperada** mediante un bloque `Structure >>` con sintaxis simplificada.
 		* Es **equivalente en información** a un schema: un template puede compilarse a un documento `@stxt.schema` 
@@ -24,7 +24,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* Un validador **PUEDE** soportar sólo schemas, sólo templates, o ambos.
 		* Si existen ambos (schema y template) para el mismo namespace objetivo, 
 		  un validador conforme **DEBERÍA** priorizar `@stxt.schema` frente a `@stxt.template`.
-		* STXT core **NO DEBE** imponer semántica: los templates son una capa opcional, posterior al parseo del documento STXT.
+		* STXT core **NO DEBE** imponer semántica: los templates son una capa opcional, posterior al parseo del documento @STXT@.
 		
 	Subheader: 2. Terminología
 	
@@ -35,15 +35,15 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		
 		Definiciones adicionales:
 		
-		* **Namespace objetivo**: el namespace STXT al que aplica el template (por ejemplo `com.example.docs`).
+		* **Namespace objetivo**: el namespace @STXT@ al que aplica el template (por ejemplo `com.example.docs`).
 		* **Plantilla de nodo**: una entrada dentro del bloque `Structure >>` que define un nodo (y opcionalmente su tipo/cardinalidad y sus hijos).
-		* **Tipo**: una etiqueta semántica de validación (por ejemplo `TEXT`, `DATE`, `ENUM`) equivalente a los tipos de STXT Schema.
+		* **Tipo**: una etiqueta semántica de validación (por ejemplo `TEXT`, `DATE`, `ENUM`) equivalente a los tipos de @STXT@ Schema.
 		* **Cardinalidad**: regla que define cuántas veces puede aparecer un nodo hijo respecto a su padre.
 		
-	Subheader: 3. Relación entre STXT y Template
+	Subheader: 3. Relación entre @STXT@ y Template
 	
 	Content >>
-		La validación mediante templates ocurre **después** del parseo STXT:
+		La validación mediante templates ocurre **después** del parseo @STXT@:
 		
 		1. Parseo del documento @STXT@ a estructura jerárquica.
 		2. Resolución del namespace lógico por herencia.
@@ -142,9 +142,9 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Content >>
 		Un parser de templates **DEBE**:
 		
-		1. Leer el bloque `Structure >>` como una secuencia de líneas (ya canonicalizadas por STXT core: trim derecha por línea).
+		1. Leer el bloque `Structure >>` como una secuencia de líneas (ya canonicalizadas por @STXT@ core: trim derecha por línea).
 		2. Ignorar líneas vacías.
-		3. Calcular jerarquía por indentación (mismos principios que STXT: indentación consecutiva, sin saltos).
+		3. Calcular jerarquía por indentación (mismos principios que @STXT@: indentación consecutiva, sin saltos).
 		4. Para cada línea, parsear:
 		   * Nombre del nodo + namespace opcional `(ns)` si existe.
 		   * El carácter `:` obligatorio.
@@ -235,7 +235,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		Un validador de templates:
 		
 		* **DEBE** soportar al menos: `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `NUMBER`, `BOOLEAN`, `DATE`, `ENUM`.
-		* **DEBERÍA** soportar el resto de tipos definidos en STXT Schema (por ejemplo `INTEGER`, `NATURAL`, 
+		* **DEBERÍA** soportar el resto de tipos definidos en @STXT@ Schema (por ejemplo `INTEGER`, `NATURAL`, 
 		  `TIME`, `TIMESTAMP`, `UUID`, `URL`, `EMAIL`, `BASE64`, etc.).
 		
 	Subheader: 9. ENUM y lista de valores
@@ -272,7 +272,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		Reglas:
 		
 		* Los documentos deben pertenecer al **namespace objetivo**, .
-		* La herencia de namespace funciona como en documentos STXT de datos, donde los namespace se heredan.
+		* La herencia de namespace funciona como en documentos @STXT@ de datos, donde los namespace se heredan.
 		* Si se especifica `(otro.ns)`, ese nodo plantilla pertenece a ese otro namespace.
 		* Si se especifica `(otro.ns)` **NO DEBE** incluir ninguna otra información sobre ese nodo, sólo la cardinalidad, que además
 		  es opcional.
