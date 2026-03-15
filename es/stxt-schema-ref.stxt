@@ -77,7 +77,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		
 	Code >>
 		Node: Nombre Nodo
-			Descrip: Descripción del nodo
+			Description: Descripción del nodo
 		    Type: Tipo
 		    Children:
 		    	Child: name_child. Puede tener un namespace en caso que sea distinto al namespace destino
@@ -93,7 +93,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 	Subsubheader: 6.2 Valores en tipos ENUM
 	Code>>
 		Node: Nombre Nodo
-			Descrip: Descripción del nodo
+			Description: Descripción del nodo
 		    Type: ENUM
 		    Children:
 		    	Child: name_child. Puede tener un namespace en caso que sea distinto al namespace destino
