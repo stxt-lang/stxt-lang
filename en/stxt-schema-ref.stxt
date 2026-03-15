@@ -19,7 +19,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 	Subheader: 2. Terminology
 		
 	Content >>
-		The key words **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted as described in **RFC 2119**.
+		The keywords **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119**.
 		
 		Terms such as *node*, *indentation*, *namespace*, *inline* and *`>>` block* retain their meaning in *STXT-SPEC*.
 		
@@ -32,7 +32,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		2. Resolving the effective namespace of each node.
 		3. Applying the corresponding schema.
 		
-		An implementation **MAY** apply validation **during** the parsing process, provided that such validation remains loosely coupled to the base parser.
+		An implementation **MAY** apply validation **during** the parsing process, provided that such validation remains weakly coupled to the base parser.
 		This allows errors to be detected before the full parsing is completed.
 		
 	Subheader: 4. General Structure of a Schema
@@ -53,7 +53,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 
 	Code >>
 		Schema (@stxt.schema): com.example.docs
-		    Description: Schema for example documents
+		    Description: Example schema
 		    Node: Document
 		        Type: GROUP
 		        Children:
@@ -80,7 +80,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* If an implementation has several candidate schemas for the same namespace, it **SHOULD** apply a clear and deterministic selection policy.
 		* For a specific validation, there **MUST** be only one effective schema.
 		
-	Subheader: 6. Node Definition (`Node:`)
+	Subheader: 6. Node Definitions (`Node:`)
 		
 	Subsubheader: 6.1 Basic form
 		
@@ -120,11 +120,11 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		If `Values` exists, it **MUST** contain at least one `Value` node.
 		If a `Node` declares `Type: ENUM`, it **MUST** include `Values`.
 
-	Subheader: 7. Children (`Children:`) and cross-namespace
+	Subheader: 7. Children (`Children:`) and cross-namespace references
 		
 	Content >>
 		A node **MAY** have a `Children` entry.
-		If `Children` exists, it **MUST** contain one or more `Child` nodes with the information about the allowed children.
+		If `Children` exists, it **MUST** contain one or more `Child` nodes with the information of the allowed children.
 		
 		A `Child` **MAY** belong to another namespace, in which case it is indicated in the name of the `Child` itself.
 		Example:
@@ -151,14 +151,14 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		This implies:
 		
 		* If `Child: Metadata (com.google.html)` appears, then there **MUST** be a schema for `com.google.html` and within it there **MUST** be `Node: Metadata`.
-		* An implementation **MAY** defer this check until document validation time, but the schema remains semantically incomplete until such definition exists.
+		* An implementation **MAY** defer this check until the moment of document validation, but the schema remains semantically incomplete until such definition exists.
 
 		
 	Subheader: 8. Cardinalities
 		
 	Content >>
 		Cardinalities are expressed through the `Min` and `Max` nodes within each `Child`.
-		They are **optional non-negative integers** indicating the minimum or maximum number of occurrences allowed for that child.
+		They are **optional non-negative integers** that indicate the minimum or maximum number of allowed occurrences of that child.
 		
 		Rules:
 		
@@ -203,9 +203,9 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 	
 		| Type      | Text forms      | Compatible children | Description / Validation                                  |
 		|-----------|-----------------|---------------------|-----------------------------------------------------------|
-		| INLINE    | INLINE          | YES                 | Inline text `:`. **Default type.** May have children.     |
-		| BLOCK     | BLOCK           | NO                  | Only `>>` text block. Cannot have children.               |
-		| TEXT      | INLINE/BLOCK    | NO                  | Generic text. May be inline `:` or block `>>`.            |
+		| INLINE    | INLINE          | YES                 | Inline text `:`. **Default type.** It may have children.  |
+		| BLOCK     | BLOCK           | NO                  | Only `>>` text block. It cannot have children.            |
+		| TEXT      | INLINE/BLOCK    | NO                  | Generic text. It may be inline `:` or block `>>`.         |
 		| GROUP     | NONE            | YES                 | Does not allow textual value. Only structured children.   |
 		
 	Subsubheader: 9.2. Basic INLINE content types
@@ -241,10 +241,10 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		A conforming implementation **MUST** support these types and **MAY** validate their structure.
 		
 		| Type             | Text forms      | Compatible children | Description / Validation              |
-		|------------------|-----------------|------------------|---------------------------------------|
-		| HEXADECIMAL      | INLINE / BLOCK  | NO               | `[0-9A-Fa-f]+`. Hexadecimal string.   |
-		| BINARY           | INLINE / BLOCK  | NO               | `[01]+`. Binary string.               |
-		| BASE64           | INLINE / BLOCK  | NO               | Valid Base64 content.                 |
+		|------------------|-----------------|--------------------|---------------------------------------|
+		| HEXADECIMAL      | INLINE / BLOCK  | NO                 | `[0-9A-Fa-f]+`. Hexadecimal string.   |
+		| BINARY           | INLINE / BLOCK  | NO                 | `[01]+`. Binary string.               |
+		| BASE64           | INLINE / BLOCK  | NO                 | Valid Base64 content.                 |
 		
 	Subsubheader: 9.5. ENUM type
 	
@@ -252,9 +252,9 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		The `ENUM` type allows explicitly enumerating the allowed values for a node.
 		Rules:
 		
-		* Comparison **MUST** be performed on the inline value already normalized by left and right trim, as defined by *STXT-SPEC*.
+		* Comparison **MUST** be made on the inline value already normalized by left and right trim, as defined by *STXT-SPEC*.
 		* Comparison **MUST** be exact and **CASE-SENSITIVE**.
-		* Comparison **MUST NOT** apply additional canonicalization, diacritic removal, or normalizations equivalent to the canonical name of nodes.
+		* Comparison **MUST NOT** apply additional canonicalization, removal of diacritics, or normalizations equivalent to the canonical name of nodes.
 		* The node **MUST** define `Values` with `Value` nodes, which represent the allowed values.
 		* Each `Value` **MUST** be unique after inline normalization by trim.
 		
@@ -314,7 +314,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		3. It defines `Children` in a `Node` whose type does not allow children.
 		4. The cardinality is invalid.
 		5. A `Node: ENUM` does not define `Values`, or `Values` does not contain any `Value`.
-		6. A duplicate `Value` appears after inline normalization by trim.
+		6. A duplicated `Value` appears after inline normalization by trim.
 		7. Two equivalent `Child` nodes appear within the same `Children`.
 		8. **A child appears in `Children` whose `Node` is not defined in its corresponding schema**.
 		
@@ -325,7 +325,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		
 		* It fully implements this document.
 		* It validates types, value forms, cardinalities, and allowed values (ENUM).
-		* It applies the strict mandatory definition rule for all nodes referenced in `Children`.
+		* It applies the strict rule of mandatory definition of all nodes referenced in `Children`.
 		* It selects, for each validation, a single effective schema per namespace.
 		* It rejects invalid documents and schemas.
 		
@@ -452,7 +452,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* `Value`
 		  Inline value with one of the allowed values for the `ENUM`.
 		
-	Subsubheader: 13.4. Minimal valid example
+	Subsubheader: 13.4. Minimum valid example
 		
 	Code >>
 		Schema (@stxt.schema): com.example.docs
@@ -478,3 +478,5 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		        Type: INLINE
 		
 	Subheader: 14. End of Document
+			
+			
