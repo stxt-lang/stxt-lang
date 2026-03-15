@@ -23,7 +23,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		
 		* Un validador **PUEDE** soportar sólo schemas, sólo templates, o ambos.
 		* Si existen ambos (schema y template) para el mismo namespace objetivo, 
-		  un validador conforme **DEBERÍA** priorizar `@stxt.schema` frente a `@stxt.template`.
+		  un validador conforme **DEBERÍA** establecer un criterio consistente de priorización.
 		* STXT core **NO DEBE** imponer semántica: los templates son una capa opcional, posterior al parseo del documento @STXT@.
 		
 	Subheader: 2. Terminología
@@ -94,14 +94,15 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* La indentación define nodos hijos (igual que @STXT@), pero **dentro de `Structure >>` no se está describiendo 
 		  un documento de datos, sino una estructura esperada**.
 		* Las reglas de indentación del documento @STXT@ base aplican al documento template (fuera del bloque)
-		  y al bloque `Structure >>` como texto literal; sin embargo, el contenido de `Structure >>` se interpreta por el sistema de templates con su propia gramática (sección 6.2).
+		  y al bloque `Structure >>` como texto literal; sin embargo, el contenido de `Structure >>` se interpreta por 
+		  el sistema de templates con su propia gramática (sección 6.2).
 		
 	Subsubheader: 6.1 Convención de estilo recomendada
 	
 	Content >>
 		Por legibilidad, se recomienda:
 		
-		* 4 espacios por nivel.
+		* 1 tabulador por nivel.
 		* Un solo espacio entre componentes.
 		* Mantener consistencia en nombres (usar las mismas mayúsculas/diacríticos que en documentos reales).
 		
@@ -116,7 +117,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		
 		* `<NodeName>` es el nombre del nodo (texto humano; se normaliza según STXT-SPEC para comparación).
 		* `<NamespaceOverride>` es opcional y tiene la forma `(<namespace>)` o `(@namespace.especial)` y define el namespace **efectivo** de ese nodo plantilla.
-		* `":"` es obligatorio (para evitar ambigüedad visual).
+		* `":"` es obligatorio (para ser un documento @STXT@ válido).
 		* `<RuleSpec>` es opcional e incluye, en este orden lógico:
 		  1. Cardinalidad opcional (entre paréntesis).
 		  2. Tipo opcional.
@@ -151,6 +152,30 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		   * La especificación de reglas opcional (`RuleSpec`).
 		
 		Un parser de templates **DEBE** fallar si una línea no contiene `:`.
+
+	Subsubheader: 6.4 Redefinición de nodos y nodos de otros namespaces.
+
+	Content >>
+		Los nodos sólo pueden definirse una vez, y siempre en la primera aparición del nodo. En caso que vuelvan a aparecer
+		se debe poner como tipo `@Nombre del nodo`.
+
+		Los nodos de otros namespaces **NO DEBEN** definirse y pueden usarse varias veces.
+
+		Ejemplo:
+	CODE >>
+		Template (@stxt.template): com.dokumentando.doc
+			Structure >>
+				Documento (com.dokumentando.doc):
+					***Título: (1)***
+					Secciones: (*)
+						Sección: (+) TEXT
+					Description: (1) TEXT
+					Tipo Documento: (1)
+					***Metadata (com.google.html): (?)***
+				Resumen (com.dokumentando.doc):
+					***Título: @Título (1)***
+					Contenido: (1) TEXT
+					***Metadata (com.google.html): (?)***
 		
 	Subheader: 7. Cardinalidades
 	
@@ -241,7 +266,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Subheader: 9. ENUM y lista de valores
 	
 	Content >>
-		Si el tipo es `ENUM`, el template **PUEDE** declarar una lista de valores permitidos.
+		Si el tipo es `ENUM`, el template **DEBE** declarar una lista de valores permitidos, con al menos un valor.
 		
 		La lista de valores se especifica con corchetes `[...]` tras el tipo:
 		
@@ -253,12 +278,12 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Content >>
 		Reglas:
 		
-		* Si el tipo es `ENUM`, la lista de valores **DEBERÍA** existir para que la validación sea útil.
+		* Si el tipo es `ENUM`, la lista de valores **DEBE** existir para que tenga un contenido válido.
 		* Si el tipo **NO** es `ENUM`, una lista `[...]` **DEBE** considerarse error de template.
 		* Los valores se separan por comas `,`.
 		* Se aplica trim (espacios/tab) alrededor de cada valor.
 		* La comparación de valores **DEBE** ser **case-sensitive** (sensible a mayúsculas/minúsculas).
-		* Debe existir al menos un valor en la lista si `[...]` está presente.
+		* Debe existir al menos un valor en la lista.
 		
 	Subheader: 10. Namespaces dentro de `Structure`
 	
@@ -325,6 +350,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		6. Tipo desconocido (según el conjunto de tipos soportado por el validador).
 		7. Uso de `[...]` si el tipo no es `ENUM`.
 		8. Tipo BLOCK-only con hijos definidos en `Structure`.
+		9. Redefinir un nodo que ya ha aparecido previamente sin usar como tipo `@Nombre nodo`.
 		
 	Subheader: 14. Conformidad
 	
@@ -347,7 +373,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		Template (@stxt.template): @stxt.template
 			Structure >>
 				Template (@stxt.template): (1)
-					Description: (0,1) TEXT
+					Description: (?) TEXT
 					Structure: (1) BLOCK
 		
 	Content >>
