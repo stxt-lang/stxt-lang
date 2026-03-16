@@ -2,7 +2,7 @@
 # Receta macarrones
 # -----------------
 
-Receta(com.kocinando.receta):
+Receta(com.example.kocinando.receta):
 	Nombre Receta: Una receta
 	Descripción: Esta es una receta de ejemplo
 	Pasos:
@@ -16,7 +16,7 @@ Receta(com.kocinando.receta):
 			Cantidad: 1
 			Unidades: dl
 			Nombre: Agua
-	Documento (com.dokumentando.doc):
+	Documento (com.example.dokumentando.doc):
 		Título: Primer documento simple
 		Description >>
 			Este es el

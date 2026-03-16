@@ -1,0 +1,5 @@
+Schema (@stxt.schema): com.example.kocinando.recetario
+	Node: Recetario
+		Children:
+			Child: Receta (com.example.kocinando.receta)
+				Min: 1 

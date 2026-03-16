@@ -1,0 +1,12 @@
+Template (@stxt.template): org.example.docs
+	Structure >>
+		Email (org.example.docs):
+			From:
+			To:
+			Cc:
+			Bcc:
+			Title: (?)
+			Body    Content: (1) TEXT
+			Metadata (org.example.meta): (?)
+		Demo (org.example.docs):
+			Body Content: (?) @Body content

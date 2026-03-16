@@ -1,4 +1,4 @@
-Schema (@stxt.schema): enum.test
+Schema (@stxt.schema): org.example.enum.test
 	Node: Document
 		Children:
 			Child: Priority

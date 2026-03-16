@@ -1,10 +1,10 @@
-Recetario (com.kocinando.recetario):
+Recetario (com.example.kocinando.recetario):
 
 	# --------
 	# Receta 1
 	# --------
 	
-	Receta (com.kocinando.receta):
+	Receta (com.example.kocinando.receta):
 		Nombre Receta: Una receta
 		Descripción: Esta es una receta de ejemplo
 		Ingredientes:
@@ -38,7 +38,7 @@ Recetario (com.kocinando.recetario):
 			# Hola
 	
 	
-	Receta (com.kocinando.receta):
+	Receta (com.example.kocinando.receta):
 		Nombre Receta: Una receta
 		Descripción: Esta es una receta de ejemplo
 		Ingredientes:

@@ -1,4 +1,4 @@
-Schema (@stxt.schema): com.gym.docs
+Schema (@stxt.schema): com.example.gym.docs
 	Node: Cliente
 		Children:
 			Child: Datos Personales

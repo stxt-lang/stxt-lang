@@ -1,6 +1,6 @@
-Template (@stxt.template): com.gym.docs
+Template (@stxt.template): com.example.gym.docs
 	Structure >>
-		Cliente (com.gym.docs):
+		Cliente (com.example.gym.docs):
 			Datos Personales: (1)
 				Nombre: (1)
 				Primer apellido: (1)

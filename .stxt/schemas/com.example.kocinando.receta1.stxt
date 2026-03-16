@@ -1,4 +1,4 @@
-Schema (@stxt.schema): com.kocinando.receta1
+Schema (@stxt.schema): com.example.kocinando.receta1
 	Node: Receta
 		Children:
 			Child: Título

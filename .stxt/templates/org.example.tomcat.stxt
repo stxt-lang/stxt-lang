@@ -1,6 +1,6 @@
-Template (@stxt.template): org.apache.tomcat
+Template (@stxt.template): org.example.tomcat
 	Structure >>
-		Server (org.apache.tomcat):
+		Server (org.example.tomcat):
 			Port: (1) INTEGER
 			Shutdown command: (?) 
 			Listener: (*)

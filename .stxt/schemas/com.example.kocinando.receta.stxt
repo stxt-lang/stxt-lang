@@ -1,4 +1,4 @@
-Schema (@stxt.schema): com.kocinando.receta
+Schema (@stxt.schema): com.example.kocinando.receta
 	Node: Receta
 		Children:
 			Child: Nombre Receta
@@ -18,7 +18,7 @@ Schema (@stxt.schema): com.kocinando.receta
 				Max: 1
 			Child: Comensales
 				Max: 1
-			Child: Documento (com.dokumentando.doc)
+			Child: Documento (com.example.dokumentando.doc)
 	Node: Nombre Receta
 	Node: Descripción
 		Type: TEXT

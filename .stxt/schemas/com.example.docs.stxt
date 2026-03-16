@@ -12,7 +12,7 @@ Schema (@stxt.schema): com.example.docs
 			Child: Body    Content
 				Min: 1
 				Max: 1
-			Child: Metadata (com.google)
+			Child: Metadata (org.example.meta)
 				Max: 1
 	Node: From
 	Node: To

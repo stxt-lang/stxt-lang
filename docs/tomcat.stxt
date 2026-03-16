@@ -1,4 +1,4 @@
-Server (org.apache.tomcat):
+Server (org.example.tomcat):
 	Port: 8080
 	Shutdown command: SHUTDOWN
 	Service: 

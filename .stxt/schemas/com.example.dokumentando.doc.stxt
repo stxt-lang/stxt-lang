@@ -1,4 +1,4 @@
-Schema (@stxt.schema): com.dokumentando.doc
+Schema (@stxt.schema): com.example.dokumentando.doc
 	Node: Documento
 		Children:
 			Child: Título

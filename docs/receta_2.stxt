@@ -2,7 +2,7 @@
 # Receta macarrones
 # -----------------
 
-Documento(com.dokumentando.documento):
+Documento(com.example.dokumentando.documento):
     Título: Receta de Pizza de Jamón
     Autor: María López
     Cuerpo>>
