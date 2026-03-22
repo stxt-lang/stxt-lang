@@ -182,16 +182,16 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Code >>
 		Template (@stxt.template): com.example.dokumentando.doc
 			Structure >>
-				Documento (com.example.dokumentando.doc):
-					***Título: (1)***
-					Secciones: (*)
-						Sección: (+) TEXT
+				Document (com.example.dokumentando.doc):
+					***Title: (1)***
+					Sections: (*)
+						Section: (+) TEXT
 					Description: (1) TEXT
-					Tipo Documento: (1)
+					Document Type: (1)
 					***Metadata (org.example.meta): (?)***
-				Resumen (com.example.dokumentando.doc):
-					***Título: (1) @Título***
-					Contenido: (1) TEXT
+				Summary (com.example.dokumentando.doc):
+					***Title: (1) @Title***
+					Content: (1) TEXT
 					***Metadata (org.example.meta): (?)***
 		
 	Subheader: 7. Cardinalities
@@ -245,9 +245,9 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		Examples:
 		
 	Code >>
-		Fecha: (1) DATE
-		Cuerpo: (1) TEXT
-		Es Público: (1) BOOLEAN
+		Date: (1) DATE
+		Body: (1) TEXT
+		Is Public: (1) BOOLEAN
 		
 	Content >>
 		General rules:
