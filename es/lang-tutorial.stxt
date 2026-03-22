@@ -32,7 +32,12 @@ Document (dev.stxt.website): STXT Tutorial
 	Subheader: 2. Herramientas
 
 	Content >>
-		* Repositorio del tutorial:
+		Para empezar a trabajar con @STXT@, lo más práctico es usar un editor que
+		permita escribir documentos con comodidad y navegar bien por la jerarquía.
+		La opción recomendada es **Visual Studio Code**, junto con la extensión oficial
+		de @STXT@.
+		
+		* Repositorio del tutorial y ejemplos:
 		  [Documentos STXT](https://github.com/stxt-lang/stxt-web)
 		* Editor recomendado:
 		  [Visual Studio Code](https://code.visualstudio.com/)
@@ -40,6 +45,16 @@ Document (dev.stxt.website): STXT Tutorial
 		  [STXT (stxt-lang.stxt)](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt)
 		* Instalación rápida:
 		  `code --install-extension stxt-lang.stxt`
+		
+		Con esta combinación puedes leer y editar los ejemplos del tutorial de forma
+		más cómoda, mantener bien la indentación y experimentar con la estructura
+		de los documentos sin tener que preparar un entorno complejo.
+		
+		Además, el proyecto de GitHub no contiene sólo este tutorial: incluye más
+		documentos y ejemplos que puedes abrir, modificar, copiar y reutilizar para
+		hacer pruebas. Es recomendable usarlos libremente para experimentar con nodos,
+		bloques de texto, namespaces, templates y schemas, porque esa es la forma más
+		rápida de familiarizarse con el lenguaje.
 
 	Subheader: 3. Ejemplo básico: ficha de un libro
 	
