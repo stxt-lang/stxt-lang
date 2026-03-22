@@ -58,4 +58,4 @@ Document (dev.stxt.website): STXT - Built for humans. Reliable for machines.
 					Bcc: EMAIL
 					Title: (?)
 					Body Content: (1) TEXT
-					Metadata (org.example): (?)
+					Metadata (org.example.meta): (?)
