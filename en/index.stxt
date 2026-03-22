@@ -51,7 +51,7 @@ Document (dev.stxt.website): STXT - Built for humans. Reliable for machines.
 	Code >>
 		***Template (@stxt.template): com.example.docs***
 			Structure >>
-				Email:
+				Email (com.example.docs):
 					From: EMAIL
 					To: EMAIL
 					Cc: EMAIL
