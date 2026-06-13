@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-03-15
+		Last modif: 2026-06-13
 		
 	Header: @STXT@ Templates (@stxt.template)
 	
@@ -24,7 +24,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* If both exist (schema and template) for the same target namespace,
 		  a conforming implementation **SHOULD** establish a consistent prioritization criterion.
 		* For a specific validation, an implementation **MUST** use a single effective semantic source: either schema or template.
-		* STXT core **MUST NOT** impose semantics: templates are an optional layer, subsequent to parsing the @STXT@ document.
+		* STXT core **MUST NOT** impose semantics: templates are an optional layer, after parsing the @STXT@ document.
 		
 	Subheader: 2. Terminology
 	
@@ -38,7 +38,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* **Target namespace**: the @STXT@ namespace to which the template applies (for example `com.example.docs`).
 		* **Node template**: an entry within the `Structure >>` block that defines a node (and optionally its type/cardinality and its children).
 		* **Type**: a semantic validation label (for example `TEXT`, `DATE`, `ENUM`) equivalent to the types in @STXT@ Schema.
-		* **Cardinality**: a rule that defines how many times a child node may appear with respect to its parent.
+		* **Cardinality**: a rule that defines how many times a child node may appear relative to its parent.
 		
 	Subheader: 3. Relationship between @STXT@ and Template
 	
@@ -52,7 +52,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		
 		An implementation **MAY** apply rules during parsing, provided that this validation remains **loosely coupled** to the base parser.
 		
-	Subheader: 4. General structure of a Template
+	Subheader: 4. General Structure of a Template
 	
 	Content >>
 		A template document **MUST** have as its root node:
@@ -72,7 +72,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Content >>
 		Rules:
 		
-		* The root node `Template` **MUST** belong to the `@stxt.template` namespace.
+		* The root node `Template` **MUST** belong to the namespace `@stxt.template`.
 		* `<target_namespace>` **MUST** be a valid namespace according to *STXT-SPEC* (namespaces section).
 		* The template document **MAY** include a `Description` node.
 		* There can only be **one effective template** per target namespace in a specific validation (see section 5).
@@ -83,21 +83,27 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		For each logical namespace:
 		
 		* There **MUST NOT** be more than one effective template simultaneously.
-		* If there are several candidate templates for the same namespace, the implementation **SHOULD** have a clear,
-		  stable, and deterministic criterion to decide which one applies.
-		* For a specific validation, an implementation **MUST NOT** apply several templates at the same time over the same target namespace.
+		* If there are multiple candidate templates for the same namespace, the implementation **SHOULD** have a clear,
+		  stable, and deterministic criterion for deciding which one applies.
+		* For a specific validation, an implementation **MUST NOT** apply multiple templates at once to the same target namespace.
 		
-	Subheader: 6. `Structure >>` block
+	Subheader: 6. `Structure >>` Block
 	
 	Content >>
 		The `Structure >>` block defines a **tree of node templates** using indentation, where:
 		
 		* Each non-empty line defines a **node template**.
-		* Indentation defines child nodes (just like @STXT@), but **inside `Structure >>` a data document is not being described, 
+		* Indentation defines child nodes (just like @STXT@), but **inside `Structure >>` a data document is not being described,
 		  but rather an expected structure**.
 		* The indentation rules of the base @STXT@ document apply to the template document outside the block.
 		* The content of `Structure >>` is interpreted through the template grammar defined in this document.
 		* The hierarchy within `Structure >>` **MUST** be built with the same consecutive indentation model as in *STXT-SPEC*.
+		
+	Content >>
+		**Top level and defined nodes.** The top-level lines of `Structure` do **not** have
+		special "root" semantics: they are node templates like any other, and their nesting defines
+		their children. Each line of `Structure` (at any level) defines or references a node of the
+		corresponding namespace, exactly like a `Node` in a schema.
 		
 	Subsubheader: 6.1 Recommended style convention
 	
@@ -117,12 +123,12 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		
 		where:
 		
-		* `<NodeName>` is the name of the node (human text; it is normalized according to STXT-SPEC for comparison).
+		* `<NodeName>` is the node name (human text; normalized according to STXT-SPEC for comparison).
 		* `<NamespaceOverride>` is optional and has the form `(<namespace>)` or `(@special.namespace)` and defines the **effective** namespace of that template node.
 		* `":"` is mandatory (to be a valid @STXT@ document).
 		* `<RuleSpec>` is optional and includes, in this logical order:
 		  1. Optional cardinality (in parentheses).
-		  2. Optional reference to a previously defined node through `@Node Name`, or alternatively a type.
+		  2. Optional reference to a node through `@Node Name`, or alternatively a type.
 		  3. Optional values if the type is `ENUM`.
 		
 		Examples:
@@ -138,8 +144,8 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Content >>
 		Notes:
 		
-		* If `<RuleSpec>` is omitted completely, default cardinality and default type are assumed (sections 7 and 8).
-		* A template node may have children even if it declares the default type `INLINE`. Types that prohibit children are defined in section 8.
+		* If `<RuleSpec>` is omitted entirely, default cardinality and default type are assumed (sections 7 and 8).
+		* A template node may have children if its effective type allows them. The default type `INLINE` allows children. Types that forbid children are defined in section 8.
 		* A reference `@Node Name` **MUST NOT** be combined with an explicit type on the same line.
 		
 	Subsubheader: 6.3 Parsing rules for `Structure >>`
@@ -149,50 +155,75 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		
 		1. Read the `Structure >>` block as a sequence of lines (already canonicalized by @STXT@ core: right trim per line).
 		2. Ignore empty lines.
-		3. Calculate hierarchy by indentation (same principles as @STXT@: consecutive indentation, without jumps).
+		3. Compute hierarchy by indentation (same principles as @STXT@: consecutive indentation, without jumps).
 		4. For each line, parse:
 		   * Node name + optional namespace `(ns)` if present.
 		   * The mandatory `:` character.
 		   * The optional rule specification (`RuleSpec`).
 		
 		5. Resolve the effective namespace of each line.
-		6. Resolve `@Node Name` references only against nodes already previously defined in the same template.
+		6. Resolve `@Node Name` references according to section 6.4.
 		
 		A template parser **MUST** fail if a line does not contain `:`.
 	
-	Subsubheader: 6.4 Redefinition of nodes and nodes from other namespaces
+	Subsubheader: 6.4 Definition, reference, and recursion
 
 	Content >>
 		Templates distinguish between:
 		
-		* **Local node definition**: first appearance of a node whose effective namespace belongs to the target namespace of the template.
-		* **Local node reference**: reuse of a previous local definition through `@Node Name`.
+		* **Local node definition**: appearance of a node whose effective namespace belongs to the template's target namespace, with its complete `RuleSpec` (type, values, children).
+		* **Local node reference**: reuse of a local definition through `@Node Name`.
 		* **External reference**: appearance of a node whose effective namespace belongs to another namespace.
 		
-		Rules:
+		Rules for definition and reference:
 		
 		* A local node **MUST NOT** be defined more than once per pair `canonical name + effective namespace`.
-		* If a local node appears again in another part of `Structure`, it **MUST** be done through a `@Node Name` reference.
-		* A `@Node Name` reference **MUST** point to a previous local definition in the same template.
+		* If a local node appears again elsewhere in `Structure`, it **MUST** be done through a `@Node Name` reference.
 		* A `@Node Name` reference **MAY** override cardinality, but **MUST NOT** redefine type, `ENUM` values, or children.
+		* The canonical name of the line and the canonical name of the `@Node Name` reference **MUST** match. A reference with a different name from its line **MUST** cause a template error (there is no renaming: `@` marks "reappearance of the same node", not "pointer to another").
 		* Nodes from other namespaces **MUST NOT** be defined locally within the current template.
-		* An external node **MAY** appear several times, but on that line its cardinality **ONLY SHOULD** be declared.
+		* An external node **MAY** appear multiple times, but on that line **ONLY SHOULD** its cardinality be declared.
 		
-		Example:
+	Content >>
+		**Recursion.** A `@Node Name` reference **MUST** point to:
+		
+		* a **previous** local definition (already closed) in the same template, **or**
+		* an **ancestor node whose definition is open** at that point, **including the very node being defined**.
+		
+		This second option enables recursive structures: a node may be declared as a child of itself
+		or of an ancestor. To resolve the reference only the node's **identity** is needed
+		(name + namespace + type), which is already available on its definition line; it is not necessary
+		for its list of children to be complete.
+		
+		As writing `Structure` is equivalent to traversing the node graph in depth, this rule
+		covers any dependency graph: self-recursion, recursion through ancestors, and mutual
+		recursion.
+		
+		Example (self-recursion):
+		
 	Code >>
-		Template (@stxt.template): com.example.dokumentando.doc
+		Template (@stxt.template): com.example.doc
 			Structure >>
-				Document (com.example.dokumentando.doc):
-					***Title: (1)***
-					Sections: (*)
-						Section: (+) TEXT
-					Description: (1) TEXT
-					Document Type: (1)
-					***Metadata (org.example.meta): (?)***
-				Summary (com.example.dokumentando.doc):
-					***Title: (1) @Title***
-					Content: (1) TEXT
-					***Metadata (org.example.meta): (?)***
+				Documento (com.example.doc):
+					Título: (1)
+					Sección: (*)
+						Título: (1) @Título
+						Texto: (?) TEXT
+						Sección: (*) @Sección
+		
+	Content >>
+		Here the last line, `Sección: (*) @Sección`, declares `Sección` as a child of itself,
+		referencing the ancestor `Sección` whose definition is open. `Título: (1) @Título`
+		reuses the previous local definition of `Título`.
+		
+		Example (mutual recursion `A`/`B`):
+		
+	Code >>
+		Template (@stxt.template): com.example.tree
+			Structure >>
+				A (com.example.tree):
+					B: (*)
+						A: (?) @A
 		
 	Subheader: 7. Cardinalities
 	
@@ -203,6 +234,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* Effective namespace of the node.
 		
 		Cardinality is expressed as an optional token in parentheses: `( ... )`.
+		It is **independent of the order** of the children (it counts occurrences, not positions).
 		
 	Subsubheader: 7.1 Allowed forms
 	
@@ -237,7 +269,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Subheader: 8. Types
 	
 	Content >>
-		Types in templates reuse the set of types from @STXT@ Schema, with the same intent: validate the form of the value and, 
+		Types in templates reuse the set of types from @STXT@ Schema, with the same intent: validate the form of the value and,
 		optionally, its content.
 		
 		The type is specified as a word after the cardinality (if present).
@@ -245,9 +277,9 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		Examples:
 		
 	Code >>
-		Date: (1) DATE
-		Body: (1) TEXT
-		Is Public: (1) BOOLEAN
+		Fecha: (1) DATE
+		Cuerpo: (1) TEXT
+		Es Público: (1) BOOLEAN
 		
 	Content >>
 		General rules:
@@ -255,7 +287,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* The explicit type **MUST** match exactly one of the types supported by the implementation.
 		* If a line uses a `@Node Name` reference, it **MUST NOT** also declare an explicit type.
 		* The semantic rules of types `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `ENUM`, `NUMBER`, `DATE`, etc. **MUST** be consistent with those defined in *STXT-SCHEMA-SPEC*.
-		
+	
 	Subsubheader: 8.1 Default type
 	
 	Content >>
@@ -266,25 +298,25 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Subsubheader: 8.2 Compatibility with children
 	
 	Content >>
-		A conforming implementation **MUST** apply these rules:
+		The compatibility rule with children is the same as in *STXT-SCHEMA-SPEC* (section 9):
 		
-		* **BLOCK-only** types (for example `BLOCK`, `TEXT`, `BASE64`, etc.) **ARE NOT** compatible with children.
-		  If a template node has children in `Structure >>` and its effective type is BLOCK-only, the template **MUST** be considered invalid.
+		**Only types `INLINE` and `GROUP` allow children. All others are leaves.**
 		
-		* **GROUP** types (or equivalent structural types without value) **DO** allow children.
+		Therefore:
 		
-		* INLINE types (for example `INLINE`, `NUMBER`, `DATE`, `BOOLEAN`, `ENUM`, etc.) **MAY** allow children (same philosophy as Schema).
-		  Value validation applies to the node, and structure validation applies to its children.
+		* If a template node declares children in `Structure >>`, its effective type **MUST** be `INLINE` or `GROUP`. Otherwise, the template **MUST** be considered invalid.
+		* The default type `INLINE` allows children, so a node without an explicit type may have children.
+		* Any type with content validation (`BLOCK`, `TEXT`, `NUMBER`, `BOOLEAN`, `DATE`, `ENUM`, `BASE64`, etc.) **DOES NOT** allow children.
 		
-	Subsubheader: 8.3 Set of types
+	Subsubheader: 8.3 Type set
 	
 	Content >>
-		The recommended set of types is the same as *STXT-SCHEMA-SPEC*.
+		The recommended type set is the same as *STXT-SCHEMA-SPEC*.
 		
 		A template implementation:
 		
 		* **MUST** support at least: `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `NUMBER`, `BOOLEAN`, `DATE`, `ENUM`.
-		* **SHOULD** support the rest of the types defined in @STXT@ Schema (for example `INTEGER`, `NATURAL`, 
+		* **SHOULD** support the rest of the types defined in @STXT@ Schema (for example `INTEGER`, `NATURAL`,
 		  `TIME`, `TIMESTAMP`, `UUID`, `URL`, `EMAIL`, `BASE64`, etc.).
 		
 	Subheader: 9. ENUM and value list
@@ -308,9 +340,20 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* Trim is applied (spaces/tabs) around each value.
 		* Value comparison **MUST** be done on the inline value already normalized through left/right trim.
 		* Value comparison **MUST** be exact and **CASE-SENSITIVE**.
-		* Comparison **MUST NOT** apply additional canonization, diacritic removal, or normalization equivalent to the canonical name of nodes.
-		* There must be at least one value in the list.
-		* Values **MUST NOT** be repeated after applying trim normalization.
+		* Comparison **MUST NOT** apply additional canonicalization, removal of diacritics, or normalization equivalent to the canonical name of nodes.
+		* At least one value must exist in the list.
+		* Values **MUST NOT** be repeated after applying normalization trim.
+		
+	Subsubheader: 9.1 Limitation of list syntax
+		
+	Content >>
+		Because of the form of the syntax `[a, b, c]`, an `ENUM` value declared in a template **CANNOT**
+		contain a comma `,` (value separator) or a closing bracket `]` (end of list).
+		It also does not preserve spaces at the beginning or end, which trim removes.
+		
+		This is a limitation of the **subset expressible by templates**. If values are needed
+		`ENUM` with commas, brackets, or significant spaces, a **schema** (`@stxt.schema`) must be used,
+		whose `Value` nodes allow any inline value.
 		
 	Subheader: 10. Namespaces within `Structure`
 	
@@ -324,12 +367,12 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		Rules:
 		
 		* If a `Structure` line omits an explicit namespace, it inherits the effective namespace of its parent.
-		* If the node has no parent within `Structure`, the default namespace is the target namespace of the template.
+		* If the node has no parent within `Structure`, the default namespace is the template's target namespace.
 		* Namespace inheritance works as in @STXT@ data documents.
 		* If `(other.ns)` is specified, that template node belongs to that other namespace.
 		* If `(other.ns)` is specified and that namespace is different from the target namespace, the line **MUST NOT** define children, explicit type, or `ENUM` values; it **MAY** only declare cardinality.
 		
-	Subheader: 11. Rules of “defined nodes”
+	Subheader: 11. Rules for "defined nodes"
 	
 	Content >>
 		In templates, a node becomes defined by its appearance in `Structure`.
@@ -337,27 +380,26 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		
 		Rules:
 		
-		* Every local node defined in `Structure` becomes part of the set of nodes in the template.
+		* Every local node defined in `Structure` becomes part of the template's set of nodes.
 		* If a template references cross-namespace nodes, a complete validation system **SHOULD**
-		  have the corresponding template or schema for that external namespace if it wishes to validate those nodes deeply.
+		  have the corresponding template or schema for that external namespace if it wishes to deeply validate those nodes.
 		* An implementation **MAY** validate only cardinality and structure of the target namespace, treating cross-namespace nodes
-		  as a “black box”, according to configuration.
+		  as a "black box", depending on configuration.
 		
 	Subheader: 12. Compilation to Schema (semantic equivalence)
 	
 	Content >>
 		A template can be compiled into an equivalent schema:
 		
-		* Each `Structure` line generates a `Node` definition for the template node (in the corresponding namespace).
+		* Each local node defined in `Structure` generates a `Node` definition (in the corresponding namespace).
 		* The indentation hierarchy in `Structure` generates `Children/Child` in the schema.
-		* Cardinality `( ... )` in the template is translated to:
-		  * `Min` / `Max` in the schema.
+		* Cardinality `( ... )` in the template is translated to `Min` / `Max` in the schema.
 		* The type is copied to `Type`.
 		* `ENUM [a,b]` is translated to `Values/Value`.
-		* A `@Node Name` reference reuses the definition already generated for that local node and only modifies the cardinality of the corresponding `Child`.
+		* A `@Node Name` reference reuses the definition already generated for that local node and only modifies the cardinality of the corresponding `Child`. Recursion (self-reference or open ancestor) is translated to a `Child` that points to the same `Node`.
 		* A cross-namespace node only generates a `Child` reference; its definition corresponds to the template or schema of that other namespace.
 		
-		Cardinality translation rules:
+		Rules for cardinality translation:
 		
 		* `(num)` → `Min=num`, `Max=num`
 		* `(*)` → without `Min`, without `Max`
@@ -379,21 +421,23 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		5. Malformed cardinality or cardinality with invalid numbers.
 		6. Unknown type (according to the set of types supported by the implementation).
 		7. Use of `[...]` if the type is not `ENUM`.
-		8. BLOCK-only type with children defined in `Structure`.
-		9. Redefining a local node that has already previously appeared without using a `@Node Name` reference.
-		10. Using a `@Node Name` reference that does not point to a previous local definition.
-		11. Declaring both a `@Node Name` reference and an explicit type on the same line.
-		12. Declaring duplicate `ENUM` values after trim normalization.
-		13. Defining children, explicit type, or `ENUM` values in a cross-namespace node.
+		8. A node with children has an effective type that does not allow children (that is, different from `INLINE` or `GROUP`).
+		9. Redefining a local node that has already appeared previously without using `@Node Name` reference.
+		10. Using a `@Node Name` reference that does not point to a previous local definition or to an open ancestor.
+		11. The name of a `@Node Name` reference does not match (in canonical name) the name of its line.
+		12. Declaring both `@Node Name` reference and explicit type on the same line.
+		13. Declaring duplicate `ENUM` values after trim normalization.
+		14. Defining children, explicit type, or `ENUM` values on a cross-namespace node.
 		
 	Subheader: 14. Conformance
 	
 	Content >>
-		A template implementation is conforming if:
+		A template implementation is conformant if:
 		
 		* It implements the `Template` and `Structure` grammar of this document.
-		* It applies the rules of cardinality, types, `@Node Name` references, and `ENUM`.
-		* It applies the child compatibility rules by type.
+		* It applies the rules of cardinality, types, `@Node Name` references (including recursion through open ancestor), and `ENUM`.
+		* It applies the child compatibility rules by type (only `INLINE` and `GROUP` allow children).
+		* It validates cardinalities independently of order.
 		* It rejects invalid templates according to section 13.
 		* It defines a stable template selection criterion (if multiple sources exist),
 		  without applying more than one simultaneously per target namespace.
@@ -401,12 +445,12 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Subheader: 15. Meta-template of the `@stxt.template` system itself
 	
 	Content >>
-		This section defines a recommended minimal template to validate documents in the `@stxt.template` namespace.
+		This section defines a recommended minimal template for validating documents in the `@stxt.template` namespace.
 		
 	Code >>
 		Template (@stxt.template): @stxt.template
 			Structure >>
-				Template (@stxt.template): (1)
+				Template (@stxt.template):
 					Description: (?) TEXT
 					Structure: (1) BLOCK
 		
@@ -415,6 +459,8 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		
 		* `Structure` is `BLOCK` because in templates it must be a `>>` block.
 		* `Description` is optional and may be `TEXT`.
+		* The `Template` line uses default cardinality (`*`): since the top level of `Structure`
+		  has no special root semantics (section 6), no document cardinality is imposed on it.
 		
 	Subheader: 16. Normative examples
 	
@@ -466,7 +512,24 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 				Demo (org.example.docs):
 					Body Content: (?) @Body Content
 					
-	Subsubheader: 16.5 Cross-namespace (external references)
+	Subsubheader: 16.5 Template with recursion
+
+	Code >>
+		Template (@stxt.template): com.example.doc
+			Structure >>
+				Documento (com.example.doc):
+					Título: (1)
+					Sección: (*)
+						Título: (1) @Título
+						Texto: (?) TEXT
+						Sección: (*) @Sección
+
+	Content >>
+		`Sección` contains itself at any depth. This is the case that a parser with the
+		"previous definition only" rule would incorrectly reject; that is why it is included as a
+		normative example of conformance.
+
+	Subsubheader: 16.6 Cross-namespace (external references)
 	
 	Code >>
 		Template (@stxt.template): com.example.docs
@@ -500,14 +563,11 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		Type             = IdentUpper
 		EnumValues       = "[" Value { "," Value } "]"
 		
-		NodeName         = Text up to `(` or `:`, with trim and compaction of spaces
+		NodeName         = Text up to `(` or `:`, with trim and space compaction
 		NamespaceTarget  = Namespace according to STXT-SPEC
-		Namespace        = Ident { "." Ident }
-		Ident            = [a-z0-9]+
-		IdentUpper       = [A-Z0-9_]+  ; recommended in uppercase (style)
+		Namespace        = Ident "." Ident { "." Ident }   ; at least 2 Ident
+		Ident            = [A-Za-z0-9]+   ; accepted in input; normalized to lowercase (STXT-SPEC section 7)
+		IdentUpper       = [A-Z0-9_]+     ; recommended in uppercase (style)
+		Value            = any text without "," or "]", with trim   ; see section 9.1
 		
 	Subheader: 18. End of Document
-	
-	
-	
-	

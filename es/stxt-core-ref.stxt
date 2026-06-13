@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-03-15
+		Last modif: 2026-06-13
 		
 	Header: @STXT@ Documentos
 	
@@ -223,12 +223,18 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Content >>
 		* La línea del nodo `>>` **NO DEBE** contener contenido significativo tras `>>`, excepto espacios opcionales.
 		* Todas las líneas con indentación **estrictamente mayor** que la del nodo `>>` pertenecen al **contenido textual del bloque**.
-		* Dentro del bloque:
+		* Dentro del contenido del bloque (indentación estrictamente mayor que la del nodo `>>`):
 		  * El parser **NO DEBE** interpretar ninguna línea como nodo estructurado, aunque contenga `:` u otra sintaxis de @STXT@.
-		  * El parser **NO DEBE** interpretar líneas que comienzan por `#` como comentarios; todas las líneas son texto literal.
-		* El bloque termina cuando aparece una **línea no vacía** cuya indentación es **menor o igual** que la indentación del nodo `>>`.
-		* Una línea de comentario con indentación **menor o igual** que la del nodo `>>` está **fuera del bloque** y se procesa como comentario normal.
+		  * El parser **NO DEBE** interpretar líneas que comienzan por `#` como comentarios; son texto literal.
+		* El bloque termina cuando aparece una **línea no vacía, que no sea comentario**, cuya indentación es **menor o igual** que la indentación del nodo `>>`.
+		* Las líneas de **comentario** (ver sección 9) son transparentes al bloque: **NO** cierran el bloque y **NO** forman parte de su contenido, independientemente de su indentación. Simplemente se descartan.
 		* Las líneas vacías **dentro del bloque** se conservan y **NO DEBEN** cerrar el bloque, independientemente de su indentación.
+		
+	Content >>
+		Como consecuencia de la transparencia de los comentarios, el contenido de un bloque `>>`
+		**puede no ser contiguo en el fichero**: una línea de comentario intercalada (con indentación
+		menor o igual que la del nodo `>>`) se descarta sin cerrar el bloque, y el texto del bloque
+		puede continuar después. Ver el ejemplo detallado en la sección 9.1.
 		
 	Subsubheader: 6.2 Ejemplo
 		
@@ -245,6 +251,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 		* Todo lo indentado por debajo de `Bloque >>` es texto literal.
 		* `Hijo: valor` y `Otro hijo: SI permitido` **no** son nodos, sino texto.
+		* `# Esto también es texto` es texto literal, porque su indentación es **mayor** que la de `Bloque >>`.
 		* `Siguiente Nodo: valor` está fuera del bloque `>>`.
 		
 	Subheader: 7. Namespaces
@@ -266,9 +273,44 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* Un nodo hijo que no especifica namespace hereda el namespace efectivo de su padre.
 		* El namespace vacío NO puede especificarse como `Nombre nodo ()`. 
 		* Un nodo hijo puede redefinir su namespace indicando `(otro.namespace)`, en cuyo caso usa ese namespace en lugar del heredado.
-		* Sólo se permiten caracteres dentro del rango `[a-z0-9]`, con `@` opcional al inicio para indicar un namespace especial.
-		* Un parser **DEBE** convertir internamente un namespace a minúsculas. Por ejemplo, `Nombre (COM.DEMO.DOCS)` pasa a `Nombre (com.demo.docs)`.
-		* Por reglas de estilo, un namespace debería escribirse en minúsculas.
+		* En la entrada, un namespace **PUEDE** escribirse con letras mayúsculas o minúsculas ASCII; el parser **DEBE** normalizarlo a minúsculas. El comportamiento es análogo al de los nombres de dominio: `COM.DEMO.DOCS` y `com.demo.docs` son el mismo namespace.
+		* La normalización a minúsculas ocurre **durante el parseo**: la representación lógica del árbol contiene **únicamente** la forma en minúsculas. La forma original en mayúsculas no se conserva.
+		* Por reglas de estilo, un namespace debería escribirse directamente en minúsculas.
+		
+	Subsubheader: 7.1 Restricción a ASCII
+		
+	Content >>
+		Cada elemento de un namespace (`Ident`) **DEBE** estar formado únicamente por caracteres
+		del rango `[a-z0-9]` (en su forma canónica), con un `@` opcional al inicio del namespace
+		completo para indicar un namespace especial.
+		
+		En la entrada se aceptan también las letras ASCII en mayúscula `[A-Z]`, que el parser
+		normaliza a minúsculas. **No** se aceptan diacríticos, caracteres no ASCII ni espacios.
+		
+		Esta restricción a ASCII es **deliberada**: evita las ambigüedades de normalización Unicode
+		y los ataques homográficos (caracteres visualmente idénticos pero distintos, p. ej. una `a`
+		latina frente a una `а` cirílica), de forma coherente con las prioridades de seguridad de
+		@STXT@ (ver sección 15).
+		
+	Subsubheader: 7.2 Herencia y nodos de nivel 0
+		
+	Content >>
+		* El namespace efectivo del nodo raíz (nivel 0) que no especifica namespace es el namespace vacío `""`.
+		* Un nodo hijo sin namespace explícito hereda el namespace efectivo de su padre.
+		* **NO existe herencia lateral entre nodos de nivel 0**: cada nodo raíz sin namespace explícito tiene namespace `""`, con independencia del namespace de cualquier nodo raíz anterior.
+		
+		Ejemplo:
+		
+	Code >>
+		Documento (com.example.docs):
+		    Autor: Joan
+		Anexo:
+		    Nota: texto
+
+	Content >>
+		En este ejemplo, `Anexo` tiene namespace `""` (vacío). **No** hereda `com.example.docs`
+		del nodo raíz anterior. La ausencia de herencia lateral garantiza que el significado de
+		un nodo raíz no dependa de los nodos que lo precedan (ver sección 8.5, concatenación).
 		
 	Subheader: 8. Indentación y Jerarquía
 		
@@ -372,17 +414,63 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		....Nivel 1:
 		..........Nivel más que 2: ***ERROR: 4 espacios, 4 espacios, 2 espacios*** 
 		
+	Content >>
+		**Nota:** estas reglas de nivel se aplican a las líneas que definen nodos. Las líneas de
+		comentario están exentas de la validación de nivel (ver sección 9): su indentación no se
+		comprueba y nunca produce error de nivel.
+		
 	Subsubheader: 8.4 Jerarquía
 		
 	Content >>
 		* La indentación **DEBE** aumentar de forma consecutiva (no se permiten saltos).
 		* Los nodos hijos **DEBEN** tener mayor indentación que su padre.
 		* La indentación dentro de un bloque `>>` **no afecta a la jerarquía estructural**: es simplemente texto.
+		* El árbol resultante del parseo **DEBE** preservar el **orden de aparición** de los nodos hermanos tal como aparecen en el documento. Una implementación conforme **NO DEBE** reordenar los hijos de un nodo.
+		
+	Subsubheader: 8.5 Múltiples nodos de nivel 0 y concatenación
+		
+	Content >>
+		Un documento @STXT@ **PUEDE** contener **varios nodos de nivel 0** (nodos raíz). No existe
+		la obligación de un único nodo raíz. Cómo se interpretan o usan esos nodos raíz corresponde
+		a la aplicación, no al núcleo @STXT@.
+		
+		Ejemplo de documento válido con tres nodos raíz:
+		
+	Code >>
+		Documento 1: Primero
+		Documento 2: Segundo
+		Documento 3 >>
+		    Texto del tercero
+
+	Content >>
+		**Cerradura bajo concatenación.** Como consecuencia directa de permitir múltiples nodos
+		de nivel 0 y de la ausencia de herencia lateral (sección 7.2), la **concatenación** de dos
+		documentos @STXT@ válidos es también un documento @STXT@ válido, siempre que el segundo
+		comience en una línea de nivel 0 (lo cual ocurre por definición, ya que sus nodos raíz están
+		a nivel 0).
+		
+		Esto permite, sin sintaxis adicional, casos de uso como:
+		
+		* Ficheros de log o registros en modo *append* (añadir al final).
+		* *Streaming* de registros sucesivos.
+		* Combinar ficheros con una simple concatenación de texto (`cat a.stxt b.stxt > c.stxt`).
+		
+		@STXT@ no necesita un formato derivado para "listas de documentos": un documento ya **es**
+		una secuencia de nodos raíz.
 		
 	Subheader: 9. Comentarios
 		
 	Content >>
-		Fuera de bloques `>>`, una línea es un comentario si, tras su indentación, el primer carácter es `#`.
+		Fuera del contenido de un bloque `>>`, una línea es un **comentario** si, tras su indentación,
+		el primer carácter es `#`.
+		
+		Reglas generales de los comentarios:
+		
+		* Un comentario se **descarta** por completo: no forma parte del árbol resultante.
+		* La indentación de un comentario **no se valida**: un comentario **PUEDE** tener cualquier
+		  indentación, incluso una que sería inválida para un nodo. Nunca produce error de nivel.
+		* Los comentarios son **transparentes a los bloques `>>`**: no cierran un bloque activo ni
+		  forman parte de su contenido (ver 9.1).
 		
 		Ejemplo:
 	Code >>		
@@ -390,35 +478,68 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Nodo:
 		    # Comentario interior
 		
-	Subsubheader: 9.1 Comentarios dentro de bloques `>>`
+	Subsubheader: 9.1 Comentarios y bloques `>>`
 		
 	Content >>
-		Dentro de un bloque `>>`:
+		Dentro de un bloque `>>` hay que distinguir dos situaciones según la indentación de la línea:
 		
-		* Toda línea con indentación **estrictamente mayor** que la del nodo `>>`
-		  **DEBE** tratarse como texto literal, incluso si empieza por `#`.
-		* Una línea no vacía con indentación **menor o igual** que la del nodo `>>` queda fuera del bloque.
+		* **Indentación estrictamente mayor** que la del nodo `>>`: la línea es **texto literal** del
+		  bloque, **aunque empiece por `#`**. No es un comentario.
+		* **Indentación menor o igual** que la del nodo `>>`: si la línea es un comentario (primer
+		  carácter `#` tras la indentación), se **descarta** y el bloque **permanece abierto**. Si no
+		  es comentario ni línea vacía, **cierra** el bloque.
 		
-		Ejemplo:
+		Esto implica que un comentario puede aparecer "en medio" de un bloque sin cerrarlo, y el
+		texto del bloque continúa después.
+		
+		Ejemplo completo:
+		
 	Code >>
-		***# Un comentario normal (nivel 0)***
-		Documento:
-			***# Otro comentario normal***
-					***# ¡Esto también es un comentario! Fuera de bloque >>***
-		    Texto >>
-		        # Esto es texto
-		        Línea normal
-		            # También es texto normal
-		    ***# Esto sí es comentario***
+		***# Es un comentario***
+		Nodo inline:
+		    ***# Es un comentario***
+		    Nodo text >>
+		        ***# NO ES un comentario***
+		    ***# Es un comentario dentro de nodo texto. NO cierra el nodo***
+		        Sigue el texto 1
+		    ***# Esto si es un comentario***
 		***# Esto también es un comentario***
-		    	Aquí continúa el texto del nodo
+		        Sigue el texto 2
+		    Otro nodo: Ya es otro nodo
 
+	Content >>
+		En este ejemplo, el contenido lógico del bloque `Nodo text` es exactamente tres líneas:
+		
+	Code >>
+		# NO ES un comentario
+		Sigue el texto 1
+		Sigue el texto 2
+
+	Content >>
+		Detalles:
+		
+		* `# NO ES un comentario` está más indentado que `Nodo text >>`, así que es **texto** (y se
+		  conserva su `#`).
+		* Las líneas `# Es un comentario dentro de nodo texto...`, `# Esto si es un comentario` y
+		  `# Esto también es un comentario` tienen indentación menor o igual que `Nodo text >>` pero
+		  son comentarios: se **descartan** sin cerrar el bloque y sin dejar rastro (ni siquiera una
+		  línea vacía) en el contenido.
+		* `Sigue el texto 1` y `Sigue el texto 2`, ambos más indentados que el nodo `>>`, son texto
+		  del bloque, aunque entre ellos haya comentarios des-indentados.
+		* `Otro nodo: Ya es otro nodo` es la primera línea **no vacía y no comentario** con indentación
+		  menor o igual: **cierra** el bloque y se procesa como nodo.
+		
 	Subsubheader: 9.2 Estilo para comentarios
 	Content >>
 		* Se recomienda que el comentario esté en el mismo nivel que el siguiente nodo.
 		  Es decir, comentarios para el siguiente nodo.
-		* No se recomiendan comentarios dentro de un bloque de texto, ya que visualmente
-		  son extraños. 
+		* **No se recomiendan comentarios dentro de un bloque de texto.** Además de resultar
+		  visualmente extraños, existe un caso que conviene conocer: si una línea de texto que
+		  empieza por `#` se des-indenta por error hasta quedar a indentación menor o igual que el
+		  nodo `>>`, dejará de ser texto y pasará a ser un comentario que se descarta silenciosamente.
+		  Es el único caso en que un error de indentación no falla de forma ruidosa.
+		* Un parser **PUEDE** emitir un aviso al detectar un comentario con indentación menor o igual
+		  que la de un bloque `>>` activo, de forma análoga al aviso de mezcla de espacios y tabuladores.
 
 	Subheader: 10. Normalización de espacios en blanco
 		
@@ -454,12 +575,16 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Subsubheader: 10.2 Líneas dentro de bloques `>>`
 		
 	Content >>
-		Para cada línea que pertenece a un bloque `>>`:
+		La **indentación de bloque** de un nodo `>>` es la indentación de la primera línea de su
+		contenido (el primer nivel estrictamente mayor que el del nodo `>>`). Para cada línea de
+		texto que pertenece al bloque:
 		
-		1. El parser determina el contenido de la línea a partir del texto que sigue a la indentación mínima del bloque 
-		   (es decir, elimina solo la indentación de bloque, pero conserva cualquier indentación adicional como parte del texto).
+		1. El parser elimina **solo** la indentación de bloque, conservando cualquier indentación
+		   adicional como parte del texto.
 		2. Sobre ese contenido, el parser **DEBE** eliminar todos los espacios y tabuladores finales (trim a la derecha).
 		3. Las líneas vacías se conservan en todos los casos.
+		
+		(Las líneas de comentario intercaladas, según 9.1, ya se han descartado y no intervienen aquí.)
 		
 		Ejemplo de canonicalización de líneas:
 		
@@ -506,6 +631,10 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		2. Saltos en los niveles de indentación.
 		3. Un nodo `>>` contiene contenido significativo inline en la misma línea que `>>`.
 		4. Un nodo no contiene ni `:` ni `>>`.
+		5. El nombre lógico de un nodo es la cadena vacía.
+		6. Un namespace no cumple las restricciones de la sección 7 (formato `a.b`, sólo ASCII `[a-z0-9]` por elemento, `@` opcional inicial).
+		
+		Las líneas de comentario y las líneas vacías **no** son causa de error (su indentación no se valida).
 		
 		Un parser conforme **DEBE** rechazar el documento.
 		
@@ -517,8 +646,11 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* Implementa la sintaxis descrita en este documento.
 		* Aplica las reglas estrictas de indentación y jerarquía.
 		* Interpreta correctamente nodos con `:` y bloques `>>`.
-		* Interpreta comentarios fuera de bloques `>>`.
-		* Trata **todo** lo que esté dentro de bloques `>>` como texto literal.
+		* Interpreta comentarios fuera del contenido de bloques `>>` y los trata como transparentes a los bloques según la sección 9.
+		* Trata **todo** lo que esté dentro del contenido de un bloque `>>` (indentación estrictamente mayor) como texto literal.
+		* Acepta **múltiples nodos de nivel 0** y preserva el orden de aparición de los nodos hermanos.
+		* No aplica herencia lateral de namespace entre nodos de nivel 0.
+		* Normaliza los namespaces a minúsculas durante el parseo.
 		* Aplica las reglas de normalización de espacios en blanco de la sección 10.
 		* Rechaza documentos inválidos según la sección 11.
 		
@@ -561,7 +693,6 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		1. `""`
 		2. `"Línea 2"`
 
-	
 	Subsubheader: 14.3 Comentarios dentro y fuera de bloques
 		
 	Code >>
@@ -570,6 +701,24 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		        # Esto es texto
 		        Más texto
 		    # Esto sí es comentario
+		
+	Content >>
+		El bloque `Cuerpo` contiene dos líneas: `"# Esto es texto"` y `"Más texto"`. La línea
+		`# Esto sí es comentario`, con indentación menor o igual que `Cuerpo >>`, es un comentario:
+		se descarta y, al ser la última línea, el bloque termina.
+		
+	Subsubheader: 14.4 Múltiples nodos raíz
+		
+	Code >>
+		Entrada:
+		    Fecha: 2026-06-13
+		    Texto: primera
+		Entrada:
+		    Fecha: 2026-06-13
+		    Texto: segunda
+	Content >>
+		Documento válido con dos nodos raíz `Entrada` al mismo nivel. Esto permite, por ejemplo,
+		un registro tipo log mediante simple *append*.
 		
 	Subheader: 15. Consideraciones de Seguridad
 	
@@ -585,10 +734,17 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		  loaders ni deserialización de objetos. La única estructura resultante es un árbol simple de nodos y valores textuales.
 		* **Inmune a inyección dentro de bloques literales**: todo contenido dentro de un nodo `>>` se trata 
 		  como texto literal sin interpretación alguna, incluso si contiene `:`, `>>`, `#` u otra sintaxis @STXT@.
+		* **Sin ambigüedad de identificadores**: los namespaces se restringen a ASCII (sección 7.1), 
+		  eliminando los ataques homográficos basados en caracteres Unicode visualmente equivalentes.
 		* **Bajo riesgo de denegación de servicio**: las reglas estrictas de indentación consecutiva 
 		  y la ausencia de referencias circulares o anchors limitan la complejidad estructural. 
 		  Las implementaciones **DEBERÍAN** imponer un límite razonable de profundidad de anidamiento (recomendado: ≤ 100 niveles) 
 		  y tamaño total del documento.
+		* **Parseo en streaming con memoria acotada**: gracias a que se permiten múltiples nodos de nivel 0 
+		  y a que no existen referencias hacia atrás, un parser **PUEDE** emitir cada árbol raíz completo en cuanto 
+		  detecta el inicio del siguiente nodo de nivel 0, con un uso de memoria del orden de la profundidad de 
+		  anidamiento (`O(profundidad)`) en lugar del tamaño total del documento. Esto hace viable procesar 
+		  ficheros muy grandes (logs, *streams*) de forma segura.
 		* **Schemas externos opcionales**: la validación semántica es una capa separada. 
 		  Un parser básico **PUEDE** operar sin cargar schemas externos, eliminando riesgos asociados a su resolución.
 		
@@ -610,12 +766,15 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Inline          = ":" [Espacio] [TextoInline]
 		BlockStart      = [Espacio] ">>" [EspaciosFinales]
 		
-		Namespace       = "(" ["@"] Ident { "." Ident } ")"
-		Ident           = [a-z0-9]+   ; solo minúsculas y números según reglas de estilo y normalización
+		Namespace       = "(" ["@"] Ident { "." Ident } ")"   ; al menos 2 Ident
+		Ident           = [A-Za-z0-9]+   ; aceptado en entrada; el parser DEBE normalizarlo a minúsculas (sección 7)
+		                                 ; forma canónica (y recomendada por estilo): [a-z0-9]+
 		
-		Comentario      = "#" { cualquier carácter hasta fin de línea }
+		Comentario      = "#" { cualquier carácter hasta fin de línea }   ; descartado; indentación no validada
 		
-		BloqueContinuación = IndentaciónMayorQueBloqueAnterior { cualquier texto }   ; texto literal
+		BloqueContinuación = LíneaTextoBloque   ; líneas con indentación estrictamente mayor que el nodo >>
+		                                          ; los comentarios intercalados (indent <= nodo >>) se descartan
+		                                          ; sin cerrar el bloque
 		
 		Indentación     = Mezcla permitida de espacios y tabuladores según sección 8
 		                  - Puros espacios: múltiplos exactos de 4 por nivel
@@ -637,20 +796,22 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		  2. Si hay bloque `>>` activo:
 		     - Si la línea es vacía → añadir línea vacía al bloque.
 		     - Si indentación > indentación del nodo `>>` → añadir línea como texto literal (trim derecha).
-		     - Si indentación ≤ indentación del nodo `>>` → cerrar bloque y procesar la línea fuera del bloque.
+		     - Si indentación ≤ indentación del nodo `>>` **y** la línea es un comentario (`#`) → descartar la línea; el bloque **sigue abierto**.
+		     - Si indentación ≤ indentación del nodo `>>` y la línea **no** es comentario → cerrar bloque y procesar la línea fuera del bloque.
 		  3. Si no hay bloque activo:
 		     - Línea vacía → ignorar (no afecta jerarquía).
-		     - Empieza por `#` → comentario.
+		     - Empieza por `#` (tras indentación) → comentario; descartar (sin validar su indentación).
 		     - En caso contrario → nuevo nodo (normalizar nombre, detectar namespace, tipo : o >>).
 		
 		* **Herencia de namespace:**
 		  - El namespace efectivo del nodo raíz es vacío por defecto.
+		  - No hay herencia lateral entre nodos de nivel 0.
 		  - Cada nodo hijo sin namespace explícito hereda el namespace efectivo de su padre.
 		  - Si un nodo define su propio namespace entre `()`, este reemplaza al heredado para él y todos sus descendientes.
 		
 		* **Normalización adicional:**
 		  - Nombres de nodo: según sección 4.1–4.3.
-		  - Namespaces: convertidos internamente a minúsculas (sección 7).
+		  - Namespaces: normalizados a minúsculas durante el parseo (sección 7); sólo se conserva la forma minúscula.
 		  - Valores inline: trim izquierdo y derecho (sección 10.1).
 		  - Líneas de bloque: conservar indentación relativa + trim derecha + preservar todas las líneas vacías (sección 10.2–10.3).
 
@@ -749,12 +910,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Template (@stxt.template): com.example.docs
 			Structure >>
 				Email (com.example.docs):
-					From:
-					To:
-					Cc:
-					Bcc:
+					From: (1) EMAIL
+					To: (1) EMAIL
+					Cc: (?) EMAIL
+					Bcc: (?) EMAIL
 					Title: (?)
-					Body    Content: (1) TEXT
+					Body Content: (1) TEXT
 					Metadata (org.example.meta): (?)
 					
 	Content>>
@@ -764,5 +925,3 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Para una validación concreta, **DEBE** seleccionarse una única fuente semántica efectiva: o bien un schema, o bien un template.
 	
 	Subheader: 19. Fin del Documento
-			
-				
