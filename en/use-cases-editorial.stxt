@@ -109,7 +109,7 @@ Document (dev.stxt.website): Publications and editorial content
 		Publication (@com.acme.editorial.publication):
 			Title: STXT — The book
 			ISBN: 978-1-23456-789-0
-			Language: es
+			Language: en
 			Status: In Progress
 			
 			Chapters:

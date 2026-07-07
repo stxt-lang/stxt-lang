@@ -37,7 +37,7 @@ Document (dev.stxt.website): STXT Tutorial
 		The recommended choice is **Visual Studio Code**, together with the official
 		@STXT@ extension.
 		
-		* Tutorial repository:
+		* Tutorial and examples repository:
 		  [STXT Documents](https://github.com/stxt-lang/stxt-web)
 		* Recommended editor:
 		  [Visual Studio Code](https://code.visualstudio.com/)

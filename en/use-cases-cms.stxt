@@ -2,6 +2,7 @@ Document (dev.stxt.website): CMS (Content Management Systems)
 
 	Metadata:
 		Author: ChatGPT 5.2
+		Revision: Joan Costa Mombiela
 		Last modif: 2026-01-11
 		
 	Header: CMS (Content Management Systems)
@@ -69,10 +70,10 @@ Document (dev.stxt.website): CMS (Content Management Systems)
 		Typical page with metadata, sections, and free-form content.
 		
 	Code >>
-		Page (@com.acme.cms.page):
+		Page (com.acme.cms.page):
 			Title: About STXT
 			Slug: about-stxt
-			Language: es
+			Language: en
 			Status: Published
 			Layout: default
 			
@@ -111,7 +112,7 @@ Document (dev.stxt.website): CMS (Content Management Systems)
 		A CMS usually works with blocks or components.
 		
 	Code >>
-		Page (@com.acme.cms.page):
+		Page (com.acme.cms.page):
 			Title: Home
 			Slug: index
 			

@@ -7,7 +7,7 @@ Document (dev.stxt.website): STXT - Built for humans. Reliable for machines.
 		and at the same time reliable for machines.
 		
 	Content >>
-		> @STXT@ is pronounced "ESS-text" — just say the letter `S`, then `text`; like _S-Text_.
+		> @STXT@ is pronounced "ESS-text" — first the letter `S`, then `text`, like _S-TEXT_.
 
 	Subheader: Documents
 	
@@ -35,7 +35,9 @@ Document (dev.stxt.website): STXT - Built for humans. Reliable for machines.
 	Subheader: Documents with namespace and schemas
 	
 	Content >>
-		@STXT@ allows the use of namespaces, as well as schemas and templates to validate content.
+		@STXT@ allows the use of namespaces to group documents.
+		In addition, schemas or templates can also be defined
+		to validate the content of a document.
 		
 		An `Email` document from the `com.example.docs` namespace:
 		

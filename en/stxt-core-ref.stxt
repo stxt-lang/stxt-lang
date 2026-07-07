@@ -756,9 +756,9 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 	Subheader: 16. Appendix A — Grammar (Informal)
 		
 	Code >>
-		Document       = { Line }
+		Document        = { Line }
 		
-		Line           = [Indentation] ( Comment | Node | BlockContinuation | EmptyLine )
+		Line            = [Indentation] ( Comment | Node | BlockContinuation | EmptyLine )
 		
 		Node            = Indentation Name [Namespace] ( Inline | BlockStart )
 		Inline          = ":" [Space] [InlineText]
@@ -768,7 +768,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		Ident           = [A-Za-z0-9]+   ; accepted in input; the parser MUST normalize it to lowercase (section 7)
 		                                 ; canonical form (and recommended by style): [a-z0-9]+
 		
-		Comment      = "#" { any character until end of line }   ; discarded; indentation not validated
+		Comment         = "#" { any character until end of line }   ; discarded; indentation not validated
 		
 		BlockContinuation = BlockTextLine   ; lines with indentation strictly greater than the >> node
 		                                          ; interleaved comments (indent <= node >>) are discarded
@@ -779,7 +779,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		                  - Pure tabs: 1 tab = 1 level
 		                  - Mixed on line: calculation by columns; each tab completes to the next multiple of 4
 		
-		Name          = Normalized text (trim + space compaction) according to section 4.1
+		Name            = Normalized text (trim + space compaction) according to section 4.1
 		
 	Content >>	
 		**Key notes for implementers:**

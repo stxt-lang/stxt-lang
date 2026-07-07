@@ -145,7 +145,7 @@ Document (dev.stxt.website): CMS (Content Management Systems)
 		Un template evita páginas incompletas o incoherentes.
 		
 	Code >>
-		Template (stxt.template): com.acme.cms.page
+		Template (@stxt.template): com.acme.cms.page
 			Description: Página CMS estándar
 			Structure >>
 				Page:

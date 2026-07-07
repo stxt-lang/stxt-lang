@@ -402,7 +402,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		1. It defines two `Node` with the same canonical name.
 		2. It uses an unknown `Type`.
 		3. It defines `Children` in a `Node` whose type does not allow children (section 9).
-		4. Cardinality is invalid (`Min > Max`, non-negative non-integer value, duplicated `Min`/`Max`).
+		4. Cardinality is invalid (`Min > Max`, a value that is not a non-negative integer, duplicated `Min`/`Max`).
 		5. A `Node: ENUM` does not define `Values`, or `Values` contains no `Value`.
 		6. A duplicated `Value` appears after inline normalization by trim.
 		7. Two equivalent `Child` nodes appear (same `canonical name + effective namespace`) within the same `Children`.

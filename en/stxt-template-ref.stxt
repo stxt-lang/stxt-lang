@@ -182,7 +182,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* A `@Node Name` reference **MAY** override cardinality, but **MUST NOT** redefine type, `ENUM` values, or children.
 		* The canonical name of the line and the canonical name of the `@Node Name` reference **MUST** match. A reference with a different name from its line **MUST** cause a template error (there is no renaming: `@` marks "reappearance of the same node", not "pointer to another").
 		* Nodes from other namespaces **MUST NOT** be defined locally within the current template.
-		* An external node **MAY** appear multiple times, but on that line **ONLY SHOULD** its cardinality be declared.
+		* An external node **MAY** appear multiple times, but that line **SHOULD** declare only its cardinality.
 		
 	Content >>
 		**Recursion.** A `@Node Name` reference **MUST** point to:
@@ -195,7 +195,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		(name + namespace + type), which is already available on its definition line; it is not necessary
 		for its list of children to be complete.
 		
-		As writing `Structure` is equivalent to traversing the node graph in depth, this rule
+		Since writing `Structure` is equivalent to a depth-first traversal of the node graph, this rule
 		covers any dependency graph: self-recursion, recursion through ancestors, and mutual
 		recursion.
 		
@@ -204,17 +204,17 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Code >>
 		Template (@stxt.template): com.example.doc
 			Structure >>
-				Documento (com.example.doc):
-					Título: (1)
-					Sección: (*)
-						Título: (1) @Título
-						Texto: (?) TEXT
-						Sección: (*) @Sección
+				Document (com.example.doc):
+					Title: (1)
+					Section: (*)
+						Title: (1) @Title
+						Text: (?) TEXT
+						Section: (*) @Section
 		
 	Content >>
-		Here the last line, `Sección: (*) @Sección`, declares `Sección` as a child of itself,
-		referencing the ancestor `Sección` whose definition is open. `Título: (1) @Título`
-		reuses the previous local definition of `Título`.
+		Here the last line, `Section: (*) @Section`, declares `Section` as a child of itself,
+		referencing the ancestor `Section` whose definition is open. `Title: (1) @Title`
+		reuses the previous local definition of `Title`.
 		
 		Example (mutual recursion `A`/`B`):
 		
@@ -277,9 +277,9 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		Examples:
 		
 	Code >>
-		Fecha: (1) DATE
-		Cuerpo: (1) TEXT
-		Es Público: (1) BOOLEAN
+		Date: (1) DATE
+		Body: (1) TEXT
+		Is Public: (1) BOOLEAN
 		
 	Content >>
 		General rules:
@@ -351,8 +351,8 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		contain a comma `,` (value separator) or a closing bracket `]` (end of list).
 		It also does not preserve spaces at the beginning or end, which trim removes.
 		
-		This is a limitation of the **subset expressible by templates**. If values are needed
-		`ENUM` with commas, brackets, or significant spaces, a **schema** (`@stxt.schema`) must be used,
+		This is a limitation of the **subset expressible by templates**. If `ENUM` values
+		with commas, brackets, or significant spaces are needed, a **schema** (`@stxt.schema`) must be used,
 		whose `Value` nodes allow any inline value.
 		
 	Subheader: 10. Namespaces within `Structure`
@@ -517,15 +517,15 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Code >>
 		Template (@stxt.template): com.example.doc
 			Structure >>
-				Documento (com.example.doc):
-					Título: (1)
-					Sección: (*)
-						Título: (1) @Título
-						Texto: (?) TEXT
-						Sección: (*) @Sección
+				Document (com.example.doc):
+					Title: (1)
+					Section: (*)
+						Title: (1) @Title
+						Text: (?) TEXT
+						Section: (*) @Section
 
 	Content >>
-		`Sección` contains itself at any depth. This is the case that a parser with the
+		`Section` contains itself at any depth. This is the case that a parser with the
 		"previous definition only" rule would incorrectly reject; that is why it is included as a
 		normative example of conformance.
 
