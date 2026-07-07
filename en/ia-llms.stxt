@@ -1,0 +1,158 @@
+Document (dev.stxt.website): AI and LLMs — Generated, verifiable documents
+
+	Metadata:
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-07-07
+
+	Header: AI and LLMs
+
+	Content >>
+		LLMs generate Markdown effortlessly: it is their mother tongue.
+		But "valid" Markdown means nothing: any output passes,
+		including hallucinated fields, missing sections and broken metadata.
+
+	Assert >>
+		@STXT@ is an ideal format for AI-generated documents:\\
+		as easy to write as Markdown, but **verifiable**.
+
+	Subheader: Why an LLM writes good @STXT@
+
+	Content >>
+		@STXT@ does not appear in model training data, but that matters
+		less than it seems. With an example and a template in context,
+		following a regular format is something LLMs do very well.
+
+		And @STXT@ is **more regular than Markdown**:
+
+		* Every line is `Name:`, `Name >>` or indented text.
+		* There are no six alternative syntaxes for the same thing.
+		* The structure is linear: it is generated top to bottom, with no backward references.
+
+		The possible mistakes are few and well known:
+
+		* Indentation drift in very long documents.
+		* Forgetting to indent a line inside a `>>` block.
+
+		Both are caught at validation time, and that is the key.
+
+	Subheader: The key difference: verifiable
+
+	Content >>
+		When an LLM generates Markdown, nobody can check the result.
+		When it generates @STXT@ with a template:
+
+		* The parser validates the output instantly.
+		* The **closed content model** catches hallucinated fields.
+		* `ENUM` values and cardinalities catch invented values.
+		* Types (`DATE`, `EMAIL`, `NUMBER`...) catch broken formats.
+
+		A valid @STXT@ document means the structure is correct.
+		Valid Markdown means nothing.
+
+	Subheader: The loop: generate, validate, fix
+
+	Content >>
+		Validation turns generation into a reliable process:
+
+		1. The LLM generates the @STXT@ document.
+		2. The parser validates it against the template.
+		3. If there are errors, they are fed back to the model.
+		4. The model fixes them and the loop repeats.
+
+		With one or two iterations, the success rate approaches 100%.
+		This loop **does not exist** for Markdown: there is nothing to validate against.
+
+	Content >>
+		Example of a template included in the prompt:
+
+	Code >>
+		Template (@stxt.template): com.acme.reports
+			Structure >>
+				Report (com.acme.reports):
+					Title: (1)
+					Date: (1) DATE
+					Status: (1) ENUM [Draft, Final]
+					Summary: (1) TEXT
+					Section: (*)
+						Title: (1) @Title
+						Content: (1) TEXT
+
+	Content >>
+		Generated output with typical LLM mistakes, all of them caught:
+
+	Code >>
+		Report (com.acme.reports):
+			Title: Market analysis
+			Date: ***tomorrow*** # ERROR: DATE requires YYYY-MM-DD
+			Status: ***Pending*** # ERROR: not an ENUM value
+			***Subtitle***: Short version # ERROR: undeclared child (closed model)
+
+	Subheader: No escaping: long prose inside structure
+
+	Content >>
+		The weak spot of LLMs generating JSON is escaping:
+		quotes, `\n`, line breaks inside strings.
+
+	Code >>
+		{"summary": "Line 1\nLine 2 with \"quotes\" and more text..."}
+
+	Content >>
+		In @STXT@, `>>` blocks are literal text: the model only
+		has to indent.
+
+	Code >>
+		Summary >>
+			Line 1
+			Line 2 with "quotes" and more text...
+
+	Content >>
+		For documents with long free text, @STXT@ is a more reliable
+		output surface than JSON or YAML.
+
+	Subheader: Normalization forgives variance
+
+	Content >>
+		The canonical node name absorbs the usual variations of an LLM:
+		`TITLE:`, `Title:` and `title:` collapse into the same node.
+		Where other formats would say "unknown field", @STXT@ understands
+		it is the same element.
+
+		Strict validation is reserved for where it matters:
+		`ENUM` values are case-sensitive and exact.
+
+	Subheader: Prompting best practices
+
+	Content >>
+		* Include the **full template** of the namespace in the prompt:
+		  it is compact and tells the model which fields exist, their
+		  cardinalities and their allowed values before generating.
+		* Add **one complete, correct example document**.
+		* Ask for consistent indentation (tabs, or 4 spaces per level).
+		* Always validate the output with the parser; do not trust the eye.
+		* Make sure the validator's error messages include the line,
+		  what was expected and what was found: a good error message
+		  makes the fixing loop nearly infallible.
+
+	Subheader: Use cases
+
+	Content >>
+		* **AI-assisted CMS content**: the build rejects generated pages
+		  that are incomplete or inconsistent; no silent garbage gets published.
+		* **Data extraction**: turning free text (emails, reports, minutes)
+		  into @STXT@ documents validated against a template.
+		* **Generated reports and documentation**: guaranteed structure,
+		  free prose inside `>>` blocks.
+		* **Agents and pipelines**: @STXT@ as the interchange format between
+		  steps, with validation at every boundary.
+
+	Subheader: Summary
+
+	Content >>
+		* With a template and an example in context, an LLM generates @STXT@ reliably.
+		* Validation catches hallucinated fields, invented values and broken formats.
+		* The generate → validate → fix loop makes the final result
+		  **more reliable than Markdown**, whose correctness nobody can check.
+		* Literal blocks remove escaping, the weak spot of JSON.
+		* Verifiable structure + free text: exactly what AI-generated
+		  content needs.

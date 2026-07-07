@@ -74,3 +74,6 @@ Document (dev.stxt.website): STXT: The Book
 		
 	Link: Contracts and legal agreements
 		Page: use-cases-contracts
+
+	Link: AI and LLMs
+		Page: ia-llms
