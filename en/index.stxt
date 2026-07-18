@@ -23,12 +23,12 @@ Document (dev.stxt.website): STXT - Built for humans. Reliable for machines.
 		An @STXT@ document balances human clarity with an explicit semantic structure, ideal for **documents, wikis, and configurations**:
 	
 	Code >>
-		***Email***:
+		Email:
 			From: John Smith
 			To: Mery Adams
 			Cc: Keyla Brown
 			Title: Project report
-			***Body Content >>***
+			Body Content >>
 				Hello Mery!
 				The book is finished!
 
@@ -42,7 +42,7 @@ Document (dev.stxt.website): STXT - Built for humans. Reliable for machines.
 		An `Email` document from the `com.example.docs` namespace:
 		
 	Code >>
-		***Email (com.example.docs)***:
+		Email (com.example.docs):
 			From: John Smith
 			To: Mery Adams
 			Cc: Keyla Brown
@@ -54,7 +54,7 @@ Document (dev.stxt.website): STXT - Built for humans. Reliable for machines.
 		And the template definition:
 		
 	Code >>
-		***Template (@stxt.template): com.example.docs***
+		Template (@stxt.template): com.example.docs
 			Structure >>
 				Email (com.example.docs):
 					From: EMAIL

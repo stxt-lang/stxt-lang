@@ -163,7 +163,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 	Code >>
 		Node: nombre del nodo
 			Children:
-				Child: nombre del hijo (***namespace.del.hijo***)
+				Child: nombre del hijo (namespace.del.hijo)
 					Min: 0
 					Max: 1
 
@@ -198,7 +198,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		
 	Code >>
 		Node: nombre del nodo
-			***Type: TIPO_DEL_NODO***
+			Type: TIPO_DEL_NODO
 			Children:
 				Child: Nombre Hijo
 

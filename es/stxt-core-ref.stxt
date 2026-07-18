@@ -56,15 +56,15 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		**Ejemplo con nodos INLINE:**
 	
 	Code >>
-		***Nodo 1***: Valor inline
-			***Nodo 2 sin valor***:
-			***Nodo 3 con otro valor***: este es el otro valor
+		Nodo 1: Valor inline
+			Nodo 2 sin valor:
+			Nodo 3 con otro valor: este es el otro valor
 		
 	Content >>	
 		**Ejemplo con nodo BLOCK:**
 	
 	Code >>
-		***Nodo block >>***
+		Nodo block >>
 			Este es el contenido
 			del bloque de texto:
 			
@@ -260,9 +260,9 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Un namespace es opcional y se especifica así:
 
 	Code >>		
-		Nodo ***(com.example.docs)***:
-		Otro nodo ***(otro.namespace)***:
-		Más nodos ***(@un.nombre.especial)***:
+		Nodo (com.example.docs):
+		Otro nodo (otro.namespace):
+		Más nodos (@un.nombre.especial):
 		
 	Content >>
 		Reglas:
@@ -378,12 +378,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 	Code >>
 		Nodo nivel 0: Valor nivel 0
-		.|-->Nodo nivel 1: ***1 espacio + 1 TAB: nivel 1***
-		..|-->Otro nodo nivel 1: ***2 espacios + 1 TAB: nivel 1***
-		...|-->..|-->Nivel 2: ***3 espacios + 1 TAB, 2 espacios + 1 TAB: nivel 2***
-		|-->....Nivel 2: ***1 TAB, 4 Espacios: nivel 2***
-		..|-->Nivel 1: ***2 espacios + 1 TAB: nivel 1***
-		.|-->Nivel 1: ***1 espacio + 1 TAB: nivel 1***
+		.|-->Nodo nivel 1: 1 espacio + 1 TAB: nivel 1
+		..|-->Otro nodo nivel 1: 2 espacios + 1 TAB: nivel 1
+		...|-->..|-->Nivel 2: 3 espacios + 1 TAB, 2 espacios + 1 TAB: nivel 2
+		|-->....Nivel 2: 1 TAB, 4 Espacios: nivel 2
+		..|-->Nivel 1: 2 espacios + 1 TAB: nivel 1
+		.|-->Nivel 1: 1 espacio + 1 TAB: nivel 1
 		
 		
 	Subsubheader: 8.3 Errores de nivel
@@ -396,7 +396,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Code>>
 		Nivel 0:
 		....Nivel 1:
-		............Nivel3: ***ERROR, no se puede pasar de nivel 1 a nivel 3***
+		............Nivel3: ERROR, no se puede pasar de nivel 1 a nivel 3
 		
 	Content >>
 		* No llegar a un múltiplo de 4 al usar espacios o mezcla
@@ -404,15 +404,15 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Code >>
 		Nivel 0:
 		....Nivel 1
-		...Nivel casi 1: ***ERROR: 3 espacios (no se llega a 4)***
+		...Nivel casi 1: ERROR: 3 espacios (no se llega a 4)
 		
 		Nivel 0:
 		....Nivel 1:
-		.|-->..Nivel casi 2: ***ERROR: 1 espacio + 1 TAB, 2 espacios***
+		.|-->..Nivel casi 2: ERROR: 1 espacio + 1 TAB, 2 espacios
 		
 		Nivel 0:
 		....Nivel 1:
-		..........Nivel más que 2: ***ERROR: 4 espacios, 4 espacios, 2 espacios*** 
+		..........Nivel más que 2: ERROR: 4 espacios, 4 espacios, 2 espacios 
 		
 	Content >>
 		**Nota:** estas reglas de nivel se aplican a las líneas que definen nodos. Las líneas de
@@ -495,15 +495,15 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Ejemplo completo:
 		
 	Code >>
-		***# Es un comentario***
+		# Es un comentario
 		Nodo inline:
-		    ***# Es un comentario***
+		    # Es un comentario
 		    Nodo text >>
-		        ***# NO ES un comentario***
-		    ***# Es un comentario dentro de nodo texto. NO cierra el nodo***
+		        # NO ES un comentario
+		    # Es un comentario dentro de nodo texto. NO cierra el nodo
 		        Sigue el texto 1
-		    ***# Esto si es un comentario***
-		***# Esto también es un comentario***
+		    # Esto si es un comentario
+		# Esto también es un comentario
 		        Sigue el texto 2
 		    Otro nodo: Ya es otro nodo
 

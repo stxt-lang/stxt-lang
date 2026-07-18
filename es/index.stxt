@@ -23,12 +23,12 @@ Document (dev.stxt.website): STXT - Built for humans. Reliable for machines.
 		Un documento @STXT@ equilibra la claridad humana con una estructura semántica explícita, ideal para **documentos, wikis y configuraciones**:
 	
 	Code >>
-		***Email***:
+		Email:
 			From: John Smith
 			To: Mery Adams
 			Cc: Keyla Brown
 			Title: Project report
-			***Body Content >>***
+			Body Content >>
 				Hello Mery!
 				The book is finished!
 
@@ -42,7 +42,7 @@ Document (dev.stxt.website): STXT - Built for humans. Reliable for machines.
 		Un documento `Email` del namespace `com.example.docs`:
 		
 	Code >>
-		***Email (com.example.docs)***:
+		Email (com.example.docs):
 			From: John Smith
 			To: Mery Adams
 			Cc: Keyla Brown
@@ -54,7 +54,7 @@ Document (dev.stxt.website): STXT - Built for humans. Reliable for machines.
 		Y la definición de la plantilla:
 		
 	Code >>
-		***Template (@stxt.template): com.example.docs***
+		Template (@stxt.template): com.example.docs
 			Structure >>
 				Email (com.example.docs):
 					From: EMAIL

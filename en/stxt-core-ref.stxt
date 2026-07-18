@@ -56,15 +56,15 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		**Example with INLINE nodes:**
 	
 	Code >>
-		***Node 1***: Inline value
-			***Node 2 without value***:
-			***Node 3 with another value***: this is the other value
+		Node 1: Inline value
+			Node 2 without value:
+			Node 3 with another value: this is the other value
 		
 	Content >>	
 		**Example with a BLOCK node:**
 	
 	Code >>
-		***Block node >>***
+		Block node >>
 			This is the content
 			of the text block:
 			
@@ -260,9 +260,9 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		A namespace is optional and is specified like this:
 
 	Code >>		
-		Node ***(com.example.docs)***:
-		Another node ***(another.namespace)***:
-		More nodes ***(@a.special.name)***:
+		Node (com.example.docs):
+		Another node (another.namespace):
+		More nodes (@a.special.name):
 		
 	Content >>
 		Rules:
@@ -378,12 +378,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		
 	Code >>
 		Level 0 node: Level 0 value
-		.|-->Level 1 node: ***1 space + 1 TAB: level 1***
-		..|-->Another level 1 node: ***2 spaces + 1 TAB: level 1***
-		...|-->..|-->Level 2: ***3 spaces + 1 TAB, 2 spaces + 1 TAB: level 2***
-		|-->....Level 2: ***1 TAB, 4 Spaces: level 2***
-		..|-->Level 1: ***2 spaces + 1 TAB: level 1***
-		.|-->Level 1: ***1 space + 1 TAB: level 1***
+		.|-->Level 1 node: 1 space + 1 TAB: level 1
+		..|-->Another level 1 node: 2 spaces + 1 TAB: level 1
+		...|-->..|-->Level 2: 3 spaces + 1 TAB, 2 spaces + 1 TAB: level 2
+		|-->....Level 2: 1 TAB, 4 Spaces: level 2
+		..|-->Level 1: 2 spaces + 1 TAB: level 1
+		.|-->Level 1: 1 space + 1 TAB: level 1
 		
 		
 	Subsubheader: 8.3 Level errors
@@ -396,7 +396,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 	Code>>
 		Level 0:
 		....Level 1:
-		............Level3: ***ERROR, you cannot go from level 1 to level 3***
+		............Level3: ERROR, you cannot go from level 1 to level 3
 		
 	Content >>
 		* Not reaching a multiple of 4 when using spaces or a mix
@@ -404,15 +404,15 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 	Code >>
 		Level 0:
 		....Level 1
-		...Almost level 1: ***ERROR: 3 spaces (does not reach 4)***
+		...Almost level 1: ERROR: 3 spaces (does not reach 4)
 		
 		Level 0:
 		....Level 1:
-		.|-->..Almost level 2: ***ERROR: 1 space + 1 TAB, 2 spaces***
+		.|-->..Almost level 2: ERROR: 1 space + 1 TAB, 2 spaces
 		
 		Level 0:
 		....Level 1:
-		..........More than level 2: ***ERROR: 4 spaces, 4 spaces, 2 spaces*** 
+		..........More than level 2: ERROR: 4 spaces, 4 spaces, 2 spaces 
 		
 	Content >>
 		**Note:** these level rules apply to lines that define nodes. Comment lines are exempt from level validation (see section 9): their indentation is not checked and never produces a level error.
@@ -493,15 +493,15 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		Complete example:
 		
 	Code >>
-		***# It is a comment***
+		# It is a comment
 		Inline node:
-		    ***# It is a comment***
+		    # It is a comment
 		    Text node >>
-		        ***# It is NOT a comment***
-		    ***# It is a comment inside a text node. It does NOT close the node***
+		        # It is NOT a comment
+		    # It is a comment inside a text node. It does NOT close the node
 		        The text continues 1
-		    ***# This is a comment***
-		***# This is also a comment***
+		    # This is a comment
+		# This is also a comment
 		        The text continues 2
 		    Another node: It is now another node
 
