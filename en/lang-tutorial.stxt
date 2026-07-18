@@ -88,8 +88,33 @@ Document (dev.stxt.website): STXT Tutorial
 		* Hierarchy is defined **only by indentation**.
 		* `Summary >>` and `Content >>` are literal text blocks: their content is not interpreted as @STXT@.
 		* There is no implicit type: everything is text unless it is validated.
-		
-	Subheader: 4. Use of namespaces
+
+	Subheader: 4. Comments
+
+	Content >>
+		@STXT@ supports **line comments**. A line is a comment when its first
+		character (after the indentation) is `#`; the parser **discards it
+		completely**, so it is not part of the tree or the data.
+
+	Code >>
+		# A book record
+		Book:
+			# The title goes first
+			Title: Modern software architecture
+			ISBN: 978-84-123456-7-8
+
+	Content >>
+		Key points:
+
+		* Comments are **whole-line**. There are no end-of-line comments: in
+		  `Title: My book # note`, the `#` and what follows are part of the
+		  **value**, not a comment.
+		* A comment's indentation is **not validated**: it may sit at any level.
+		  As a style rule, align it with the node it describes.
+		* Inside a `>>` text block everything is literal: a `#` there is **text**,
+		  not a comment.
+
+	Subheader: 5. Use of namespaces
 	
 	Assert >>
 		Namespaces allow grouping nodes into categories. In addition, if a
@@ -131,7 +156,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* The @STXT@ language **does not validate** the namespace, it only defines the 
 		  propagation rules.
 		
-	Subsubheader: 4.1 Special namespaces with `@`
+	Subsubheader: 5.1 Special namespaces with `@`
 	Content >>
 		Namespaces may or may not start with `@`. This indicates that they are 
 		**special or reserved namespaces**. For example, both templates
@@ -139,7 +164,7 @@ Document (dev.stxt.website): STXT Tutorial
 		
 		This is only a semantic indication, but the behavior is the same.
 	
-	Subsubheader: 4.2 Document validation
+	Subsubheader: 5.2 Document validation
 	
 	Content >>
 		In order to semantically validate a document, it must be associated with a **namespace**.
@@ -151,7 +176,7 @@ Document (dev.stxt.website): STXT Tutorial
 		To validate a document, **it is necessary for it to belong to a namespace**.\\
 		On the other hand, a document with a namespace does not have to be validated.
 			
-	Subheader: 5. Validation with Templates
+	Subheader: 6. Validation with Templates
 	
 	Content >>
 		**Templates** allow defining structural and type rules
@@ -159,7 +184,7 @@ Document (dev.stxt.website): STXT Tutorial
 		
 		A template is an @STXT@ document whose namespace is `@stxt.template`.
 		
-	Subsubheader: 5.1 Template for books
+	Subsubheader: 6.1 Template for books
 	
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -187,7 +212,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* `Summary` and `Content` are text blocks (`TEXT`).
 		* There must be at least one `Chapter`.
 		
-	Subsubheader: 5.2 Allowed forms for numbering
+	Subsubheader: 6.2 Allowed forms for numbering
 	
 	Content >>
 		
@@ -201,7 +226,7 @@ Document (dev.stxt.website): STXT Tutorial
 		| `num-`     | Up to `num` (`0..num`).      |
 		| `min,max`  | Between `min` and `max`.     |
 	
-	Subsubheader: 5.3 Applying the template
+	Subsubheader: 6.3 Applying the template
 	
 	Content >>
 		A validator that supports templates must:
@@ -214,7 +239,7 @@ Document (dev.stxt.website): STXT Tutorial
 		Depending on the parser, it may validate at the same time it parses the content. 
 		
 		
-	Subheader: 6. Validation with Schemas
+	Subheader: 7. Validation with Schemas
 	
 	Content >>
 		**Schemas** provide the same information as a template,
@@ -226,7 +251,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* Defines nodes, types, and cardinalities separately.
 		* Is the “canonical” representation of validation.
 		
-	Subsubheader: 6.1 Schema equivalent to the template
+	Subsubheader: 7.1 Schema equivalent to the template
 	
 	Code >>
 		Schema (@stxt.schema): com.acme.book
@@ -284,7 +309,7 @@ Document (dev.stxt.website): STXT Tutorial
 		  schemas and templates exist simultaneously for the same namespace. **There can only
 		  be one active**.
 		
-	Subheader: 7. Final validatable document
+	Subheader: 8. Final validatable document
 	
 	Content >>
 		Complete @STXT@ document that can be validated with the previous template or schema:
@@ -309,7 +334,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* Complies with the `com.acme.book` template.
 		* Complies with the `com.acme.book` schema.
 		
-	Subheader: 8. Best practices
+	Subheader: 9. Best practices
 	
 	Content >>
 		* Use `>>` blocks for long or literal text.
