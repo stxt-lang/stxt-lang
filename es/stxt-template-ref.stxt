@@ -546,7 +546,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		
 	Subheader: 17. Apéndice A — Gramática (informal)
 	
-	Code >>
+	Grammar >>
 		TemplateDoc      = "Template" "(" "@stxt.template" ")" ":" NamespaceTarget { TemplateField }
 		TemplateField    = DescriptionField | StructureField
 		DescriptionField = "Description" ":" Text

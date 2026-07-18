@@ -755,7 +755,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		
 	Subheader: 16. Appendix A — Grammar (Informal)
 		
-	Code >>
+	Grammar >>
 		Document        = { Line }
 		
 		Line            = [Indentation] ( Comment | Node | BlockContinuation | EmptyLine )

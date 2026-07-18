@@ -757,12 +757,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 	Subheader: 16. Apéndice A — Gramática (Informal)
 		
-	Code >>
-		Documento       = { Línea }
-		
-		Línea           = [Indentación] ( Comentario | Nodo | BloqueContinuación | LíneaVacía )
-		
-		Nodo            = Indentación Nombre [Namespace] ( Inline | BlockStart )
+	Grammar >>
+		Documento       = { Linea }
+
+		Linea           = [Indentacion] ( Comentario | Nodo | BloqueContinuacion | LineaVacia )
+
+		Nodo            = Indentacion Nombre [Namespace] ( Inline | BlockStart )
 		Inline          = ":" [Espacio] [TextoInline]
 		BlockStart      = [Espacio] ">>" [EspaciosFinales]
 		
@@ -772,11 +772,11 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 		Comentario      = "#" { cualquier carácter hasta fin de línea }   ; descartado; indentación no validada
 		
-		BloqueContinuación = LíneaTextoBloque   ; líneas con indentación estrictamente mayor que el nodo >>
+		BloqueContinuacion = LineaTextoBloque   ; líneas con indentación estrictamente mayor que el nodo >>
 		                                          ; los comentarios intercalados (indent <= nodo >>) se descartan
 		                                          ; sin cerrar el bloque
 		
-		Indentación     = Mezcla permitida de espacios y tabuladores según sección 8
+		Indentacion     = Mezcla permitida de espacios y tabuladores según sección 8
 		                  - Puros espacios: múltiplos exactos de 4 por nivel
 		                  - Puros tabs: 1 tab = 1 nivel
 		                  - Mixtos en línea: cálculo por columnas; cada tab completa hasta el siguiente múltiplo de 4
