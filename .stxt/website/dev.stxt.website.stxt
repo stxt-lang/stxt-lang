@@ -8,8 +8,8 @@ Template (@stxt.template): dev.stxt.website
 			Header: (?)
 			Subheader:
 			Subsubheader:
-			Content: TEXT
-			Assert: TEXT
+			Content: MARKDOWN
+			Assert: MARKDOWN
 			CODE: TEXT
 			Grammar: TEXT
 			Listing: TEXT
@@ -19,8 +19,9 @@ Template (@stxt.template): dev.stxt.website
 		Header:	Equivalente a un h1 de html
 		Document: Un documento es bla, bla, bla
 		Content >>
-			Texto de la página, en formato Markdown.
-			(Tipo TEXT hasta que el tooling soporte el tipo MARKDOWN de STXT-SCHEMA-SPEC 9.7.)
+			Texto de la página, en formato Markdown (tipo MARKDOWN, STXT-SCHEMA-SPEC 9.7).
+			El plugin de VSCode aún no conoce este tipo: su error TYPE_NOT_VALID es esperado
+			y sirve de recordatorio hasta que se actualice el tooling.
 		CODE >>
 			Código en formato STXT válido.
 			Un validador PUEDE parsear estos bloques como STXT.
