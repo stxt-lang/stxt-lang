@@ -308,6 +308,30 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 	Content >>
 		A conforming implementation **MUST** check `ENUM` types against their allowed values and **MUST** reject any value that does not match exactly one of them.
 
+	Subsubheader: 9.7 MARKDOWN type
+
+	Content >>
+		A conforming implementation **MUST** support this type.
+
+		| Type     | Value form      | Allows children | Description / Validation                        |
+		|----------|-----------------|-----------------|--------------------------------------------------|
+		| MARKDOWN | INLINE/BLOCK    | NO              | Text interpreted as Markdown. No structural validation. |
+
+		Rules:
+
+		* For **validation** purposes, `MARKDOWN` is equivalent to `TEXT`: all text is valid Markdown, so an implementation **MUST NOT** reject any value because of its content.
+		* Its function is to be an **interpretation contract** for consumers (renderers, exporters, editors): the text **SHOULD** be interpreted according to **CommonMark**. Extensions (e.g. tables) are the application's decision.
+		* In the `BLOCK` form, line breaks and empty lines **are preserved** (unlike the binary types of section 9.5): they form part of the Markdown text.
+		* Like every type with specific content, `MARKDOWN` **does not allow children** (section 9.1).
+
+		**Design note (non-normative):** `MARKDOWN` is the **only** embedded format that
+		@STXT@ Schema defines, because it covers the only domain that @STXT@ delegates by design —
+		the formatting of prose (bold, links, lists within text) — and because its raw form
+		remains readable, consistent with the Human-First principle. Types for embedded **data
+		formats** (`JSON`, `XML`, `YAML`, `TOML`, …) are an explicit **non-goal**
+		(section 11): @STXT@ is already the structure format, and such a type would bury structure
+		in opaque blobs. Structure is expressed in @STXT@.
+
 	Subheader: 10. Cardinalities
 
 	Content >>
@@ -347,9 +371,10 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		validators (automata, particle ambiguity) without a clear benefit for the target use cases.
 
 		Other explicit **non-goals** of @STXT@ Schema are: patterns or regular expressions over
-		values, default values, and conditional rules between fields ("if A appears, then B").
-		Keeping the model small and predictable is a design goal: that semantics belongs to the
-		application.
+		values, default values, conditional rules between fields ("if A appears, then B"), and
+		types for **embedded data formats** (`JSON`, `XML`, `YAML`, `TOML`, …; see the design
+		note in section 9.7). Keeping the model small and predictable is a design goal: that
+		semantics belongs to the application.
 
 	Subheader: 12. Normative Examples
 
@@ -537,6 +562,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		            Value: HEXADECIMAL
 		            Value: BINARY
 		            Value: BASE64
+		            Value: MARKDOWN
 		    Node: Values
 		        Type: GROUP
 		        Children:

@@ -18,6 +18,9 @@ Template (@stxt.template): dev.stxt.website
 	Description >>
 		Header:	Equivalente a un h1 de html
 		Document: Un documento es bla, bla, bla
+		Content >>
+			Texto de la página, en formato Markdown.
+			(Tipo TEXT hasta que el tooling soporte el tipo MARKDOWN de STXT-SCHEMA-SPEC 9.7.)
 		CODE >>
 			Código en formato STXT válido.
 			Un validador PUEDE parsear estos bloques como STXT.

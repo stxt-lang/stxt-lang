@@ -308,6 +308,30 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 	Content >>
 		Una implementación conforme **DEBE** comprobar los tipos `ENUM` contra sus valores permitidos y **DEBE** rechazar cualquier valor que no coincida exactamente con uno de ellos.
 
+	Subsubheader: 9.7 Tipo MARKDOWN
+
+	Content >>
+		Una implementación conforme **DEBE** admitir este tipo.
+
+		| Tipo     | Forma del valor | Admite hijos | Descripción / Validación                        |
+		|----------|-----------------|--------------|--------------------------------------------------|
+		| MARKDOWN | INLINE/BLOCK    | NO           | Texto que se interpreta como Markdown. Sin validación estructural. |
+
+		Reglas:
+
+		* A efectos de **validación**, `MARKDOWN` equivale a `TEXT`: todo texto es Markdown válido, así que una implementación **NO DEBE** rechazar ningún valor por su contenido.
+		* Su función es ser un **contrato de interpretación** para los consumidores (renderizadores, exportadores, editores): el texto **DEBERÍA** interpretarse según **CommonMark**. Las extensiones (p. ej. tablas) son decisión de la aplicación.
+		* En la forma `BLOCK`, los saltos de línea y las líneas vacías **se conservan** (a diferencia de los tipos binarios de la sección 9.5): forman parte del texto Markdown.
+		* Como todo tipo con contenido específico, `MARKDOWN` **no admite hijos** (sección 9.1).
+
+		**Nota de diseño (no normativa):** `MARKDOWN` es el **único** formato incrustado que
+		@STXT@ Schema define, porque cubre el único dominio que @STXT@ delega por diseño — el
+		formato de la prosa (negrita, enlaces, listas dentro del texto) — y porque su forma cruda
+		sigue siendo legible, coherente con el principio Human-First. Los tipos para **formatos de
+		datos** incrustados (`JSON`, `XML`, `YAML`, `TOML`, …) son un **no-objetivo explícito**
+		(sección 11): @STXT@ ya es el formato de estructura, y un tipo así enterraría estructura
+		en blobs opacos. La estructura se expresa en @STXT@.
+
 	Subheader: 10. Cardinalidades
 
 	Content >>
@@ -348,9 +372,10 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		objetivo.
 
 		Otros **no-objetivos** explícitos de @STXT@ Schema son: patrones o expresiones regulares
-		sobre valores, valores por defecto, y reglas condicionales entre campos ("si aparece A,
-		entonces B"). Mantener el modelo pequeño y predecible es un objetivo de diseño: esa
-		semántica pertenece a la aplicación.
+		sobre valores, valores por defecto, reglas condicionales entre campos ("si aparece A,
+		entonces B"), y los tipos para **formatos de datos incrustados** (`JSON`, `XML`, `YAML`,
+		`TOML`, …; ver la nota de diseño de la sección 9.7). Mantener el modelo pequeño y
+		predecible es un objetivo de diseño: esa semántica pertenece a la aplicación.
 
 	Subheader: 12. Ejemplos Normativos
 
@@ -539,6 +564,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		            Value: HEXADECIMAL
 		            Value: BINARY
 		            Value: BASE64
+		            Value: MARKDOWN
 		    Node: Values
 		        Type: GROUP
 		        Children:

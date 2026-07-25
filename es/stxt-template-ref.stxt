@@ -314,7 +314,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Content >>
 		El conjunto de tipos es el de *STXT-SCHEMA-SPEC*, con los mismos niveles de soporte:
 
-		* Una implementación de templates **DEBE** admitir todos los tipos definidos en *STXT-SCHEMA-SPEC* (secciones 9.2 a 9.5).
+		* Una implementación de templates **DEBE** admitir todos los tipos definidos en *STXT-SCHEMA-SPEC* (sección 9, incluido `MARKDOWN`).
 		* La exigencia de validación de cada grupo es la misma que allí: **DEBE** validar los tipos
 		  estructurales y los básicos de contenido, **DEBERÍA** validar los ampliados y **PUEDE**
 		  validar los binarios.

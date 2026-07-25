@@ -314,7 +314,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Content >>
 		The type set is that of *STXT-SCHEMA-SPEC*, with the same support levels:
 
-		* A template implementation **MUST** accept all the types defined in *STXT-SCHEMA-SPEC* (sections 9.2 to 9.5).
+		* A template implementation **MUST** accept all the types defined in *STXT-SCHEMA-SPEC* (section 9, including `MARKDOWN`).
 		* The validation requirement of each group is the same as there: it **MUST** validate the
 		  structural and basic content types, **SHOULD** validate the extended ones, and **MAY**
 		  validate the binary ones.
