@@ -11,6 +11,7 @@ Template (@stxt.template): dev.stxt.website
 			Content: TEXT
 			Assert: TEXT
 			CODE: TEXT
+			Grammar: TEXT
 			Link:
 				Page:
 	Description >>

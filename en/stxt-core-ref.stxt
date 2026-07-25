@@ -323,27 +323,25 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		An @STXT@ document:
 		
 		* **MAY** use spaces or tabs for indentation.
-		* Mixing spaces and tabs on the same line is **not recommended**. A parser **MAY** emit a warning in that case.
-		* If spaces and tabs are mixed on the same line, the effective indentation **MUST** be calculated from left to right:
-		  * Each tab completes the current level up to the next multiple of 4 columns.
-		  * Spaces add one column each.
-		  * The final result **MUST** correspond exactly to an integer number of levels.
-		  Following the **Human-First** principle, this rule seeks to ensure that a document that *looks* correct is actually correct.
-		* If it uses spaces:
-		  * It **MUST** use multiples of **4 spaces** to increase a level.
+		* The indentation of a line **MUST** be homogeneous: either only tabs, or only spaces.
+		* Mixing spaces and tabs in the indentation of the same line is a **parse error** (see section 8.3).
 		* If it uses tabs:
 		  * Each tab represents exactly 1 level.
-		* The following are equivalent as an increase of 1 level from an aligned column:
-		  * 4 spaces
-		  * 1 tab
-		  * 1, 2, or 3 spaces followed by 1 tab
-		* Once a full level has been reached, the calculation continues from that new base column.
+		* If it uses spaces:
+		  * It **MUST** use multiples of **4 spaces**: each group of 4 spaces represents 1 level.
+		* Different lines of the same document **MAY** use different styles (some tabs, some spaces): the hierarchy is compared by **level**, not by columns.
+		  * This is **not recommended** as a matter of style, and a parser **MAY** emit a warning if a document combines both styles.
+
+		Following the **Human-First** principle, this rule guarantees that the hierarchy of a
+		document looks the same in any editor, whatever the configured tab width: an indentation
+		that mixes tabs and spaces renders differently depending on the editor, and for that
+		reason it is rejected instead of interpreted.
 		  
-	Subsubheader: 8.2 Special indentation examples
+	Subsubheader: 8.2 Indentation examples
 	
 	Content >>
 		In the following examples, `.` is shown to identify a space, and `|-->` to identify a tab.
-		The tab is represented as occupying up to the next column that is a multiple of 4, as a text editor would do.
+		The tab is represented with a width of 4 columns, as a text editor configured to 4 would do.
 
 	Content >>
 		Example with tabs:
@@ -370,20 +368,21 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		....Level 1:
 	
 	Content >>
-		Example with a mix of spaces and tabs. 
+		Example with different styles on different lines.
 		
-		Allowed, although not recommended by style.
-		A parser **MAY** give a warning about mixing on the same line.
-		This example has the same indentation as the previous two.
+		Allowed: each line uses a homogeneous indentation (only tabs or only spaces),
+		even though the document combines both styles. It is not recommended, and a parser
+		**MAY** give a style warning.
+		This example has the same hierarchy as the previous two.
 		
 	Code >>
 		Level 0 node: Level 0 value
-		.|-->Level 1 node: 1 space + 1 TAB: level 1
-		..|-->Another level 1 node: 2 spaces + 1 TAB: level 1
-		...|-->..|-->Level 2: 3 spaces + 1 TAB, 2 spaces + 1 TAB: level 2
-		|-->....Level 2: 1 TAB, 4 Spaces: level 2
-		..|-->Level 1: 2 spaces + 1 TAB: level 1
-		.|-->Level 1: 1 space + 1 TAB: level 1
+		|-->Level 1 node: 1 TAB: level 1
+		....Another level 1 node: 4 spaces: level 1
+		|-->|-->Level 2: 2 TABs: level 2
+		........Level 2: 8 spaces: level 2
+		....Level 1: 4 spaces: level 1
+		|-->Level 1: 1 TAB: level 1
 		
 		
 	Subsubheader: 8.3 Level errors
@@ -399,7 +398,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		............Level3: ERROR, you cannot go from level 1 to level 3
 		
 	Content >>
-		* Not reaching a multiple of 4 when using spaces or a mix
+		* Not reaching a multiple of 4 when using spaces
+		* Mixing spaces and tabs in the indentation of the same line
 		
 	Code >>
 		Level 0:
@@ -408,11 +408,15 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		
 		Level 0:
 		....Level 1:
-		.|-->..Almost level 2: ERROR: 1 space + 1 TAB, 2 spaces
+		.|-->Mixed level: ERROR: mix of space and TAB on the same line
 		
 		Level 0:
 		....Level 1:
-		..........More than level 2: ERROR: 4 spaces, 4 spaces, 2 spaces 
+		..........More than level 2: ERROR: 10 spaces (not a multiple of 4)
+
+		Level 0:
+		|-->Level 1:
+		|-->....Mixed level: ERROR: mix of TAB and spaces on the same line
 		
 	Content >>
 		**Note:** these level rules apply to lines that define nodes. Comment lines are exempt from level validation (see section 9): their indentation is not checked and never produces a level error.
@@ -509,9 +513,10 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		In this example, the logical content of the `Text node` block is exactly three lines:
 		
 	Code >>
-		# It is NOT a comment
-		The text continues 1
-		The text continues 2
+		Text node >>
+			# It is NOT a comment
+			The text continues 1
+			The text continues 2
 
 	Content >>
 		Details:
@@ -537,7 +542,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		  `>>` node, it will stop being text and become a comment that is silently discarded.
 		  It is the only case in which an indentation error does not fail noisily.
 		* A parser **MAY** emit a warning when detecting a comment with indentation less than or equal
-		  to that of an active `>>` block, analogously to the warning for mixing spaces and tabs.
+		  to that of an active `>>` block, analogously to the style warning for combining tabs and
+		  spaces on different lines (section 8.1).
 
 	Subheader: 10. Whitespace normalization
 		
@@ -774,10 +780,10 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		                                          ; interleaved comments (indent <= node >>) are discarded
 		                                          ; without closing the block
 		
-		Indentation     = Mix of spaces and tabs allowed according to section 8
-		                  - Pure spaces: exact multiples of 4 per level
+		Indentation     = Only tabs or only spaces on each line, according to section 8
 		                  - Pure tabs: 1 tab = 1 level
-		                  - Mixed on line: calculation by columns; each tab completes to the next multiple of 4
+		                  - Pure spaces: exact multiples of 4 per level
+		                  - Mix of tabs and spaces on the same line: parse error
 		
 		Name            = Normalized text (trim + space compaction) according to section 4.1
 		
@@ -790,7 +796,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		  - Current inherited namespace.
 		
 		* **Basic parsing flow:**
-		  1. Read line and calculate its effective indentation (according to section 8 rules).
+		  1. Read line and calculate its indentation level (according to section 8 rules).
 		  2. If there is an active `>>` block:
 		     - If the line is empty → add empty line to the block.
 		     - If indentation > indentation of the `>>` node → add line as literal text (right trim).

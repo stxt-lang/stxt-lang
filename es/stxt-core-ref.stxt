@@ -1,8 +1,7 @@
 Document (dev.stxt.website): STXT (Semantic Text) — Documentos
-
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-06-13
+	  	Last modif: 2026-06-13
 		
 	Header: @STXT@ Documentos
 	
@@ -323,27 +322,25 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Un documento @STXT@:
 		
 		* **PUEDE** usar espacios o tabuladores para indentación.
-		* **No se recomienda** mezclar espacios y tabuladores en una misma línea. Un parser **PUEDE** emitir un aviso en ese caso.
-		* Si se mezclan espacios y tabuladores en una misma línea, la indentación efectiva **DEBE** calcularse de izquierda a derecha:
-		  * Cada tabulador completa el nivel actual hasta el siguiente múltiplo de 4 columnas.
-		  * Los espacios suman una columna cada uno.
-		  * El resultado final **DEBE** equivaler exactamente a un número entero de niveles.
-		  Siguiendo el principio **Human-First**, esta regla busca que un documento que *parece* correcto también lo sea realmente.
-		* Si usa espacios:
-		  * **DEBE** usar múltiples de **4 espacios** para subir de nivel.
+		* La indentación de una línea **DEBE** ser homogénea: o bien solo tabuladores, o bien solo espacios.
+		* Mezclar espacios y tabuladores en la indentación de una misma línea es un **error de parseo** (ver sección 8.3).
 		* Si usa tabs:
 		  * Cada tab representa exactamente 1 nivel.
-		* Son equivalentes como subida de 1 nivel desde una columna alineada:
-		  * 4 espacios
-		  * 1 tabulador
-		  * 1, 2 o 3 espacios seguidos de 1 tabulador
-		* Una vez alcanzado un nivel completo, el cálculo continúa desde esa nueva columna base.
+		* Si usa espacios:
+		  * **DEBE** usar múltiplos de **4 espacios**: cada grupo de 4 espacios representa 1 nivel.
+		* Líneas distintas de un mismo documento **PUEDEN** usar estilos distintos (unas tabs, otras espacios): la jerarquía se compara por **nivel**, no por columnas.
+		  * **No se recomienda** por estilo, y un parser **PUEDE** emitir un aviso si un documento combina ambos estilos.
+
+		Siguiendo el principio **Human-First**, esta regla garantiza que la jerarquía de un documento
+		se vea igual en cualquier editor, sea cual sea el ancho de tabulador configurado: una
+		indentación que mezcla tabs y espacios se renderiza distinta según el editor, y por eso
+		se rechaza en lugar de interpretarse.
 		  
-	Subsubheader: 8.2 Ejemplos de indentación especiales
+	Subsubheader: 8.2 Ejemplos de indentación
 	
 	Content >>
 		En los siguientes ejemplos se muestra `.` para identificar un espacio, y `|-->` para identificar un tabulador.
-		El tabulador se representa ocupando hasta la siguiente columna múltiplo de 4, como haría un editor de texto.
+		El tabulador se representa con un ancho de 4 columnas, como haría un editor de texto configurado a 4.
 
 	Content >>
 		Ejemplo con tabuladores:
@@ -370,20 +367,21 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		....Nivel 1:
 	
 	Content >>
-		Ejemplo con mezcla de espacios y tabuladores. 
+		Ejemplo con estilos distintos en líneas distintas.
 		
-		Permitido, aunque no recomendable por estilo.
-		Un parser **PUEDE** dar un aviso de mezcla en la misma línea.
-		Este ejemplo tiene la misma indentación que los dos anteriores.
+		Permitido: cada línea usa una indentación homogénea (solo tabs o solo espacios),
+		aunque el documento combine ambos estilos. No es recomendable, y un parser
+		**PUEDE** dar un aviso de estilo.
+		Este ejemplo tiene la misma jerarquía que los dos anteriores.
 		
 	Code >>
 		Nodo nivel 0: Valor nivel 0
-		.|-->Nodo nivel 1: 1 espacio + 1 TAB: nivel 1
-		..|-->Otro nodo nivel 1: 2 espacios + 1 TAB: nivel 1
-		...|-->..|-->Nivel 2: 3 espacios + 1 TAB, 2 espacios + 1 TAB: nivel 2
-		|-->....Nivel 2: 1 TAB, 4 Espacios: nivel 2
-		..|-->Nivel 1: 2 espacios + 1 TAB: nivel 1
-		.|-->Nivel 1: 1 espacio + 1 TAB: nivel 1
+		|-->Nodo nivel 1: 1 TAB: nivel 1
+		....Otro nodo nivel 1: 4 espacios: nivel 1
+		|-->|-->Nivel 2: 2 TABs: nivel 2
+		........Nivel 2: 8 espacios: nivel 2
+		....Nivel 1: 4 espacios: nivel 1
+		|-->Nivel 1: 1 TAB: nivel 1
 		
 		
 	Subsubheader: 8.3 Errores de nivel
@@ -399,7 +397,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		............Nivel3: ERROR, no se puede pasar de nivel 1 a nivel 3
 		
 	Content >>
-		* No llegar a un múltiplo de 4 al usar espacios o mezcla
+		* No llegar a un múltiplo de 4 al usar espacios
+		* Mezclar espacios y tabuladores en la indentación de una misma línea
 		
 	Code >>
 		Nivel 0:
@@ -408,11 +407,15 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 		Nivel 0:
 		....Nivel 1:
-		.|-->..Nivel casi 2: ERROR: 1 espacio + 1 TAB, 2 espacios
+		.|-->Nivel mezclado: ERROR: mezcla de espacio y TAB en la misma línea
 		
 		Nivel 0:
 		....Nivel 1:
-		..........Nivel más que 2: ERROR: 4 espacios, 4 espacios, 2 espacios 
+		..........Nivel más que 2: ERROR: 10 espacios (no es múltiplo de 4)
+
+		Nivel 0:
+		|-->Nivel 1:
+		|-->....Nivel mezclado: ERROR: mezcla de TAB y espacios en la misma línea
 		
 	Content >>
 		**Nota:** estas reglas de nivel se aplican a las líneas que definen nodos. Las líneas de
@@ -511,9 +514,10 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		En este ejemplo, el contenido lógico del bloque `Nodo text` es exactamente tres líneas:
 		
 	Code >>
-		# NO ES un comentario
-		Sigue el texto 1
-		Sigue el texto 2
+		Nodo text >>
+			# NO ES un comentario
+			Sigue el texto 1
+			Sigue el texto 2
 
 	Content >>
 		Detalles:
@@ -539,7 +543,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		  nodo `>>`, dejará de ser texto y pasará a ser un comentario que se descarta silenciosamente.
 		  Es el único caso en que un error de indentación no falla de forma ruidosa.
 		* Un parser **PUEDE** emitir un aviso al detectar un comentario con indentación menor o igual
-		  que la de un bloque `>>` activo, de forma análoga al aviso de mezcla de espacios y tabuladores.
+		  que la de un bloque `>>` activo, de forma análoga al aviso de estilo por combinar tabs y
+		  espacios en líneas distintas (sección 8.1).
 
 	Subheader: 10. Normalización de espacios en blanco
 		
@@ -776,10 +781,10 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		                                          ; los comentarios intercalados (indent <= nodo >>) se descartan
 		                                          ; sin cerrar el bloque
 		
-		Indentacion     = Mezcla permitida de espacios y tabuladores según sección 8
-		                  - Puros espacios: múltiplos exactos de 4 por nivel
+		Indentacion     = Solo tabuladores o solo espacios en cada línea, según sección 8
 		                  - Puros tabs: 1 tab = 1 nivel
-		                  - Mixtos en línea: cálculo por columnas; cada tab completa hasta el siguiente múltiplo de 4
+		                  - Puros espacios: múltiplos exactos de 4 por nivel
+		                  - Mezcla de tabs y espacios en la misma línea: error de parseo
 		
 		Nombre          = Texto normalizado (trim + compactación espacios) según sección 4.1
 		
@@ -792,7 +797,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		  - Namespace heredado actual.
 		
 		* **Flujo básico de parseo:**
-		  1. Leer línea y calcular su indentación efectiva (según reglas de sección 8).
+		  1. Leer línea y calcular su nivel de indentación (según reglas de sección 8).
 		  2. Si hay bloque `>>` activo:
 		     - Si la línea es vacía → añadir línea vacía al bloque.
 		     - Si indentación > indentación del nodo `>>` → añadir línea como texto literal (trim derecha).
