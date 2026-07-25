@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-06-13
+		Last modif: 2026-07-25
 		
 	Header: @STXT@ Plantillas (@stxt.template)
 	
@@ -125,7 +125,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		
 		* `<NodeName>` es el nombre del nodo (texto humano; se normaliza según STXT-SPEC para comparación).
 		* `<NamespaceOverride>` es opcional y tiene la forma `(<namespace>)` o `(@namespace.especial)` y define el namespace **efectivo** de ese nodo plantilla.
-		* `":"` es obligatorio (para ser un documento @STXT@ válido).
+		* `":"` es obligatorio. No lo exige el core (el contenido de un bloque `>>` es texto opaco para él), sino la **gramática de templates**, por coherencia visual con la sintaxis @STXT@.
 		* `<RuleSpec>` es opcional e incluye, en este orden lógico:
 		  1. Cardinalidad opcional (entre paréntesis).
 		  2. Referencia opcional a un nodo mediante `@Nombre Nodo`, o alternativamente un tipo.
@@ -153,9 +153,9 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Content >>
 		Un parser de templates **DEBE**:
 		
-		1. Leer el bloque `Structure >>` como una secuencia de líneas (ya canonicalizadas por @STXT@ core: trim derecha por línea).
+		1. Leer el bloque `Structure >>` como una secuencia de líneas ya canonicalizadas por @STXT@ core: nivel de bloque eliminado y trim derecha por línea (*STXT-SPEC*, sección 10.2).
 		2. Ignorar líneas vacías.
-		3. Calcular jerarquía por indentación (mismos principios que @STXT@: indentación consecutiva, sin saltos).
+		3. Calcular jerarquía por indentación aplicando las reglas de *STXT-SPEC* (sección 8): en cada línea, solo tabs (1 tab = 1 nivel) o solo espacios en múltiplos de 4, **sin mezcla en una misma línea**, y con niveles consecutivos, sin saltos.
 		4. Para cada línea, parsear:
 		   * Nombre del nodo + namespace opcional `(ns)` si existe.
 		   * El carácter `:` obligatorio.
@@ -182,7 +182,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* Una referencia `@Nombre Nodo` **PUEDE** sobrescribir la cardinalidad, pero **NO DEBE** redefinir tipo, valores `ENUM` ni hijos.
 		* El nombre canónico de la línea y el nombre canónico de la referencia `@Nombre Nodo` **DEBEN** coincidir. Una referencia con nombre distinto al de su línea **DEBE** provocar un error de template (no existe el renombrado: `@` marca "reaparición del mismo nodo", no "puntero a otro").
 		* Los nodos de otros namespaces **NO DEBEN** definirse localmente dentro del template actual.
-		* Un nodo externo **PUEDE** aparecer varias veces, pero en esa línea **SÓLO DEBERÍA** declararse su cardinalidad.
+		* Un nodo externo **PUEDE** aparecer varias veces, pero en esa línea **NO DEBE** declararse nada más que la cardinalidad (ver sección 10).
 		
 	Content >>
 		**Recursión.** Una referencia `@Nombre Nodo` **DEBE** apuntar a:
@@ -285,6 +285,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		Reglas generales:
 		
 		* El tipo explícito **DEBE** coincidir exactamente con uno de los tipos soportados por la implementación.
+		* El tipo **DEBE** escribirse en mayúsculas (`DATE`, no `date`): la comparación es exacta y **CASE-SENSITIVE**.
 		* Si una línea usa referencia `@Nombre Nodo`, **NO DEBE** declarar además un tipo explícito.
 		* Las reglas semánticas de tipos `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `ENUM`, `NUMBER`, `DATE`, etc. **DEBEN** ser coherentes con las definidas en *STXT-SCHEMA-SPEC*.
 
@@ -311,13 +312,12 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Subsubheader: 8.3 Conjunto de tipos
 	
 	Content >>
-		El conjunto de tipos recomendado es el mismo que *STXT-SCHEMA-SPEC*.
-		
-		Una implementación de templates:
-		
-		* **DEBE** soportar al menos: `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `NUMBER`, `BOOLEAN`, `DATE`, `ENUM`.
-		* **DEBERÍA** soportar el resto de tipos definidos en @STXT@ Schema (por ejemplo `INTEGER`, `NATURAL`, 
-		  `TIME`, `TIMESTAMP`, `UUID`, `URL`, `EMAIL`, `BASE64`, etc.).
+		El conjunto de tipos es el de *STXT-SCHEMA-SPEC*, con los mismos niveles de soporte:
+
+		* Una implementación de templates **DEBE** admitir todos los tipos definidos en *STXT-SCHEMA-SPEC* (secciones 9.2 a 9.5).
+		* La exigencia de validación de cada grupo es la misma que allí: **DEBE** validar los tipos
+		  estructurales y los básicos de contenido, **DEBERÍA** validar los ampliados y **PUEDE**
+		  validar los binarios.
 		
 	Subheader: 9. ENUM y lista de valores
 	
@@ -414,21 +414,27 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Content >>
 		Un template es inválido si ocurre cualquiera de estas condiciones:
 		
-		1. El documento de `Structure>>` no es un documento válido @STXT@ (indentación inválida, etc.)
+		1. La indentación interna de `Structure >>` no cumple las reglas de indentación de *STXT-SPEC*, sección 8 (mezcla de tabs y espacios en una misma línea, niveles no consecutivos, espacios que no son múltiplos de 4, etc.).
 		2. El documento no tiene raíz `Template (@stxt.template): <namespace_objetivo>`.
 		3. Falta `Structure >>` o `Structure` no es bloque `>>`.
 		4. Una línea no vacía dentro de `Structure` no contiene `:`.
 		5. Cardinalidad mal formada o con números inválidos.
 		6. Tipo desconocido (según el conjunto de tipos soportado por la implementación).
-		7. Uso de `[...]` si el tipo no es `ENUM`.
-		8. Un nodo con hijos tiene un tipo efectivo que no admite hijos (es decir, distinto de `INLINE` o `GROUP`).
-		9. Redefinir un nodo local que ya ha aparecido previamente sin usar referencia `@Nombre Nodo`.
-		10. Usar una referencia `@Nombre Nodo` que no apunta a una definición local previa ni a un ancestro abierto.
-		11. El nombre de una referencia `@Nombre Nodo` no coincide (en nombre canónico) con el nombre de su línea.
-		12. Declarar a la vez referencia `@Nombre Nodo` y tipo explícito en la misma línea.
-		13. Declarar valores `ENUM` duplicados tras la normalización por trim.
-		14. Definir hijos, tipo explícito o valores `ENUM` en un nodo cross-namespace.
-		
+		7. Tipo `ENUM` sin lista de valores `[...]`, o con una lista vacía.
+		8. Uso de `[...]` si el tipo no es `ENUM`.
+		9. Un nodo con hijos tiene un tipo efectivo que no admite hijos (es decir, distinto de `INLINE` o `GROUP`).
+		10. Redefinir un nodo local que ya ha aparecido previamente sin usar referencia `@Nombre Nodo`.
+		11. Usar una referencia `@Nombre Nodo` que no apunta a una definición local previa ni a un ancestro abierto.
+		12. El nombre de una referencia `@Nombre Nodo` no coincide (en nombre canónico) con el nombre de su línea.
+		13. Declarar a la vez referencia `@Nombre Nodo` y tipo explícito en la misma línea.
+		14. Declarar valores `ENUM` duplicados tras la normalización por trim.
+		15. Definir hijos, tipo explícito o valores `ENUM` en un nodo cross-namespace.
+
+	Content >>
+		La validación de un **documento** frente a un template es, por definición, la validación
+		frente al schema compilado equivalente (sección 12): las condiciones de invalidez de un
+		documento son las definidas en *STXT-SCHEMA-SPEC*, sección 13.
+
 	Subheader: 14. Conformidad
 	
 	Content >>
@@ -567,7 +573,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		NamespaceTarget  = Namespace según STXT-SPEC
 		Namespace        = Ident "." Ident { "." Ident }   ; al menos 2 Ident
 		Ident            = [A-Za-z0-9]+   ; aceptado en entrada; normalizado a minúsculas (STXT-SPEC sección 7)
-		IdentUpper       = [A-Z0-9_]+     ; recomendado en mayúsculas (estilo)
+		IdentUpper       = [A-Z0-9_]+     ; los tipos se escriben en mayúsculas; comparación exacta (sección 8)
 		Value            = cualquier texto sin "," ni "]", con trim   ; ver sección 9.1
 		
 	Subheader: 18. Fin del Documento

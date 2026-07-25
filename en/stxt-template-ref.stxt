@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-06-13
+		Last modif: 2026-07-25
 		
 	Header: @STXT@ Templates (@stxt.template)
 	
@@ -125,7 +125,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		
 		* `<NodeName>` is the node name (human text; normalized according to STXT-SPEC for comparison).
 		* `<NamespaceOverride>` is optional and has the form `(<namespace>)` or `(@special.namespace)` and defines the **effective** namespace of that template node.
-		* `":"` is mandatory (to be a valid @STXT@ document).
+		* `":"` is mandatory. It is not required by the core (the content of a `>>` block is opaque text to it), but by the **template grammar**, for visual consistency with @STXT@ syntax.
 		* `<RuleSpec>` is optional and includes, in this logical order:
 		  1. Optional cardinality (in parentheses).
 		  2. Optional reference to a node through `@Node Name`, or alternatively a type.
@@ -153,9 +153,9 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Content >>
 		A template parser **MUST**:
 		
-		1. Read the `Structure >>` block as a sequence of lines (already canonicalized by @STXT@ core: right trim per line).
+		1. Read the `Structure >>` block as a sequence of lines already canonicalized by @STXT@ core: block level removed and right trim per line (*STXT-SPEC*, section 10.2).
 		2. Ignore empty lines.
-		3. Compute hierarchy by indentation (same principles as @STXT@: consecutive indentation, without jumps).
+		3. Compute hierarchy by indentation applying the rules of *STXT-SPEC* (section 8): on each line, only tabs (1 tab = 1 level) or only spaces in multiples of 4, **with no mixing on the same line**, and with consecutive levels, without jumps.
 		4. For each line, parse:
 		   * Node name + optional namespace `(ns)` if present.
 		   * The mandatory `:` character.
@@ -182,7 +182,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* A `@Node Name` reference **MAY** override cardinality, but **MUST NOT** redefine type, `ENUM` values, or children.
 		* The canonical name of the line and the canonical name of the `@Node Name` reference **MUST** match. A reference with a different name from its line **MUST** cause a template error (there is no renaming: `@` marks "reappearance of the same node", not "pointer to another").
 		* Nodes from other namespaces **MUST NOT** be defined locally within the current template.
-		* An external node **MAY** appear multiple times, but that line **SHOULD** declare only its cardinality.
+		* An external node **MAY** appear multiple times, but that line **MUST NOT** declare anything other than the cardinality (see section 10).
 		
 	Content >>
 		**Recursion.** A `@Node Name` reference **MUST** point to:
@@ -285,6 +285,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		General rules:
 		
 		* The explicit type **MUST** match exactly one of the types supported by the implementation.
+		* The type **MUST** be written in uppercase (`DATE`, not `date`): the comparison is exact and **CASE-SENSITIVE**.
 		* If a line uses a `@Node Name` reference, it **MUST NOT** also declare an explicit type.
 		* The semantic rules of types `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `ENUM`, `NUMBER`, `DATE`, etc. **MUST** be consistent with those defined in *STXT-SCHEMA-SPEC*.
 	
@@ -311,13 +312,12 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Subsubheader: 8.3 Type set
 	
 	Content >>
-		The recommended type set is the same as *STXT-SCHEMA-SPEC*.
-		
-		A template implementation:
-		
-		* **MUST** support at least: `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `NUMBER`, `BOOLEAN`, `DATE`, `ENUM`.
-		* **SHOULD** support the rest of the types defined in @STXT@ Schema (for example `INTEGER`, `NATURAL`,
-		  `TIME`, `TIMESTAMP`, `UUID`, `URL`, `EMAIL`, `BASE64`, etc.).
+		The type set is that of *STXT-SCHEMA-SPEC*, with the same support levels:
+
+		* A template implementation **MUST** accept all the types defined in *STXT-SCHEMA-SPEC* (sections 9.2 to 9.5).
+		* The validation requirement of each group is the same as there: it **MUST** validate the
+		  structural and basic content types, **SHOULD** validate the extended ones, and **MAY**
+		  validate the binary ones.
 		
 	Subheader: 9. ENUM and value list
 	
@@ -414,20 +414,26 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Content >>
 		A template is invalid if any of these conditions occurs:
 		
-		1. The `Structure>>` document is not a valid @STXT@ document (invalid indentation, etc.)
+		1. The internal indentation of `Structure >>` does not comply with the indentation rules of *STXT-SPEC*, section 8 (a mix of tabs and spaces on the same line, non-consecutive levels, spaces that are not multiples of 4, etc.).
 		2. The document does not have root `Template (@stxt.template): <target_namespace>`.
 		3. `Structure >>` is missing or `Structure` is not a `>>` block.
 		4. A non-empty line within `Structure` does not contain `:`.
 		5. Malformed cardinality or cardinality with invalid numbers.
 		6. Unknown type (according to the set of types supported by the implementation).
-		7. Use of `[...]` if the type is not `ENUM`.
-		8. A node with children has an effective type that does not allow children (that is, different from `INLINE` or `GROUP`).
-		9. Redefining a local node that has already appeared previously without using `@Node Name` reference.
-		10. Using a `@Node Name` reference that does not point to a previous local definition or to an open ancestor.
-		11. The name of a `@Node Name` reference does not match (in canonical name) the name of its line.
-		12. Declaring both `@Node Name` reference and explicit type on the same line.
-		13. Declaring duplicate `ENUM` values after trim normalization.
-		14. Defining children, explicit type, or `ENUM` values on a cross-namespace node.
+		7. `ENUM` type without a `[...]` value list, or with an empty list.
+		8. Use of `[...]` if the type is not `ENUM`.
+		9. A node with children has an effective type that does not allow children (that is, different from `INLINE` or `GROUP`).
+		10. Redefining a local node that has already appeared previously without using `@Node Name` reference.
+		11. Using a `@Node Name` reference that does not point to a previous local definition or to an open ancestor.
+		12. The name of a `@Node Name` reference does not match (in canonical name) the name of its line.
+		13. Declaring both `@Node Name` reference and explicit type on the same line.
+		14. Declaring duplicate `ENUM` values after trim normalization.
+		15. Defining children, explicit type, or `ENUM` values on a cross-namespace node.
+
+	Content >>
+		The validation of a **document** against a template is, by definition, the validation
+		against the equivalent compiled schema (section 12): the invalidity conditions of a
+		document are those defined in *STXT-SCHEMA-SPEC*, section 13.
 		
 	Subheader: 14. Conformance
 	
@@ -567,7 +573,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		NamespaceTarget  = Namespace according to STXT-SPEC
 		Namespace        = Ident "." Ident { "." Ident }   ; at least 2 Ident
 		Ident            = [A-Za-z0-9]+   ; accepted in input; normalized to lowercase (STXT-SPEC section 7)
-		IdentUpper       = [A-Z0-9_]+     ; recommended in uppercase (style)
+		IdentUpper       = [A-Z0-9_]+     ; types are written in uppercase; exact comparison (section 8)
 		Value            = any text without "," or "]", with trim   ; see section 9.1
 		
 	Subheader: 18. End of Document
