@@ -353,7 +353,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Content >>
 		Ejemplo con tabuladores:
 		
-	Code >>
+	Listing >>
 		Nodo nivel 0: Valor nivel 0
 		|-->Nodo nivel 1:
 		|-->Otro nodo nivel 1:
@@ -365,7 +365,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Content >>		
 		Ejemplo con espacios:
 		
-	Code >>
+	Listing >>
 		Nodo nivel 0: Valor nivel 0
 		....Nodo nivel 1:
 		....Otro nodo nivel 1:
@@ -382,7 +382,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		**PUEDE** dar un aviso de estilo.
 		Este ejemplo tiene la misma jerarquía que los dos anteriores.
 		
-	Code >>
+	Listing >>
 		Nodo nivel 0: Valor nivel 0
 		|-->Nodo nivel 1: 1 TAB: nivel 1
 		....Otro nodo nivel 1: 4 espacios: nivel 1
@@ -399,7 +399,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 		* Niveles no consecutivos:
 		
-	Code>>
+	Listing >>
 		Nivel 0:
 		....Nivel 1:
 		............Nivel3: ERROR, no se puede pasar de nivel 1 a nivel 3
@@ -408,7 +408,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* No llegar a un múltiplo de 4 al usar espacios
 		* Mezclar espacios y tabuladores en la indentación de una misma línea
 		
-	Code >>
+	Listing >>
 		Nivel 0:
 		....Nivel 1
 		...Nivel casi 1: ERROR: 3 espacios (no se llega a 4)

@@ -12,12 +12,18 @@ Template (@stxt.template): dev.stxt.website
 			Assert: TEXT
 			CODE: TEXT
 			Grammar: TEXT
+			Listing: TEXT
 			Link:
 				Page:
 	Description >>
 		Header:	Equivalente a un h1 de html
 		Document: Un documento es bla, bla, bla
 		CODE >>
-			Código en formato STXT
-			También puede ser código en otros formatos,
-			como HTML, XML, etc.
+			Código en formato STXT válido.
+			Un validador PUEDE parsear estos bloques como STXT.
+		Grammar >>
+			Gramática (informal) del lenguaje.
+		Listing >>
+			Texto preformateado que no es STXT:
+			diagramas de whitespace, código en otros formatos
+			(HTML, XML...), salidas de consola, etc.

@@ -354,7 +354,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 	Content >>
 		Example with tabs:
 		
-	Code >>
+	Listing >>
 		Level 0 node: Level 0 value
 		|-->Level 1 node:
 		|-->Another level 1 node:
@@ -366,7 +366,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 	Content >>		
 		Example with spaces:
 		
-	Code >>
+	Listing >>
 		Level 0 node: Level 0 value
 		....Level 1 node:
 		....Another level 1 node:
@@ -383,7 +383,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		**MAY** give a style warning.
 		This example has the same hierarchy as the previous two.
 		
-	Code >>
+	Listing >>
 		Level 0 node: Level 0 value
 		|-->Level 1 node: 1 TAB: level 1
 		....Another level 1 node: 4 spaces: level 1
@@ -400,7 +400,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		
 		* Non-consecutive levels:
 		
-	Code>>
+	Listing >>
 		Level 0:
 		....Level 1:
 		............Level3: ERROR, you cannot go from level 1 to level 3
@@ -409,7 +409,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		* Not reaching a multiple of 4 when using spaces
 		* Mixing spaces and tabs in the indentation of the same line
 		
-	Code >>
+	Listing >>
 		Level 0:
 		....Level 1
 		...Almost level 1: ERROR: 3 spaces (does not reach 4)
