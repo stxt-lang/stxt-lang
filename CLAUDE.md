@@ -41,11 +41,13 @@ Document (dev.stxt.website): Título de la página
 		Ejemplos de código STXT; ***texto*** marca resaltado dentro del ejemplo.
 ```
 
-Convenciones del contenido: `@STXT@` es la forma con la que se escribe el nombre del lenguaje en el texto; los nodos disponibles son `Metadata`, `Header`, `Subheader`, `Subsubheader`, `Content`, `Assert`, `Code`, `Link`/`Page`.
+Convenciones del contenido: `@STXT@` es la forma con la que se escribe el nombre del lenguaje en el texto; los nodos disponibles son `Metadata`, `Header`, `Subheader`, `Subsubheader`, `Content`, `Assert`, `Code`, `Grammar`, `Listing`, `Link`/`Page`.
+
+Reparto de los bloques preformateados: `Code` es **exclusivamente STXT válido** (parseable; `***texto***` marca resaltado), `Grammar` es la gramática del lenguaje, y `Listing` es texto preformateado que no es STXT (diagramas de whitespace con la notación `.`/`|-->`, código en otros formatos, salidas de consola…). No poner contenido no parseable en un `Code`.
 
 ## Reglas críticas al editar ficheros `.stxt`
 
-- La indentación **es** la estructura: estos ficheros usan **tabuladores** (1 tab = 1 nivel). No convertir tabs a espacios ni mezclarlos; los saltos de nivel no consecutivos son error de parseo.
+- La indentación **es** la estructura: estos ficheros usan **tabuladores** (1 tab = 1 nivel). La indentación de una línea debe ser homogénea — solo tabs o solo espacios (múltiplos de 4): **mezclar ambos en una misma línea es error de parseo** desde 2026-07-25, igual que los saltos de nivel no consecutivos. No convertir tabs a espacios.
 - Todo lo indentado bajo un nodo `>>` es **texto literal** (los `#`, `:` y `>>` interiores no se interpretan), pero su indentación relativa se conserva: respetarla al editar.
 - Un nodo es siempre `Nombre:` (inline) o `Nombre >>` (bloque); la línea del `>>` no lleva contenido detrás.
-- Los namespaces solo admiten ASCII `[a-z0-9]` con formato `a.b` mínimo; `@` inicial marca namespaces especiales (`@stxt.schema`, `@stxt.template`, `dev.stxt.website`).
+- Los namespaces solo admiten ASCII `[a-z0-9]` con formato `a.b` mínimo; `@` inicial marca namespaces especiales (`@stxt.schema`, `@stxt.template`, `dev.stxt.website`). La rama `@stxt.*` está reservada al lenguaje: no crear ejemplos con namespaces propios bajo `@stxt`.
