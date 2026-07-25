@@ -335,6 +335,14 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		se vea igual en cualquier editor, sea cual sea el ancho de tabulador configurado: una
 		indentación que mezcla tabs y espacios se renderiza distinta según el editor, y por eso
 		se rechaza en lugar de interpretarse.
+
+		**Nota de diseño (no normativa):** el ancho de nivel es fijo de forma deliberada: 1 tab
+		o 4 espacios, sin otros anchos (por ejemplo, 2 espacios). Gracias a ello, el nivel de una
+		línea es una función de la propia línea (`tabs` o `espacios / 4`), calculable de forma
+		aislada, sin pila de indentaciones ni contexto previo — a diferencia de los lenguajes con
+		ancho de indentación variable, cuyos parsers necesitan mantener una pila de niveles.
+		La preferencia visual pertenece al editor, no al lenguaje: quien prefiera una indentación
+		más compacta puede usar tabuladores y configurar el ancho de tabulador de su editor.
 		  
 	Subsubheader: 8.2 Ejemplos de indentación
 	

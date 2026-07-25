@@ -336,6 +336,14 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		document looks the same in any editor, whatever the configured tab width: an indentation
 		that mixes tabs and spaces renders differently depending on the editor, and for that
 		reason it is rejected instead of interpreted.
+
+		**Design note (non-normative):** the level width is deliberately fixed: 1 tab or
+		4 spaces, with no other widths (for example, 2 spaces). Thanks to this, the level of a
+		line is a function of the line itself (`tabs` or `spaces / 4`), computable in isolation,
+		with no indentation stack and no previous context — unlike languages with variable
+		indentation width, whose parsers need to maintain a stack of levels.
+		Visual preference belongs to the editor, not to the language: whoever prefers a more
+		compact indentation can use tabs and configure their editor's tab width.
 		  
 	Subsubheader: 8.2 Indentation examples
 	
