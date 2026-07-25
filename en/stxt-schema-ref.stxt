@@ -2,53 +2,53 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-06-13
-		
+		Last modif: 2026-07-25
+
 	Header: @STXT@ Schemas (@stxt.schema)
-	
+
 	Subheader: 1. Introduction
 	Content >>		
 		This document defines the specification of the **@STXT@ Schema** language, a mechanism for validating @STXT@ documents through formal semantic rules.
-		
+
 		A **schema**:
-		
+
 		* Is an @STXT@ document with namespace `@stxt.schema`.
 		* Defines the nodes, types, and cardinalities of the target namespace.
 		* Does not modify the base syntax of @STXT@; it operates on the already parsed structure.
-		
+
 	Subheader: 2. Terminology
-		
+
 	Content >>
 		The keywords **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119**.
-		
+
 		Terms such as *node*, *indentation*, *namespace*, *inline* and *`>>` block* retain their meaning in *STXT-SPEC*.
-		
+
 	Subheader: 3. Relationship between @STXT@ and Schema
-		
+
 	Content >>
 		Schema validation occurs **after** @STXT@ parsing:
-		
+
 		1. Parsing the document into a hierarchical @STXT@ structure.
 		2. Resolving the effective namespace of each node.
 		3. Applying the corresponding schema.
-		
+
 		An implementation **MAY** apply validation **during** the parsing process, provided that such validation remains loosely coupled to the base parser.
 		This allows errors to be detected before the full parsing is completed.
-		
+
 	Subheader: 4. General Structure of a Schema
-		
+
 	Content >>
 		A schema document **MUST** have as its root node:
-		
+
 		`Schema (@stxt.schema): <target_namespace>`
-		
+
 		Rules:
-		
+
 		* `<target_namespace>` **MUST** be a valid namespace according to *STXT-SPEC*.
 		* The root node `Schema` **MUST** belong to the `@stxt.schema` namespace.
 		* The schema document **MAY** include a `Description` node.
 		* The schema document **MUST** include one or more `Node` nodes.
-		
+
 		Example:
 
 	Code >>
@@ -57,14 +57,14 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		    Node: Document
 		        Type: GROUP
 		        Children:
-		        	Child: Author
-		        	Child: Date
-		        		Max: 1
-		        	Child: Content
-		        		Min: 1
-		        		Max: 1
-		        	Child: Metadata (org.example.meta)
-		        		Max: 1
+		            Child: Author
+		            Child: Date
+		                Max: 1
+		            Child: Content
+		                Min: 1
+		                Max: 1
+		            Child: Metadata (org.example.meta)
+		                Max: 1
 		    Node: Author
 		    Node: Date
 		        Type: DATE
@@ -72,94 +72,96 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		        Type: TEXT
 
 	Subheader: 5. One schema per namespace
-		
+
 	Content >>
 		For each logical namespace:
-		
+
 		* There **MUST NOT** be more than one effective schema simultaneously.
 		* If an implementation has several candidate schemas for the same namespace, it **SHOULD** apply a clear and deterministic selection policy.
 		* For a specific validation, there **MUST** be only one effective schema.
-		
+
 	Subheader: 6. Closed content model
-		
+
 	Content >>
 		@STXT@ Schema uses a **closed content model**. This means that, for each node in the
 		document, **only** the direct children explicitly declared in the schema are allowed.
-		
+
 		Rules:
-		
+
 		* If a `Node` declares a `Children` block, its instances in the document **MAY ONLY**
 		  have as direct children the nodes declared through `Child` (each identified by
 		  its logical pair `canonical name + effective namespace`).
 		* If a `Node` does **not** declare `Children`, its instances in the document **MUST NOT** have
 		  any direct children (total closure).
 		* The appearance of an **undeclared** direct child **MUST** cause a validation error.
-		
+
 		This model is consistent with the @STXT@ philosophy of failing loudly: a misspelled
 		node (for example `Titel` instead of `Title`) is detected as an undeclared child instead
 		of being silently accepted.
-		
+
 	Content >>
 		**Note on evolution.** Since the model is closed, **adding** a node to a namespace is a
 		change that breaks validation of documents using old schemas. The recommended practice
 		for evolving a namespace incompatibly is to **version it in the namespace itself**
 		(for example `com.example.docs.v1` → `com.example.docs.v2`), so that each version has its
 		schema and documents declare the version they use.
-		
+
 	Content >>
 		**Unresolved cross-namespace nodes.** If a `Child` points to another namespace and the
 		implementation does not have a schema for that namespace, the declared node is accepted, but its
 		internal content remains **unvalidated** ("black box"). An implementation **SHOULD** be able
-		to distinguish between "fully validated" and "partially validated" in that case (see section 7.1).
-		
+		to distinguish between "fully validated" and "partially validated" in that case (see section 8.1).
+
 	Subheader: 7. Node Definition (`Node:`)
-		
+
 	Subsubheader: 7.1 Basic form
-		
+
 	Code >>
 		Node: Node Name
-			Description: Node description
-		    Type: Type
+		    Description: Node description
+		    Type: INLINE
 		    Children:
-		    	Child: Child Name. It may include a namespace if it is different from the target namespace
-		    		Min: optional, indicates the minimum number of children that may appear
-		    		Max: optional, indicates the maximum number of children that may appear
+		        Child: Child Name (another.namespace)
+		            Min: 1
+		            Max: 1
 	Content >>
 		Rules:
-		
+
 		* The inline value of `Node` **MUST** be a valid node name according to *STXT-SPEC*.
 		* Each `Node` **MUST** be unique within the schema at the canonical name level.
 		* Each `Node` defines the semantics of the node in the schema's target namespace.
 		* If `Type` is omitted, the default type is `INLINE`.
 		* A `Node` **MUST NOT** contain more than one `Description` node, more than one `Type` node, more than one `Children` node, nor more than one `Values` node.
 		* Only types that allow children (see section 9) **MAY** declare `Children`. Declaring `Children` in a type that does not allow children **MUST** cause a schema error.
-		
+		* The name of a `Child` **MAY** include a namespace when the child belongs to another namespace (section 8).
+		* `Min` and `Max` are optional within a `Child` (section 10).
+
 	Subsubheader: 7.2 Values in ENUM types
 	Code>>
 		Node: Node Name
 			Description: Node description
 		    Type: ENUM
 		    Values:
-		    	Value: value 1
-		    	Value: value 2
-		    	Value: value 3
-		    	
+		        Value: value 1
+		        Value: value 2
+		        Value: value 3
+
 	Content >>
 		The `ENUM` type, and only `ENUM`, **MAY** specify a `Values` node with the allowed values through `Value` nodes.
 		If `Values` exists, it **MUST** contain at least one `Value` node.
 		If a `Node` declares `Type: ENUM`, it **MUST** include `Values`.
-		
+
 		Since `ENUM` does not allow children (section 9), a `Node` of type `ENUM` **MUST NOT** declare `Children`.
 
 	Subheader: 8. Children (`Children:`) and cross-namespaces
-		
+
 	Content >>
 		A node **MAY** have a `Children` entry.
 		If `Children` exists, it **MUST** contain one or more `Child` nodes with the information of the allowed children.
-		
+
 		A `Child` **MAY** belong to another namespace, in which case it is indicated in the name of the `Child` itself.
 		Example:
-		
+
 	Code >>
 		Node: node name
 			Children:
@@ -171,31 +173,32 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* If the namespace is omitted, the `Child` belongs to the target namespace of the current schema.
 		* If an explicit namespace is indicated, the `Child` belongs to that specific namespace.
 		* Within the same `Children` node, an implementation **MUST NOT** accept two `Child` nodes that point to the same logical pair `canonical name + effective namespace`.
-		
+
 	Subsubheader: 8.1 Explicitly defined nodes
-		
+
 	Content >>
 		**Every node that appears in `Children` must have its own definition as `Node:` in its corresponding schema.**
-		
-		This avoids "ghost" children and guarantees that all nodes have defined semantics.
-		
-		This implies:
-		
-		* If `Child: Metadata (org.example.meta)` appears, then there **MUST** be a schema for `org.example.meta` and within it there **MUST** be `Node: Metadata`.
-		* An implementation **MAY** defer this check until the moment of document validation, but the schema remains semantically incomplete until such definition exists.
 
-		
+		This avoids "ghost" children and guarantees that all nodes have defined semantics.
+
+		This implies:
+
+		* If `Child: Metadata (org.example.meta)` appears, **full** validation requires that a schema exist for `org.example.meta` and that `Node: Metadata` exist within it.
+		* An implementation **MAY** operate without having that schema: the node is accepted as a "black box" and the result is a **partial** validation (see section 6). The schema remains semantically incomplete until such definition exists.
+		* An implementation **MAY** defer this check until the moment of document validation.
+
+
 	Subheader: 9. Types
-		
+
 	Content >>
 		Types define:
-		
+
 		1. **The form of the node value** (inline, `>>` block, both, or none).
 		2. **Whether the node allows children**.
 		3. **Content validation**.
-		
+
 		They are defined inside `Node`, through a `Type` element. Example:
-		
+
 	Code >>
 		Node: node name
 			Type: NODE_TYPE
@@ -203,46 +206,46 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 				Child: Child Name
 
 	Subsubheader: 9.1 Model of two independent properties
-		
+
 	Content >>
 		Each type is described through **two independent properties**:
-		
+
 		* **Value form**: `INLINE`, `BLOCK`, `INLINE/BLOCK` or `NONE`.
 		* **Allows children**: YES or NO.
-		
+
 		These two properties are **independent from each other**. In particular, "allows children" **is not**
 		derived from the value form. The compatibility rule is deliberately simple:
-		
+
 		**Only the two generic structural types — `INLINE` and `GROUP` — allow children. All
 		types with specific content validation are leaves (they do not allow children).**
-		
+
 		The intuition: as soon as a type declares that it validates a specific datum (`NUMBER`, `DATE`,
 		`BOOLEAN`, `ENUM`, etc.), that node **is** a datum, and a datum is a leaf. If both
 		value and structure are needed, the generic `INLINE` type is used, which exists precisely for that;
 		and if only structure is needed, `GROUP` is used.
-		
+
 		Other considerations:
-		
+
 		* The type **does not control requiredness**; only the form and validity of the value.
 		  Requiredness of appearance is controlled through cardinality.
 		* The value of `Type` **MUST** match exactly one of the types defined in this section.
 		* Declaring `Children` in a `Node` whose type **does not allow children** **MUST** cause a schema error.
-		
+
 	Subsubheader: 9.2 Basic structural types
 	Content >>
 		A conforming implementation **MUST** support these types and **MUST** validate their structure.
-	
+
 		| Type      | Value form      | Allows children | Description / Validation                              |
 		|-----------|-----------------|-----------------|-------------------------------------------------------|
 		| INLINE    | INLINE          | **YES**         | Inline `:` text. **Default type.** Optional value without specific validation. Allows children. |
 		| GROUP     | NONE            | **YES**         | Does not allow textual value. Structured children only. |
 		| BLOCK     | BLOCK           | NO              | `>>` text block only. Does not allow children.        |
 		| TEXT      | INLINE/BLOCK    | NO              | Generic text. It may be inline `:` or `>>` block. Does not allow children. |
-		
+
 	Subsubheader: 9.3 Basic INLINE content types
 	Content>>
 		A conforming implementation **MUST** support these types and **MUST** validate their structure.
-		 
+
 		| Type      | Value form      | Allows children | Description / Validation               |
 		|-----------|-----------------|-----------------|-----------------------------------------|
 		| BOOLEAN   | INLINE          | NO              | `true` or `false`.                     |
@@ -252,7 +255,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 	Subsubheader: 9.4 Extended INLINE content types
 	Content>>
 		A conforming implementation **MUST** support these types and **SHOULD** validate their structure.
-		
+
 		| Type      | Value form      | Allows children | Description / Validation                      |
 		|-----------|-----------------|-----------------|------------------------------------------------|
 		| INTEGER   | INLINE          | NO              | Number without decimals (positive and negative). |
@@ -265,50 +268,54 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		| EMAIL     | INLINE          | NO              | Valid email address.                           |
 
 	Subsubheader: 9.5 Extended INLINE/BLOCK binary content types
-	
+
 	Content >>
 		A conforming implementation **MUST** support these types and **MAY** validate their structure.
-		
+
 		| Type        | Value form      | Allows children | Description / Validation              |
 		|-------------|-----------------|-----------------|----------------------------------------|
 		| HEXADECIMAL | INLINE/BLOCK    | NO              | `[0-9A-Fa-f]+`. Hexadecimal string.   |
 		| BINARY      | INLINE/BLOCK    | NO              | `[01]+`. Binary string.               |
 		| BASE64      | INLINE/BLOCK    | NO              | Valid Base64 content.                 |
-		
+
+		In the `BLOCK` form, validation is applied to the **concatenation** of the block's lines,
+		ignoring line breaks, empty lines, and leading and trailing spaces or tabs of each line.
+		This allows splitting long content (e.g. Base64) across several lines.
+
 	Subsubheader: 9.6 ENUM type
-	
+
 	Content >>
 		The `ENUM` type allows explicitly enumerating the values allowed for a node.
 		Rules:
-		
+
 		* Comparison **MUST** be done on the inline value already normalized by left and right trim, as defined by *STXT-SPEC*.
 		* Comparison **MUST** be exact and **CASE-SENSITIVE**.
 		* Comparison **MUST NOT** apply additional canonicalization, removal of diacritics, nor normalizations equivalent to the canonical name of nodes.
 		* The node **MUST** define `Values` with `Value` nodes, which represent the allowed values.
 		* Each `Value` **MUST** be unique after inline normalization by trim.
 		* `ENUM` **does not allow children**: a `Node` of type `ENUM` **MUST NOT** declare `Children`.
-		
+
 		Example:
-		
+
 	Code >>
 		Node: Node Name
 		    Type: ENUM
 		    Values:
-		    	Value: value 1
-		    	Value: value 2
-		    	Value: value 3
-		    	
+		        Value: value 1
+		        Value: value 2
+		        Value: value 3
+
 	Content >>
 		A conforming implementation **MUST** check `ENUM` types against their allowed values and **MUST** reject any value that does not match exactly one of them.
-	
+
 	Subheader: 10. Cardinalities
-		
+
 	Content >>
 		Cardinalities are expressed through the `Min` and `Max` nodes within each `Child`.
 		They are **optional non-negative integers** that indicate the minimum or maximum number of allowed occurrences of that child.
-		
+
 		Rules:
-		
+
 		* If `Min` is omitted, the effective minimum is `0`.
 		* If `Max` is omitted, the effective maximum is unlimited.
 		* `Min` and `Max` **MUST NOT** appear more than once within the same `Child`.
@@ -319,65 +326,70 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* A conforming implementation **MUST** check cardinalities.
 
 	Subheader: 11. Order of children
-		
+
 	Content >>
 		@STXT@ Schema does **not** validate the order of children. Validation of cardinality and
 		presence is **independent of the position** of each child within its parent: it only counts
 		how many times each child appears, not in what order.
-		
+
 		Two documents with the same children in a different order validate exactly the same. This is a
 		design decision consistent with the Human-First principle: the author of a document should not
 		have to remember the order of the fields.
-		
+
 		**Order preserved, not validated.** Although order is not *validated*, the order of appearance of
 		children **is preserved** in the parsed tree (core guarantee, *STXT-SPEC*). Therefore,
 		an application that needs positional meaning (for example, consecutive sections of a
 		document) obtains it from the tree itself, not from validation. The semantics of order belong
 		to the application.
-		
+
 		Sequential order validation is an explicit **non-goal** of @STXT@ Schema: introducing
 		ordered content models (in the style of `xs:sequence`) would considerably complicate
 		validators (automata, particle ambiguity) without a clear benefit for the target use cases.
-		
+
+		Other explicit **non-goals** of @STXT@ Schema are: patterns or regular expressions over
+		values, default values, and conditional rules between fields ("if A appears, then B").
+		Keeping the model small and predictable is a design goal: that semantics belongs to the
+		application.
+
 	Subheader: 12. Normative Examples
-		
+
 	Subsubheader: 12.1 Schema with cross-namespace references
-		
+
 	Code >>
 		Schema (@stxt.schema): com.example.docs
 		    Node: Document
 		        Type: GROUP
 		        Children:
 		            Child: Metadata (org.example.meta)
-		            	Max: 1
+		                Max: 1
 		            Child: Content
-		            	Min: 1
-		            	Max: 1
+		                Min: 1
+		                Max: 1
 		    Node: Content
 		        Type: BLOCK
 
 	Content: And in `org.example.meta`:
-	
+
 	Code >>
 		Schema (@stxt.schema): org.example.meta
 		    Node: Metadata
-		    	Type: INLINE
-		
+		        Type: INLINE
+
 	Subsubheader: 12.2 Valid document
-		
+
 	Code >>
 		Document (com.example.docs):
 		    Metadata (org.example.meta): info
-		    Content>>
+		    Content >>
 		        Line 1
 		        Line 2
 
 	Subsubheader: 12.3 Recursive structure
-		
+
 	Content >>
 		The closed model allows recursion effortlessly: a `Node` may be declared as a child of itself
 		or of an ancestor.
-		
+
 	Code >>
 		Schema (@stxt.schema): com.example.docs
 		    Node: Section
@@ -389,39 +401,42 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		            Child: Section
 		    Node: Title
 		        Type: INLINE
-		
+
 	Content >>
 		Here `Section` may contain more nested `Section` nodes at any depth (limited
 		by the recommended depth limit in *STXT-SPEC*, security section).
-		
+
 	Subheader: 13. Schema Errors
-		
+
 	Content >>
 		A schema is invalid if:
-		
-		1. It defines two `Node` with the same canonical name.
-		2. It uses an unknown `Type`.
-		3. It defines `Children` in a `Node` whose type does not allow children (section 9).
-		4. Cardinality is invalid (`Min > Max`, a value that is not a non-negative integer, duplicated `Min`/`Max`).
-		5. A `Node: ENUM` does not define `Values`, or `Values` contains no `Value`.
-		6. A duplicated `Value` appears after inline normalization by trim.
-		7. Two equivalent `Child` nodes appear (same `canonical name + effective namespace`) within the same `Children`.
-		8. A child appears in `Children` whose `Node` is not defined in its corresponding schema.
-		
+
+		1. The root node does not have the form `Schema (@stxt.schema): <target_namespace>`, or the target namespace is not valid according to *STXT-SPEC*.
+		2. It does not define any `Node`.
+		3. It defines two `Node` with the same canonical name.
+		4. It uses an unknown `Type`.
+		5. It defines `Children` in a `Node` whose type does not allow children (section 9).
+		6. It defines `Values` in a `Node` whose type is not `ENUM` (section 7.2).
+		7. Cardinality is invalid (`Min > Max`, a value that is not a non-negative integer, duplicated `Min`/`Max`).
+		8. A `Node` of type `ENUM` does not define `Values`, or `Values` contains no `Value`.
+		9. A duplicated `Value` appears after inline normalization by trim.
+		10. Two equivalent `Child` nodes appear (same `canonical name + effective namespace`) within the same `Children`.
+		11. A child appears in `Children` whose `Node` is not defined in its corresponding schema.
+
 	Content >>
 		A document is invalid against a schema if:
-		
+
 		* A node presents a direct **undeclared** child in the `Children` of its definition (closed model, section 6).
 		* A node without declared `Children` presents **any** direct child.
 		* A declared cardinality is violated.
 		* The value of a node does not satisfy validation of its type.
 		* An `ENUM` value does not match exactly any of its `Value`.
-		
+
 	Subheader: 14. Conformance
-		
+
 	Content >>
 		An implementation is conforming if:
-		
+
 		* It fully implements this document.
 		* It validates types, value forms, cardinalities, and allowed values (ENUM).
 		* It applies the **closed content model** (section 6).
@@ -430,20 +445,20 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* It validates cardinalities **independently of order**.
 		* It selects, for each validation, a single effective schema per namespace.
 		* It rejects invalid documents and schemas.
-		
+
 	Subheader: 15. Schema of the Schema (`@stxt.schema`)
-		
+
 	Content >>
 		This section defines the **official schema** of the schema system itself: the meta-schema that validates all documents in the `@stxt.schema` namespace.
-		
+
 		**Level of guarantee.** The meta-schema validates the **form** of a schema document (which nodes
 		exist, their types, their cardinalities). It cannot express the conditional or
 		crossed rules of this document (for example "`Values` only if `Type: ENUM`", or "`Min ≤ Max`"),
 		which belong to the language but not to the meta-schema. Therefore, "validating against the meta-schema"
 		is a **necessary but not sufficient** condition to be a valid schema: in addition, the rules of section 13 must be met.
-		
+
 	Subsubheader: 15.1 Considerations
-		
+
 	Content >>
 		* Every schema document is: `Schema (@stxt.schema): <target-namespace>`
 		* A schema contains:
@@ -463,9 +478,9 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 			* May only appear in `Node` nodes of type `ENUM`.
 			* Contains one or more `Value` nodes.
 		* The names (`Schema`, `Node`, `Type`, `Children`, `Child`, `Description`, `Min`, `Max`, `Values`, `Value`) belong to the `@stxt.schema` namespace.
-		
+
 	Subsubheader: 15.2 Complete Meta-Schema
-		
+
 	Code >>
 		Schema (@stxt.schema): @stxt.schema
 		    Node: Schema
@@ -485,7 +500,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		            Child: Values
 		                Max: 1
 		    Node: Children
-		       	Type: GROUP
+		        Type: GROUP
 		        Children:
 		            Child: Child
 		                Min: 1
@@ -528,66 +543,66 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		            Child: Value
 		                Min: 1
 		    Node: Value
-		    		
+
 	Content >>
 		**Note:** in the meta-schema, `Node` and `Child` are of default type `INLINE` (their
 		inline value is the name of the target node or child) and therefore they allow children. This illustrates that
 		`INLINE` is the type that combines value and structure, the core of the system.
-		
+
 	Subsubheader: 15.3 Quick reading
-		
+
 	Content >>
 		* `Schema`
 		  Inline value = target namespace (e.g. `com.example.docs`).
-		  Children: `Description` (?), `Node` (*).
-		
+		  Children: `Description` (?), `Node` (+).
+
 		* `Node`
 		  Inline value = target node name (e.g. `Document`, `Author`).
 		  Optional children:
-		
+
 		  * `Type`: concrete type (if missing ⇒ `INLINE`).
 		  * `Children`: Node with list of allowed `Child`.
 		  * `Description`: explanatory text.
 		  * `Values`: Allowed values (ENUM type only).
-		
+
 		* `Type`
 		  Inline (`ENUM`), with the type name (`GROUP`, `INLINE`, `NUMBER`, etc.).
-		
+
 		* `Children`
 		  `GROUP`: contains one or more `Child` nodes.
-		
+
 		* `Description`
 		  `TEXT`: may be inline or multiline.
 
 		* `Values`
 		  `GROUP`: contains one or more `Value` nodes.
-		
+
 		* `Value`
 		  Inline value with one of the allowed values for the `ENUM`.
-		
+
 	Subsubheader: 15.4 Minimal valid example
-		
+
 	Code >>
 		Schema (@stxt.schema): com.example.docs
 		    Node: Document
-		
+
 	Subsubheader: 15.5 Complete example
-		
+
 	Code >>
 		Schema (@stxt.schema): com.example.docs
 		    Description: Example schema
 		    Node: Document
 		        Type: GROUP
 		        Children:
-		        	Child: Title
-		        		Min: 1
-		        		Max: 1
-		        	Child: Author
-		        	Child: Metadata (org.example.meta)
-		        		Max: 1
+		            Child: Title
+		                Min: 1
+		                Max: 1
+		            Child: Author
+		            Child: Metadata (org.example.meta)
+		                Max: 1
 		    Node: Title
 		        Type: INLINE
 		    Node: Author
 		        Type: INLINE
-		
+
 	Subheader: 16. End of Document
