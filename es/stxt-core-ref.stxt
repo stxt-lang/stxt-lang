@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-07-25
+		Last modif: 2026-07-26
 		
 	Header: @STXT@ Documentos
 	
@@ -242,7 +242,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* Las líneas vacías **dentro del bloque** se conservan y **NO DEBEN** cerrar el bloque, independientemente de su indentación.
 		* La comparación de indentaciones entre las líneas y el nodo `>>` se realiza por **nivel** (sección 8.1), con independencia del estilo (tabs o espacios) que use cada línea.
 		* El bloque también termina al llegar al **final del documento**.
-		* Las líneas del contenido siguen además las reglas de canonicalización de la sección 10.2, incluida la prohibición de quedar por debajo del nivel de bloque.
+		* Las líneas del contenido siguen además las reglas de canonicalización de la sección 10.2.
 		
 	Content >>
 		Como consecuencia de la transparencia de los comentarios, el contenido de un bloque `>>`
@@ -449,8 +449,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		**Nota:** estas reglas de nivel se aplican a las líneas que definen nodos. Las líneas de
 		comentario están exentas de la validación de nivel (ver sección 9): su indentación no se
 		comprueba y nunca produce error de nivel. Las líneas de texto de un bloque `>>` siguen
-		las reglas de la sección 10.2: solo su prefijo de nivel de bloque debe ser válido; el
-		resto de la línea es texto libre.
+		las reglas de la sección 10.2: solo su prefijo de nivel de bloque (el nivel del nodo
+		`>>` más uno) debe ser válido; el resto de la línea es texto libre.
 		
 	Subsubheader: 8.4 Jerarquía
 		
@@ -610,21 +610,21 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Subsubheader: 10.2 Líneas dentro de bloques `>>`
 		
 	Content >>
-		El **nivel de bloque** de un nodo `>>` es el nivel de indentación de la primera línea
-		**no vacía** de su contenido (la primera con nivel estrictamente mayor que el del nodo
-		`>>`). Para cada línea no vacía que pertenece al bloque:
+		El **nivel de bloque** de un nodo `>>` es **fijo**: el nivel del nodo `>>` más uno.
+		No se deriva del contenido: ninguna línea del bloque (tampoco la primera) establece
+		un mínimo de indentación para las demás. Para cada línea no vacía que pertenece al
+		bloque (nivel estrictamente mayor que el del nodo `>>`):
 
-		1. Su indentación **DEBE** alcanzar al menos el nivel de bloque. Una línea con nivel
-		   mayor que el del nodo `>>` pero menor que el nivel de bloque es un **error de parseo**.
-		2. El prefijo de la línea que cubre el nivel de bloque **DEBE** ser homogéneo (solo tabs
+		1. El prefijo de la línea que cubre el nivel de bloque **DEBE** ser homogéneo (solo tabs
 		   o solo espacios, sección 8.1). El cálculo es por **nivel**, por lo que cada línea puede
 		   usar un estilo distinto del de la línea del nodo `>>` o del resto del bloque.
-		3. El parser elimina **solo** ese prefijo (el nivel de bloque), conservando cualquier
+		2. El parser elimina **solo** ese prefijo (el nivel de bloque), conservando cualquier
 		   indentación adicional como parte del texto. El resto de la línea es **texto libre**:
-		   puede contener espacios y tabuladores en cualquier combinación, y cualquier sintaxis
-		   @STXT@ sin interpretarse.
-		4. Sobre ese contenido, el parser **DEBE** eliminar todos los espacios y tabuladores finales (trim a la derecha).
-		5. Las líneas vacías se conservan en todos los casos (ver sección 10.3).
+		   una vez alcanzado el nivel de bloque, no se aplica ninguna regla adicional de
+		   indentación ni de caracteres — puede contener espacios y tabuladores en cualquier
+		   combinación, y cualquier sintaxis @STXT@ sin interpretarse.
+		3. Sobre ese contenido, el parser **DEBE** eliminar todos los espacios y tabuladores finales (trim a la derecha).
+		4. Las líneas vacías se conservan en todos los casos (ver sección 10.3).
 		
 		(Las líneas de comentario intercaladas, según 9.1, ya se han descartado y no intervienen aquí.)
 		
@@ -640,7 +640,22 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 		* Línea 1: `"Hola"`
 		* Línea 2: `"    Mundo"`  (los 4 espacios adicionales tras el nivel de bloque se conservan; los espacios del final se eliminan)
-		
+
+	Content >>
+		Como el nivel de bloque no depende del contenido, la primera línea puede estar más
+		indentada que líneas posteriores del mismo bloque:
+
+	Code >>
+		Bloque >>
+		        Muy indentada
+		    Menos indentada
+
+	Content >>
+		Representación lógica del contenido del bloque:
+
+		* Línea 1: `"    Muy indentada"`
+		* Línea 2: `"Menos indentada"`
+
 	Subsubheader: 10.3 Líneas vacías en bloques `>>`
 		
 	Content >>
@@ -672,13 +687,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		1. Espacios que no sean múltiplos de 4 (cuando se usan espacios para indentación).
 		2. Mezcla de espacios y tabuladores en la indentación de una misma línea (sección 8.1).
 		3. Saltos en los niveles de indentación.
-		4. Una línea de un bloque `>>` con nivel mayor que el del nodo `>>` pero menor que el nivel de bloque (sección 10.2).
-		5. Un nodo `>>` contiene contenido significativo inline en la misma línea que `>>`.
-		6. Un nodo no contiene ni `:` ni `>>`.
-		7. El nombre lógico de un nodo es la cadena vacía.
-		8. El nombre canónico de un nodo es la cadena vacía (sección 4.3).
-		9. El nombre de un nodo contiene caracteres no permitidos (sección 4.2).
-		10. Un namespace no cumple las restricciones de la sección 7 (formato `a.b`, sólo ASCII `[a-z0-9]` por elemento, `@` opcional inicial).
+		4. Un nodo `>>` contiene contenido significativo inline en la misma línea que `>>`.
+		5. Un nodo no contiene ni `:` ni `>>`.
+		6. El nombre lógico de un nodo es la cadena vacía.
+		7. El nombre canónico de un nodo es la cadena vacía (sección 4.3).
+		8. El nombre de un nodo contiene caracteres no permitidos (sección 4.2).
+		9. Un namespace no cumple las restricciones de la sección 7 (formato `a.b`, sólo ASCII `[a-z0-9]` por elemento, `@` opcional inicial).
 		
 		Las líneas de comentario y las líneas vacías **no** son causa de error (su indentación no se valida).
 		
@@ -836,14 +850,15 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 		* El parser debe procesar el documento línea por línea, manteniendo estado de:
 		  - Nivel de indentación actual del nodo padre.
-		  - Nivel de bloque y estado de bloque `>>` activo (si lo hay).
+		  - Estado de bloque `>>` activo (si lo hay). Su nivel de bloque no es estado adicional:
+		    es siempre el nivel del nodo `>>` más uno.
 		  - Namespace heredado actual.
 		
 		* **Flujo básico de parseo:**
 		  1. Leer línea (descartando un `\r` final si existe, sección 3) y calcular su nivel de indentación (según reglas de sección 8).
 		  2. Si hay bloque `>>` activo:
 		     - Si la línea es vacía → añadir línea vacía al bloque.
-		     - Si indentación > indentación del nodo `>>` → añadir línea como texto literal (trim derecha).
+		     - Si indentación > indentación del nodo `>>` → recortar el nivel de bloque (nivel del nodo `>>` + 1) y añadir el resto como texto literal (trim derecha).
 		     - Si indentación ≤ indentación del nodo `>>` **y** la línea es un comentario (`#`) → descartar la línea; el bloque **sigue abierto**.
 		     - Si indentación ≤ indentación del nodo `>>` y la línea **no** es comentario → cerrar bloque y procesar la línea fuera del bloque.
 		  3. Si no hay bloque activo:
@@ -861,7 +876,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		  - Nombres de nodo: según sección 4.1–4.3.
 		  - Namespaces: normalizados a minúsculas durante el parseo (sección 7); sólo se conserva la forma minúscula.
 		  - Valores inline: trim izquierdo y derecho (sección 10.1).
-		  - Líneas de bloque: conservar indentación relativa + trim derecha + preservar todas las líneas vacías (sección 10.2–10.3).
+		  - Líneas de bloque: recortar el nivel de bloque conservando la indentación adicional + trim derecha + preservar todas las líneas vacías (sección 10.2–10.3).
 
 	Subheader: 17. Apéndice B — Interacción con `@stxt.schema`
 		

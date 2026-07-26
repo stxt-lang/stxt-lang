@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-07-25
+		Last modif: 2026-07-26
 		
 	Header: @STXT@ Documents
 	
@@ -243,7 +243,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		* Empty lines **within the block** are preserved and **MUST NOT** close the block, regardless of their indentation.
 		* The comparison of indentations between the lines and the `>>` node is done by **level** (section 8.1), regardless of the style (tabs or spaces) each line uses.
 		* The block also ends upon reaching the **end of the document**.
-		* Content lines additionally follow the canonicalization rules of section 10.2, including the prohibition of falling below the block level.
+		* Content lines additionally follow the canonicalization rules of section 10.2.
 		
 	Content >>
 		As a consequence of the transparency of comments, the content of a `>>` block
@@ -447,7 +447,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		|-->....Mixed level: ERROR: mix of TAB and spaces on the same line
 		
 	Content >>
-		**Note:** these level rules apply to lines that define nodes. Comment lines are exempt from level validation (see section 9): their indentation is not checked and never produces a level error. Text lines of a `>>` block follow the rules of section 10.2: only their block-level prefix must be valid; the rest of the line is free text.
+		**Note:** these level rules apply to lines that define nodes. Comment lines are exempt from level validation (see section 9): their indentation is not checked and never produces a level error. Text lines of a `>>` block follow the rules of section 10.2: only their block-level prefix (the level of the `>>` node plus one) must be valid; the rest of the line is free text.
 		
 	Subsubheader: 8.4 Hierarchy
 		
@@ -607,20 +607,20 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 	Subsubheader: 10.2 Lines within `>>` blocks
 		
 	Content >>
-		The **block level** of a `>>` node is the indentation level of the first **non-empty**
-		line of its content (the first with a level strictly greater than that of the `>>`
-		node). For each non-empty line belonging to the block:
+		The **block level** of a `>>` node is **fixed**: the level of the `>>` node plus one.
+		It is not derived from the content: no line of the block (not even the first one)
+		establishes a minimum indentation for the others. For each non-empty line belonging
+		to the block (level strictly greater than that of the `>>` node):
 
-		1. Its indentation **MUST** reach at least the block level. A line with a level greater
-		   than that of the `>>` node but less than the block level is a **parse error**.
-		2. The prefix of the line that covers the block level **MUST** be homogeneous (only tabs
+		1. The prefix of the line that covers the block level **MUST** be homogeneous (only tabs
 		   or only spaces, section 8.1). The calculation is by **level**, so each line may use a
 		   style different from that of the `>>` node line or the rest of the block.
-		3. The parser removes **only** that prefix (the block level), preserving any additional
-		   indentation as part of the text. The rest of the line is **free text**: it may contain
+		2. The parser removes **only** that prefix (the block level), preserving any additional
+		   indentation as part of the text. The rest of the line is **free text**: once the block
+		   level is reached, no further indentation or character rules apply — it may contain
 		   spaces and tabs in any combination, and any @STXT@ syntax without being interpreted.
-		4. On that content, the parser **MUST** remove all trailing spaces and tabs (right trim).
-		5. Empty lines are preserved in all cases (see section 10.3).
+		3. On that content, the parser **MUST** remove all trailing spaces and tabs (right trim).
+		4. Empty lines are preserved in all cases (see section 10.3).
 		
 		(Interleaved comment lines, according to 9.1, have already been discarded and do not intervene here.)
 		
@@ -636,7 +636,22 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		
 		* Line 1: `"Hello"`
 		* Line 2: `"    World"`  (the 4 additional spaces after the block level are preserved; trailing spaces are removed)
-		
+
+	Content >>
+		Since the block level does not depend on the content, the first line may be more
+		indented than later lines of the same block:
+
+	Code >>
+		Block >>
+		        Deeply indented
+		    Less indented
+
+	Content >>
+		Logical representation of the block content:
+
+		* Line 1: `"    Deeply indented"`
+		* Line 2: `"Less indented"`
+
 	Subsubheader: 10.3 Empty lines in `>>` blocks
 		
 	Content >>
@@ -668,13 +683,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		1. Spaces that are not a multiple of 4 (when spaces are used for indentation).
 		2. A mix of spaces and tabs in the indentation of the same line (section 8.1).
 		3. Jumps in indentation levels.
-		4. A line of a `>>` block with a level greater than that of the `>>` node but less than the block level (section 10.2).
-		5. A `>>` node contains significant inline content on the same line as `>>`.
-		6. A node contains neither `:` nor `>>`.
-		7. The logical name of a node is the empty string.
-		8. The canonical name of a node is the empty string (section 4.3).
-		9. The name of a node contains disallowed characters (section 4.2).
-		10. A namespace does not comply with the restrictions of section 7 (format `a.b`, ASCII only `[a-z0-9]` per element, optional initial `@`).
+		4. A `>>` node contains significant inline content on the same line as `>>`.
+		5. A node contains neither `:` nor `>>`.
+		6. The logical name of a node is the empty string.
+		7. The canonical name of a node is the empty string (section 4.3).
+		8. The name of a node contains disallowed characters (section 4.2).
+		9. A namespace does not comply with the restrictions of section 7 (format `a.b`, ASCII only `[a-z0-9]` per element, optional initial `@`).
 		
 		Comment lines and empty lines are **not** a cause of error (their indentation is not validated).
 		
@@ -832,14 +846,15 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		
 		* The parser must process the document line by line, maintaining state of:
 		  - Current indentation level of the parent node.
-		  - Block level and state of the active `>>` block (if any).
+		  - State of the active `>>` block (if any). Its block level is not additional state:
+		    it is always the level of the `>>` node plus one.
 		  - Current inherited namespace.
 		
 		* **Basic parsing flow:**
 		  1. Read line (discarding a trailing `\r` if present, section 3) and calculate its indentation level (according to section 8 rules).
 		  2. If there is an active `>>` block:
 		     - If the line is empty → add empty line to the block.
-		     - If indentation > indentation of the `>>` node → add line as literal text (right trim).
+		     - If indentation > indentation of the `>>` node → strip the block level (level of the `>>` node + 1) and add the rest as literal text (right trim).
 		     - If indentation ≤ indentation of the `>>` node **and** the line is a comment (`#`) → discard the line; the block **remains open**.
 		     - If indentation ≤ indentation of the `>>` node and the line is **not** a comment → close block and process the line outside the block.
 		  3. If there is no active block:
@@ -857,7 +872,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		  - Node names: according to section 4.1–4.3.
 		  - Namespaces: normalized to lowercase during parsing (section 7); only the lowercase form is preserved.
 		  - Inline values: left and right trim (section 10.1).
-		  - Block lines: preserve relative indentation + right trim + preserve all empty lines (section 10.2–10.3).
+		  - Block lines: strip the block level preserving any additional indentation + right trim + preserve all empty lines (section 10.2–10.3).
 
 	Subheader: 17. Appendix B — Interaction with `@stxt.schema`
 		
