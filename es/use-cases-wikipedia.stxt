@@ -369,7 +369,8 @@ Document (dev.stxt.website): Wikipedia (un enfoque alternativo)
 
 	Code >>
 		Template (@stxt.template): com.example.wiki
-			Description: Estructura mínima para páginas tipo wiki
+			Description >>
+				Page: Estructura mínima para páginas tipo wiki
 			Structure >>
 				Page:
 					Title: (1)

@@ -146,7 +146,8 @@ Document (dev.stxt.website): CMS (Content Management Systems)
 		
 	Code >>
 		Template (@stxt.template): com.acme.cms.page
-			Description: Página CMS estándar
+			Description >>
+				Page: Página CMS estándar
 			Structure >>
 				Page:
 					Title: (1)

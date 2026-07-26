@@ -184,7 +184,8 @@ Document (dev.stxt.website): Configuration files
 
 	Code >>
 		Template (@stxt.template): com.acme.server
-			Description: API server configuration
+			Description >>
+				Server Config: API server configuration
 			Structure >>
 				Server Config:
 					Name: (1)

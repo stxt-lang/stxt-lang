@@ -222,7 +222,8 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 		
 	Code >>
 		Template (@stxt.template): com.acme.legal.contract
-			Description: Estructura básica de contratos
+			Description >>
+				Agreement: Estructura básica de contratos
 			Structure >>
 				Agreement:
 					Id: (1)

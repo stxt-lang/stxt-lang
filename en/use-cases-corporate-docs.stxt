@@ -185,7 +185,8 @@ Document (dev.stxt.website): Corporate documents
 		
 	Code >>
 		Template (@stxt.template): com.acme.corp.minutes
-			Description: Corporate minutes template
+			Description >>
+				Minutes: Corporate minutes template
 			Structure >>
 				Minutes:
 					Title: (1)

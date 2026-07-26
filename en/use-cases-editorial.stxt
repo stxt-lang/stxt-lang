@@ -152,7 +152,8 @@ Document (dev.stxt.website): Publications and editorial content
 		
 	Code >>
 		Template (@stxt.template): com.acme.editorial.article
-			Description: Standard editorial article
+			Description >>
+				Article: Standard editorial article
 			Structure >>
 				Article:
 					Title: (1)

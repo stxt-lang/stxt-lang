@@ -185,7 +185,8 @@ Document (dev.stxt.website): Documentos corporativos
 		
 	Code >>
 		Template (@stxt.template): com.acme.corp.minutes
-			Description: Plantilla de actas corporativas
+			Description >>
+				Minutes: Plantilla de actas corporativas
 			Structure >>
 				Minutes:
 					Title: (1)

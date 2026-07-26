@@ -210,7 +210,8 @@ Document (dev.stxt.website): RFCs and technical proposals
 
 	Code >>
 		Template (@stxt.template): com.acme.rfc
-			Description: Minimal structure for technical RFCs
+			Description >>
+				RFC: Minimal structure for technical RFCs
 			Structure >>
 				RFC:
 					Id: (1)
