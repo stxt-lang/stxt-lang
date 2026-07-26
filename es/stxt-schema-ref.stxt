@@ -107,10 +107,13 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		schema y los documentos declaren la versión que usan.
 
 	Content >>
-		**Nodos cross-namespace no resueltos.** Si un `Child` apunta a otro namespace y la
-		implementación no dispone de schema para ese namespace, el nodo declarado se acepta, pero su
-		contenido interno queda **sin validar** ("caja negra"). Una implementación **DEBERÍA** poder
-		distinguir entre "validado completamente" y "validado parcialmente" en ese caso (ver sección 8.1).
+		**Nodos cross-namespace no resueltos.** Declarar un `Child` que apunta a otro namespace
+		**no** requiere disponer del schema de ese namespace: la carga de un schema nunca mira
+		dentro de otros schemas, de modo que el resultado es independiente del orden de carga.
+		La comprobación se hace al validar un documento: si un nodo de ese namespace aparece,
+		su schema **DEBE** estar disponible y el nodo **DEBE** existir en él como `Node:`; en caso
+		contrario, el documento es inválido. Un hijo cross-namespace declarado pero nunca usado
+		no plantea ningún problema (ver sección 8.1).
 
 	Subheader: 7. Definición de Nodos (`Node:`)
 
@@ -178,14 +181,17 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 
 	Content >>
 		**Todo nodo que aparezca en `Children` debe tener una definición propia como `Node:` en su schema correspondiente.**
+		El *cuándo* se comprueba depende del namespace del hijo: para hijos del mismo namespace del
+		schema, en la **carga del schema**; para hijos de otro namespace, en la **validación del
+		documento** (cuando el nodo aparece).
 
 		Así evitamos hijos "fantasma" y garantizamos que todos los nodos tienen semántica definida.
 
 		Esto implica:
 
-		* Si aparece `Child: Metadata (org.example.meta)`, la validación **completa** requiere que exista un schema para `org.example.meta` y que dentro de él exista `Node: Metadata`.
-		* Una implementación **PUEDE** operar sin disponer de ese schema: el nodo se acepta como "caja negra" y el resultado es una validación **parcial** (ver sección 6). El schema sigue siendo semánticamente incompleto hasta que dicha definición exista.
-		* Una implementación **PUEDE** diferir esta comprobación hasta el momento de validación del documento.
+		* Un `Child` sin namespace explícito **DEBE** tener su definición `Node:` en el propio schema; su ausencia **DEBE** provocar un error de schema en la carga (sección 13).
+		* Declarar `Child: Metadata (org.example.meta)` **no** requiere disponer del schema de `org.example.meta`: la carga de un schema nunca mira dentro de otros schemas (independencia del orden de carga).
+		* Si un nodo `Metadata (org.example.meta)` aparece en un documento, el schema de `org.example.meta` **DEBE** estar disponible y **DEBE** definir `Node: Metadata`; en caso contrario, es un error de validación del documento (sección 13). Un hijo cross-namespace declarado pero nunca usado no plantea ningún problema.
 
 
 	Subheader: 9. Tipos
@@ -447,7 +453,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		8. Un `Node` de tipo `ENUM` no define `Values`, o `Values` no contiene ningún `Value`.
 		9. Aparece un `Value` duplicado tras la normalización inline por trim.
 		10. Aparecen dos nodos `Child` equivalentes (mismo `nombre canónico + namespace efectivo`) dentro del mismo `Children`.
-		11. Aparece un hijo en `Children` cuyo `Node` no está definido en su schema correspondiente.
+		11. Aparece un hijo en `Children` **del mismo namespace del schema** cuyo `Node` no está definido en el propio schema.
 
 	Content >>
 		Un documento es inválido frente a un schema si:
@@ -457,6 +463,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		* Se incumple una cardinalidad declarada.
 		* El valor de un nodo no cumple la validación de su tipo.
 		* Un valor `ENUM` no coincide exactamente con ninguno de sus `Value`.
+		* Aparece un nodo cuyo namespace no tiene schema disponible, o cuyo nombre no existe como `Node:` en el schema de su namespace (sección 8.1).
 
 	Subheader: 14. Conformidad
 
@@ -467,7 +474,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		* Valida tipos, formas de valor, cardinalidades y valores permitidos (ENUM).
 		* Aplica el **modelo de contenido cerrado** (sección 6).
 		* Aplica la regla de compatibilidad de hijos por tipo (sólo `INLINE` y `GROUP` admiten hijos).
-		* Aplica la regla estricta de definición obligatoria de todos los nodos referenciados en `Children`.
+		* Aplica la regla estricta de definición obligatoria de todos los nodos referenciados en `Children` (en la carga del schema para hijos del mismo namespace; en la validación del documento para hijos cross-namespace, sección 8.1).
 		* Valida cardinalidades de forma **independiente del orden**.
 		* Selecciona, para cada validación, un único schema efectivo por namespace.
 		* Rechaza documentos y schemas inválidos.

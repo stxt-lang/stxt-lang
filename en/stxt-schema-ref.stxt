@@ -107,10 +107,13 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		schema and documents declare the version they use.
 
 	Content >>
-		**Unresolved cross-namespace nodes.** If a `Child` points to another namespace and the
-		implementation does not have a schema for that namespace, the declared node is accepted, but its
-		internal content remains **unvalidated** ("black box"). An implementation **SHOULD** be able
-		to distinguish between "fully validated" and "partially validated" in that case (see section 8.1).
+		**Unresolved cross-namespace nodes.** Declaring a `Child` that points to another namespace
+		does **not** require having the schema of that namespace: loading a schema never looks
+		inside other schemas, so the result is independent of load order.
+		The check happens when validating a document: if a node of that namespace appears,
+		its schema **MUST** be available and the node **MUST** exist in it as a `Node:`; otherwise,
+		the document is invalid. A cross-namespace child that is declared but never used
+		poses no problem (see section 8.1).
 
 	Subheader: 7. Node Definition (`Node:`)
 
@@ -178,14 +181,17 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 
 	Content >>
 		**Every node that appears in `Children` must have its own definition as `Node:` in its corresponding schema.**
+		*When* this is checked depends on the child's namespace: for children of the schema's own
+		namespace, at **schema load**; for children of another namespace, at **document
+		validation** (when the node appears).
 
 		This avoids "ghost" children and guarantees that all nodes have defined semantics.
 
 		This implies:
 
-		* If `Child: Metadata (org.example.meta)` appears, **full** validation requires that a schema exist for `org.example.meta` and that `Node: Metadata` exist within it.
-		* An implementation **MAY** operate without having that schema: the node is accepted as a "black box" and the result is a **partial** validation (see section 6). The schema remains semantically incomplete until such definition exists.
-		* An implementation **MAY** defer this check until the moment of document validation.
+		* A `Child` without an explicit namespace **MUST** have its `Node:` definition in the schema itself; its absence **MUST** cause a schema error at load (section 13).
+		* Declaring `Child: Metadata (org.example.meta)` does **not** require having the schema of `org.example.meta`: loading a schema never looks inside other schemas (load-order independence).
+		* If a `Metadata (org.example.meta)` node appears in a document, the schema of `org.example.meta` **MUST** be available and **MUST** define `Node: Metadata`; otherwise, it is a document validation error (section 13). A cross-namespace child that is declared but never used poses no problem.
 
 
 	Subheader: 9. Types
@@ -446,7 +452,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		8. A `Node` of type `ENUM` does not define `Values`, or `Values` contains no `Value`.
 		9. A duplicated `Value` appears after inline normalization by trim.
 		10. Two equivalent `Child` nodes appear (same `canonical name + effective namespace`) within the same `Children`.
-		11. A child appears in `Children` whose `Node` is not defined in its corresponding schema.
+		11. A child appears in `Children` **of the schema's own namespace** whose `Node` is not defined in the schema itself.
 
 	Content >>
 		A document is invalid against a schema if:
@@ -456,6 +462,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* A declared cardinality is violated.
 		* The value of a node does not satisfy validation of its type.
 		* An `ENUM` value does not match exactly any of its `Value`.
+		* A node appears whose namespace has no schema available, or whose name does not exist as a `Node:` in the schema of its namespace (section 8.1).
 
 	Subheader: 14. Conformance
 
@@ -466,7 +473,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* It validates types, value forms, cardinalities, and allowed values (ENUM).
 		* It applies the **closed content model** (section 6).
 		* It applies the child compatibility rule by type (only `INLINE` and `GROUP` allow children).
-		* It applies the strict mandatory definition rule for all nodes referenced in `Children`.
+		* It applies the strict mandatory definition rule for all nodes referenced in `Children` (at schema load for children of the same namespace; at document validation for cross-namespace children, section 8.1).
 		* It validates cardinalities **independently of order**.
 		* It selects, for each validation, a single effective schema per namespace.
 		* It rejects invalid documents and schemas.
