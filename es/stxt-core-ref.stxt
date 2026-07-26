@@ -125,34 +125,46 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Subsubheader: 4.2 Restricciones del nombre del nodo
 		
 	Content >>
-		El nombre del nodo sólo permitirá caracteres alfanuméricos y los caracteres `-`, `_`, ` `.
-		Se permiten nombres con diacríticos, mayúsculas y minúsculas.		
-		
+		El nombre del nodo sólo permitirá **letras y dígitos Unicode** (categorías generales `L` y `Nd`,
+		en cualquier alfabeto: latino, griego, cirílico, árabe, CJK…) y los caracteres separadores `-`, `_`, ` `.
+		Se permiten nombres con diacríticos, mayúsculas y minúsculas.
+
+		El nombre **DEBE** contener al menos una letra o un dígito: un nombre compuesto sólo por
+		separadores tendría nombre canónico vacío (sección 4.3).
+
 	Subsubheader: 4.3 Nombre canónico del nodo
-		
+
 	Content >>
 		El nombre canónico se forma a partir del nombre del nodo mediante el siguiente proceso:
-		
-		* Descomposición Unicode (NFKD)
-		* Conversión a minúsculas
-		* Eliminación de diacríticos
+
+		* Normalización Unicode NFC (unifica las formas precompuesta y descompuesta de un mismo
+		  carácter: `é` como un solo punto de código y `e` + acento combinante son equivalentes)
+		* Conversión a minúsculas (case folding Unicode)
 		* Compactación de espacios (no es necesaria sobre un nombre ya normalizado)
-		* Reemplazo de `[^a-z0-9]` por `-`. No se permiten 2 o más guiones seguidos; se deben compactar a uno solo (`-`) 
+		* Reemplazo de toda secuencia de separadores (`-`, `_`, ` `) por un solo guion (`-`)
 		* Eliminar guiones (`-`) al inicio y al final si existieran
-		
+
+		Los diacríticos y las letras no latinas **se conservan**: la igualdad de nombres es insensible
+		a mayúsculas y a separadores, pero sensible a acentos y alfabeto, siguiendo el modelo de los
+		nombres de dominio internacionalizados (IDN). Así, `Título` y `título` son el mismo nodo,
+		pero `Año` y `Ano` son nodos distintos. A diferencia de los nombres de nodo, los namespaces
+		permanecen restringidos a ASCII `[a-z0-9]` (sección 7).
+
 		El nombre canónico será usado para saber si un nodo tiene el mismo nombre que otro.
 		También será usado internamente por todas las operaciones de búsqueda o comprobación,
 		para saber si se trata del mismo elemento.
 
 		Un nodo cuyo nombre canónico resulte ser la cadena vacía (p. ej. `___`) es inválido y
 		**DEBE** provocar un error de parseo, igual que un nombre lógico vacío (sección 4.1).
-		
+
 		Ejemplos de transformación:
-		
+
 	Code >>
-		Un nombré con äcento: un-nombre-con-acento
-		UN NOMBRE con äcento: un-nombre-con-acento
-		TAMaÑo número 2__ y 3: tamano-numero-2-y-3
+		Un nombré con äcento: un-nombré-con-äcento
+		UN NOMBRÉ CON ÄCENTO: un-nombré-con-äcento
+		TAMaÑo número 2__ y 3: tamaño-número-2-y-3
+		Пример 1: пример-1
+		Nombre 日本語: nombre-日本語
 
 	Subsubheader: 4.4 Normas de estilo
 	Content >>

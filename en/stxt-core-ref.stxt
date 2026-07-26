@@ -126,34 +126,46 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 	Subsubheader: 4.2 Restrictions on the node name
 		
 	Content >>
-		The node name will only allow alphanumeric characters and the characters `-`, `_`, ` `.
-		Names with diacritics, uppercase, and lowercase letters are allowed.		
-		
+		The node name will only allow **Unicode letters and digits** (general categories `L` and `Nd`,
+		in any script: Latin, Greek, Cyrillic, Arabic, CJK…) and the separator characters `-`, `_`, ` `.
+		Names with diacritics, uppercase, and lowercase letters are allowed.
+
+		The name **MUST** contain at least one letter or digit: a name made up only of
+		separators would have an empty canonical name (section 4.3).
+
 	Subsubheader: 4.3 Canonical node name
-		
+
 	Content >>
 		The canonical name is formed from the node name through the following process:
-		
-		* Unicode decomposition (NFKD)
-		* Conversion to lowercase
-		* Removal of diacritics
+
+		* Unicode NFC normalization (unifies the precomposed and decomposed forms of the same
+		  character: `é` as a single code point and `e` + combining accent are equivalent)
+		* Conversion to lowercase (Unicode case folding)
 		* Compaction of spaces (not necessary on an already normalized name)
-		* Replacement of `[^a-z0-9]` with `-`. 2 or more consecutive hyphens are not allowed; they must be compacted into a single one (`-`) 
+		* Replacement of any sequence of separators (`-`, `_`, ` `) with a single hyphen (`-`)
 		* Remove hyphens (`-`) at the beginning and end if any exist
-		
+
+		Diacritics and non-Latin letters **are preserved**: name equality is insensitive to case
+		and separators, but sensitive to accents and script, following the model of
+		internationalized domain names (IDN). Thus, `Título` and `título` are the same node,
+		but `Año` and `Ano` are different nodes. Unlike node names, namespaces
+		remain restricted to ASCII `[a-z0-9]` (section 7).
+
 		The canonical name will be used to determine whether one node has the same name as another.
 		It will also be used internally by all lookup or checking operations,
 		to determine whether it is the same element.
 
 		A node whose canonical name turns out to be the empty string (e.g. `___`) is invalid and
 		**MUST** cause a parse error, just like an empty logical name (section 4.1).
-		
+
 		Examples of transformation:
-		
+
 	Code >>
-		A namé with äccent: a-name-with-accent
-		A NAME with äccent: a-name-with-accent
+		A namé with äccent: a-namé-with-äccent
+		A NAMÉ WITH ÄCCENT: a-namé-with-äccent
 		SIZe number 2__ and 3: size-number-2-and-3
+		Пример 1: пример-1
+		Name 日本語: name-日本語
 
 	Subsubheader: 4.4 Style guidelines
 	Content >>
