@@ -239,7 +239,7 @@ Document (dev.stxt.website): Contracts and legal agreements
 					Purpose: (?) TEXT
 					Clauses: (?)
 						Clause: (*)
-							Title: (1)
+							Title: (1) @Title
 							Text: (1) TEXT
 
 					History: (?)

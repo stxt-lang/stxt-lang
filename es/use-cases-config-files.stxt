@@ -210,7 +210,7 @@ Document (dev.stxt.website): Ficheros de configuración
 					
 					Features: (?)
 						Feature: (*)
-							Name: (1)
+							Name: (1) @Name
 							Enabled: (1) BOOLEAN
 					
 					Description: (?) TEXT

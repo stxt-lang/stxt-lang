@@ -89,7 +89,7 @@ Document (dev.stxt.website): Corporate documents
 				Decision:
 					Id: DEC-0142
 					Title: Move deployment window to Monday
-					Status: Approved
+					Decision status: Approved
 					Owner: Platform Team
 					Rationale >>
 						We reduce operational risk and make support easier on Monday.
@@ -97,7 +97,7 @@ Document (dev.stxt.website): Corporate documents
 				Decision:
 					Id: DEC-0143
 					Title: Freeze non-critical changes in module X
-					Status: Proposed
+					Decision status: Proposed
 					Owner: Reliability
 					Rationale >>
 						External dependency with high variability in response times.
@@ -108,13 +108,13 @@ Document (dev.stxt.website): Corporate documents
 					Title: Prepare capacity proposal (Q1)
 					Owner: Mery Adams
 					Due: 2026-01-16
-					Status: Open
+					Action status: Open
 				Action:
 					Id: ACT-0992
 					Title: Estimate cost of option B
 					Owner: Joan Costa
 					Due: 2026-01-14
-					Status: In Progress
+					Action status: In Progress
 	
 	Subheader: What gets automated with this document
 	
@@ -202,25 +202,25 @@ Document (dev.stxt.website): Corporate documents
 					
 					Agenda: (?)
 						Item: (*)
-							Title: (1)
+							Title: (1) @Title
 					
 					Notes: (?) TEXT
 					
 					Decisions: (?)
 						Decision: (*)
 							Id: (1)
-							Title: (1)
-							Status: (1) ENUM [Proposed, Approved, Rejected]
+							Title: (1) @Title
+							Decision status: (1) ENUM [Proposed, Approved, Rejected]
 							Owner: (?)
 							Rationale: (?) TEXT
 					
 					Action Items: (?)
 						Action: (*)
-							Id: (1)
-							Title: (1)
-							Owner: (?)
+							Id: (1) @Id
+							Title: (1) @Title
+							Owner: (?) @Owner
 							Due: (?) DATE
-							Status: (1) ENUM [Open, In Progress, Done, Blocked]
+							Action status: (1) ENUM [Open, In Progress, Done, Blocked]
 	
 	Content >>
 		This template:
@@ -229,6 +229,8 @@ Document (dev.stxt.website): Corporate documents
 		* Controls states with `ENUM`.
 		* Allows free text where appropriate (`TEXT`).
 		* Keeps the document pleasant to edit (doesn’t force “Node:” like in schema).
+		* Reuses `Title`, `Id`, and `Owner` through `@Node Name` references: within a namespace a node name identifies **one** node, so its reappearances are referenced instead of redefined.
+		* That is why `Decision status` and `Action status` are distinct nodes: their `ENUM` values differ, and a reference cannot change them.
 		
 	Subheader: Validation with @stxt.schema
 	
@@ -254,7 +256,7 @@ Document (dev.stxt.website): Corporate documents
 	Subheader: Style recommendations
 	
 	Content >>
-		* Use stable node names (“Action Items”, “Decision”, “Status”…).
+		* Use stable node names (“Action Items”, “Decision”, “Action status”…).
 		* Reserve `>>` for long text, context, or rationale.
 		* Keep cardinalities small and explicit in templates to avoid ambiguity.
 		* If you need states, use `ENUM` with bounded values.

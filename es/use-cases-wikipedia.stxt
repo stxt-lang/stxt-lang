@@ -382,15 +382,13 @@ Document (dev.stxt.website): Wikipedia (un enfoque alternativo)
 							Heading: (1)
 							Content: (1) TEXT
 							Subsections: (?)
-								Section: (*)
-									Heading: (1)
-									Content: (1) TEXT
+								Section: (*) @Section
 
 					Links: (?)
 					References: (?)
 						Reference: (*)
 							Id: (1)
-							Title: (1)
+							Title: (1) @Title
 							Url: (?)
 							Note: (?) TEXT
 

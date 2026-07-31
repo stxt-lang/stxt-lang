@@ -226,7 +226,7 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 					
 					Alternatives: (?)
 						Alternative: (*)
-							Title: (1)
+							Title: (1) @Title
 							Pros: (?) TEXT
 							Cons: (?) TEXT
 					

@@ -157,7 +157,7 @@ Document (dev.stxt.website): CMS (Content Management Systems)
 					Layout: (?)
 					
 					SEO: (?)
-						Title: (?)
+						Title: (?) @Title
 						Description: (?)
 						Keywords: (?)
 							Keyword: (+)

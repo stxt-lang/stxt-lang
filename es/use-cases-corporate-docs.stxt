@@ -89,7 +89,7 @@ Document (dev.stxt.website): Documentos corporativos
 				Decision:
 					Id: DEC-0142
 					Title: Mover ventana de despliegue a lunes
-					Status: Approved
+					Decision status: Approved
 					Owner: Platform Team
 					Rationale >>
 						Reducimos riesgo operativo y facilitamos soporte el lunes.
@@ -97,7 +97,7 @@ Document (dev.stxt.website): Documentos corporativos
 				Decision:
 					Id: DEC-0143
 					Title: Congelar cambios no críticos en módulo X
-					Status: Proposed
+					Decision status: Proposed
 					Owner: Reliability
 					Rationale >>
 						Dependencia externa con variabilidad alta en tiempos de respuesta.
@@ -108,13 +108,13 @@ Document (dev.stxt.website): Documentos corporativos
 					Title: Preparar propuesta de capacidad (Q1)
 					Owner: Mery Adams
 					Due: 2026-01-16
-					Status: Open
+					Action status: Open
 				Action:
 					Id: ACT-0992
 					Title: Estimar coste opción B
 					Owner: Joan Costa
 					Due: 2026-01-14
-					Status: In Progress
+					Action status: In Progress
 	
 	Subheader: Qué se automatiza con este documento
 	
@@ -202,25 +202,25 @@ Document (dev.stxt.website): Documentos corporativos
 					
 					Agenda: (?)
 						Item: (*)
-							Title: (1)
+							Title: (1) @Title
 					
 					Notes: (?) TEXT
 					
 					Decisions: (?)
 						Decision: (*)
 							Id: (1)
-							Title: (1)
-							Status: (1) ENUM [Proposed, Approved, Rejected]
+							Title: (1) @Title
+							Decision status: (1) ENUM [Proposed, Approved, Rejected]
 							Owner: (?)
 							Rationale: (?) TEXT
 					
 					Action Items: (?)
 						Action: (*)
-							Id: (1)
-							Title: (1)
-							Owner: (?)
+							Id: (1) @Id
+							Title: (1) @Title
+							Owner: (?) @Owner
 							Due: (?) DATE
-							Status: (1) ENUM [Open, In Progress, Done, Blocked]
+							Action status: (1) ENUM [Open, In Progress, Done, Blocked]
 	
 	Content >>
 		Este template:
@@ -229,6 +229,8 @@ Document (dev.stxt.website): Documentos corporativos
 		* Controla estados con `ENUM`.
 		* Permite texto libre donde toca (`TEXT`).
 		* Mantiene el documento agradable de editar (no obliga a “Node:” como en schema).
+		* Reutiliza `Title`, `Id` y `Owner` con referencias `@Nombre Nodo`: dentro de un namespace un nombre de nodo identifica **un solo** nodo, así que sus reapariciones se referencian en lugar de redefinirse.
+		* Por eso `Decision status` y `Action status` son nodos distintos: sus `ENUM` no coinciden, y una referencia no puede cambiar los valores.
 		
 	Subheader: Validación con @stxt.schema
 	
@@ -254,7 +256,7 @@ Document (dev.stxt.website): Documentos corporativos
 	Subheader: Recomendaciones de estilo
 	
 	Content >>
-		* Usa nombres de nodos estables (“Action Items”, “Decision”, “Status”…).
+		* Usa nombres de nodos estables (“Action Items”, “Decision”, “Action status”…).
 		* Reserva `>>` para texto largo, contexto o argumentación.
 		* Mantén cardinalidades pequeñas y explícitas en templates para evitar ambigüedad.
 		* Si necesitas estados, usa `ENUM` con valores acotados.
