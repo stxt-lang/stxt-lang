@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-01-11
+		Last modif: 2026-08-02
 		
 	Header: @STXT@ Tutorial
 	
@@ -89,7 +89,102 @@ Document (dev.stxt.website): STXT Tutorial
 		* `Summary >>` and `Content >>` are literal text blocks: their content is not interpreted as @STXT@.
 		* There is no implicit type: everything is text unless it is validated.
 
-	Subheader: 4. Comments
+	Subheader: 4. Indentation and levels
+
+	Assert >>
+		In @STXT@ indentation **is** the structure: there are no braces, brackets, or
+		closing tags. A line's level is the only thing that decides whose child it is.
+
+	Content >>
+		The rules are deliberately small:
+
+		* **1 tab = 1 level.**
+		* **4 spaces = 1 level**, always in multiples of 4.
+		* A line's indentation **must be homogeneous**: either tabs only, or spaces
+		  only. **Mixing both on the same line is a parse error.**
+		* Levels must be **consecutive**: you cannot jump from level 1 to level 3.
+
+		Different lines of the same document **may** use different styles, because
+		hierarchy is compared by **level** and not by columns. It is not advisable, and
+		a parser may emit a warning, but it is not an error.
+
+	Content >>
+		In the following example `.` represents a space and `|-->` a tab:
+
+	Listing >>
+		Book:
+		|-->Title: Correct, 1 tab = level 1
+		....ISBN: Correct, 4 spaces = level 1
+		..Publisher: ERROR, 2 spaces do not reach a multiple of 4
+		.|-->Summary: ERROR, mixes space and tab on the same line
+
+	Content >>
+		The reason for rejecting the mix instead of interpreting it is **Human-First**:
+		a line combining tabs and spaces looks different depending on each editor's tab
+		width, and the hierarchy would stop being obvious just by reading it.
+
+		A fixed level width (1 tab or 4 spaces, never 2) also has a practical
+		consequence: a line's level is computed by looking at **that line only**,
+		without carrying context or maintaining a stack of indentations. That is why
+		parsing @STXT@ is trivial.
+
+	Subsubheader: 4.1 Indentation inside `>>` blocks
+
+	Content >>
+		A `>>` text block has a **fixed block level**: the level of the `>>` node plus
+		one. That prefix is the only thing validated; everything after it is **literal
+		text**, and its relative indentation is preserved as is.
+
+	Code >>
+		Summary >>
+			This line sits at the block level.
+				This one looks indented, and that indentation is part of the text.
+			# This is not a comment: it is text.
+			Title: this is not a node either.
+
+	Content >>
+		The block ends at the first non-empty line whose indentation is **less than or
+		equal to** that of the `>>` node. Empty lines do not close it, and comments are
+		transparent: they neither close it nor form part of its content.
+
+	Subheader: 5. Node names
+
+	Content >>
+		A node is always `Name:` (inline) or `Name >>` (block). The name accepts
+		**Unicode letters and digits from any script** —Latin, Greek, Cyrillic,
+		Arabic, CJK…—, plus the separators `-`, `_`, and space, and **must contain at
+		least one letter or digit**.
+
+		To decide whether two nodes are the same, @STXT@ compares their **canonical
+		names**, obtained as follows:
+
+		* Unicode NFC normalization.
+		* Conversion to lowercase.
+		* Every run of separators (`-`, `_`, space) becomes a single `-`.
+		* Leading and trailing hyphens are removed.
+
+	Code >>
+		Un nombré con äcento: un-nombré-con-äcento
+		UN NOMBRÉ CON ÄCENTO: un-nombré-con-äcento
+		TAMaÑo número 2__ y 3: tamaño-número-2-y-3
+		Пример 1: пример-1
+		Nombre 日本語: nombre-日本語
+
+	Assert >>
+		Name equality is insensitive to case and separators, but **sensitive to accents
+		and script**: `Título` and `título` are the same node,\\
+		but `Año` and `Ano` are different nodes.
+
+	Content >>
+		This is the same criterion used by internationalized domain names (IDN), and it
+		is deliberate: it lets you write documents in any language without the language
+		"correcting" the words behind your back, and without merging into one two names
+		that are distinct to a reader.
+
+		**Namespaces** are the exception: they remain restricted to ASCII `[a-z0-9]`
+		(see section 7).
+
+	Subheader: 6. Comments
 
 	Content >>
 		@STXT@ supports **line comments**. A line is a comment when its first
@@ -114,7 +209,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* Inside a `>>` text block everything is literal: a `#` there is **text**,
 		  not a comment.
 
-	Subheader: 5. Use of namespaces
+	Subheader: 7. Use of namespaces
 	
 	Assert >>
 		Namespaces allow grouping nodes into categories. In addition, if a
@@ -156,15 +251,21 @@ Document (dev.stxt.website): STXT Tutorial
 		* The @STXT@ language **does not validate** the namespace, it only defines the 
 		  propagation rules.
 		
-	Subsubheader: 5.1 Special namespaces with `@`
+	Subsubheader: 7.1 Special namespaces with `@`
 	Content >>
 		Namespaces may or may not start with `@`. This indicates that they are 
 		**special or reserved namespaces**. For example, both templates
 		and schemas start with `@`. 
 		
 		This is only a semantic indication, but the behavior is the same.
+
+		That said, `@` is part of the namespace: `@com.acme.book` and `com.acme.book`
+		are **different** namespaces, and a document only validates against the template
+		or schema whose namespace matches exactly. The `@stxt.*` branch is **reserved**
+		for the language itself (`@stxt.schema`, `@stxt.template`): it must not be used
+		for your own namespaces.
 	
-	Subsubheader: 5.2 Document validation
+	Subsubheader: 7.2 Document validation
 	
 	Content >>
 		In order to semantically validate a document, it must be associated with a **namespace**.
@@ -176,7 +277,7 @@ Document (dev.stxt.website): STXT Tutorial
 		To validate a document, **it is necessary for it to belong to a namespace**.\\
 		On the other hand, a document with a namespace does not have to be validated.
 			
-	Subheader: 6. Validation with Templates
+	Subheader: 8. Validation with Templates
 	
 	Content >>
 		**Templates** allow defining structural and type rules
@@ -184,7 +285,7 @@ Document (dev.stxt.website): STXT Tutorial
 		
 		A template is an @STXT@ document whose namespace is `@stxt.template`.
 		
-	Subsubheader: 6.1 Template for books
+	Subsubheader: 8.1 Template for books
 	
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -212,7 +313,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* `Summary` and `Content` are text blocks (`TEXT`).
 		* There must be at least one `Chapter`.
 		
-	Subsubheader: 6.2 Allowed forms for numbering
+	Subsubheader: 8.2 Allowed forms for numbering
 	
 	Content >>
 		
@@ -226,11 +327,38 @@ Document (dev.stxt.website): STXT Tutorial
 		| `num-`     | Up to `num` (`0..num`).      |
 		| `min,max`  | Between `min` and `max`.     |
 	
-	Subsubheader: 6.3 Applying the template
-	
+	Subsubheader: 8.3 Available types
+
+	Content >>
+		The type is written **after** the cardinality. If none is given, the default
+		type is `INLINE`. The most common ones:
+
+		| Type       | Value form      | What for                                        |
+		|------------|-----------------|-------------------------------------------------|
+		| `INLINE`   | inline          | Simple text. Accepts children. **Default.**     |
+		| `GROUP`    | no value        | Structure only, no value of its own.            |
+		| `TEXT`     | inline or `>>`  | Generic text, no interpretation.                |
+		| `MARKDOWN` | inline or `>>`  | Text to be interpreted as Markdown.             |
+		| `NUMBER`   | inline          | Number in JSON format.                          |
+		| `DATE`     | inline          | `YYYY-MM-DD` date.                              |
+		| `ENUM`     | inline          | Only the enumerated values.                     |
+
+		`MARKDOWN` validates nothing that `TEXT` does not: all text is valid Markdown,
+		so no implementation must reject a value because of its content. What it adds
+		is an **interpretation contract** for whoever consumes the document —renderers,
+		exporters, editors—, which should read it as CommonMark.
+
+		Only `INLINE` and `GROUP` accept children: as soon as a type validates a
+		specific piece of data (`NUMBER`, `DATE`, `ENUM`…), that node **is** data, and
+		data is a leaf.
+
+		The complete list of types is in *STXT-SCHEMA-SPEC*.
+
+	Subsubheader: 8.4 Applying the template
+
 	Content >>
 		A validator that supports templates must:
-		
+
 		* Verify that the nodes exist.
 		* Check cardinalities.
 		* Validate basic types (number, date, boolean, text).
@@ -239,7 +367,7 @@ Document (dev.stxt.website): STXT Tutorial
 		Depending on the parser, it may validate at the same time it parses the content. 
 		
 		
-	Subheader: 7. Validation with Schemas
+	Subheader: 9. Validation with Schemas
 	
 	Content >>
 		**Schemas** provide the same information as a template,
@@ -251,7 +379,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* Defines nodes, types, and cardinalities separately.
 		* Is the “canonical” representation of validation.
 		
-	Subsubheader: 7.1 Schema equivalent to the template
+	Subsubheader: 9.1 Schema equivalent to the template
 	
 	Code >>
 		Schema (@stxt.schema): com.acme.book
@@ -273,17 +401,12 @@ Document (dev.stxt.website): STXT Tutorial
 						Max: 1
 					Child: Summary
 						Max: 1
-					Child: Chapters
-						Max: 1
+					Child: Chapter
+						Min: 1
 						
 			Node: Authors
 				Children:
 					Child: Author
-						Min: 1
-						
-			Node: Chapters
-				Children:
-					Child: Chapter
 						Min: 1
 						
 			Node: Chapter
@@ -309,13 +432,13 @@ Document (dev.stxt.website): STXT Tutorial
 		  schemas and templates exist simultaneously for the same namespace. **There can only
 		  be one active**.
 		
-	Subheader: 8. Final validatable document
+	Subheader: 10. Final validatable document
 	
 	Content >>
 		Complete @STXT@ document that can be validated with the previous template or schema:
 		
 	Code >>
-		Book (@com.acme.book):
+		Book (com.acme.book):
 			Title: Modern software architecture
 			Authors:
 				Author: María Pérez
@@ -334,10 +457,16 @@ Document (dev.stxt.website): STXT Tutorial
 		* Complies with the `com.acme.book` template.
 		* Complies with the `com.acme.book` schema.
 		
-	Subheader: 9. Best practices
-	
+	Subheader: 11. Best practices
+
 	Content >>
 		* Use `>>` blocks for long or literal text.
-		* Maintain consistent indentation (use spaces or tabs, but do not mix them).
+		* Pick one indentation style —tabs or spaces— and keep it throughout the
+		  document. Remember that mixing them **on the same line** is not a matter of
+		  style: it is a parse error (section 4).
+		* Write node names in the document's own language: accents and non-Latin
+		  scripts are first-class citizens (section 5).
 		* Use templates to iterate quickly or to have a view as close as possible to what the documents are like.
-		* Use schemas when a more formal description of the fields is needed
+		* Use schemas when a more formal description of the fields is needed.
+		* Mark as `MARKDOWN` the text meant to be rendered, and as `TEXT` the text that
+		  must be read as is.
