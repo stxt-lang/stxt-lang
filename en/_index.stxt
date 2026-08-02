@@ -26,6 +26,9 @@ Document (dev.stxt.website): STXT: The Book
 		
 	Link: @STXT@ Template
 		Page: stxt-template-ref
+
+	Link: @STXT@ Discovery
+		Page: stxt-discovery-ref
 			
 #	Subheader: Transformations		
 	

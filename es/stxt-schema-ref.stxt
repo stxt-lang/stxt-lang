@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-07-25
+		Last modif: 2026-08-02
 
 	Header: @STXT@ Esquemas (@stxt.schema)
 
@@ -15,6 +15,11 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		* Es un documento @STXT@ con namespace `@stxt.schema`.
 		* Define los nodos, tipos y cardinalidades del namespace objetivo.
 		* No modifica la sintaxis base de @STXT@; opera sobre la estructura ya parseada.
+
+		Este documento define qué es un schema y cómo valida. La forma en que una
+		herramienta **localiza** los schemas en el sistema de ficheros (directorios
+		`.stxt`, niveles de usuario y sistema, `STXT_PATH`) se define en
+		*STXT-DISCOVERY-SPEC*.
 
 	Subheader: 2. Terminología
 

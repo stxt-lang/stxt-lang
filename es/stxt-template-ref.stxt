@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-07-26
+		Last modif: 2026-08-02
 		
 	Header: @STXT@ Plantillas (@stxt.template)
 	
@@ -23,6 +23,9 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* Una implementación **PUEDE** soportar sólo schemas, sólo templates, o ambos.
 		* Si existen ambos (schema y template) para el mismo namespace objetivo,
 		  una implementación conforme **DEBERÍA** establecer un criterio consistente de priorización.
+		  Cuando las definiciones se descubren en el sistema de ficheros, ese criterio queda
+		  fijado por *STXT-DISCOVERY-SPEC*: gana la definición del nivel más cercano, y dos
+		  definiciones en el mismo nivel son un error.
 		* Para una validación concreta, una implementación **DEBE** usar una única fuente semántica efectiva: o bien schema, o bien template.
 		* STXT core **NO DEBE** imponer semántica: los templates son una capa opcional, posterior al parseo del documento @STXT@.
 		

@@ -6,19 +6,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Contenido fuente del sitio web / libro del lenguaje **STXT (Semantic Text)**, un formato textual jerárquico "Human-First" diseñado para ser legible por personas y trivial de parsear por máquinas. Todo el contenido está escrito en el propio lenguaje STXT (ficheros `.stxt`). No hay código fuente, sistema de build, linter ni tests: los cambios se validan leyendo las especificaciones y manteniendo la coherencia entre ficheros.
 
-## Los tres ficheros más importantes
+## Los cuatro ficheros más importantes
 
 Las especificaciones normativas del lenguaje viven en `es/` (versión canónica) con espejo en `en/`:
 
 1. **`es/stxt-core-ref.stxt`** — Especificación de la sintaxis base (STXT-SPEC): nodos inline `Nombre: valor` y bloques de texto `Nombre >>`, indentación estricta (tabs = 1 nivel, o múltiplos de 4 espacios), namespaces `(a.b.c)`, comentarios `#`, normalización de nombres/valores, reglas de error y seguridad.
 2. **`es/stxt-schema-ref.stxt`** — Especificación de esquemas (`@stxt.schema`): validación semántica con `Node`/`Children`/`Child`, tipos (`INLINE`, `GROUP`, `BLOCK`, `TEXT`, `NUMBER`, `DATE`, `ENUM`…), cardinalidades `Min`/`Max` y modelo de contenido cerrado. Incluye el meta-schema oficial.
 3. **`es/stxt-template-ref.stxt`** — Especificación de plantillas (`@stxt.template`): sintaxis simplificada equivalente a los schemas, con un bloque `Structure >>`, cardinalidades `(1)`, `(?)`, `(*)`, `(+)`, `(min,max)`, tipos tras la cardinalidad, `ENUM [a, b, c]` y referencias `@Nombre Nodo` (incluida recursión). Todo template es compilable a un schema equivalente.
+4. **`es/stxt-discovery-ref.stxt`** — Especificación de resolución (STXT-DISCOVERY-SPEC): cómo las herramientas localizan schemas/templates en el sistema de ficheros. Cadena de niveles: directorios `.stxt` ascendentes desde el documento (todos, no solo el primero) → `$HOME/.stxt` → `/etc/stxt` (Windows: `%USERPROFILE%\.stxt`, `%ProgramData%\stxt`); precedencia **por namespace** (el nivel más cercano gana), duplicados en el mismo nivel = error, `STXT_PATH` sustituye la cadena completa.
 
-Cualquier cambio conceptual en el lenguaje debe reflejarse de forma coherente en los tres documentos (se referencian entre sí como *STXT-SPEC*, *STXT-SCHEMA-SPEC* y *STXT-TEMPLATE-SPEC*) y en su espejo inglés.
+Cualquier cambio conceptual en el lenguaje debe reflejarse de forma coherente en los cuatro documentos (se referencian entre sí como *STXT-SPEC*, *STXT-SCHEMA-SPEC*, *STXT-TEMPLATE-SPEC* y *STXT-DISCOVERY-SPEC*) y en su espejo inglés.
 
 ## Estructura del repositorio
 
-- **`es/`** — Contenido canónico del sitio en español: `_index.stxt` (navegación del sitio: nodos `Link`/`Page`), `index.stxt` (portada), `lang-tutorial.stxt`, las tres referencias y las páginas `use-cases-*.stxt` (CMS, wikis, contratos, RFCs, configuración, editorial, docs corporativos).
+- **`es/`** — Contenido canónico del sitio en español: `_index.stxt` (navegación del sitio: nodos `Link`/`Page`), `index.stxt` (portada), `lang-tutorial.stxt`, las cuatro referencias y las páginas `use-cases-*.stxt` (CMS, wikis, contratos, RFCs, configuración, editorial, docs corporativos).
 - **`en/`** — Espejo en inglés de `es/`, con la misma estructura de ficheros. Al modificar contenido en `es/`, mantener sincronizado `en/`.
 - **`.stxt/`** — Definiciones semánticas que validan el contenido del repo: `website/dev.stxt.website.stxt` es el template del namespace `dev.stxt.website` (el que usan todas las páginas del sitio), más `schemas/` y `templates/` con definiciones de ejemplo (`com.example.*`, `org.example.*`…) usadas por los documentos de muestra.
 - **`docs/`** — Documentos STXT de ejemplo (emails, recetas, configuraciones tipo tomcat…) que instancian los schemas/templates de `.stxt/`.

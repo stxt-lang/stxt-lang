@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-07-26
+		Last modif: 2026-08-02
 		
 	Header: @STXT@ Documents
 	
@@ -898,7 +898,9 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		and whose purpose is to define the structural rules, value types, and cardinalities of the nodes belonging to a specific namespace.
 		
 		The @STXT@ core **does not interpret** these rules; it only defines how they are expressed and how they are combined through namespaces.
-		
+
+		The location of schema documents on the file system (`.stxt` directories) is defined in *STXT-DISCOVERY-SPEC*.
+
 	Subsubheader: 17.1. Associating a schema with a namespace
 		
 	Content >>
@@ -994,5 +996,6 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		If an implementation finds several schemas or templates applicable to the same namespace,
 		it **SHOULD** define a clear and deterministic priority policy.
 		For a specific validation, a single effective semantic source **MUST** be selected: either a schema or a template.
+		When definitions are discovered on the file system, that policy is fixed by *STXT-DISCOVERY-SPEC*.
 	
 	Subheader: 19. End of Document

@@ -1,0 +1,234 @@
+Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
+
+	Metadata:
+		Author: Joan Costa Mombiela
+		Last modif: 2026-08-02
+
+	Header: @STXT@ Schema and Template Resolution
+
+	Subheader: 1. Introduction
+
+	Content >>
+		This document defines **@STXT@ Discovery**: the mechanism by which a tool locates,
+		on the file system, the `@stxt.schema` and `@stxt.template` documents applicable to
+		an @STXT@ document.
+
+		The *STXT-SCHEMA-SPEC* and *STXT-TEMPLATE-SPEC* specifications define how
+		definitions are written and how they validate; they deliberately do not say **where
+		they live**. This specification fills that gap with a single goal: that the same
+		document validates against the same definitions in every tool — an editor, a command
+		line, a continuous integration process. If every tool searched for definitions its
+		own way, the outcome of validating would depend on who validates.
+
+		Resolution is **identical for schemas and templates**: both are discovered by the
+		same procedure and compete for the same namespaces.
+
+		In the rest of the specifications, this document is referenced as
+		*STXT-DISCOVERY-SPEC*.
+
+	Subheader: 2. Terminology
+
+	Content >>
+		The keywords **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119**.
+
+		Terms such as *node*, *namespace*, *schema* and *template* retain their meaning in
+		*STXT-SPEC*, *STXT-SCHEMA-SPEC* and *STXT-TEMPLATE-SPEC*.
+
+		Additional definitions:
+
+		* **Definition**: a `@stxt.schema` or `@stxt.template` document, associated with a target namespace.
+		* **Resolution directory**: a directory named `.stxt` whose contents are definitions.
+		* **Level**: each of the resolution directories applicable to a document, ordered by precedence.
+		* **Resolution chain**: the ordered list of levels applicable to a specific document.
+
+	Subheader: 3. The `.stxt` directory
+
+	Content >>
+		A resolution directory is a directory named exactly `.stxt`.
+
+		* A tool **MUST** load **all** files with the `.stxt` extension under the directory,
+		  **recursively**.
+		* Subdirectories carry no meaning: they are organization only. `.stxt/web/a.stxt`
+		  and `.stxt/a.stxt` belong to the same level.
+		* Every file under a resolution directory **MUST** be a definition: a document whose
+		  root node belongs to `@stxt.schema` or `@stxt.template`. Any other content is a
+		  resolution error (section 8).
+
+	Subheader: 4. The resolution chain
+
+	Content >>
+		For a given document, the resolution chain is built in this order, from highest to
+		lowest precedence:
+
+		1. **Project level**: the `.stxt` directories found by walking up from the
+		   document's directory to the root of the file system, from nearest to farthest.
+		2. **User level**: the `.stxt` directory in the user's home folder.
+		3. **System level**: the machine-wide definitions directory.
+
+	Subsubheader: 4.1 Project level
+
+	Content >>
+		Starting from the directory containing the document, the tool **MUST** examine that
+		directory and each of its ancestors, in ascending order, and add to the chain
+		**every** `.stxt` directory that exists.
+
+		* The search **MUST NOT** stop at the first directory found: in a monorepo, the
+		  subproject's `.stxt` and the repository root's `.stxt` both take part, and the
+		  subproject's one has higher precedence for being nearer.
+		* The search ends at the root of the file system. A tool **MAY** impose an ascent
+		  limit (for example, 32 levels) as a safeguard against pathological paths
+		  (section 10).
+		* A document with no location on the file system (standard input, an unsaved
+		  buffer) has no project level: its chain starts at the user level.
+
+	Subsubheader: 4.2 User level and system level
+
+	Content >>
+		| Level  | Linux, macOS and other Unix | Windows               |
+		|--------|-----------------------------|-----------------------|
+		| User   | `$HOME/.stxt`               | `%USERPROFILE%\.stxt` |
+		| System | `/etc/stxt`                 | `%ProgramData%\stxt`  |
+
+		* The user level allows personal definitions shared across projects.
+		* The system level allows an organization to distribute definitions to every
+		  account on a machine.
+		* If any of the directories does not exist, that level simply contributes no
+		  definitions; it is not an error.
+
+	Subheader: 5. Precedence
+
+	Content >>
+		Once every level of the chain is loaded, precedence applies **per target
+		namespace**, not per whole directory:
+
+		* For each namespace, the **active definition** is the one from the **nearest
+		  level** that defines it. Definitions of the same namespace at farther levels are
+		  ignored.
+		* Different namespaces **MAY** resolve from different levels: the project's template
+		  from its `.stxt`, and a personal definition from `$HOME/.stxt`, in the same
+		  validation.
+		* Within a single level, two definitions for the same namespace are an **error**
+		  (section 8), whether they are two schemas, two templates, or a schema and a
+		  template. Across different levels there is no conflict: the nearest one wins,
+		  whatever its kind.
+
+		For the scope of this specification, this rule pins down the schema-versus-template
+		prioritization criterion that *STXT-TEMPLATE-SPEC* leaves open to the
+		implementation: the effective semantic source of a namespace is its active
+		definition.
+
+	Subsubheader: 5.1 Complete example
+
+	Listing >>
+		/home/ana/
+		├── .stxt/                       (user level)
+		│   └── notes.stxt               defines org.ana.notes
+		└── projects/monorepo/
+		    ├── .stxt/                   (project level, 2nd)
+		    │   ├── common.stxt          defines com.acme.common
+		    │   └── web-old.stxt         defines com.acme.web
+		    └── web/
+		        ├── .stxt/               (project level, 1st)
+		        │   └── web.stxt         defines com.acme.web
+		        └── index.stxt           document to validate
+
+	Content >>
+		The resolution chain of `index.stxt` is, in order:
+		`web/.stxt` → `monorepo/.stxt` → `/home/ana/.stxt` → `/etc/stxt`.
+
+		Result per namespace:
+
+		* `com.acme.web` → `web/.stxt/web.stxt` (the nearest level wins; `web-old.stxt` is ignored).
+		* `com.acme.common` → `monorepo/.stxt/common.stxt`.
+		* `org.ana.notes` → `/home/ana/.stxt/notes.stxt`.
+
+	Subheader: 6. The `STXT_PATH` environment variable
+
+	Content >>
+		If the `STXT_PATH` environment variable is defined, it **completely replaces** the
+		resolution chain of section 4: no project, user or system level is searched.
+
+		* Its value is a list of directories separated by the platform's path separator
+		  (`:` on Unix, `;` on Windows).
+		* Each directory in the list is one level; the order of the list is the order of
+		  precedence (the first one has the highest priority).
+		* Entries point **directly** to definition directories: they do not need to be
+		  named `.stxt`.
+		* A nonexistent entry is ignored; it is not an error.
+		* An `STXT_PATH` that is defined but empty leaves the chain empty: documents are
+		  parsed without validation.
+
+		`STXT_PATH` exists for environments where the implicit search gets in the way:
+		continuous integration, the tools' own tests, or environments with a restricted
+		file system.
+
+	Subheader: 7. Per-document resolution
+
+	Content >>
+		The resolution chain is defined **per document**: it is a function of the
+		document's location and the environment, not of the tool or of the set of documents
+		being processed.
+
+		A tool that processes several documents at once (an editor with several open files,
+		a command line with several arguments) **MAY** share loads and caches as an
+		optimization, but the result **MUST** be identical to resolving each document
+		separately. In particular, if two documents from different projects see different
+		definitions for the same namespace, each one **MUST** be validated with its own.
+
+		A tool **MAY** offer explicit mechanisms to designate definitions (a command-line
+		option, editor configuration). What is designated explicitly **MUST** take
+		precedence over what this specification discovers.
+
+	Subheader: 8. Resolution errors
+
+	Content >>
+		A tool **MUST** report as a resolution error:
+
+		1. Two definitions for the same target namespace at the same level.
+		2. A file under a resolution directory that does not parse as @STXT@.
+		3. A file whose root node belongs neither to `@stxt.schema` nor to
+		   `@stxt.template`.
+		4. A definition that does not validate against its meta-schema (*STXT-SCHEMA-SPEC*,
+		   *STXT-TEMPLATE-SPEC*).
+
+		Rules:
+
+		* Upon a resolution error, the tool **MAY** continue loading the remaining
+		  definitions, but **MUST** report the error.
+		* Upon error 1, the tool **MUST NOT** silently pick one of the conflicting
+		  definitions: the affected namespace has no active definition while the conflict
+		  exists.
+		* Reminder from *STXT-SPEC* (sections 15 and 17.2): a document declaring a
+		  namespace for which the chain contributes no definition **is not an error** — the
+		  document simply cannot be validated. A tool **SHOULD** distinguish that case from
+		  a namespace with resolution errors.
+
+	Subheader: 9. Conformance
+
+	Content >>
+		* Definition discovery is part of the schema/template layer, **optional** like the
+		  layer itself (*STXT-SPEC* §17.3): a conforming core parser is not required to
+		  implement it.
+		* A tool that implements file-system discovery **MUST** follow this specification
+		  in full: implementing only part of the chain produces exactly the disagreement
+		  between tools that this specification exists to avoid.
+		* This specification does not define **when** definitions are reloaded (file
+		  watching, caches, invalidation): that is each tool's decision, as long as the
+		  observable result honors sections 4 to 8.
+
+	Subheader: 10. Security Considerations
+
+	Content >>
+		* The upward search and the user and system levels load files from directories the
+		  validating party does not necessarily control (the ancestors of a shared path,
+		  `/etc/stxt`). A definition **only validates**: it does not execute code or alter
+		  the document. The impact of a hostile definition is limited to changing the
+		  validation outcome.
+		* Even so, a tool **SHOULD** be able to show which directories it loaded and where
+		  the active definition of each namespace came from, and **MAY** offer trust
+		  restrictions analogous to those of other tools with upward searches (for example,
+		  limiting the search to a configured root directory).
+		* The ascent limit of section 4.1 protects against pathological directory
+		  structures: circular links or virtual file systems.
+
+	Subheader: 11. End of Document

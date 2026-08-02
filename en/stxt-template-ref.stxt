@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-07-26
+		Last modif: 2026-08-02
 		
 	Header: @STXT@ Templates (@stxt.template)
 	
@@ -23,6 +23,9 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* An implementation **MAY** support only schemas, only templates, or both.
 		* If both exist (schema and template) for the same target namespace,
 		  a conforming implementation **SHOULD** establish a consistent prioritization criterion.
+		  When definitions are discovered on the file system, that criterion is fixed by
+		  *STXT-DISCOVERY-SPEC*: the definition from the nearest level wins, and two
+		  definitions at the same level are an error.
 		* For a specific validation, an implementation **MUST** use a single effective semantic source: either schema or template.
 		* STXT core **MUST NOT** impose semantics: templates are an optional layer, after parsing the @STXT@ document.
 		
