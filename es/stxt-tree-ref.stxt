@@ -1,0 +1,230 @@
+Document (dev.stxt.website): STXT Tree — Representación canónica del documento
+	Metadata:
+		Author: Joan Costa Mombiela
+		Last modif: 2026-08-09
+
+	Header: @STXT@ Árbol canónico
+
+	Subheader: 1. Introducción
+
+	Content >>
+		Este documento define **STXT-TREE-SPEC**, la representación JSON canónica del
+		árbol lógico que produce el parseo de un documento @STXT@ válido.
+
+		Su propósito es que dos implementaciones conformes puedan mostrar, intercambiar
+		y comparar el mismo resultado de parseo sin depender de las clases, los getters o
+		la serialización automática de una plataforma concreta. Es, en particular, el
+		formato de referencia para los corpus de conformidad y para herramientas como
+		`stxt describe`.
+
+		Esta especificación representa el **árbol lógico**, no el fichero fuente. No
+		pretende conservar comentarios, líneas vacías fuera de bloques, el estilo de
+		indentación, la posición exacta de los nodos ni otras decisiones de presentación.
+		Para reescribir un fichero conservando esos elementos hace falta una capa de
+		análisis de fuente distinta del árbol.
+
+		La sintaxis de los documentos y el significado de sus nombres, valores, bloques,
+		namespaces e indentación se definen en *STXT-SPEC*. Los schemas, templates y la
+		resolución de definiciones no cambian este árbol.
+
+	Subheader: 2. Terminología
+
+	Content >>
+		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y
+		**"PUEDE"** deben interpretarse según **RFC 2119**.
+
+		Los términos *nodo*, *INLINE*, *BLOCK*, *nombre canónico*, *namespace efectivo* y
+		*documento* mantienen el significado de *STXT-SPEC*.
+
+		En este documento, una **representación de árbol** es un valor JSON que cumple las
+		secciones 3 a 6. Un **emisor** es una implementación que transforma nodos @STXT@
+		parseados en esa representación.
+
+	Subheader: 3. Valor de documento
+
+	Content >>
+		La representación de un documento @STXT@ **DEBE** ser un array JSON. Cada elemento
+		del array es un nodo raíz, en el mismo orden en que aparece en el documento.
+
+		El array exterior es obligatorio porque @STXT@ permite varios nodos raíz. Un
+		documento compuesto solamente por comentarios o líneas vacías es válido y se
+		representa como el array vacío `[]`.
+
+		La representación no envuelve el array en un objeto ni incluye un nombre de
+		documento, ruta de fichero, versión de implementación ni resultado de validación.
+		Esos datos pertenecen a la aplicación que invoca el parser, no al documento @STXT@.
+
+	Subheader: 4. Representación de un nodo
+
+	Content >>
+		Cada nodo **DEBE** representarse como un objeto JSON con los miembros comunes
+		`name`, `canonicalName`, `namespace` y `form`, más `value` y `children` si es
+		INLINE, o `lines` si es BLOCK.
+
+		| Miembro | Tipo JSON | Significado |
+		|----------|-----------|-------------|
+		| `name` | string | Nombre lógico del nodo, tras el trim y la compactación de espacios de *STXT-SPEC* sección 4.1. Conserva mayúsculas, diacríticos y separadores del nombre lógico. |
+		| `canonicalName` | string | Nombre canónico calculado según *STXT-SPEC* sección 4.3: NFC, minúsculas Unicode y separadores compactados en `-`. |
+		| `namespace` | string | Namespace **efectivo** del nodo, ya heredado y normalizado a minúsculas. Es `""` si no existe namespace efectivo. |
+		| `form` | string | Exactamente `"inline"` para un nodo `:` o `"block"` para un nodo `>>`. |
+		| `children` | array | Sólo en nodos `inline`: representaciones de sus hijos directos, en orden de aparición. Siempre existe para esa forma, incluso cuando está vacío. |
+		| `value` | string | Sólo en nodos `inline`: su valor inline ya normalizado con trim. Siempre existe para esa forma, incluso si es `""`. |
+		| `lines` | array de strings | Sólo en nodos `block`: las líneas lógicas del bloque, en orden. Siempre existe para esa forma, incluso si está vacío. |
+
+	Content >>
+		Un nodo `inline` **DEBE** tener exactamente los miembros `name`, `canonicalName`,
+		`namespace`, `form`, `value` y `children`. Un nodo `block` **DEBE** tener exactamente
+		los miembros `name`, `canonicalName`, `namespace`, `form` y `lines`. No se permiten
+		miembros adicionales en la representación canónica.
+
+		Un bloque producido por el parser base no tiene hijos estructurados y, por tanto,
+		**NO DEBE** tener el miembro `children`. Su contenido indentado ya está representado
+		por `lines` como texto literal.
+
+	Subheader: 5. Valores y líneas de bloque
+
+	Content >>
+		El miembro `value` contiene el valor INLINE después del trim izquierdo y derecho de
+		*STXT-SPEC* sección 10.1. No se aplican más conversiones: sigue siendo texto, aunque
+		un schema pueda validarlo como fecha, número u otro tipo.
+
+		El miembro `lines` conserva de forma exacta las líneas lógicas de un bloque según
+		*STXT-SPEC* secciones 10.2 y 10.3. Cada elemento es una string, incluida una línea
+		vacía representada por `""`. No se sustituye el array por una string unida con
+		`\n`: esa unión perdería la diferencia entre un bloque sin líneas (`[]`) y un bloque
+		que contiene una única línea vacía (`[""]`).
+
+		Los comentarios y las líneas vacías fuera de un bloque no producen nodos ni líneas.
+		Dentro de un bloque, una línea que empieza por `#` sólo aparece en `lines` si su
+		indentación la hace contenido literal, tal como define *STXT-SPEC* sección 9.1.
+
+	Subheader: 6. Identidad y datos excluidos
+
+	Content >>
+		La identidad estructural de un nodo está formada por `canonicalName` y `namespace`.
+		Por ello no se emite un miembro `qualifiedName`: es un valor derivado, igual a
+		`canonicalName` cuando `namespace` es vacío y a `namespace + ":" + canonicalName`
+		en cualquier otro caso.
+
+		Tampoco se emite un miembro `text`: para un INLINE sería igual a `value` y para un
+		BLOCK sería la unión derivada de `lines` con saltos de línea. Ambos casos duplican
+		información y el segundo pierde distinciones necesarias para la conformidad.
+
+		Los números de línea, niveles de indentación, rutas de fichero, estilos de
+		indentación, comentarios y representación original de un namespace **NO DEBEN**
+		aparecer. Son metadatos de una entrada concreta o información descartada por el
+		parseo, y convertirían dos fuentes semánticamente equivalentes en árboles distintos.
+
+	Subheader: 7. JSON y canonicalidad
+
+	Content >>
+		El formato usa JSON estándar. Un emisor **DEBE** producir JSON válido y **DEBERÍA**
+		codificarlo en UTF-8 sin BOM. La canonicalidad se define sobre el valor JSON y sus
+		miembros, no sobre sus bytes: el orden de los miembros de un objeto, la sangría, los
+		espacios y la elección equivalente de escapes JSON no cambian la representación.
+
+		Los corpus de conformidad **DEBEN** comparar el valor JSON tras parsearlo, no una
+		cadena de caracteres. Una aplicación **PUEDE** elegir una presentación determinista
+		para personas, por ejemplo JSON con dos espacios de sangría y salto de línea final.
+
+		Una especificación futura puede definir un perfil de serialización por bytes para
+		firmas, hashes o cachés. Ese perfil no forma parte de STXT-TREE-SPEC.
+
+	Subheader: 8. Errores y validación
+
+	Content >>
+		STXT-TREE-SPEC sólo representa documentos que han superado el parseo sintáctico. No
+		define la serialización de excepciones, diagnósticos, advertencias, errores de
+		discovery ni árboles parciales después de un error. En especial, el modo de recuperar
+		un parser tras varios errores no es parte de este contrato.
+
+		Los tests de entradas inválidas siguen comprobando los códigos estables y las líneas
+		definidos por las especificaciones correspondientes. Una representación normalizada de
+		diagnósticos, si se necesita, será una especificación separada.
+
+		La validación por schema o template ocurre sobre el árbol ya producido. El resultado
+		de esa validación no modifica la representación de árbol; una herramienta puede
+		mostrarlo por otro canal.
+
+	Subheader: 9. Conformidad
+
+	Content >>
+		Un emisor de árbol @STXT@ es conforme si, para todo documento válido:
+
+		* Emite un array de todos los nodos raíz, preservando su orden.
+		* Emite todos y sólo los miembros exigidos por la sección 4.
+		* Aplica las normalizaciones y la herencia de namespace de *STXT-SPEC* antes de emitir.
+		* Conserva cada línea lógica de un bloque, incluidas las líneas vacías finales.
+		* No emite metadatos de fuente ni valores derivados excluidos por la sección 6.
+
+		El directorio `conformance/tree/` de la fuente de especificaciones contiene pares
+		normativos de documento `.stxt` y representación `.json`. Toda implementación que
+		sostenga STXT-TREE-SPEC **DEBE** producir un valor JSON igual al fichero esperado de
+		cada par.
+
+	Subheader: 10. Ejemplo normativo
+
+	Content >>
+		Documento @STXT@ de entrada:
+
+	Code >>
+		# Comentario descartado
+		Documento (COM.EXAMPLE.DOCS):
+			Título: Informe
+			Cuerpo >>
+				Primera línea
+				
+				# Esto es texto
+			Anexo:
+				Nota: sin namespace heredado lateralmente
+
+	Content >>
+		Su representación es el siguiente valor JSON. Obsérvese que el comentario inicial
+		no aparece, el namespace está en minúsculas y `Anexo` tiene namespace vacío.
+
+	Listing >>
+		[
+		  {
+		    "name": "Documento",
+		    "canonicalName": "documento",
+		    "namespace": "com.example.docs",
+		    "form": "inline",
+		    "value": "",
+		    "children": [
+		      {
+		        "name": "Título",
+		        "canonicalName": "título",
+		        "namespace": "com.example.docs",
+		        "form": "inline",
+		        "value": "Informe",
+		        "children": []
+		      },
+		      {
+		        "name": "Cuerpo",
+		        "canonicalName": "cuerpo",
+		        "namespace": "com.example.docs",
+		        "form": "block",
+		        "lines": ["Primera línea", "", "# Esto es texto"]
+		      }
+		    ]
+		  },
+		  {
+		    "name": "Anexo",
+		    "canonicalName": "anexo",
+		    "namespace": "",
+		    "form": "inline",
+		    "value": "",
+		    "children": [
+		      {
+		        "name": "Nota",
+		        "canonicalName": "nota",
+		        "namespace": "",
+		        "form": "inline",
+		        "value": "sin namespace heredado lateralmente",
+		        "children": []
+		      }
+		    ]
+		  }
+		]
+
+	Subheader: 11. Fin del Documento

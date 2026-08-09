@@ -20,6 +20,9 @@ Document (dev.stxt.website): STXT: El Libro
 	
 	Link: @STXT@ Documentos
 		Page: stxt-core-ref
+
+	Link: @STXT@ Árbol canónico
+		Page: stxt-tree-ref
 		
 	Link: @STXT@ Esquemas
 		Page: stxt-schema-ref

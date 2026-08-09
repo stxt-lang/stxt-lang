@@ -1,0 +1,43 @@
+[
+  {
+    "name": "Document",
+    "canonicalName": "document",
+    "namespace": "com.example.docs",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Title",
+        "canonicalName": "title",
+        "namespace": "com.example.docs",
+        "form": "inline",
+        "value": "Report",
+        "children": []
+      },
+      {
+        "name": "Body",
+        "canonicalName": "body",
+        "namespace": "com.example.docs",
+        "form": "block",
+        "lines": ["First line", "", "# This is literal text", "Last line", ""]
+      }
+    ]
+  },
+  {
+    "name": "Appendix",
+    "canonicalName": "appendix",
+    "namespace": "",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Note",
+        "canonicalName": "note",
+        "namespace": "",
+        "form": "inline",
+        "value": "no lateral namespace inheritance",
+        "children": []
+      }
+    ]
+  }
+]

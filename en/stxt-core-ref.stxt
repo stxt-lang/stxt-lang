@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-02
+		Last modif: 2026-08-09
 		
 	Header: @STXT@ Documents
 	
@@ -721,6 +721,10 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		* It normalizes namespaces to lowercase during parsing.
 		* It applies the whitespace normalization rules of section 10.
 		* It rejects invalid documents according to section 11.
+
+		The interoperable representation of the logical tree resulting from this parsing is
+		defined by *STXT-TREE-SPEC*. Emitting it as JSON is an optional capability of a base
+		parser; it does not alter the syntax rules in this document.
 		
 	Subheader: 13. File Extension and Media Type
 		

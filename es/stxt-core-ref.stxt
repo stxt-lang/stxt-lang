@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-02
+		Last modif: 2026-08-09
 		
 	Header: @STXT@ Documentos
 	
@@ -725,6 +725,10 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* Normaliza los namespaces a minúsculas durante el parseo.
 		* Aplica las reglas de normalización de espacios en blanco de la sección 10.
 		* Rechaza documentos inválidos según la sección 11.
+
+		La representación interoperable del árbol lógico que resulta de este parseo se define
+		en *STXT-TREE-SPEC*. Su emisión como JSON es una capacidad opcional del parser base;
+		no modifica las reglas sintácticas de este documento.
 		
 	Subheader: 13. Extensión de Archivo y Media Type
 		

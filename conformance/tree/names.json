@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Raíz",
+    "canonicalName": "raíz",
+    "namespace": "example.ns",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Café_De-Prueba",
+        "canonicalName": "café-de-prueba",
+        "namespace": "example.ns",
+        "form": "inline",
+        "value": "valor \"con comillas\" y \\ barra",
+        "children": []
+      },
+      {
+        "name": "Año",
+        "canonicalName": "año",
+        "namespace": "example.ns",
+        "form": "inline",
+        "value": "",
+        "children": []
+      },
+      {
+        "name": "Ano",
+        "canonicalName": "ano",
+        "namespace": "example.ns",
+        "form": "inline",
+        "value": "",
+        "children": []
+      }
+    ]
+  }
+]

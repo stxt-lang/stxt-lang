@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "example.spaces",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Child",
+        "canonicalName": "child",
+        "namespace": "example.spaces",
+        "form": "inline",
+        "value": "value",
+        "children": []
+      },
+      {
+        "name": "Empty block",
+        "canonicalName": "empty-block",
+        "namespace": "example.spaces",
+        "form": "block",
+        "lines": []
+      }
+    ]
+  }
+]

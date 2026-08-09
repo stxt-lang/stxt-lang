@@ -1,0 +1,11 @@
+# This comment is discarded.
+Document (COM.EXAMPLE.DOCS):
+	Title: Report
+	Body >>
+		First line
+		
+		# This is literal text
+		Last line
+		
+Appendix:
+	Note: no lateral namespace inheritance

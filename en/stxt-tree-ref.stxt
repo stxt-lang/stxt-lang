@@ -1,0 +1,226 @@
+Document (dev.stxt.website): STXT Tree — Canonical document representation
+	Metadata:
+		Author: Joan Costa Mombiela
+		Last modif: 2026-08-09
+
+	Header: @STXT@ Canonical tree
+
+	Subheader: 1. Introduction
+
+	Content >>
+		This document defines **STXT-TREE-SPEC**, the canonical JSON representation of the
+		logical tree produced when a valid @STXT@ document is parsed.
+
+		Its purpose is for two conforming implementations to display, exchange and compare
+		the same parsing result without relying on a platform-specific class, getters or
+		automatic serialization. It is, in particular, the reference format for conformance
+		corpora and tools such as `stxt describe`.
+
+		This specification represents the **logical tree**, not the source file. It does not
+		attempt to retain comments, blank lines outside blocks, indentation style, the exact
+		position of nodes, or other presentation choices. Rewriting a file while retaining
+		those elements requires a source-analysis layer separate from the tree.
+
+		*STXT-SPEC* defines document syntax and the meaning of names, values, blocks,
+		namespaces and indentation. Schemas, templates and definition discovery do not alter
+		this tree.
+
+	Subheader: 2. Terminology
+
+	Content >>
+		The key words **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and
+		**"MAY"** in this document are to be interpreted as described in **RFC 2119**.
+
+		The terms *node*, *INLINE*, *BLOCK*, *canonical name*, *effective namespace* and
+		*document* retain the meaning defined by *STXT-SPEC*.
+
+		In this document, a **tree representation** is a JSON value that meets sections 3 to
+		6. An **emitter** is an implementation that transforms parsed @STXT@ nodes into that
+		representation.
+
+	Subheader: 3. Document value
+
+	Content >>
+		The representation of an @STXT@ document **MUST** be a JSON array. Each element of
+		the array is a root node, in the same order in which it appears in the document.
+
+		The outer array is required because @STXT@ permits multiple root nodes. A document
+		made solely of comments or blank lines is valid and is represented by the empty array
+		`[]`.
+
+		The representation does not wrap the array in an object and does not include a
+		document name, file path, implementation version or validation result. Those facts
+		belong to the application invoking the parser, not to the @STXT@ document.
+
+	Subheader: 4. Node representation
+
+	Content >>
+		Each node **MUST** be represented as a JSON object with the common members `name`,
+		`canonicalName`, `namespace` and `form`, plus `value` and `children` for INLINE, or
+		`lines` for BLOCK.
+
+		| Member | JSON type | Meaning |
+		|--------|-----------|---------|
+		| `name` | string | Logical node name after the trimming and space compaction of *STXT-SPEC* section 4.1. It retains case, diacritics and separators from the logical name. |
+		| `canonicalName` | string | Canonical name calculated under *STXT-SPEC* section 4.3: NFC, Unicode lower case, and separators compacted to `-`. |
+		| `namespace` | string | Node's **effective** namespace, already inherited and lower-cased. It is `""` when the node has no effective namespace. |
+		| `form` | string | Exactly `"inline"` for a `:` node or `"block"` for a `>>` node. |
+		| `children` | array | Only for `inline` nodes: direct-child representations, in order of appearance. It always exists for this form, even when empty. |
+		| `value` | string | Only for `inline` nodes: their inline value after trimming. It always exists for this form, including when it is `""`. |
+		| `lines` | array of strings | Only for `block` nodes: the logical lines of the block, in order. It always exists for this form, including when empty. |
+
+	Content >>
+		An `inline` node **MUST** have exactly the members `name`, `canonicalName`,
+		`namespace`, `form`, `value` and `children`. A `block` node **MUST** have exactly
+		the members `name`, `canonicalName`, `namespace`, `form` and `lines`. Additional
+		members are not permitted in the canonical representation.
+
+		A block produced by the base parser has no structural children and therefore **MUST
+		NOT** have a `children` member. Its indented content is already represented as literal
+		text in `lines`.
+
+	Subheader: 5. Values and block lines
+
+	Content >>
+		The `value` member holds the INLINE value after left and right trimming under
+		*STXT-SPEC* section 10.1. No further conversion is applied: it remains text even
+		when a schema may validate it as a date, number or another type.
+
+		The `lines` member retains the logical block lines exactly as defined by
+		*STXT-SPEC* sections 10.2 and 10.3. Every element is a string, including an empty
+		line represented by `""`. The array is not replaced with a string joined by `\n`:
+		that join would lose the distinction between a block with no lines (`[]`) and a block
+		containing one empty line (`[""]`).
+
+		Comments and blank lines outside a block create neither nodes nor lines. Inside a
+		block, a line beginning with `#` appears in `lines` only when its indentation makes
+		it literal content, as defined by *STXT-SPEC* section 9.1.
+
+	Subheader: 6. Identity and excluded data
+
+	Content >>
+		A node's structural identity is made up of `canonicalName` and `namespace`.
+		Therefore, no `qualifiedName` member is emitted: it is derived as `canonicalName`
+		when `namespace` is empty, and as `namespace + ":" + canonicalName` otherwise.
+
+		Neither is a `text` member emitted: for INLINE it equals `value`, and for BLOCK it
+		is the derived join of `lines` with newline characters. Both duplicate information,
+		and the latter loses distinctions needed for conformance.
+
+		Line numbers, indentation levels, file paths, indentation styles, comments and a
+		namespace's original spelling **MUST NOT** appear. They are either metadata of one
+		particular input or information discarded during parsing, and would make semantically
+		equivalent sources produce different trees.
+
+	Subheader: 7. JSON and canonicality
+
+	Content >>
+		The format uses standard JSON. An emitter **MUST** produce valid JSON and **SHOULD**
+		encode it as UTF-8 without a BOM. Canonicality is defined over the JSON value and its
+		members, not its bytes: object-member order, indentation, whitespace and equivalent
+		choices of JSON escaping do not change the representation.
+
+		Conformance corpora **MUST** compare the JSON value after parsing it, not a character
+		string. An application **MAY** choose a deterministic presentation for people, such
+		as JSON indented with two spaces and a final line break.
+
+		A future specification may define a byte serialization profile for signatures, hashes
+		or caches. That profile is not part of STXT-TREE-SPEC.
+
+	Subheader: 8. Errors and validation
+
+	Content >>
+		STXT-TREE-SPEC represents only documents that completed syntactic parsing. It does
+		not define serialization of exceptions, diagnostics, warnings, discovery errors or
+		partial trees after an error. In particular, a parser's recovery after multiple errors
+		is not part of this contract.
+
+		Tests for invalid input continue to check the stable codes and line numbers defined by
+		the relevant specifications. If a normalized diagnostic representation is needed, it
+		will be a separate specification.
+
+		Schema or template validation happens over the tree already produced. Its result does
+		not modify the tree representation; a tool may display it through another channel.
+
+	Subheader: 9. Conformance
+
+	Content >>
+		An @STXT@ tree emitter is conforming if, for every valid document:
+
+		* It emits an array containing every root node, preserving their order.
+		* It emits all and only the members required by section 4.
+		* It applies the normalization and namespace inheritance of *STXT-SPEC* before emitting.
+		* It retains every logical block line, including trailing blank lines.
+		* It does not emit source metadata or derived values excluded by section 6.
+
+		The `conformance/tree/` directory in the specification source contains normative pairs
+		of `.stxt` documents and `.json` representations. Every implementation claiming
+		STXT-TREE-SPEC support **MUST** produce a JSON value equal to the expected file for
+		each pair.
+
+	Subheader: 10. Normative example
+
+	Content >>
+		Input @STXT@ document:
+
+	Code >>
+		# Discarded comment
+		Document (COM.EXAMPLE.DOCS):
+			Title: Report
+			Body >>
+				First line
+				
+				# This is text
+		Appendix:
+			Note: no lateral namespace inheritance
+
+	Content >>
+		Its representation is the following JSON value. Notice that the initial comment is
+		absent, the namespace is lower-cased, and `Appendix` has an empty namespace.
+
+	Listing >>
+		[
+		  {
+		    "name": "Document",
+		    "canonicalName": "document",
+		    "namespace": "com.example.docs",
+		    "form": "inline",
+		    "value": "",
+		    "children": [
+		      {
+		        "name": "Title",
+		        "canonicalName": "title",
+		        "namespace": "com.example.docs",
+		        "form": "inline",
+		        "value": "Report",
+		        "children": []
+		      },
+		      {
+		        "name": "Body",
+		        "canonicalName": "body",
+		        "namespace": "com.example.docs",
+		        "form": "block",
+		        "lines": ["First line", "", "# This is text"]
+		      }
+		    ]
+		  },
+		  {
+		    "name": "Appendix",
+		    "canonicalName": "appendix",
+		    "namespace": "",
+		    "form": "inline",
+		    "value": "",
+		    "children": [
+		      {
+		        "name": "Note",
+		        "canonicalName": "note",
+		        "namespace": "",
+		        "form": "inline",
+		        "value": "no lateral namespace inheritance",
+		        "children": []
+		      }
+		    ]
+		  }
+		]
+
+	Subheader: 11. End of Document
