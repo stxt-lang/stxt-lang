@@ -175,8 +175,8 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 				Primera línea
 				
 				# Esto es texto
-			Anexo:
-				Nota: sin namespace heredado lateralmente
+		Anexo:
+			Nota: sin namespace heredado lateralmente
 
 	Content >>
 		Su representación es el siguiente valor JSON. Obsérvese que el comentario inicial
