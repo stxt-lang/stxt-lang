@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-09
+		Last modif: 2026-08-10
 		
 	Header: @STXT@ Documentos
 	
@@ -729,6 +729,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		La representación interoperable del árbol lógico que resulta de este parseo se define
 		en *STXT-TREE-SPEC*. Su emisión como JSON es una capacidad opcional del parser base;
 		no modifica las reglas sintácticas de este documento.
+
+		**Guía de implementación (no normativa).** El pseudocódigo neutro `stxt-impl` concreta
+		estas reglas en algoritmos y contratos comunes para los puertos del lenguaje. Es la segunda
+		referencia de autoridad tras las especificaciones, pero nunca las sustituye ni puede
+		contradecirlas. Su repositorio público es
+		[github.com/stxt-lang/stxt-impl](https://github.com/stxt-lang/stxt-impl).
 		
 	Subheader: 13. Extensión de Archivo y Media Type
 		
