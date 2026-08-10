@@ -21,9 +21,6 @@ Document (dev.stxt.website): STXT: The Book
 	Link: @STXT@ Documents
 		Page: stxt-core-ref
 
-	Link: @STXT@ Canonical tree
-		Page: stxt-tree-ref
-		
 	Link: @STXT@ Schema
 		Page: stxt-schema-ref
 		
@@ -33,6 +30,9 @@ Document (dev.stxt.website): STXT: The Book
 	Link: @STXT@ Discovery
 		Page: stxt-discovery-ref
 			
+	Link: @STXT@ Canonical tree
+		Page: stxt-tree-ref
+		
 #	Subheader: Transformations		
 	
 #	Link: STXT to XML
