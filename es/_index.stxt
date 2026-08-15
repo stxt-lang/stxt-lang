@@ -10,8 +10,8 @@ Document (dev.stxt.website): STXT: El Libro
 #	Link: CLI stxt
 #		Page: lang-cli-stxt
 	
-#	Link: Editor online
-#		Page: lang-online-editor
+	Link: Playground
+		Url: https://play.stxt.dev
 	
 #	Link: Herramientas
 #		Page: lang-tools

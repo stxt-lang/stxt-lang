@@ -14,9 +14,13 @@ Template (@stxt.template): dev.stxt.website
 			Grammar: TEXT
 			Listing: TEXT
 			Link:
-				Page:
+				Page: (?)
+				Url: (?) URL
 	Description >>
 		Header:	Equivalente a un h1 de html
+		Link >>
+			Entrada de la navegación del sitio: con Page (nombre de una página del sitio)
+			o con Url (enlace externo, se abre en otra pestaña). Uno de los dos.
 		Document: Un documento es bla, bla, bla
 		Content >>
 			Texto de la página, en formato Markdown (tipo MARKDOWN, STXT-SCHEMA-SPEC 9.7).
