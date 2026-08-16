@@ -1,0 +1,194 @@
+Document (dev.stxt.website): Herramientas
+
+	Metadata:
+		Author: Claude Fable 5
+		Last modif: 2026-08-16
+
+	Header: Herramientas
+
+	Assert >>
+		Todo lo que hay en esta página —playground, extensión, línea de comandos y
+		bibliotecas— implementa **las mismas cinco especificaciones** y devuelve
+		**los mismos códigos de error**. Elige la herramienta por comodidad, no por
+		compatibilidad.
+
+	Content >>
+		@STXT@ no necesita instalación para empezar. Según lo que quieras hacer:
+
+		| Quiero…                                       | Uso…                                                       |
+		|-----------------------------------------------|------------------------------------------------------------|
+		| Probar el lenguaje ahora mismo, sin instalar  | El [playground](https://play.stxt.dev)                     |
+		| Escribir documentos a diario                  | La extensión de **VS Code**                                |
+		| Validar en un script, un `Makefile` o en CI   | La línea de comandos `stxt`                                |
+		| Leer o generar @STXT@ desde mi programa       | Una biblioteca: **TypeScript**, **Java** o **Python**      |
+
+	Subheader: Playground
+
+	Content >>
+		[play.stxt.dev](https://play.stxt.dev) es un editor en el navegador, pensado como
+		un VS Code simplificado: varios documentos a la vez, sus esquemas o plantillas al
+		lado, errores de sintaxis y de validación mientras escribes, autocompletado guiado
+		por la gramática y hover con la definición de cada nodo.
+
+		* No hay nada que instalar ni cuenta que crear; el trabajo se guarda en el propio
+		  navegador.
+		* Viene con una semilla de documentos de ejemplo para tocar y romper.
+		* Un documento se puede compartir con un enlace que lleva el contenido dentro.
+
+		Es el sitio para seguir el [tutorial](lang-tutorial) sin salir del navegador.
+
+	Subheader: Extensión de VS Code
+
+	Content >>
+		La extensión oficial es
+		[STXT – Semantic Text (`stxt-lang.stxt`)](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt).
+		Desde la paleta de extensiones, buscando `stxt`, o desde el terminal:
+
+	Listing >>
+		code --install-extension stxt-lang.stxt
+
+	Content >>
+		Qué aporta:
+
+		* Errores de sintaxis en tiempo real, y de esquema cuando hay una gramática que
+		  aplica.
+		* Coloreado semántico dirigido por el propio parser.
+		* Autocompletado con los nodos que permite el esquema y los valores de un `ENUM`.
+		* Información al pasar el ratón: nodo, nombre canónico, tipo, valores y descripción.
+		* Ir a la definición (F12): del nodo al `Node:` de su esquema o a su línea en la
+		  `Structure` de su plantilla.
+		* Formateo del documento.
+		* Resolución de esquemas y plantillas desde los directorios `.stxt/` del proyecto,
+		  del usuario y del sistema, tal como describe la [referencia de resolución](stxt-discovery-ref).
+
+	Subheader: Línea de comandos
+
+	Content >>
+		El comando `stxt` es la interfaz para scripts, `Makefile` y pipelines de integración
+		continua. Se publica en npm como
+		[`@stxt-lang/cli`](https://www.npmjs.com/package/@stxt-lang/cli) y necesita
+		Node 20 o superior.
+
+	Listing >>
+		npm install -g @stxt-lang/cli
+		stxt --version
+
+	Content >>
+		O sin instalar nada de forma permanente:
+
+	Listing >>
+		npx @stxt-lang/cli validate docs/
+
+	Content >>
+		Los comandos:
+
+		| Comando          | Qué hace                                                                     |
+		|------------------|------------------------------------------------------------------------------|
+		| `stxt validate`  | Parsea y valida uno o varios ficheros o directorios; calla si todo pasa      |
+		| `stxt format`    | Reformatea (`--tabs` / `--spaces`); `--check` para CI, `--write` para guardar |
+		| `stxt describe`  | Muestra el árbol lógico de un documento en JSON (STXT-TREE-SPEC)             |
+		| `stxt schemas`   | Dice qué esquemas y plantillas aplican en un directorio, y de qué nivel      |
+		| `stxt install`   | Instala una definición en `./.stxt`, `~/.stxt` o el nivel del sistema        |
+
+		Un ejemplo de uso en CI, que falla si algún documento no valida o no está
+		bien formateado:
+
+	Listing >>
+		stxt validate --recursive docs/
+		stxt format --check --recursive docs/
+
+	Content >>
+		El código de salida distingue *tus documentos tienen errores* de *el comando se ha
+		usado mal*, así que se puede usar directamente en un script. Ningún comando
+		reescribe ficheros sin `--write`.
+
+	Subheader: Bibliotecas
+
+	Content >>
+		Tres implementaciones, una por ecosistema, con el mismo alcance y la misma versión.
+		Las tres derivan de la especificación a través de un mismo pseudocódigo de
+		referencia, y las tres pasan el mismo corpus de conformidad. Ninguna tiene
+		dependencias en tiempo de ejecución.
+
+	Subsubheader: TypeScript / JavaScript
+
+	Content >>
+		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) en npm. Es el
+		parser sobre el que corren la extensión, la línea de comandos y el playground.
+
+	Listing >>
+		npm install @stxt-lang/core
+
+	Content >>
+		Un ejemplo mínimo:
+
+	Listing >>
+		import { Parser, InlineNode } from '@stxt-lang/core';
+
+		const result = new Parser().parseResult(text);
+		for (const error of result.getErrors()) {
+			console.error(`line ${error.line} [${error.code}]: ${error.message}`);
+		}
+		const root = result.getNodes()[0];
+		if (root instanceof InlineNode) {
+			console.log(root.getChild('Title')?.getText());
+		}
+
+	Subsubheader: Java
+
+	Content >>
+		[`dev.stxt:stxt-core`](https://central.sonatype.com/artifact/dev.stxt/stxt-core)
+		en Maven Central. Java 17 o superior; módulo automático `dev.stxt`.
+
+	Listing >>
+		<dependency>
+		    <groupId>dev.stxt</groupId>
+		    <artifactId>stxt-core</artifactId>
+		    <version>0.7.0</version>
+		</dependency>
+
+	Content >>
+		O con Gradle:
+
+	Listing >>
+		implementation 'dev.stxt:stxt-core:0.7.0'
+
+	Subsubheader: Python
+
+	Content >>
+		[`stxt`](https://pypi.org/project/stxt/) en PyPI. Python puro, 3.10 o superior.
+
+	Listing >>
+		pip install stxt
+
+	Content >>
+		Un ejemplo mínimo:
+
+	Listing >>
+		from stxt import Parser, InlineNode
+
+		result = Parser().parse_result(text)
+		for error in result.get_errors():
+		    print(f"line {error.line} [{error.code}]: {error.message}")
+		root = result.get_nodes()[0]
+		if isinstance(root, InlineNode):
+		    print(root.get_child("Title").get_text())
+
+	Subheader: Código fuente
+
+	Content >>
+		Todo el ecosistema vive en la organización
+		[stxt-lang](https://github.com/stxt-lang) de GitHub, con licencia MIT:
+
+		| Repositorio                                                     | Contenido                                            |
+		|-----------------------------------------------------------------|------------------------------------------------------|
+		| [stxt-web](https://github.com/stxt-lang/stxt-web)               | Este sitio: las especificaciones y el corpus de ejemplos |
+		| [stxt-js](https://github.com/stxt-lang/stxt-js)                 | `@stxt-lang/core`, la biblioteca TypeScript          |
+		| [stxt-java](https://github.com/stxt-lang/stxt-java)             | `dev.stxt:stxt-core`, la biblioteca Java             |
+		| [stxt-python](https://github.com/stxt-lang/stxt-python)         | `stxt`, la biblioteca Python                         |
+		| [stxt-cli](https://github.com/stxt-lang/stxt-cli)               | `@stxt-lang/cli`, la línea de comandos               |
+		| [stxt-vscode](https://github.com/stxt-lang/stxt-vscode)         | La extensión de VS Code                              |
+		| [stxt-play](https://github.com/stxt-lang/stxt-play)             | El playground                                        |
+
+		Las incidencias y propuestas se abren en el repositorio de la herramienta afectada;
+		las que son del lenguaje en sí, en `stxt-web`.

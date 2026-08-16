@@ -10,11 +10,11 @@ Document (dev.stxt.website): STXT: The Book
 #	Link: STXT CLI
 #		Page: lang-cli-stxt
 	
+	Link: Tools
+		Page: lang-tools
+	
 	Link: Playground
 		Url: https://play.stxt.dev
-	
-#	Link: Tools
-#		Page: lang-tools
 	
 	Subheader: Language Reference
 	

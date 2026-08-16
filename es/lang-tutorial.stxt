@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-08-02
+		Last modif: 2026-08-16
 		
 	Header: @STXT@ Tutorial
 	
@@ -55,6 +55,11 @@ Document (dev.stxt.website): STXT Tutorial
 		hacer pruebas. Es recomendable usarlos libremente para experimentar con nodos,
 		bloques de texto, namespaces, templates y schemas, porque esa es la forma más
 		rápida de familiarizarse con el lenguaje.
+
+		Si prefieres no instalar nada, el [playground](https://play.stxt.dev) permite
+		seguir todo el tutorial desde el navegador. La lista completa —playground,
+		extensión, línea de comandos y bibliotecas— está en la página
+		[Herramientas](lang-tools).
 
 	Subheader: 3. Ejemplo básico: ficha de un libro
 	
