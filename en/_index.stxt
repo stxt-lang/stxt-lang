@@ -13,6 +13,9 @@ Document (dev.stxt.website): STXT: The Book
 	Link: Tools
 		Page: lang-tools
 	
+	Link: FAQ
+		Page: faq
+	
 	Link: Playground
 		Url: https://play.stxt.dev
 	

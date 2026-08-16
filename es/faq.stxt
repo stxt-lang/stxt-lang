@@ -1,0 +1,235 @@
+Document (dev.stxt.website): Preguntas frecuentes
+
+	Metadata:
+		Author: Claude Fable 5
+		Last modif: 2026-08-16
+
+	Header: Preguntas frecuentes
+
+	Content >>
+		Respuestas cortas a las dudas que aparecen al empezar con @STXT@. Cada respuesta
+		enlaza a la sección de la referencia que la fija; ante cualquier discrepancia,
+		manda la referencia.
+
+	Subheader: El lenguaje
+
+	Subsubheader: ¿Por qué no YAML, JSON o TOML?
+
+	Content >>
+		Porque resuelven otro problema. JSON y TOML están pensados para datos; YAML intenta
+		cubrir datos y texto y paga por ello con una gramática enorme y sorpresas conocidas
+		(`NO` que se convierte en falso, indentación con anchos variables, anclas, tags que
+		instancian objetos). @STXT@ está pensado para **documentos**: cosas que una persona
+		escribe y lee, con estructura y con párrafos de texto libre mezclados.
+
+		Lo que lo distingue:
+
+		* **Un texto libre es literal.** Todo lo indentado bajo un nodo `>>` es texto tal cual,
+		  sin escapes, sin comillas y sin que `:`, `#` o `>>` signifiquen nada dentro.
+		* **Una sola forma de escribir cada cosa.** `Nombre: valor` o `Nombre >>`, un tabulador o
+		  cuatro espacios por nivel. No hay tres sintaxis para una lista.
+		* **El parser es trivial y seguro por diseño**: sin entidades, sin referencias, sin
+		  inclusión de ficheros, sin ejecución de código, sin ambigüedad de identificadores. Ver
+		  [STXT-SPEC](stxt-core-ref) §15.
+		* **La validación es una capa aparte y opcional**, con un modelo cerrado que detecta un
+		  nombre mal escrito en lugar de aceptarlo en silencio.
+
+		Cuando lo que tienes son datos para que los lea otra máquina, JSON sigue siendo una
+		buena elección; y de hecho todo documento @STXT@ tiene una representación JSON
+		canónica (ver *¿Cómo lo convierto a JSON?*).
+
+	Subsubheader: ¿Es un formato de datos o de documentos?
+
+	Content >>
+		Las dos cosas, porque la línea entre ambas es artificial: un email tiene campos y un
+		cuerpo, un contrato tiene cláusulas y metadatos, una configuración tiene valores y
+		comentarios largos. @STXT@ es un árbol de nodos con nombre; cada nodo lleva o bien un
+		valor y unos hijos, o bien un bloque de texto. Con eso se describe tanto una ficha de
+		datos como un documento de veinte páginas. Los [casos de uso](use-cases-corporate-docs)
+		recorren ese abanico.
+
+	Subsubheader: ¿Qué extensión y qué media type uso?
+
+	Content >>
+		Extensión `.stxt`; media type `text/stxt`, y `text/plain` como alternativa compatible.
+		Codificación UTF-8 sin BOM, finales de línea `LF` (se acepta `CRLF`).
+		Ver [STXT-SPEC](stxt-core-ref) §3 y §13.
+
+	Subheader: Escribir documentos
+
+	Subsubheader: ¿Tabuladores o espacios?
+
+	Content >>
+		Los dos valen, y significan lo mismo: **un tabulador es un nivel, cuatro espacios son un
+		nivel**. Lo que no vale es mezclarlos en la indentación de una misma línea (error
+		`MIXED_INDENTATION`), ni usar otro ancho (dos espacios no son medio nivel: son un error).
+		Líneas distintas de un documento pueden usar estilos distintos, pero por estilo conviene
+		elegir uno; `stxt format --tabs` o `--spaces` lo unifican.
+
+		El ancho fijo es deliberado: el nivel de una línea se calcula mirando solo esa línea, y la
+		jerarquía se ve igual en cualquier editor. Quien prefiera una indentación más compacta
+		usa tabuladores y ajusta el ancho de tabulador de su editor.
+		Ver [STXT-SPEC](stxt-core-ref) §8.1.
+
+	Subsubheader: ¿Importan las mayúsculas, los acentos y los espacios en los nombres?
+
+	Content >>
+		Los nombres se comparan por su **nombre canónico**: minúsculas, y toda secuencia de
+		espacios, guiones y guiones bajos reducida a un solo guion. Los acentos y las letras no
+		latinas **se conservan**. Así:
+
+		* `Fecha de nacimiento`, `fecha_de_nacimiento` y `Fecha-De-Nacimiento` son el **mismo** nodo.
+		* `Título` y `título` son el mismo nodo; `Titulo` es **otro**.
+		* `Año` y `ano` son nodos distintos, como es de esperar.
+
+		Los **namespaces** son más estrictos: solo ASCII `[a-z0-9]` y puntos, al menos `a.b`, y se
+		pasan a minúsculas. Ver [STXT-SPEC](stxt-core-ref) §4.3 y §7.
+
+	Subsubheader: ¿Cómo escribo un valor con dos puntos o almohadilla dentro?
+
+	Content >>
+		Tal cual. En un nodo inline el valor es todo lo que hay después del **primer** `:`, así
+		que `Hora: 10:30` vale `10:30`, y `#` solo abre un comentario cuando es el primer
+		carácter de la línea. En un bloque `>>` no hay que pensar nada: es texto literal.
+
+	Code >>
+		Cita: 10:30 en la sala 2 # esto forma parte del valor
+		Notas >>
+			# esto también es texto, no un comentario
+			Clave: valor >> tampoco es un nodo
+
+	Subsubheader: ¿Puede un documento tener varios nodos raíz?
+
+	Content >>
+		Sí. Un fichero puede contener varios nodos de nivel 0, cada uno con su árbol, y las
+		herramientas los devuelven en orden. Es lo que permite parsear en *streaming*
+		ficheros grandes: cada raíz se emite completa en cuanto empieza la siguiente.
+		Los namespaces **no** se heredan lateralmente entre raíces: cada una declara el suyo.
+		Ver [STXT-SPEC](stxt-core-ref) §8.5.
+
+	Subsubheader: ¿Y los comentarios?
+
+	Content >>
+		Una línea cuyo primer carácter no blanco es `#` es un comentario, y no cuenta para la
+		indentación: ni un comentario ni una línea vacía pueden provocar un error de nivel.
+		Dentro de un bloque `>>`, una línea con `#` **más indentada** que el nodo es texto del
+		bloque; una **menos o igual de indentada** es un comentario y no cierra el bloque.
+		Ver [STXT-SPEC](stxt-core-ref) §9.
+
+	Subsubheader: ¿Qué pasa con los comentarios al formatear?
+
+	Content >>
+		Se conservan. `stxt format` (y el *Format Document* de la extensión de VS Code) reescribe
+		solo las líneas que abren un nodo; comentarios, líneas en blanco y el contenido de los
+		bloques quedan como están, salvo el espacio final de línea. Perder comentarios exige un
+		flag explícito, `--clean`, que reserializa el árbol y descarta todo lo que el árbol no
+		describe. Ninguna herramienta del ecosistema reescribe un fichero sin que se lo pidas
+		(`--write`).
+
+	Subheader: Esquemas y plantillas
+
+	Subsubheader: ¿Los esquemas son obligatorios?
+
+	Content >>
+		No. Un documento sin namespace se parsea y punto. Si tiene namespace y en su cadena de
+		resolución **no hay ninguna definición**, las herramientas solo parsean: no está mal, es
+		que no se puede validar. La validación se activa cuando hay definiciones cerca (un
+		directorio `.stxt/`), y entonces sí cuenta: un documento con un namespace para el que
+		no hay definición se señala con `SCHEMA_NOT_FOUND`, porque casi siempre es un namespace
+		mal escrito. En la CLI, `--warn-schema` lo rebaja a aviso y `--no-schema` desactiva la
+		validación del todo.
+
+	Subsubheader: ¿Esquema o plantilla?
+
+	Content >>
+		Son dos sintaxis para el mismo modelo, y **toda plantilla equivale a un esquema**. La
+		plantilla (`@stxt.template`) se escribe como el documento que describe, con la
+		cardinalidad y el tipo entre paréntesis, y es la forma recomendada para escribir a mano:
+
+	Code >>
+		Template (@stxt.template): com.example.docs
+			Structure >>
+				Email (com.example.docs):
+					From: EMAIL
+					To: (+) EMAIL
+					Subject: (?)
+					Body: (1) TEXT
+
+	Content >>
+		El esquema (`@stxt.schema`) es la forma explícita, con `Node`, `Children`, `Child`,
+		`Min`/`Max` y `Type`; es lo que se genera y lo que se procesa. Si dudas, plantilla.
+		Ver [STXT-TEMPLATE-SPEC](stxt-template-ref) y [STXT-SCHEMA-SPEC](stxt-schema-ref).
+
+	Subsubheader: ¿Dónde pongo los esquemas y plantillas?
+
+	Content >>
+		En un directorio llamado **`.stxt/`** en el proyecto: se cargan todos los `.stxt` que
+		haya dentro, recursivamente, sin que importen los nombres de fichero ni los
+		subdirectorios. La cadena de resolución de un documento son **todos** los `.stxt/` de sus
+		directorios ascendentes, luego `~/.stxt` y por último `/etc/stxt` (en Windows,
+		`%USERPROFILE%\.stxt` y `%ProgramData%\stxt`). Gana el nivel más cercano, namespace a
+		namespace. La variable `STXT_PATH` sustituye la cadena entera por una lista de
+		directorios, útil en CI.
+
+		`stxt install fichero.stxt` deja una definición en su sitio y `stxt schemas` enseña qué
+		aplica en un directorio y de dónde sale. Ver [STXT-DISCOVERY-SPEC](stxt-discovery-ref).
+
+	Subsubheader: ¿Qué pasa si escribo Titel en vez de Title?
+
+	Content >>
+		Que el validador se queja (`CHILD_NOT_DECLARED`). El modelo de contenido es **cerrado**:
+		un nodo solo admite los hijos que su definición declara, y si no declara ninguno, no
+		admite ninguno. Es la razón de ser de validar: fallar de forma ruidosa en vez de aceptar
+		en silencio. Ver [STXT-SCHEMA-SPEC](stxt-schema-ref) §6.
+
+	Subsubheader: ¿Se valida el orden de los hijos?
+
+	Content >>
+		No. Se valida cuántas veces aparece cada hijo, no en qué posición: dos documentos con los
+		mismos hijos en distinto orden validan igual. El orden **se conserva** en el árbol, así
+		que una aplicación que le dé significado lo obtiene del árbol, no del validador.
+		Tampoco hay expresiones regulares, valores por defecto ni reglas condicionales entre
+		campos: son no-objetivos declarados. Ver [STXT-SCHEMA-SPEC](stxt-schema-ref) §11.
+
+	Subsubheader: ¿Cómo evoluciono un esquema sin romper documentos?
+
+	Content >>
+		Como el modelo es cerrado, añadir un nodo rompe la validación de los documentos que
+		usen la definición antigua. La práctica recomendada es **versionar el namespace**
+		(`com.example.docs.v1` → `com.example.docs.v2`): cada versión tiene su definición y cada
+		documento declara la que usa.
+
+	Subheader: Herramientas
+
+	Subsubheader: ¿Cómo valido en CI?
+
+	Content >>
+		Con la línea de comandos, sin instalar nada de forma permanente:
+
+	Listing >>
+		npx @stxt-lang/cli validate --recursive docs/
+		npx @stxt-lang/cli format --check --recursive docs/
+
+	Content >>
+		El código de salida es `1` si algún documento no pasa y `2` si la llamada está mal, así
+		que el trabajo falla solo. `--format json` da la salida para máquinas. Y si el entorno de
+		CI no debe depender de lo que haya en `~/.stxt` o `/etc/stxt`, `STXT_PATH=./.stxt` fija
+		la cadena de resolución. Los detalles, en [Herramientas](lang-tools).
+
+	Subsubheader: ¿Cómo lo convierto a JSON?
+
+	Content >>
+		Todo documento válido tiene un **árbol canónico** en JSON, definido en
+		[STXT-TREE-SPEC](stxt-tree-ref): un array de raíces con `name`, `canonicalName`,
+		`namespace`, y `value` más `children` (inline) o `lines` (bloque). `stxt describe
+		fichero.stxt` lo imprime, y las tres bibliotecas lo exponen desde su API. No incluye
+		posiciones ni comentarios: es el contenido lógico, el mismo en todas las implementaciones.
+
+	Subsubheader: ¿En qué lenguajes hay parser?
+
+	Content >>
+		TypeScript/JavaScript (`@stxt-lang/core`), Java (`dev.stxt:stxt-core`) y Python
+		(`stxt`), con el mismo alcance, la misma versión y el mismo corpus de conformidad. Sobre
+		el primero corren la extensión de VS Code, la CLI y el playground. Todo está en la
+		página [Herramientas](lang-tools); y para probar sin instalar nada,
+		[play.stxt.dev](https://play.stxt.dev).

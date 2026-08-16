@@ -1,0 +1,236 @@
+Document (dev.stxt.website): Frequently asked questions
+
+	Metadata:
+		Author: Claude Fable 5
+		Last modif: 2026-08-16
+
+	Header: Frequently asked questions
+
+	Content >>
+		Short answers to the questions that come up when starting with @STXT@. Each answer
+		links to the section of the reference that settles it; where they disagree, the
+		reference wins.
+
+	Subheader: The language
+
+	Subsubheader: Why not YAML, JSON or TOML?
+
+	Content >>
+		Because they solve a different problem. JSON and TOML are designed for data; YAML tries
+		to cover data and text and pays for it with a huge grammar and well-known surprises
+		(`NO` turning into false, variable indentation widths, anchors, tags that instantiate
+		objects). @STXT@ is designed for **documents**: things a person writes and reads, with
+		structure and paragraphs of free text mixed together.
+
+		What sets it apart:
+
+		* **Free text is literal.** Everything indented under a `>>` node is text as is, with no
+		  escapes, no quotes, and no meaning for `:`, `#` or `>>` inside it.
+		* **One way to write each thing.** `Name: value` or `Name >>`, one tab or four spaces per
+		  level. There are no three syntaxes for a list.
+		* **The parser is trivial and secure by design**: no entities, no references, no file
+		  inclusion, no code execution, no ambiguous identifiers. See
+		  [STXT-SPEC](stxt-core-ref) §15.
+		* **Validation is a separate, optional layer**, with a closed model that catches a
+		  misspelled name instead of accepting it silently.
+
+		When what you have is data for another machine to read, JSON remains a good choice; and
+		in fact every @STXT@ document has a canonical JSON representation (see *How do I convert
+		it to JSON?*).
+
+	Subsubheader: Is it a data format or a document format?
+
+	Content >>
+		Both, because the line between them is artificial: an email has fields and a body, a
+		contract has clauses and metadata, a configuration has values and long comments. @STXT@
+		is a tree of named nodes; each node carries either a value and children, or a block of
+		text. That describes a data record as well as a twenty-page document. The
+		[use cases](use-cases-corporate-docs) walk through that range.
+
+	Subsubheader: Which file extension and media type do I use?
+
+	Content >>
+		Extension `.stxt`; media type `text/stxt`, with `text/plain` as a compatible
+		alternative. UTF-8 without BOM, `LF` line endings (`CRLF` is accepted).
+		See [STXT-SPEC](stxt-core-ref) §3 and §13.
+
+	Subheader: Writing documents
+
+	Subsubheader: Tabs or spaces?
+
+	Content >>
+		Both work, and they mean the same: **one tab is one level, four spaces are one level**.
+		What does not work is mixing them in the indentation of a single line (error
+		`MIXED_INDENTATION`), or using another width (two spaces are not half a level: they are
+		an error). Different lines of a document may use different styles, but for style's sake
+		pick one; `stxt format --tabs` or `--spaces` unify it.
+
+		The fixed width is deliberate: the level of a line is computed from that line alone, and
+		the hierarchy looks the same in every editor. Anyone who prefers a more compact
+		indentation uses tabs and adjusts the tab width of their editor.
+		See [STXT-SPEC](stxt-core-ref) §8.1.
+
+	Subsubheader: Do case, accents and spaces matter in names?
+
+	Content >>
+		Names are compared by their **canonical name**: lower case, and every run of spaces,
+		hyphens and underscores reduced to a single hyphen. Accents and non-Latin letters **are
+		kept**. So:
+
+		* `Date of birth`, `date_of_birth` and `Date-Of-Birth` are the **same** node.
+		* `Título` and `título` are the same node; `Titulo` is **another** one.
+		* `Año` and `ano` are different nodes, as one would expect.
+
+		**Namespaces** are stricter: ASCII `[a-z0-9]` and dots only, at least `a.b`, and they
+		are lower-cased. See [STXT-SPEC](stxt-core-ref) §4.3 and §7.
+
+	Subsubheader: How do I write a value with a colon or a hash inside?
+
+	Content >>
+		Just write it. In an inline node the value is everything after the **first** `:`, so
+		`Time: 10:30` has the value `10:30`, and `#` only opens a comment when it is the first
+		character of the line. Inside a `>>` block there is nothing to think about: it is
+		literal text.
+
+	Code >>
+		Meeting: 10:30 in room 2 # this is part of the value
+		Notes >>
+			# this is text too, not a comment
+			Key: value >> not a node either
+
+	Subsubheader: Can a document have several root nodes?
+
+	Content >>
+		Yes. A file may contain several level-0 nodes, each with its own tree, and the tools
+		return them in order. That is what allows *streaming* parsing of large files: each root
+		is emitted complete as soon as the next one begins. Namespaces are **not** inherited
+		sideways between roots: each declares its own. See [STXT-SPEC](stxt-core-ref) §8.5.
+
+	Subsubheader: What about comments?
+
+	Content >>
+		A line whose first non-blank character is `#` is a comment, and it does not count for
+		indentation: neither a comment nor a blank line can cause a level error. Inside a `>>`
+		block, a `#` line indented **deeper** than the node is text of the block; one indented
+		**less or equal** is a comment and does not close the block.
+		See [STXT-SPEC](stxt-core-ref) §9.
+
+	Subsubheader: What happens to comments when formatting?
+
+	Content >>
+		They are kept. `stxt format` (and *Format Document* in the VS Code extension) rewrites
+		only the lines that open a node; comments, blank lines and the content of blocks stay as
+		they are, except for trailing whitespace. Losing comments requires an explicit flag,
+		`--clean`, which re-serializes the tree and drops everything the tree does not describe.
+		No tool in the ecosystem rewrites a file unless you ask for it (`--write`).
+
+	Subheader: Schemas and templates
+
+	Subsubheader: Are schemas mandatory?
+
+	Content >>
+		No. A document without a namespace is parsed, full stop. If it has a namespace and its
+		resolution chain has **no definition at all**, the tools only parse: nothing is wrong, it
+		simply cannot be validated. Validation kicks in when definitions are nearby (a `.stxt/`
+		directory), and then it does count: a document with a namespace for which there is no
+		definition is flagged with `SCHEMA_NOT_FOUND`, because it is almost always a misspelled
+		namespace. In the CLI, `--warn-schema` turns that into a warning and `--no-schema`
+		disables validation altogether.
+
+	Subsubheader: Schema or template?
+
+	Content >>
+		Two syntaxes for the same model, and **every template is equivalent to a schema**. The
+		template (`@stxt.template`) is written like the document it describes, with the
+		cardinality and the type in parentheses, and it is the recommended form for writing by
+		hand:
+
+	Code >>
+		Template (@stxt.template): com.example.docs
+			Structure >>
+				Email (com.example.docs):
+					From: EMAIL
+					To: (+) EMAIL
+					Subject: (?)
+					Body: (1) TEXT
+
+	Content >>
+		The schema (`@stxt.schema`) is the explicit form, with `Node`, `Children`, `Child`,
+		`Min`/`Max` and `Type`; it is what gets generated and what gets processed. When in doubt,
+		template. See [STXT-TEMPLATE-SPEC](stxt-template-ref) and
+		[STXT-SCHEMA-SPEC](stxt-schema-ref).
+
+	Subsubheader: Where do I put schemas and templates?
+
+	Content >>
+		In a directory called **`.stxt/`** in the project: every `.stxt` file inside it is
+		loaded, recursively, regardless of file names or subdirectories. The resolution chain of
+		a document is **every** `.stxt/` of its ancestor directories, then `~/.stxt`, and finally
+		`/etc/stxt` (on Windows, `%USERPROFILE%\.stxt` and `%ProgramData%\stxt`). The closest
+		level wins, namespace by namespace. The `STXT_PATH` variable replaces the whole chain
+		with a list of directories, handy in CI.
+
+		`stxt install file.stxt` puts a definition in place and `stxt schemas` shows what
+		applies in a directory and where it comes from. See
+		[STXT-DISCOVERY-SPEC](stxt-discovery-ref).
+
+	Subsubheader: What if I write Titel instead of Title?
+
+	Content >>
+		The validator complains (`CHILD_NOT_DECLARED`). The content model is **closed**: a node
+		only admits the children its definition declares, and if it declares none, it admits
+		none. That is the point of validating: fail loudly instead of accepting silently.
+		See [STXT-SCHEMA-SPEC](stxt-schema-ref) §6.
+
+	Subsubheader: Is the order of children validated?
+
+	Content >>
+		No. What is validated is how many times each child appears, not in which position: two
+		documents with the same children in a different order validate the same. The order **is
+		preserved** in the tree, so an application that gives it meaning gets it from the tree,
+		not from the validator. There are no regular expressions, default values or conditional
+		rules between fields either: they are declared non-goals.
+		See [STXT-SCHEMA-SPEC](stxt-schema-ref) §11.
+
+	Subsubheader: How do I evolve a schema without breaking documents?
+
+	Content >>
+		Because the model is closed, adding a node breaks the validation of documents that use
+		the old definition. The recommended practice is to **version the namespace**
+		(`com.example.docs.v1` → `com.example.docs.v2`): each version has its definition and each
+		document declares the one it uses.
+
+	Subheader: Tools
+
+	Subsubheader: How do I validate in CI?
+
+	Content >>
+		With the command line, without installing anything permanently:
+
+	Listing >>
+		npx @stxt-lang/cli validate --recursive docs/
+		npx @stxt-lang/cli format --check --recursive docs/
+
+	Content >>
+		The exit code is `1` if any document fails and `2` if the call itself is wrong, so the
+		job fails on its own. `--format json` gives machine-readable output. And if the CI
+		environment must not depend on whatever is in `~/.stxt` or `/etc/stxt`,
+		`STXT_PATH=./.stxt` pins the resolution chain. Details on the [Tools](lang-tools) page.
+
+	Subsubheader: How do I convert it to JSON?
+
+	Content >>
+		Every valid document has a **canonical tree** in JSON, defined in
+		[STXT-TREE-SPEC](stxt-tree-ref): an array of roots with `name`, `canonicalName`,
+		`namespace`, and `value` plus `children` (inline) or `lines` (block). `stxt describe
+		file.stxt` prints it, and the three libraries expose it from their API. It includes no
+		positions and no comments: it is the logical content, the same in every implementation.
+
+	Subsubheader: Which languages have a parser?
+
+	Content >>
+		TypeScript/JavaScript (`@stxt-lang/core`), Java (`dev.stxt:stxt-core`) and Python
+		(`stxt`), with the same scope, the same version and the same conformance corpus. The VS
+		Code extension, the CLI and the playground run on the first one. Everything is on the
+		[Tools](lang-tools) page; and to try it without installing anything,
+		[play.stxt.dev](https://play.stxt.dev).
