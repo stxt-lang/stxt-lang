@@ -172,7 +172,8 @@ Document (dev.stxt.website): Preguntas frecuentes
 		directorios, útil en CI.
 
 		`stxt install fichero.stxt` deja una definición en su sitio y `stxt schemas` enseña qué
-		aplica en un directorio y de dónde sale. Ver [STXT-DISCOVERY-SPEC](stxt-discovery-ref).
+		aplica en un directorio y de dónde sale. El recorrido completo, con ejemplo, está en
+		[El entorno de trabajo](lang-workflow); la norma, en [STXT-DISCOVERY-SPEC](stxt-discovery-ref).
 
 	Subsubheader: ¿Qué pasa si escribo Titel en vez de Title?
 

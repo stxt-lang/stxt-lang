@@ -59,7 +59,8 @@ Document (dev.stxt.website): STXT Tutorial
 		Si prefieres no instalar nada, el [playground](https://play.stxt.dev) permite
 		seguir todo el tutorial desde el navegador. La lista completa —playground,
 		extensión, línea de comandos y bibliotecas— está en la página
-		[Herramientas](lang-tools).
+		[Herramientas](lang-tools); y cómo montar un proyecto y validarlo de verdad, con
+		este mismo ejemplo del libro, en [El entorno de trabajo](lang-workflow).
 
 	Subheader: 3. Ejemplo básico: ficha de un libro
 	
@@ -461,6 +462,9 @@ Document (dev.stxt.website): STXT Tutorial
 		* Es @STXT@ válido.
 		* Cumple el template `com.acme.book`.
 		* Cumple el schema `com.acme.book`.
+
+		Para comprobarlo de verdad —dejar la plantilla en un directorio `.stxt/` y validar
+		desde el terminal o desde el editor— sigue [El entorno de trabajo](lang-workflow).
 		
 	Subheader: 11. Buenas prácticas
 	

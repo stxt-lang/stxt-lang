@@ -1,0 +1,279 @@
+Document (dev.stxt.website): El entorno de trabajo
+
+	Metadata:
+		Author: Claude Fable 5
+		Last modif: 2026-08-16
+
+	Header: El entorno de trabajo
+
+	Assert >>
+		El [tutorial](lang-tutorial) enseña el lenguaje; esta página enseña a **trabajar**
+		con él: montar un proyecto, dejar su gramática donde las herramientas la encuentran,
+		y validar desde el editor, desde la línea de comandos y en integración continua.
+		Se sigue con el mismo ejemplo del tutorial, la ficha de un libro.
+
+	Content >>
+		Hace falta la línea de comandos `stxt` (`npm install -g @stxt-lang/cli`, o `npx
+		@stxt-lang/cli` sin instalar) y, para la sección 4, Visual Studio Code con la extensión
+		`stxt-lang.stxt`. Si no quieres instalar nada, la sección 7 hace lo mismo en el
+		playground. Todo lo que se usa aquí está descrito en [Herramientas](lang-tools).
+
+	Subheader: 1. El proyecto y el directorio `.stxt/`
+
+	Content >>
+		Un proyecto @STXT@ es un directorio cualquiera con documentos `.stxt`. Lo único que
+		añade @STXT@ es un directorio llamado exactamente **`.stxt/`** donde viven las
+		gramáticas —esquemas y plantillas— del proyecto. Cuando una herramienta valida un
+		documento busca ese directorio en la carpeta del documento y en **todas** sus carpetas
+		ancestras, y después en `~/.stxt` y en `/etc/stxt`. Esa lista es la **cadena de
+		resolución** del documento, y es la misma para el editor, la línea de comandos y
+		cualquier otra herramienta: por eso un documento valida igual en todas partes.
+
+		Para el ejemplo, un proyecto `libros` con la gramática en `.stxt/` y los documentos
+		en `docs/`:
+
+	Listing >>
+		libros/
+		├── .stxt/            las gramáticas del proyecto
+		└── docs/
+		    └── book.stxt     los documentos
+
+	Listing >>
+		mkdir -p libros/.stxt libros/docs
+		cd libros
+
+	Content >>
+		Dentro de `.stxt/` se cargan **todos** los ficheros `.stxt`, recursivamente, y ni los
+		nombres de fichero ni los subdirectorios significan nada: son solo organización. Lo
+		que sí importa es que cada fichero sea una definición (`@stxt.schema` o
+		`@stxt.template`); cualquier otra cosa dentro de `.stxt/` es un error de resolución.
+		Ver [STXT-DISCOVERY-SPEC](stxt-discovery-ref) §3 y §4.
+
+	Subheader: 2. Escribir la gramática
+
+	Content >>
+		La plantilla del libro es la del tutorial (sección 8). Se puede escribir directamente
+		en `.stxt/` con el nombre que se quiera, o dejar que la CLI la coloque: `stxt install`
+		la parsea, comprueba que valida contra su meta-esquema y solo entonces la escribe, en
+		forma canónica, como `.stxt/@stxt.template/<namespace>.stxt`. Esa nomenclatura es una
+		convención de la CLI, no del lenguaje.
+
+	Code >>
+		Template (@stxt.template): com.acme.book
+			Structure >>
+				Book:
+					Title: (1)
+					Authors: (1)
+						Author: (+)
+					ISBN: (1)
+					Publisher: (?)
+					Published: (?) DATE
+					Summary: (?) TEXT
+					Chapter: (+)
+						Content: (?) TEXT
+			Description >>
+				Book: Plantilla para fichas de libros editoriales
+
+	Listing >>
+		stxt install book-template.stxt
+
+		Installed com.acme.book (@stxt.template) to /home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt
+
+	Content >>
+		`stxt schemas` enseña la cadena de resolución de un directorio y qué definición queda
+		activa para cada namespace, y de dónde sale:
+
+	Listing >>
+		stxt schemas docs
+
+		Resolution chain for /home/ana/libros/docs:
+		    /home/ana/libros/.stxt
+
+		Namespaces:
+		    com.acme.book <- /home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt
+
+	Content >>
+		Si el proyecto está dentro de otro que también tiene `.stxt/` (un monorepo), la cadena
+		enseñará los dos directorios: ambos participan, y para cada namespace gana el más
+		cercano al documento.
+
+	Subheader: 3. Escribir y validar el documento
+
+	Content >>
+		El documento, en `docs/book.stxt`, con el namespace de la plantilla:
+
+	Code >>
+		Book (com.acme.book):
+			Title: Arquitectura de software moderna
+			Authors:
+				Author: María Pérez
+				Author: Juan García
+			ISBN: 978-84-123456-7-8
+			Published: 2025-10-01
+			Summary: Una introducción práctica a la arquitectura de sistemas modernos.
+			Chapter: Introducción
+				Content >>
+					Conceptos básicos y objetivos del libro.
+
+	Listing >>
+		stxt validate docs/book.stxt
+
+	Content >>
+		No escribe nada y termina con código `0`: **calla cuando todo pasa**. Para ver cómo
+		se queja, dos errores típicos: una fecha que no es `YYYY-MM-DD` y un nodo obligatorio
+		que falta. Cambia `Published` por texto libre y borra la línea `ISBN`:
+
+	Code >>
+		Book (com.acme.book):
+			Title: Arquitectura de software moderna
+			Authors:
+				Author: María Pérez
+				Author: Juan García
+			Published: 1 de octubre de 2025
+			Summary: Una introducción práctica a la arquitectura de sistemas modernos.
+			Chapter: Introducción
+				Content >>
+					Conceptos básicos y objetivos del libro.
+
+	Listing >>
+		stxt validate docs/book.stxt
+
+		/home/ana/libros/docs/book.stxt:6: [INVALID_VALUE] Published: Invalid date (1 de octubre de 2025) (error)
+		/home/ana/libros/docs/book.stxt:1: [INVALID_NUMBER] 0 nodes of 'com.acme.book:isbn' and min is 1 (error)
+		2 error(s), 0 warning(s)
+
+	Content >>
+		Cada hallazgo es `fichero:línea: [CÓDIGO] mensaje (severidad)`. El **código** es
+		estable y es el mismo en la CLI, en la extensión y en las tres bibliotecas
+		(`INVALID_VALUE`, `INVALID_NUMBER`, `CHILD_NOT_DECLARED`, `MIXED_INDENTATION`…),
+		así que sirve para buscar en la documentación o para filtrar en un script. La
+		cardinalidad que falla se señala en la línea del **padre** (`Book`, línea 1), porque
+		es el padre quien tiene cero `ISBN`.
+
+		El código de salida distingue *tus documentos tienen errores* (`1`) de *el comando
+		se ha usado mal* (`2`). Tres opciones cambian qué cuenta como fallo:
+
+		* `--warn-schema`: los errores de gramática se reportan como avisos y no hacen
+		  fallar; los de sintaxis, sí.
+		* `--no-schema`: solo sintaxis, sin buscar ni aplicar gramáticas.
+		* `--format json`: los mismos hallazgos como array JSON, para máquinas.
+
+		Con `--recursive` (`-r`) se validan directorios enteros; los `.stxt/` que encuentre
+		por el camino se saltan, porque son la cadena de resolución, no documentos que
+		comprobar.
+
+	Subheader: 4. Lo mismo desde VS Code
+
+	Content >>
+		Abre la carpeta `libros/` en Visual Studio Code con la extensión instalada
+		(`code --install-extension stxt-lang.stxt`). No hay nada que configurar: la
+		extensión sigue **la misma cadena de resolución** que la CLI —los `.stxt/` del
+		documento y de sus ancestros, aunque estén por encima de la raíz del workspace, y
+		después `~/.stxt` y `/etc/stxt`—, así que ve la misma plantilla y da los mismos
+		códigos. Con `docs/book.stxt` abierto:
+
+		* Los **errores de sintaxis** aparecen subrayados en rojo, y los de gramática como
+		  avisos, con el mismo código y mensaje que en la línea de comandos.
+		* **Autocompletado** (`Ctrl+Espacio`): dentro de `Book` propone solo los hijos que
+		  la plantilla permite; en un `ENUM`, sus valores.
+		* **Hover** sobre un nombre de nodo: su nombre canónico, su tipo, los valores
+		  permitidos si es un `ENUM` y la descripción que dé la plantilla.
+		* **Ir a la definición** (`F12`) sobre `Published` abre `.stxt/@stxt.template/com.acme.book.stxt`
+		  en la línea `Published: (?) DATE`.
+		* **Formatear documento**, desde la paleta de comandos o el atajo del editor:
+		  reindenta y normaliza sin perder comentarios ni líneas en blanco.
+
+		Si editas la plantilla, la extensión vuelve a resolver y revalida los documentos
+		abiertos sin recargar nada. Y si un documento tiene namespace pero no hay gramática
+		en ninguna parte, no verás ningún aviso: **los esquemas son opcionales**, y un
+		documento sin gramática no está mal, solo no se puede validar.
+
+	Subheader: 5. Más de un nivel: usuario y sistema
+
+	Content >>
+		El `.stxt/` del proyecto es el primer nivel de la cadena; hay dos más:
+
+		| Nivel    | Dónde                                    | `stxt install …` | Para qué                                                    |
+		|----------|------------------------------------------|------------------|-------------------------------------------------------------|
+		| Proyecto | `.stxt/` del documento y de sus ancestros | `--local`        | Las gramáticas del proyecto, versionadas con él             |
+		| Usuario  | `~/.stxt` (`%USERPROFILE%\.stxt`)         | `--user`         | Definiciones personales, comunes a todos tus proyectos      |
+		| Sistema  | `/etc/stxt` (`%ProgramData%\stxt`)        | `--system`       | Definiciones que una organización distribuye a toda una máquina |
+
+		La precedencia es **por namespace**, no por directorio: para cada namespace manda el
+		nivel más cercano que lo defina, y los demás niveles siguen aportando los namespaces
+		que ese no define. Así, un proyecto puede llevar su `com.acme.book` y tú tener en
+		`~/.stxt` una plantilla `org.ana.notas` para tus apuntes, y las dos aplican en la
+		misma validación.
+
+		Lo que no se permite es **dos definiciones del mismo namespace en el mismo nivel**.
+		Si copias la plantilla del libro a `.stxt/otro/copia.stxt`, `stxt schemas` lo dice y
+		el namespace se queda **sin definición activa** hasta que quites una:
+
+	Listing >>
+		stxt schemas docs
+
+		Resolution chain for /home/ana/libros/docs:
+		    /home/ana/libros/.stxt
+
+		No namespaces resolved.
+
+		Errors:
+		    DISCOVERY_DUPLICATE_NAMESPACE /home/ana/libros/.stxt/otro/copia.stxt: Duplicate definition for namespace 'com.acme.book' at level /home/ana/libros/.stxt: already defined in /home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt
+
+	Content >>
+		`stxt validate` reporta ese mismo error (línea `0`, con el fichero causante) y falla:
+		la herramienta nunca elige una de las dos en silencio. Ver
+		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) §5 y §8.
+
+	Subheader: 6. Integración continua y `STXT_PATH`
+
+	Content >>
+		En un trabajo de CI el resultado no debería depender de lo que haya en el `~/.stxt` o
+		el `/etc/stxt` de la máquina que ejecuta. La variable de entorno **`STXT_PATH`**
+		sustituye la cadena de resolución **entera** por una lista de directorios (separados
+		por `:`, o `;` en Windows), en orden de precedencia; las entradas no tienen por qué
+		llamarse `.stxt`. Con ella, dos pasos bastan para que el trabajo falle si algún
+		documento no valida o no está bien formateado:
+
+	Listing >>
+		STXT_PATH=./.stxt npx @stxt-lang/cli validate --recursive docs/
+		npx @stxt-lang/cli format --check --recursive docs/
+
+	Content >>
+		`format --check` no escribe nada: solo lista qué ficheros cambiarían y falla si hay
+		alguno, como `gofmt -l` o `prettier --check`. Para reformatear de verdad hace falta
+		`--write`; ningún comando reescribe ficheros sin pedirlo.
+
+		Una `STXT_PATH` definida pero vacía deja la cadena vacía: los documentos se parsean
+		sin validación de gramática. Y una entrada que no existe simplemente no aporta nada,
+		no es un error. Ver [STXT-DISCOVERY-SPEC](stxt-discovery-ref) §6.
+
+	Subheader: 7. Sin instalar nada: el playground
+
+	Content >>
+		En el [playground](https://play.stxt.dev) no hay sistema de ficheros, así que no hay
+		`.stxt/` ni cadena de directorios: la asociación entre documentos y gramáticas es
+		**por namespace dentro del workspace**. Toda plantilla o esquema que esté en la lista
+		de documentos alimenta la validación, y cada documento se valida contra la definición
+		cuyo namespace le corresponde. Dos gramáticas con el mismo namespace en el workspace
+		son un error, exactamente como en la sección 5.
+
+		La semilla con la que arranca ya trae `book.stxt` y la gramática `com.acme.book`:
+		abre el libro, rompe la fecha o borra el `ISBN`, y el panel de problemas del pie
+		enseña los mismos códigos que la CLI. El autocompletado, el hover y el interruptor
+		de tabuladores/espacios funcionan igual que en la extensión, y *Share* copia una URL
+		que lleva el workspace entero dentro, para enseñárselo a alguien sin que instale nada.
+
+	Subheader: 8. Resumen
+
+	Content >>
+		| Quiero…                                            | Hago…                                                                  |
+		|----------------------------------------------------|------------------------------------------------------------------------|
+		| Empezar un proyecto                                | Un directorio `.stxt/` junto a los documentos                          |
+		| Dejar una gramática en su sitio                    | Escribirla en `.stxt/`, o `stxt install gramatica.stxt`                |
+		| Ver qué gramática aplica y de dónde sale           | `stxt schemas [directorio]`                                            |
+		| Validar desde el terminal                          | `stxt validate --recursive docs/`                                      |
+		| Validar mientras escribo                           | VS Code con la extensión, o el playground                              |
+		| Compartir una gramática entre mis proyectos        | `stxt install --user gramatica.stxt` (`~/.stxt`)                       |
+		| Que CI no dependa de la máquina                    | `STXT_PATH=./.stxt` delante del comando                                |
+		| Comprobar el formato en CI                         | `stxt format --check --recursive docs/`                                |

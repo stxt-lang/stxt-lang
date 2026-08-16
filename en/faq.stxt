@@ -171,7 +171,8 @@ Document (dev.stxt.website): Frequently asked questions
 		with a list of directories, handy in CI.
 
 		`stxt install file.stxt` puts a definition in place and `stxt schemas` shows what
-		applies in a directory and where it comes from. See
+		applies in a directory and where it comes from. The full walkthrough, with an
+		example, is in [The working environment](lang-workflow); the norm, in
 		[STXT-DISCOVERY-SPEC](stxt-discovery-ref).
 
 	Subsubheader: What if I write Titel instead of Title?
