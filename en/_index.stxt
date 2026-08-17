@@ -80,14 +80,8 @@ Document (dev.stxt.website): STXT: The Book
 	Link: Corporate Documents
 		Page: use-cases-corporate-docs
 		
-	Link: Wikipedia
-		Page: use-cases-wikipedia
-		
-	Link: CMS
+	Link: CMS and publishing
 		Page: use-cases-cms
-		
-	Link: Publications
-		Page: use-cases-editorial
 		
 	Link: Configuration files
 		Page: use-cases-config-files
