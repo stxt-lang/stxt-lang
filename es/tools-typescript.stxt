@@ -1,0 +1,449 @@
+Document (dev.stxt.website): La biblioteca TypeScript
+
+	Metadata:
+		Author: Claude Fable 5
+		Last modif: 2026-08-17
+
+	Header: La biblioteca TypeScript
+
+	Assert >>
+		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) es el parser de
+		@STXT@ para **TypeScript y JavaScript**, y el puerto de referencia del ecosistema:
+		sobre él corren la [línea de comandos](tools-cli), la extensión de VS Code y el
+		[playground](https://play.stxt.dev), que no tienen parser propio. Implementa las
+		cinco especificaciones —sintaxis, árbol canónico, esquemas, plantillas y
+		resolución— y devuelve **los mismos códigos de error** que las bibliotecas
+		[Java](tools-java) y [Python](tools-python).
+
+	Content >>
+		Esta página es la guía de uso de la biblioteca: parsear, recorrer y construir
+		árboles, validar contra esquemas y plantillas, resolver qué gramática aplica a un
+		documento, obtener su JSON canónico y volver a escribir @STXT@. Todo lo que aquí
+		se muestra sale de un único punto de entrada, sin subrutas internas.
+
+	Subheader: Instalación
+
+	Listing >>
+		npm install @stxt-lang/core
+
+	Content >>
+		El paquete se distribuye como **CommonJS con declaraciones de tipos**, así que sirve
+		igual desde TypeScript, desde `require` y desde módulos ES (`import { Parser } from
+		'@stxt-lang/core'`). **No tiene dependencias en tiempo de ejecución** y no toca ni
+		el sistema de ficheros ni el entorno —eso se inyecta, como se ve en
+		*Resolución*—, por lo que corre igual en Node y en el navegador: el playground es
+		esta misma biblioteca empaquetada para el cliente. Su versión y la de la CLI que la
+		lleva se ven con `stxt --version`; el JSDoc viaja en el `.d.ts`, de modo que el
+		editor enseña la documentación de cada método al pasar el ratón.
+
+	Subheader: Parsear
+
+	Content >>
+		`Parser` tiene dos entradas. `parseResult(text)` **acumula todos los errores** y
+		devuelve además los nodos que ha podido construir; `parse(text)` lanza una
+		`ParseException` en el primero y devuelve `Node[]` si no hay ninguno. La primera es
+		la que quiere un editor o un validador; la segunda, un programa para el que un
+		documento inválido es simplemente una excepción.
+
+	Listing >>
+		import { Parser, ParseResult, ParseException } from '@stxt-lang/core';
+
+		const parser = new Parser();
+		const result: ParseResult = parser.parseResult(text);
+
+		if (result.hasErrors()) {
+		    for (const error of result.getErrors()) {
+		        console.error(`line ${error.line} [${error.code}]: ${error.message}`);
+		    }
+		}
+		const roots = result.getNodes();   // los nodos raíz, en orden; puede haber varios
+
+		// La forma "lanzar al primer error"
+		try {
+		    const nodes = parser.parse(text);
+		} catch (e) {
+		    if (e instanceof ParseException) console.error(e.line, e.code, e.message);
+		}
+
+	Content >>
+		Cada error es una `ParseException` con tres campos: **`line`** (la línea del
+		documento, empezando en 1), **`code`** (estable, en mayúsculas: `INVALID_LINE`,
+		`MIXED_INDENTATION`, `INDENTATION_LEVEL_NOT_VALID`…) y **`message`**. Los errores
+		de gramática son `ValidationException`, una subclase con los mismos campos, así
+		que un solo bucle recorre los dos y `instanceof` distingue la severidad. Un
+		documento con un error de sintaxis puede seguir devolviendo nodos: el parser se
+		recupera y sigue, para que un editor pueda subrayar todo lo que está mal de una
+		vez.
+
+	Subheader: El árbol
+
+	Content >>
+		`Node` es una clase abstracta con **exactamente dos formas**, y cada una tiene solo lo
+		que es suyo:
+
+		| Clase        | Sintaxis      | Lo propio                                                                                                    |
+		|--------------|---------------|--------------------------------------------------------------------------------------------------------------|
+		| `InlineNode` | `Nombre: valor` | `getValue()`/`setValue()`, `getChildren()`, `getChild(name)`, `getChildrenByName(name)`, `addChild()`, `removeChild()`, `addInlineNode()`, `addTextNode()` |
+		| `TextNode`   | `Nombre >>`   | `getTextLines()`, `setText()`, `setTextLines()`, `addTextLine()`, `clearText()`                                |
+
+		Lo común vive en `Node`: `getName()` y `getCanonicalName()` (el nombre canónico de
+		STXT-SPEC: minúsculas, NFC, separadores unificados), `getDeclaredNamespace()` (lo
+		que el nodo escribe entre paréntesis, o `""`) y `getNamespace()` (el **efectivo**,
+		heredado por la cadena de padres), `getLine()`, `getLevel()` (derivado de la
+		profundidad), `getParent()` (siempre un `InlineNode`, o `null` en la raíz),
+		`detach()` y `getText()` —el valor de un inline o las líneas unidas de un bloque—.
+		Recorrer un árbol es preguntar la forma con `instanceof`, que en TypeScript además
+		estrecha el tipo, igual que el árbol canónico de STXT-TREE-SPEC solo tiene
+		`children` en los inline y `lines` en los bloques.
+
+		Con el documento del [tutorial](lang-tutorial), la ficha de un libro:
+
+	Code >>
+		Book (com.acme.book):
+			Title: Arquitectura de software moderna
+			Authors:
+				Author: María Pérez
+				Author: Juan García
+			ISBN: 978-84-123456-7-8
+			Published: 2025-10-01
+			Chapter: Introducción
+				Content >>
+					Conceptos básicos y objetivos del libro.
+
+	Listing >>
+		import { Parser, InlineNode, TextNode, Node } from '@stxt-lang/core';
+
+		const book = new Parser().parseResult(text).getNodes()[0];
+
+		book.getName();          // "Book"
+		book.getCanonicalName(); // "book"
+		book.getNamespace();     // "com.acme.book"
+		book.getLine();          // 1
+
+		if (book instanceof InlineNode) {
+		    book.getChild('Title')?.getText();                 // "Arquitectura de software moderna"
+		    book.getChild('title')?.getName();                 // "Title": la búsqueda es por nombre canónico
+		    book.getChild('Publisher');                        // null: no existe
+
+		    const authors = book.getChild('Authors') as InlineNode;
+		    authors.getChildrenByName('Author').map(a => a.getText());   // ["María Pérez", "Juan García"]
+		    authors.getDeclaredNamespace();                    // "": no lo declara…
+		    authors.getNamespace();                            // "com.acme.book": …lo hereda
+
+		    const chapter = book.getChild('Chapter') as InlineNode;
+		    const content = chapter.getChild('Content');
+		    if (content instanceof TextNode) {
+		        content.getTextLines();   // ["Conceptos básicos y objetivos del libro."]
+		        content.getLevel();       // 2
+		        content.getParent() === chapter;   // true
+		    }
+		}
+
+		// Un recorrido genérico
+		function walk(node: Node, depth = 0): void {
+		    console.log('  '.repeat(depth) + node.getName());
+		    if (node instanceof InlineNode) {
+		        for (const child of node.getChildren()) walk(child, depth + 1);
+		    }
+		}
+
+	Subsubheader: Construir y modificar
+
+	Content >>
+		Los árboles son mutables y **mantienen su propia integridad**: cada nodo conoce a su
+		padre, `addChild` engancha los dos extremos y rechaza un nodo que ya tenga padre
+		(`NODE_ALREADY_ATTACHED`) o que sea un ancestro (`NODE_CYCLE`); `removeChild` y
+		`detach()` lo deshacen. Los niveles se derivan de la cadena de padres, y la línea
+		solo la fija el parser. En las fábricas con dos cadenas, la segunda es siempre el
+		**contenido** (valor o texto); el namespace solo aparece en la forma de tres
+		argumentos.
+
+	Listing >>
+		import { InlineNode, TextNode } from '@stxt-lang/core';
+
+		const email = new InlineNode('Email', 'com.example.mail', 'Weekly report');
+		email.addInlineNode('From', 'Ana García <ana@example.com>');
+		const to = email.addInlineNode('To');
+		to.addInlineNode('Address', 'bob@example.com');
+		const body = email.addTextNode('Body', 'Hi Bob,\n\nSee attached.');
+
+		body.getParent() === email;   // true
+		body.getLevel();              // 1
+		to.getNamespace();            // "com.example.mail", heredado
+
+		// Reordenar: "To" al principio
+		to.detach();
+		email.addChild(to, 0);
+
+		// Editar
+		email.setNamespace('com.example.docs');   // todo el subárbol que hereda le sigue
+		body.setText('Hi Bob,\n\nSee the new attachment.');
+
+	Subheader: Validar contra un esquema o una plantilla
+
+	Content >>
+		Las gramáticas son documentos @STXT@ en los namespaces reservados `@stxt.schema` y
+		`@stxt.template`; la plantilla es la forma de autoría corta y **se compila a un
+		esquema** al cargarla. `UnifiedSchemaProvider` carga cualquiera de las dos con
+		`addFile(text)`: parsea, valida contra el meta-esquema que corresponda y registra el
+		esquema por namespace. La validación es un `Validator` que se registra en el
+		`Parser` y corre sobre cada nodo al cerrarlo; `ConditionalValidator` lo envuelve
+		para que solo se validen los nodos **con namespace**, que es la regla del lenguaje:
+		un documento sin namespace no está mal, solo no se puede validar.
+
+	Code >>
+		Template (@stxt.template): com.acme.book
+			Structure >>
+				Book:
+					Title: (1)
+					Authors: (1)
+						Author: (+)
+					ISBN: (1)
+					Publisher: (?)
+					Published: (?) DATE
+					Summary: (?) TEXT
+					Chapter: (+)
+						Content: (?) TEXT
+			Description >>
+				Book: Plantilla para fichas de libros editoriales
+
+	Listing >>
+		import {
+		    Parser, UnifiedSchemaProvider, SchemaValidator, ConditionalValidator,
+		    ValidationException,
+		} from '@stxt-lang/core';
+
+		const provider = new UnifiedSchemaProvider();
+		provider.addFile(templateText);            // lanza si la plantilla no valida contra su meta-esquema
+
+		const parser = new Parser();
+		parser.registerValidator(new ConditionalValidator(new SchemaValidator(provider)));
+
+		const result = parser.parseResult(documentText);
+		for (const error of result.getErrors()) {
+		    const kind = error instanceof ValidationException ? 'schema' : 'syntax';
+		    console.log(`${kind} line ${error.line} [${error.code}]: ${error.message}`);
+		}
+
+	Content >>
+		Con un libro al que le falta el `ISBN` y cuya fecha no es `YYYY-MM-DD`, el bucle
+		imprime exactamente lo que imprimiría `stxt validate`:
+
+	Listing >>
+		schema line 5 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
+		schema line 1 [INVALID_NUMBER]: 0 nodes of 'com.acme.book:isbn' and min is 1
+
+	Content >>
+		Reglas que conviene saber:
+
+		* Un error de cardinalidad se señala en la línea del **padre**, que es quien tiene
+		  cero `ISBN`.
+		* Si el documento usa un namespace que el proveedor no conoce, cada nodo produce
+		  un `SCHEMA_NOT_FOUND`; el proveedor **nunca lanza** por un namespace ausente
+		  (`getSchema()` devuelve `null`).
+		* Los nodos sin namespace no se validan (por el `ConditionalValidator`); un
+		  documento que es a su vez una definición se valida siempre contra su
+		  meta-esquema.
+		* `addFile` acepta ficheros con varias definiciones, y `getAllSchemas()` las
+		  enumera; `clear()` vacía el proveedor.
+		* Los tipos de valor disponibles son los de STXT-SCHEMA-SPEC: `INLINE`, `BLOCK`,
+		  `TEXT`, `MARKDOWN`, `BOOLEAN`, `INTEGER`, `NATURAL`, `NUMBER`, `DATE`, `TIME`,
+		  `TIMESTAMP`, `UUID`, `EMAIL`, `URL`, `HEXADECIMAL`, `BINARY`, `BASE64`, `GROUP`
+		  y `ENUM`.
+
+		El esquema compilado se puede inspeccionar: `provider.getSchema(ns)` devuelve un
+		`Schema` con `getNamespace()` y `getNodeDefinition(name)`; cada `NodeDefinition`
+		tiene `getType()`, `getChildren()` (un mapa de `ChildDefinition` con `getMin()` /
+		`getMax()`), `getValues()` para un `ENUM` y `getDescription()`. Es lo que usa la
+		extensión para el autocompletado y el hover.
+
+	Subheader: Resolución: qué gramática aplica a un documento
+
+	Content >>
+		`UnifiedSchemaProvider` espera que le des el texto de la gramática. **La resolución**
+		responde a la pregunta anterior: *dado este documento, ¿qué definiciones le
+		aplican?* `DiscoveryResolver` es la implementación de referencia de
+		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) —los `.stxt/` del documento y de todos
+		sus ancestros, después `~/.stxt` y `/etc/stxt`, precedencia por namespace,
+		`STXT_PATH` sustituye la cadena—, y es la misma que usan la CLI y la extensión,
+		así que las tres coinciden por construcción.
+
+		El resolutor **no toca por sí mismo ni el sistema de ficheros ni el entorno**: se le
+		inyectan un `DiscoveryFileSystem` y un `DiscoveryEnvironment`. Eso es lo que permite
+		que la misma lógica corra sobre el `fs` de Node, sobre el sistema de ficheros
+		virtual de un editor o sobre un árbol en memoria en un test. Los adaptadores para
+		Node caben en veinte líneas:
+
+	Listing >>
+		import * as fs from 'fs/promises';
+		import * as os from 'os';
+		import * as path from 'path';
+		import { DiscoveryEntry, DiscoveryEnvironment, DiscoveryFileSystem } from '@stxt-lang/core';
+
+		class NodeFileSystem implements DiscoveryFileSystem {
+		    async isDirectory(p: string): Promise<boolean> {
+		        try { return (await fs.stat(p)).isDirectory(); } catch { return false; }
+		    }
+		    async listDirectory(p: string): Promise<DiscoveryEntry[]> {
+		        const entries = await fs.readdir(p, { withFileTypes: true });
+		        return entries.map(e => ({ path: path.join(p, e.name), name: e.name, isDirectory: e.isDirectory() }));
+		    }
+		    readFile(p: string): Promise<string> { return fs.readFile(p, 'utf-8'); }
+		    parentOf(p: string): string | null {
+		        const parent = path.dirname(p);
+		        return parent === p ? null : parent;   // null en la raíz del sistema de ficheros
+		    }
+		    join(p: string, name: string): string { return path.join(p, name); }
+		}
+
+		class NodeEnvironment implements DiscoveryEnvironment {
+		    getStxtPath(): string[] | null {
+		        const value = process.env.STXT_PATH;
+		        // null (no definida) y [] (definida pero vacía) significan cosas distintas
+		        return value === undefined ? null : value.split(path.delimiter).filter(e => e !== '');
+		    }
+		    getUserLevelDir(): string | null { return path.join(os.homedir(), '.stxt'); }
+		    getSystemLevelDir(): string | null { return '/etc/stxt'; }
+		}
+
+	Content >>
+		Con eso, resolver un documento y validarlo son dos pasos, porque
+		`DiscoveryResult` **implementa `SchemaProvider`** y entra directamente en el
+		validador. La cadena es por documento: se pasa el directorio en el que vive
+		(`null` para la entrada estándar o un búfer sin guardar, que arranca la cadena en
+		el nivel de usuario).
+
+	Listing >>
+		import { Parser, SchemaValidator, ConditionalValidator, DiscoveryResolver } from '@stxt-lang/core';
+
+		const resolver = new DiscoveryResolver(new NodeFileSystem(), new NodeEnvironment());
+		const discovery = await resolver.resolve('/home/ana/libros/docs');
+
+		discovery.getChain();        // ["/home/ana/libros/.stxt"]  (todos los ancestros, el más cercano primero)
+
+		// Los errores de resolución se acumulan, nunca se lanzan: se informan y se sigue
+		for (const error of discovery.getErrors()) {
+		    console.error(`[${error.code}] ${error.file}: ${error.message}`);
+		}
+
+		const parser = new Parser();
+		parser.registerValidator(new ConditionalValidator(new SchemaValidator(discovery)));
+		const result = parser.parseResult(documentText);
+
+	Content >>
+		`DiscoveryResult` dice además **de dónde** sale cada gramática, que es lo que necesita
+		un editor para "ir a la definición" o un diagnóstico que se explique solo:
+
+	Listing >>
+		const definition = discovery.getDefinition('com.acme.book');
+		definition?.file;       // "/home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt"
+		definition?.levelDir;   // "/home/ana/libros/.stxt"  (el nivel que ha ganado)
+		definition?.schema;     // el Schema compilado
+
+		discovery.getActiveDefinitions();   // una por namespace, con la precedencia aplicada
+		discovery.getAllSchemas();          // solo los esquemas de las anteriores
+
+	Content >>
+		Los niveles se cachean por directorio: resolver muchos documentos que comparten
+		ancestros lee cada `.stxt/` una sola vez. `resolver.clearCache()` cuando los
+		ficheros de definición puedan haber cambiado —desde un *file watcher*, por
+		ejemplo—. Los códigos de error de la resolución son `DISCOVERY_DUPLICATE_NAMESPACE`,
+		`DISCOVERY_NOT_A_DEFINITION`, `DISCOVERY_NOT_PARSEABLE` y
+		`DISCOVERY_INVALID_DEFINITION`; `DiscoveryError` es una clase de datos (`code`,
+		`file`, `message`, `namespace`), no una excepción, porque la spec quiere informar
+		de una definición mala sin detener la carga del resto.
+
+	Subheader: El árbol canónico en JSON
+
+	Content >>
+		`toCanonicalTree(nodes)` transforma los nodos raíz en el valor JSON de
+		[STXT-TREE-SPEC](stxt-tree-ref) —el mismo que emite `stxt describe`— y
+		`toCanonicalJson(nodes)` lo serializa con dos espacios de sangría. Es una función
+		explícita, no `JSON.stringify` sobre el nodo: emite solo los campos normativos,
+		`children` en los inline y `lines` en los bloques, sin posiciones ni comentarios.
+		Los tipos `CanonicalDocument`, `CanonicalNode`, `CanonicalInlineNode` y
+		`CanonicalBlockNode` describen el resultado.
+
+	Listing >>
+		import { Parser, toCanonicalTree, toCanonicalJson, CanonicalDocument } from '@stxt-lang/core';
+
+		const nodes = new Parser().parseResult(text).getNodes();
+		const tree: CanonicalDocument = toCanonicalTree(nodes);
+		tree[0].name;    // "Book"
+		tree[0].form;    // "inline"
+
+		process.stdout.write(toCanonicalJson(nodes));
+
+	Subheader: Escribir STXT
+
+	Content >>
+		`NodeWriter` hace el viaje inverso: serializa un nodo, o una lista de documentos,
+		a texto @STXT@ en forma canónica, con `IndentStyle.TABS` (por defecto) o
+		`IndentStyle.SPACES_4`. Escribe el namespace **donde el nodo lo declara**, no donde
+		difiere del padre: fiel al fuente. Como parte del árbol lógico, un texto que pase
+		por `parse` y `NodeWriter` sale sin comentarios ni líneas en blanco fuera de los
+		bloques —es lo que hace `stxt format --clean`—; el reformateo que los conserva es
+		trabajo de la CLI y de la extensión, no de la biblioteca.
+
+	Listing >>
+		import { NodeWriter, IndentStyle } from '@stxt-lang/core';
+
+		const one = NodeWriter.toSTXT(email);                                   // un nodo, con tabuladores
+		const all = NodeWriter.toSTXTDocs(result.getNodes(), IndentStyle.SPACES_4);   // un documento entero
+
+	Content >>
+		El `email` construido más arriba, escrito con `toSTXT`:
+
+	Code >>
+		Email (com.example.mail): Weekly report
+			To:
+				Address: bob@example.com
+			From: Ana García <ana@example.com>
+			Body >>
+				Hi Bob,
+
+				See attached.
+
+	Subheader: Observar el parseo
+
+	Content >>
+		`Observer` recibe llamadas **en streaming** mientras se parsea: `onCreate(node,
+		line)` al abrir un nodo —ya con padre, namespace efectivo y nivel—, `onFinish(node)`
+		al cerrarlo, `onComment(lineNumber, line)` y `onTextLine(node, lineNumber,
+		lineString, line)` por cada línea de un bloque. Es la base del coloreado semántico
+		de la extensión y del mapa línea→nodo del formateador de la CLI.
+
+	Listing >>
+		import { Parser, Observer, Node, TextNode, Line } from '@stxt-lang/core';
+
+		class LoggingObserver implements Observer {
+		    onCreate(node: Node, line: string): void { console.log('open', node.getQualifiedName()); }
+		    onFinish(node: Node): void { console.log('close', node.getQualifiedName()); }
+		    onComment(lineNumber: number, line: string): void { /* … */ }
+		    onTextLine(node: TextNode, lineNumber: number, lineString: string, line: Line): void { /* … */ }
+		}
+
+		const parser = new Parser();
+		parser.registerObserver(new LoggingObserver());
+		parser.parseResult(text);
+
+	Subheader: La superficie de la API
+
+	Content >>
+		Todo lo importable, y solo esto; nada más del paquete es contrato:
+
+		| Grupo                | Exportaciones                                                                                                          |
+		|----------------------|------------------------------------------------------------------------------------------------------------------------|
+		| Parseo               | `Parser`, `ParseResult`, `Node`, `InlineNode`, `TextNode`, `Line`, `parseLine`, `Constants`, `StringUtils`             |
+		| Errores              | `ParseException`, `ValidationException`                                                                                |
+		| Puntos de extensión  | `Observer`                                                                                                             |
+		| Esquemas             | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaValidator`, `transformNodeToSchema`, `transformTemplateNodeToSchema` |
+		| Runtime              | `UnifiedSchemaProvider`, `ConditionalValidator`, `NodeWriter`, `IndentStyle`, `toCanonicalTree`, `toCanonicalJson` y los tipos `Canonical*` |
+		| Resolución           | `DiscoveryResolver`, `DiscoveryOptions`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryFileSystem`, `DiscoveryEntry`, `DiscoveryEnvironment` |
+
+		Hasta la 1.0, una versión menor puede cambiar la API en memoria (la 0.7.0 rehízo el
+		modelo de nodos), pero **nunca el lenguaje ni el árbol canónico**: un documento
+		que parsea y valida hoy parsea y valida igual mañana. Las novedades de cada versión
+		están en el [repositorio](https://github.com/stxt-lang/stxt-js), que es también
+		donde se reportan los errores del parser y de la validación —los que se ven a
+		través de la CLI, la extensión o el playground incluidos—.

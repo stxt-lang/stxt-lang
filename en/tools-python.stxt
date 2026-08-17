@@ -1,0 +1,422 @@
+Document (dev.stxt.website): The Python library
+
+	Metadata:
+		Author: Claude Fable 5
+		Last modif: 2026-08-17
+
+	Header: The Python library
+
+	Assert >>
+		[`stxt`](https://pypi.org/project/stxt/) is the @STXT@ parser for **Python**,
+		published on PyPI: pure Python, no dependencies, 3.10 or later. It is a
+		module-by-module port of the language's reference pseudocode, so it implements the
+		five specifications —syntax, canonical tree, schemas, templates and resolution— and
+		reports **the same error codes** as the [TypeScript](tools-typescript) and
+		[Java](tools-java) libraries and the [command line](tools-cli). It is a library:
+		**it ships no CLI**; the command of the ecosystem is `stxt`.
+
+	Content >>
+		This page is the usage guide: parsing, walking and building trees, validating
+		against schemas and templates, resolving which grammar applies to a document,
+		obtaining its canonical JSON and writing @STXT@ back out. It has the same structure
+		as the TypeScript and Java guides, and the API is the same with `snake_case` names
+		(`getCanonicalName` → `get_canonical_name`): moving from one port to another is a
+		matter of spelling.
+
+	Subheader: Installation
+
+	Listing >>
+		pip install stxt
+
+	Content >>
+		The package carries type annotations (`py.typed`), depends on nothing and touches
+		neither the file system nor the environment by itself —except in the host adapters
+		of resolution, which can be replaced—. Everything public is imported from the root
+		package, `from stxt import Parser, InlineNode, …`; the version is in
+		`stxt.__version__`.
+
+	Subheader: Parsing
+
+	Content >>
+		`Parser` has two entry points. `parse_result(text)` **collects every error** and
+		also returns the nodes it managed to build; `parse(text)` raises a
+		`ParseException` on the first one and returns `list[Node]` when there is none. The
+		former is what an editor or a validator wants; the latter, a program for which an
+		invalid document is simply an exception.
+
+	Listing >>
+		from stxt import Parser, ParseException
+
+		parser = Parser()
+		result = parser.parse_result(text)
+
+		if result.has_errors():
+		    for error in result.get_errors():
+		        print(f"line {error.line} [{error.code}]: {error.message}")
+		roots = result.get_nodes()   # the root nodes, in order; there may be several
+
+		# The "raise on first error" form
+		try:
+		    nodes = parser.parse(text)
+		except ParseException as e:
+		    print(e.line, e.code, e.message)
+
+	Content >>
+		Every error is a `ParseException` with three attributes: **`line`** (the line of
+		the document, starting at 1), **`code`** (stable, upper-case: `INVALID_LINE`,
+		`MIXED_INDENTATION`, `INDENTATION_LEVEL_NOT_VALID`…) and **`message`** —also as
+		`get_line()`, `get_code()` and `get_message()`—. Grammar errors are
+		`ValidationException`, a subclass with the same attributes, so a single loop walks
+		both and `isinstance` tells the severity apart. A document with a syntax error may
+		still return nodes: the parser recovers and carries on, so that an editor can
+		underline everything that is wrong at once.
+
+	Subheader: The tree
+
+	Content >>
+		`Node` is an abstract class with **exactly two forms**, and each one owns only what
+		is really its own:
+
+		| Class        | Syntax        | What it owns                                                                                                 |
+		|--------------|---------------|--------------------------------------------------------------------------------------------------------------|
+		| `InlineNode` | `Name: value` | `get_value()`/`set_value()`, `get_children()`, `get_child(name)`, `get_children_by_name(name)`, `add_child()`, `remove_child()`, `add_inline_node()`, `add_text_node()` |
+		| `TextNode`   | `Name >>`     | `get_text_lines()`, `set_text()`, `set_text_lines()`, `add_text_line()`, `clear_text()`                        |
+
+		What they share lives in `Node`: `get_name()` and `get_canonical_name()` (the
+		canonical name of STXT-SPEC: lower-case, NFC, unified separators),
+		`get_declared_namespace()` (what the node writes between parentheses, or `""`) and
+		`get_namespace()` (the **effective** one, inherited through the chain of parents),
+		`get_line()`, `get_level()` (derived from the depth), `get_parent()` (always an
+		`InlineNode`, or `None` at the root), `detach()` and `get_text()` —the value of an
+		inline node or the joined lines of a block—. Walking a tree means asking for the
+		form with `isinstance`, the same way the canonical tree of STXT-TREE-SPEC has
+		`children` only for inline nodes and `lines` only for blocks. The hierarchy is
+		closed: `InlineNode` and `TextNode` cannot be subclassed.
+
+		A detail of this port: `get_children()` and `get_text_lines()` return **tuples**
+		(read-only views); the tree is changed with `add_child`, `remove_child` and
+		`detach`, never by mutating what they return.
+
+		With the document of the [tutorial](lang-tutorial), a book record:
+
+	Code >>
+		Book (com.acme.book):
+			Title: Arquitectura de software moderna
+			Authors:
+				Author: María Pérez
+				Author: Juan García
+			ISBN: 978-84-123456-7-8
+			Published: 2025-10-01
+			Chapter: Introducción
+				Content >>
+					Conceptos básicos y objetivos del libro.
+
+	Listing >>
+		from stxt import Parser, InlineNode, TextNode, Node
+
+		book = Parser().parse_result(text).get_nodes()[0]
+
+		book.get_name()            # "Book"
+		book.get_canonical_name()  # "book"
+		book.get_namespace()       # "com.acme.book"
+		book.get_line()            # 1
+
+		if isinstance(book, InlineNode):
+		    book.get_child("Title").get_text()                 # "Arquitectura de software moderna"
+		    book.get_child("title").get_name()                 # "Title": lookups go by canonical name
+		    book.get_child("Publisher")                        # None: not there
+
+		    authors = book.get_child("Authors")
+		    [a.get_text() for a in authors.get_children_by_name("Author")]   # ['María Pérez', 'Juan García']
+		    authors.get_declared_namespace()                   # "": it declares none…
+		    authors.get_namespace()                            # "com.acme.book": …it inherits it
+
+		    content = book.get_child("Chapter").get_child("Content")
+		    if isinstance(content, TextNode):
+		        content.get_text_lines()   # ('Conceptos básicos y objetivos del libro.',)
+		        content.get_level()        # 2
+		        content.get_parent() is book.get_child("Chapter")   # True
+
+		# A generic walk
+		def walk(node: Node, depth: int = 0) -> None:
+		    print("  " * depth + node.get_name())
+		    if isinstance(node, InlineNode):
+		        for child in node.get_children():
+		            walk(child, depth + 1)
+
+	Subsubheader: Building and editing
+
+	Content >>
+		Trees are mutable and **keep their own integrity**: every node knows its parent,
+		`add_child` links both ends and raises `RuntimeException` if the node already has a
+		parent (`NODE_ALREADY_ATTACHED`) or is an ancestor (`NODE_CYCLE`); `remove_child`
+		and `detach()` undo it. Levels are derived from the chain of parents, and the line
+		is only set by the parser. In the constructors and factories with two strings, the
+		second one is always the **content** (value or text); the namespace only appears in
+		the three-argument form, `InlineNode(name, namespace, value)`, and the keyword
+		arguments `value=`, `namespace=` and `text=` are accepted too.
+
+	Listing >>
+		from stxt import InlineNode, TextNode
+
+		email = InlineNode("Email", "com.example.mail", "Weekly report")
+		email.add_inline_node("From", "Ana García <ana@example.com>")
+		to = email.add_inline_node("To")
+		to.add_inline_node("Address", "bob@example.com")
+		body = email.add_text_node("Body", "Hi Bob,\n\nSee attached.")
+
+		body.get_parent() is email    # True
+		body.get_level()              # 1
+		to.get_namespace()            # "com.example.mail", inherited
+
+		# Reorder: "To" first
+		to.detach()
+		email.add_child(to, 0)
+
+		# Edit
+		email.set_namespace("com.example.docs")   # the whole inheriting subtree follows
+		body.set_text("Hi Bob,\n\nSee the new attachment.")
+
+	Subheader: Validating against a schema or a template
+
+	Content >>
+		Grammars are @STXT@ documents in the reserved namespaces `@stxt.schema` and
+		`@stxt.template`; the template is the short authoring form and **compiles to a
+		schema** when loaded. `UnifiedSchemaProvider` loads either kind with
+		`add_file(text)`: it parses, validates against the corresponding meta-schema and
+		registers the schema by namespace. Validation is a `Validator` registered on the
+		`Parser` that runs on each node as it is closed; `ConditionalValidator` wraps it so
+		that only nodes **with a namespace** are validated, which is the rule of the
+		language: a document without a namespace is not wrong, it just cannot be
+		validated.
+
+	Code >>
+		Template (@stxt.template): com.acme.book
+			Structure >>
+				Book:
+					Title: (1)
+					Authors: (1)
+						Author: (+)
+					ISBN: (1)
+					Publisher: (?)
+					Published: (?) DATE
+					Summary: (?) TEXT
+					Chapter: (+)
+						Content: (?) TEXT
+			Description >>
+				Book: Template for publisher book records
+
+	Listing >>
+		from stxt import (
+		    Parser, UnifiedSchemaProvider, SchemaValidator, ConditionalValidator,
+		    ValidationException,
+		)
+
+		provider = UnifiedSchemaProvider()
+		provider.add_file(template_text)            # raises if the template does not validate against its meta-schema
+
+		parser = Parser()
+		parser.register_validator(ConditionalValidator(SchemaValidator(provider)))
+
+		result = parser.parse_result(document_text)
+		for error in result.get_errors():
+		    kind = "schema" if isinstance(error, ValidationException) else "syntax"
+		    print(f"{kind} line {error.line} [{error.code}]: {error.message}")
+
+	Content >>
+		With a book that lacks its `ISBN` and whose date is not `YYYY-MM-DD`, the loop
+		prints exactly what `stxt validate` would print:
+
+	Listing >>
+		schema line 5 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
+		schema line 1 [INVALID_NUMBER]: 0 nodes of 'com.acme.book:isbn' and min is 1
+
+	Content >>
+		Rules worth knowing:
+
+		* A cardinality error is reported on the line of the **parent**, which is the one
+		  with zero `ISBN`.
+		* If the document uses a namespace the provider does not know, each node produces
+		  a `SCHEMA_NOT_FOUND`; the provider **never raises** for a missing namespace
+		  (`get_schema()` returns `None`).
+		* Nodes without a namespace are not validated (thanks to `ConditionalValidator`);
+		  a document that is itself a definition is always validated against its
+		  meta-schema.
+		* `add_file` accepts files with several definitions, and `get_all_schemas()` lists
+		  them; `clear()` empties the provider.
+		* The available value types are those of STXT-SCHEMA-SPEC: `INLINE`, `BLOCK`,
+		  `TEXT`, `MARKDOWN`, `BOOLEAN`, `INTEGER`, `NATURAL`, `NUMBER`, `DATE`, `TIME`,
+		  `TIMESTAMP`, `UUID`, `EMAIL`, `URL`, `HEXADECIMAL`, `BINARY`, `BASE64`, `GROUP`
+		  and `ENUM`.
+
+		The compiled schema can be inspected: `provider.get_schema(ns)` returns a `Schema`
+		with `get_namespace()` and `get_node_definition(name)`; each `NodeDefinition` has
+		`get_type()`, `get_children()` (a dictionary of `ChildDefinition` by qualified name
+		`namespace:name`, with `get_min()` / `get_max()`), `get_values()` for an `ENUM` and
+		`get_description()`.
+
+	Subheader: Resolution: which grammar applies to a document
+
+	Content >>
+		`UnifiedSchemaProvider` expects you to hand it the grammar text. **Resolution**
+		answers the previous question: *given this document, which definitions apply to
+		it?* `DiscoveryResolver` implements [STXT-DISCOVERY-SPEC](stxt-discovery-ref) —the
+		`.stxt/` directories of the document and of all its ancestors, then `~/.stxt` and
+		`/etc/stxt`, per-namespace precedence, `STXT_PATH` replacing the chain—, just like
+		the CLI and the extension, so all three agree by construction.
+
+		As in the TypeScript port, the resolver touches neither the file system nor the
+		environment by itself: it receives a `DiscoveryFileSystem` and a
+		`DiscoveryEnvironment`. The difference is that the package **already ships the two
+		host adapters** —`OsDiscoveryFileSystem` over `os` and `SystemDiscoveryEnvironment`
+		over `STXT_PATH`, `~/.stxt` and `/etc/stxt` (or `%ProgramData%\stxt`)— and the
+		`stxt.discovery.resolve(document_dir)` shortcut over them; a test can pass an
+		in-memory tree instead. The chain is per document: pass the directory it lives in
+		(`None` for standard input or an unsaved buffer, which starts the chain at the user
+		level). Since `DiscoveryResult` **implements `SchemaProvider`**, resolving and
+		validating are two steps:
+
+	Listing >>
+		from stxt import Parser, SchemaValidator, ConditionalValidator
+		from stxt.discovery import resolve
+
+		discovery = resolve("/home/ana/libros/docs")
+
+		discovery.get_chain()        # ['/home/ana/libros/.stxt']  (every ancestor, nearest first)
+
+		# Resolution errors are collected, never raised: report them and carry on
+		for error in discovery.get_errors():
+		    print(f"[{error.code}] {error.file}: {error.message}")
+
+		parser = Parser()
+		parser.register_validator(ConditionalValidator(SchemaValidator(discovery)))
+		result = parser.parse_result(document_text)
+
+	Content >>
+		`DiscoveryResult` also tells you **where** each grammar came from, which is what an
+		editor needs for "go to definition" or a diagnostic that explains itself:
+
+	Listing >>
+		definition = discovery.get_definition("com.acme.book")
+		definition.file        # '/home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt'
+		definition.level_dir   # '/home/ana/libros/.stxt'  (the level that won)
+		definition.schema      # the compiled Schema
+
+		discovery.get_active_definitions()   # one per namespace, precedence applied
+		discovery.get_all_schemas()          # just the schemas of the above
+
+	Content >>
+		To resolve many documents, keep a `DiscoveryResolver` of your own: it caches the
+		levels by directory and reads each `.stxt/` once; call `clear_cache()` when the
+		definition files may have changed:
+
+	Listing >>
+		from stxt import DiscoveryResolver, OsDiscoveryFileSystem, SystemDiscoveryEnvironment
+
+		resolver = DiscoveryResolver(OsDiscoveryFileSystem(), SystemDiscoveryEnvironment())
+		discovery = resolver.resolve("/home/ana/libros/docs")
+		resolver.clear_cache()
+
+	Content >>
+		The resolution error codes are `DISCOVERY_DUPLICATE_NAMESPACE`,
+		`DISCOVERY_NOT_A_DEFINITION`, `DISCOVERY_NOT_PARSEABLE` and
+		`DISCOVERY_INVALID_DEFINITION`; `DiscoveryError` is a data class (`code`, `file`,
+		`message`, `namespace`), not an exception, because the spec wants a bad definition
+		reported without stopping the load of the rest.
+
+	Subheader: The canonical tree as JSON
+
+	Content >>
+		`to_canonical_tree(nodes)` turns the root nodes into the JSON value of
+		[STXT-TREE-SPEC](stxt-tree-ref) —a list of dictionaries, the same tree `stxt
+		describe` emits— and `to_canonical_json(nodes)` serialises it with two-space
+		indentation. It is an explicit function that emits only the normative fields,
+		`children` for inline nodes and `lines` for blocks, with no positions or comments.
+
+	Listing >>
+		from stxt import Parser, to_canonical_tree, to_canonical_json
+
+		nodes = Parser().parse_result(text).get_nodes()
+		tree = to_canonical_tree(nodes)
+		tree[0]["name"]    # 'Book'
+		tree[0]["form"]    # 'inline'
+
+		print(to_canonical_json(nodes))
+
+	Subheader: Writing STXT
+
+	Content >>
+		`NodeWriter` makes the trip back: it serialises a node, or a list of documents, to
+		@STXT@ text in canonical form, with `IndentStyle.TABS` (default) or
+		`IndentStyle.SPACES_4`. It writes the namespace **where the node declares it**, not
+		where it differs from the parent: faithful to the source. Since it starts from the
+		logical tree, a text that goes through `parse` and `NodeWriter` comes out without
+		comments or blank lines outside blocks —that is what `stxt format --clean` does—;
+		the reformatting that keeps them is the job of the CLI and the extension, not of
+		the library.
+
+	Listing >>
+		from stxt import NodeWriter, IndentStyle
+
+		one = NodeWriter.to_stxt(email)                                          # one node, with tabs
+		all = NodeWriter.to_stxt_docs(result.get_nodes(), IndentStyle.SPACES_4)   # a whole document
+
+	Content >>
+		The `email` built above, written with `to_stxt`:
+
+	Code >>
+		Email (com.example.mail): Weekly report
+			To:
+				Address: bob@example.com
+			From: Ana García <ana@example.com>
+			Body >>
+				Hi Bob,
+
+				See attached.
+
+	Subheader: Observing the parse
+
+	Content >>
+		`Observer` is a base class with four empty callbacks —override the ones you need—
+		that the parser calls **while streaming**: `on_create(node, line_string)` when a
+		node is opened —already with its parent, effective namespace and level—,
+		`on_finish(node)` when it is closed, `on_comment(line_number, line_string)` and
+		`on_text_line(node, line_number, line_string, line_indent)` for each line of a
+		block. `Validator` is the other hook: it runs on each node as it is closed and
+		**returns** a list of `ValidationException` (it does not raise); `SchemaValidator`
+		is just a built-in `Validator`.
+
+	Listing >>
+		from stxt import Parser, Observer, Node
+
+		class LoggingObserver(Observer):
+		    def on_create(self, node: Node, line_string: str) -> None:
+		        print("open", node.get_qualified_name())
+		    def on_finish(self, node: Node) -> None:
+		        print("close", node.get_qualified_name())
+
+		parser = Parser()
+		parser.register_observer(LoggingObserver())
+		parser.parse_result(text)
+
+	Subheader: The API surface
+
+	Content >>
+		Everything importable from `stxt`; the subpackages (`stxt.schema`,
+		`stxt.discovery`…) are importable too:
+
+		| Group                | Names                                                                                                                  |
+		|----------------------|------------------------------------------------------------------------------------------------------------------------|
+		| Parsing              | `Parser`, `ParseResult`, `Node`, `InlineNode`, `TextNode`, `NO_LINE`, `LineIndent`, `parse_line`, `EMPTY_NAMESPACE`    |
+		| Errors               | `ParseException`, `ValidationException`, `RuntimeException`                                                            |
+		| Extension points     | `Observer`, `Validator`                                                                                                |
+		| Schemas              | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaProviderMemory`, `SchemaProviderMeta`, `SchemaValidator`, `transform_node_to_schema`, `SCHEMA_NAMESPACE` |
+		| Templates            | `MetaTemplateSchemaProvider`, `TemplateSchemaProviderMemory`, `transform_template_node_to_schema`, `TEMPLATE_NAMESPACE`  |
+		| Runtime              | `UnifiedSchemaProvider`, `ConditionalValidator`, `NodeWriter`, `IndentStyle`, `to_canonical_tree`, `to_canonical_json`  |
+		| Resolution           | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryFileSystem`, `DiscoveryEntry`, `DiscoveryEnvironment`, `OsDiscoveryFileSystem`, `SystemDiscoveryEnvironment` and `stxt.discovery.resolve` |
+
+		Until 1.0, a minor release can change the in-memory API, but **never the language
+		or the canonical tree**: a document that parses and validates today parses and
+		validates the same tomorrow. The release notes of each version are in the
+		[repository](https://github.com/stxt-lang/stxt-python), which is also where its
+		errors are reported.

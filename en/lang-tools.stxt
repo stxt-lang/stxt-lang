@@ -2,7 +2,7 @@ Document (dev.stxt.website): Tools
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-16
+		Last modif: 2026-08-17
 
 	Header: Tools
 
@@ -98,7 +98,8 @@ Document (dev.stxt.website): Tools
 	Content >>
 		The exit code distinguishes *your documents have errors* from *the command was
 		misused*, so it can be used directly from a script. No command rewrites files
-		without `--write`.
+		without `--write`. Every option, output and exit code is in the
+		[command-line reference](tools-cli).
 
 	Subheader: Libraries
 
@@ -112,7 +113,9 @@ Document (dev.stxt.website): Tools
 
 	Content >>
 		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) on npm. It is
-		the parser the extension, the command line and the playground run on.
+		the parser the extension, the command line and the playground run on. The full
+		guide —tree, validation, resolution, canonical JSON, writing— is in
+		[the TypeScript library](tools-typescript).
 
 	Listing >>
 		npm install @stxt-lang/core
@@ -136,25 +139,27 @@ Document (dev.stxt.website): Tools
 
 	Content >>
 		[`dev.stxt:stxt-core`](https://central.sonatype.com/artifact/dev.stxt/stxt-core)
-		on Maven Central. Java 17 or newer; automatic module `dev.stxt`.
+		on Maven Central. Java 17 or newer; automatic module `dev.stxt`. The full guide is
+		in [the Java library](tools-java).
 
 	Listing >>
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>0.7.0</version>
+		    <version>0.7.2</version>
 		</dependency>
 
 	Content >>
 		Or with Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:0.7.0'
+		implementation 'dev.stxt:stxt-core:0.7.2'
 
 	Subsubheader: Python
 
 	Content >>
-		[`stxt`](https://pypi.org/project/stxt/) on PyPI. Pure Python, 3.10 or newer.
+		[`stxt`](https://pypi.org/project/stxt/) on PyPI. Pure Python, 3.10 or newer. The full
+		guide is in [the Python library](tools-python).
 
 	Listing >>
 		pip install stxt

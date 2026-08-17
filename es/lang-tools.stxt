@@ -2,7 +2,7 @@ Document (dev.stxt.website): Herramientas
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-16
+		Last modif: 2026-08-17
 
 	Header: Herramientas
 
@@ -100,7 +100,8 @@ Document (dev.stxt.website): Herramientas
 	Content >>
 		El código de salida distingue *tus documentos tienen errores* de *el comando se ha
 		usado mal*, así que se puede usar directamente en un script. Ningún comando
-		reescribe ficheros sin `--write`.
+		reescribe ficheros sin `--write`. Todas las opciones, las salidas y los códigos de
+		salida están en la [referencia de la línea de comandos](tools-cli).
 
 	Subheader: Bibliotecas
 
@@ -115,6 +116,8 @@ Document (dev.stxt.website): Herramientas
 	Content >>
 		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) en npm. Es el
 		parser sobre el que corren la extensión, la línea de comandos y el playground.
+		La guía completa —árbol, validación, resolución, JSON canónico, escritura— está
+		en [la biblioteca TypeScript](tools-typescript).
 
 	Listing >>
 		npm install @stxt-lang/core
@@ -138,25 +141,27 @@ Document (dev.stxt.website): Herramientas
 
 	Content >>
 		[`dev.stxt:stxt-core`](https://central.sonatype.com/artifact/dev.stxt/stxt-core)
-		en Maven Central. Java 17 o superior; módulo automático `dev.stxt`.
+		en Maven Central. Java 17 o superior; módulo automático `dev.stxt`. La guía completa
+		está en [la biblioteca Java](tools-java).
 
 	Listing >>
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>0.7.0</version>
+		    <version>0.7.2</version>
 		</dependency>
 
 	Content >>
 		O con Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:0.7.0'
+		implementation 'dev.stxt:stxt-core:0.7.2'
 
 	Subsubheader: Python
 
 	Content >>
-		[`stxt`](https://pypi.org/project/stxt/) en PyPI. Python puro, 3.10 o superior.
+		[`stxt`](https://pypi.org/project/stxt/) en PyPI. Python puro, 3.10 o superior. La
+		guía completa está en [la biblioteca Python](tools-python).
 
 	Listing >>
 		pip install stxt

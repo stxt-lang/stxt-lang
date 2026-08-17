@@ -10,9 +10,6 @@ Document (dev.stxt.website): STXT: The Book
 	Link: Working environment
 		Page: lang-workflow
 	
-#	Link: STXT CLI
-#		Page: lang-cli-stxt
-	
 	Link: Tools
 		Page: lang-tools
 	
@@ -64,6 +61,20 @@ Document (dev.stxt.website): STXT: The Book
 #	Link: YAML to STXT
 #		Page: migrate-yaml		
 		
+	Subheader: Tools reference
+
+	Link: Command line
+		Page: tools-cli
+
+	Link: TypeScript library
+		Page: tools-typescript
+
+	Link: Java library
+		Page: tools-java
+
+	Link: Python library
+		Page: tools-python
+
 	SubHeader: Use cases 
 	
 	Link: Corporate Documents
