@@ -45,9 +45,9 @@ Document (dev.stxt.website): STXT - Semantic Text
 		
 	Code >>
 		Email (com.example.docs):
-			From: John Smith
-			To: Mery Adams
-			Cc: Keyla Brown
+			From: John Smith <john.smith@example.com>
+			To: Mery Adams <mery.adams@example.com>
+			Cc: Keyla Brown <keyla.brown@example.com>
 			Title: Project report
 			Body Content >>
 				Hello Mery!! 

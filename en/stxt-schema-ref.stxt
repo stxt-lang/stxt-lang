@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-02
+		Last modif: 2026-08-17
 
 	Header: @STXT@ Schemas (@stxt.schema)
 
@@ -275,7 +275,19 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		| TIMESTAMP | INLINE          | NO              | Full ISO 8601 timestamp.                       |
 		| UUID      | INLINE          | NO              | Canonical UUID.                                |
 		| URL       | INLINE          | NO              | Valid URL or URI.                              |
-		| EMAIL     | INLINE          | NO              | Valid email address.                           |
+		| EMAIL     | INLINE          | NO              | Email address, bare or with a display name (see below). |
+
+		The `EMAIL` type accepts two forms, and the address is validated the same way in both:
+
+		* The **bare address**: `user@domain.tld`.
+		* The address preceded by a **display name**, with the address between `<` and `>`:
+		  `Joan Costa <joan@example.com>`. The name is any non-empty text that contains neither
+		  `<` nor `>` (quotes, if present, are part of the name; they are not interpreted), and the
+		  space between the name and `<` is optional.
+
+		A conforming implementation **MUST** accept both forms and **MUST NOT** accept `<` and `>`
+		without a name before them, unbalanced, or followed by anything. This is the usual form of
+		email headers (the RFC 5322 *mailbox*), without the quoting and comments of that grammar.
 
 	Subsubheader: 9.5 Extended INLINE/BLOCK binary content types
 

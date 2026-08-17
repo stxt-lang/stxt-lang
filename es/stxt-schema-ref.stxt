@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-02
+		Last modif: 2026-08-17
 
 	Header: @STXT@ Esquemas (@stxt.schema)
 
@@ -276,7 +276,19 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		| TIMESTAMP | INLINE          | NO           | Timestamp ISO 8601 completo.                   |
 		| UUID      | INLINE          | NO           | UUID canónico.                                 |
 		| URL       | INLINE          | NO           | URL o URI válida.                              |
-		| EMAIL     | INLINE          | NO           | Dirección de correo válida.                    |
+		| EMAIL     | INLINE          | NO           | Dirección de correo, sola o con nombre (ver abajo). |
+
+		El tipo `EMAIL` admite dos formas, y en las dos la dirección se valida igual:
+
+		* La **dirección sola**: `usuario@dominio.tld`.
+		* La dirección con un **nombre para mostrar** delante y la dirección entre `<` y `>`:
+		  `Joan Costa <joan@example.com>`. El nombre es cualquier texto no vacío que no contenga
+		  `<` ni `>` (si lleva comillas, forman parte del nombre; no se interpretan), y el espacio
+		  entre el nombre y `<` es opcional.
+
+		Una implementación conforme **DEBE** aceptar las dos formas y **NO DEBE** aceptar `<` y `>`
+		sin nombre delante, desparejados, ni seguidos de nada. Es la forma habitual de las cabeceras
+		de correo (el *mailbox* de RFC 5322), sin las comillas ni los comentarios de esa gramática.
 
 	Subsubheader: 9.5 Tipos ampliados de contenido binario INLINE/BLOCK
 
