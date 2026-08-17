@@ -60,7 +60,7 @@ Document (dev.stxt.website): Publications and editorial content
 		Article with metadata, sections, and long text.
 		
 	Code >>
-		Article (@com.acme.editorial.article):
+		Article (com.acme.editorial.article):
 			Title: Introduction to STXT
 			Slug: introduction-to-stxt
 			Authors:
@@ -106,7 +106,7 @@ Document (dev.stxt.website): Publications and editorial content
 		Book or long document divided into sections.
 		
 	Code >>
-		Publication (@com.acme.editorial.publication):
+		Publication (com.acme.editorial.publication):
 			Title: STXT — The book
 			ISBN: 978-1-23456-789-0
 			Language: en

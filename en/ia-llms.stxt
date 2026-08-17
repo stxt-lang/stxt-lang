@@ -84,9 +84,13 @@ Document (dev.stxt.website): AI and LLMs — Generated, verifiable documents
 	Code >>
 		Report (com.acme.reports):
 			Title: Market analysis
-			Date: tomorrow # ERROR: DATE requires YYYY-MM-DD
-			Status: Pending # ERROR: not an ENUM value
-			Subtitle: Short version # ERROR: undeclared child (closed model)
+			# ERROR: DATE requires YYYY-MM-DD
+			Date: tomorrow
+			# ERROR: not an ENUM value
+			Status: Pending
+			# ERROR: undeclared child (closed model)
+			Subtitle: Short version
+			# ERROR: Summary is missing, and it is mandatory
 
 	Subheader: No escaping: long prose inside structure
 

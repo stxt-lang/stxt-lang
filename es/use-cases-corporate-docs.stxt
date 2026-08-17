@@ -54,10 +54,10 @@ Document (dev.stxt.website): Documentos corporativos
 		El texto libre vive en bloques, y lo procesable queda como nodos.
 		
 	Code >>
-		Minutes (@com.acme.corp.minutes):
+		Minutes (com.acme.corp.minutes):
 			Title: Weekly sync — Platform
 			Date: 2026-01-09
-			Time: 10:00
+			Time: 10:00:00
 			Duration minutes: 45
 			Meeting id: PLAT-2026-01-09
 			Location: Google Meet
@@ -140,7 +140,7 @@ Document (dev.stxt.website): Documentos corporativos
 		* Riesgos y bloqueos como listas procesables.
 		
 	Code >>
-		Status Report (@com.acme.corp.status):
+		Status Report (com.acme.corp.status):
 			Period:
 				From: 2026-01-05
 				To: 2026-01-09

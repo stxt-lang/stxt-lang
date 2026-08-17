@@ -134,6 +134,7 @@ Document (dev.stxt.website): The working environment
 			Chapter: Introduction
 				Content >>
 					Basic concepts and goals of the book.
+		# ERROR: the date is not YYYY-MM-DD and ISBN, which is mandatory, is missing
 
 	Listing >>
 		stxt validate docs/book.stxt

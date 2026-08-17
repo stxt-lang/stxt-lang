@@ -41,7 +41,7 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 		A very small page, with a summary and one section.
 
 	Code >>
-		Page (@com.example.wiki):
+		Page (com.example.wiki):
 			Title: STXT
 			Lead >>
 				STXT (Semantic Text) is a hierarchical textual format designed
@@ -65,7 +65,7 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 		In STXT that is a natural tree.
 
 	Code >>
-		Page (@com.example.wiki):
+		Page (com.example.wiki):
 			Title: Markup languages
 
 			Lead >>
@@ -102,7 +102,7 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 		In STXT they can be expressed as explicit nodes, without “inventing” syntax inside the text.
 
 	Code >>
-		Page (@com.example.wiki):
+		Page (com.example.wiki):
 			Title: STXT
 
 			Lead >>
@@ -112,10 +112,10 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 				Internal:
 					Link:
 						Title: JSON
-						Page: JSON
+						Article: JSON
 					Link:
 						Title: YAML
-						Page: YAML
+						Article: YAML
 				External:
 					Link:
 						Title: Example repository
@@ -142,7 +142,7 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 		* and citation “markers” within the text as something optional (for example `[ref: ...]`).
 
 	Code >>
-		Page (@com.example.wiki):
+		Page (com.example.wiki):
 			Title: Indentation
 
 			Lead >>
@@ -170,7 +170,7 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 		Since it is human text, it fits well in a `>>` block.
 
 	Code >>
-		Page (@com.example.wiki):
+		Page (com.example.wiki):
 			Title: Structured data
 
 			Lead >>
@@ -192,7 +192,7 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 		In STXT they can be represented as metadata sections, separated from the main content.
 
 	Code >>
-		Page (@com.example.wiki):
+		Page (com.example.wiki):
 			Title: Free software
 
 			Lead >>
@@ -221,7 +221,7 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 		In STXT it is represented as a subtree with clear names.
 
 	Code >>
-		Page (@com.example.wiki):
+		Page (com.example.wiki):
 			Title: Tomcat
 
 			Infobox:
@@ -248,7 +248,7 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 		With STXT, repetitions are natural.
 
 	Code >>
-		Page (@com.example.wiki):
+		Page (com.example.wiki):
 			Title: Python
 
 			Infobox:
@@ -262,8 +262,8 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 					Paradigm: Imperative
 					Paradigm: Functional
 				Typing discipline:
-					Item: Dynamic
-					Item: Strong
+					Discipline: Dynamic
+					Discipline: Strong
 
 			Lead >>
 				Python is an interpreted, high-level, general-purpose programming language.
@@ -275,7 +275,7 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 		In STXT, a “template” could be a structured node that the renderer interprets.
 
 	Code >>
-		Page (@com.example.wiki):
+		Page (com.example.wiki):
 			Title: Solar energy
 
 			Lead >>
@@ -294,10 +294,10 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 					Items:
 						Item:
 							Title: Wind energy
-							Page: Wind energy
+							Article: Wind energy
 						Item:
 							Title: Hydroelectric energy
-							Page: Hydroelectric energy
+							Article: Hydroelectric energy
 
 	Subheader: Example 10 — Content variants without breaking the tree
 
@@ -312,7 +312,7 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 		In STXT, the direct way is to use `>>` blocks for literal content.
 
 	Code >>
-		Page (@com.example.wiki):
+		Page (com.example.wiki):
 			Title: TCP ports
 
 			Lead >>
@@ -345,8 +345,11 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 		for auditing or change control.
 
 	Code >>
-		Page (@com.example.wiki):
+		Page (com.example.wiki):
 			Title: STXT
+
+			Lead >>
+				STXT is a hierarchical, human-readable text format.
 
 			Editorial:
 				Status: Draft
@@ -364,8 +367,9 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 	Subheader: Example 12 — Minimal template for wiki pages
 
 	Content >>
-		If consistency is desired, it can be validated with a simple template.
-		It does not force the “Wikipedia form”, it only defines a basic skeleton.
+		If consistency is desired, it can be validated with a template. This one covers
+		everything shown in the previous examples; it does not force the “Wikipedia form”,
+		it only defines a skeleton.
 
 	Code >>
 		Template (@stxt.template): com.example.wiki
@@ -375,6 +379,19 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 				Page:
 					Title: (1)
 					Infobox: (?)
+						Type: (?)
+						Name: (?)
+						Initial release: (?)
+						License: (?)
+						Website: (?)
+						Written in: (?)
+						Designed by: (?)
+							Person: (+)
+						First appeared: (?)
+						Paradigms: (?)
+							Paradigm: (+)
+						Typing discipline: (?)
+							Discipline: (+)
 					Lead: (1) TEXT
 
 					Sections: (?)
@@ -385,15 +402,45 @@ Document (dev.stxt.website): Wikipedia (an alternative approach)
 								Section: (*) @Section
 
 					Links: (?)
+						Internal: (?)
+							Link: (*)
+								Title: (1) @Title
+								Article: (?)
+								Url: (?)
+						External: (?)
+							Link: (*) @Link
 					References: (?)
 						Reference: (*)
 							Id: (1)
 							Title: (1) @Title
-							Url: (?)
+							Author: (?)
+							Year: (?)
+							Url: (?) @Url
 							Note: (?) TEXT
 
 					Categories: (?)
 						Category: (*)
 
+					Boxes: (?)
+						Box: (*)
+							Type: (1) @Type
+							Title: (?) @Title
+							Content: (?) @Content
+							Items: (?)
+								Item: (*)
+									Title: (1) @Title
+									Article: (?) @Article
+
 					Maintenance: (?)
+						Needs citations: (?) BOOLEAN
+						Last reviewed: (?) DATE
+						Notes: (?) TEXT
 					Editorial: (?)
+						Status: (?)
+						Last updated: (?) DATE
+						Reviewed by: (?)
+							Person: (+) @Person
+						Change log: (?)
+							Entry: (*)
+								Date: (1) DATE
+								Summary: (1)

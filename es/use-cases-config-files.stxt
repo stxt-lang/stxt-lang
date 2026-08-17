@@ -68,7 +68,7 @@ Document (dev.stxt.website): Ficheros de configuración
 		Configuración legible, editable a mano y estructurada.
 		
 	Code >>
-		Server Config (@com.acme.server):
+		Server Config (com.acme.server):
 			Name: api-gateway
 			Environment: production
 			
@@ -118,7 +118,7 @@ Document (dev.stxt.website): Ficheros de configuración
 		Mismo formato, distintos entornos, sin duplicar estructura.
 		
 	Code >>
-		Application Config (@com.acme.app):
+		Application Config (com.acme.app):
 			App name: Billing
 			
 			Environments:
@@ -156,7 +156,7 @@ Document (dev.stxt.website): Ficheros de configuración
 		Un caso clásico donde conviven datos y texto explicativo.
 		
 	Code >>
-		Feature Flags (@com.acme.features):
+		Feature Flags (com.acme.features):
 			Feature:
 				Key: new-checkout
 				Enabled: false

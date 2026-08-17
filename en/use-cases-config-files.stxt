@@ -68,7 +68,7 @@ Document (dev.stxt.website): Configuration files
 		Human-readable, hand-editable, and structured configuration.
 
 	Code >>
-		Server Config (@com.acme.server):
+		Server Config (com.acme.server):
 			Name: api-gateway
 			Environment: production
 
@@ -118,7 +118,7 @@ Document (dev.stxt.website): Configuration files
 		Same format, different environments, without duplicating structure.
 
 	Code >>
-		Application Config (@com.acme.app):
+		Application Config (com.acme.app):
 			App name: Billing
 
 			Environments:
@@ -156,7 +156,7 @@ Document (dev.stxt.website): Configuration files
 		A classic case where data and explanatory text coexist.
 
 	Code >>
-		Feature Flags (@com.acme.features):
+		Feature Flags (com.acme.features):
 			Feature:
 				Key: new-checkout
 				Enabled: false

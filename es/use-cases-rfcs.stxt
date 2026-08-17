@@ -55,7 +55,7 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 		Un RFC muy pequeño, suficiente para discusión inicial.
 		
 	Code >>
-		RFC (@com.acme.rfc):
+		RFC (com.acme.rfc):
 			Id: RFC-012
 			Title: Cache distribuida para el módulo X
 			Status: Draft
@@ -88,7 +88,7 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 		RFC realista con alternativas, impacto y riesgos.
 		
 	Code >>
-		RFC (@com.acme.rfc):
+		RFC (com.acme.rfc):
 			Id: RFC-013
 			Title: Unificación del sistema de configuración
 			Status: Review
@@ -140,11 +140,19 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 		El estado es un dato explícito, no una frase en el texto.
 		
 	Code >>
-		RFC (@com.acme.rfc):
+		RFC (com.acme.rfc):
 			Id: RFC-013
 			Title: Unificación del sistema de configuración
 			Status: Accepted
+			Authors:
+				Author: Platform Team
 			Accepted date: 2026-01-18
+			
+			Context >>
+				Múltiples formatos de configuración con reglas distintas.
+			
+			Proposal >>
+				Adoptar STXT como formato único de configuración.
 			
 			Decision >>
 				Se aprueba la adopción progresiva de STXT
@@ -161,18 +169,23 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 		En STXT, estas relaciones pueden ser explícitas.
 		
 	Code >>
-		RFC (@com.acme.rfc):
+		RFC (com.acme.rfc):
 			Id: RFC-020
 			Title: Deprecación del sistema legacy
 			Status: Draft
+			Authors:
+				Author: Joan Costa
 			
 			Related:
-				RFC: RFC-013
-				RFC: RFC-007
+				Reference: RFC-013
+				Reference: RFC-007
 			
 			Context >>
 				Este RFC depende de la adopción del nuevo sistema
 				de configuración descrito en RFC-013.
+			
+			Proposal >>
+				Retirar el sistema legacy una vez migrados los servicios.
 	
 	Subheader: Ejemplo 5 — Comentarios y revisión
 	
@@ -181,10 +194,15 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 		con el texto principal.
 		
 	Code >>
-		RFC (@com.acme.rfc):
+		RFC (com.acme.rfc):
 			Id: RFC-021
 			Title: Nuevo pipeline de despliegue
 			Status: Review
+			Authors:
+				Author: Platform Team
+			
+			Context >>
+				Cada equipo mantiene hoy su propio pipeline.
 			
 			Proposal >>
 				Unificar pipelines CI/CD en una única definición.
@@ -219,10 +237,17 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 					Status: (1) ENUM [Draft, Review, Accepted, Rejected, Deprecated]
 					Authors: (1)
 						Author: (+)
+					Created: (?) DATE
+					Updated: (?) DATE
+					Accepted date: (?) DATE
+					Related: (?)
+						Reference: (+)
 					
 					Context: (1) TEXT
+					Problem: (?) TEXT
 					Proposal: (1) TEXT
 					Decision: (?) TEXT
+					Consequences: (?) TEXT
 					
 					Alternatives: (?)
 						Alternative: (*)
@@ -233,6 +258,10 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 					Impact: (?) TEXT
 					Risks: (?) TEXT
 					Comments: (?)
+						Comment: (*)
+							Author: (1) @Author
+							Date: (1) DATE
+							Text: (1) TEXT
 	
 	Subheader: Por qué este caso encaja especialmente bien
 	

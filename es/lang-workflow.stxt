@@ -134,6 +134,7 @@ Document (dev.stxt.website): El entorno de trabajo
 			Chapter: Introducción
 				Content >>
 					Conceptos básicos y objetivos del libro.
+		# ERROR: la fecha no es YYYY-MM-DD y falta ISBN, que es obligatorio
 
 	Listing >>
 		stxt validate docs/book.stxt

@@ -115,6 +115,7 @@ Document (dev.stxt.website): CMS (Content Management Systems)
 		Page (com.acme.cms.page):
 			Title: Inicio
 			Slug: index
+			Status: Published
 			
 			Blocks:
 				Block:
@@ -163,17 +164,23 @@ Document (dev.stxt.website): CMS (Content Management Systems)
 							Keyword: (+)
 					
 					Header: (?) TEXT
-					Content: (1) TEXT
+					Content: (?) TEXT
 					Footer: (?) TEXT
 					
 					Blocks: (?)
 						Block: (*)
 							Type: (1)
+							Title: (?) @Title
+							Subtitle: (?)
+							Items: (?)
+								Item: (+)
+							Label: (?)
+							Target: (?)
 	
 	Content >>
 		Este template:
 		
-		* Garantiza título, slug y contenido.
+		* Garantiza título, slug y estado.
 		* Controla estados editoriales.
 		* Permite bloques flexibles.
 		

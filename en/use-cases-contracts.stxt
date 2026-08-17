@@ -58,7 +58,7 @@ Document (dev.stxt.website): Contracts and legal agreements
 		A basic agreement between two parties, with legal text and explicit data.
 
 	Code >>
-		Agreement (@com.acme.legal.contract):
+		Agreement (com.acme.legal.contract):
 			Id: AGR-2026-001
 			Title: Service provision agreement
 			Status: Draft
@@ -100,9 +100,18 @@ Document (dev.stxt.website): Contracts and legal agreements
 		Clauses are a natural tree.
 
 	Code >>
-		Agreement (@com.acme.legal.contract):
+		Agreement (com.acme.legal.contract):
 			Id: AGR-2026-002
 			Title: Confidentiality agreement
+			Status: Signed
+
+			Parties:
+				Party:
+					Name: ACME Corp
+					Role: Disclosing party
+				Party:
+					Name: Example Ltd
+					Role: Receiving party
 
 			Clauses:
 				Clause:
@@ -132,7 +141,7 @@ Document (dev.stxt.website): Contracts and legal agreements
 		An SLA mixes regulatory text with concrete metrics.
 
 	Code >>
-		SLA (@com.acme.legal.sla):
+		SLA (com.acme.legal.sla):
 			Service: Payments platform
 			Effective date: 2026-03-01
 
@@ -180,9 +189,18 @@ Document (dev.stxt.website): Contracts and legal agreements
 		Agreements evolve: amendments, renewals, revisions.
 
 	Code >>
-		Agreement (@com.acme.legal.contract):
+		Agreement (com.acme.legal.contract):
 			Id: AGR-2026-003
 			Title: Master agreement
+			Status: Signed
+
+			Parties:
+				Party:
+					Name: ACME Corp
+					Role: Provider
+				Party:
+					Name: Example Ltd
+					Role: Customer
 
 			History:
 				Revision:
@@ -237,12 +255,27 @@ Document (dev.stxt.website): Contracts and legal agreements
 							Role: (1)
 
 					Purpose: (?) TEXT
+					Term: (?)
+						Start: (1) DATE
+						End: (?) DATE
+					Payment: (?)
+						Fee: (1) NUMBER
+						Currency: (1)
+						Billing period: (?)
+					Governing law: (?)
+
 					Clauses: (?)
 						Clause: (*)
+							Number: (?) NATURAL
 							Title: (1) @Title
 							Text: (1) TEXT
+							Internal notes: (?) TEXT
 
 					History: (?)
+						Revision: (*)
+							Date: (1) DATE
+							Summary: (1)
+					Current version: (?) NATURAL
 
 	Subheader: Why this approach is useful
 

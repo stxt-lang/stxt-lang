@@ -58,7 +58,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 		Un acuerdo básico entre dos partes, con texto legal y datos explícitos.
 		
 	Code >>
-		Agreement (@com.acme.legal.contract):
+		Agreement (com.acme.legal.contract):
 			Id: AGR-2026-001
 			Title: Acuerdo de prestación de servicios
 			Status: Draft
@@ -100,9 +100,18 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 		Las cláusulas son un árbol natural.
 		
 	Code >>
-		Agreement (@com.acme.legal.contract):
+		Agreement (com.acme.legal.contract):
 			Id: AGR-2026-002
 			Title: Acuerdo de confidencialidad
+			Status: Signed
+			
+			Parties:
+				Party:
+					Name: ACME Corp
+					Role: Parte reveladora
+				Party:
+					Name: Example Ltd
+					Role: Parte receptora
 			
 			Clauses:
 				Clause:
@@ -132,7 +141,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 		Un SLA mezcla texto normativo con métricas concretas.
 		
 	Code >>
-		SLA (@com.acme.legal.sla):
+		SLA (com.acme.legal.sla):
 			Service: Plataforma de pagos
 			Effective date: 2026-03-01
 			
@@ -180,9 +189,18 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 		Los acuerdos evolucionan: enmiendas, renovaciones, revisiones.
 		
 	Code >>
-		Agreement (@com.acme.legal.contract):
+		Agreement (com.acme.legal.contract):
 			Id: AGR-2026-003
 			Title: Acuerdo marco
+			Status: Signed
+			
+			Parties:
+				Party:
+					Name: ACME Corp
+					Role: Proveedor
+				Party:
+					Name: Example Ltd
+					Role: Cliente
 			
 			History:
 				Revision:
@@ -237,12 +255,27 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 							Role: (1)
 					
 					Purpose: (?) TEXT
+					Term: (?)
+						Start: (1) DATE
+						End: (?) DATE
+					Payment: (?)
+						Fee: (1) NUMBER
+						Currency: (1)
+						Billing period: (?)
+					Governing law: (?)
+					
 					Clauses: (?)
 						Clause: (*)
+							Number: (?) NATURAL
 							Title: (1) @Title
 							Text: (1) TEXT
+							Internal notes: (?) TEXT
 					
 					History: (?)
+						Revision: (*)
+							Date: (1) DATE
+							Summary: (1)
+					Current version: (?) NATURAL
 	
 	Subheader: Por qué este enfoque resulta útil
 	

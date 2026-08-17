@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-10
+		Last modif: 2026-08-17
 		
 	Header: @STXT@ Documentos
 	
@@ -918,10 +918,10 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Subsubheader: 17.1. Asociación de un schema a un namespace
 		
 	Content >>
-		Para asociar un schema al namespace `com.example.docs`, se escribe un documento:
+		Para asociar un schema al namespace `com.example.mail`, se escribe un documento:
 		
 	Code>>
-		Schema (@stxt.schema): com.example.docs
+		Schema (@stxt.schema): com.example.mail
 			Node: Email
 				Children:
 					Child: From
@@ -949,10 +949,13 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Un documento que declare el mismo namespace:
 		
 	Code >>
-		Documento (com.example.docs):
-		    Campo1: valor
-		    Texto: uno
-		    Texto: dos
+		Email (com.example.mail):
+		    From: john.smith@example.com
+		    To: mery.adams@example.com
+		    Title: Project report
+		    Body Content >>
+		        Hello Mery!
+		        The book is finished!
 	
 	Content >>
 		
@@ -991,12 +994,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Subsubheader: 18.1. Asociación de un template a un namespace
 		
 	Content >>
-		Para asociar un template al namespace `com.example.docs`, se escribe un documento:
+		Para asociar un template al namespace `com.example.mail`, se escribe un documento:
 		
 	Code>>
-		Template (@stxt.template): com.example.docs
+		Template (@stxt.template): com.example.mail
 			Structure >>
-				Email (com.example.docs):
+				Email (com.example.mail):
 					From: (1) EMAIL
 					To: (1) EMAIL
 					Cc: (?) EMAIL

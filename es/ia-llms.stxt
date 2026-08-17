@@ -84,9 +84,13 @@ Document (dev.stxt.website): IA y LLMs — Documentos generados y verificables
 	Code >>
 		Informe (com.acme.informes):
 			Título: Análisis de mercado
-			Fecha: mañana # ERROR: DATE requiere YYYY-MM-DD
-			Estado: Pendiente # ERROR: no es un valor del ENUM
-			Subtítulo: Versión corta # ERROR: hijo no declarado (modelo cerrado)
+			# ERROR: DATE requiere YYYY-MM-DD
+			Fecha: mañana
+			# ERROR: no es un valor del ENUM
+			Estado: Pendiente
+			# ERROR: hijo no declarado (modelo cerrado)
+			Subtítulo: Versión corta
+			# ERROR: falta Resumen, que es obligatorio
 
 	Subheader: Sin escapado: prosa larga dentro de estructura
 
