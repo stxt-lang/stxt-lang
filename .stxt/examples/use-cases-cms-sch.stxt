@@ -13,8 +13,8 @@ Template (@stxt.template): com.acme.cms.page
 				Keywords: (?)
 					Keyword: (+)
 			
-			Header: (?) TEXT
-			Content: (1) TEXT
+			Header: (?) MARKDOWN
+			Content: (1) MARKDOWN
 			Footer: (?) TEXT
 			
 			Blocks: (?)

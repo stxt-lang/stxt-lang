@@ -68,9 +68,10 @@ Document (dev.stxt.website): CMS and publishing
 	Subheader: Example 1 — Web page
 
 	Content >>
-		A typical page of a site, with metadata, SEO and free content. A CMS usually works
-		with blocks or components as well; in @STXT@ they are nodes with a `Type` that the
-		renderer transforms however it likes.
+		A typical page of a site, with metadata, SEO and free content; the header and the
+		body are `MARKDOWN` blocks, so the editor and the playground colour them as such. A
+		CMS usually works with blocks or components as well; in @STXT@ they are nodes with
+		a `Type` that the renderer transforms however it likes.
 
 	Code >>
 		Page (com.acme.cms.page):
@@ -131,16 +132,16 @@ Document (dev.stxt.website): CMS and publishing
 						Keywords: (?)
 							Keyword: (+)
 
-					Header: (?) TEXT
-					Content: (?) TEXT
+					Header: (?) MARKDOWN
+					Content: (?) MARKDOWN
 					Footer: (?) TEXT
 
 	Subheader: Example 2 — Article
 
 	Content >>
 		An article with metadata, authors, status and long text. The text lives in `>>`
-		blocks and may carry Markdown inside without interfering with @STXT@; the
-		editorial structure —title, authors, status— is explicit.
+		blocks —the body, of type `MARKDOWN`, carries Markdown inside without interfering
+		with @STXT@—; the editorial structure —title, authors, status— is explicit.
 
 	Code >>
 		Article (com.acme.editorial.article):
@@ -198,7 +199,7 @@ Document (dev.stxt.website): CMS and publishing
 						Tag: (+)
 
 					Abstract: (?) TEXT
-					Content: (1) TEXT
+					Content: (1) MARKDOWN
 
 	Subheader: Example 3 — Multi-section publication
 
@@ -263,7 +264,8 @@ Document (dev.stxt.website): CMS and publishing
 
 	Content >>
 		* Define a few clear document types, and a template for each one.
-		* Use `TEXT` for the body and long sections; keep metadata concise and stable.
+		* Use `TEXT` or `MARKDOWN` for the body and long sections; keep metadata concise
+		  and stable.
 		* Keep blocks simple and well named.
 		* Leave presentation out of the document and avoid conditional logic in the
 		  content.

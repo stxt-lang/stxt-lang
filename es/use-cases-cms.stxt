@@ -68,9 +68,10 @@ Document (dev.stxt.website): CMS y publicaciones
 	Subheader: Ejemplo 1 — Página web
 
 	Content >>
-		Página típica de un sitio, con metadatos, SEO y contenido libre. Un CMS suele
-		trabajar además con bloques o componentes; en @STXT@ son nodos con un `Type` que
-		el renderizador transforma como quiera.
+		Página típica de un sitio, con metadatos, SEO y contenido libre; la cabecera y el
+		cuerpo son bloques de tipo `MARKDOWN`, así que el editor y el playground los
+		colorean como tal. Un CMS suele trabajar además con bloques o componentes; en
+		@STXT@ son nodos con un `Type` que el renderizador transforma como quiera.
 
 	Code >>
 		Page (com.acme.cms.page):
@@ -131,16 +132,16 @@ Document (dev.stxt.website): CMS y publicaciones
 						Keywords: (?)
 							Keyword: (+)
 
-					Header: (?) TEXT
-					Content: (?) TEXT
+					Header: (?) MARKDOWN
+					Content: (?) MARKDOWN
 					Footer: (?) TEXT
 
 	Subheader: Ejemplo 2 — Artículo
 
 	Content >>
 		Un artículo con metadatos, autores, estado y texto largo. El texto vive en bloques
-		`>>` y puede llevar Markdown dentro sin interferir con @STXT@; la estructura
-		editorial —título, autores, estado— es explícita.
+		`>>` —el cuerpo, de tipo `MARKDOWN`, lleva Markdown dentro sin interferir con
+		@STXT@—; la estructura editorial —título, autores, estado— es explícita.
 
 	Code >>
 		Article (com.acme.editorial.article):
@@ -198,7 +199,7 @@ Document (dev.stxt.website): CMS y publicaciones
 						Tag: (+)
 
 					Abstract: (?) TEXT
-					Content: (1) TEXT
+					Content: (1) MARKDOWN
 
 	Subheader: Ejemplo 3 — Publicación en varias secciones
 
@@ -263,8 +264,8 @@ Document (dev.stxt.website): CMS y publicaciones
 
 	Content >>
 		* Define pocos tipos de documento claros, y una plantilla para cada uno.
-		* Usa `TEXT` para el cuerpo y las secciones largas; mantén los metadatos concisos y
-		  estables.
+		* Usa `TEXT` o `MARKDOWN` para el cuerpo y las secciones largas; mantén los
+		  metadatos concisos y estables.
 		* Mantén los bloques simples y bien nombrados.
 		* Deja la presentación fuera del documento y evita lógica condicional en el
 		  contenido.
