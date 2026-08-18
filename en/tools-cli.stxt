@@ -2,7 +2,7 @@ Document (dev.stxt.website): The command line
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-17
+		Last modif: 2026-08-18
 
 	Header: The command line
 
@@ -30,7 +30,7 @@ Document (dev.stxt.website): The command line
 		npm install -g @stxt-lang/cli
 		stxt --version
 
-		stxt 0.7.1 (@stxt-lang/core 0.7.1)
+		stxt 0.7.2 (@stxt-lang/core 0.7.1)
 
 	Content >>
 		`--version` prints two versions: the command's and that of the parser inside it.
@@ -49,9 +49,9 @@ Document (dev.stxt.website): The command line
 
 	Listing >>
 		stxt [--version | --help]
-		stxt validate <file|dir>... [--recursive] [--format text|json] [--warn-schema | --no-schema]
-		stxt format   <file|dir>... [--recursive] [--tabs | --spaces] [--write | --check] [--clean]
-		stxt describe <file>
+		stxt validate <file|dir|->... [--recursive] [--format text|json] [--warn-schema | --no-schema]
+		stxt format   <file|dir|->... [--recursive] [--tabs | --spaces] [--write | --check] [--clean]
+		stxt describe <file|->
 		stxt schemas  [path]
 		stxt install  <file> [--local | --user | --system | --root <dir>] [--force] [--ignore-non-definitions]
 
@@ -76,6 +76,10 @@ Document (dev.stxt.website): The command line
 		  **usage errors**: they exit with code `2` without doing anything.
 		* Results (findings, JSON, formatted documents, listings) go to **standard
 		  output**; usage and read errors go to **standard error**.
+		* **`-` is standard input** in `validate`, `format` and `describe`, the usual Unix
+		  convention: a document arriving through a pipe is processed like a file and
+		  reported as `<stdin>`. It can be given only once. Without an argument, no
+		  command reads standard input on its own: that is a usage error.
 		* **No command rewrites files unless asked to**: `format` only writes with
 		  `--write`, and `install` only overwrites with `--force`.
 
@@ -97,7 +101,7 @@ Document (dev.stxt.website): The command line
 	Subheader: stxt validate
 
 	Listing >>
-		stxt validate <file|dir>... [--recursive] [--format text|json] [--warn-schema | --no-schema]
+		stxt validate <file|dir|->... [--recursive] [--format text|json] [--warn-schema | --no-schema]
 
 	Content >>
 		For each document: it parses it, resolves its grammar chain —the `.stxt/`
@@ -115,8 +119,22 @@ Document (dev.stxt.website): The command line
 		| `--no-schema`       | Syntax only: no grammar is resolved or applied                                                  |
 
 		A directory as argument requires `--recursive`; without it, it is a usage error
-		(`2`), so that nobody validates "the whole project" by accident. Files and
-		directories can be mixed in the same call.
+		(`2`), so that nobody validates "the whole project" by accident. Files,
+		directories and `-` can be mixed in the same call.
+
+		With **`-`** the document is read from **standard input** and called `<stdin>` in
+		the findings. Since it lives in no directory, its grammar chain is that of the
+		**current directory**, as if it were a file there —the same one `stxt schemas`
+		shows without an argument—; so, run from the project root, it validates against
+		the same grammars as its files. Here, the version of the earlier document committed
+		in git, with the same two findings:
+
+	Listing >>
+		git show HEAD:docs/book.stxt | stxt validate -
+
+		<stdin>:6: [INVALID_VALUE] Published: Invalid date (1 de octubre de 2025) (error)
+		<stdin>:1: [INVALID_NUMBER] 0 nodes of 'com.acme.book:isbn' and min is 1 (error)
+		2 error(s), 0 warning(s)
 
 	Subsubheader: The findings
 
@@ -205,7 +223,7 @@ Document (dev.stxt.website): The command line
 	Subheader: stxt format
 
 	Listing >>
-		stxt format <file|dir>... [--recursive] [--tabs | --spaces] [--write | --check] [--clean]
+		stxt format <file|dir|->... [--recursive] [--tabs | --spaces] [--write | --check] [--clean]
 
 	Content >>
 		Rewrites documents in their **canonical form**: indentation normalised to tabs (or
@@ -279,10 +297,21 @@ Document (dev.stxt.website): The command line
 		Combining `--write` with `--check`, or `--tabs` with `--spaces`, is a usage error
 		(`2`): `stxt format: --write and --check cannot be combined`.
 
+		With **`-`** the document is read from standard input and the result goes to
+		standard output, which turns `format` into a filter any editor can apply to the
+		selection; `--check -` answers `<stdin>: would be reformatted` and `1` if it would
+		change. `--write` with `-` is a usage error: there is no file to write back to.
+
+	Listing >>
+		stxt format --spaces - < docs/book.stxt
+
+		stxt format --write -
+		stxt format: --write cannot be used with - (the standard input); the result is printed to stdout
+
 	Subheader: stxt describe
 
 	Listing >>
-		stxt describe <file>
+		stxt describe <file|->
 
 	Content >>
 		Parses **one** document and writes its logical tree to standard output in the
@@ -294,7 +323,9 @@ Document (dev.stxt.website): The command line
 
 		`describe` **resolves no grammar and validates nothing**: those results are not
 		part of the logical tree. If the document has syntax errors it emits no partial
-		tree: it reports the errors on standard error and exits with `1`.
+		tree: it reports the errors on standard error and exits with `1`. With `-` it
+		reads the document from standard input (`stxt describe - < config.stxt`), and
+		calls it `<stdin>` in the errors.
 
 	Code >>
 		Book (com.acme.book):
@@ -560,13 +591,22 @@ Document (dev.stxt.website): The command line
 	Listing >>
 		stxt describe config.stxt > config.json
 
+	Content >>
+		**A document that is not on disk** —another program generates it, or it comes
+		from an HTTP request—, with `-`:
+
+	Listing >>
+		curl -s https://example.com/api/book.stxt | stxt validate -
+		curl -s https://example.com/api/book.stxt | stxt describe - | jq '.[0].name'
+
 	Subheader: Limits
 
 	Content >>
 		What the command line does **not** do, so you do not go looking for it:
 
-		* It does not read from standard input: every command works on files and
-		  directories.
+		* It does not read from standard input on its own: you ask for it with `-`, and
+		  only `validate`, `format` and `describe` accept it; `schemas` and `install` work
+		  on paths.
 		* It does not convert to other formats: the only structured output is the JSON of
 		  `describe` (the STXT-TREE-SPEC tree) and that of `validate --format json`.
 		* There is no per-command help: `stxt --help` is all the help, and this page is
