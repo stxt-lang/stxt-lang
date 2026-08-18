@@ -233,8 +233,11 @@ Document (dev.stxt.website): La línea de comandos
 		puntos, sin espacios al final de línea. Trabaja **línea a línea**: re-renderiza
 		las líneas que abren un nodo y **conserva todo lo que el árbol no describe**
 		—comentarios, líneas en blanco y el contenido de los bloques `>>`, que solo se
-		reindenta—, además del final de línea original (CRLF incluido) y la ausencia de
-		salto final. El namespace se escribe únicamente donde el fuente lo escribió.
+		reindenta, sus líneas en blanco incluidas—, además del final de línea original (CRLF
+		incluido) y la ausencia de salto final. De los comentarios convierte solo las unidades
+		enteras de indentación (tabuladores o grupos de cuatro espacios) al estilo elegido, una
+		por una, y deja intacto lo que venga detrás. El namespace se escribe únicamente donde
+		el fuente lo escribió.
 
 		Tres modos, mutuamente excluyentes:
 

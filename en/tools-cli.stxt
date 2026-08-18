@@ -230,9 +230,11 @@ Document (dev.stxt.website): The command line
 		to four spaces with `--spaces`), a single space after the colon, no trailing
 		whitespace. It works **line by line**: it re-renders the lines that open a node
 		and **keeps everything the tree does not describe** —comments, blank lines and the
-		content of `>>` blocks, which is only re-indented—, plus the original line ending
-		(CRLF included) and the absence of a final newline. The namespace is written only
-		where the source wrote it.
+		content of `>>` blocks, which is only re-indented, its blank lines included—, plus the
+		original line ending (CRLF included) and the absence of a final newline. Of a comment it
+		converts only the whole indentation units (tabs or groups of four spaces) to the chosen
+		style, one for one, and leaves whatever follows them untouched. The namespace is
+		written only where the source wrote it.
 
 		Three modes, mutually exclusive:
 
