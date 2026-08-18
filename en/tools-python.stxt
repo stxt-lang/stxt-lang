@@ -44,7 +44,7 @@ Document (dev.stxt.website): The Python library
 		former is what an editor or a validator wants; the latter, a program for which an
 		invalid document is simply an exception.
 
-	Listing >>
+	Python >>
 		from stxt import Parser, ParseException
 
 		parser = Parser()
@@ -111,7 +111,7 @@ Document (dev.stxt.website): The Python library
 				Content >>
 					Conceptos básicos y objetivos del libro.
 
-	Listing >>
+	Python >>
 		from stxt import Parser, InlineNode, TextNode, Node
 
 		book = Parser().parse_result(text).get_nodes()[0]
@@ -156,7 +156,7 @@ Document (dev.stxt.website): The Python library
 		the three-argument form, `InlineNode(name, namespace, value)`, and the keyword
 		arguments `value=`, `namespace=` and `text=` are accepted too.
 
-	Listing >>
+	Python >>
 		from stxt import InlineNode, TextNode
 
 		email = InlineNode("Email", "com.example.mail", "Weekly report")
@@ -206,7 +206,7 @@ Document (dev.stxt.website): The Python library
 			Description >>
 				Book: Template for publisher book records
 
-	Listing >>
+	Python >>
 		from stxt import (
 		    Parser, UnifiedSchemaProvider, SchemaValidator, ConditionalValidator,
 		    ValidationException,
@@ -276,7 +276,7 @@ Document (dev.stxt.website): The Python library
 		level). Since `DiscoveryResult` **implements `SchemaProvider`**, resolving and
 		validating are two steps:
 
-	Listing >>
+	Python >>
 		from stxt import Parser, SchemaValidator, ConditionalValidator
 		from stxt.discovery import resolve
 
@@ -296,7 +296,7 @@ Document (dev.stxt.website): The Python library
 		`DiscoveryResult` also tells you **where** each grammar came from, which is what an
 		editor needs for "go to definition" or a diagnostic that explains itself:
 
-	Listing >>
+	Python >>
 		definition = discovery.get_definition("com.acme.book")
 		definition.file        # '/home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt'
 		definition.level_dir   # '/home/ana/libros/.stxt'  (the level that won)
@@ -310,7 +310,7 @@ Document (dev.stxt.website): The Python library
 		levels by directory and reads each `.stxt/` once; call `clear_cache()` when the
 		definition files may have changed:
 
-	Listing >>
+	Python >>
 		from stxt import DiscoveryResolver, OsDiscoveryFileSystem, SystemDiscoveryEnvironment
 
 		resolver = DiscoveryResolver(OsDiscoveryFileSystem(), SystemDiscoveryEnvironment())
@@ -333,7 +333,7 @@ Document (dev.stxt.website): The Python library
 		indentation. It is an explicit function that emits only the normative fields,
 		`children` for inline nodes and `lines` for blocks, with no positions or comments.
 
-	Listing >>
+	Python >>
 		from stxt import Parser, to_canonical_tree, to_canonical_json
 
 		nodes = Parser().parse_result(text).get_nodes()
@@ -355,7 +355,7 @@ Document (dev.stxt.website): The Python library
 		the reformatting that keeps them is the job of the CLI and the extension, not of
 		the library.
 
-	Listing >>
+	Python >>
 		from stxt import NodeWriter, IndentStyle
 
 		one = NodeWriter.to_stxt(email)                                          # one node, with tabs
@@ -386,7 +386,7 @@ Document (dev.stxt.website): The Python library
 		**returns** a list of `ValidationException` (it does not raise); `SchemaValidator`
 		is just a built-in `Validator`.
 
-	Listing >>
+	Python >>
 		from stxt import Parser, Observer, Node
 
 		class LoggingObserver(Observer):

@@ -44,7 +44,7 @@ Document (dev.stxt.website): La biblioteca Python
 		es la que quiere un editor o un validador; la segunda, un programa para el que un
 		documento inválido es simplemente una excepción.
 
-	Listing >>
+	Python >>
 		from stxt import Parser, ParseException
 
 		parser = Parser()
@@ -111,7 +111,7 @@ Document (dev.stxt.website): La biblioteca Python
 				Content >>
 					Conceptos básicos y objetivos del libro.
 
-	Listing >>
+	Python >>
 		from stxt import Parser, InlineNode, TextNode, Node
 
 		book = Parser().parse_result(text).get_nodes()[0]
@@ -156,7 +156,7 @@ Document (dev.stxt.website): La biblioteca Python
 		de tres argumentos, `InlineNode(name, namespace, value)`, y también valen los
 		argumentos con nombre `value=`, `namespace=` y `text=`.
 
-	Listing >>
+	Python >>
 		from stxt import InlineNode, TextNode
 
 		email = InlineNode("Email", "com.example.mail", "Weekly report")
@@ -205,7 +205,7 @@ Document (dev.stxt.website): La biblioteca Python
 			Description >>
 				Book: Plantilla para fichas de libros editoriales
 
-	Listing >>
+	Python >>
 		from stxt import (
 		    Parser, UnifiedSchemaProvider, SchemaValidator, ConditionalValidator,
 		    ValidationException,
@@ -276,7 +276,7 @@ Document (dev.stxt.website): La biblioteca Python
 		de usuario). Como `DiscoveryResult` **implementa `SchemaProvider`**, resolver y
 		validar son dos pasos:
 
-	Listing >>
+	Python >>
 		from stxt import Parser, SchemaValidator, ConditionalValidator
 		from stxt.discovery import resolve
 
@@ -296,7 +296,7 @@ Document (dev.stxt.website): La biblioteca Python
 		`DiscoveryResult` dice además **de dónde** sale cada gramática, que es lo que necesita
 		un editor para "ir a la definición" o un diagnóstico que se explique solo:
 
-	Listing >>
+	Python >>
 		definition = discovery.get_definition("com.acme.book")
 		definition.file        # '/home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt'
 		definition.level_dir   # '/home/ana/libros/.stxt'  (el nivel que ha ganado)
@@ -310,7 +310,7 @@ Document (dev.stxt.website): La biblioteca Python
 		los niveles por directorio y lee cada `.stxt/` una sola vez; `clear_cache()`
 		cuando los ficheros de definición puedan haber cambiado:
 
-	Listing >>
+	Python >>
 		from stxt import DiscoveryResolver, OsDiscoveryFileSystem, SystemDiscoveryEnvironment
 
 		resolver = DiscoveryResolver(OsDiscoveryFileSystem(), SystemDiscoveryEnvironment())
@@ -333,7 +333,7 @@ Document (dev.stxt.website): La biblioteca Python
 		de sangría. Es una función explícita que emite solo los campos normativos,
 		`children` en los inline y `lines` en los bloques, sin posiciones ni comentarios.
 
-	Listing >>
+	Python >>
 		from stxt import Parser, to_canonical_tree, to_canonical_json
 
 		nodes = Parser().parse_result(text).get_nodes()
@@ -354,7 +354,7 @@ Document (dev.stxt.website): La biblioteca Python
 		bloques —es lo que hace `stxt format --clean`—; el reformateo que los conserva es
 		trabajo de la CLI y de la extensión, no de la biblioteca.
 
-	Listing >>
+	Python >>
 		from stxt import NodeWriter, IndentStyle
 
 		one = NodeWriter.to_stxt(email)                                          # un nodo, con tabuladores
@@ -385,7 +385,7 @@ Document (dev.stxt.website): La biblioteca Python
 		`ValidationException` (no lanza); `SchemaValidator` no es más que un `Validator`
 		integrado.
 
-	Listing >>
+	Python >>
 		from stxt import Parser, Observer, Node
 
 		class LoggingObserver(Observer):

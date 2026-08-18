@@ -13,6 +13,11 @@ Template (@stxt.template): dev.stxt.website
 			CODE: TEXT
 			Grammar: TEXT
 			Listing: TEXT
+			Java: TEXT
+			TypeScript: TEXT
+			Python: TEXT
+			Json: TEXT
+			Xml: TEXT
 			Link:
 				Page: (?)
 				Url: (?) URL
@@ -30,6 +35,17 @@ Template (@stxt.template): dev.stxt.website
 		Grammar >>
 			Gramática (informal) del lenguaje.
 		Listing >>
-			Texto preformateado que no es STXT:
-			diagramas de whitespace, código en otros formatos
-			(HTML, XML...), salidas de consola, etc.
+			Texto preformateado que no es código: diagramas de whitespace,
+			árboles de directorios, sesiones de terminal (comando y salida),
+			salidas de consola, etc. Sale sin colorear.
+		Java >>
+			Código Java. Se colorea con la gramática Java de Prism.
+		TypeScript >>
+			Código TypeScript o JavaScript. Se colorea con la gramática TypeScript de Prism.
+		Python >>
+			Código Python. Se colorea con la gramática Python de Prism.
+		Json >>
+			Un valor JSON. Se colorea con la gramática JSON de Prism.
+		Xml >>
+			Un fragmento XML o HTML (por ejemplo, un pom.xml). Se colorea con la
+			gramática de marcado de Prism.

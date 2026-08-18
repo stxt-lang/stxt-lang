@@ -27,7 +27,7 @@ Document (dev.stxt.website): The Java library
 		Requires **Java 17** or later. **It has no runtime dependencies** and under JPMS it
 		is an automatic module named `dev.stxt`.
 
-	Listing >>
+	Xml >>
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
@@ -57,7 +57,7 @@ Document (dev.stxt.website): The Java library
 		no validation** (syntax only) and `STXT.parser(loader)` one with schema and
 		template validation registered, as shown below.
 
-	Listing >>
+	Java >>
 		import java.util.List;
 
 		import dev.stxt.Node;
@@ -134,7 +134,7 @@ Document (dev.stxt.website): The Java library
 				Content >>
 					Conceptos básicos y objetivos del libro.
 
-	Listing >>
+	Java >>
 		import dev.stxt.InlineNode;
 		import dev.stxt.Node;
 		import dev.stxt.TextNode;
@@ -183,7 +183,7 @@ Document (dev.stxt.website): The Java library
 		always the **content** (value or text); the namespace only appears in the
 		three-argument form. To insert at a position, `addChild(index, node)`.
 
-	Listing >>
+	Java >>
 		import dev.stxt.InlineNode;
 		import dev.stxt.TextNode;
 
@@ -237,7 +237,7 @@ Document (dev.stxt.website): The Java library
 			Description >>
 				Book: Template for publisher book records
 
-	Listing >>
+	Java >>
 		import java.io.File;
 
 		import dev.stxt.ParseResult;
@@ -272,7 +272,7 @@ Document (dev.stxt.website): The Java library
 		classpath, a database or a URL, is a lambda that returns its text, or throws
 		`ResourceNotFoundException` when it does not have it:
 
-	Listing >>
+	Java >>
 		import dev.stxt.exceptions.ResourceNotFoundException;
 
 		ResourcesLoader loader = (namespace, resource) -> {
@@ -297,7 +297,7 @@ Document (dev.stxt.website): The Java library
 		  it validates **every** node: wrap it in the `ConditionalValidator` yourself to
 		  get the same behaviour as the CLI and the extension.
 
-	Listing >>
+	Java >>
 		import dev.stxt.runtime.ConditionalValidator;
 		import dev.stxt.schema.SchemaValidator;
 
@@ -337,7 +337,7 @@ Document (dev.stxt.website): The Java library
 		buffer, which starts the chain at the user level). Since `DiscoveryResult`
 		**implements `SchemaProvider`**, resolving and validating are two steps:
 
-	Listing >>
+	Java >>
 		import java.nio.file.Path;
 
 		import dev.stxt.Parser;
@@ -366,7 +366,7 @@ Document (dev.stxt.website): The Java library
 		`DiscoveryResult` also tells you **where** each grammar came from, which is what an
 		editor needs for "go to definition" or a diagnostic that explains itself:
 
-	Listing >>
+	Java >>
 		DiscoveryDefinition definition = discovery.getDefinition("com.acme.book");
 		definition.getFile();       // /home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt
 		definition.getLevelDir();   // /home/ana/libros/.stxt  (the level that won)
@@ -394,7 +394,7 @@ Document (dev.stxt.website): The Java library
 		positions or comments— and **depends on no JSON library**: it returns the text,
 		which you then hand to Jackson, Gson or whatever the program uses.
 
-	Listing >>
+	Java >>
 		import dev.stxt.runtime.TreeJson;
 
 		String json = TreeJson.toCanonicalJson(result.getNodes());
@@ -413,7 +413,7 @@ Document (dev.stxt.website): The Java library
 		the reformatting that keeps them is the job of the CLI and the extension, not of
 		the library.
 
-	Listing >>
+	Java >>
 		import dev.stxt.runtime.NodeWriter;
 		import dev.stxt.runtime.NodeWriter.IndentStyle;
 
@@ -445,7 +445,7 @@ Document (dev.stxt.website): The Java library
 		read, without waiting for the end. `SchemaValidator` is just a built-in
 		`Validator`; `Validator` is a functional interface, so a lambda will do.
 
-	Listing >>
+	Java >>
 		import java.util.List;
 
 		import dev.stxt.Node;

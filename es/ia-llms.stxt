@@ -98,7 +98,7 @@ Document (dev.stxt.website): IA y LLMs — Documentos generados y verificables
 		El punto débil de los LLMs generando JSON es el escapado:
 		comillas, `\n`, saltos de línea dentro de strings.
 
-	Listing >>
+	Json >>
 		{"resumen": "Línea 1\nLínea 2 con \"comillas\" y más texto..."}
 
 	Content >>

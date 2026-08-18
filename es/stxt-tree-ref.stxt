@@ -182,7 +182,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		Su representación es el siguiente valor JSON. Obsérvese que el comentario inicial
 		no aparece, el namespace está en minúsculas y `Anexo` tiene namespace vacío.
 
-	Listing >>
+	Json >>
 		[
 		  {
 		    "name": "Documento",

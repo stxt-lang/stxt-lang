@@ -123,7 +123,7 @@ Document (dev.stxt.website): Tools
 	Content >>
 		A minimal example:
 
-	Listing >>
+	TypeScript >>
 		import { Parser, InlineNode } from '@stxt-lang/core';
 
 		const result = new Parser().parseResult(text);
@@ -142,7 +142,7 @@ Document (dev.stxt.website): Tools
 		on Maven Central. Java 17 or newer; automatic module `dev.stxt`. The full guide is
 		in [the Java library](tools-java).
 
-	Listing >>
+	Xml >>
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
@@ -167,7 +167,7 @@ Document (dev.stxt.website): Tools
 	Content >>
 		A minimal example:
 
-	Listing >>
+	Python >>
 		from stxt import Parser, InlineNode
 
 		result = Parser().parse_result(text)

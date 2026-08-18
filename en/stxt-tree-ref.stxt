@@ -178,7 +178,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		Its representation is the following JSON value. Notice that the initial comment is
 		absent, the namespace is lower-cased, and `Appendix` has an empty namespace.
 
-	Listing >>
+	Json >>
 		[
 		  {
 		    "name": "Document",

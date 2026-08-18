@@ -45,7 +45,7 @@ Document (dev.stxt.website): The TypeScript library
 		former is what an editor or a validator wants; the latter, a program for which an
 		invalid document is simply an exception.
 
-	Listing >>
+	TypeScript >>
 		import { Parser, ParseResult, ParseException } from '@stxt-lang/core';
 
 		const parser = new Parser();
@@ -110,7 +110,7 @@ Document (dev.stxt.website): The TypeScript library
 				Content >>
 					Conceptos básicos y objetivos del libro.
 
-	Listing >>
+	TypeScript >>
 		import { Parser, InlineNode, TextNode, Node } from '@stxt-lang/core';
 
 		const book = new Parser().parseResult(text).getNodes()[0];
@@ -158,7 +158,7 @@ Document (dev.stxt.website): The TypeScript library
 		the **content** (value or text); the namespace only appears in the three-argument
 		form.
 
-	Listing >>
+	TypeScript >>
 		import { InlineNode, TextNode } from '@stxt-lang/core';
 
 		const email = new InlineNode('Email', 'com.example.mail', 'Weekly report');
@@ -208,7 +208,7 @@ Document (dev.stxt.website): The TypeScript library
 			Description >>
 				Book: Template for publisher book records
 
-	Listing >>
+	TypeScript >>
 		import {
 		    Parser, UnifiedSchemaProvider, SchemaValidator, ConditionalValidator,
 		    ValidationException,
@@ -274,7 +274,7 @@ Document (dev.stxt.website): The TypeScript library
 		the same logic run over Node's `fs`, over an editor's virtual file system or over
 		an in-memory tree in a test. The Node adapters fit in twenty lines:
 
-	Listing >>
+	TypeScript >>
 		import * as fs from 'fs/promises';
 		import * as os from 'os';
 		import * as path from 'path';
@@ -313,7 +313,7 @@ Document (dev.stxt.website): The TypeScript library
 		for standard input or an unsaved buffer, which starts the chain at the user
 		level).
 
-	Listing >>
+	TypeScript >>
 		import { Parser, SchemaValidator, ConditionalValidator, DiscoveryResolver } from '@stxt-lang/core';
 
 		const resolver = new DiscoveryResolver(new NodeFileSystem(), new NodeEnvironment());
@@ -334,7 +334,7 @@ Document (dev.stxt.website): The TypeScript library
 		`DiscoveryResult` also tells you **where** each grammar came from, which is what an
 		editor needs for "go to definition" or a diagnostic that explains itself:
 
-	Listing >>
+	TypeScript >>
 		const definition = discovery.getDefinition('com.acme.book');
 		definition?.file;       // "/home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt"
 		definition?.levelDir;   // "/home/ana/libros/.stxt"  (the level that won)
@@ -363,7 +363,7 @@ Document (dev.stxt.website): The TypeScript library
 		comments. The types `CanonicalDocument`, `CanonicalNode`, `CanonicalInlineNode`
 		and `CanonicalBlockNode` describe the result.
 
-	Listing >>
+	TypeScript >>
 		import { Parser, toCanonicalTree, toCanonicalJson, CanonicalDocument } from '@stxt-lang/core';
 
 		const nodes = new Parser().parseResult(text).getNodes();
@@ -385,7 +385,7 @@ Document (dev.stxt.website): The TypeScript library
 		the reformatting that keeps them is the job of the CLI and the extension, not of
 		the library.
 
-	Listing >>
+	TypeScript >>
 		import { NodeWriter, IndentStyle } from '@stxt-lang/core';
 
 		const one = NodeWriter.toSTXT(email);                                   // one node, with tabs
@@ -414,7 +414,7 @@ Document (dev.stxt.website): The TypeScript library
 		block. It is the basis of the extension's semantic colouring and of the line→node
 		map of the CLI formatter.
 
-	Listing >>
+	TypeScript >>
 		import { Parser, Observer, Node, TextNode, Line } from '@stxt-lang/core';
 
 		class LoggingObserver implements Observer {

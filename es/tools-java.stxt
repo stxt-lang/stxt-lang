@@ -28,7 +28,7 @@ Document (dev.stxt.website): La biblioteca Java
 		Requiere **Java 17** o superior. **No tiene dependencias en tiempo de ejecución** y
 		bajo JPMS es un módulo automático llamado `dev.stxt`.
 
-	Listing >>
+	Xml >>
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
@@ -58,7 +58,7 @@ Document (dev.stxt.website): La biblioteca Java
 		validación** (solo sintaxis) y `STXT.parser(loader)` uno con la validación de
 		esquemas y plantillas registrada, como se ve más abajo.
 
-	Listing >>
+	Java >>
 		import java.util.List;
 
 		import dev.stxt.Node;
@@ -134,7 +134,7 @@ Document (dev.stxt.website): La biblioteca Java
 				Content >>
 					Conceptos básicos y objetivos del libro.
 
-	Listing >>
+	Java >>
 		import dev.stxt.InlineNode;
 		import dev.stxt.Node;
 		import dev.stxt.TextNode;
@@ -183,7 +183,7 @@ Document (dev.stxt.website): La biblioteca Java
 		**contenido** (valor o texto); el namespace solo aparece en la forma de tres
 		argumentos. Para insertar en una posición, `addChild(index, node)`.
 
-	Listing >>
+	Java >>
 		import dev.stxt.InlineNode;
 		import dev.stxt.TextNode;
 
@@ -237,7 +237,7 @@ Document (dev.stxt.website): La biblioteca Java
 			Description >>
 				Book: Plantilla para fichas de libros editoriales
 
-	Listing >>
+	Java >>
 		import java.io.File;
 
 		import dev.stxt.ParseResult;
@@ -272,7 +272,7 @@ Document (dev.stxt.website): La biblioteca Java
 		de datos o una URL es una lambda que devuelve su texto, o lanza
 		`ResourceNotFoundException` cuando no la tiene:
 
-	Listing >>
+	Java >>
 		import dev.stxt.exceptions.ResourceNotFoundException;
 
 		ResourcesLoader loader = (namespace, resource) -> {
@@ -297,7 +297,7 @@ Document (dev.stxt.website): La biblioteca Java
 		  este valida **todos** los nodos: envuélvelo tú en el `ConditionalValidator` para
 		  tener el mismo comportamiento que la CLI y la extensión.
 
-	Listing >>
+	Java >>
 		import dev.stxt.runtime.ConditionalValidator;
 		import dev.stxt.schema.SchemaValidator;
 
@@ -337,7 +337,7 @@ Document (dev.stxt.website): La biblioteca Java
 		un búfer sin guardar, que arranca la cadena en el nivel de usuario). Como
 		`DiscoveryResult` **implementa `SchemaProvider`**, resolver y validar son dos pasos:
 
-	Listing >>
+	Java >>
 		import java.nio.file.Path;
 
 		import dev.stxt.Parser;
@@ -366,7 +366,7 @@ Document (dev.stxt.website): La biblioteca Java
 		`DiscoveryResult` dice además **de dónde** sale cada gramática, que es lo que necesita
 		un editor para "ir a la definición" o un diagnóstico que se explique solo:
 
-	Listing >>
+	Java >>
 		DiscoveryDefinition definition = discovery.getDefinition("com.acme.book");
 		definition.getFile();       // /home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt
 		definition.getLevelDir();   // /home/ana/libros/.stxt  (el nivel que ha ganado)
@@ -395,7 +395,7 @@ Document (dev.stxt.website): La biblioteca Java
 		posiciones ni comentarios— y **no depende de ninguna biblioteca JSON**: devuelve el
 		texto, y ya se le pasa a Jackson, Gson o lo que use el programa.
 
-	Listing >>
+	Java >>
 		import dev.stxt.runtime.TreeJson;
 
 		String json = TreeJson.toCanonicalJson(result.getNodes());
@@ -413,7 +413,7 @@ Document (dev.stxt.website): La biblioteca Java
 		bloques —es lo que hace `stxt format --clean`—; el reformateo que los conserva es
 		trabajo de la CLI y de la extensión, no de la biblioteca.
 
-	Listing >>
+	Java >>
 		import dev.stxt.runtime.NodeWriter;
 		import dev.stxt.runtime.NodeWriter.IndentStyle;
 
@@ -445,7 +445,7 @@ Document (dev.stxt.website): La biblioteca Java
 		es más que un `Validator` integrado; `Validator` es una interfaz funcional, así que
 		una lambda vale.
 
-	Listing >>
+	Java >>
 		import java.util.List;
 
 		import dev.stxt.Node;

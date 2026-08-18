@@ -98,7 +98,7 @@ Document (dev.stxt.website): AI and LLMs — Generated, verifiable documents
 		The weak spot of LLMs generating JSON is escaping:
 		quotes, `\n`, line breaks inside strings.
 
-	Listing >>
+	Json >>
 		{"summary": "Line 1\nLine 2 with \"quotes\" and more text..."}
 
 	Content >>
