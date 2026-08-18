@@ -481,7 +481,7 @@ Document (dev.stxt.website): The command line
 		several definitions is split into several.
 
 		That naming is a convention of the CLI, not of the language:
-		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) gives no meaning to file names or to the
+		[STXT-DISCOVERY-SPEC §3](stxt-discovery-ref#s3) gives no meaning to file names or to the
 		subdirectories of a level, so by hand a grammar can be placed wherever you like.
 		The convention is worth following because it makes obvious, with an `ls`, which
 		namespaces each level defines.
@@ -529,7 +529,7 @@ Document (dev.stxt.website): The command line
 	Content >>
 		The three commands that apply grammars —`validate`, `schemas` and `install`— use
 		the **same resolution chain** as the VS Code extension and the libraries, the one
-		of [STXT-DISCOVERY-SPEC](stxt-discovery-ref): for a document, every `.stxt/`
+		of [STXT-DISCOVERY-SPEC §4](stxt-discovery-ref#s4): for a document, every `.stxt/`
 		directory from its folder upwards, then `~/.stxt` and finally `/etc/stxt`. Inside
 		each level **every** `.stxt` file is loaded, recursively, and each must be a
 		definition. Precedence is **per namespace**: for each one the closest level that

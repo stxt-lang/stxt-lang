@@ -2,7 +2,7 @@ Document (dev.stxt.website): Frequently asked questions
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-16
+		Last modif: 2026-08-18
 
 	Header: Frequently asked questions
 
@@ -30,7 +30,7 @@ Document (dev.stxt.website): Frequently asked questions
 		  level. There are no three syntaxes for a list.
 		* **The parser is trivial and secure by design**: no entities, no references, no file
 		  inclusion, no code execution, no ambiguous identifiers. See
-		  [STXT-SPEC](stxt-core-ref) §15.
+		  [STXT-SPEC §15](stxt-core-ref#s15).
 		* **Validation is a separate, optional layer**, with a closed model that catches a
 		  misspelled name instead of accepting it silently.
 
@@ -52,7 +52,7 @@ Document (dev.stxt.website): Frequently asked questions
 	Content >>
 		Extension `.stxt`; media type `text/stxt`, with `text/plain` as a compatible
 		alternative. UTF-8 without BOM, `LF` line endings (`CRLF` is accepted).
-		See [STXT-SPEC](stxt-core-ref) §3 and §13.
+		See [STXT-SPEC §3](stxt-core-ref#s3) and [§13](stxt-core-ref#s13).
 
 	Subheader: Writing documents
 
@@ -68,7 +68,7 @@ Document (dev.stxt.website): Frequently asked questions
 		The fixed width is deliberate: the level of a line is computed from that line alone, and
 		the hierarchy looks the same in every editor. Anyone who prefers a more compact
 		indentation uses tabs and adjusts the tab width of their editor.
-		See [STXT-SPEC](stxt-core-ref) §8.1.
+		See [STXT-SPEC §8.1](stxt-core-ref#s8-1).
 
 	Subsubheader: Do case, accents and spaces matter in names?
 
@@ -82,7 +82,7 @@ Document (dev.stxt.website): Frequently asked questions
 		* `Año` and `ano` are different nodes, as one would expect.
 
 		**Namespaces** are stricter: ASCII `[a-z0-9]` and dots only, at least `a.b`, and they
-		are lower-cased. See [STXT-SPEC](stxt-core-ref) §4.3 and §7.
+		are lower-cased. See [STXT-SPEC §4.3](stxt-core-ref#s4-3) and [§7](stxt-core-ref#s7).
 
 	Subsubheader: How do I write a value with a colon or a hash inside?
 
@@ -104,7 +104,7 @@ Document (dev.stxt.website): Frequently asked questions
 		Yes. A file may contain several level-0 nodes, each with its own tree, and the tools
 		return them in order. That is what allows *streaming* parsing of large files: each root
 		is emitted complete as soon as the next one begins. Namespaces are **not** inherited
-		sideways between roots: each declares its own. See [STXT-SPEC](stxt-core-ref) §8.5.
+		sideways between roots: each declares its own. See [STXT-SPEC §8.5](stxt-core-ref#s8-5).
 
 	Subsubheader: What about comments?
 
@@ -113,7 +113,7 @@ Document (dev.stxt.website): Frequently asked questions
 		indentation: neither a comment nor a blank line can cause a level error. Inside a `>>`
 		block, a `#` line indented **deeper** than the node is text of the block; one indented
 		**less or equal** is a comment and does not close the block.
-		See [STXT-SPEC](stxt-core-ref) §9.
+		See [STXT-SPEC §9](stxt-core-ref#s9).
 
 	Subsubheader: What happens to comments when formatting?
 
@@ -181,7 +181,7 @@ Document (dev.stxt.website): Frequently asked questions
 		The validator complains (`CHILD_NOT_DECLARED`). The content model is **closed**: a node
 		only admits the children its definition declares, and if it declares none, it admits
 		none. That is the point of validating: fail loudly instead of accepting silently.
-		See [STXT-SCHEMA-SPEC](stxt-schema-ref) §6.
+		See [STXT-SCHEMA-SPEC §6](stxt-schema-ref#s6).
 
 	Subsubheader: Is the order of children validated?
 
@@ -191,7 +191,7 @@ Document (dev.stxt.website): Frequently asked questions
 		preserved** in the tree, so an application that gives it meaning gets it from the tree,
 		not from the validator. There are no regular expressions, default values or conditional
 		rules between fields either: they are declared non-goals.
-		See [STXT-SCHEMA-SPEC](stxt-schema-ref) §11.
+		See [STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11).
 
 	Subsubheader: How do I evolve a schema without breaking documents?
 

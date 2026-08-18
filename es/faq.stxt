@@ -2,7 +2,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-16
+		Last modif: 2026-08-18
 
 	Header: Preguntas frecuentes
 
@@ -30,7 +30,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		  cuatro espacios por nivel. No hay tres sintaxis para una lista.
 		* **El parser es trivial y seguro por diseño**: sin entidades, sin referencias, sin
 		  inclusión de ficheros, sin ejecución de código, sin ambigüedad de identificadores. Ver
-		  [STXT-SPEC](stxt-core-ref) §15.
+		  [STXT-SPEC §15](stxt-core-ref#s15).
 		* **La validación es una capa aparte y opcional**, con un modelo cerrado que detecta un
 		  nombre mal escrito en lugar de aceptarlo en silencio.
 
@@ -53,7 +53,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 	Content >>
 		Extensión `.stxt`; media type `text/stxt`, y `text/plain` como alternativa compatible.
 		Codificación UTF-8 sin BOM, finales de línea `LF` (se acepta `CRLF`).
-		Ver [STXT-SPEC](stxt-core-ref) §3 y §13.
+		Ver [STXT-SPEC §3](stxt-core-ref#s3) y [§13](stxt-core-ref#s13).
 
 	Subheader: Escribir documentos
 
@@ -69,7 +69,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		El ancho fijo es deliberado: el nivel de una línea se calcula mirando solo esa línea, y la
 		jerarquía se ve igual en cualquier editor. Quien prefiera una indentación más compacta
 		usa tabuladores y ajusta el ancho de tabulador de su editor.
-		Ver [STXT-SPEC](stxt-core-ref) §8.1.
+		Ver [STXT-SPEC §8.1](stxt-core-ref#s8-1).
 
 	Subsubheader: ¿Importan las mayúsculas, los acentos y los espacios en los nombres?
 
@@ -83,7 +83,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		* `Año` y `ano` son nodos distintos, como es de esperar.
 
 		Los **namespaces** son más estrictos: solo ASCII `[a-z0-9]` y puntos, al menos `a.b`, y se
-		pasan a minúsculas. Ver [STXT-SPEC](stxt-core-ref) §4.3 y §7.
+		pasan a minúsculas. Ver [STXT-SPEC §4.3](stxt-core-ref#s4-3) y [§7](stxt-core-ref#s7).
 
 	Subsubheader: ¿Cómo escribo un valor con dos puntos o almohadilla dentro?
 
@@ -105,7 +105,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		herramientas los devuelven en orden. Es lo que permite parsear en *streaming*
 		ficheros grandes: cada raíz se emite completa en cuanto empieza la siguiente.
 		Los namespaces **no** se heredan lateralmente entre raíces: cada una declara el suyo.
-		Ver [STXT-SPEC](stxt-core-ref) §8.5.
+		Ver [STXT-SPEC §8.5](stxt-core-ref#s8-5).
 
 	Subsubheader: ¿Y los comentarios?
 
@@ -114,7 +114,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		indentación: ni un comentario ni una línea vacía pueden provocar un error de nivel.
 		Dentro de un bloque `>>`, una línea con `#` **más indentada** que el nodo es texto del
 		bloque; una **menos o igual de indentada** es un comentario y no cierra el bloque.
-		Ver [STXT-SPEC](stxt-core-ref) §9.
+		Ver [STXT-SPEC §9](stxt-core-ref#s9).
 
 	Subsubheader: ¿Qué pasa con los comentarios al formatear?
 
@@ -181,7 +181,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		Que el validador se queja (`CHILD_NOT_DECLARED`). El modelo de contenido es **cerrado**:
 		un nodo solo admite los hijos que su definición declara, y si no declara ninguno, no
 		admite ninguno. Es la razón de ser de validar: fallar de forma ruidosa en vez de aceptar
-		en silencio. Ver [STXT-SCHEMA-SPEC](stxt-schema-ref) §6.
+		en silencio. Ver [STXT-SCHEMA-SPEC §6](stxt-schema-ref#s6).
 
 	Subsubheader: ¿Se valida el orden de los hijos?
 
@@ -190,7 +190,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		mismos hijos en distinto orden validan igual. El orden **se conserva** en el árbol, así
 		que una aplicación que le dé significado lo obtiene del árbol, no del validador.
 		Tampoco hay expresiones regulares, valores por defecto ni reglas condicionales entre
-		campos: son no-objetivos declarados. Ver [STXT-SCHEMA-SPEC](stxt-schema-ref) §11.
+		campos: son no-objetivos declarados. Ver [STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11).
 
 	Subsubheader: ¿Cómo evoluciono un esquema sin romper documentos?
 

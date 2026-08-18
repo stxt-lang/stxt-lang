@@ -2,7 +2,7 @@ Document (dev.stxt.website): The working environment
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-16
+		Last modif: 2026-08-18
 
 	Header: The working environment
 
@@ -46,7 +46,7 @@ Document (dev.stxt.website): The working environment
 		Inside `.stxt/` **every** `.stxt` file is loaded, recursively, and neither file names
 		nor subdirectories mean anything: they are just organisation. What does matter is that
 		each file is a definition (`@stxt.schema` or `@stxt.template`); anything else inside
-		`.stxt/` is a resolution error. See [STXT-DISCOVERY-SPEC](stxt-discovery-ref) §3 and §4.
+		`.stxt/` is a resolution error. See [STXT-DISCOVERY-SPEC §3](stxt-discovery-ref#s3) and [§4](stxt-discovery-ref#s4).
 
 	Subheader: 2. Writing the grammar
 
@@ -223,7 +223,7 @@ Document (dev.stxt.website): The working environment
 	Content >>
 		`stxt validate` reports that same error (line `0`, naming the offending file) and
 		fails: the tool never silently picks one of the two. See
-		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) §5 and §8.
+		[STXT-DISCOVERY-SPEC §5](stxt-discovery-ref#s5) and [§8](stxt-discovery-ref#s8).
 
 	Subheader: 6. Continuous integration and `STXT_PATH`
 
@@ -246,7 +246,7 @@ Document (dev.stxt.website): The working environment
 
 		A `STXT_PATH` that is defined but empty leaves the chain empty: documents are parsed
 		with no grammar validation. And an entry that does not exist simply contributes
-		nothing; it is not an error. See [STXT-DISCOVERY-SPEC](stxt-discovery-ref) §6.
+		nothing; it is not an error. See [STXT-DISCOVERY-SPEC §6](stxt-discovery-ref#s6).
 
 	Subheader: 7. Without installing anything: the playground
 

@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-08-16
+		Last modif: 2026-08-18
 		
 	Header: @STXT@ Tutorial
 	
@@ -28,6 +28,10 @@ Document (dev.stxt.website): STXT Tutorial
 		
 		* `@stxt.schema` — validación formal y exhaustiva.
 		* `@stxt.template` — validación mediante plantillas de estructura, orientada a prototipos.
+
+		La referencia completa de la sintaxis es [STXT-SPEC](stxt-core-ref); las de las dos capas de
+		validación, [STXT-SCHEMA-SPEC](stxt-schema-ref) y [STXT-TEMPLATE-SPEC](stxt-template-ref). Este tutorial
+		enlaza a la sección concreta de cada una a medida que avanza.
 	
 	Subheader: 2. Herramientas
 
@@ -95,6 +99,9 @@ Document (dev.stxt.website): STXT Tutorial
 		* `Summary >>` y `Content >>` son bloques de texto literal: su contenido no se interpreta como @STXT@.
 		* No existe ningún tipo implícito: todo es texto mientras no se valide.
 
+		Referencia: [STXT-SPEC §4](stxt-core-ref#s4) (el nodo), [§5](stxt-core-ref#s5) (nodos INLINE) y
+		[§6](stxt-core-ref#s6) (bloques de texto).
+
 	Subheader: 4. Indentación y niveles
 
 	Assert >>
@@ -135,6 +142,9 @@ Document (dev.stxt.website): STXT Tutorial
 		línea**, sin arrastrar contexto ni mantener una pila de indentaciones. Por eso
 		parsear @STXT@ es trivial.
 
+		Referencia: [STXT-SPEC §8](stxt-core-ref#s8) (indentación y jerarquía) y [§8.3](stxt-core-ref#s8-3)
+		(errores de nivel).
+
 	Subsubheader: 4.1 Indentación dentro de bloques `>>`
 
 	Content >>
@@ -153,6 +163,9 @@ Document (dev.stxt.website): STXT Tutorial
 		El bloque termina en la primera línea no vacía cuya indentación sea **menor o
 		igual** que la del nodo `>>`. Las líneas vacías no lo cierran, y los comentarios
 		son transparentes: ni lo cierran ni forman parte de su contenido.
+
+		Referencia: [STXT-SPEC §6.1](stxt-core-ref#s6-1) (reglas de los bloques) y [§10.2](stxt-core-ref#s10-2)
+		(líneas dentro de bloques).
 
 	Subheader: 5. Nombres de nodo
 
@@ -191,6 +204,9 @@ Document (dev.stxt.website): STXT Tutorial
 		Los **namespaces** son la excepción: siguen restringidos a ASCII `[a-z0-9]`
 		(ver sección 7).
 
+		Referencia: [STXT-SPEC §4.2](stxt-core-ref#s4-2) (caracteres permitidos) y [§4.3](stxt-core-ref#s4-3)
+		(nombre canónico).
+
 	Subheader: 6. Comentarios
 
 	Content >>
@@ -215,6 +231,9 @@ Document (dev.stxt.website): STXT Tutorial
 		  Por estilo, se recomienda alinearlo con el nodo que describe.
 		* Dentro de un bloque de texto `>>` todo es literal: un `#` ahí es **texto**,
 		  no un comentario.
+
+		Referencia: [STXT-SPEC §9](stxt-core-ref#s9), con el detalle de los comentarios dentro de
+		bloques `>>` en [§9.1](stxt-core-ref#s9-1).
 
 	Subheader: 7. Uso de namespaces
 	
@@ -257,6 +276,9 @@ Document (dev.stxt.website): STXT Tutorial
 		* Un nodo puede redefinir su namespace si es necesario.
 		* El lenguaje @STXT@ **no valida** el namespace, sólo define las reglas de 
 		  propagación.
+
+		Referencia: [STXT-SPEC §7](stxt-core-ref#s7) (namespaces) y [§7.2](stxt-core-ref#s7-2) (herencia y
+		nodos raíz).
 		
 	Subsubheader: 7.1 Namespaces especiales con `@`
 	Content >>
@@ -279,6 +301,9 @@ Document (dev.stxt.website): STXT Tutorial
 		Una vez tiene el namespace, se usa un esquema (`@stxt.schema`)
 		o template (`@stxt.template`) para validarlo. Las validaciones son extensiones
 		al lenguaje base, que los parsers pueden o no implementar.
+
+		Referencia: [STXT-SPEC §17](stxt-core-ref#s17) y [§18](stxt-core-ref#s18), los apéndices sobre la
+		interacción con `@stxt.schema` y `@stxt.template`.
 		
 	Assert >>
 		Para validar un documento **es necesario que pertenezca a un namespace**.\\
@@ -319,6 +344,9 @@ Document (dev.stxt.website): STXT Tutorial
 		* `Published` debe tener formato `DATE`.
 		* `Summary` y `Content` son bloques de texto (`TEXT`).
 		* Al menos debe haber un `Chapter`.
+
+		Referencia: [STXT-TEMPLATE-SPEC §4](stxt-template-ref#s4) (estructura de un template) y
+		[§6](stxt-template-ref#s6) (el bloque `Structure`).
 		
 	Subsubheader: 8.2 Formas permitidas para la numeración
 	
@@ -333,6 +361,8 @@ Document (dev.stxt.website): STXT Tutorial
 		| `num+`     | `num` o más (`num..∞`).      |
 		| `num-`     | Hasta `num` (`0..num`).      |
 		| `min,max`  | Entre `min` y `max`.         |
+
+		Referencia: [STXT-TEMPLATE-SPEC §7](stxt-template-ref#s7) (cardinalidades).
 	
 	Subsubheader: 8.3 Tipos disponibles
 
@@ -358,7 +388,8 @@ Document (dev.stxt.website): STXT Tutorial
 		Sólo `INLINE` y `GROUP` admiten hijos: en cuanto un tipo valida un dato concreto
 		(`NUMBER`, `DATE`, `ENUM`…), ese nodo **es** un dato, y un dato es una hoja.
 
-		La lista completa de tipos está en *STXT-SCHEMA-SPEC*.
+		La lista completa de tipos está en [STXT-SCHEMA-SPEC §9](stxt-schema-ref#s9); cómo se escriben
+		en un template, en [STXT-TEMPLATE-SPEC §8](stxt-template-ref#s8) y [§9](stxt-template-ref#s9) (`ENUM`).
 
 	Subsubheader: 8.4 Aplicación del template
 
@@ -437,6 +468,11 @@ Document (dev.stxt.website): STXT Tutorial
 		* Un validador **DEBERÍA** establecer un criterio de prioridad si
 		  existen esquemas y templates de forma simultánea para un mismo namespace. **Sólo puede
 		  haber uno activo**.
+
+		Referencia: [STXT-SCHEMA-SPEC §7](stxt-schema-ref#s7) (`Node`), [§8](stxt-schema-ref#s8) (`Children`) y
+		[§10](stxt-schema-ref#s10) (cardinalidades); la equivalencia con el template, en
+		[STXT-TEMPLATE-SPEC §13](stxt-template-ref#s13); y qué definición gana cuando hay varias, en
+		[STXT-DISCOVERY-SPEC §5](stxt-discovery-ref#s5).
 		
 	Subheader: 10. Documento final validable
 	
@@ -479,4 +515,7 @@ Document (dev.stxt.website): STXT Tutorial
 		* Usar esquemas cuando se necesite una descripción más formal de los campos.
 		* Marcar como `MARKDOWN` el texto pensado para renderizarse, y como `TEXT` el que
 		  debe leerse tal cual.
+
+		Las normas de estilo del propio lenguaje están en [STXT-SPEC §4.4](stxt-core-ref#s4-4) y
+		[§9.2](stxt-core-ref#s9-2).
 		

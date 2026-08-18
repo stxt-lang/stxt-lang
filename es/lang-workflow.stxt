@@ -2,7 +2,7 @@ Document (dev.stxt.website): El entorno de trabajo
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-16
+		Last modif: 2026-08-18
 
 	Header: El entorno de trabajo
 
@@ -47,7 +47,7 @@ Document (dev.stxt.website): El entorno de trabajo
 		nombres de fichero ni los subdirectorios significan nada: son solo organización. Lo
 		que sí importa es que cada fichero sea una definición (`@stxt.schema` o
 		`@stxt.template`); cualquier otra cosa dentro de `.stxt/` es un error de resolución.
-		Ver [STXT-DISCOVERY-SPEC](stxt-discovery-ref) §3 y §4.
+		Ver [STXT-DISCOVERY-SPEC §3](stxt-discovery-ref#s3) y [§4](stxt-discovery-ref#s4).
 
 	Subheader: 2. Escribir la gramática
 
@@ -224,7 +224,7 @@ Document (dev.stxt.website): El entorno de trabajo
 	Content >>
 		`stxt validate` reporta ese mismo error (línea `0`, con el fichero causante) y falla:
 		la herramienta nunca elige una de las dos en silencio. Ver
-		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) §5 y §8.
+		[STXT-DISCOVERY-SPEC §5](stxt-discovery-ref#s5) y [§8](stxt-discovery-ref#s8).
 
 	Subheader: 6. Integración continua y `STXT_PATH`
 
@@ -247,7 +247,7 @@ Document (dev.stxt.website): El entorno de trabajo
 
 		Una `STXT_PATH` definida pero vacía deja la cadena vacía: los documentos se parsean
 		sin validación de gramática. Y una entrada que no existe simplemente no aporta nada,
-		no es un error. Ver [STXT-DISCOVERY-SPEC](stxt-discovery-ref) §6.
+		no es un error. Ver [STXT-DISCOVERY-SPEC §6](stxt-discovery-ref#s6).
 
 	Subheader: 7. Sin instalar nada: el playground
 

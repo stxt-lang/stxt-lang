@@ -487,7 +487,7 @@ Document (dev.stxt.website): La línea de comandos
 		con varias definiciones se parte en varios.
 
 		Esa nomenclatura es una convención de la CLI, no del lenguaje:
-		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) no da significado ni a los nombres de
+		[STXT-DISCOVERY-SPEC §3](stxt-discovery-ref#s3) no da significado ni a los nombres de
 		fichero ni a los subdirectorios de un nivel, así que a mano se puede colocar la
 		gramática donde se quiera. La convención vale porque hace evidente, con un `ls`,
 		qué namespaces define cada nivel.
@@ -536,7 +536,7 @@ Document (dev.stxt.website): La línea de comandos
 	Content >>
 		Los tres comandos que aplican gramáticas —`validate`, `schemas` e `install`— usan la
 		**misma cadena de resolución** que la extensión de VS Code y las bibliotecas, la
-		de [STXT-DISCOVERY-SPEC](stxt-discovery-ref): para un documento, todos los
+		de [STXT-DISCOVERY-SPEC §4](stxt-discovery-ref#s4): para un documento, todos los
 		directorios `.stxt/` desde su carpeta hacia arriba, después `~/.stxt` y por último
 		`/etc/stxt`. Dentro de cada nivel se cargan **todos** los ficheros `.stxt`,
 		recursivamente, y cada uno debe ser una definición. La precedencia es **por
