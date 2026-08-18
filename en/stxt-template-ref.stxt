@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-02
+		Last modif: 2026-08-18
 		
 	Header: @STXT@ Templates (@stxt.template)
 	
@@ -24,7 +24,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* If both exist (schema and template) for the same target namespace,
 		  a conforming implementation **SHOULD** establish a consistent prioritization criterion.
 		  When definitions are discovered on the file system, that criterion is fixed by
-		  *STXT-DISCOVERY-SPEC*: the definition from the nearest level wins, and two
+		  [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref): the definition from the nearest level wins, and two
 		  definitions at the same level are an error.
 		* For a specific validation, an implementation **MUST** use a single effective semantic source: either schema or template.
 		* STXT core **MUST NOT** impose semantics: templates are an optional layer, after parsing the @STXT@ document.
@@ -34,7 +34,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Content >>
 		The keywords **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119**.
 		
-		Terms such as *node*, *indentation*, *namespace*, *inline*, and *`>>` block* retain their meaning in *STXT-SPEC*.
+		Terms such as *node*, *indentation*, *namespace*, *inline*, and *`>>` block* retain their meaning in [*STXT-SPEC*](stxt-core-ref).
 		
 		Additional definitions:
 		
@@ -77,9 +77,9 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		Rules:
 		
 		* The root node `Template` **MUST** belong to the namespace `@stxt.template`.
-		* `<target_namespace>` **MUST** be a valid namespace according to *STXT-SPEC* (namespaces section).
-		* The template document **MAY** include at most one `Description` node, with per-node descriptions (section 12).
-		* There can only be **one effective template** per target namespace in a specific validation (see section 5).
+		* `<target_namespace>` **MUST** be a valid namespace according to [*STXT-SPEC*](stxt-core-ref) (namespaces section).
+		* The template document **MAY** include at most one `Description` node, with per-node descriptions ([section 12](#s12)).
+		* There can only be **one effective template** per target namespace in a specific validation (see [section 5](#s5)).
 		
 	Subheader: 5. One template per target namespace
 	
@@ -101,7 +101,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		  but rather an expected structure**.
 		* The indentation rules of the base @STXT@ document apply to the template document outside the block.
 		* The content of `Structure >>` is interpreted through the template grammar defined in this document.
-		* The hierarchy within `Structure >>` **MUST** be built with the same consecutive indentation model as in *STXT-SPEC*.
+		* The hierarchy within `Structure >>` **MUST** be built with the same consecutive indentation model as in [*STXT-SPEC*](stxt-core-ref).
 		
 	Content >>
 		**Top level and defined nodes.** The top-level lines of `Structure` do **not** have
@@ -127,7 +127,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		
 		where:
 		
-		* `<NodeName>` is the node name (human text; normalized according to STXT-SPEC for comparison).
+		* `<NodeName>` is the node name (human text; normalized according to [*STXT-SPEC*](stxt-core-ref), [section 4.3](stxt-core-ref#s4-3), for comparison).
 		* `<NamespaceOverride>` is optional and has the form `(<namespace>)` or `(@special.namespace)` and defines the **effective** namespace of that template node.
 		* `":"` is mandatory. It is not required by the core (the content of a `>>` block is opaque text to it), but by the **template grammar**, for visual consistency with @STXT@ syntax.
 		* `<RuleSpec>` is optional and includes, in this logical order:
@@ -148,8 +148,8 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Content >>
 		Notes:
 		
-		* If `<RuleSpec>` is omitted entirely, default cardinality and default type are assumed (sections 7 and 8).
-		* A template node may have children if its effective type allows them. The default type `INLINE` allows children. Types that forbid children are defined in section 8.
+		* If `<RuleSpec>` is omitted entirely, default cardinality and default type are assumed ([sections 7](#s7) and [8](#s8)).
+		* A template node may have children if its effective type allows them. The default type `INLINE` allows children. Types that forbid children are defined in [section 8](#s8).
 		* A reference `@Node Name` **MUST NOT** be combined with an explicit type on the same line.
 		
 	Subsubheader: 6.3 Parsing rules for `Structure >>`
@@ -157,16 +157,16 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Content >>
 		A template parser **MUST**:
 		
-		1. Read the `Structure >>` block as a sequence of lines already canonicalized by @STXT@ core: block level removed and right trim per line (*STXT-SPEC*, section 10.2).
+		1. Read the `Structure >>` block as a sequence of lines already canonicalized by @STXT@ core: block level removed and right trim per line ([*STXT-SPEC*](stxt-core-ref), [section 10.2](stxt-core-ref#s10-2)).
 		2. Ignore empty lines.
-		3. Compute hierarchy by indentation applying the rules of *STXT-SPEC* (section 8): on each line, only tabs (1 tab = 1 level) or only spaces in multiples of 4, **with no mixing on the same line**, and with consecutive levels, without jumps.
+		3. Compute hierarchy by indentation applying the rules of [*STXT-SPEC*](stxt-core-ref) ([section 8](stxt-core-ref#s8)): on each line, only tabs (1 tab = 1 level) or only spaces in multiples of 4, **with no mixing on the same line**, and with consecutive levels, without jumps.
 		4. For each line, parse:
 		   * Node name + optional namespace `(ns)` if present.
 		   * The mandatory `:` character.
 		   * The optional rule specification (`RuleSpec`).
 		
 		5. Resolve the effective namespace of each line.
-		6. Resolve `@Node Name` references according to section 6.4.
+		6. Resolve `@Node Name` references according to [section 6.4](#s6-4).
 		
 		A template parser **MUST** fail if a line does not contain `:`.
 	
@@ -186,7 +186,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* A `@Node Name` reference **MAY** override cardinality, but **MUST NOT** redefine type, `ENUM` values, or children.
 		* The canonical name of the line and the canonical name of the `@Node Name` reference **MUST** match. A reference with a different name from its line **MUST** cause a template error (there is no renaming: `@` marks "reappearance of the same node", not "pointer to another").
 		* Nodes from other namespaces **MUST NOT** be defined locally within the current template.
-		* An external node **MAY** appear multiple times, but that line **MUST NOT** declare anything other than the cardinality (see section 10).
+		* An external node **MAY** appear multiple times, but that line **MUST NOT** declare anything other than the cardinality (see [section 10](#s10)).
 		
 	Content >>
 		**Recursion.** A `@Node Name` reference **MUST** point to:
@@ -234,7 +234,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Content >>
 		Cardinality applies **per instance of the parent node**, counting only direct children that match by:
 		
-		* Canonical node name (according to STXT-SPEC).
+		* Canonical node name (according to [*STXT-SPEC*](stxt-core-ref), [section 4.3](stxt-core-ref#s4-3)).
 		* Effective namespace of the node.
 		
 		Cardinality is expressed as an optional token in parentheses: `( ... )`.
@@ -291,7 +291,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* The explicit type **MUST** match exactly one of the types supported by the implementation.
 		* The type **MUST** be written in uppercase (`DATE`, not `date`): the comparison is exact and **CASE-SENSITIVE**.
 		* If a line uses a `@Node Name` reference, it **MUST NOT** also declare an explicit type.
-		* The semantic rules of types `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `ENUM`, `NUMBER`, `DATE`, etc. **MUST** be consistent with those defined in *STXT-SCHEMA-SPEC*.
+		* The semantic rules of types `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `ENUM`, `NUMBER`, `DATE`, etc. **MUST** be consistent with those defined in [*STXT-SCHEMA-SPEC*](stxt-schema-ref).
 	
 	Subsubheader: 8.1 Default type
 	
@@ -303,7 +303,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Subsubheader: 8.2 Compatibility with children
 	
 	Content >>
-		The compatibility rule with children is the same as in *STXT-SCHEMA-SPEC* (section 9):
+		The compatibility rule with children is the same as in [*STXT-SCHEMA-SPEC*](stxt-schema-ref) ([section 9](stxt-schema-ref#s9)):
 		
 		**Only types `INLINE` and `GROUP` allow children. All others are leaves.**
 		
@@ -316,9 +316,9 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Subsubheader: 8.3 Type set
 	
 	Content >>
-		The type set is that of *STXT-SCHEMA-SPEC*, with the same support levels:
+		The type set is that of [*STXT-SCHEMA-SPEC*](stxt-schema-ref), with the same support levels:
 
-		* A template implementation **MUST** accept all the types defined in *STXT-SCHEMA-SPEC* (section 9, including `MARKDOWN`).
+		* A template implementation **MUST** accept all the types defined in [*STXT-SCHEMA-SPEC*](stxt-schema-ref) ([section 9](stxt-schema-ref#s9), including `MARKDOWN`).
 		* The validation requirement of each group is the same as there: it **MUST** validate the
 		  structural and basic content types, **SHOULD** validate the extended ones, and **MAY**
 		  validate the binary ones.
@@ -403,10 +403,10 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* `Node Name >>` with the description in its text block — block entry, for multi-line descriptions.
 
 		The correspondence between an entry and its `Structure` node is made by **canonical name**
-		(*STXT-SPEC*, section 4.3). The order of the entries is free: it does not have to follow the order of `Structure`.
+		([*STXT-SPEC*](stxt-core-ref), [section 4.3](stxt-core-ref#s4-3)). The order of the entries is free: it does not have to follow the order of `Structure`.
 
 		It is the same information that a schema expresses with the `Description` node of each `Node`
-		(*STXT-SCHEMA-SPEC*, section 7.1); the template groups it in a single block because its
+		([*STXT-SCHEMA-SPEC*](stxt-schema-ref), [section 7.1](stxt-schema-ref#s7-1)); the template groups it in a single block because its
 		line syntax has no room for descriptions. Editors **MAY** use these
 		descriptions, for example, as contextual help (hover) over the nodes of a document.
 
@@ -445,7 +445,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* `ENUM [a,b]` is translated to `Values/Value`.
 		* A `@Node Name` reference reuses the definition already generated for that local node and only modifies the cardinality of the corresponding `Child`. Recursion (self-reference or open ancestor) is translated to a `Child` that points to the same `Node`.
 		* A cross-namespace node only generates a `Child` reference; its definition corresponds to the template or schema of that other namespace.
-		* Each `Description` entry (section 12) is translated to the `Description` node of the corresponding `Node` in the compiled schema.
+		* Each `Description` entry ([section 12](#s12)) is translated to the `Description` node of the corresponding `Node` in the compiled schema.
 
 		Rules for cardinality translation:
 		
@@ -462,7 +462,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 	Content >>
 		A template is invalid if any of these conditions occurs:
 		
-		1. The internal indentation of `Structure >>` does not comply with the indentation rules of *STXT-SPEC*, section 8 (a mix of tabs and spaces on the same line, non-consecutive levels, spaces that are not multiples of 4, etc.).
+		1. The internal indentation of `Structure >>` does not comply with the indentation rules of [*STXT-SPEC*](stxt-core-ref), [section 8](stxt-core-ref#s8) (a mix of tabs and spaces on the same line, non-consecutive levels, spaces that are not multiples of 4, etc.).
 		2. The document does not have root `Template (@stxt.template): <target_namespace>`.
 		3. `Structure >>` is missing or `Structure` is not a `>>` block.
 		4. A non-empty line within `Structure` does not contain `:`.
@@ -485,8 +485,8 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 
 	Content >>
 		The validation of a **document** against a template is, by definition, the validation
-		against the equivalent compiled schema (section 13): the invalidity conditions of a
-		document are those defined in *STXT-SCHEMA-SPEC*, section 13.
+		against the equivalent compiled schema ([section 13](#s13)): the invalidity conditions of a
+		document are those defined in [*STXT-SCHEMA-SPEC*](stxt-schema-ref), [section 13](stxt-schema-ref#s13).
 		
 	Subheader: 15. Conformance
 	
@@ -497,7 +497,7 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* It applies the rules of cardinality, types, `@Node Name` references (including recursion through open ancestor), and `ENUM`.
 		* It applies the child compatibility rules by type (only `INLINE` and `GROUP` allow children).
 		* It validates cardinalities independently of order.
-		* It rejects invalid templates according to section 14.
+		* It rejects invalid templates according to [section 14](#s14).
 		* It defines a stable template selection criterion (if multiple sources exist),
 		  without applying more than one simultaneously per target namespace.
 		
@@ -519,9 +519,9 @@ Document (dev.stxt.website): STXT Templates (@stxt.template)
 		* `Structure` is `BLOCK` because in templates it must be a `>>` block.
 		* `Description` is optional and may be `TEXT`: for the core and for this meta-template its
 		  content is opaque text, but it is interpreted with the per-node description grammar
-		  of section 12, just as the content of `Structure` is interpreted with the template grammar.
+		  of [section 12](#s12), just as the content of `Structure` is interpreted with the template grammar.
 		* The `Template` line uses default cardinality (`*`): since the top level of `Structure`
-		  has no special root semantics (section 6), no document cardinality is imposed on it.
+		  has no special root semantics ([section 6](#s6)), no document cardinality is imposed on it.
 		
 	Subheader: 17. Normative examples
 

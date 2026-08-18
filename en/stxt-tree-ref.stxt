@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Tree — Canonical document representation
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-09
+		Last modif: 2026-08-18
 
 	Header: @STXT@ Canonical tree
 
@@ -21,7 +21,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		position of nodes, or other presentation choices. Rewriting a file while retaining
 		those elements requires a source-analysis layer separate from the tree.
 
-		*STXT-SPEC* defines document syntax and the meaning of names, values, blocks,
+		[*STXT-SPEC*](stxt-core-ref) defines document syntax and the meaning of names, values, blocks,
 		namespaces and indentation. Schemas, templates and definition discovery do not alter
 		this tree.
 
@@ -32,9 +32,9 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		**"MAY"** in this document are to be interpreted as described in **RFC 2119**.
 
 		The terms *node*, *INLINE*, *BLOCK*, *canonical name*, *effective namespace* and
-		*document* retain the meaning defined by *STXT-SPEC*.
+		*document* retain the meaning defined by [*STXT-SPEC*](stxt-core-ref).
 
-		In this document, a **tree representation** is a JSON value that meets sections 3 to
+		In this document, a **tree representation** is a JSON value that meets [sections 3](#s3) to
 		6. An **emitter** is an implementation that transforms parsed @STXT@ nodes into that
 		representation.
 
@@ -61,8 +61,8 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 
 		| Member | JSON type | Meaning |
 		|--------|-----------|---------|
-		| `name` | string | Logical node name after the trimming and space compaction of *STXT-SPEC* section 4.1. It retains case, diacritics and separators from the logical name. |
-		| `canonicalName` | string | Canonical name calculated under *STXT-SPEC* section 4.3: NFC, Unicode lower case, and separators compacted to `-`. |
+		| `name` | string | Logical node name after the trimming and space compaction of [*STXT-SPEC*](stxt-core-ref) [section 4.1](stxt-core-ref#s4-1). It retains case, diacritics and separators from the logical name. |
+		| `canonicalName` | string | Canonical name calculated under [*STXT-SPEC*](stxt-core-ref) [section 4.3](stxt-core-ref#s4-3): NFC, Unicode lower case, and separators compacted to `-`. |
 		| `namespace` | string | Node's **effective** namespace, already inherited and lower-cased. It is `""` when the node has no effective namespace. |
 		| `form` | string | Exactly `"inline"` for a `:` node or `"block"` for a `>>` node. |
 		| `children` | array | Only for `inline` nodes: direct-child representations, in order of appearance. It always exists for this form, even when empty. |
@@ -83,18 +83,18 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 
 	Content >>
 		The `value` member holds the INLINE value after left and right trimming under
-		*STXT-SPEC* section 10.1. No further conversion is applied: it remains text even
+		[*STXT-SPEC*](stxt-core-ref) [section 10.1](stxt-core-ref#s10-1). No further conversion is applied: it remains text even
 		when a schema may validate it as a date, number or another type.
 
 		The `lines` member retains the logical block lines exactly as defined by
-		*STXT-SPEC* sections 10.2 and 10.3. Every element is a string, including an empty
+		[*STXT-SPEC*](stxt-core-ref) [sections 10.2](stxt-core-ref#s10-2) and [10.3](stxt-core-ref#s10-3). Every element is a string, including an empty
 		line represented by `""`. The array is not replaced with a string joined by `\n`:
 		that join would lose the distinction between a block with no lines (`[]`) and a block
 		containing one empty line (`[""]`).
 
 		Comments and blank lines outside a block create neither nodes nor lines. Inside a
 		block, a line beginning with `#` appears in `lines` only when its indentation makes
-		it literal content, as defined by *STXT-SPEC* section 9.1.
+		it literal content, as defined by [*STXT-SPEC*](stxt-core-ref) [section 9.1](stxt-core-ref#s9-1).
 
 	Subheader: 6. Identity and excluded data
 
@@ -148,10 +148,10 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		An @STXT@ tree emitter is conforming if, for every valid document:
 
 		* It emits an array containing every root node, preserving their order.
-		* It emits all and only the members required by section 4.
-		* It applies the normalization and namespace inheritance of *STXT-SPEC* before emitting.
+		* It emits all and only the members required by [section 4](#s4).
+		* It applies the normalization and namespace inheritance of [*STXT-SPEC*](stxt-core-ref) before emitting.
 		* It retains every logical block line, including trailing blank lines.
-		* It does not emit source metadata or derived values excluded by section 6.
+		* It does not emit source metadata or derived values excluded by [section 6](#s6).
 
 		The `conformance/tree/` directory in the specification source contains normative pairs
 		of `.stxt` documents and `.json` representations. Every implementation claiming

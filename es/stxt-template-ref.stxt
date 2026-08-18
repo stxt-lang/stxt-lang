@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-02
+		Last modif: 2026-08-18
 		
 	Header: @STXT@ Plantillas (@stxt.template)
 	
@@ -24,7 +24,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* Si existen ambos (schema y template) para el mismo namespace objetivo,
 		  una implementación conforme **DEBERÍA** establecer un criterio consistente de priorización.
 		  Cuando las definiciones se descubren en el sistema de ficheros, ese criterio queda
-		  fijado por *STXT-DISCOVERY-SPEC*: gana la definición del nivel más cercano, y dos
+		  fijado por [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref): gana la definición del nivel más cercano, y dos
 		  definiciones en el mismo nivel son un error.
 		* Para una validación concreta, una implementación **DEBE** usar una única fuente semántica efectiva: o bien schema, o bien template.
 		* STXT core **NO DEBE** imponer semántica: los templates son una capa opcional, posterior al parseo del documento @STXT@.
@@ -34,7 +34,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Content >>
 		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y **"PUEDE"** deben interpretarse según **RFC 2119**.
 		
-		Términos como *nodo*, *indentación*, *namespace*, *inline* y *bloque `>>`* mantienen su significado en *STXT-SPEC*.
+		Términos como *nodo*, *indentación*, *namespace*, *inline* y *bloque `>>`* mantienen su significado en [*STXT-SPEC*](stxt-core-ref).
 		
 		Definiciones adicionales:
 		
@@ -77,9 +77,9 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		Reglas:
 		
 		* El nodo raíz `Template` **DEBE** pertenecer al namespace `@stxt.template`.
-		* `<namespace_objetivo>` **DEBE** ser un namespace válido según *STXT-SPEC* (sección de namespaces).
-		* El documento template **PUEDE** incluir como máximo un nodo `Description`, con descripciones por nodo (sección 12).
-		* Sólo puede existir **un template efectivo** por namespace objetivo en una validación concreta (ver sección 5).
+		* `<namespace_objetivo>` **DEBE** ser un namespace válido según [*STXT-SPEC*](stxt-core-ref) ([sección de namespaces](stxt-core-ref#s7)).
+		* El documento template **PUEDE** incluir como máximo un nodo `Description`, con descripciones por nodo ([sección 12](#s12)).
+		* Sólo puede existir **un template efectivo** por namespace objetivo en una validación concreta (ver [sección 5](#s5)).
 		
 	Subheader: 5. Un template por namespace objetivo
 	
@@ -101,7 +101,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		  un documento de datos, sino una estructura esperada**.
 		* Las reglas de indentación del documento @STXT@ base aplican al documento template fuera del bloque.
 		* El contenido de `Structure >>` se interpreta mediante la gramática de templates definida en este documento.
-		* La jerarquía dentro de `Structure >>` **DEBE** construirse con el mismo modelo de indentación consecutiva que en *STXT-SPEC*.
+		* La jerarquía dentro de `Structure >>` **DEBE** construirse con el mismo modelo de indentación consecutiva que en [*STXT-SPEC*](stxt-core-ref).
 		
 	Content >>
 		**Nivel superior y nodos definidos.** Las líneas de nivel superior de `Structure` **no** tienen
@@ -127,7 +127,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		
 		donde:
 		
-		* `<NodeName>` es el nombre del nodo (texto humano; se normaliza según STXT-SPEC para comparación).
+		* `<NodeName>` es el nombre del nodo (texto humano; se normaliza según [*STXT-SPEC*](stxt-core-ref), [sección 4.3](stxt-core-ref#s4-3), para comparación).
 		* `<NamespaceOverride>` es opcional y tiene la forma `(<namespace>)` o `(@namespace.especial)` y define el namespace **efectivo** de ese nodo plantilla.
 		* `":"` es obligatorio. No lo exige el core (el contenido de un bloque `>>` es texto opaco para él), sino la **gramática de templates**, por coherencia visual con la sintaxis @STXT@.
 		* `<RuleSpec>` es opcional e incluye, en este orden lógico:
@@ -148,8 +148,8 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Content >>
 		Notas:
 		
-		* Si `<RuleSpec>` se omite por completo, se asume cardinalidad por defecto y tipo por defecto (sección 7 y 8).
-		* Un nodo plantilla puede tener hijos si su tipo efectivo los admite. El tipo por defecto `INLINE` admite hijos. Los tipos que prohíben hijos se definen en la sección 8.
+		* Si `<RuleSpec>` se omite por completo, se asume cardinalidad por defecto y tipo por defecto ([sección 7](#s7) y [8](#s8)).
+		* Un nodo plantilla puede tener hijos si su tipo efectivo los admite. El tipo por defecto `INLINE` admite hijos. Los tipos que prohíben hijos se definen en la [sección 8](#s8).
 		* Una referencia `@Nombre Nodo` **NO DEBE** combinarse con un tipo explícito en la misma línea.
 		
 	Subsubheader: 6.3 Reglas de parsing del `Structure >>`
@@ -157,16 +157,16 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Content >>
 		Un parser de templates **DEBE**:
 		
-		1. Leer el bloque `Structure >>` como una secuencia de líneas ya canonicalizadas por @STXT@ core: nivel de bloque eliminado y trim derecha por línea (*STXT-SPEC*, sección 10.2).
+		1. Leer el bloque `Structure >>` como una secuencia de líneas ya canonicalizadas por @STXT@ core: nivel de bloque eliminado y trim derecha por línea ([*STXT-SPEC*](stxt-core-ref), [sección 10.2](stxt-core-ref#s10-2)).
 		2. Ignorar líneas vacías.
-		3. Calcular jerarquía por indentación aplicando las reglas de *STXT-SPEC* (sección 8): en cada línea, solo tabs (1 tab = 1 nivel) o solo espacios en múltiplos de 4, **sin mezcla en una misma línea**, y con niveles consecutivos, sin saltos.
+		3. Calcular jerarquía por indentación aplicando las reglas de [*STXT-SPEC*](stxt-core-ref) ([sección 8](stxt-core-ref#s8)): en cada línea, solo tabs (1 tab = 1 nivel) o solo espacios en múltiplos de 4, **sin mezcla en una misma línea**, y con niveles consecutivos, sin saltos.
 		4. Para cada línea, parsear:
 		   * Nombre del nodo + namespace opcional `(ns)` si existe.
 		   * El carácter `:` obligatorio.
 		   * La especificación de reglas opcional (`RuleSpec`).
 		
 		5. Resolver el namespace efectivo de cada línea.
-		6. Resolver referencias `@Nombre Nodo` según la sección 6.4.
+		6. Resolver referencias `@Nombre Nodo` según la [sección 6.4](#s6-4).
 		
 		Un parser de templates **DEBE** fallar si una línea no contiene `:`.
 
@@ -186,7 +186,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* Una referencia `@Nombre Nodo` **PUEDE** sobrescribir la cardinalidad, pero **NO DEBE** redefinir tipo, valores `ENUM` ni hijos.
 		* El nombre canónico de la línea y el nombre canónico de la referencia `@Nombre Nodo` **DEBEN** coincidir. Una referencia con nombre distinto al de su línea **DEBE** provocar un error de template (no existe el renombrado: `@` marca "reaparición del mismo nodo", no "puntero a otro").
 		* Los nodos de otros namespaces **NO DEBEN** definirse localmente dentro del template actual.
-		* Un nodo externo **PUEDE** aparecer varias veces, pero en esa línea **NO DEBE** declararse nada más que la cardinalidad (ver sección 10).
+		* Un nodo externo **PUEDE** aparecer varias veces, pero en esa línea **NO DEBE** declararse nada más que la cardinalidad (ver [sección 10](#s10)).
 		
 	Content >>
 		**Recursión.** Una referencia `@Nombre Nodo` **DEBE** apuntar a:
@@ -234,7 +234,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Content >>
 		La cardinalidad se aplica **por instancia del nodo padre**, contando sólo hijos directos que coincidan por:
 		
-		* Nombre canónico del nodo (según STXT-SPEC).
+		* Nombre canónico del nodo (según [*STXT-SPEC*](stxt-core-ref), [sección 4.3](stxt-core-ref#s4-3)).
 		* Namespace efectivo del nodo.
 		
 		La cardinalidad se expresa como un token opcional entre paréntesis: `( ... )`.
@@ -291,7 +291,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* El tipo explícito **DEBE** coincidir exactamente con uno de los tipos soportados por la implementación.
 		* El tipo **DEBE** escribirse en mayúsculas (`DATE`, no `date`): la comparación es exacta y **CASE-SENSITIVE**.
 		* Si una línea usa referencia `@Nombre Nodo`, **NO DEBE** declarar además un tipo explícito.
-		* Las reglas semánticas de tipos `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `ENUM`, `NUMBER`, `DATE`, etc. **DEBEN** ser coherentes con las definidas en *STXT-SCHEMA-SPEC*.
+		* Las reglas semánticas de tipos `INLINE`, `GROUP`, `BLOCK`, `TEXT`, `ENUM`, `NUMBER`, `DATE`, etc. **DEBEN** ser coherentes con las definidas en [*STXT-SCHEMA-SPEC*](stxt-schema-ref).
 
 	Subsubheader: 8.1 Tipo por defecto
 	
@@ -303,7 +303,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Subsubheader: 8.2 Compatibilidad con hijos
 	
 	Content >>
-		La regla de compatibilidad con hijos es la misma que en *STXT-SCHEMA-SPEC* (sección 9):
+		La regla de compatibilidad con hijos es la misma que en [*STXT-SCHEMA-SPEC*](stxt-schema-ref) ([sección 9](stxt-schema-ref#s9)):
 		
 		**Sólo los tipos `INLINE` y `GROUP` admiten hijos. Todos los demás tipos son hojas.**
 		
@@ -316,9 +316,9 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Subsubheader: 8.3 Conjunto de tipos
 	
 	Content >>
-		El conjunto de tipos es el de *STXT-SCHEMA-SPEC*, con los mismos niveles de soporte:
+		El conjunto de tipos es el de [*STXT-SCHEMA-SPEC*](stxt-schema-ref), con los mismos niveles de soporte:
 
-		* Una implementación de templates **DEBE** admitir todos los tipos definidos en *STXT-SCHEMA-SPEC* (sección 9, incluido `MARKDOWN`).
+		* Una implementación de templates **DEBE** admitir todos los tipos definidos en [*STXT-SCHEMA-SPEC*](stxt-schema-ref) ([sección 9](stxt-schema-ref#s9), incluido `MARKDOWN`).
 		* La exigencia de validación de cada grupo es la misma que allí: **DEBE** validar los tipos
 		  estructurales y los básicos de contenido, **DEBERÍA** validar los ampliados y **PUEDE**
 		  validar los binarios.
@@ -403,10 +403,10 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* `Nombre Nodo >>` con la descripción en su bloque de texto — entrada de bloque, para descripciones de varias líneas.
 
 		La correspondencia entre una entrada y su nodo de `Structure` se hace por **nombre canónico**
-		(*STXT-SPEC*, sección 4.3). El orden de las entradas es libre: no tiene que seguir el orden de `Structure`.
+		([*STXT-SPEC*](stxt-core-ref), [sección 4.3](stxt-core-ref#s4-3)). El orden de las entradas es libre: no tiene que seguir el orden de `Structure`.
 
 		Es la misma información que un schema expresa con el nodo `Description` de cada `Node`
-		(*STXT-SCHEMA-SPEC*, sección 7.1); el template la agrupa en un único bloque porque su
+		([*STXT-SCHEMA-SPEC*](stxt-schema-ref), [sección 7.1](stxt-schema-ref#s7-1)); el template la agrupa en un único bloque porque su
 		sintaxis de línea no tiene sitio para descripciones. Los editores **PUEDEN** usar estas
 		descripciones, por ejemplo, como ayuda contextual (hover) sobre los nodos de un documento.
 
@@ -445,7 +445,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* `ENUM [a,b]` se traduce a `Values/Value`.
 		* Una referencia `@Nombre Nodo` reutiliza la definición ya generada para ese nodo local y sólo modifica la cardinalidad del `Child` correspondiente. La recursión (auto-referencia o ancestro abierto) se traduce a un `Child` que apunta al mismo `Node`.
 		* Un nodo cross-namespace sólo genera una referencia `Child`; su definición corresponde al template o schema de ese otro namespace.
-		* Cada entrada de `Description` (sección 12) se traduce al nodo `Description` del `Node` correspondiente del schema compilado.
+		* Cada entrada de `Description` ([sección 12](#s12)) se traduce al nodo `Description` del `Node` correspondiente del schema compilado.
 
 		Reglas de traducción de cardinalidad:
 		
@@ -462,7 +462,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 	Content >>
 		Un template es inválido si ocurre cualquiera de estas condiciones:
 		
-		1. La indentación interna de `Structure >>` no cumple las reglas de indentación de *STXT-SPEC*, sección 8 (mezcla de tabs y espacios en una misma línea, niveles no consecutivos, espacios que no son múltiplos de 4, etc.).
+		1. La indentación interna de `Structure >>` no cumple las reglas de indentación de [*STXT-SPEC*](stxt-core-ref), [sección 8](stxt-core-ref#s8) (mezcla de tabs y espacios en una misma línea, niveles no consecutivos, espacios que no son múltiplos de 4, etc.).
 		2. El documento no tiene raíz `Template (@stxt.template): <namespace_objetivo>`.
 		3. Falta `Structure >>` o `Structure` no es bloque `>>`.
 		4. Una línea no vacía dentro de `Structure` no contiene `:`.
@@ -485,8 +485,8 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 
 	Content >>
 		La validación de un **documento** frente a un template es, por definición, la validación
-		frente al schema compilado equivalente (sección 13): las condiciones de invalidez de un
-		documento son las definidas en *STXT-SCHEMA-SPEC*, sección 13.
+		frente al schema compilado equivalente ([sección 13](#s13)): las condiciones de invalidez de un
+		documento son las definidas en [*STXT-SCHEMA-SPEC*](stxt-schema-ref), [sección 13](stxt-schema-ref#s13).
 
 	Subheader: 15. Conformidad
 	
@@ -497,7 +497,7 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* Aplica las reglas de cardinalidad, tipos, referencias `@Nombre Nodo` (incluida recursión por ancestro abierto) y `ENUM`.
 		* Aplica las reglas de compatibilidad de hijos por tipo (sólo `INLINE` y `GROUP` admiten hijos).
 		* Valida cardinalidades de forma independiente del orden.
-		* Rechaza templates inválidos según la sección 14.
+		* Rechaza templates inválidos según la [sección 14](#s14).
 		* Define un criterio estable de selección de template (si existieran múltiples fuentes),
 		  sin aplicar más de uno simultáneamente por namespace objetivo.
 		
@@ -519,9 +519,9 @@ Document (dev.stxt.website): STXT Plantillas (@stxt.template)
 		* `Structure` es `BLOCK` porque en templates debe ser un bloque `>>`.
 		* `Description` es opcional y puede ser `TEXT`: para el core y para este meta-template su
 		  contenido es texto opaco, pero se interpreta con la gramática de descripciones por nodo
-		  de la sección 12, igual que el contenido de `Structure` se interpreta con la gramática de templates.
+		  de la [sección 12](#s12), igual que el contenido de `Structure` se interpreta con la gramática de templates.
 		* La línea `Template` usa cardinalidad por defecto (`*`): como el nivel superior de `Structure`
-		  no tiene semántica especial de raíz (sección 6), no se le impone una cardinalidad de documento.
+		  no tiene semántica especial de raíz ([sección 6](#s6)), no se le impone una cardinalidad de documento.
 		
 	Subheader: 17. Ejemplos normativos
 

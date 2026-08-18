@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-02
+		Last modif: 2026-08-18
 
 	Header: @STXT@ Resolución de Schemas y Templates
 
@@ -13,7 +13,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 		localiza, en el sistema de ficheros, los documentos `@stxt.schema` y `@stxt.template`
 		aplicables a un documento @STXT@.
 
-		Las especificaciones *STXT-SCHEMA-SPEC* y *STXT-TEMPLATE-SPEC* definen cómo se
+		Las especificaciones [*STXT-SCHEMA-SPEC*](stxt-schema-ref) y [*STXT-TEMPLATE-SPEC*](stxt-template-ref) definen cómo se
 		escriben las definiciones y cómo validan; deliberadamente no dicen **dónde viven**.
 		Esta especificación cubre ese hueco con un único objetivo: que un mismo documento se
 		valide con las mismas definiciones en cualquier herramienta — un editor, una línea de
@@ -32,7 +32,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y **"PUEDE"** deben interpretarse según **RFC 2119**.
 
 		Términos como *nodo*, *namespace*, *schema* y *template* mantienen su significado en
-		*STXT-SPEC*, *STXT-SCHEMA-SPEC* y *STXT-TEMPLATE-SPEC*.
+		[*STXT-SPEC*](stxt-core-ref), [*STXT-SCHEMA-SPEC*](stxt-schema-ref) y [*STXT-TEMPLATE-SPEC*](stxt-template-ref).
 
 		Definiciones adicionales:
 
@@ -52,7 +52,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 		  y `.stxt/a.stxt` pertenecen al mismo nivel.
 		* Todo fichero bajo un directorio de resolución **DEBE** ser una definición: un
 		  documento cuyo nodo raíz pertenezca a `@stxt.schema` o `@stxt.template`. Cualquier
-		  otro contenido es un error de resolución (sección 8).
+		  otro contenido es un error de resolución ([sección 8](#s8)).
 
 	Subheader: 4. La cadena de resolución
 
@@ -78,7 +78,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 		  participan ambos, y el del subproyecto tiene más precedencia por ser más cercano.
 		* La búsqueda termina en la raíz del sistema de ficheros. Una herramienta **PUEDE**
 		  imponer un límite de ascenso (por ejemplo, 32 niveles) como salvaguarda frente a
-		  rutas patológicas (sección 10).
+		  rutas patológicas ([sección 10](#s10)).
 		* Un documento sin ubicación en el sistema de ficheros (entrada estándar, un buffer
 		  sin guardar) no tiene nivel de proyecto: su cadena empieza en el nivel de usuario.
 
@@ -108,12 +108,12 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 		  proyecto desde su `.stxt`, y una definición personal desde `$HOME/.stxt`, en la
 		  misma validación.
 		* Dentro de un mismo nivel, dos definiciones para el mismo namespace son un **error**
-		  (sección 8), tanto si son dos schemas, dos templates, o un schema y un template.
+		  ([sección 8](#s8)), tanto si son dos schemas, dos templates, o un schema y un template.
 		  Entre niveles distintos no hay conflicto: gana el más cercano, sea del tipo que
 		  sea.
 
 		Esta regla concreta, para el ámbito de esta especificación, el criterio de
-		priorización entre schema y template que *STXT-TEMPLATE-SPEC* deja abierto a la
+		priorización entre schema y template que [*STXT-TEMPLATE-SPEC*](stxt-template-ref) deja abierto a la
 		implementación: la fuente semántica efectiva de un namespace es su definición activa.
 
 	Subsubheader: 5.1 Ejemplo completo
@@ -145,7 +145,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 
 	Content >>
 		Si la variable de entorno `STXT_PATH` está definida, **sustituye por completo** la
-		cadena de resolución de la sección 4: no se busca nivel de proyecto, ni de usuario,
+		cadena de resolución de la [sección 4](#s4): no se busca nivel de proyecto, ni de usuario,
 		ni de sistema.
 
 		* Su valor es una lista de directorios separados por el separador de rutas de la
@@ -189,8 +189,8 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 		1. Dos definiciones para el mismo namespace objetivo en el mismo nivel.
 		2. Un fichero bajo un directorio de resolución que no parsea como @STXT@.
 		3. Un fichero cuyo nodo raíz no pertenece a `@stxt.schema` ni a `@stxt.template`.
-		4. Una definición que no valida contra su meta-schema (*STXT-SCHEMA-SPEC*,
-		   *STXT-TEMPLATE-SPEC*).
+		4. Una definición que no valida contra su meta-schema ([*STXT-SCHEMA-SPEC*](stxt-schema-ref),
+		   [*STXT-TEMPLATE-SPEC*](stxt-template-ref)).
 
 		Reglas:
 
@@ -199,7 +199,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 		* Ante el error 1, la herramienta **NO DEBE** elegir silenciosamente una de las
 		  definiciones en conflicto: el namespace afectado queda sin definición activa
 		  mientras el conflicto exista.
-		* Recordatorio de *STXT-SPEC* (secciones 15 y 17.2): que un documento declare un
+		* Recordatorio de [*STXT-SPEC*](stxt-core-ref) ([secciones 15](stxt-core-ref#s15) y [17.2](stxt-core-ref#s17-2)): que un documento declare un
 		  namespace para el que la cadena no aporta ninguna definición **no es un error** —
 		  el documento simplemente no puede validarse. Una herramienta **DEBERÍA** distinguir
 		  ese caso del de un namespace con errores de resolución.
@@ -208,7 +208,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 
 	Content >>
 		* El descubrimiento de definiciones es parte de la capa de schemas/templates,
-		  **opcional** como ella (*STXT-SPEC* §17.3): un parser conforme del núcleo no está
+		  **opcional** como ella ([*STXT-SPEC*](stxt-core-ref) [§17.3](stxt-core-ref#s17-3)): un parser conforme del núcleo no está
 		  obligado a implementarlo.
 		* Una herramienta que implemente descubrimiento en el sistema de ficheros **DEBE**
 		  seguir esta especificación completa: implementar sólo una parte de la cadena
@@ -216,7 +216,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 		  existe para evitar.
 		* Esta especificación no define **cuándo** se recargan las definiciones (vigilancia
 		  de ficheros, cachés, invalidación): eso es decisión de cada herramienta, siempre
-		  que el resultado observable respete las secciones 4 a 8.
+		  que el resultado observable respete las [secciones 4](#s4) a [8](#s8).
 
 	Subheader: 10. Consideraciones de Seguridad
 
@@ -230,7 +230,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de Schemas y Templat
 		  dónde ha salido la definición activa de cada namespace, y **PUEDE** ofrecer
 		  restricciones de confianza análogas a las de otras herramientas con búsqueda
 		  ascendente (por ejemplo, limitar la búsqueda a un directorio raíz configurado).
-		* El límite de ascenso de la sección 4.1 protege frente a estructuras de directorios
+		* El límite de ascenso de la [sección 4.1](#s4-1) protege frente a estructuras de directorios
 		  patológicas: enlaces circulares o sistemas de ficheros virtuales.
 
 	Subheader: 11. Fin del Documento

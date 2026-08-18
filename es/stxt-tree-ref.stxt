@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Tree — Representación canónica del documento
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-09
+		Last modif: 2026-08-18
 
 	Header: @STXT@ Árbol canónico
 
@@ -24,7 +24,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		análisis de fuente distinta del árbol.
 
 		La sintaxis de los documentos y el significado de sus nombres, valores, bloques,
-		namespaces e indentación se definen en *STXT-SPEC*. Los schemas, templates y la
+		namespaces e indentación se definen en [*STXT-SPEC*](stxt-core-ref). Los schemas, templates y la
 		resolución de definiciones no cambian este árbol.
 
 	Subheader: 2. Terminología
@@ -34,10 +34,10 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		**"PUEDE"** deben interpretarse según **RFC 2119**.
 
 		Los términos *nodo*, *INLINE*, *BLOCK*, *nombre canónico*, *namespace efectivo* y
-		*documento* mantienen el significado de *STXT-SPEC*.
+		*documento* mantienen el significado de [*STXT-SPEC*](stxt-core-ref).
 
 		En este documento, una **representación de árbol** es un valor JSON que cumple las
-		secciones 3 a 6. Un **emisor** es una implementación que transforma nodos @STXT@
+		[secciones 3](#s3) a [6](#s6). Un **emisor** es una implementación que transforma nodos @STXT@
 		parseados en esa representación.
 
 	Subheader: 3. Valor de documento
@@ -63,8 +63,8 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 
 		| Miembro | Tipo JSON | Significado |
 		|----------|-----------|-------------|
-		| `name` | string | Nombre lógico del nodo, tras el trim y la compactación de espacios de *STXT-SPEC* sección 4.1. Conserva mayúsculas, diacríticos y separadores del nombre lógico. |
-		| `canonicalName` | string | Nombre canónico calculado según *STXT-SPEC* sección 4.3: NFC, minúsculas Unicode y separadores compactados en `-`. |
+		| `name` | string | Nombre lógico del nodo, tras el trim y la compactación de espacios de [*STXT-SPEC*](stxt-core-ref) [sección 4.1](stxt-core-ref#s4-1). Conserva mayúsculas, diacríticos y separadores del nombre lógico. |
+		| `canonicalName` | string | Nombre canónico calculado según [*STXT-SPEC*](stxt-core-ref) [sección 4.3](stxt-core-ref#s4-3): NFC, minúsculas Unicode y separadores compactados en `-`. |
 		| `namespace` | string | Namespace **efectivo** del nodo, ya heredado y normalizado a minúsculas. Es `""` si no existe namespace efectivo. |
 		| `form` | string | Exactamente `"inline"` para un nodo `:` o `"block"` para un nodo `>>`. |
 		| `children` | array | Sólo en nodos `inline`: representaciones de sus hijos directos, en orden de aparición. Siempre existe para esa forma, incluso cuando está vacío. |
@@ -85,18 +85,18 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 
 	Content >>
 		El miembro `value` contiene el valor INLINE después del trim izquierdo y derecho de
-		*STXT-SPEC* sección 10.1. No se aplican más conversiones: sigue siendo texto, aunque
+		[*STXT-SPEC*](stxt-core-ref) [sección 10.1](stxt-core-ref#s10-1). No se aplican más conversiones: sigue siendo texto, aunque
 		un schema pueda validarlo como fecha, número u otro tipo.
 
 		El miembro `lines` conserva de forma exacta las líneas lógicas de un bloque según
-		*STXT-SPEC* secciones 10.2 y 10.3. Cada elemento es una string, incluida una línea
+		[*STXT-SPEC*](stxt-core-ref) [secciones 10.2](stxt-core-ref#s10-2) y [10.3](stxt-core-ref#s10-3). Cada elemento es una string, incluida una línea
 		vacía representada por `""`. No se sustituye el array por una string unida con
 		`\n`: esa unión perdería la diferencia entre un bloque sin líneas (`[]`) y un bloque
 		que contiene una única línea vacía (`[""]`).
 
 		Los comentarios y las líneas vacías fuera de un bloque no producen nodos ni líneas.
 		Dentro de un bloque, una línea que empieza por `#` sólo aparece en `lines` si su
-		indentación la hace contenido literal, tal como define *STXT-SPEC* sección 9.1.
+		indentación la hace contenido literal, tal como define [*STXT-SPEC*](stxt-core-ref) [sección 9.1](stxt-core-ref#s9-1).
 
 	Subheader: 6. Identidad y datos excluidos
 
@@ -152,10 +152,10 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		Un emisor de árbol @STXT@ es conforme si, para todo documento válido:
 
 		* Emite un array de todos los nodos raíz, preservando su orden.
-		* Emite todos y sólo los miembros exigidos por la sección 4.
-		* Aplica las normalizaciones y la herencia de namespace de *STXT-SPEC* antes de emitir.
+		* Emite todos y sólo los miembros exigidos por la [sección 4](#s4).
+		* Aplica las normalizaciones y la herencia de namespace de [*STXT-SPEC*](stxt-core-ref) antes de emitir.
 		* Conserva cada línea lógica de un bloque, incluidas las líneas vacías finales.
-		* No emite metadatos de fuente ni valores derivados excluidos por la sección 6.
+		* No emite metadatos de fuente ni valores derivados excluidos por la [sección 6](#s6).
 
 		El directorio `conformance/tree/` de la fuente de especificaciones contiene pares
 		normativos de documento `.stxt` y representación `.json`. Toda implementación que

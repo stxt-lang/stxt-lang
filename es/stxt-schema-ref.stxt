@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-17
+		Last modif: 2026-08-18
 
 	Header: @STXT@ Esquemas (@stxt.schema)
 
@@ -19,14 +19,14 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		Este documento define qué es un schema y cómo valida. La forma en que una
 		herramienta **localiza** los schemas en el sistema de ficheros (directorios
 		`.stxt`, niveles de usuario y sistema, `STXT_PATH`) se define en
-		*STXT-DISCOVERY-SPEC*.
+		[*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
 
 	Subheader: 2. Terminología
 
 	Content >>
 		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y **"PUEDE"** deben interpretarse según **RFC 2119**.
 
-		Términos como *nodo*, *indentación*, *namespace*, *inline* y *bloque `>>`* mantienen su significado en *STXT-SPEC*.
+		Términos como *nodo*, *indentación*, *namespace*, *inline* y *bloque `>>`* mantienen su significado en [*STXT-SPEC*](stxt-core-ref).
 
 	Subheader: 3. Relación entre @STXT@ y Schema
 
@@ -49,7 +49,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 
 		Reglas:
 
-		* `<namespace_objetivo>` **DEBE** ser un namespace válido según *STXT-SPEC*.
+		* `<namespace_objetivo>` **DEBE** ser un namespace válido según [*STXT-SPEC*](stxt-core-ref).
 		* El nodo raíz `Schema` **DEBE** pertenecer al namespace `@stxt.schema`.
 		* El documento schema **PUEDE** incluir un nodo `Description`.
 		* El documento schema **DEBE** incluir uno o más nodos `Node`.
@@ -118,7 +118,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		La comprobación se hace al validar un documento: si un nodo de ese namespace aparece,
 		su schema **DEBE** estar disponible y el nodo **DEBE** existir en él como `Node:`; en caso
 		contrario, el documento es inválido. Un hijo cross-namespace declarado pero nunca usado
-		no plantea ningún problema (ver sección 8.1).
+		no plantea ningún problema (ver [sección 8.1](#s8-1)).
 
 	Subheader: 7. Definición de Nodos (`Node:`)
 
@@ -135,14 +135,14 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 	Content >>
 		Reglas:
 
-		* El valor inline de `Node` **DEBE** ser un nombre de nodo válido según *STXT-SPEC*.
+		* El valor inline de `Node` **DEBE** ser un nombre de nodo válido según [*STXT-SPEC*](stxt-core-ref).
 		* Cada `Node` **DEBE** ser único dentro del schema a nivel de nombre canónico.
 		* Cada `Node` define la semántica del nodo en el namespace objetivo del schema.
 		* Si `Type` se omite, el tipo por defecto es `INLINE`.
 		* Un `Node` **NO DEBE** contener más de un nodo `Description`, más de un nodo `Type`, más de un nodo `Children` ni más de un nodo `Values`.
-		* Sólo los tipos que admiten hijos (ver sección 9) **PUEDEN** declarar `Children`. Declarar `Children` en un tipo que no admite hijos **DEBE** provocar un error de schema.
-		* El nombre de un `Child` **PUEDE** incluir un namespace cuando el hijo pertenece a otro namespace (sección 8).
-		* `Min` y `Max` son opcionales dentro de un `Child` (sección 10).
+		* Sólo los tipos que admiten hijos (ver [sección 9](#s9)) **PUEDEN** declarar `Children`. Declarar `Children` en un tipo que no admite hijos **DEBE** provocar un error de schema.
+		* El nombre de un `Child` **PUEDE** incluir un namespace cuando el hijo pertenece a otro namespace ([sección 8](#s8)).
+		* `Min` y `Max` son opcionales dentro de un `Child` ([sección 10](#s10)).
 
 	Subsubheader: 7.2 Valores en tipos ENUM
 	Code>>
@@ -159,7 +159,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		Si existe `Values`, **DEBE** contener al menos un nodo `Value`.
 		Si un `Node` declara `Type: ENUM`, **DEBE** incluir `Values`.
 
-		Como `ENUM` no admite hijos (sección 9), un `Node` de tipo `ENUM` **NO DEBE** declarar `Children`.
+		Como `ENUM` no admite hijos ([sección 9](#s9)), un `Node` de tipo `ENUM` **NO DEBE** declarar `Children`.
 
 	Subheader: 8. Hijos (`Children:`) y namespaces cruzados
 
@@ -194,9 +194,9 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 
 		Esto implica:
 
-		* Un `Child` sin namespace explícito **DEBE** tener su definición `Node:` en el propio schema; su ausencia **DEBE** provocar un error de schema en la carga (sección 13).
+		* Un `Child` sin namespace explícito **DEBE** tener su definición `Node:` en el propio schema; su ausencia **DEBE** provocar un error de schema en la carga ([sección 13](#s13)).
 		* Declarar `Child: Metadata (org.example.meta)` **no** requiere disponer del schema de `org.example.meta`: la carga de un schema nunca mira dentro de otros schemas (independencia del orden de carga).
-		* Si un nodo `Metadata (org.example.meta)` aparece en un documento, el schema de `org.example.meta` **DEBE** estar disponible y **DEBE** definir `Node: Metadata`; en caso contrario, es un error de validación del documento (sección 13). Un hijo cross-namespace declarado pero nunca usado no plantea ningún problema.
+		* Si un nodo `Metadata (org.example.meta)` aparece en un documento, el schema de `org.example.meta` **DEBE** estar disponible y **DEBE** definir `Node: Metadata`; en caso contrario, es un error de validación del documento ([sección 13](#s13)). Un hijo cross-namespace declarado pero nunca usado no plantea ningún problema.
 
 
 	Subheader: 9. Tipos
@@ -261,7 +261,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		|-----------|-----------------|--------------|-----------------------------------------|
 		| BOOLEAN   | INLINE          | NO           | `true` o `false`.                      |
 		| NUMBER    | INLINE          | NO           | Número con formato JSON.               |
-		| ENUM      | INLINE          | NO           | Sólo valores especificados (ver 9.6).  |
+		| ENUM      | INLINE          | NO           | Sólo valores especificados (ver [9.6](#s9-6)).  |
 
 	Subsubheader: 9.4 Tipos ampliados de contenido INLINE
 	Content>>
@@ -311,7 +311,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		El tipo `ENUM` permite enumerar de forma explícita los valores permitidos para un nodo.
 		Reglas:
 
-		* La comparación **DEBE** hacerse sobre el valor inline ya normalizado mediante trim a izquierda y derecha, tal como define *STXT-SPEC*.
+		* La comparación **DEBE** hacerse sobre el valor inline ya normalizado mediante trim a izquierda y derecha, tal como define [*STXT-SPEC*](stxt-core-ref).
 		* La comparación **DEBE** ser exacta y **CASE-SENSITIVE**.
 		* La comparación **NO DEBE** aplicar canonización adicional, eliminación de diacríticos ni normalizaciones equivalentes al nombre canónico de los nodos.
 		* El nodo **DEBE** definir `Values` con nodos `Value`, que representan los valores permitidos.
@@ -344,15 +344,15 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 
 		* A efectos de **validación**, `MARKDOWN` equivale a `TEXT`: todo texto es Markdown válido, así que una implementación **NO DEBE** rechazar ningún valor por su contenido.
 		* Su función es ser un **contrato de interpretación** para los consumidores (renderizadores, exportadores, editores): el texto **DEBERÍA** interpretarse según **CommonMark**. Las extensiones (p. ej. tablas) son decisión de la aplicación.
-		* En la forma `BLOCK`, los saltos de línea y las líneas vacías **se conservan** (a diferencia de los tipos binarios de la sección 9.5): forman parte del texto Markdown.
-		* Como todo tipo con contenido específico, `MARKDOWN` **no admite hijos** (sección 9.1).
+		* En la forma `BLOCK`, los saltos de línea y las líneas vacías **se conservan** (a diferencia de los tipos binarios de la [sección 9.5](#s9-5)): forman parte del texto Markdown.
+		* Como todo tipo con contenido específico, `MARKDOWN` **no admite hijos** ([sección 9.1](#s9-1)).
 
 		**Nota de diseño (no normativa):** `MARKDOWN` es el **único** formato incrustado que
 		@STXT@ Schema define, porque cubre el único dominio que @STXT@ delega por diseño — el
 		formato de la prosa (negrita, enlaces, listas dentro del texto) — y porque su forma cruda
 		sigue siendo legible, coherente con el principio Human-First. Los tipos para **formatos de
 		datos** incrustados (`JSON`, `XML`, `YAML`, `TOML`, …) son un **no-objetivo explícito**
-		(sección 11): @STXT@ ya es el formato de estructura, y un tipo así enterraría estructura
+		([sección 11](#s11)): @STXT@ ya es el formato de estructura, y un tipo así enterraría estructura
 		en blobs opacos. La estructura se expresa en @STXT@.
 
 	Subheader: 10. Cardinalidades
@@ -369,7 +369,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		* Si existen ambos, `Min` **NO DEBE** ser mayor que `Max`.
 		* La cardinalidad se aplica por instancia del nodo padre.
 		* La cardinalidad cuenta sólo hijos **directos** con el mismo nombre canónico y el mismo namespace efectivo.
-		* La validación de cardinalidad es **independiente del orden** de los hijos: cuenta apariciones, no posiciones (ver sección 11).
+		* La validación de cardinalidad es **independiente del orden** de los hijos: cuenta apariciones, no posiciones (ver [sección 11](#s11)).
 		* Una implementación conforme **DEBE** comprobar las cardinalidades.
 
 	Subheader: 11. Orden de los hijos
@@ -384,7 +384,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		tener que recordar el orden de los campos.
 
 		**Orden preservado, no validado.** Aunque el orden no se *valida*, el orden de aparición de
-		los hijos **se preserva** en el árbol parseado (garantía del núcleo, *STXT-SPEC*). Por tanto,
+		los hijos **se preserva** en el árbol parseado (garantía del núcleo, [*STXT-SPEC*](stxt-core-ref)). Por tanto,
 		una aplicación que necesite significado posicional (por ejemplo, secciones consecutivas de un
 		documento) lo obtiene del propio árbol, no de la validación. La semántica del orden corresponde
 		a la aplicación.
@@ -397,7 +397,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		Otros **no-objetivos** explícitos de @STXT@ Schema son: patrones o expresiones regulares
 		sobre valores, valores por defecto, reglas condicionales entre campos ("si aparece A,
 		entonces B"), y los tipos para **formatos de datos incrustados** (`JSON`, `XML`, `YAML`,
-		`TOML`, …; ver la nota de diseño de la sección 9.7). Mantener el modelo pequeño y
+		`TOML`, …; ver la nota de diseño de la [sección 9.7](#s9-7)). Mantener el modelo pequeño y
 		predecible es un objetivo de diseño: esa semántica pertenece a la aplicación.
 
 	Subheader: 12. Ejemplos Normativos
@@ -453,19 +453,19 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 
 	Content >>
 		Aquí `Section` puede contener más nodos `Section` anidados a cualquier profundidad (limitada
-		por el límite de profundidad recomendado en *STXT-SPEC*, sección de seguridad).
+		por el límite de profundidad recomendado en [*STXT-SPEC*](stxt-core-ref), [sección de seguridad](stxt-core-ref#s15)).
 
 	Subheader: 13. Errores de Schema
 
 	Content >>
 		Un schema es inválido si:
 
-		1. El nodo raíz no tiene la forma `Schema (@stxt.schema): <namespace_objetivo>`, o el namespace objetivo no es válido según *STXT-SPEC*.
+		1. El nodo raíz no tiene la forma `Schema (@stxt.schema): <namespace_objetivo>`, o el namespace objetivo no es válido según [*STXT-SPEC*](stxt-core-ref).
 		2. No define ningún nodo `Node`.
 		3. Define dos `Node` con el mismo nombre canónico.
 		4. Usa un `Type` desconocido.
-		5. Define `Children` en un `Node` cuyo tipo no admite hijos (sección 9).
-		6. Define `Values` en un `Node` cuyo tipo no es `ENUM` (sección 7.2).
+		5. Define `Children` en un `Node` cuyo tipo no admite hijos ([sección 9](#s9)).
+		6. Define `Values` en un `Node` cuyo tipo no es `ENUM` ([sección 7.2](#s7-2)).
 		7. La cardinalidad es inválida (`Min > Max`, valor no entero no negativo, `Min`/`Max` duplicados).
 		8. Un `Node` de tipo `ENUM` no define `Values`, o `Values` no contiene ningún `Value`.
 		9. Aparece un `Value` duplicado tras la normalización inline por trim.
@@ -475,12 +475,12 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 	Content >>
 		Un documento es inválido frente a un schema si:
 
-		* Un nodo presenta un hijo directo **no declarado** en el `Children` de su definición (modelo cerrado, sección 6).
+		* Un nodo presenta un hijo directo **no declarado** en el `Children` de su definición (modelo cerrado, [sección 6](#s6)).
 		* Un nodo sin `Children` declarado presenta **cualquier** hijo directo.
 		* Se incumple una cardinalidad declarada.
 		* El valor de un nodo no cumple la validación de su tipo.
 		* Un valor `ENUM` no coincide exactamente con ninguno de sus `Value`.
-		* Aparece un nodo cuyo namespace no tiene schema disponible, o cuyo nombre no existe como `Node:` en el schema de su namespace (sección 8.1).
+		* Aparece un nodo cuyo namespace no tiene schema disponible, o cuyo nombre no existe como `Node:` en el schema de su namespace ([sección 8.1](#s8-1)).
 
 	Subheader: 14. Conformidad
 
@@ -489,9 +489,9 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 
 		* Implementa íntegramente este documento.
 		* Valida tipos, formas de valor, cardinalidades y valores permitidos (ENUM).
-		* Aplica el **modelo de contenido cerrado** (sección 6).
+		* Aplica el **modelo de contenido cerrado** ([sección 6](#s6)).
 		* Aplica la regla de compatibilidad de hijos por tipo (sólo `INLINE` y `GROUP` admiten hijos).
-		* Aplica la regla estricta de definición obligatoria de todos los nodos referenciados en `Children` (en la carga del schema para hijos del mismo namespace; en la validación del documento para hijos cross-namespace, sección 8.1).
+		* Aplica la regla estricta de definición obligatoria de todos los nodos referenciados en `Children` (en la carga del schema para hijos del mismo namespace; en la validación del documento para hijos cross-namespace, [sección 8.1](#s8-1)).
 		* Valida cardinalidades de forma **independiente del orden**.
 		* Selecciona, para cada validación, un único schema efectivo por namespace.
 		* Rechaza documentos y schemas inválidos.
@@ -506,7 +506,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Especificación del Lenguaje 
 		cruzadas de este documento (por ejemplo "`Values` sólo si `Type: ENUM`", o "`Min ≤ Max`"),
 		que pertenecen al lenguaje pero no al meta-schema. Por tanto, "validar contra el meta-schema"
 		es condición **necesaria pero no suficiente** para ser un schema válido: además deben cumplirse
-		las reglas de la sección 13.
+		las reglas de la [sección 13](#s13).
 
 	Subsubheader: 15.1 Consideraciones
 

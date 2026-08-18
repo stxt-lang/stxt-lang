@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-17
+		Last modif: 2026-08-18
 		
 	Header: @STXT@ Documents
 	
@@ -53,7 +53,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 
 		An **empty line** is a line with no characters or composed only of spaces and tabs.
 		Outside a `>>` block, empty lines are ignored and their indentation is not validated;
-		inside a block they are preserved (see section 10.3).
+		inside a block they are preserved (see [section 10.3](#s10-3)).
 		
 		There are two forms of node:
 		
@@ -131,7 +131,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		Names with diacritics, uppercase, and lowercase letters are allowed.
 
 		The name **MUST** contain at least one letter or digit: a name made up only of
-		separators would have an empty canonical name (section 4.3).
+		separators would have an empty canonical name ([section 4.3](#s4-3)).
 
 	Subsubheader: 4.3 Canonical node name
 
@@ -149,14 +149,14 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		and separators, but sensitive to accents and script, following the model of
 		internationalized domain names (IDN). Thus, `Título` and `título` are the same node,
 		but `Año` and `Ano` are different nodes. Unlike node names, namespaces
-		remain restricted to ASCII `[a-z0-9]` (section 7).
+		remain restricted to ASCII `[a-z0-9]` ([section 7](#s7)).
 
 		The canonical name will be used to determine whether one node has the same name as another.
 		It will also be used internally by all lookup or checking operations,
 		to determine whether it is the same element.
 
 		A node whose canonical name turns out to be the empty string (e.g. `___`) is invalid and
-		**MUST** cause a parse error, just like an empty logical name (section 4.1).
+		**MUST** cause a parse error, just like an empty logical name ([section 4.1](#s4-1)).
 
 		Examples of transformation:
 
@@ -251,17 +251,17 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		  * The parser **MUST NOT** interpret any line as a structured node, even if it contains `:` or other @STXT@ syntax.
 		  * The parser **MUST NOT** interpret lines beginning with `#` as comments; they are literal text.
 		* The block ends when a **non-empty line, which is not a comment**, appears whose indentation is **less than or equal** to the indentation of the `>>` node.
-		* **Comment** lines (see section 9) are transparent to the block: they do **NOT** close the block and do **NOT** form part of its content, regardless of their indentation. They are simply discarded.
+		* **Comment** lines (see [section 9](#s9)) are transparent to the block: they do **NOT** close the block and do **NOT** form part of its content, regardless of their indentation. They are simply discarded.
 		* Empty lines **within the block** are preserved and **MUST NOT** close the block, regardless of their indentation.
-		* The comparison of indentations between the lines and the `>>` node is done by **level** (section 8.1), regardless of the style (tabs or spaces) each line uses.
+		* The comparison of indentations between the lines and the `>>` node is done by **level** ([section 8.1](#s8-1)), regardless of the style (tabs or spaces) each line uses.
 		* The block also ends upon reaching the **end of the document**.
-		* Content lines additionally follow the canonicalization rules of section 10.2.
+		* Content lines additionally follow the canonicalization rules of [section 10.2](#s10-2).
 		
 	Content >>
 		As a consequence of the transparency of comments, the content of a `>>` block
 		**may not be contiguous in the file**: an interleaved comment line (with indentation
 		less than or equal to that of the `>>` node) is discarded without closing the block, and the block text
-		may continue afterward. See the detailed example in section 9.1.
+		may continue afterward. See the detailed example in [section 9.1](#s9-1).
 		
 	Subsubheader: 6.2 Example
 		
@@ -306,7 +306,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		* The namespaces under `@stxt` (`@stxt.schema`, `@stxt.template`, and any other `@stxt.*`) are **reserved** for the @STXT@ language itself and its official specifications. An application **MUST NOT** define its own namespaces under `@stxt`.
 
 		**Note:** any `(` appearing after the name of a node opens a namespace: parentheses
-		cannot form part of the name (section 4.2). For example, `Quantity (kg): 3` is
+		cannot form part of the name ([section 4.2](#s4-2)). For example, `Quantity (kg): 3` is
 		**invalid**, because `kg` does not comply with the minimum `a.b` format of a namespace.
 		
 	Subsubheader: 7.1 Restriction to ASCII
@@ -322,7 +322,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		This ASCII restriction is **deliberate**: it avoids Unicode normalization ambiguities
 		and homographic attacks (visually identical but distinct characters, e.g. a Latin `a`
 		versus a Cyrillic `а`), consistently with the security priorities of
-		@STXT@ (see section 15).
+		@STXT@ (see [section 15](#s15)).
 		
 	Subsubheader: 7.2 Inheritance and level 0 nodes
 		
@@ -342,7 +342,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 	Content >>
 		In this example, `Appendix` has namespace `""` (empty). It does **not** inherit `com.example.docs`
 		from the previous root node. The absence of lateral inheritance guarantees that the meaning of
-		a root node does not depend on the nodes that precede it (see section 8.5, concatenation).
+		a root node does not depend on the nodes that precede it (see [section 8.5](#s8-5), concatenation).
 		
 	Subheader: 8. Indentation and Hierarchy
 		
@@ -356,7 +356,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		
 		* **MAY** use spaces or tabs for indentation.
 		* The indentation of a line **MUST** be homogeneous: either only tabs, or only spaces.
-		* Mixing spaces and tabs in the indentation of the same line is a **parse error** (see section 8.3).
+		* Mixing spaces and tabs in the indentation of the same line is a **parse error** (see [section 8.3](#s8-3)).
 		* If it uses tabs:
 		  * Each tab represents exactly 1 level.
 		* If it uses spaces:
@@ -459,7 +459,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		|-->....Mixed level: ERROR: mix of TAB and spaces on the same line
 		
 	Content >>
-		**Note:** these level rules apply to lines that define nodes. Comment lines are exempt from level validation (see section 9): their indentation is not checked and never produces a level error. Text lines of a `>>` block follow the rules of section 10.2: only their block-level prefix (the level of the `>>` node plus one) must be valid; the rest of the line is free text.
+		**Note:** these level rules apply to lines that define nodes. Comment lines are exempt from level validation (see [section 9](#s9)): their indentation is not checked and never produces a level error. Text lines of a `>>` block follow the rules of [section 10.2](#s10-2): only their block-level prefix (the level of the `>>` node plus one) must be valid; the rest of the line is free text.
 		
 	Subsubheader: 8.4 Hierarchy
 		
@@ -486,7 +486,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 
 	Content >>
 		**Closure under concatenation.** As a direct consequence of allowing multiple
-		level 0 nodes and the absence of lateral inheritance (section 7.2), the **concatenation** of two
+		level 0 nodes and the absence of lateral inheritance ([section 7.2](#s7-2)), the **concatenation** of two
 		valid @STXT@ documents is also a valid @STXT@ document, provided that the second
 		begins on a level 0 line (which occurs by definition, since its root nodes are
 		at level 0).
@@ -512,7 +512,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		* The indentation of a comment is **not validated**: a comment **MAY** have any
 		  indentation, even one that would be invalid for a node. It never produces a level error.
 		* Comments are **transparent to `>>` blocks**: they do not close an active block nor
-		  form part of its content (see 9.1).
+		  form part of its content (see [9.1](#s9-1)).
 		
 		Example:
 	Code >>		
@@ -583,7 +583,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		  It is the only case in which an indentation error does not fail noisily.
 		* A parser **MAY** emit a warning when detecting a comment with indentation less than or equal
 		  to that of an active `>>` block, analogously to the style warning for combining tabs and
-		  spaces on different lines (section 8.1).
+		  spaces on different lines ([section 8.1](#s8-1)).
 
 	Subheader: 10. Whitespace normalization
 		
@@ -625,14 +625,14 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		to the block (level strictly greater than that of the `>>` node):
 
 		1. The prefix of the line that covers the block level **MUST** be homogeneous (only tabs
-		   or only spaces, section 8.1). The calculation is by **level**, so each line may use a
+		   or only spaces, [section 8.1](#s8-1)). The calculation is by **level**, so each line may use a
 		   style different from that of the `>>` node line or the rest of the block.
 		2. The parser removes **only** that prefix (the block level), preserving any additional
 		   indentation as part of the text. The rest of the line is **free text**: once the block
 		   level is reached, no further indentation or character rules apply — it may contain
 		   spaces and tabs in any combination, and any @STXT@ syntax without being interpreted.
 		3. On that content, the parser **MUST** remove all trailing spaces and tabs (right trim).
-		4. Empty lines are preserved in all cases (see section 10.3).
+		4. Empty lines are preserved in all cases (see [section 10.3](#s10-3)).
 		
 		(Interleaved comment lines, according to 9.1, have already been discarded and do not intervene here.)
 		
@@ -693,14 +693,14 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		A document is invalid if any of these conditions occurs:
 		
 		1. Spaces that are not a multiple of 4 (when spaces are used for indentation).
-		2. A mix of spaces and tabs in the indentation of the same line (section 8.1).
+		2. A mix of spaces and tabs in the indentation of the same line ([section 8.1](#s8-1)).
 		3. Jumps in indentation levels.
 		4. A `>>` node contains significant inline content on the same line as `>>`.
 		5. A node contains neither `:` nor `>>`.
 		6. The logical name of a node is the empty string.
-		7. The canonical name of a node is the empty string (section 4.3).
-		8. The name of a node contains disallowed characters (section 4.2).
-		9. A namespace does not comply with the restrictions of section 7 (format `a.b`, ASCII only `[a-z0-9]` per element, optional initial `@`).
+		7. The canonical name of a node is the empty string ([section 4.3](#s4-3)).
+		8. The name of a node contains disallowed characters ([section 4.2](#s4-2)).
+		9. A namespace does not comply with the restrictions of [section 7](#s7) (format `a.b`, ASCII only `[a-z0-9]` per element, optional initial `@`).
 		
 		Comment lines and empty lines are **not** a cause of error (their indentation is not validated).
 		
@@ -714,16 +714,16 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		* It implements the syntax described in this document.
 		* It applies the strict indentation and hierarchy rules.
 		* It correctly interprets nodes with `:` and `>>` blocks.
-		* It interprets comments outside the content of `>>` blocks and treats them as transparent to blocks according to section 9.
+		* It interprets comments outside the content of `>>` blocks and treats them as transparent to blocks according to [section 9](#s9).
 		* It treats **everything** within the content of a `>>` block (strictly greater indentation) as literal text.
 		* It accepts **multiple level 0 nodes** and preserves the order of appearance of sibling nodes.
 		* It does not apply lateral namespace inheritance between level 0 nodes.
 		* It normalizes namespaces to lowercase during parsing.
-		* It applies the whitespace normalization rules of section 10.
-		* It rejects invalid documents according to section 11.
+		* It applies the whitespace normalization rules of [section 10](#s10).
+		* It rejects invalid documents according to [section 11](#s11).
 
 		The interoperable representation of the logical tree resulting from this parsing is
-		defined by *STXT-TREE-SPEC*. Emitting it as JSON is an optional capability of a base
+		defined by [*STXT-TREE-SPEC*](stxt-tree-ref). Emitting it as JSON is an optional capability of a base
 		parser; it does not alter the syntax rules in this document.
 
 		**Implementation blueprint (non-normative).** The language-neutral `stxt-impl`
@@ -812,7 +812,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		  loaders, or object deserialization. The only resulting structure is a simple tree of nodes and textual values.
 		* **Immune to injection inside literal blocks**: all content within a `>>` node is treated 
 		  as literal text without any interpretation, even if it contains `:`, `>>`, `#`, or other @STXT@ syntax.
-		* **No identifier ambiguity**: namespaces are restricted to ASCII (section 7.1), 
+		* **No identifier ambiguity**: namespaces are restricted to ASCII ([section 7.1](#s7-1)), 
 		  eliminating homographic attacks based on visually equivalent Unicode characters.
 		* **Low risk of denial of service**: the strict rules of consecutive indentation 
 		  and the absence of circular references or anchors limit structural complexity. 
@@ -829,7 +829,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		Consequently, @STXT@ is especially suitable for processing documents from untrusted sources 
 		(remote configurations, user input, data exchange) where parser security is critical.
 		
-		Implementations **MUST** reject invalid documents according to section 11 
+		Implementations **MUST** reject invalid documents according to [section 11](#s11) 
 		and **MUST NOT** introduce extensions that allow external loading 
 		or dynamic evaluation without explicit security measures.
 		
@@ -873,7 +873,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		  - Current inherited namespace.
 		
 		* **Basic parsing flow:**
-		  1. Read line (discarding a trailing `\r` if present, section 3) and calculate its indentation level (according to section 8 rules).
+		  1. Read line (discarding a trailing `\r` if present, [section 3](#s3)) and calculate its indentation level (according to [section 8](#s8) rules).
 		  2. If there is an active `>>` block:
 		     - If the line is empty → add empty line to the block.
 		     - If indentation > indentation of the `>>` node → strip the block level (level of the `>>` node + 1) and add the rest as literal text (right trim).
@@ -891,17 +891,17 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		  - If a node defines its own namespace within `()`, this replaces the inherited one for it and all its descendants.
 		
 		* **Additional normalization:**
-		  - Node names: according to section 4.1–4.3.
-		  - Namespaces: normalized to lowercase during parsing (section 7); only the lowercase form is preserved.
-		  - Inline values: left and right trim (section 10.1).
-		  - Block lines: strip the block level preserving any additional indentation + right trim + preserve all empty lines (section 10.2–10.3).
+		  - Node names: according to [section 4.1](#s4-1)–[4.3](#s4-3).
+		  - Namespaces: normalized to lowercase during parsing ([section 7](#s7)); only the lowercase form is preserved.
+		  - Inline values: left and right trim ([section 10.1](#s10-1)).
+		  - Block lines: strip the block level preserving any additional indentation + right trim + preserve all empty lines ([section 10.2](#s10-2)–[10.3](#s10-3)).
 
 	Subheader: 17. Appendix B — Interaction with `@stxt.schema`
 		
 	Content >>
 		The schema system allows adding semantic validation to @STXT@ documents **without modifying the base syntax** of the language.
 		
-		The @STXT@ core does not define how an implementation should react: the behavior belongs exclusively to the schema system (*STXT-SCHEMA-SPEC*).
+		The @STXT@ core does not define how an implementation should react: the behavior belongs exclusively to the schema system ([*STXT-SCHEMA-SPEC*](stxt-schema-ref)).
 		
 		A schema is an @STXT@ document whose namespace is: `@stxt.schema`
 		
@@ -909,7 +909,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		
 		The @STXT@ core **does not interpret** these rules; it only defines how they are expressed and how they are combined through namespaces.
 
-		The location of schema documents on the file system (`.stxt` directories) is defined in *STXT-DISCOVERY-SPEC*.
+		The location of schema documents on the file system (`.stxt` directories) is defined in [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
 
 	Subsubheader: 17.1. Associating a schema with a namespace
 		
@@ -975,7 +975,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 	Content>>	
 		The template system allows adding semantic validation to @STXT@ documents **without modifying the base syntax** of the language.
 		
-		The @STXT@ core does not define how an implementation should react: the behavior belongs exclusively to the template system (*STXT-TEMPLATE-SPEC*).
+		The @STXT@ core does not define how an implementation should react: the behavior belongs exclusively to the template system ([*STXT-TEMPLATE-SPEC*](stxt-template-ref)).
 		
 		A template is an @STXT@ document whose namespace is: `@stxt.template`
 		
@@ -1009,6 +1009,6 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		If an implementation finds several schemas or templates applicable to the same namespace,
 		it **SHOULD** define a clear and deterministic priority policy.
 		For a specific validation, a single effective semantic source **MUST** be selected: either a schema or a template.
-		When definitions are discovered on the file system, that policy is fixed by *STXT-DISCOVERY-SPEC*.
+		When definitions are discovered on the file system, that policy is fixed by [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
 	
 	Subheader: 19. End of Document

@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-02
+		Last modif: 2026-08-18
 
 	Header: @STXT@ Schema and Template Resolution
 
@@ -13,7 +13,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		on the file system, the `@stxt.schema` and `@stxt.template` documents applicable to
 		an @STXT@ document.
 
-		The *STXT-SCHEMA-SPEC* and *STXT-TEMPLATE-SPEC* specifications define how
+		The [*STXT-SCHEMA-SPEC*](stxt-schema-ref) and [*STXT-TEMPLATE-SPEC*](stxt-template-ref) specifications define how
 		definitions are written and how they validate; they deliberately do not say **where
 		they live**. This specification fills that gap with a single goal: that the same
 		document validates against the same definitions in every tool — an editor, a command
@@ -32,7 +32,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		The keywords **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119**.
 
 		Terms such as *node*, *namespace*, *schema* and *template* retain their meaning in
-		*STXT-SPEC*, *STXT-SCHEMA-SPEC* and *STXT-TEMPLATE-SPEC*.
+		[*STXT-SPEC*](stxt-core-ref), [*STXT-SCHEMA-SPEC*](stxt-schema-ref) and [*STXT-TEMPLATE-SPEC*](stxt-template-ref).
 
 		Additional definitions:
 
@@ -52,7 +52,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		  and `.stxt/a.stxt` belong to the same level.
 		* Every file under a resolution directory **MUST** be a definition: a document whose
 		  root node belongs to `@stxt.schema` or `@stxt.template`. Any other content is a
-		  resolution error (section 8).
+		  resolution error ([section 8](#s8)).
 
 	Subheader: 4. The resolution chain
 
@@ -77,7 +77,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		  subproject's one has higher precedence for being nearer.
 		* The search ends at the root of the file system. A tool **MAY** impose an ascent
 		  limit (for example, 32 levels) as a safeguard against pathological paths
-		  (section 10).
+		  ([section 10](#s10)).
 		* A document with no location on the file system (standard input, an unsaved
 		  buffer) has no project level: its chain starts at the user level.
 
@@ -108,12 +108,12 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		  from its `.stxt`, and a personal definition from `$HOME/.stxt`, in the same
 		  validation.
 		* Within a single level, two definitions for the same namespace are an **error**
-		  (section 8), whether they are two schemas, two templates, or a schema and a
+		  ([section 8](#s8)), whether they are two schemas, two templates, or a schema and a
 		  template. Across different levels there is no conflict: the nearest one wins,
 		  whatever its kind.
 
 		For the scope of this specification, this rule pins down the schema-versus-template
-		prioritization criterion that *STXT-TEMPLATE-SPEC* leaves open to the
+		prioritization criterion that [*STXT-TEMPLATE-SPEC*](stxt-template-ref) leaves open to the
 		implementation: the effective semantic source of a namespace is its active
 		definition.
 
@@ -146,7 +146,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 
 	Content >>
 		If the `STXT_PATH` environment variable is defined, it **completely replaces** the
-		resolution chain of section 4: no project, user or system level is searched.
+		resolution chain of [section 4](#s4): no project, user or system level is searched.
 
 		* Its value is a list of directories separated by the platform's path separator
 		  (`:` on Unix, `;` on Windows).
@@ -188,8 +188,8 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		2. A file under a resolution directory that does not parse as @STXT@.
 		3. A file whose root node belongs neither to `@stxt.schema` nor to
 		   `@stxt.template`.
-		4. A definition that does not validate against its meta-schema (*STXT-SCHEMA-SPEC*,
-		   *STXT-TEMPLATE-SPEC*).
+		4. A definition that does not validate against its meta-schema ([*STXT-SCHEMA-SPEC*](stxt-schema-ref),
+		   [*STXT-TEMPLATE-SPEC*](stxt-template-ref)).
 
 		Rules:
 
@@ -198,7 +198,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		* Upon error 1, the tool **MUST NOT** silently pick one of the conflicting
 		  definitions: the affected namespace has no active definition while the conflict
 		  exists.
-		* Reminder from *STXT-SPEC* (sections 15 and 17.2): a document declaring a
+		* Reminder from [*STXT-SPEC*](stxt-core-ref) ([sections 15](stxt-core-ref#s15) and [17.2](stxt-core-ref#s17-2)): a document declaring a
 		  namespace for which the chain contributes no definition **is not an error** — the
 		  document simply cannot be validated. A tool **SHOULD** distinguish that case from
 		  a namespace with resolution errors.
@@ -207,14 +207,14 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 
 	Content >>
 		* Definition discovery is part of the schema/template layer, **optional** like the
-		  layer itself (*STXT-SPEC* §17.3): a conforming core parser is not required to
+		  layer itself ([*STXT-SPEC*](stxt-core-ref) [§17.3](stxt-core-ref#s17-3)): a conforming core parser is not required to
 		  implement it.
 		* A tool that implements file-system discovery **MUST** follow this specification
 		  in full: implementing only part of the chain produces exactly the disagreement
 		  between tools that this specification exists to avoid.
 		* This specification does not define **when** definitions are reloaded (file
 		  watching, caches, invalidation): that is each tool's decision, as long as the
-		  observable result honors sections 4 to 8.
+		  observable result honors [sections 4](#s4) to [8](#s8).
 
 	Subheader: 10. Security Considerations
 
@@ -228,7 +228,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		  the active definition of each namespace came from, and **MAY** offer trust
 		  restrictions analogous to those of other tools with upward searches (for example,
 		  limiting the search to a configured root directory).
-		* The ascent limit of section 4.1 protects against pathological directory
+		* The ascent limit of [section 4.1](#s4-1) protects against pathological directory
 		  structures: circular links or virtual file systems.
 
 	Subheader: 11. End of Document

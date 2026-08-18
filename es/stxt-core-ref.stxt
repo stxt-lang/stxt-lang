@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-17
+		Last modif: 2026-08-18
 		
 	Header: @STXT@ Documentos
 	
@@ -52,7 +52,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 
 		Una **línea vacía** es una línea sin caracteres o compuesta únicamente por espacios y
 		tabuladores. Fuera de un bloque `>>`, las líneas vacías se ignoran y su indentación no se
-		valida; dentro de un bloque se conservan (ver sección 10.3).
+		valida; dentro de un bloque se conservan (ver [sección 10.3](#s10-3)).
 		
 		Existen dos formas de nodo:
 		
@@ -130,7 +130,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Se permiten nombres con diacríticos, mayúsculas y minúsculas.
 
 		El nombre **DEBE** contener al menos una letra o un dígito: un nombre compuesto sólo por
-		separadores tendría nombre canónico vacío (sección 4.3).
+		separadores tendría nombre canónico vacío ([sección 4.3](#s4-3)).
 
 	Subsubheader: 4.3 Nombre canónico del nodo
 
@@ -148,14 +148,14 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		a mayúsculas y a separadores, pero sensible a acentos y alfabeto, siguiendo el modelo de los
 		nombres de dominio internacionalizados (IDN). Así, `Título` y `título` son el mismo nodo,
 		pero `Año` y `Ano` son nodos distintos. A diferencia de los nombres de nodo, los namespaces
-		permanecen restringidos a ASCII `[a-z0-9]` (sección 7).
+		permanecen restringidos a ASCII `[a-z0-9]` ([sección 7](#s7)).
 
 		El nombre canónico será usado para saber si un nodo tiene el mismo nombre que otro.
 		También será usado internamente por todas las operaciones de búsqueda o comprobación,
 		para saber si se trata del mismo elemento.
 
 		Un nodo cuyo nombre canónico resulte ser la cadena vacía (p. ej. `___`) es inválido y
-		**DEBE** provocar un error de parseo, igual que un nombre lógico vacío (sección 4.1).
+		**DEBE** provocar un error de parseo, igual que un nombre lógico vacío ([sección 4.1](#s4-1)).
 
 		Ejemplos de transformación:
 
@@ -250,17 +250,17 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		  * El parser **NO DEBE** interpretar ninguna línea como nodo estructurado, aunque contenga `:` u otra sintaxis de @STXT@.
 		  * El parser **NO DEBE** interpretar líneas que comienzan por `#` como comentarios; son texto literal.
 		* El bloque termina cuando aparece una **línea no vacía, que no sea comentario**, cuya indentación es **menor o igual** que la indentación del nodo `>>`.
-		* Las líneas de **comentario** (ver sección 9) son transparentes al bloque: **NO** cierran el bloque y **NO** forman parte de su contenido, independientemente de su indentación. Simplemente se descartan.
+		* Las líneas de **comentario** (ver [sección 9](#s9)) son transparentes al bloque: **NO** cierran el bloque y **NO** forman parte de su contenido, independientemente de su indentación. Simplemente se descartan.
 		* Las líneas vacías **dentro del bloque** se conservan y **NO DEBEN** cerrar el bloque, independientemente de su indentación.
-		* La comparación de indentaciones entre las líneas y el nodo `>>` se realiza por **nivel** (sección 8.1), con independencia del estilo (tabs o espacios) que use cada línea.
+		* La comparación de indentaciones entre las líneas y el nodo `>>` se realiza por **nivel** ([sección 8.1](#s8-1)), con independencia del estilo (tabs o espacios) que use cada línea.
 		* El bloque también termina al llegar al **final del documento**.
-		* Las líneas del contenido siguen además las reglas de canonicalización de la sección 10.2.
+		* Las líneas del contenido siguen además las reglas de canonicalización de la [sección 10.2](#s10-2).
 		
 	Content >>
 		Como consecuencia de la transparencia de los comentarios, el contenido de un bloque `>>`
 		**puede no ser contiguo en el fichero**: una línea de comentario intercalada (con indentación
 		menor o igual que la del nodo `>>`) se descarta sin cerrar el bloque, y el texto del bloque
-		puede continuar después. Ver el ejemplo detallado en la sección 9.1.
+		puede continuar después. Ver el ejemplo detallado en la [sección 9.1](#s9-1).
 		
 	Subsubheader: 6.2 Ejemplo
 		
@@ -305,7 +305,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* Los namespaces bajo `@stxt` (`@stxt.schema`, `@stxt.template` y cualquier otro `@stxt.*`) están **reservados** para el propio lenguaje @STXT@ y sus especificaciones oficiales. Una aplicación **NO DEBE** definir namespaces propios bajo `@stxt`.
 
 		**Nota:** todo `(` que aparezca tras el nombre de un nodo abre un namespace: los paréntesis
-		no pueden formar parte del nombre (sección 4.2). Por ejemplo, `Cantidad (kg): 3` es
+		no pueden formar parte del nombre ([sección 4.2](#s4-2)). Por ejemplo, `Cantidad (kg): 3` es
 		**inválido**, porque `kg` no cumple el formato mínimo `a.b` de un namespace.
 		
 	Subsubheader: 7.1 Restricción a ASCII
@@ -321,7 +321,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Esta restricción a ASCII es **deliberada**: evita las ambigüedades de normalización Unicode
 		y los ataques homográficos (caracteres visualmente idénticos pero distintos, p. ej. una `a`
 		latina frente a una `а` cirílica), de forma coherente con las prioridades de seguridad de
-		@STXT@ (ver sección 15).
+		@STXT@ (ver [sección 15](#s15)).
 		
 	Subsubheader: 7.2 Herencia y nodos de nivel 0
 		
@@ -341,7 +341,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Content >>
 		En este ejemplo, `Anexo` tiene namespace `""` (vacío). **No** hereda `com.example.docs`
 		del nodo raíz anterior. La ausencia de herencia lateral garantiza que el significado de
-		un nodo raíz no dependa de los nodos que lo precedan (ver sección 8.5, concatenación).
+		un nodo raíz no dependa de los nodos que lo precedan (ver [sección 8.5](#s8-5), concatenación).
 		
 	Subheader: 8. Indentación y Jerarquía
 		
@@ -355,7 +355,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 		* **PUEDE** usar espacios o tabuladores para indentación.
 		* La indentación de una línea **DEBE** ser homogénea: o bien solo tabuladores, o bien solo espacios.
-		* Mezclar espacios y tabuladores en la indentación de una misma línea es un **error de parseo** (ver sección 8.3).
+		* Mezclar espacios y tabuladores en la indentación de una misma línea es un **error de parseo** (ver [sección 8.3](#s8-3)).
 		* Si usa tabs:
 		  * Cada tab representa exactamente 1 nivel.
 		* Si usa espacios:
@@ -459,9 +459,9 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 	Content >>
 		**Nota:** estas reglas de nivel se aplican a las líneas que definen nodos. Las líneas de
-		comentario están exentas de la validación de nivel (ver sección 9): su indentación no se
+		comentario están exentas de la validación de nivel (ver [sección 9](#s9)): su indentación no se
 		comprueba y nunca produce error de nivel. Las líneas de texto de un bloque `>>` siguen
-		las reglas de la sección 10.2: solo su prefijo de nivel de bloque (el nivel del nodo
+		las reglas de la [sección 10.2](#s10-2): solo su prefijo de nivel de bloque (el nivel del nodo
 		`>>` más uno) debe ser válido; el resto de la línea es texto libre.
 		
 	Subsubheader: 8.4 Jerarquía
@@ -489,7 +489,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 
 	Content >>
 		**Cerradura bajo concatenación.** Como consecuencia directa de permitir múltiples nodos
-		de nivel 0 y de la ausencia de herencia lateral (sección 7.2), la **concatenación** de dos
+		de nivel 0 y de la ausencia de herencia lateral ([sección 7.2](#s7-2)), la **concatenación** de dos
 		documentos @STXT@ válidos es también un documento @STXT@ válido, siempre que el segundo
 		comience en una línea de nivel 0 (lo cual ocurre por definición, ya que sus nodos raíz están
 		a nivel 0).
@@ -515,7 +515,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* La indentación de un comentario **no se valida**: un comentario **PUEDE** tener cualquier
 		  indentación, incluso una que sería inválida para un nodo. Nunca produce error de nivel.
 		* Los comentarios son **transparentes a los bloques `>>`**: no cierran un bloque activo ni
-		  forman parte de su contenido (ver 9.1).
+		  forman parte de su contenido (ver [9.1](#s9-1)).
 		
 		Ejemplo:
 	Code >>		
@@ -586,7 +586,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		  Es el único caso en que un error de indentación no falla de forma ruidosa.
 		* Un parser **PUEDE** emitir un aviso al detectar un comentario con indentación menor o igual
 		  que la de un bloque `>>` activo, de forma análoga al aviso de estilo por combinar tabs y
-		  espacios en líneas distintas (sección 8.1).
+		  espacios en líneas distintas ([sección 8.1](#s8-1)).
 
 	Subheader: 10. Normalización de espacios en blanco
 		
@@ -628,7 +628,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		bloque (nivel estrictamente mayor que el del nodo `>>`):
 
 		1. El prefijo de la línea que cubre el nivel de bloque **DEBE** ser homogéneo (solo tabs
-		   o solo espacios, sección 8.1). El cálculo es por **nivel**, por lo que cada línea puede
+		   o solo espacios, [sección 8.1](#s8-1)). El cálculo es por **nivel**, por lo que cada línea puede
 		   usar un estilo distinto del de la línea del nodo `>>` o del resto del bloque.
 		2. El parser elimina **solo** ese prefijo (el nivel de bloque), conservando cualquier
 		   indentación adicional como parte del texto. El resto de la línea es **texto libre**:
@@ -636,7 +636,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		   indentación ni de caracteres — puede contener espacios y tabuladores en cualquier
 		   combinación, y cualquier sintaxis @STXT@ sin interpretarse.
 		3. Sobre ese contenido, el parser **DEBE** eliminar todos los espacios y tabuladores finales (trim a la derecha).
-		4. Las líneas vacías se conservan en todos los casos (ver sección 10.3).
+		4. Las líneas vacías se conservan en todos los casos (ver [sección 10.3](#s10-3)).
 		
 		(Las líneas de comentario intercaladas, según 9.1, ya se han descartado y no intervienen aquí.)
 		
@@ -697,14 +697,14 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Un documento es inválido si ocurre alguna de estas condiciones:
 		
 		1. Espacios que no sean múltiplos de 4 (cuando se usan espacios para indentación).
-		2. Mezcla de espacios y tabuladores en la indentación de una misma línea (sección 8.1).
+		2. Mezcla de espacios y tabuladores en la indentación de una misma línea ([sección 8.1](#s8-1)).
 		3. Saltos en los niveles de indentación.
 		4. Un nodo `>>` contiene contenido significativo inline en la misma línea que `>>`.
 		5. Un nodo no contiene ni `:` ni `>>`.
 		6. El nombre lógico de un nodo es la cadena vacía.
-		7. El nombre canónico de un nodo es la cadena vacía (sección 4.3).
-		8. El nombre de un nodo contiene caracteres no permitidos (sección 4.2).
-		9. Un namespace no cumple las restricciones de la sección 7 (formato `a.b`, sólo ASCII `[a-z0-9]` por elemento, `@` opcional inicial).
+		7. El nombre canónico de un nodo es la cadena vacía ([sección 4.3](#s4-3)).
+		8. El nombre de un nodo contiene caracteres no permitidos ([sección 4.2](#s4-2)).
+		9. Un namespace no cumple las restricciones de la [sección 7](#s7) (formato `a.b`, sólo ASCII `[a-z0-9]` por elemento, `@` opcional inicial).
 		
 		Las líneas de comentario y las líneas vacías **no** son causa de error (su indentación no se valida).
 		
@@ -718,16 +718,16 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* Implementa la sintaxis descrita en este documento.
 		* Aplica las reglas estrictas de indentación y jerarquía.
 		* Interpreta correctamente nodos con `:` y bloques `>>`.
-		* Interpreta comentarios fuera del contenido de bloques `>>` y los trata como transparentes a los bloques según la sección 9.
+		* Interpreta comentarios fuera del contenido de bloques `>>` y los trata como transparentes a los bloques según la [sección 9](#s9).
 		* Trata **todo** lo que esté dentro del contenido de un bloque `>>` (indentación estrictamente mayor) como texto literal.
 		* Acepta **múltiples nodos de nivel 0** y preserva el orden de aparición de los nodos hermanos.
 		* No aplica herencia lateral de namespace entre nodos de nivel 0.
 		* Normaliza los namespaces a minúsculas durante el parseo.
-		* Aplica las reglas de normalización de espacios en blanco de la sección 10.
-		* Rechaza documentos inválidos según la sección 11.
+		* Aplica las reglas de normalización de espacios en blanco de la [sección 10](#s10).
+		* Rechaza documentos inválidos según la [sección 11](#s11).
 
 		La representación interoperable del árbol lógico que resulta de este parseo se define
-		en *STXT-TREE-SPEC*. Su emisión como JSON es una capacidad opcional del parser base;
+		en [*STXT-TREE-SPEC*](stxt-tree-ref). Su emisión como JSON es una capacidad opcional del parser base;
 		no modifica las reglas sintácticas de este documento.
 
 		**Guía de implementación (no normativa).** El pseudocódigo neutro `stxt-impl` concreta
@@ -816,7 +816,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		  loaders ni deserialización de objetos. La única estructura resultante es un árbol simple de nodos y valores textuales.
 		* **Inmune a inyección dentro de bloques literales**: todo contenido dentro de un nodo `>>` se trata 
 		  como texto literal sin interpretación alguna, incluso si contiene `:`, `>>`, `#` u otra sintaxis @STXT@.
-		* **Sin ambigüedad de identificadores**: los namespaces se restringen a ASCII (sección 7.1), 
+		* **Sin ambigüedad de identificadores**: los namespaces se restringen a ASCII ([sección 7.1](#s7-1)), 
 		  eliminando los ataques homográficos basados en caracteres Unicode visualmente equivalentes.
 		* **Bajo riesgo de denegación de servicio**: las reglas estrictas de indentación consecutiva 
 		  y la ausencia de referencias circulares o anchors limitan la complejidad estructural. 
@@ -833,7 +833,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		En consecuencia, @STXT@ es especialmente adecuado para procesar documentos de fuentes no confiables 
 		(configuraciones remotas, entradas de usuario, intercambio de datos) donde la seguridad del parser es crítica.
 		
-		Las implementaciones **DEBEN** rechazar documentos inválidos según la sección 11 
+		Las implementaciones **DEBEN** rechazar documentos inválidos según la [sección 11](#s11) 
 		y **NO DEBEN** introducir extensiones que permitan carga externa 
 		o evaluación dinámica sin medidas de seguridad explícitas.
 		
@@ -877,7 +877,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		  - Namespace heredado actual.
 		
 		* **Flujo básico de parseo:**
-		  1. Leer línea (descartando un `\r` final si existe, sección 3) y calcular su nivel de indentación (según reglas de sección 8).
+		  1. Leer línea (descartando un `\r` final si existe, [sección 3](#s3)) y calcular su nivel de indentación (según reglas de [sección 8](#s8)).
 		  2. Si hay bloque `>>` activo:
 		     - Si la línea es vacía → añadir línea vacía al bloque.
 		     - Si indentación > indentación del nodo `>>` → recortar el nivel de bloque (nivel del nodo `>>` + 1) y añadir el resto como texto literal (trim derecha).
@@ -895,17 +895,17 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		  - Si un nodo define su propio namespace entre `()`, este reemplaza al heredado para él y todos sus descendientes.
 		
 		* **Normalización adicional:**
-		  - Nombres de nodo: según sección 4.1–4.3.
-		  - Namespaces: normalizados a minúsculas durante el parseo (sección 7); sólo se conserva la forma minúscula.
-		  - Valores inline: trim izquierdo y derecho (sección 10.1).
-		  - Líneas de bloque: recortar el nivel de bloque conservando la indentación adicional + trim derecha + preservar todas las líneas vacías (sección 10.2–10.3).
+		  - Nombres de nodo: según [sección 4.1](#s4-1)–[4.3](#s4-3).
+		  - Namespaces: normalizados a minúsculas durante el parseo ([sección 7](#s7)); sólo se conserva la forma minúscula.
+		  - Valores inline: trim izquierdo y derecho ([sección 10.1](#s10-1)).
+		  - Líneas de bloque: recortar el nivel de bloque conservando la indentación adicional + trim derecha + preservar todas las líneas vacías ([sección 10.2](#s10-2)–[10.3](#s10-3)).
 
 	Subheader: 17. Apéndice B — Interacción con `@stxt.schema`
 		
 	Content >>
 		El sistema de schemas permite añadir validación semántica a documentos @STXT@ **sin modificar la sintaxis base** del lenguaje.
 		
-		El núcleo @STXT@ no define cómo debe reaccionar una implementación: el comportamiento pertenece exclusivamente al sistema de schemas (*STXT-SCHEMA-SPEC*).
+		El núcleo @STXT@ no define cómo debe reaccionar una implementación: el comportamiento pertenece exclusivamente al sistema de schemas ([*STXT-SCHEMA-SPEC*](stxt-schema-ref)).
 		
 		Un schema es un documento @STXT@ cuyo namespace es: `@stxt.schema`
 		
@@ -913,7 +913,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 		El núcleo @STXT@ **no interpreta** estas reglas; únicamente define cómo se expresan y cómo se combinan mediante namespaces.
 
-		La localización de los documentos schema en el sistema de ficheros (directorios `.stxt`) se define en *STXT-DISCOVERY-SPEC*.
+		La localización de los documentos schema en el sistema de ficheros (directorios `.stxt`) se define en [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
 
 	Subsubheader: 17.1. Asociación de un schema a un namespace
 		
@@ -979,7 +979,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Content>>	
 		El sistema de templates permite añadir validación semántica a documentos @STXT@ **sin modificar la sintaxis base** del lenguaje.
 		
-		El núcleo @STXT@ no define cómo debe reaccionar una implementación: el comportamiento pertenece exclusivamente al sistema de templates (*STXT-TEMPLATE-SPEC*).
+		El núcleo @STXT@ no define cómo debe reaccionar una implementación: el comportamiento pertenece exclusivamente al sistema de templates ([*STXT-TEMPLATE-SPEC*](stxt-template-ref)).
 		
 		Un template es un documento @STXT@ cuyo namespace es: `@stxt.template`
 		
@@ -1013,6 +1013,6 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Si una implementación encuentra varios schemas o templates aplicables al mismo namespace,
 		**DEBERÍA** definir una política de prioridad clara y determinista.
 		Para una validación concreta, **DEBE** seleccionarse una única fuente semántica efectiva: o bien un schema, o bien un template.
-		Cuando las definiciones se descubren en el sistema de ficheros, esa política queda fijada por *STXT-DISCOVERY-SPEC*.
+		Cuando las definiciones se descubren en el sistema de ficheros, esa política queda fijada por [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
 	
 	Subheader: 19. Fin del Documento
