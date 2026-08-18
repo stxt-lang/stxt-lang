@@ -1,0 +1,4 @@
+# canonicalName is NFC; name keeps the characters as they were written.
+Root (com.example.nfc):
+	Café: decomposed
+	Café: precomposed

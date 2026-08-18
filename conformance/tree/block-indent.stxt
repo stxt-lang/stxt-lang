@@ -1,0 +1,6 @@
+# Indentation beyond the level of the block is literal content and is kept.
+Root (com.example.indent):
+	Snippet >>
+		def f():
+			return 1
+		done

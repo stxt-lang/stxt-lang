@@ -1,0 +1,6 @@
+# The logical name is trimmed and its inner whitespace runs are compacted;
+# the canonical name compacts every run of separators into a single '-'.
+Root (com.example.spacing):
+	Node   with   spaces: value
+	Trailing before colon   : value
+	Mixed _ and - separators: value

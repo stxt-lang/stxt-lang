@@ -1,0 +1,7 @@
+# A child may redeclare the namespace; its descendants inherit the new one,
+# and later siblings keep the old one.
+Root (com.example.outer):
+	Inherited:
+	Override (com.example.inner):
+		Grandchild:
+	After:

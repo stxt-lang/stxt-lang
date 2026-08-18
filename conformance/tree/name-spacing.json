@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.spacing",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Node with spaces",
+        "canonicalName": "node-with-spaces",
+        "namespace": "com.example.spacing",
+        "form": "inline",
+        "value": "value",
+        "children": []
+      },
+      {
+        "name": "Trailing before colon",
+        "canonicalName": "trailing-before-colon",
+        "namespace": "com.example.spacing",
+        "form": "inline",
+        "value": "value",
+        "children": []
+      },
+      {
+        "name": "Mixed _ and - separators",
+        "canonicalName": "mixed-and-separators",
+        "namespace": "com.example.spacing",
+        "form": "inline",
+        "value": "value",
+        "children": []
+      }
+    ]
+  }
+]

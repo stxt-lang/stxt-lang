@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.nfc",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Cafe\u0301",
+        "canonicalName": "caf\u00e9",
+        "namespace": "com.example.nfc",
+        "form": "inline",
+        "value": "decomposed",
+        "children": []
+      },
+      {
+        "name": "Caf\u00e9",
+        "canonicalName": "caf\u00e9",
+        "namespace": "com.example.nfc",
+        "form": "inline",
+        "value": "precomposed",
+        "children": []
+      }
+    ]
+  }
+]

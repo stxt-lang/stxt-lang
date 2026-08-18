@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.blank",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Written blank",
+        "canonicalName": "written-blank",
+        "namespace": "com.example.blank",
+        "form": "block",
+        "lines": ["first", "", "last"]
+      },
+      {
+        "name": "Only blank",
+        "canonicalName": "only-blank",
+        "namespace": "com.example.blank",
+        "form": "block",
+        "lines": [""]
+      },
+      {
+        "name": "No lines",
+        "canonicalName": "no-lines",
+        "namespace": "com.example.blank",
+        "form": "block",
+        "lines": []
+      }
+    ]
+  }
+]

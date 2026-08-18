@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.indent",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Snippet",
+        "canonicalName": "snippet",
+        "namespace": "com.example.indent",
+        "form": "block",
+        "lines": ["def f():", "\treturn 1", "done"]
+      }
+    ]
+  }
+]

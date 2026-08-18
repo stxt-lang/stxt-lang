@@ -1,0 +1,7 @@
+# Inside a block, ':', '>>' and '#' are literal text.
+Root (com.example.literal):
+	Body >>
+		Name: not a node
+		Nested >>
+		# not a comment
+		Trailing colon:

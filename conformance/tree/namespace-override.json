@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.outer",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Inherited",
+        "canonicalName": "inherited",
+        "namespace": "com.example.outer",
+        "form": "inline",
+        "value": "",
+        "children": []
+      },
+      {
+        "name": "Override",
+        "canonicalName": "override",
+        "namespace": "com.example.inner",
+        "form": "inline",
+        "value": "",
+        "children": [
+          {
+            "name": "Grandchild",
+            "canonicalName": "grandchild",
+            "namespace": "com.example.inner",
+            "form": "inline",
+            "value": "",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "After",
+        "canonicalName": "after",
+        "namespace": "com.example.outer",
+        "form": "inline",
+        "value": "",
+        "children": []
+      }
+    ]
+  }
+]

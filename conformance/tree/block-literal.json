@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.literal",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Body",
+        "canonicalName": "body",
+        "namespace": "com.example.literal",
+        "form": "block",
+        "lines": ["Name: not a node", "Nested >>", "# not a comment", "Trailing colon:"]
+      }
+    ]
+  }
+]

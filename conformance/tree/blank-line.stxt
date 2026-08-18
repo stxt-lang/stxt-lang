@@ -1,0 +1,10 @@
+# A blank line of a block is "" however it is written, and a block whose only
+# line is blank is [""], not [].
+Root (com.example.blank):
+	Written blank >>
+		first
+
+		last
+	Only blank >>
+		
+	No lines >>

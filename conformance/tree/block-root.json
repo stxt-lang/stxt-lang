@@ -1,0 +1,9 @@
+[
+  {
+    "name": "Notes",
+    "canonicalName": "notes",
+    "namespace": "com.example.blockroot",
+    "form": "block",
+    "lines": ["A root can be a block.", "Its lines are literal."]
+  }
+]
