@@ -29,6 +29,22 @@
         "form": "inline",
         "value": "",
         "children": []
+      },
+      {
+        "name": "Straße",
+        "canonicalName": "straße",
+        "namespace": "example.ns",
+        "form": "inline",
+        "value": "",
+        "children": []
+      },
+      {
+        "name": "STRASSE",
+        "canonicalName": "strasse",
+        "namespace": "example.ns",
+        "form": "inline",
+        "value": "",
+        "children": []
       }
     ]
   }

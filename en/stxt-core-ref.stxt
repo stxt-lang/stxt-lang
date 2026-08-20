@@ -101,7 +101,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		
 		On that fragment, the following is applied:
 		
-		- Removal of leading and trailing spaces and tabs (trim).
+		- Removal of trailing spaces and tabs (right trim). There is no left trim to do: every
+		  leading space or tab is indentation ([section 8](#s8)).
 		- Compaction of spaces into a single one
 		
 		The result of this normalization is the **node name**.
@@ -144,7 +145,9 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 
 		* Unicode NFC normalization (unifies the precomposed and decomposed forms of the same
 		  character: `é` as a single code point and `e` + combining accent are equivalent)
-		* Conversion to lowercase (Unicode case folding)
+		* Conversion to **Unicode lowercase**, independent of the locale. It is **not** full Unicode
+		  *case folding*: `ß` is preserved (`Straße` → `straße`) and is different from `ss`
+		  (`STRASSE` → `strasse`)
 		* Compaction of spaces (not necessary on an already normalized name)
 		* Replacement of any sequence of separators (`-`, `_`, ` `) with a single hyphen (`-`)
 		* Remove hyphens (`-`) at the beginning and end if any exist
@@ -170,6 +173,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		SIZe number 2__ and 3: size-number-2-and-3
 		Пример 1: пример-1
 		Name 日本語: name-日本語
+		Straße: straße
+		STRASSE: strasse
 
 	Subsubheader: 4.4 Style guidelines
 	Content >>
@@ -181,7 +186,6 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		* `>>` has no character after it
 		* Separate the node name or the namespace with a space before `>>`
 		* Do not use more than one space in names
-		* Namespace without spaces in the definition `(namespace.def)`
 		
 		Examples of correct style:
 		
@@ -224,7 +228,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		Name: value 1
 		Name:    value 1    
 		# in both cases, the inline value of Name is "value 1", although in the 
-		# second there are spaces before and after.		
+		# second there are spaces before and after.
 	
 	Content>>	
 		Strong normalization applies only to structural identifiers.
@@ -302,6 +306,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		* The effective namespace of a root node that does not specify a namespace is the empty namespace `""`.
 		* A child node that does not specify a namespace inherits the effective namespace of its parent.
 		* The empty namespace cannot be specified as `Node name ()`. 
+		* There **MUST NOT** be spaces or tabs between the parentheses: `Node ( a.b ):` and `Node (a. b):` are invalid (`INVALID_NAMESPACE`). They may appear between the name and `(`, and between `)` and `:` or `>>`.
 		* A child node may redefine its namespace by indicating `(another.namespace)`, in which case it uses that namespace instead of the inherited one.
 		* In the input, a namespace **MAY** be written with uppercase or lowercase ASCII letters; the parser **MUST** normalize it to lowercase. The behavior is analogous to domain names: `COM.DEMO.DOCS` and `com.demo.docs` are the same namespace.
 		* Lowercase normalization occurs **during parsing**: the logical representation of the tree contains **only** the lowercase form. The original uppercase form is not preserved.
@@ -446,7 +451,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		
 	Listing >>
 		Level 0:
-		....Level 1
+		....Level 1:
 		...Almost level 1: ERROR: 3 spaces (does not reach 4)
 		
 		Level 0:
@@ -478,6 +483,9 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		An @STXT@ document **MAY** contain **multiple level 0 nodes** (root nodes). There is no
 		obligation for a single root node. How those root nodes are interpreted or used belongs
 		to the application, not to the @STXT@ core.
+
+		It **MAY** also contain none: an empty document, or one made only of comments and empty
+		lines, is **valid** and its tree is the empty sequence of root nodes.
 		
 		Example of a valid document with three root nodes:
 		
@@ -524,7 +532,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		Node:
 		    # Inner comment
 		
-	Subsubheader: 9.1 Comments and `>>` blocks
+	Subsubheader: 9.1 Comments and >> blocks
 		
 	Content >>
 		Within a `>>` block, two situations must be distinguished according to the indentation of the line:
@@ -580,7 +588,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		ensure that different implementations produce the same logical representation 
 		from the same @STXT@ text.
 		
-	Subsubheader: 10.1 Inline values (`:`)
+	Subsubheader: 10.1 Inline values
 		
 	Content >>
 		When parsing a node with `:`:
@@ -604,7 +612,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		
 		If after the `trim` the value is empty, the inline value is considered the empty string (`""`).
 		
-	Subsubheader: 10.2 Lines within `>>` blocks
+	Subsubheader: 10.2 Lines within >> blocks
 		
 	Content >>
 		The **block level** of a `>>` node is **fixed**: the level of the `>>` node plus one.
@@ -614,7 +622,10 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 
 		1. The prefix of the line that covers the block level **MUST** be homogeneous (only tabs
 		   or only spaces, [section 8.1](#s8-1)). The calculation is by **level**, so each line may use a
-		   style different from that of the `>>` node line or the rest of the block.
+		   style different from that of the `>>` node line or the rest of the block. A non-empty line
+		   whose prefix does not reach the block level with a valid number of spaces (e.g. 2 spaces
+		   under a level 0 `>>`) is the error of [section 8.3](#s8-3) (`INVALID_NUMBER_SPACES`): it is
+		   neither block text nor a block close.
 		2. The parser removes **only** that prefix (the block level), preserving any additional
 		   indentation as part of the text. The rest of the line is **free text**: once the block
 		   level is reached, no further indentation or character rules apply — it may contain
@@ -650,7 +661,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		* Line 1: `"    Deeply indented"`
 		* Line 2: `"Less indented"`
 
-	Subsubheader: 10.3 Empty lines in `>>` blocks
+	Subsubheader: 10.3 Empty lines in >> blocks
 		
 	Content >>
 		* Empty lines within the block, whether intermediate or final, **MUST** be preserved as empty lines (`""`) in the logical representation of the text.
@@ -698,11 +709,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		An @STXT@ implementation is conforming if:
 		
 		* It implements the syntax described in this document.
+		* It accepts UTF-8 with or without BOM and both LF and CRLF line endings ([section 3](#s3)).
 		* It applies the strict indentation and hierarchy rules.
 		* It correctly interprets nodes with `:` and `>>` blocks.
 		* It interprets comments outside the content of `>>` blocks, and a comment with indentation less than or equal to that of the `>>` node closes the active block, according to [section 9](#s9).
 		* It treats **everything** within the content of a `>>` block (strictly greater indentation) as literal text.
-		* It accepts **multiple level 0 nodes** and preserves the order of appearance of sibling nodes.
+		* It accepts **multiple level 0 nodes** —and also none ([section 8.5](#s8-5))— and preserves the order of appearance of sibling nodes.
 		* It does not apply lateral namespace inheritance between level 0 nodes.
 		* It normalizes namespaces to lowercase during parsing.
 		* It applies the whitespace normalization rules of [section 10](#s10).
@@ -999,5 +1011,3 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		it **SHOULD** define a clear and deterministic priority policy.
 		For a specific validation, a single effective semantic source **MUST** be selected: either a schema or a template.
 		When definitions are discovered on the file system, that policy is fixed by [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
-	
-	Subheader: 19. End of Document

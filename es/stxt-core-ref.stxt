@@ -100,7 +100,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 		Sobre ese fragmento se aplica:
 		
-		- Eliminación de espacios y tabuladores iniciales y finales (trim).
+		- Eliminación de espacios y tabuladores finales (trim a la derecha). No hay trim a la izquierda
+		  que hacer: todo espacio o tabulador inicial es indentación ([sección 8](#s8)).
 		- Compactación de espacios en uno solo
 		
 		El resultado de esta normalización es el **nombre del nodo**.
@@ -144,7 +145,9 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 
 		* Normalización Unicode NFC (unifica las formas precompuesta y descompuesta de un mismo
 		  carácter: `é` como un solo punto de código y `e` + acento combinante son equivalentes)
-		* Conversión a minúsculas (case folding Unicode)
+		* Conversión a **minúsculas Unicode**, independiente de la configuración regional. **No** es el
+		  *case folding* completo de Unicode: `ß` se conserva (`Straße` → `straße`) y es distinto de
+		  `ss` (`STRASSE` → `strasse`)
 		* Compactación de espacios (no es necesaria sobre un nombre ya normalizado)
 		* Reemplazo de toda secuencia de separadores (`-`, `_`, ` `) por un solo guion (`-`)
 		* Eliminar guiones (`-`) al inicio y al final si existieran
@@ -170,6 +173,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		TAMaÑo número 2__ y 3: tamaño-número-2-y-3
 		Пример 1: пример-1
 		Nombre 日本語: nombre-日本語
+		Straße: straße
+		STRASSE: strasse
 
 	Subsubheader: 4.4 Normas de estilo
 	Content >>
@@ -181,7 +186,6 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* `>>` no tiene ningún carácter después
 		* Separar el nombre del nodo o el namespace con un espacio antes de `>>`
 		* No se usa más de un espacio en los nombres
-		* Namespace sin espacios en la definición `(namespace.def)`
 		
 		Ejemplos de estilo correcto:
 		
@@ -224,7 +228,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Nombre: valor 1
 		Nombre:    valor 1    
 		# en los dos casos, el valor inline de Nombre es "valor 1", aunque en el 
-		# segundo haya espacios antes y después.		
+		# segundo haya espacios antes y después.
 	
 	Content>>	
 		La normalización fuerte se aplica sólo a identificadores estructurales.
@@ -302,6 +306,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* El namespace efectivo de un nodo raíz que no especifica namespace es el namespace vacío `""`.
 		* Un nodo hijo que no especifica namespace hereda el namespace efectivo de su padre.
 		* El namespace vacío NO puede especificarse como `Nombre nodo ()`. 
+		* Entre los paréntesis **NO DEBE** haber espacios ni tabuladores: `Nodo ( a.b ):` y `Nodo (a. b):` son inválidos (`INVALID_NAMESPACE`). Sí puede haberlos entre el nombre y `(`, y entre `)` y `:` o `>>`.
 		* Un nodo hijo puede redefinir su namespace indicando `(otro.namespace)`, en cuyo caso usa ese namespace en lugar del heredado.
 		* En la entrada, un namespace **PUEDE** escribirse con letras mayúsculas o minúsculas ASCII; el parser **DEBE** normalizarlo a minúsculas. El comportamiento es análogo al de los nombres de dominio: `COM.DEMO.DOCS` y `com.demo.docs` son el mismo namespace.
 		* La normalización a minúsculas ocurre **durante el parseo**: la representación lógica del árbol contiene **únicamente** la forma en minúsculas. La forma original en mayúsculas no se conserva.
@@ -446,7 +451,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 	Listing >>
 		Nivel 0:
-		....Nivel 1
+		....Nivel 1:
 		...Nivel casi 1: ERROR: 3 espacios (no se llega a 4)
 		
 		Nivel 0:
@@ -482,6 +487,9 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Un documento @STXT@ **PUEDE** contener **varios nodos de nivel 0** (nodos raíz). No existe
 		la obligación de un único nodo raíz. Cómo se interpretan o usan esos nodos raíz corresponde
 		a la aplicación, no al núcleo @STXT@.
+
+		También **PUEDE** no contener ninguno: un documento vacío, o formado solo por comentarios y
+		líneas vacías, es **válido** y su árbol es la secuencia vacía de nodos raíz.
 		
 		Ejemplo de documento válido con tres nodos raíz:
 		
@@ -528,7 +536,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Nodo:
 		    # Comentario interior
 		
-	Subsubheader: 9.1 Comentarios y bloques `>>`
+	Subsubheader: 9.1 Comentarios y bloques >>
 		
 	Content >>
 		Dentro de un bloque `>>` hay que distinguir dos situaciones según la indentación de la línea:
@@ -584,7 +592,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		garantizar que distintas implementaciones produzcan la misma representación 
 		lógica a partir del mismo texto @STXT@.
 		
-	Subsubheader: 10.1 Valores inline (`:`)
+	Subsubheader: 10.1 Valores inline
 		
 	Content >>
 		Al parsear un nodo con `:`:
@@ -608,7 +616,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		
 		Si tras el `trim` el valor queda vacío, el valor inline se considera la cadena vacía (`""`).
 		
-	Subsubheader: 10.2 Líneas dentro de bloques `>>`
+	Subsubheader: 10.2 Líneas dentro de bloques >>
 		
 	Content >>
 		El **nivel de bloque** de un nodo `>>` es **fijo**: el nivel del nodo `>>` más uno.
@@ -618,7 +626,10 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 
 		1. El prefijo de la línea que cubre el nivel de bloque **DEBE** ser homogéneo (solo tabs
 		   o solo espacios, [sección 8.1](#s8-1)). El cálculo es por **nivel**, por lo que cada línea puede
-		   usar un estilo distinto del de la línea del nodo `>>` o del resto del bloque.
+		   usar un estilo distinto del de la línea del nodo `>>` o del resto del bloque. Una línea no
+		   vacía cuyo prefijo no alcanza el nivel de bloque con un número válido de espacios (p. ej.
+		   2 espacios bajo un `>>` de nivel 0) es el error de la [sección 8.3](#s8-3)
+		   (`INVALID_NUMBER_SPACES`): ni es texto del bloque ni lo cierra.
 		2. El parser elimina **solo** ese prefijo (el nivel de bloque), conservando cualquier
 		   indentación adicional como parte del texto. El resto de la línea es **texto libre**:
 		   una vez alcanzado el nivel de bloque, no se aplica ninguna regla adicional de
@@ -655,7 +666,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		* Línea 1: `"    Muy indentada"`
 		* Línea 2: `"Menos indentada"`
 
-	Subsubheader: 10.3 Líneas vacías en bloques `>>`
+	Subsubheader: 10.3 Líneas vacías en bloques >>
 		
 	Content >>
 		* Las líneas vacías dentro del bloque, ya sean intermedias o finales, **DEBEN** preservarse como líneas vacías (`""`) en la representación lógica del texto.
@@ -703,11 +714,12 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Una implementación @STXT@ es conforme si:
 		
 		* Implementa la sintaxis descrita en este documento.
+		* Acepta UTF-8 con o sin BOM y los finales de línea LF y CRLF ([sección 3](#s3)).
 		* Aplica las reglas estrictas de indentación y jerarquía.
 		* Interpreta correctamente nodos con `:` y bloques `>>`.
 		* Interpreta comentarios fuera del contenido de bloques `>>`, y un comentario con indentación menor o igual que la del nodo `>>` cierra el bloque activo, según la [sección 9](#s9).
 		* Trata **todo** lo que esté dentro del contenido de un bloque `>>` (indentación estrictamente mayor) como texto literal.
-		* Acepta **múltiples nodos de nivel 0** y preserva el orden de aparición de los nodos hermanos.
+		* Acepta **múltiples nodos de nivel 0** —y también ninguno ([sección 8.5](#s8-5))— y preserva el orden de aparición de los nodos hermanos.
 		* No aplica herencia lateral de namespace entre nodos de nivel 0.
 		* Normaliza los namespaces a minúsculas durante el parseo.
 		* Aplica las reglas de normalización de espacios en blanco de la [sección 10](#s10).
@@ -1004,5 +1016,3 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		**DEBERÍA** definir una política de prioridad clara y determinista.
 		Para una validación concreta, **DEBE** seleccionarse una única fuente semántica efectiva: o bien un schema, o bien un template.
 		Cuando las definiciones se descubren en el sistema de ficheros, esa política queda fijada por [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
-	
-	Subheader: 19. Fin del Documento
