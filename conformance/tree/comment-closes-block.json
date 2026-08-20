@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.comment",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Body",
+        "canonicalName": "body",
+        "namespace": "com.example.comment",
+        "form": "block",
+        "lines": ["first line", "# still text"]
+      },
+      {
+        "name": "After",
+        "canonicalName": "after",
+        "namespace": "com.example.comment",
+        "form": "inline",
+        "value": "sibling",
+        "children": []
+      }
+    ]
+  }
+]

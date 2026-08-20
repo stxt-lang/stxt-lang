@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-18
+		Last modif: 2026-08-20
 
 	Header: @STXT@ Schemas (@stxt.schema)
 
@@ -83,6 +83,15 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* There **MUST NOT** be more than one effective schema simultaneously.
 		* If an implementation has several candidate schemas for the same namespace, it **SHOULD** apply a clear and deterministic selection policy.
 		* For a specific validation, there **MUST** be only one effective schema.
+
+	Content >>
+		**The empty namespace is not validated.** A node whose effective namespace is `""` (that of
+		everything that neither declares nor inherits a namespace, [*STXT-SPEC* §7](stxt-core-ref#s7))
+		is **valid by definition**: a validator **MUST NOT** look up a schema for it nor emit
+		`SCHEMA_NOT_FOUND` for it. Since children inherit the namespace, a document without a
+		namespace stays entirely outside validation; a node that declares a namespace inside it **is**
+		validated, against the schema of that namespace. Consequently, no schema or template **MAY**
+		have `""` as its target namespace: nothing could ever resolve against it.
 
 	Subheader: 6. Closed content model
 
@@ -458,7 +467,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 	Content >>
 		A schema is invalid if:
 
-		1. The root node does not have the form `Schema (@stxt.schema): <target_namespace>`, or the target namespace is not valid according to [*STXT-SPEC*](stxt-core-ref).
+		1. The root node does not have the form `Schema (@stxt.schema): <target_namespace>`, or the target namespace is empty or not valid according to [*STXT-SPEC*](stxt-core-ref).
 		2. It does not define any `Node`.
 		3. It defines two `Node` with the same canonical name.
 		4. It uses an unknown `Type`.
@@ -478,7 +487,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* A declared cardinality is violated.
 		* The value of a node does not satisfy validation of its type.
 		* An `ENUM` value does not match exactly any of its `Value`.
-		* A node appears whose namespace has no schema available, or whose name does not exist as a `Node:` in the schema of its namespace ([section 8.1](#s8-1)).
+		* A node with a non-empty namespace appears that has no schema available (`SCHEMA_NOT_FOUND`; nodes with namespace `""` are not validated, [section 5](#s5)), or whose name does not exist as a `Node:` in the schema of its namespace ([section 8.1](#s8-1)).
 
 	Subheader: 14. Conformance
 
@@ -491,7 +500,7 @@ Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
 		* It applies the child compatibility rule by type (only `INLINE` and `GROUP` allow children).
 		* It applies the strict mandatory definition rule for all nodes referenced in `Children` (at schema load for children of the same namespace; at document validation for cross-namespace children, [section 8.1](#s8-1)).
 		* It validates cardinalities **independently of order**.
-		* It selects, for each validation, a single effective schema per namespace.
+		* It selects, for each validation, a single effective schema per namespace, and does not validate nodes with an empty namespace ([section 5](#s5)).
 		* It rejects invalid documents and schemas.
 
 	Subheader: 15. Schema of the Schema (`@stxt.schema`)

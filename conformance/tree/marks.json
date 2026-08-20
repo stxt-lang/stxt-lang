@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.marks",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "\u0939\u093f\u0902\u0926\u0940",
+        "canonicalName": "\u0939\u093f\u0902\u0926\u0940",
+        "namespace": "com.example.marks",
+        "form": "inline",
+        "value": "devanagari",
+        "children": []
+      },
+      {
+        "name": "Q\u0301",
+        "canonicalName": "q\u0301",
+        "namespace": "com.example.marks",
+        "form": "inline",
+        "value": "no precomposed form",
+        "children": []
+      }
+    ]
+  }
+]

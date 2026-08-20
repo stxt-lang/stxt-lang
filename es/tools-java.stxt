@@ -2,7 +2,7 @@ Document (dev.stxt.website): La biblioteca Java
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-17
+		Last modif: 2026-08-20
 
 	Header: La biblioteca Java
 
@@ -32,14 +32,14 @@ Document (dev.stxt.website): La biblioteca Java
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>0.7.2</version>
+		    <version>0.8.0</version>
 		</dependency>
 
 	Content >>
 		O con Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:0.7.2'
+		implementation 'dev.stxt:stxt-core:0.8.0'
 
 	Content >>
 		El javadoc de cada versión está en
@@ -217,9 +217,9 @@ Document (dev.stxt.website): La biblioteca Java
 		tal cual—, y `STXT.parser(loader)` devuelve un parser que resuelve las dos formas,
 		valida cada gramática contra su meta-esquema al cargarla, la cachea y valida cada
 		nodo **con namespace** del documento al cerrarlo: por debajo registra un
-		`SchemaValidator` envuelto en un `ConditionalValidator`, que deja pasar los nodos
-		sin namespace, porque esa es la regla del lenguaje —un documento sin namespace no
-		está mal, solo no se puede validar—.
+		`SchemaValidator`, que deja pasar los nodos sin namespace porque esa es la regla
+		del lenguaje (STXT-SCHEMA-SPEC §5) —un documento sin namespace no está mal, solo
+		no se puede validar—.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -291,11 +291,11 @@ Document (dev.stxt.website): La biblioteca Java
 		  (`getSchema()` devuelve `null`).
 		* Una gramática que no valida contra su meta-esquema se reporta como hallazgo del
 		  documento (por ejemplo `TYPE_NOT_VALID`), no como excepción.
-		* Los nodos sin namespace no se validan (por el `ConditionalValidator`); un
+		* Los nodos sin namespace no se validan (regla del propio `SchemaValidator`); un
 		  documento que es a su vez una definición se valida siempre contra su
-		  meta-esquema. Si en vez de la fachada registras un `SchemaValidator` a mano,
-		  este valida **todos** los nodos: envuélvelo tú en el `ConditionalValidator` para
-		  tener el mismo comportamiento que la CLI y la extensión.
+		  meta-esquema. Registrar un `SchemaValidator` a mano da el mismo comportamiento
+		  que la fachada, la CLI y la extensión; el antiguo `ConditionalValidator` que lo
+		  envolvía es hoy redundante y está obsoleto.
 
 	Java >>
 		import dev.stxt.runtime.ConditionalValidator;

@@ -2,7 +2,7 @@ Document (dev.stxt.website): The Java library
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-17
+		Last modif: 2026-08-20
 
 	Header: The Java library
 
@@ -31,14 +31,14 @@ Document (dev.stxt.website): The Java library
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>0.7.2</version>
+		    <version>0.8.0</version>
 		</dependency>
 
 	Content >>
 		Or with Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:0.7.2'
+		implementation 'dev.stxt:stxt-core:0.8.0'
 
 	Content >>
 		The javadoc of every version is on
@@ -217,9 +217,9 @@ Document (dev.stxt.website): The Java library
 		`STXT.parser(loader)` returns a parser that resolves both kinds, validates each
 		grammar against its meta-schema when loading it, caches it and validates every
 		node **with a namespace** as it is closed: underneath it registers a
-		`SchemaValidator` wrapped in a `ConditionalValidator`, which lets the nodes
-		without a namespace through, because that is the rule of the language —a document
-		without a namespace is not wrong, it just cannot be validated—.
+		`SchemaValidator`, which lets the nodes without a namespace through because that
+		is the rule of the language (STXT-SCHEMA-SPEC §5) —a document without a namespace
+		is not wrong, it just cannot be validated—.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -291,11 +291,11 @@ Document (dev.stxt.website): The Java library
 		  (`getSchema()` returns `null`).
 		* A grammar that does not validate against its meta-schema is reported as a
 		  finding of the document (for instance `TYPE_NOT_VALID`), not as an exception.
-		* Nodes without a namespace are not validated (thanks to `ConditionalValidator`);
+		* Nodes without a namespace are not validated (a rule of `SchemaValidator` itself);
 		  a document that is itself a definition is always validated against its
-		  meta-schema. If instead of the facade you register a `SchemaValidator` by hand,
-		  it validates **every** node: wrap it in the `ConditionalValidator` yourself to
-		  get the same behaviour as the CLI and the extension.
+		  meta-schema. Registering a `SchemaValidator` by hand gives the same behaviour as
+		  the facade, the CLI and the extension; the old `ConditionalValidator` that wrapped
+		  it is now redundant and deprecated.
 
 	Java >>
 		import dev.stxt.runtime.ConditionalValidator;

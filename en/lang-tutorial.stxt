@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-08-18
+		Last modif: 2026-08-20
 		
 	Header: @STXT@ Tutorial
 	
@@ -160,8 +160,8 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Content >>
 		The block ends at the first non-empty line whose indentation is **less than or
-		equal to** that of the `>>` node. Empty lines do not close it, and comments are
-		transparent: they neither close it nor form part of its content.
+		equal to** that of the `>>` node, be it a node or a comment. Empty lines do not
+		close it. There are no comments inside a block: it is a literal.
 
 		Reference: [STXT-SPEC §6.1](stxt-core-ref#s6-1) (block rules) and [§10.2](stxt-core-ref#s10-2) (lines
 		inside blocks).
@@ -170,7 +170,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Content >>
 		A node is always `Name:` (inline) or `Name >>` (block). The name accepts
-		**Unicode letters and digits from any script** —Latin, Greek, Cyrillic,
+		**Unicode letters, digits and combining marks from any script** —Latin, Greek, Cyrillic,
 		Arabic, CJK…—, plus the separators `-`, `_`, and space, and **must contain at
 		least one letter or digit**.
 

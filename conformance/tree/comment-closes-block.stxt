@@ -1,0 +1,7 @@
+# A comment at the level of the block node (or shallower) closes the block.
+Root (com.example.comment):
+	Body >>
+		first line
+		# still text
+	# a comment: the block ends here
+	After: sibling

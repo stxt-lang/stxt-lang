@@ -2,7 +2,7 @@ Document (dev.stxt.website): The Python library
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-17
+		Last modif: 2026-08-20
 
 	Header: The Python library
 
@@ -185,10 +185,11 @@ Document (dev.stxt.website): The Python library
 		schema** when loaded. `UnifiedSchemaProvider` loads either kind with
 		`add_file(text)`: it parses, validates against the corresponding meta-schema and
 		registers the schema by namespace. Validation is a `Validator` registered on the
-		`Parser` that runs on each node as it is closed; `ConditionalValidator` wraps it so
-		that only nodes **with a namespace** are validated, which is the rule of the
-		language: a document without a namespace is not wrong, it just cannot be
-		validated.
+		`Parser` that runs on each node as it is closed; it only validates nodes
+		**with a namespace**, which is the rule of the language (STXT-SCHEMA-SPEC §5): a
+		document without a namespace is not wrong, it just cannot be validated.
+		`ConditionalValidator` used to wrap it to apply that rule; it is now redundant and
+		deprecated.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -239,7 +240,7 @@ Document (dev.stxt.website): The Python library
 		* If the document uses a namespace the provider does not know, each node produces
 		  a `SCHEMA_NOT_FOUND`; the provider **never raises** for a missing namespace
 		  (`get_schema()` returns `None`).
-		* Nodes without a namespace are not validated (thanks to `ConditionalValidator`);
+		* Nodes without a namespace are not validated (a rule of `SchemaValidator` itself);
 		  a document that is itself a definition is always validated against its
 		  meta-schema.
 		* `add_file` accepts files with several definitions, and `get_all_schemas()` lists

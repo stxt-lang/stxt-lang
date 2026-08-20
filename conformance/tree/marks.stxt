@@ -1,0 +1,4 @@
+# Combining marks (Mn, Mc) are name characters: Devanagari vowel signs, and a combining accent with no precomposed form.
+Root (com.example.marks):
+	हिंदी: devanagari
+	Q́: no precomposed form
