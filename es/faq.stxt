@@ -2,7 +2,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-18
+		Last modif: 2026-08-20
 
 	Header: Preguntas frecuentes
 
@@ -51,7 +51,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 	Subsubheader: ¿Qué extensión y qué media type uso?
 
 	Content >>
-		Extensión `.stxt`; media type `text/stxt`, y `text/plain` como alternativa compatible.
+		Extensión `.stxt`; media type `text/stxt` (registro en IANA previsto, aún no registrado), y `text/plain` como alternativa compatible.
 		Codificación UTF-8 sin BOM, finales de línea `LF` (se acepta `CRLF`).
 		Ver [STXT-SPEC §3](stxt-core-ref#s3) y [§13](stxt-core-ref#s13).
 

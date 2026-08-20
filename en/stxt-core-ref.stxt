@@ -728,8 +728,11 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 	Subsubheader: 13.2 Media Type (MIME)
 		
 	Content >>
-		* Official media type: `text/stxt`
-		* Compatible alternative: `text/plain`
+		* Media type: `text/stxt`. Its **registration in the IANA standards tree through an RFC is
+		  planned**; until then it is **not registered**.
+		* Compatible alternative: `text/plain; charset=utf-8`
+		* The content is always UTF-8 ([section 3](#s3)); the `charset` parameter, if present, **MUST**
+		  be `utf-8`.
 
 	Subheader: 14. Normative Examples
 		
@@ -802,8 +805,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		  eliminating homographic attacks based on visually equivalent Unicode characters.
 		* **Low risk of denial of service**: the strict rules of consecutive indentation 
 		  and the absence of circular references or anchors limit structural complexity. 
-		  Implementations **SHOULD** impose a reasonable nesting depth limit (recommended: ≤ 100 levels) 
-		  and total document size.
+		  An implementation **MAY** impose limits on nesting depth or document size according to its
+		  environment; this specification fixes none.
 		* **Streaming parsing with bounded memory**: thanks to allowing multiple level 0 nodes 
 		  and the absence of backward references, a parser **MAY** emit each complete root tree as soon as 
 		  it detects the start of the next level 0 node, with memory usage on the order of the nesting 

@@ -733,8 +733,11 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 	Subsubheader: 13.2 Media Type (MIME)
 		
 	Content >>
-		* Media type oficial: `text/stxt`
-		* Alternativa compatible: `text/plain`
+		* Media type: `text/stxt`. Está **previsto su registro en el árbol estándar de IANA mediante
+		  un RFC**; hasta entonces **no está registrado**.
+		* Alternativa compatible: `text/plain; charset=utf-8`
+		* El contenido es siempre UTF-8 ([sección 3](#s3)); el parámetro `charset`, si aparece, **DEBE**
+		  ser `utf-8`.
 
 	Subheader: 14. Ejemplos Normativos
 		
@@ -807,8 +810,8 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		  eliminando los ataques homográficos basados en caracteres Unicode visualmente equivalentes.
 		* **Bajo riesgo de denegación de servicio**: las reglas estrictas de indentación consecutiva 
 		  y la ausencia de referencias circulares o anchors limitan la complejidad estructural. 
-		  Las implementaciones **DEBERÍAN** imponer un límite razonable de profundidad de anidamiento (recomendado: ≤ 100 niveles) 
-		  y tamaño total del documento.
+		  Una implementación **PUEDE** imponer límites de profundidad de anidamiento o de tamaño del
+		  documento según su entorno; esta especificación no fija ninguno.
 		* **Parseo en streaming con memoria acotada**: gracias a que se permiten múltiples nodos de nivel 0 
 		  y a que no existen referencias hacia atrás, un parser **PUEDE** emitir cada árbol raíz completo en cuanto 
 		  detecta el inicio del siguiente nodo de nivel 0, con un uso de memoria del orden de la profundidad de 
