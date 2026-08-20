@@ -1,14 +1,15 @@
 Document (dev.stxt.website): STXT Tree — Representación canónica del documento
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-18
+		Last modif: 2026-08-20
 
-	Header: @STXT@ Árbol canónico
+	Header: @STXT@ Tree
 
 	Subheader: 1. Introducción
 
 	Content >>
-		Este documento define **STXT-TREE-SPEC**, la representación JSON canónica del
+		Este documento es **STXT-TREE-SPEC**; las demás especificaciones lo citan con ese nombre.
+		Define la representación JSON canónica del
 		árbol lógico que produce el parseo de un documento @STXT@ válido.
 
 		Su propósito es que dos implementaciones conformes puedan mostrar, intercambiar

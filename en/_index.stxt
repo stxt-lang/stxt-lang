@@ -18,7 +18,7 @@ Document (dev.stxt.website): STXT: The Book
 	
 	Subheader: Language Reference
 	
-	Link: @STXT@ Documents
+	Link: @STXT@ Core
 		Page: stxt-core-ref
 
 	Link: @STXT@ Schema
@@ -30,7 +30,7 @@ Document (dev.stxt.website): STXT: The Book
 	Link: @STXT@ Discovery
 		Page: stxt-discovery-ref
 			
-	Link: @STXT@ Canonical tree
+	Link: @STXT@ Tree
 		Page: stxt-tree-ref
 		
 #	Subheader: Transformations		

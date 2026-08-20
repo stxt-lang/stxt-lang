@@ -1,14 +1,15 @@
 Document (dev.stxt.website): STXT Tree — Canonical document representation
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-18
+		Last modif: 2026-08-20
 
-	Header: @STXT@ Canonical tree
+	Header: @STXT@ Tree
 
 	Subheader: 1. Introduction
 
 	Content >>
-		This document defines **STXT-TREE-SPEC**, the canonical JSON representation of the
+		This document is **STXT-TREE-SPEC**; the other specifications cite it by that name.
+		It defines the canonical JSON representation of the
 		logical tree produced when a valid @STXT@ document is parsed.
 
 		Its purpose is for two conforming implementations to display, exchange and compare

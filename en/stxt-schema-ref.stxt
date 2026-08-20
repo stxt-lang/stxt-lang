@@ -1,13 +1,15 @@
-Document (dev.stxt.website): STXT @stxt.schema — Schema Language Specification
+Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 
 	Metadata:
 		Author: Joan Costa Mombiela
 		Last modif: 2026-08-20
 
-	Header: @STXT@ Schemas (@stxt.schema)
+	Header: @STXT@ Schema
 
 	Subheader: 1. Introduction
 	Content >>		
+		This document is **STXT-SCHEMA-SPEC**; the other specifications cite it by that name.
+
 		This document defines the specification of the **@STXT@ Schema** language, a mechanism for validating @STXT@ documents through formal semantic rules.
 
 		A **schema**:

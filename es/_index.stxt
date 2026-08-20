@@ -18,19 +18,19 @@ Document (dev.stxt.website): STXT: El Libro
 	
 	Subheader: Referencia del Lenguaje
 	
-	Link: @STXT@ Documentos
+	Link: @STXT@ Core
 		Page: stxt-core-ref
 
-	Link: @STXT@ Esquemas
+	Link: @STXT@ Schema
 		Page: stxt-schema-ref
 		
-	Link: @STXT@ Plantillas
+	Link: @STXT@ Template
 		Page: stxt-template-ref
 
-	Link: @STXT@ Resolución
+	Link: @STXT@ Discovery
 		Page: stxt-discovery-ref
 			
-	Link: @STXT@ Árbol canónico
+	Link: @STXT@ Tree
 		Page: stxt-tree-ref
 		
 #	Subheader: Transformaciones		

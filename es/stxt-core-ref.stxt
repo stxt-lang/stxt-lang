@@ -1,13 +1,16 @@
-Document (dev.stxt.website): STXT (Semantic Text) — Documentos
+Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Metadata:
 		Author: Joan Costa Mombiela
 		Last modif: 2026-08-20
 		
-	Header: @STXT@ Documentos
+	Header: @STXT@ Core
 	
 	Subheader: 1. Introducción
 	
 	Content >>
+		Este documento es **STXT-SPEC**, la especificación base del lenguaje; las demás
+		especificaciones lo citan con ese nombre.
+
 		Este documento define la especificación del lenguaje **@STXT@ (Semantic Text)**.
 		
 		@STXT@ es un lenguaje **Human-First**, diseñado para que su forma natural sea legible, 
