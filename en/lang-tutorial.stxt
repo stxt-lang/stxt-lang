@@ -192,7 +192,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Assert >>
 		Name equality is insensitive to case and separators, but **sensitive to accents
 		and script**: `Título` and `título` are the same node,\\
-		but `Año` and `Ano` are different nodes.
+		but `Caña` and `Cana`, or `Peña` and `Pena`, are different nodes.
 
 	Content >>
 		This is the same criterion used by internationalized domain names (IDN), and it

@@ -147,7 +147,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documentos
 		Los diacríticos y las letras no latinas **se conservan**: la igualdad de nombres es insensible
 		a mayúsculas y a separadores, pero sensible a acentos y alfabeto, siguiendo el modelo de los
 		nombres de dominio internacionalizados (IDN). Así, `Título` y `título` son el mismo nodo,
-		pero `Año` y `Ano` son nodos distintos. A diferencia de los nombres de nodo, los namespaces
+		pero `Caña` y `Cana`, o `Peña` y `Pena`, son nodos distintos. A diferencia de los nombres de nodo, los namespaces
 		permanecen restringidos a ASCII `[a-z0-9]` ([sección 7](#s7)).
 
 		El nombre canónico será usado para saber si un nodo tiene el mismo nombre que otro.

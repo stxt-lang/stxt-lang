@@ -148,7 +148,7 @@ Document (dev.stxt.website): STXT (Semantic Text) — Documents
 		Diacritics and non-Latin letters **are preserved**: name equality is insensitive to case
 		and separators, but sensitive to accents and script, following the model of
 		internationalized domain names (IDN). Thus, `Título` and `título` are the same node,
-		but `Año` and `Ano` are different nodes. Unlike node names, namespaces
+		but `Caña` and `Cana`, or `Peña` and `Pena`, are different nodes. Unlike node names, namespaces
 		remain restricted to ASCII `[a-z0-9]` ([section 7](#s7)).
 
 		The canonical name will be used to determine whether one node has the same name as another.

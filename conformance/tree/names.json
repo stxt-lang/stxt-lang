@@ -15,16 +15,16 @@
         "children": []
       },
       {
-        "name": "Año",
-        "canonicalName": "año",
+        "name": "Caña",
+        "canonicalName": "caña",
         "namespace": "example.ns",
         "form": "inline",
         "value": "",
         "children": []
       },
       {
-        "name": "Ano",
-        "canonicalName": "ano",
+        "name": "Cana",
+        "canonicalName": "cana",
         "namespace": "example.ns",
         "form": "inline",
         "value": "",

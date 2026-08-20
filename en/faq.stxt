@@ -79,7 +79,7 @@ Document (dev.stxt.website): Frequently asked questions
 
 		* `Date of birth`, `date_of_birth` and `Date-Of-Birth` are the **same** node.
 		* `Título` and `título` are the same node; `Titulo` is **another** one.
-		* `Año` and `ano` are different nodes, as one would expect.
+		* `Caña` and `cana`, or `Peña` and `pena`, are different nodes, as one would expect.
 
 		**Namespaces** are stricter: ASCII `[a-z0-9]` and dots only, at least `a.b`, and they
 		are lower-cased. See [STXT-SPEC §4.3](stxt-core-ref#s4-3) and [§7](stxt-core-ref#s7).

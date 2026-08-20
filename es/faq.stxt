@@ -80,7 +80,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 		* `Fecha de nacimiento`, `fecha_de_nacimiento` y `Fecha-De-Nacimiento` son el **mismo** nodo.
 		* `Título` y `título` son el mismo nodo; `Titulo` es **otro**.
-		* `Año` y `ano` son nodos distintos, como es de esperar.
+		* `Caña` y `cana`, o `Peña` y `pena`, son nodos distintos, como es de esperar.
 
 		Los **namespaces** son más estrictos: solo ASCII `[a-z0-9]` y puntos, al menos `a.b`, y se
 		pasan a minúsculas. Ver [STXT-SPEC §4.3](stxt-core-ref#s4-3) y [§7](stxt-core-ref#s7).

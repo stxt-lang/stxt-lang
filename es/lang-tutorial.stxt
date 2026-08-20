@@ -193,7 +193,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Assert >>
 		La igualdad de nombres es insensible a mayúsculas y a separadores, pero
 		**sensible a acentos y alfabeto**: `Título` y `título` son el mismo nodo,\\
-		pero `Año` y `Ano` son nodos distintos.
+		pero `Caña` y `Cana`, o `Peña` y `Pena`, son nodos distintos.
 
 	Content >>
 		Es el mismo criterio que usan los nombres de dominio internacionalizados (IDN),
