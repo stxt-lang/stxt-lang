@@ -477,7 +477,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		11. Usar una referencia `@Nombre Nodo` que no apunta a una definición local previa ni a un ancestro abierto.
 		12. El nombre de una referencia `@Nombre Nodo` no coincide (en nombre canónico) con el nombre de su línea.
 		13. Declarar a la vez referencia `@Nombre Nodo` y tipo explícito en la misma línea.
-		14. Declarar valores `ENUM` duplicados tras la normalización por trim.
+		14. Declarar valores `ENUM` duplicados tras la normalización por trim, o vacíos (`[a, , b]`, `[a, b,]`).
 		15. Definir hijos, tipo explícito o valores `ENUM` en un nodo cross-namespace.
 		16. El contenido de `Description` no es un documento @STXT@ válido.
 		17. Una entrada de `Description` no corresponde, por nombre canónico, a ningún nodo definido en `Structure`.
@@ -520,6 +520,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		| `CHILDREN_NOT_ALLOWED_IN_REFERENCE` | 21: una referencia `@Nombre Nodo` declara hijos |
 		| `VALUES_NOT_ALLOWED_IN_REFERENCE` | 22: una referencia `@Nombre Nodo` declara valores `ENUM` |
 		| `VALUE_DUPLICATED` | 14: valores `ENUM` repetidos |
+		| `VALUE_EMPTY` | 14: un valor `ENUM` vacío en la lista |
 		| `CHILDREN_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` | 15: hijos en un nodo cross-namespace |
 		| `TYPE_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` | 15: tipo explícito en un nodo cross-namespace |
 		| `VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` | 15: valores `ENUM` en un nodo cross-namespace |

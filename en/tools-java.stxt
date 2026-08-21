@@ -262,8 +262,8 @@ Document (dev.stxt.website): The Java library
 		prints the same codes as `stxt validate`:
 
 	Listing >>
-		schema line 5 [INVALID_VALUE]: Error at line: 5, Published: Invalid date (1 de octubre de 2025)
-		schema line 1 [TOO_FEW_CHILDREN]: Error at line: 1, 0 nodes of 'com.acme.book:isbn' and min is 1
+		schema line 5 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
+		schema line 1 [TOO_FEW_CHILDREN]: 0 nodes of 'com.acme.book:isbn' and min is 1
 
 	Content >>
 		`ResourcesLoader` is a single-method interface, `retrieve(namespace, resource)`

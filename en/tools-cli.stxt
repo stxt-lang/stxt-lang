@@ -30,10 +30,13 @@ Document (dev.stxt.website): The command line
 		npm install -g @stxt-lang/cli
 		stxt --version
 
-		stxt 0.9.1 (@stxt-lang/core 0.9.1)
+		stxt 0.10.0 (@stxt-lang/core 0.10.0, spec 1.0)
 
 	Content >>
-		`--version` prints two versions: the command's and that of the parser inside it.
+		`--version` prints three versions: the command's, that of the parser inside it, and that of
+		the STXT specifications the parser implements. The first two say what is installed; the
+		third says what it conforms to: two installations with different packages read the same
+		STXT as long as the spec version matches.
 		Without installing anything permanently, every command works through `npx`:
 
 	Listing >>

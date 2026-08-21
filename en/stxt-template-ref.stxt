@@ -477,7 +477,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		11. Using a `@Node Name` reference that does not point to a previous local definition or to an open ancestor.
 		12. The name of a `@Node Name` reference does not match (in canonical name) the name of its line.
 		13. Declaring both `@Node Name` reference and explicit type on the same line.
-		14. Declaring duplicate `ENUM` values after trim normalization.
+		14. Declaring duplicate `ENUM` values after trim normalization, or empty ones (`[a, , b]`, `[a, b,]`).
 		15. Defining children, explicit type, or `ENUM` values on a cross-namespace node.
 		16. The content of `Description` is not a valid @STXT@ document.
 		17. A `Description` entry does not correspond, by canonical name, to any node defined in `Structure`.
@@ -520,6 +520,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		| `CHILDREN_NOT_ALLOWED_IN_REFERENCE` | 21: a `@Node Name` reference declares children |
 		| `VALUES_NOT_ALLOWED_IN_REFERENCE` | 22: a `@Node Name` reference declares `ENUM` values |
 		| `VALUE_DUPLICATED` | 14: repeated `ENUM` values |
+		| `VALUE_EMPTY` | 14: an empty `ENUM` value in the list |
 		| `CHILDREN_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` | 15: children on a cross-namespace node |
 		| `TYPE_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` | 15: explicit type on a cross-namespace node |
 		| `VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` | 15: `ENUM` values on a cross-namespace node |

@@ -54,6 +54,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		* The root node `Schema` **MUST** belong to the `@stxt.schema` namespace.
 		* The schema document **MAY** include a `Description` node.
 		* The schema document **MUST** include one or more `Node` nodes.
+		* A schema document is **exactly one** `Schema` node: neither more than one root node, nor none ([section 13](#s13), condition 12).
 
 		Example:
 
@@ -83,7 +84,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		For each logical namespace:
 
 		* There **MUST NOT** be more than one effective schema simultaneously.
-		* If an implementation has several candidate schemas for the same namespace, it **SHOULD** apply a clear and deterministic selection policy.
+		* If an implementation has several candidate schemas for the same namespace, the choice is fixed by [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref): the level closest to the document wins, and two definitions of the same namespace at the same level leave that namespace with no active definition.
 		* For a specific validation, there **MUST** be only one effective schema.
 
 	Content >>
@@ -109,6 +110,13 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		* If a `Node` does **not** declare `Children`, its instances in the document **MUST NOT** have
 		  any direct children (total closure).
 		* The appearance of an **undeclared** direct child **MUST** cause a validation error.
+
+		**Any `Node` can be the root of a document.** The schema does not distinguish between
+		"root" nodes and "child" nodes: a document whose root node is any `Node` of the namespace is
+		valid if that node satisfies its rules. So, against the schema of [section 15.5](#s15-5),
+		both `Document (com.example.docs): …` and `Title (com.example.docs): …` are valid roots.
+		This allows partial documents (a fragment, one file per section) without extra schemas; a
+		schema that wants to restrict the root does so by convention, not by declaration.
 
 		This model is consistent with the @STXT@ philosophy of failing loudly: a misspelled
 		node (for example `Titel` instead of `Title`) is detected as an undeclared child instead
@@ -146,6 +154,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		Rules:
 
 		* The inline value of `Node` **MUST** be a valid node name according to [*STXT-SPEC*](stxt-core-ref).
+		* Matching between a `Node` and the nodes of the document is done by **canonical name** ([*STXT-SPEC* §6](stxt-core-ref#s6)): `Node: Node Name` validates `node-name`, `NODE_NAME` and `Node  Name`, and the same holds for `Child`.
 		* Each `Node` **MUST** be unique within the schema at the canonical name level.
 		* Each `Node` defines the semantics of the node in the schema's target namespace.
 		* If `Type` is omitted, the default type is `INLINE`.
@@ -155,9 +164,9 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		* `Min` and `Max` are optional within a `Child` ([section 10](#s10)).
 
 	Subsubheader: 7.2 Values in ENUM types
-	Code>>
+	Code >>
 		Node: Node Name
-			Description: Node description
+		    Description: Node description
 		    Type: ENUM
 		    Values:
 		        Value: value 1
@@ -168,6 +177,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		The `ENUM` type, and only `ENUM`, **MAY** specify a `Values` node with the allowed values through `Value` nodes.
 		If `Values` exists, it **MUST** contain at least one `Value` node.
 		If a `Node` declares `Type: ENUM`, it **MUST** include `Values`.
+		Each `Value` **MUST** have a non-empty inline value after trimming: an empty `Value:` **MUST** cause a schema error (`VALUE_EMPTY`), because an enumeration whose only valid value is the empty string makes no sense. For the same reason a `Child:` without a value is an error (`INVALID_NODE_NAME`, [section 13.1](#s13-1)).
 
 		Since `ENUM` does not allow children ([section 9](#s9)), a `Node` of type `ENUM` **MUST NOT** declare `Children`.
 
@@ -182,12 +192,12 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 
 	Code >>
 		Node: node name
-			Children:
-				Child: child name (child.namespace)
-					Min: 0
-					Max: 1
+		    Children:
+		        Child: child name (child.namespace)
+		            Min: 0
+		            Max: 1
 
-	Content>>		
+	Content >>
 		* If the namespace is omitted, the `Child` belongs to the target namespace of the current schema.
 		* If an explicit namespace is indicated, the `Child` belongs to that specific namespace.
 		* Within the same `Children` node, an implementation **MUST NOT** accept two `Child` nodes that point to the same logical pair `canonical name + effective namespace`.
@@ -264,7 +274,8 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		| TEXT      | INLINE/BLOCK    | NO              | Generic text. It may be inline `:` or `>>` block. Does not allow children. |
 
 	Subsubheader: 9.3 Basic INLINE content types
-	Content>>
+
+	Content >>
 		A conforming implementation **MUST** support these types and **MUST** validate their structure.
 
 		| Type      | Value form      | Allows children | Description / Validation               |
@@ -274,7 +285,8 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		| ENUM      | INLINE          | NO              | Only specified values (see [9.6](#s9-6)).       |
 
 	Subsubheader: 9.4 Extended INLINE content types
-	Content>>
+
+	Content >>
 		A conforming implementation **MUST** support these types and **SHOULD** validate their structure.
 
 		| Type      | Value form      | Allows children | Description / Validation                      |
@@ -381,9 +393,13 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		| BINARY      | INLINE/BLOCK    | NO              | `[01]+`. Binary string.               |
 		| BASE64      | INLINE/BLOCK    | NO              | Standard Base64: alphabet `A–Z a–z 0–9 + /`, optional trailing `=` padding, no leftover bits. |
 
-		In the `BLOCK` form, validation is applied to the **concatenation** of the block's lines,
-		ignoring line breaks, empty lines, and leading and trailing spaces or tabs of each line.
-		This allows splitting long content (e.g. Base64) across several lines.
+		In all three types, and in both forms, the grammar is applied to the value **with no
+		blanks at all**: before validating, every space (U+0020) and tab (U+0009) is removed,
+		wherever it is, and in the `BLOCK` form line breaks and empty lines too, so that validation
+		applies to the **concatenation** of the lines. This allows grouping digits (`DE AD BE EF`,
+		`1010 1010`) and splitting long content across several lines (e.g. Base64 at 76 columns).
+		No other character is ignored: a separator other than a blank (`DE:AD`, `DE-AD`) is an
+		invalid value.
 
 		`BASE64` is the standard alphabet of RFC 4648 §4 (not the *URL-safe* one with `-` and `_`).
 		The trailing `=` padding **MAY** be omitted; the content **MUST** decode with no leftover
@@ -396,11 +412,11 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		The `ENUM` type allows explicitly enumerating the values allowed for a node.
 		Rules:
 
-		* Comparison **MUST** be done on the inline value already normalized by left and right trim, as defined by [*STXT-SPEC*](stxt-core-ref).
+		* Comparison **MUST** be done on the inline value as delivered by the parser (already trimmed left and right, [*STXT-SPEC* §10.1](stxt-core-ref#s10-1)).
 		* Comparison **MUST** be exact and **CASE-SENSITIVE**.
 		* Comparison **MUST NOT** apply additional canonicalization, removal of diacritics, nor normalizations equivalent to the canonical name of nodes.
 		* The node **MUST** define `Values` with `Value` nodes, which represent the allowed values.
-		* Each `Value` **MUST** be unique after inline normalization by trim.
+		* Each `Value` **MUST** be unique and non-empty ([section 7.2](#s7-2)).
 		* `ENUM` **does not allow children**: a `Node` of type `ENUM` **MUST NOT** declare `Children`.
 
 		Example:
@@ -452,6 +468,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		* If `Max` is omitted, the effective maximum is unlimited.
 		* `Min` and `Max` **MUST NOT** appear more than once within the same `Child`.
 		* If both exist, `Min` **MUST NOT** be greater than `Max`.
+		* `Max: 0` is legal and declares a **forbidden** child: the `Child` exists in the model but no occurrence is valid. It serves, for instance, to withdraw in one version of a namespace a child that another allowed. An implementation **MUST NOT** treat it as an error.
 		* Cardinality applies per instance of the parent node.
 		* Cardinality counts only **direct** children with the same canonical name and the same effective namespace.
 		* Cardinality validation is **independent of child order**: it counts occurrences, not positions (see [section 11](#s11)).
@@ -557,6 +574,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		11. A child appears in `Children` **of the schema's own namespace** whose `Node` is not defined in the schema itself.
 		12. The schema document has more than one root node, or none: a schema document is **exactly one** `Schema` node.
 		13. A node of the schema (`Node`, `Child`, `Type`, `Min`…) is written in `>>` form; all of them are inline except `Description`, which is `TEXT`.
+		14. A `Value` of an `ENUM` is empty ([section 7.2](#s7-2)).
 
 	Content >>
 		A document is invalid against a schema if:
@@ -565,6 +583,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		* A node without declared `Children` presents **any** direct child.
 		* A declared cardinality is violated.
 		* The value of a node does not satisfy validation of its type.
+		* The form of the node (inline or `>>` block, value present or absent, with or without children) is not the one of its type ([section 9](#s9)).
 		* An `ENUM` value does not match exactly any of its `Value`.
 		* A node with a non-empty namespace appears that has no schema available (`SCHEMA_NOT_FOUND`; nodes with namespace `""` are not validated, [section 5](#s5)), or whose name does not exist as a `Node:` in the schema of its namespace ([section 8.1](#s8-1)).
 
@@ -594,6 +613,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		| `MIN_GREATER_THAN_MAX` | 7: `Min` greater than `Max` |
 		| `VALUES_REQUIRED` | 8: `ENUM` without `Values`, or `Values` without any `Value` |
 		| `VALUE_DUPLICATED` | 9: two equal `Value` after trimming |
+		| `VALUE_EMPTY` | 14: a `Value` of an `ENUM` without a value |
 		| `VALUES_DUPLICATED` | two `Values` nodes in the same `Node` |
 		| `CHILD_DUPLICATED` | 10: two `Child` with the same canonical name + namespace pair |
 		| `CHILD_NOT_DEFINED` | 11: a `Child` of the same namespace without its `Node` |
