@@ -1,0 +1,14 @@
+# A comment is validated like a node (homogeneous indentation, level <= last node + 1) but
+# never moves the hierarchy: the node after it is checked against the last node, not the comment.
+Root (com.example.comment):
+	# one level deeper than Root: the position of its first child
+	First: 1
+		# one level deeper than First, which has no children
+	Second: 2
+	# back at the level of the children
+	Third >>
+		text
+	# closes the block; Fourth is checked against Third, not against this comment
+	Fourth: 4
+# level 0 again
+Other: x

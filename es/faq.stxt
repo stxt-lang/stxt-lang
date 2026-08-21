@@ -2,7 +2,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 
 	Header: Preguntas frecuentes
 
@@ -110,10 +110,12 @@ Document (dev.stxt.website): Preguntas frecuentes
 	Subsubheader: ¿Y los comentarios?
 
 	Content >>
-		Una línea cuyo primer carácter no blanco es `#` es un comentario, y no cuenta para la
-		indentación: ni un comentario ni una línea vacía pueden provocar un error de nivel.
-		Dentro de un bloque `>>`, una línea con `#` **más indentada** que el nodo es texto del
-		bloque; una **menos o igual de indentada** es un comentario y no cierra el bloque.
+		Una línea cuyo primer carácter no blanco es `#` es un comentario. No forma parte del
+		árbol ni mueve la jerarquía, pero su indentación se valida como la de un nodo: estilo
+		homogéneo, múltiplos de 4 si son espacios, y como máximo un nivel más que el último nodo.
+		Las líneas vacías sí están exentas. Dentro de un bloque `>>`, una línea con `#` **más
+		indentada** que el nodo es texto del bloque; una **menos o igual de indentada** es un
+		comentario y cierra el bloque.
 		Ver [STXT-SPEC §9](stxt-core-ref#s9).
 
 	Subsubheader: ¿Qué pasa con los comentarios al formatear?

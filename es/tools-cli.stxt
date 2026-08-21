@@ -2,7 +2,7 @@ Document (dev.stxt.website): La línea de comandos
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 
 	Header: La línea de comandos
 
@@ -31,7 +31,7 @@ Document (dev.stxt.website): La línea de comandos
 		npm install -g @stxt-lang/cli
 		stxt --version
 
-		stxt 0.8.0 (@stxt-lang/core 0.8.0)
+		stxt 0.9.0 (@stxt-lang/core 0.9.0)
 
 	Content >>
 		`--version` enseña dos versiones: la del comando y la del parser que lleva dentro.

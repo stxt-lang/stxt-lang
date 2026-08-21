@@ -464,7 +464,12 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		|-->....Mixed level: ERROR: mix of TAB and spaces on the same line
 		
 	Content >>
-		**Note:** these level rules apply to lines that define nodes. Comment lines are exempt from level validation (see [section 9](#s9)): their indentation is not checked and never produces a level error. Text lines of a `>>` block follow the rules of [section 10.2](#s10-2): only their block-level prefix (the level of the `>>` node plus one) must be valid; the rest of the line is free text.
+		**Note:** these level rules apply to lines that define nodes and also to comment lines
+		(see [section 9](#s9)): the indentation of a comment **MUST** be valid and its level
+		**MUST NOT** exceed that of the last node by more than one, even though the comment is not
+		part of the hierarchy. Empty lines are exempt. Text lines of a `>>` block follow the rules
+		of [section 10.2](#s10-2): only their block-level prefix (the level of the `>>` node plus
+		one) must be valid; the rest of the line is free text.
 		
 	Subsubheader: 8.4 Hierarchy
 		
@@ -517,8 +522,14 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		General rules for comments:
 		
 		* A comment is completely **discarded**: it is not part of the resulting tree.
-		* The indentation of a comment is **not validated**: a comment **MAY** have any
-		  indentation, even one that would be invalid for a node. It never produces a level error.
+		* The indentation of a comment **is validated like that of a node** ([section 8](#s8)):
+		  only tabs or only groups of 4 spaces, never mixed on the same line, and its level
+		  **MUST NOT** exceed by more than one the level of the last node read (the same limit a
+		  node would have in that position). A comment that breaks these rules is a parse error
+		  ([section 11](#s11)), with the same codes as a node.
+		* A comment **does not alter the hierarchy**: it does not change the reference level for
+		  the following lines. The node after a comment is validated against the last node, not
+		  against the comment.
 		* A comment **closes an active `>>` block** like any other non-empty line with
 		  indentation less than or equal to that of the `>>` node; within the content of a block
 		  there are no comments (see [9.1](#s9-1)).
@@ -528,6 +539,25 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		# Root comment
 		Node:
 		    # Inner comment
+		    Child: value
+		# Closing comment, at any level from 0 to 2
+		
+	Content >>
+		Examples of invalid comments:
+		
+	Listing >>
+		Node:
+		   # ERROR: 3 spaces (4 are not reached)
+		
+		Node:
+		........# ERROR: level 2 after a level 0 node
+		
+		Node:
+		|-->....# ERROR: mix of TAB and spaces on the same line
+		
+	Content >>
+		The rule comes from visual coherence: indentation is the structure of the document, and a
+		comment floating outside it misleads the reader about which node it refers to.
 		
 	Subsubheader: 9.1 Comments and >> blocks
 		
@@ -571,7 +601,8 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Subsubheader: 9.2 Style for comments
 	Content >>
 		* It is recommended that the comment be at the same level as the following node.
-		  That is, comments for the following node.
+		  That is, comments for the following node. [Section 9](#s9) only bounds the level
+		  (at most that of the last node plus one); within that margin, this is the style.
 		* **There are no comments inside a text block**: a `#` line more indented than the `>>` node
 		  is text, and one with indentation less than or equal closes the block. If a text line that
 		  begins with `#` is de-indented by mistake, the block closes early and the next text line, if
@@ -698,7 +729,8 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		8. The name of a node contains disallowed characters ([section 4.2](#s4-2)).
 		9. A namespace does not comply with the restrictions of [section 7](#s7) (format `a.b`, ASCII only `[a-z0-9]` per element, optional initial `@`).
 		
-		Comment lines and empty lines are **not** a cause of error (their indentation is not validated).
+		Conditions 1, 2 and 3 also apply to comment lines ([section 9](#s9)).
+		Empty lines are **not** a cause of error (their indentation is not validated).
 		
 		A conforming parser **MUST** reject the document.
 		
@@ -711,7 +743,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		* It accepts UTF-8 with or without BOM and both LF and CRLF line endings ([section 3](#s3)).
 		* It applies the strict indentation and hierarchy rules.
 		* It correctly interprets nodes with `:` and `>>` blocks.
-		* It interprets comments outside the content of `>>` blocks, and a comment with indentation less than or equal to that of the `>>` node closes the active block, according to [section 9](#s9).
+		* It interprets comments outside the content of `>>` blocks, validates their indentation like that of a node without letting them alter the hierarchy, and a comment with indentation less than or equal to that of the `>>` node closes the active block, according to [section 9](#s9).
 		* It treats **everything** within the content of a `>>` block (strictly greater indentation) as literal text.
 		* It accepts **multiple level 0 nodes** —and also none ([section 8.5](#s8-5))— and preserves the order of appearance of sibling nodes.
 		* It does not apply lateral namespace inheritance between level 0 nodes.
@@ -840,8 +872,9 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 
 		Line             = Comment | EmptyLine | BlockTextLine | Node
 
-		Comment          = { Blank } "#" { any character until end of line }
-		                   ; outside block content; discarded; its indentation is not validated (section 9)
+		Comment          = Indentation "#" { any character until end of line }
+		                   ; outside block content; discarded; its indentation is validated like a node's
+		                   ; (level <= last node + 1) but does not alter the hierarchy (section 9)
 		EmptyLine        = { Blank }                      ; ignored outside blocks; inside, a "" line of the content (section 10.3)
 		BlockTextLine    = BlockIndentation FreeText      ; only with an open >> block: homogeneous prefix of level(>> node) + 1;
 		                                                  ; the rest is literal text, right-trimmed (section 10.2)
@@ -882,7 +915,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		     - If indentation ≤ indentation of the `>>` node, **whether or not it is a comment** → close block and process the line outside the block.
 		  3. If there is no active block:
 		     - Empty line → ignore (does not affect hierarchy).
-		     - Starts with `#` (after indentation) → comment; discard (without validating its indentation).
+		     - Starts with `#` (after indentation) → comment; validate its indentation like a node's (homogeneous style, multiple of 4, level ≤ last node + 1) and discard without touching the hierarchy.
 		     - Otherwise → new node (normalize name, detect namespace, type : or >>).
 		
 		* **Namespace inheritance:**

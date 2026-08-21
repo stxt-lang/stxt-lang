@@ -464,11 +464,13 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		|-->....Nivel mezclado: ERROR: mezcla de TAB y espacios en la misma línea
 		
 	Content >>
-		**Nota:** estas reglas de nivel se aplican a las líneas que definen nodos. Las líneas de
-		comentario están exentas de la validación de nivel (ver [sección 9](#s9)): su indentación no se
-		comprueba y nunca produce error de nivel. Las líneas de texto de un bloque `>>` siguen
-		las reglas de la [sección 10.2](#s10-2): solo su prefijo de nivel de bloque (el nivel del nodo
-		`>>` más uno) debe ser válido; el resto de la línea es texto libre.
+		**Nota:** estas reglas de nivel se aplican a las líneas que definen nodos y también a las
+		líneas de comentario (ver [sección 9](#s9)): la indentación de un comentario
+		**DEBE** ser válida y su nivel **NO DEBE** superar en más de uno el del último nodo, aunque
+		el comentario no forme parte de la jerarquía. Las líneas vacías están exentas. Las líneas de
+		texto de un bloque `>>` siguen las reglas de la [sección 10.2](#s10-2): solo su prefijo de
+		nivel de bloque (el nivel del nodo `>>` más uno) debe ser válido; el resto de la línea es
+		texto libre.
 		
 	Subsubheader: 8.4 Jerarquía
 		
@@ -521,8 +523,14 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		Reglas generales de los comentarios:
 		
 		* Un comentario se **descarta** por completo: no forma parte del árbol resultante.
-		* La indentación de un comentario **no se valida**: un comentario **PUEDE** tener cualquier
-		  indentación, incluso una que sería inválida para un nodo. Nunca produce error de nivel.
+		* La indentación de un comentario **se valida como la de un nodo** ([sección 8](#s8)): solo
+		  tabuladores o solo grupos de 4 espacios, sin mezclar en la misma línea, y su nivel
+		  **NO DEBE** superar en más de uno el nivel del último nodo leído (el mismo límite que
+		  tendría un nodo en esa posición). Un comentario que incumple estas reglas es un error de
+		  parseo ([sección 11](#s11)), con los mismos códigos que un nodo.
+		* Un comentario **no altera la jerarquía**: no cambia el nivel de referencia para las líneas
+		  siguientes. El nodo que sigue a un comentario se valida contra el último nodo, no contra el
+		  comentario.
 		* Un comentario **cierra un bloque `>>` activo** igual que cualquier otra línea no vacía con
 		  indentación menor o igual que la del nodo `>>`; dentro del contenido de un bloque no hay
 		  comentarios (ver [9.1](#s9-1)).
@@ -532,6 +540,25 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		# Comentario raíz
 		Nodo:
 		    # Comentario interior
+		    Hijo: valor
+		# Comentario de cierre, a cualquier nivel entre 0 y 2
+		
+	Content >>
+		Ejemplos de comentarios inválidos:
+		
+	Listing >>
+		Nodo:
+		   # ERROR: 3 espacios (no se llega a 4)
+		
+		Nodo:
+		........# ERROR: nivel 2 tras un nodo de nivel 0
+		
+		Nodo:
+		|-->....# ERROR: mezcla de TAB y espacios en la misma línea
+		
+	Content >>
+		La regla nace de la coherencia visual: la indentación es la estructura del documento, y un
+		comentario que flota fuera de ella engaña al lector sobre a qué nodo se refiere.
 		
 	Subsubheader: 9.1 Comentarios y bloques >>
 		
@@ -575,7 +602,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Subsubheader: 9.2 Estilo para comentarios
 	Content >>
 		* Se recomienda que el comentario esté en el mismo nivel que el siguiente nodo.
-		  Es decir, comentarios para el siguiente nodo.
+		  Es decir, comentarios para el siguiente nodo. La [sección 9](#s9) solo acota el nivel
+		  (como máximo el del último nodo más uno); dentro de ese margen, el estilo es este.
 		* **Dentro de un bloque de texto no hay comentarios**: una línea `#` más indentada que el nodo
 		  `>>` es texto, y una con indentación menor o igual cierra el bloque. Si una línea de texto que
 		  empieza por `#` se des-indenta por error, el bloque se cierra antes de tiempo y la siguiente
@@ -703,7 +731,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		8. El nombre de un nodo contiene caracteres no permitidos ([sección 4.2](#s4-2)).
 		9. Un namespace no cumple las restricciones de la [sección 7](#s7) (formato `a.b`, sólo ASCII `[a-z0-9]` por elemento, `@` opcional inicial).
 		
-		Las líneas de comentario y las líneas vacías **no** son causa de error (su indentación no se valida).
+		Las condiciones 1, 2 y 3 se aplican también a las líneas de comentario ([sección 9](#s9)).
+		Las líneas vacías **no** son causa de error (su indentación no se valida).
 		
 		Un parser conforme **DEBE** rechazar el documento.
 		
@@ -716,7 +745,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* Acepta UTF-8 con o sin BOM y los finales de línea LF y CRLF ([sección 3](#s3)).
 		* Aplica las reglas estrictas de indentación y jerarquía.
 		* Interpreta correctamente nodos con `:` y bloques `>>`.
-		* Interpreta comentarios fuera del contenido de bloques `>>`, y un comentario con indentación menor o igual que la del nodo `>>` cierra el bloque activo, según la [sección 9](#s9).
+		* Interpreta comentarios fuera del contenido de bloques `>>`, valida su indentación como la de un nodo sin que alteren la jerarquía, y un comentario con indentación menor o igual que la del nodo `>>` cierra el bloque activo, según la [sección 9](#s9).
 		* Trata **todo** lo que esté dentro del contenido de un bloque `>>` (indentación estrictamente mayor) como texto literal.
 		* Acepta **múltiples nodos de nivel 0** —y también ninguno ([sección 8.5](#s8-5))— y preserva el orden de aparición de los nodos hermanos.
 		* No aplica herencia lateral de namespace entre nodos de nivel 0.
@@ -845,8 +874,9 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 
 		Linea            = Comentario | LineaVacia | LineaTextoBloque | Nodo
 
-		Comentario       = { Blanco } "#" { cualquier carácter hasta fin de línea }
-		                   ; fuera del contenido de un bloque; se descarta; su indentación no se valida (sección 9)
+		Comentario       = Indentacion "#" { cualquier carácter hasta fin de línea }
+		                   ; fuera del contenido de un bloque; se descarta; su indentación se valida como la de un
+		                   ; nodo (nivel <= último nodo + 1) pero no altera la jerarquía (sección 9)
 		LineaVacia       = { Blanco }                     ; ignorada fuera de bloques; dentro, una línea "" del contenido (sección 10.3)
 		LineaTextoBloque = IndentacionBloque TextoLibre   ; solo con un bloque >> abierto: prefijo homogéneo del nivel del nodo >> + 1;
 		                                                  ; el resto es texto literal, con trim a la derecha (sección 10.2)
@@ -887,7 +917,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		     - Si indentación ≤ indentación del nodo `>>`, **sea o no un comentario** → cerrar bloque y procesar la línea fuera del bloque.
 		  3. Si no hay bloque activo:
 		     - Línea vacía → ignorar (no afecta jerarquía).
-		     - Empieza por `#` (tras indentación) → comentario; descartar (sin validar su indentación).
+		     - Empieza por `#` (tras indentación) → comentario; validar su indentación como la de un nodo (estilo homogéneo, múltiplo de 4, nivel ≤ último nodo + 1) y descartar sin tocar la jerarquía.
 		     - En caso contrario → nuevo nodo (normalizar nombre, detectar namespace, tipo : o >>).
 		
 		* **Herencia de namespace:**

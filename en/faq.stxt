@@ -2,7 +2,7 @@ Document (dev.stxt.website): Frequently asked questions
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 
 	Header: Frequently asked questions
 
@@ -109,10 +109,12 @@ Document (dev.stxt.website): Frequently asked questions
 	Subsubheader: What about comments?
 
 	Content >>
-		A line whose first non-blank character is `#` is a comment, and it does not count for
-		indentation: neither a comment nor a blank line can cause a level error. Inside a `>>`
-		block, a `#` line indented **deeper** than the node is text of the block; one indented
-		**less or equal** is a comment and does not close the block.
+		A line whose first non-blank character is `#` is a comment. It is not part of the tree
+		and does not move the hierarchy, but its indentation is validated like a node's:
+		homogeneous style, multiples of 4 if spaces, and at most one level deeper than the last
+		node. Blank lines are exempt. Inside a `>>` block, a `#` line indented **deeper** than
+		the node is text of the block; one indented **less or equal** is a comment and closes
+		the block.
 		See [STXT-SPEC §9](stxt-core-ref#s9).
 
 	Subsubheader: What happens to comments when formatting?

@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 		
 	Header: @STXT@ Tutorial
 	
@@ -226,8 +226,9 @@ Document (dev.stxt.website): STXT Tutorial
 		* Comments are **whole-line**. There are no end-of-line comments: in
 		  `Title: My book # note`, the `#` and what follows are part of the
 		  **value**, not a comment.
-		* A comment's indentation is **not validated**: it may sit at any level.
-		  As a style rule, align it with the node it describes.
+		* A comment's indentation is **validated like a node's**: homogeneous style and, at
+		  most, one level deeper than the last node. It does not move the hierarchy. As a style
+		  rule, align it with the node it describes.
 		* Inside a `>>` text block everything is literal: a `#` there is **text**,
 		  not a comment.
 

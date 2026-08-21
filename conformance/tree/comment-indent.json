@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.comment",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "First",
+        "canonicalName": "first",
+        "namespace": "com.example.comment",
+        "form": "inline",
+        "value": "1",
+        "children": []
+      },
+      {
+        "name": "Second",
+        "canonicalName": "second",
+        "namespace": "com.example.comment",
+        "form": "inline",
+        "value": "2",
+        "children": []
+      },
+      {
+        "name": "Third",
+        "canonicalName": "third",
+        "namespace": "com.example.comment",
+        "form": "block",
+        "lines": ["text"]
+      },
+      {
+        "name": "Fourth",
+        "canonicalName": "fourth",
+        "namespace": "com.example.comment",
+        "form": "inline",
+        "value": "4",
+        "children": []
+      }
+    ]
+  },
+  {
+    "name": "Other",
+    "canonicalName": "other",
+    "namespace": "",
+    "form": "inline",
+    "value": "x",
+    "children": []
+  }
+]
