@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.nbsp",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Trailing",
+        "canonicalName": "trailing",
+        "namespace": "com.example.nbsp",
+        "form": "inline",
+        "value": "Joan ",
+        "children": []
+      },
+      {
+        "name": "Leading",
+        "canonicalName": "leading",
+        "namespace": "com.example.nbsp",
+        "form": "inline",
+        "value": " Joan",
+        "children": []
+      },
+      {
+        "name": "Only",
+        "canonicalName": "only",
+        "namespace": "com.example.nbsp",
+        "form": "inline",
+        "value": " ",
+        "children": []
+      },
+      {
+        "name": "Block",
+        "canonicalName": "block",
+        "namespace": "com.example.nbsp",
+        "form": "block",
+        "lines": ["first ", " ", "in the middle"]
+      }
+    ]
+  }
+]

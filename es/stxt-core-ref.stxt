@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 		
 	Header: @STXT@ Core
 	
@@ -53,9 +53,20 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Content >>
 		Cada línea no vacía del documento que no sea comentario ni parte de un bloque `>>` define un **nodo**.
 
-		Una **línea vacía** es una línea sin caracteres o compuesta únicamente por espacios y
-		tabuladores. Fuera de un bloque `>>`, las líneas vacías se ignoran y su indentación no se
-		valida; dentro de un bloque se conservan (ver [sección 10.3](#s10-3)).
+		**Blanco.** En toda esta especificación, *blanco* (o "espacios y tabuladores") designa
+		exclusivamente dos caracteres: el espacio `U+0020` y el tabulador `U+0009`. Son los únicos
+		que cuentan como indentación ([sección 8](#s8)), los únicos que se recortan al normalizar
+		nombres y valores ([sección 10](#s10)) y los únicos que hacen vacía una línea. Cualquier
+		otro carácter de espacio Unicode — el espacio de no separación `U+00A0`, el espacio
+		ideográfico `U+3000`, el separador de línea `U+2028`, etc. — y cualquier carácter de
+		control **es contenido**: forma parte del nombre o del valor, no se recorta y no hace vacía
+		una línea. Un parser **NO DEBE** usar para ello la noción de "espacio en blanco" de su
+		plataforma si esta es más amplia. El `\r` de un final `CRLF` se descarta antes, según la
+		[sección 3](#s3), y no interviene aquí.
+
+		Una **línea vacía** es una línea sin caracteres o compuesta únicamente por blancos. Fuera
+		de un bloque `>>`, las líneas vacías se ignoran y su indentación no se valida; dentro de un
+		bloque se conservan (ver [sección 10.3](#s10-3)).
 		
 		Existen dos formas de nodo:
 		
@@ -577,7 +588,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Content >>
 		Esta sección define cómo deben normalizarse los espacios en blanco para 
 		garantizar que distintas implementaciones produzcan la misma representación 
-		lógica a partir del mismo texto @STXT@.
+		lógica a partir del mismo texto @STXT@. En todo lo que sigue, "espacios y tabuladores"
+		son exactamente los dos blancos definidos en la [sección 4](#s4): `U+0020` y `U+0009`.
 		
 	Subsubheader: 10.1 Valores inline
 		

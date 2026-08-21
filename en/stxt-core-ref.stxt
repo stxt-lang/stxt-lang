@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 		
 	Header: @STXT@ Core
 	
@@ -54,9 +54,20 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Content >>
 		Each non-empty line in the document that is not a comment nor part of a `>>` block defines a **node**.
 
-		An **empty line** is a line with no characters or composed only of spaces and tabs.
-		Outside a `>>` block, empty lines are ignored and their indentation is not validated;
-		inside a block they are preserved (see [section 10.3](#s10-3)).
+		**Blank.** Throughout this specification, *blank* (or "spaces and tabs") designates
+		exactly two characters: the space `U+0020` and the tab `U+0009`. They are the only ones
+		that count as indentation ([section 8](#s8)), the only ones trimmed when normalizing names
+		and values ([section 10](#s10)) and the only ones that make a line empty. Any other
+		Unicode space character — the no-break space `U+00A0`, the ideographic space `U+3000`,
+		the line separator `U+2028`, etc. — and any control character **is content**: it is part
+		of the name or value, it is not trimmed and it does not make a line empty. A parser
+		**MUST NOT** rely on its platform's notion of "whitespace" for this when that notion is
+		broader. The `\r` of a `CRLF` ending is discarded beforehand, per [section 3](#s3), and
+		plays no role here.
+
+		An **empty line** is a line with no characters or composed only of blanks. Outside a
+		`>>` block, empty lines are ignored and their indentation is not validated; inside a
+		block they are preserved (see [section 10.3](#s10-3)).
 		
 		There are two forms of node:
 		
@@ -573,7 +584,8 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Content >>
 		This section defines how whitespace must be normalized to 
 		ensure that different implementations produce the same logical representation 
-		from the same @STXT@ text.
+		from the same @STXT@ text. In everything that follows, "spaces and tabs" are exactly
+		the two blanks defined in [section 4](#s4): `U+0020` and `U+0009`.
 		
 	Subsubheader: 10.1 Inline values
 		

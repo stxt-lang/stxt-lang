@@ -31,14 +31,14 @@ Document (dev.stxt.website): The Java library
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>0.8.0</version>
+		    <version>0.8.1</version>
 		</dependency>
 
 	Content >>
 		Or with Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:0.8.0'
+		implementation 'dev.stxt:stxt-core:0.8.1'
 
 	Content >>
 		The javadoc of every version is on

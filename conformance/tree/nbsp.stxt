@@ -1,0 +1,11 @@
+# Blanks are only U+0020 and U+0009 (STXT-SPEC section 4). Any other Unicode space,
+# such as the no-break space U+00A0 used here, is content: it is neither trimmed nor
+# does it make a line empty.
+Root (com.example.nbsp):
+	Trailing: Joan 
+	Leading: Joan
+	Only: 
+	Block >>
+		first 
+		 
+		in the middle
