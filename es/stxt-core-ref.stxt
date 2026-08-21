@@ -29,39 +29,26 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		
 		Este documento describe la **sintaxis base** del lenguaje.
 
-	Subsubheader: 1.1 Versión de las especificaciones
+	Subsubheader: 1.1 Versión de esta especificación
 
 	Content >>
-		Cada una de las cinco especificaciones de @STXT@ —*STXT-SPEC*, [*STXT-TREE-SPEC*](stxt-tree-ref),
-		[*STXT-SCHEMA-SPEC*](stxt-schema-ref), [*STXT-TEMPLATE-SPEC*](stxt-template-ref) y
-		[*STXT-DISCOVERY-SPEC*](stxt-discovery-ref)— lleva **su propio número de versión**, en el campo
-		`Version` de su `Metadata`. Los números son **independientes**: la sintaxis base se espera
-		muy estable, mientras que las capas de encima (schema, plantillas, descubrimiento) pueden
-		evolucionar a otro ritmo sin que eso signifique que el lenguaje cambió. Es el mismo camino que
-		siguieron XML con XML Schema, o JSON con JSON Schema. El campo `Last modif` responde a otra
-		pregunta, *cuándo cambió de verdad* el documento, y se conserva en todos.
+		Esta especificación lleva su número de versión en el campo `Version` de su `Metadata`, con el
+		formato `mayor.menor`, sin parche. El campo `Last modif` responde a otra pregunta: *cuándo cambió
+		de verdad* el documento.
 
-		Reglas, que cada especificación aplica por separado:
+		* El número **mayor** sube si un documento que era válido **deja de serlo o cambia de
+		  significado**. Es la única clase de cambio que puede romper a alguien, y se hace constar. Una
+		  aclaración que deje inválido algo que una implementación conforme aceptaba cuenta como cambio
+		  mayor: lo que decide es el efecto, no la intención.
+		* El número **menor** sube si **solo se añade** —una aclaración, un caso normativo— sin
+		  invalidar nada existente. Todo lo válido en `1.0` lo es en cualquier `1.x`.
+		* La primera versión es la **`1.0`**. Los borradores anteriores no llevan número.
 
-		* El formato es `mayor.menor`, sin parche: para una especificación el parche no significa nada.
-		* El número **mayor** sube si un documento, schema, plantilla o árbol canónico que era válido
-		  según esa especificación **deja de serlo o cambia de significado**. Es la única clase de cambio
-		  que puede romper a alguien, y se hace constar. Una aclaración que deje inválido algo que una
-		  implementación conforme aceptaba cuenta como cambio mayor: lo que decide es el efecto, no la
-		  intención.
-		* El número **menor** sube si **solo se añade** —un tipo de valor, una aclaración, un caso
-		  normativo— sin invalidar nada existente. Todo lo válido en `1.0` lo es en cualquier `1.x`.
-		* La primera versión de cada especificación es la **`1.0`**. Los borradores anteriores no llevan
-		  número.
-		* Cuando una especificación depende de otra (*STXT-TREE-SPEC* de *STXT-SPEC*,
-		  *STXT-TEMPLATE-SPEC* de *STXT-SCHEMA-SPEC*…), su introducción dice de cuál y a partir de qué
-		  versión. Subir una no obliga a subir las demás.
-		* **«STXT 1.0»**, dicho a secas, es la versión de *STXT-SPEC*: la sintaxis base es lo que define
-		  qué es un documento @STXT@. Una implementación conforme **DEBERÍA** exponer la versión de
-		  *STXT-SPEC* que implementa (por ejemplo, una constante `SPEC_VERSION`), **distinta de la
-		  versión de su paquete**: dos implementaciones con paquetes distintos leen el mismo @STXT@
-		  mientras coincida este número. La conformidad se declara contra la versión de la
-		  especificación, no contra la del paquete.
+		**«STXT 1.0»**, dicho por sí solo, es la versión de esta especificación: la sintaxis base es lo que
+		define qué es un documento @STXT@. Una implementación conforme **DEBERÍA** exponerla (por
+		ejemplo, una constante `SPEC_VERSION`), **distinta de la versión de su paquete**: dos
+		implementaciones con paquetes distintos leen el mismo @STXT@ mientras coincida este número. La
+		conformidad se declara contra la versión de la especificación, no contra la del paquete.
 
 	Subheader: 2. Terminología
 

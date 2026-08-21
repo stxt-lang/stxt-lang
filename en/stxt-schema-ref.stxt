@@ -10,8 +10,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 	Subheader: 1. Introduction
 	Content >>		
 		This document is **STXT-SCHEMA-SPEC**; the other specifications cite it by that name.
-		This is its **version 1.0** (`Version` field); it depends on [*STXT-SPEC*](stxt-core-ref) 1.0 and is versioned separately, as per [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
-
+		
 		This document defines the specification of the **@STXT@ Schema** language, a mechanism for validating @STXT@ documents through formal semantic rules.
 
 		A **schema**:
@@ -23,6 +22,16 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		This document defines what a schema is and how it validates. The way a tool
 		**locates** schemas on the file system (`.stxt` directories, user and system
 		levels, `STXT_PATH`) is defined in [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
+
+	Subsubheader: 1.1 Version of this specification
+
+	Content >>
+		This specification carries its own version number in the `Version` field of its `Metadata`,
+		**independent** of the other @STXT@ specifications, and follows the same change policy as
+		[*STXT-SPEC* §1.1](stxt-core-ref#s1-1): `major.minor`, major if something valid stops being
+		valid or changes meaning, minor if something is only added.
+		It depends on [*STXT-SPEC*](stxt-core-ref): a schema is an @STXT@ document, and requires *STXT-
+		SPEC* 1.0 or later.
 
 	Subheader: 2. Terminology
 

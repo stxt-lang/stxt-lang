@@ -10,8 +10,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 
 	Content >>
 		Este documento es **STXT-TREE-SPEC**; las demás especificaciones lo citan con ese nombre.
-		Esta es su **versión 1.0** (campo `Version`); depende de [*STXT-SPEC*](stxt-core-ref) 1.0 y se versiona por separado, según [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
-		Define la representación JSON canónica del
+				Define la representación JSON canónica del
 		árbol lógico que produce el parseo de un documento @STXT@ válido.
 
 		Su propósito es que dos implementaciones conformes puedan mostrar, intercambiar
@@ -29,6 +28,16 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		La sintaxis de los documentos y el significado de sus nombres, valores, bloques,
 		namespaces e indentación se definen en [*STXT-SPEC*](stxt-core-ref). Los schemas, templates y la
 		resolución de definiciones no cambian este árbol.
+
+	Subsubheader: 1.1 Versión de esta especificación
+
+	Content >>
+		Esta especificación lleva su propio número de versión en el campo `Version` de su `Metadata`,
+		**independiente** del de las demás especificaciones de @STXT@, y sigue la misma política de
+		cambios que [*STXT-SPEC* §1.1](stxt-core-ref#s1-1): `mayor.menor`, mayor si algo válido deja
+		de serlo o cambia de significado, menor si solo se añade.
+		Depende por completo de [*STXT-SPEC*](stxt-core-ref): describe el árbol que produce su sintaxis,
+		y requiere *STXT-SPEC* 1.0 o posterior.
 
 	Subheader: 2. Terminología
 

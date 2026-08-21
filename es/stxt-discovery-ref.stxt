@@ -11,8 +11,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 
 	Content >>
 		Este documento es **STXT-DISCOVERY-SPEC**; las demás especificaciones lo citan con ese nombre.
-		Esta es su **versión 1.0** (campo `Version`); depende de [*STXT-SPEC*](stxt-core-ref) 1.0 y de [*STXT-SCHEMA-SPEC*](stxt-schema-ref) 1.0, y se versiona por separado, según [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
-
+		
 		Este documento define **@STXT@ Discovery**: el mecanismo por el que una herramienta
 		localiza, en el sistema de ficheros, los documentos `@stxt.schema` y `@stxt.template`
 		aplicables a un documento @STXT@.
@@ -29,6 +28,16 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 
 		En el resto de especificaciones, este documento se referencia como
 		*STXT-DISCOVERY-SPEC*.
+
+	Subsubheader: 1.1 Versión de esta especificación
+
+	Content >>
+		Esta especificación lleva su propio número de versión en el campo `Version` de su `Metadata`,
+		**independiente** del de las demás especificaciones de @STXT@, y sigue la misma política de
+		cambios que [*STXT-SPEC* §1.1](stxt-core-ref#s1-1): `mayor.menor`, mayor si algo válido deja
+		de serlo o cambia de significado, menor si solo se añade.
+		Depende de [*STXT-SPEC*](stxt-core-ref) y de [*STXT-SCHEMA-SPEC*](stxt-schema-ref), 1.0 o
+		posterior en ambos casos.
 
 	Subheader: 2. Terminología
 

@@ -10,8 +10,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 	
 	Content >>
 		Este documento es **STXT-TEMPLATE-SPEC**; las demás especificaciones lo citan con ese nombre.
-		Esta es su **versión 1.0** (campo `Version`); depende de [*STXT-SCHEMA-SPEC*](stxt-schema-ref) 1.0 y se versiona por separado, según [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
-
+		
 		Este documento define la especificación del lenguaje **STXT Template**, un mecanismo para describir reglas semánticas
 		(estructura, tipos, cardinalidades y valores permitidos) aplicables a documentos @STXT@.
 		
@@ -33,6 +32,17 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		* Para una validación concreta, una implementación **DEBE** usar una única fuente semántica efectiva: o bien schema, o bien template.
 		* STXT core **NO DEBE** imponer semántica: los templates son una capa opcional, posterior al parseo del documento @STXT@.
 		
+
+	Subsubheader: 1.1 Versión de esta especificación
+
+	Content >>
+		Esta especificación lleva su propio número de versión en el campo `Version` de su `Metadata`,
+		**independiente** del de las demás especificaciones de @STXT@, y sigue la misma política de
+		cambios que [*STXT-SPEC* §1.1](stxt-core-ref#s1-1): `mayor.menor`, mayor si algo válido deja
+		de serlo o cambia de significado, menor si solo se añade.
+		Depende de [*STXT-SCHEMA-SPEC*](stxt-schema-ref): toda plantilla se compila a un schema
+		equivalente, y requiere *STXT-SCHEMA-SPEC* 1.0 o posterior.
+
 	Subheader: 2. Terminología
 	
 	Content >>

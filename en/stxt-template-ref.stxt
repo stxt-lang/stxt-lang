@@ -10,8 +10,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 	
 	Content >>
 		This document is **STXT-TEMPLATE-SPEC**; the other specifications cite it by that name.
-		This is its **version 1.0** (`Version` field); it depends on [*STXT-SCHEMA-SPEC*](stxt-schema-ref) 1.0 and is versioned separately, as per [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
-
+		
 		This document defines the specification of the **STXT Template** language, a mechanism for describing semantic rules
 		(structure, types, cardinalities, and allowed values) applicable to @STXT@ documents.
 		
@@ -33,6 +32,17 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		* For a specific validation, an implementation **MUST** use a single effective semantic source: either schema or template.
 		* STXT core **MUST NOT** impose semantics: templates are an optional layer, after parsing the @STXT@ document.
 		
+
+	Subsubheader: 1.1 Version of this specification
+
+	Content >>
+		This specification carries its own version number in the `Version` field of its `Metadata`,
+		**independent** of the other @STXT@ specifications, and follows the same change policy as
+		[*STXT-SPEC* §1.1](stxt-core-ref#s1-1): `major.minor`, major if something valid stops being
+		valid or changes meaning, minor if something is only added.
+		It depends on [*STXT-SCHEMA-SPEC*](stxt-schema-ref): every template compiles to an equivalent
+		schema, and requires *STXT-SCHEMA-SPEC* 1.0 or later.
+
 	Subheader: 2. Terminology
 	
 	Content >>

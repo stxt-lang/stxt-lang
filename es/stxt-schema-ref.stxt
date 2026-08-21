@@ -10,8 +10,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 	Subheader: 1. Introducción
 	Content >>		
 		Este documento es **STXT-SCHEMA-SPEC**; las demás especificaciones lo citan con ese nombre.
-		Esta es su **versión 1.0** (campo `Version`); depende de [*STXT-SPEC*](stxt-core-ref) 1.0 y se versiona por separado, según [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
-
+		
 		Este documento define la especificación del lenguaje **@STXT@ Schema**, un mecanismo para validar documentos @STXT@ mediante reglas semánticas formales.
 
 		Un **schema**:
@@ -24,6 +23,16 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		herramienta **localiza** los schemas en el sistema de ficheros (directorios
 		`.stxt`, niveles de usuario y sistema, `STXT_PATH`) se define en
 		[*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
+
+	Subsubheader: 1.1 Versión de esta especificación
+
+	Content >>
+		Esta especificación lleva su propio número de versión en el campo `Version` de su `Metadata`,
+		**independiente** del de las demás especificaciones de @STXT@, y sigue la misma política de
+		cambios que [*STXT-SPEC* §1.1](stxt-core-ref#s1-1): `mayor.menor`, mayor si algo válido deja
+		de serlo o cambia de significado, menor si solo se añade.
+		Depende de [*STXT-SPEC*](stxt-core-ref): un schema es un documento @STXT@, y requiere *STXT-
+		SPEC* 1.0 o posterior.
 
 	Subheader: 2. Terminología
 
