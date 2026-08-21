@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 		
 	Header: @STXT@ Template
 	
@@ -484,11 +484,53 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		18. A `Description` entry has structured children.
 		19. A `Description` entry declares a namespace different from the template's target namespace.
 		20. More than one `Description` entry for the same node.
+		21. A `@Node Name` reference declares children: the structure is fixed by the referenced definition.
+		22. A `@Node Name` reference declares `ENUM` values.
 
 	Content >>
 		The validation of a **document** against a template is, by definition, the validation
 		against the equivalent compiled schema ([section 13](#s13)): the invalidity conditions of a
 		document are those defined in [*STXT-SCHEMA-SPEC*](stxt-schema-ref), [section 13](stxt-schema-ref#s13).
+		
+	Subsubheader: 14.1 Error codes
+		
+	Content >>
+		As in [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), every error carries a stable code, identical
+		in every implementation; **from 1.0 on they do not change**. The numbers point to the
+		conditions of the list above.
+		
+		| Code | Condition |
+		|---|---|
+		| `INDENTATION_*` codes of *STXT-SPEC* | 1: indentation of `Structure >>` |
+		| `TEMPLATE_ROOT_NOT_VALID` | 2: the root is not `Template (@stxt.template): …`, or the target namespace is not valid |
+		| `TEMPLATE_NAMESPACE_EMPTY` | 2: the target namespace is empty |
+		| `TEMPLATE_MULTIPLE_ROOTS` | the template document has more than one root node, or none |
+		| `TEMPLATE_STRUCTURE_REQUIRED` | 3: `Structure >>` missing or not a block |
+		| `STRUCTURE_LINE_NOT_VALID` | 4: a `Structure` line without `:` |
+		| `CARDINALITY_NOT_VALID` | 5: malformed cardinality or invalid numbers |
+		| `MIN_GREATER_THAN_MAX` | 5: `(min,max)` with `min` greater than `max` |
+		| `TYPE_NOT_VALID` | 6: unknown type |
+		| `VALUES_REQUIRED` | 7: `ENUM` without `[...]` or with an empty list |
+		| `VALUES_NOT_ALLOWED_FOR_TYPE` | 8: `[...]` on a type other than `ENUM` |
+		| `CHILDREN_NOT_ALLOWED_FOR_TYPE` | 9: children under a type that allows none |
+		| `REFERENCE_REQUIRED` | 10: second appearance of a local node without `@` |
+		| `REFERENCE_NOT_FOUND` | 11: `@Node Name` with no previous definition nor open ancestor |
+		| `REFERENCE_NAME_NOT_VALID` | 12: the name after `@` does not match the line's |
+		| `REFERENCE_WITH_TYPE_NOT_ALLOWED` | 13: reference and explicit type on the same line |
+		| `CHILDREN_NOT_ALLOWED_IN_REFERENCE` | 21: a `@Node Name` reference declares children |
+		| `VALUES_NOT_ALLOWED_IN_REFERENCE` | 22: a `@Node Name` reference declares `ENUM` values |
+		| `VALUE_DUPLICATED` | 14: repeated `ENUM` values |
+		| `CHILDREN_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` | 15: children on a cross-namespace node |
+		| `TYPE_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` | 15: explicit type on a cross-namespace node |
+		| `VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` | 15: `ENUM` values on a cross-namespace node |
+		| codes of *STXT-SPEC* §11.1 | 16: the content of `Description` does not parse |
+		| `DESCRIPTION_NODE_NOT_FOUND` | 17: a `Description` entry with no node in `Structure` |
+		| `DESCRIPTION_CHILDREN_NOT_ALLOWED` | 18: a `Description` entry with children |
+		| `DESCRIPTION_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` | 19: a `Description` entry with another namespace |
+		| `DESCRIPTION_DUPLICATED` | 20: two `Description` entries for the same node |
+		
+		The errors of a **document** against a template are those of
+		[*STXT-SCHEMA-SPEC* §13.1](stxt-schema-ref#s13-1), because it is validated against the compiled schema.
 		
 	Subheader: 15. Conformance
 	

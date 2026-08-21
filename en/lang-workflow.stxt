@@ -2,7 +2,7 @@ Document (dev.stxt.website): The working environment
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-18
+		Last modif: 2026-08-21
 
 	Header: The working environment
 
@@ -140,13 +140,13 @@ Document (dev.stxt.website): The working environment
 		stxt validate docs/book.stxt
 
 		/home/ana/books/docs/book.stxt:6: [INVALID_VALUE] Published: Invalid date (October 1st, 2025) (error)
-		/home/ana/books/docs/book.stxt:1: [INVALID_NUMBER] 0 nodes of 'com.acme.book:isbn' and min is 1 (error)
+		/home/ana/books/docs/book.stxt:1: [TOO_FEW_CHILDREN] 0 nodes of 'com.acme.book:isbn' and min is 1 (error)
 		2 error(s), 0 warning(s)
 
 	Content >>
 		Each finding is `file:line: [CODE] message (severity)`. The **code** is stable and
 		identical in the CLI, the extension and the three libraries (`INVALID_VALUE`,
-		`INVALID_NUMBER`, `CHILD_NOT_DECLARED`, `MIXED_INDENTATION`…), so it can be looked
+		`TOO_FEW_CHILDREN`, `CHILD_NOT_DECLARED`, `INDENTATION_MIXED`…), so it can be looked
 		up in the documentation or filtered in a script. The failed cardinality is reported
 		on the **parent's** line (`Book`, line 1), because it is the parent that has zero
 		`ISBN`.

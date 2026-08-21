@@ -2,7 +2,7 @@ Document (dev.stxt.website): La biblioteca Python
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 
 	Header: La biblioteca Python
 
@@ -64,7 +64,7 @@ Document (dev.stxt.website): La biblioteca Python
 	Content >>
 		Cada error es una `ParseException` con tres atributos: **`line`** (la línea del
 		documento, empezando en 1), **`code`** (estable, en mayúsculas: `INVALID_LINE`,
-		`MIXED_INDENTATION`, `INDENTATION_LEVEL_NOT_VALID`…) y **`message`** —también como
+		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`…) y **`message`** —también como
 		`get_line()`, `get_code()` y `get_message()`—. Los errores de gramática son
 		`ValidationException`, una subclase con los mismos atributos, así que un solo bucle
 		recorre los dos e `isinstance` distingue la severidad. Un documento con un error de
@@ -229,7 +229,7 @@ Document (dev.stxt.website): La biblioteca Python
 
 	Listing >>
 		schema line 5 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
-		schema line 1 [INVALID_NUMBER]: 0 nodes of 'com.acme.book:isbn' and min is 1
+		schema line 1 [TOO_FEW_CHILDREN]: 0 nodes of 'com.acme.book:isbn' and min is 1
 
 	Content >>
 		Reglas que conviene saber:

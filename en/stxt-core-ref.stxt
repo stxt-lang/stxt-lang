@@ -734,6 +734,31 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		
 		A conforming parser **MUST** reject the document.
 		
+	Subsubheader: 11.1 Error codes
+		
+	Content >>
+		Every error carries a stable **code**, in uppercase English, which is the same in every
+		conforming implementation: a program that filters or counts errors does so by code, not by
+		the message text, which each implementation words (and translates) as it sees fit. These are
+		the codes of the syntax errors; each one points to the condition of the list above. **From
+		1.0 on the codes do not change**; until then, a minor version may rename them.
+		
+		| Code | Condition |
+		|---|---|
+		| `INDENTATION_SPACES_NOT_VALID` | 1: indentation spaces that are not a multiple of 4 |
+		| `INDENTATION_MIXED` | 2: tabs and spaces mixed in the indentation of one line |
+		| `INDENTATION_LEVEL_NOT_VALID` | 3: a jump of more than one level from the last node |
+		| `BLOCK_VALUE_NOT_ALLOWED` | 4: content after `>>` on the node line |
+		| `INVALID_LINE` | 5 and 6: the line has neither `:` nor `>>`, the `>>` precedes the `:`, or the name is the empty string |
+		| `INVALID_NODE_NAME` | 7 and 8: empty canonical name, or characters not allowed |
+		| `INVALID_NAMESPACE` | 9: malformed namespace |
+		| `UNEXPECTED_ERROR` | an unforeseen exception of the implementation, wrapped with its line; a document conforming to this specification never produces it |
+		
+		The three `INDENTATION_*` codes apply equally to comment lines ([section 9](#s9)). The
+		codes of semantic validation are defined in [*STXT-SCHEMA-SPEC*](stxt-schema-ref#s13-1) and
+		[*STXT-TEMPLATE-SPEC*](stxt-template-ref#s14-1); those of schema discovery, in
+		[*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
+		
 	Subheader: 12. Conformance
 		
 	Content >>

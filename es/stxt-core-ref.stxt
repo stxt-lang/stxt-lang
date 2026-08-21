@@ -736,6 +736,31 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		
 		Un parser conforme **DEBE** rechazar el documento.
 		
+	Subsubheader: 11.1 Códigos de error
+		
+	Content >>
+		Todo error lleva un **código** estable, en mayúsculas y en inglés, que es el mismo en todas
+		las implementaciones conformes: un programa que filtra o cuenta errores lo hace por código, no
+		por el texto del mensaje, que cada implementación redacta (y traduce) como quiera. Estos son
+		los códigos de los errores de sintaxis; cada uno remite a la condición de la lista anterior.
+		**Desde la 1.0 los códigos no cambian**; hasta entonces, una versión menor puede renombrarlos.
+		
+		| Código | Condición |
+		|---|---|
+		| `INDENTATION_SPACES_NOT_VALID` | 1: espacios de indentación que no son múltiplo de 4 |
+		| `INDENTATION_MIXED` | 2: tabuladores y espacios mezclados en la indentación de una línea |
+		| `INDENTATION_LEVEL_NOT_VALID` | 3: salto de más de un nivel respecto al último nodo |
+		| `BLOCK_VALUE_NOT_ALLOWED` | 4: contenido tras `>>` en la línea del nodo |
+		| `INVALID_LINE` | 5 y 6: la línea no contiene `:` ni `>>`, el `>>` precede al `:`, o el nombre es la cadena vacía |
+		| `INVALID_NODE_NAME` | 7 y 8: nombre canónico vacío o con caracteres no permitidos |
+		| `INVALID_NAMESPACE` | 9: namespace mal formado |
+		| `UNEXPECTED_ERROR` | una excepción no prevista de la implementación, envuelta con su línea; nunca la produce un documento conforme a esta especificación |
+		
+		Los tres códigos `INDENTATION_*` se aplican igual a las líneas de comentario
+		([sección 9](#s9)). Los códigos de la validación semántica se definen en
+		[*STXT-SCHEMA-SPEC*](stxt-schema-ref#s13-1) y [*STXT-TEMPLATE-SPEC*](stxt-template-ref#s14-1); los
+		de la localización de esquemas, en [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
+		
 	Subheader: 12. Conformidad
 		
 	Content >>

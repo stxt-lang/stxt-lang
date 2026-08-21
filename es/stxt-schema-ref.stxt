@@ -557,6 +557,8 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		9. Aparece un `Value` duplicado tras la normalización inline por trim.
 		10. Aparecen dos nodos `Child` equivalentes (mismo `nombre canónico + namespace efectivo`) dentro del mismo `Children`.
 		11. Aparece un hijo en `Children` **del mismo namespace del schema** cuyo `Node` no está definido en el propio schema.
+		12. El documento schema tiene más de un nodo raíz, o ninguno: un documento schema es **exactamente un** nodo `Schema`.
+		13. Un nodo del schema (`Node`, `Child`, `Type`, `Min`…) está escrito en forma `>>`; todos son inline salvo `Description`, que es `TEXT`.
 
 	Content >>
 		Un documento es inválido frente a un schema si:
@@ -568,6 +570,53 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		* Un valor `ENUM` no coincide exactamente con ninguno de sus `Value`.
 		* Aparece un nodo con namespace no vacío que no tiene schema disponible (`SCHEMA_NOT_FOUND`; los nodos con namespace `""` no se validan, [sección 5](#s5)), o cuyo nombre no existe como `Node:` en el schema de su namespace ([sección 8.1](#s8-1)).
 
+	Subsubheader: 13.1 Códigos de error
+		
+	Content >>
+		Como en [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), cada error lleva un código estable e idéntico
+		en todas las implementaciones; **desde la 1.0 no cambian**. Un documento schema se valida
+		primero **como documento** contra el meta-esquema de la [sección 15](#s15), así que sus
+		errores de forma (un `Node` sin valor, dos `Type`, un `Min` que no es `NATURAL`…) llegan con
+		los códigos de la segunda tabla; después se aplican las reglas propias de la primera.
+		
+		Errores del **schema** (primera lista de esta sección):
+		
+		| Código | Condición |
+		|---|---|
+		| `SCHEMA_ROOT_NOT_VALID` | 1: la raíz no es `Schema (@stxt.schema): …`, o el namespace objetivo no es válido |
+		| `SCHEMA_NAMESPACE_EMPTY` | 1: el namespace objetivo está vacío |
+		| `SCHEMA_MULTIPLE_ROOTS` | 12: el documento schema tiene más de un nodo raíz, o ninguno |
+		| `SCHEMA_NODE_NOT_INLINE` | 13: un nodo del schema está escrito en forma `>>` |
+		| `NODE_DUPLICATED` | 3: dos `Node` con el mismo nombre canónico |
+		| `INVALID_NODE_NAME` | el valor de un `Node` o un `Child` no es un nombre válido ([sección 7.1](#s7-1)) |
+		| `TYPE_NOT_VALID` | 4: tipo desconocido (el meta-esquema lo detecta antes como `INVALID_VALUE` del `ENUM` `Type`; `TYPE_NOT_VALID` queda para una implementación cuyo registro de tipos no tenga el tipo) |
+		| `CHILDREN_NOT_ALLOWED_FOR_TYPE` | 5: `Children` en un tipo que no admite hijos |
+		| `VALUES_NOT_ALLOWED_FOR_TYPE` | 6: `Values` en un tipo distinto de `ENUM` |
+		| `CARDINALITY_NOT_VALID` | 7: `Min` o `Max` no es un entero no negativo |
+		| `MIN_GREATER_THAN_MAX` | 7: `Min` mayor que `Max` |
+		| `VALUES_REQUIRED` | 8: `ENUM` sin `Values`, o `Values` sin ningún `Value` |
+		| `VALUE_DUPLICATED` | 9: dos `Value` iguales tras el recorte |
+		| `VALUES_DUPLICATED` | dos nodos `Values` en el mismo `Node` |
+		| `CHILD_DUPLICATED` | 10: dos `Child` con el mismo par nombre canónico + namespace |
+		| `CHILD_NOT_DEFINED` | 11: un `Child` del mismo namespace sin su `Node` |
+		
+		Errores del **documento** frente al schema (segunda lista):
+		
+		| Código | Condición |
+		|---|---|
+		| `SCHEMA_NOT_FOUND` | nodo con namespace no vacío sin schema disponible |
+		| `NODE_NOT_DEFINED_IN_SCHEMA` | el nombre del nodo no existe como `Node` en el schema de su namespace |
+		| `CHILD_NOT_DECLARED` | hijo directo no declarado en `Children` (modelo cerrado), o cualquier hijo bajo un `Node` sin `Children` |
+		| `TOO_FEW_CHILDREN` | menos apariciones de un hijo que su `Min` |
+		| `TOO_MANY_CHILDREN` | más apariciones de un hijo que su `Max` |
+		| `INVALID_VALUE` | el valor no cumple la gramática de su tipo, o no es uno de los `Value` de un `ENUM` |
+		| `BLOCK_FORM_REQUIRED` | forma inline donde el tipo exige bloque `>>` (`BLOCK`) |
+		| `BLOCK_FORM_NOT_ALLOWED` | forma bloque `>>` donde el tipo exige inline |
+		| `VALUE_NOT_ALLOWED` | valor en un nodo de tipo `GROUP` |
+		| `CHILDREN_NOT_ALLOWED` | hijos bajo un nodo de tipo `TEXT` o `MARKDOWN` |
+		| `TYPE_NOT_VALID` | el tipo declarado en el schema no existe en la implementación |
+		| `UNEXPECTED_ERROR` | excepción no prevista de la implementación, con la línea del nodo |
+		
 	Subheader: 14. Conformidad
 
 	Content >>

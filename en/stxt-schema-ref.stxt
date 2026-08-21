@@ -555,6 +555,8 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		9. A duplicated `Value` appears after inline normalization by trim.
 		10. Two equivalent `Child` nodes appear (same `canonical name + effective namespace`) within the same `Children`.
 		11. A child appears in `Children` **of the schema's own namespace** whose `Node` is not defined in the schema itself.
+		12. The schema document has more than one root node, or none: a schema document is **exactly one** `Schema` node.
+		13. A node of the schema (`Node`, `Child`, `Type`, `Min`…) is written in `>>` form; all of them are inline except `Description`, which is `TEXT`.
 
 	Content >>
 		A document is invalid against a schema if:
@@ -566,6 +568,53 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		* An `ENUM` value does not match exactly any of its `Value`.
 		* A node with a non-empty namespace appears that has no schema available (`SCHEMA_NOT_FOUND`; nodes with namespace `""` are not validated, [section 5](#s5)), or whose name does not exist as a `Node:` in the schema of its namespace ([section 8.1](#s8-1)).
 
+	Subsubheader: 13.1 Error codes
+		
+	Content >>
+		As in [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), every error carries a stable code, identical
+		in every implementation; **from 1.0 on they do not change**. A schema document is first
+		validated **as a document** against the meta-schema of [section 15](#s15), so its form errors
+		(a `Node` without a value, two `Type`, a `Min` that is not a `NATURAL`…) come with the codes
+		of the second table; the rules of the first are applied afterwards.
+		
+		Errors of the **schema** (first list of this section):
+		
+		| Code | Condition |
+		|---|---|
+		| `SCHEMA_ROOT_NOT_VALID` | 1: the root is not `Schema (@stxt.schema): …`, or the target namespace is not valid |
+		| `SCHEMA_NAMESPACE_EMPTY` | 1: the target namespace is empty |
+		| `SCHEMA_MULTIPLE_ROOTS` | 12: the schema document has more than one root node, or none |
+		| `SCHEMA_NODE_NOT_INLINE` | 13: a node of the schema is written in `>>` form |
+		| `NODE_DUPLICATED` | 3: two `Node` with the same canonical name |
+		| `INVALID_NODE_NAME` | the value of a `Node` or a `Child` is not a valid name ([section 7.1](#s7-1)) |
+		| `TYPE_NOT_VALID` | 4: unknown type (the meta-schema catches it first as `INVALID_VALUE` of the `Type` `ENUM`; `TYPE_NOT_VALID` is left for an implementation whose type registry lacks the type) |
+		| `CHILDREN_NOT_ALLOWED_FOR_TYPE` | 5: `Children` on a type that allows no children |
+		| `VALUES_NOT_ALLOWED_FOR_TYPE` | 6: `Values` on a type other than `ENUM` |
+		| `CARDINALITY_NOT_VALID` | 7: `Min` or `Max` is not a non-negative integer |
+		| `MIN_GREATER_THAN_MAX` | 7: `Min` greater than `Max` |
+		| `VALUES_REQUIRED` | 8: `ENUM` without `Values`, or `Values` without any `Value` |
+		| `VALUE_DUPLICATED` | 9: two equal `Value` after trimming |
+		| `VALUES_DUPLICATED` | two `Values` nodes in the same `Node` |
+		| `CHILD_DUPLICATED` | 10: two `Child` with the same canonical name + namespace pair |
+		| `CHILD_NOT_DEFINED` | 11: a `Child` of the same namespace without its `Node` |
+		
+		Errors of the **document** against the schema (second list):
+		
+		| Code | Condition |
+		|---|---|
+		| `SCHEMA_NOT_FOUND` | node with a non-empty namespace and no schema available |
+		| `NODE_NOT_DEFINED_IN_SCHEMA` | the node's name does not exist as a `Node` in the schema of its namespace |
+		| `CHILD_NOT_DECLARED` | direct child not declared in `Children` (closed model), or any child under a `Node` without `Children` |
+		| `TOO_FEW_CHILDREN` | fewer occurrences of a child than its `Min` |
+		| `TOO_MANY_CHILDREN` | more occurrences of a child than its `Max` |
+		| `INVALID_VALUE` | the value does not follow the grammar of its type, or is not one of the `Value` of an `ENUM` |
+		| `BLOCK_FORM_REQUIRED` | inline form where the type requires a `>>` block (`BLOCK`) |
+		| `BLOCK_FORM_NOT_ALLOWED` | `>>` block form where the type requires inline |
+		| `VALUE_NOT_ALLOWED` | a value on a node of type `GROUP` |
+		| `CHILDREN_NOT_ALLOWED` | children under a node of type `TEXT` or `MARKDOWN` |
+		| `TYPE_NOT_VALID` | the type declared in the schema does not exist in the implementation |
+		| `UNEXPECTED_ERROR` | unforeseen exception of the implementation, with the node's line |
+		
 	Subheader: 14. Conformance
 
 	Content >>

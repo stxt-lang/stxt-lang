@@ -2,7 +2,7 @@ Document (dev.stxt.website): The Python library
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 
 	Header: The Python library
 
@@ -64,7 +64,7 @@ Document (dev.stxt.website): The Python library
 	Content >>
 		Every error is a `ParseException` with three attributes: **`line`** (the line of
 		the document, starting at 1), **`code`** (stable, upper-case: `INVALID_LINE`,
-		`MIXED_INDENTATION`, `INDENTATION_LEVEL_NOT_VALID`…) and **`message`** —also as
+		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`…) and **`message`** —also as
 		`get_line()`, `get_code()` and `get_message()`—. Grammar errors are
 		`ValidationException`, a subclass with the same attributes, so a single loop walks
 		both and `isinstance` tells the severity apart. A document with a syntax error may
@@ -230,7 +230,7 @@ Document (dev.stxt.website): The Python library
 
 	Listing >>
 		schema line 5 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
-		schema line 1 [INVALID_NUMBER]: 0 nodes of 'com.acme.book:isbn' and min is 1
+		schema line 1 [TOO_FEW_CHILDREN]: 0 nodes of 'com.acme.book:isbn' and min is 1
 
 	Content >>
 		Rules worth knowing:

@@ -31,7 +31,7 @@ Document (dev.stxt.website): La línea de comandos
 		npm install -g @stxt-lang/cli
 		stxt --version
 
-		stxt 0.9.0 (@stxt-lang/core 0.9.0)
+		stxt 0.9.1 (@stxt-lang/core 0.9.1)
 
 	Content >>
 		`--version` enseña dos versiones: la del comando y la del parser que lleva dentro.
@@ -135,7 +135,7 @@ Document (dev.stxt.website): La línea de comandos
 		git show HEAD:docs/book.stxt | stxt validate -
 
 		<stdin>:6: [INVALID_VALUE] Published: Invalid date (1 de octubre de 2025) (error)
-		<stdin>:1: [INVALID_NUMBER] 0 nodes of 'com.acme.book:isbn' and min is 1 (error)
+		<stdin>:1: [TOO_FEW_CHILDREN] 0 nodes of 'com.acme.book:isbn' and min is 1 (error)
 		2 error(s), 0 warning(s)
 
 	Subsubheader: Los hallazgos
@@ -149,7 +149,7 @@ Document (dev.stxt.website): La línea de comandos
 		stxt validate docs/book.stxt
 
 		/home/ana/libros/docs/book.stxt:6: [INVALID_VALUE] Published: Invalid date (1 de octubre de 2025) (error)
-		/home/ana/libros/docs/book.stxt:1: [INVALID_NUMBER] 0 nodes of 'com.acme.book:isbn' and min is 1 (error)
+		/home/ana/libros/docs/book.stxt:1: [TOO_FEW_CHILDREN] 0 nodes of 'com.acme.book:isbn' and min is 1 (error)
 		2 error(s), 0 warning(s)
 
 	Content >>
@@ -160,8 +160,8 @@ Document (dev.stxt.website): La línea de comandos
 
 		| Código                                             | De qué habla                                                       |
 		|----------------------------------------------------|--------------------------------------------------------------------|
-		| `MIXED_INDENTATION`, `INDENTATION_LEVEL_NOT_VALID`, `INVALID_LINE` | Sintaxis ([STXT-SPEC](stxt-core-ref))                        |
-		| `INVALID_VALUE`, `INVALID_NUMBER`, `CHILD_NOT_DECLARED`, `NODE_NOT_EXIST_IN_SCHEMA` | Gramática ([STXT-SCHEMA-SPEC](stxt-schema-ref)) |
+		| `INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`, `INVALID_LINE` | Sintaxis ([STXT-SPEC](stxt-core-ref))                        |
+		| `INVALID_VALUE`, `TOO_FEW_CHILDREN`, `CHILD_NOT_DECLARED`, `NODE_NOT_DEFINED_IN_SCHEMA` | Gramática ([STXT-SCHEMA-SPEC](stxt-schema-ref)) |
 		| `SCHEMA_NOT_FOUND`                                 | El documento usa un namespace que la cadena no define              |
 		| `DISCOVERY_DUPLICATE_NAMESPACE`, `DISCOVERY_NOT_A_DEFINITION` | La propia cadena de resolución ([STXT-DISCOVERY-SPEC](stxt-discovery-ref)) |
 		| `FILE_NOT_READABLE`                                | El fichero no existe o no se puede leer                            |
@@ -198,7 +198,7 @@ Document (dev.stxt.website): La línea de comandos
 		stxt validate --warn-schema docs/book.stxt
 
 		/home/ana/libros/docs/book.stxt:6: [INVALID_VALUE] Published: Invalid date (1 de octubre de 2025) (warning)
-		/home/ana/libros/docs/book.stxt:1: [INVALID_NUMBER] 0 nodes of 'com.acme.book:isbn' and min is 1 (warning)
+		/home/ana/libros/docs/book.stxt:1: [TOO_FEW_CHILDREN] 0 nodes of 'com.acme.book:isbn' and min is 1 (warning)
 		0 error(s), 2 warning(s)
 
 	Content >>
@@ -216,7 +216,7 @@ Document (dev.stxt.website): La línea de comandos
 	Listing >>
 		stxt validate --format json docs/book.stxt
 
-		[{"file":"/home/ana/libros/docs/book.stxt","line":6,"code":"INVALID_VALUE","message":"Published: Invalid date (1 de octubre de 2025)","severity":"error"},{"file":"/home/ana/libros/docs/book.stxt","line":1,"code":"INVALID_NUMBER","message":"0 nodes of 'com.acme.book:isbn' and min is 1","severity":"error"}]
+		[{"file":"/home/ana/libros/docs/book.stxt","line":6,"code":"INVALID_VALUE","message":"Published: Invalid date (1 de octubre de 2025)","severity":"error"},{"file":"/home/ana/libros/docs/book.stxt","line":1,"code":"TOO_FEW_CHILDREN","message":"0 nodes of 'com.acme.book:isbn' and min is 1","severity":"error"}]
 
 	Listing >>
 		# Cuántos hallazgos de cada código hay en todo el proyecto

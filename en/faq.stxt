@@ -61,7 +61,7 @@ Document (dev.stxt.website): Frequently asked questions
 	Content >>
 		Both work, and they mean the same: **one tab is one level, four spaces are one level**.
 		What does not work is mixing them in the indentation of a single line (error
-		`MIXED_INDENTATION`), or using another width (two spaces are not half a level: they are
+		`INDENTATION_MIXED`), or using another width (two spaces are not half a level: they are
 		an error). Different lines of a document may use different styles, but for style's sake
 		pick one; `stxt format --tabs` or `--spaces` unify it.
 

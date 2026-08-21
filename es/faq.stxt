@@ -62,7 +62,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 	Content >>
 		Los dos valen, y significan lo mismo: **un tabulador es un nivel, cuatro espacios son un
 		nivel**. Lo que no vale es mezclarlos en la indentación de una misma línea (error
-		`MIXED_INDENTATION`), ni usar otro ancho (dos espacios no son medio nivel: son un error).
+		`INDENTATION_MIXED`), ni usar otro ancho (dos espacios no son medio nivel: son un error).
 		Líneas distintas de un documento pueden usar estilos distintos, pero por estilo conviene
 		elegir uno; `stxt format --tabs` o `--spaces` lo unifican.
 

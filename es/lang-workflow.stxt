@@ -2,7 +2,7 @@ Document (dev.stxt.website): El entorno de trabajo
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-18
+		Last modif: 2026-08-21
 
 	Header: El entorno de trabajo
 
@@ -140,13 +140,13 @@ Document (dev.stxt.website): El entorno de trabajo
 		stxt validate docs/book.stxt
 
 		/home/ana/libros/docs/book.stxt:6: [INVALID_VALUE] Published: Invalid date (1 de octubre de 2025) (error)
-		/home/ana/libros/docs/book.stxt:1: [INVALID_NUMBER] 0 nodes of 'com.acme.book:isbn' and min is 1 (error)
+		/home/ana/libros/docs/book.stxt:1: [TOO_FEW_CHILDREN] 0 nodes of 'com.acme.book:isbn' and min is 1 (error)
 		2 error(s), 0 warning(s)
 
 	Content >>
 		Cada hallazgo es `fichero:línea: [CÓDIGO] mensaje (severidad)`. El **código** es
 		estable y es el mismo en la CLI, en la extensión y en las tres bibliotecas
-		(`INVALID_VALUE`, `INVALID_NUMBER`, `CHILD_NOT_DECLARED`, `MIXED_INDENTATION`…),
+		(`INVALID_VALUE`, `TOO_FEW_CHILDREN`, `CHILD_NOT_DECLARED`, `INDENTATION_MIXED`…),
 		así que sirve para buscar en la documentación o para filtrar en un script. La
 		cardinalidad que falla se señala en la línea del **padre** (`Book`, línea 1), porque
 		es el padre quien tiene cero `ISBN`.
