@@ -183,13 +183,15 @@ Document (dev.stxt.website): The command line
 	Subsubheader: Without a grammar, or with the grammar as a warning
 
 	Content >>
-		**Grammars are optional.** A document without a namespace, or whose namespace no
-		grammar of the chain defines, is not wrong: it just cannot be validated. That is
-		why `SCHEMA_NOT_FOUND` is only reported when the document's chain **does** have
-		grammars and none of them covers the namespace it uses —the case of a misspelled
-		namespace—; if the chain is empty, nothing is said. A document that is a
-		definition (`@stxt.schema` or `@stxt.template`) is always checked against its
-		meta-schema, even when there is no other grammar at all.
+		**Grammars are optional, but `validate` validates.** A document without a
+		namespace is not validated and passes (STXT-SCHEMA-SPEC §5). One whose namespace
+		no grammar of the chain defines is a `SCHEMA_NOT_FOUND`, also when the chain is
+		empty: validation was asked for, and a document that cannot be validated is not a
+		validated one. The verdict thus depends only on the document and its chain, never
+		on whether unrelated grammars happen to be installed. To check the syntax alone,
+		use `--no-schema`. A document that is a definition (`@stxt.schema` or
+		`@stxt.template`) is always checked against its meta-schema, even when there is no
+		other grammar at all.
 
 		Two options change what counts as a failure. `--warn-schema` downgrades grammar
 		errors to warnings, useful while a grammar is being introduced into a project with

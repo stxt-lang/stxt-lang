@@ -131,13 +131,15 @@ Document (dev.stxt.website): Frequently asked questions
 	Subsubheader: Are schemas mandatory?
 
 	Content >>
-		No. A document without a namespace is parsed, full stop. If it has a namespace and its
-		resolution chain has **no definition at all**, the tools only parse: nothing is wrong, it
-		simply cannot be validated. Validation kicks in when definitions are nearby (a `.stxt/`
-		directory), and then it does count: a document with a namespace for which there is no
-		definition is flagged with `SCHEMA_NOT_FOUND`, because it is almost always a misspelled
-		namespace. In the CLI, `--warn-schema` turns that into a warning and `--no-schema`
-		disables validation altogether.
+		No. A document without a namespace is parsed, full stop. If it has a namespace, the
+		validating tool looks its definition up through the resolution chain (a nearby `.stxt/`
+		directory, the user one, the system one) and, if none covers that namespace, flags it
+		with `SCHEMA_NOT_FOUND`: nothing is wrong with the document, it just could not be
+		validated, and that is said rather than hidden — also when the chain is empty. Whether a
+		document is validated is decided by the tool, not by whether unrelated definitions
+		happen to be installed: in the CLI, `--warn-schema` turns it into a warning and
+		`--no-schema` disables validation altogether; in VS Code, the `stxt.schemaValidation`
+		setting; in the playground, the *Schema validation* switch.
 
 	Subsubheader: Schema or template?
 

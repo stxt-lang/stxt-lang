@@ -185,13 +185,15 @@ Document (dev.stxt.website): La línea de comandos
 	Subsubheader: Sin gramática, o con la gramática en aviso
 
 	Content >>
-		**Las gramáticas son opcionales.** Un documento sin namespace, o cuyo namespace no
-		define ninguna gramática de la cadena, no está mal: solo no se puede validar. Por
-		eso `SCHEMA_NOT_FOUND` únicamente se reporta cuando la cadena del documento
-		**sí** tiene gramáticas y ninguna cubre el namespace que usa —el caso de un
-		namespace mal escrito—; si la cadena está vacía, no se dice nada. Un documento
-		que es una definición (`@stxt.schema` o `@stxt.template`) se comprueba siempre
-		contra su meta-esquema, aunque no haya ninguna otra gramática.
+		**Las gramáticas son opcionales, pero `validate` valida.** Un documento sin
+		namespace no se valida y pasa (STXT-SCHEMA-SPEC §5). Uno con namespace que ninguna
+		gramática de la cadena define es un `SCHEMA_NOT_FOUND`, también cuando la cadena
+		está vacía: se ha pedido validar, y un documento que no se puede validar no es un
+		documento validado. Así el veredicto depende solo del documento y de su cadena,
+		no de si hay otras gramáticas instaladas que no tienen nada que ver. Para
+		comprobar únicamente la sintaxis está `--no-schema`. Un documento que es una
+		definición (`@stxt.schema` o `@stxt.template`) se comprueba siempre contra su
+		meta-esquema, aunque no haya ninguna otra gramática.
 
 		Dos opciones cambian qué cuenta como fallo. `--warn-schema` rebaja los errores de
 		gramática a avisos, útil mientras una gramática se está introduciendo en un

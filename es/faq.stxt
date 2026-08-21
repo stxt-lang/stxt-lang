@@ -133,13 +133,15 @@ Document (dev.stxt.website): Preguntas frecuentes
 	Subsubheader: ¿Los esquemas son obligatorios?
 
 	Content >>
-		No. Un documento sin namespace se parsea y punto. Si tiene namespace y en su cadena de
-		resolución **no hay ninguna definición**, las herramientas solo parsean: no está mal, es
-		que no se puede validar. La validación se activa cuando hay definiciones cerca (un
-		directorio `.stxt/`), y entonces sí cuenta: un documento con un namespace para el que
-		no hay definición se señala con `SCHEMA_NOT_FOUND`, porque casi siempre es un namespace
-		mal escrito. En la CLI, `--warn-schema` lo rebaja a aviso y `--no-schema` desactiva la
-		validación del todo.
+		No. Un documento sin namespace se parsea y punto. Si tiene namespace, la herramienta
+		que valida busca su definición en la cadena de resolución (un directorio `.stxt/`
+		cerca, el de usuario, el del sistema) y, si no hay ninguna para ese namespace, lo
+		señala con `SCHEMA_NOT_FOUND`: el documento no está mal, es que no se ha podido
+		validar, y eso se dice en vez de callarlo, también cuando la cadena está vacía. Lo que
+		decide si se valida es la herramienta, no que haya otras definiciones instaladas: en la
+		CLI, `--warn-schema` lo rebaja a aviso y `--no-schema` desactiva la validación del
+		todo; en VS Code, el ajuste `stxt.schemaValidation`; en el playground, el interruptor
+		*Schema validation*.
 
 	Subsubheader: ¿Esquema o plantilla?
 
