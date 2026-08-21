@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 
 	Metadata:
 		Author: Joan Costa Mombiela
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 
 	Header: @STXT@ Schema
 
@@ -271,7 +271,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		| Tipo      | Forma del valor | Admite hijos | Descripción / Validación               |
 		|-----------|-----------------|--------------|-----------------------------------------|
 		| BOOLEAN   | INLINE          | NO           | `true` o `false`.                      |
-		| NUMBER    | INLINE          | NO           | Número con formato JSON.               |
+		| NUMBER    | INLINE          | NO           | Número decimal, con signo y exponente opcionales (ver [9.4](#s9-4)). |
 		| ENUM      | INLINE          | NO           | Sólo valores especificados (ver [9.6](#s9-6)).  |
 
 	Subsubheader: 9.4 Tipos ampliados de contenido INLINE
@@ -280,14 +280,46 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 
 		| Tipo      | Forma del valor | Admite hijos | Descripción / Validación                      |
 		|-----------|-----------------|--------------|------------------------------------------------|
-		| INTEGER   | INLINE          | NO           | Número sin decimales (positivos y negativos).  |
-		| NATURAL   | INLINE          | NO           | Números mayores o iguales a 0 sin decimales.   |
-		| DATE      | INLINE          | NO           | Fecha `YYYY-MM-DD`.                            |
-		| TIME      | INLINE          | NO           | Hora ISO 8601, `hh:mm:ss`.                     |
-		| TIMESTAMP | INLINE          | NO           | Timestamp ISO 8601 completo.                   |
-		| UUID      | INLINE          | NO           | UUID canónico.                                 |
-		| URL       | INLINE          | NO           | URL o URI válida.                              |
+		| INTEGER   | INLINE          | NO           | Entero con signo opcional.                     |
+		| NATURAL   | INLINE          | NO           | Entero sin signo (≥ 0).                        |
+		| DATE      | INLINE          | NO           | Fecha `AAAA-MM-DD`, válida en el calendario.   |
+		| TIME      | INLINE          | NO           | Hora `hh:mm:ss`, en rango.                     |
+		| TIMESTAMP | INLINE          | NO           | Fecha y hora ISO 8601, `AAAA-MM-DDThh:mm[:ss[.f…]][Z\|±hh:mm]`. |
+		| UUID      | INLINE          | NO           | UUID `8-4-4-4-12` hexadecimal, sin distinguir mayúsculas. |
+		| URL       | INLINE          | NO           | URL absoluta: esquema y host obligatorios (ver abajo). |
 		| EMAIL     | INLINE          | NO           | Dirección de correo, sola o con nombre (ver abajo). |
+
+		**Gramática de los tipos de [9.3](#s9-3) y 9.4.** Cada tipo acepta exactamente las cadenas de
+		su regla, sobre el valor inline tal como lo entrega el parser (ya recortado). Es la gramática
+		normativa: dos implementaciones conformes aceptan y rechazan los mismos valores.
+
+	Grammar >>
+		BOOLEAN   = "true" | "false"                              ; exacto, sensible a mayúsculas
+		NUMBER    = [ signo ] ( dígitos [ "." [ dígitos ] ] | "." dígitos ) [ ( "e" | "E" ) [ signo ] dígitos ]
+		INTEGER   = [ signo ] dígitos
+		NATURAL   = dígitos                                       ; sin signo
+		DATE      = AAAA "-" MM "-" DD                            ; fecha existente del calendario gregoriano
+		                                                          ; (proléptico), año 0000–9999
+		TIME      = hh ":" mm ":" ss                              ; 00–23, 00–59, 00–59; sin fracción ni zona
+		TIMESTAMP = DATE "T" hh ":" mm [ ":" ss [ "." dígitos ] ] [ "Z" | signo hh ":" mm ]
+		                                                          ; mismos rangos; segundos, fracción y zona opcionales
+		UUID      = 8hex "-" 4hex "-" 4hex "-" 4hex "-" 12hex     ; hex = [0-9A-Fa-f]; no se comprueban versión ni variante
+		signo     = "+" | "-"
+		dígitos   = dígito { dígito }                             ; solo ASCII 0–9; se admiten ceros a la izquierda
+
+	Content >>
+		Precisiones:
+
+		* `NUMBER` **no** es el número de JSON: admite `+1`, `1.`, `.5` y `007`. Es un valor textual:
+		  no se comprueba que quepa en ningún tipo numérico de la plataforma ni se redondea.
+		* `DATE` y `TIMESTAMP` exigen una fecha **existente**: `2026-02-30` y `2026-13-01` son
+		  inválidas, `2024-02-29` es válida. `TIME` y `TIMESTAMP` exigen hora en rango: `24:00:00` y
+		  `10:60:00` son inválidas. No se admiten segundos intercalares (`ss` = 60).
+		* `TIMESTAMP`: la fracción tiene uno o más dígitos; sin zona, la interpretación (hora local u
+		  otra) es de la aplicación; la zona se valida solo sintácticamente (`±hh:mm` en rango), no
+		  se comprueba que exista.
+		* Las expresiones de esta sección y las de [9.5](#s9-5) son las que debe implementar un puerto;
+		  no se delega en los analizadores de fechas o URL de la plataforma, que discrepan entre sí.
 
 		El tipo `EMAIL` admite dos formas, y en las dos la dirección se valida igual:
 
@@ -301,6 +333,44 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		sin nombre delante, desparejados, ni seguidos de nada. Es la forma habitual de las cabeceras
 		de correo (el *mailbox* de RFC 5322), sin las comillas ni los comentarios de esa gramática.
 
+	Content >>
+		El tipo `URL` acepta únicamente **URL absolutas con esquema y host**. La gramática es propia
+		de esta especificación, no la del analizador de URL de cada plataforma, para que todas las
+		implementaciones acepten exactamente lo mismo:
+
+	Grammar >>
+		URL       = Esquema "://" [ Usuario "@" ] Host [ ":" Puerto ] [ "/" Ruta ] [ "?" Consulta ] [ "#" Fragmento ]
+
+		Esquema   = letra { letra | dígito | "+" | "-" | "." }        ; sin distinguir mayúsculas
+		Usuario   = uno o más caracteres que no sean blanco, "/", "?", "#" ni "@"
+		Host      = "[" uno o más de ( hex | ":" | "." ) "]"             ; IPv6 entre corchetes
+		          | uno o más caracteres que no sean blanco, "/", "?", "#", "@", ":", "[" ni "]"
+		Puerto    = dígito { dígito }
+		Ruta      = caracteres que no sean blanco, "?" ni "#"           ; puede quedar vacía
+		Consulta  = caracteres que no sean blanco ni "#"                ; puede quedar vacía
+		Fragmento = caracteres que no sean blanco                       ; puede quedar vacío
+
+	Content >>
+		Reglas:
+
+		* Una implementación conforme **DEBE** aceptar cualquier esquema con esa forma (`https`,
+		  `ftp`, `git+ssh`, …): no hay lista de esquemas permitidos.
+		* El host **DEBE** ser no vacío; no se exige dominio de primer nivel (`http://localhost`
+		  valida) ni se resuelve nada. Los caracteres no ASCII se aceptan tal cual, en el host y en
+		  el resto (un IDN no se convierte a *punycode*).
+		* Una implementación **NO DEBE** aceptar un valor sin esquema (`stxt.dev`,
+		  `www.stxt.dev/x`), con esquema pero sin `//` y host (`mailto:ana@example.com`,
+		  `urn:isbn:…`, `tel:…`, `file:///etc/hosts`), con blancos interiores, ni con puerto no
+		  numérico.
+		* La comprobación es **sintáctica**: no se normaliza, no se decodifican los `%xx` ni se
+		  comprueba que el recurso exista.
+
+		**Nota de diseño (no normativa):** no hay un tipo `URI` general a propósito. Una URI
+		según RFC 3986 es casi cualquier cadena con dos puntos (`a:b` lo es), así que un tipo así
+		apenas validaría más que `TEXT`. El valor de `URL` está en cazar el esquema olvidado o el
+		host mal escrito. Para identificadores que no son direcciones web (`urn:isbn:…`, `tel:…`)
+		se usa `TEXT` o un `ENUM`; para correo, `EMAIL`.
+
 	Subsubheader: 9.5 Tipos ampliados de contenido binario INLINE/BLOCK
 
 	Content >>
@@ -310,11 +380,16 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		|-------------|-----------------|--------------|----------------------------------------|
 		| HEXADECIMAL | INLINE/BLOCK    | NO           | `[0-9A-Fa-f]+`. Cadena hexadecimal.   |
 		| BINARY      | INLINE/BLOCK    | NO           | `[01]+`. Cadena binaria.              |
-		| BASE64      | INLINE/BLOCK    | NO           | Contenido Base64 válido.              |
+		| BASE64      | INLINE/BLOCK    | NO           | Base64 estándar: alfabeto `A–Z a–z 0–9 + /`, relleno `=` final opcional, sin bits sobrantes. |
 
 		En la forma `BLOCK`, la validación se aplica sobre la **concatenación** de las líneas del
 		bloque, ignorando saltos de línea, líneas vacías y espacios o tabuladores iniciales y
 		finales de cada línea. Esto permite partir en varias líneas contenidos largos (p. ej. Base64).
+
+		`BASE64` es el alfabeto estándar de RFC 4648 §4 (no el *URL-safe* con `-` y `_`). El relleno
+		`=` final **PUEDE** omitirse; el contenido **DEBE** decodificarse sin bits sobrantes, es decir,
+		volver a codificarse en la misma cadena (sin contar el relleno). Una cadena vacía no es válida
+		en ninguno de los tres tipos.
 
 	Subsubheader: 9.6 Tipo ENUM
 
