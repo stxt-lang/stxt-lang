@@ -2,6 +2,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 
 	Metadata:
 		Author: Joan Costa Mombiela
+		Version: 1.0
 		Last modif: 2026-08-20
 
 	Header: @STXT@ Discovery
@@ -10,6 +11,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 
 	Content >>
 		Este documento es **STXT-DISCOVERY-SPEC**; las demás especificaciones lo citan con ese nombre.
+		Forma parte de las especificaciones de @STXT@ **versión 1.0** (campo `Version`); la regla de versionado está en [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
 
 		Este documento define **@STXT@ Discovery**: el mecanismo por el que una herramienta
 		localiza, en el sistema de ficheros, los documentos `@stxt.schema` y `@stxt.template`

@@ -3,6 +3,7 @@ Template (@stxt.template): dev.stxt.website
 		Document (dev.stxt.website):
 			Metadata: (?)
 				Author: (1)
+				Version: (?)
 				Revision: (?)
 				Last modif: (?)
 			Header: (?)
@@ -27,6 +28,9 @@ Template (@stxt.template): dev.stxt.website
 			Entrada de la navegación del sitio: con Page (nombre de una página del sitio)
 			o con Url (enlace externo, se abre en otra pestaña). Uno de los dos.
 		Document: Un documento es bla, bla, bla
+		Version >>
+			Versión de las especificaciones de STXT de la que forma parte el documento
+			(solo en las cinco specs; STXT-SPEC 1.1). El CMS la pinta bajo el título.
 		Content >>
 			Texto de la página, en formato Markdown (tipo MARKDOWN, STXT-SCHEMA-SPEC 9.7).
 		CODE >>

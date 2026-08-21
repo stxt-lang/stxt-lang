@@ -2,6 +2,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 
 	Metadata:
 		Author: Joan Costa Mombiela
+		Version: 1.0
 		Last modif: 2026-08-20
 
 	Header: @STXT@ Discovery
@@ -10,6 +11,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 
 	Content >>
 		This document is **STXT-DISCOVERY-SPEC**; the other specifications cite it by that name.
+		It is part of the @STXT@ specifications **version 1.0** (`Version` field); the versioning rule is in [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
 
 		This document defines **@STXT@ Discovery**: the mechanism by which a tool locates,
 		on the file system, the `@stxt.schema` and `@stxt.template` documents applicable to

@@ -2,6 +2,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 
 	Metadata:
 		Author: Joan Costa Mombiela
+		Version: 1.0
 		Last modif: 2026-08-21
 
 	Header: @STXT@ Schema
@@ -9,6 +10,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 	Subheader: 1. Introduction
 	Content >>		
 		This document is **STXT-SCHEMA-SPEC**; the other specifications cite it by that name.
+		It is part of the @STXT@ specifications **version 1.0** (`Version` field); the versioning rule is in [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
 
 		This document defines the specification of the **@STXT@ Schema** language, a mechanism for validating @STXT@ documents through formal semantic rules.
 

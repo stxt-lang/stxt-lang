@@ -2,6 +2,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 
 	Metadata:
 		Author: Joan Costa Mombiela
+		Version: 1.0
 		Last modif: 2026-08-21
 		
 	Header: @STXT@ Core
@@ -28,6 +29,32 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		* Facilitating the creation of parsers while trying to minimize security errors.
 		
 		This document describes the **base syntax** of the language.
+
+	Subsubheader: 1.1 Version of the specifications
+
+	Content >>
+		The five @STXT@ specifications —*STXT-SPEC*, [*STXT-TREE-SPEC*](stxt-tree-ref),
+		[*STXT-SCHEMA-SPEC*](stxt-schema-ref), [*STXT-TEMPLATE-SPEC*](stxt-template-ref) and
+		[*STXT-DISCOVERY-SPEC*](stxt-discovery-ref)— carry **a single shared version number**, in
+		the `Version` field of their metadata. They are published together and read as a set: the
+		version says *which release* each document belongs to. The `Last modif` field is kept and
+		answers a different question, *when that document actually changed*; so a fix in one
+		specification does not make the others look changed.
+
+		Rules:
+
+		* The format is `major.minor`, with no patch: for a specification the patch means nothing.
+		* The **major** number goes up if a document, schema, template or canonical tree that was
+		  valid **stops being valid or changes meaning**. It is the only kind of change that can break
+		  someone, and it is stated.
+		* The **minor** number goes up if something is **only added** —a value type, a clarification,
+		  a normative case— without invalidating anything existing. Everything valid in `1.0` is valid
+		  in any `1.x`.
+		* The first version is **`1.0`**. Earlier drafts carry no number.
+		* A conforming implementation **SHOULD** expose the version of the specifications it
+		  implements (for instance, a `SPEC_VERSION` constant), **distinct from its package version**:
+		  two implementations with different packages read the same @STXT@ as long as this number
+		  matches. Conformance is declared against the specification version, not the package one.
 
 	Subheader: 2. Terminology
 

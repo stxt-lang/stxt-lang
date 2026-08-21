@@ -1,6 +1,7 @@
 Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Metadata:
 		Author: Joan Costa Mombiela
+		Version: 1.0
 		Last modif: 2026-08-21
 		
 	Header: @STXT@ Core
@@ -27,6 +28,32 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* Facilitar la creación de parsers intentando minimizar errores de seguridad.
 		
 		Este documento describe la **sintaxis base** del lenguaje.
+
+	Subsubheader: 1.1 Versión de las especificaciones
+
+	Content >>
+		Las cinco especificaciones de @STXT@ —*STXT-SPEC*, [*STXT-TREE-SPEC*](stxt-tree-ref),
+		[*STXT-SCHEMA-SPEC*](stxt-schema-ref), [*STXT-TEMPLATE-SPEC*](stxt-template-ref) y
+		[*STXT-DISCOVERY-SPEC*](stxt-discovery-ref)— llevan **un único número de versión
+		compartido**, en el campo `Version` de su metadato. Se publican juntas y se leen como un
+		conjunto: la versión dice *de qué entrega forma parte* cada documento. El campo `Last modif`
+		se conserva y responde a otra pregunta, *cuándo cambió de verdad* ese documento; así un
+		arreglo en una especificación no hace parecer que las demás cambiaron.
+
+		Reglas:
+
+		* El formato es `mayor.menor`, sin parche: para una especificación el parche no significa nada.
+		* El número **mayor** sube si un documento, schema, plantilla o árbol canónico que era válido
+		  **deja de serlo o cambia de significado**. Es la única clase de cambio que puede romper a
+		  alguien, y se hace constar.
+		* El número **menor** sube si **solo se añade** —un tipo de valor, una aclaración, un caso
+		  normativo— sin invalidar nada existente. Todo lo válido en `1.0` lo es en cualquier `1.x`.
+		* La primera versión es la **`1.0`**. Los borradores anteriores no llevan número.
+		* Una implementación conforme **DEBERÍA** exponer la versión de las especificaciones que
+		  implementa (por ejemplo, una constante `SPEC_VERSION`), **distinta de la versión de su
+		  paquete**: dos implementaciones con paquetes distintos leen el mismo @STXT@ mientras
+		  coincida este número. La conformidad se declara contra la versión de la especificación,
+		  no contra la del paquete.
 
 	Subheader: 2. Terminología
 

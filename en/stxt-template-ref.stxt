@@ -1,6 +1,7 @@
 Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
+		Version: 1.0
 		Last modif: 2026-08-21
 		
 	Header: @STXT@ Template
@@ -9,6 +10,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 	
 	Content >>
 		This document is **STXT-TEMPLATE-SPEC**; the other specifications cite it by that name.
+		It is part of the @STXT@ specifications **version 1.0** (`Version` field); the versioning rule is in [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
 
 		This document defines the specification of the **STXT Template** language, a mechanism for describing semantic rules
 		(structure, types, cardinalities, and allowed values) applicable to @STXT@ documents.
