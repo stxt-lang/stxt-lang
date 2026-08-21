@@ -10,7 +10,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 
 	Content >>
 		This document is **STXT-TREE-SPEC**; the other specifications cite it by that name.
-		It is part of the @STXT@ specifications **version 1.0** (`Version` field); the versioning rule is in [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
+		This is its **version 1.0** (`Version` field); it depends on [*STXT-SPEC*](stxt-core-ref) 1.0 and is versioned separately, as per [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
 		It defines the canonical JSON representation of the
 		logical tree produced when a valid @STXT@ document is parsed.
 

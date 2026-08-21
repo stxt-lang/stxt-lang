@@ -11,7 +11,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 
 	Content >>
 		This document is **STXT-DISCOVERY-SPEC**; the other specifications cite it by that name.
-		It is part of the @STXT@ specifications **version 1.0** (`Version` field); the versioning rule is in [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
+		This is its **version 1.0** (`Version` field); it depends on [*STXT-SPEC*](stxt-core-ref) 1.0 and [*STXT-SCHEMA-SPEC*](stxt-schema-ref) 1.0, and is versioned separately, as per [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
 
 		This document defines **@STXT@ Discovery**: the mechanism by which a tool locates,
 		on the file system, the `@stxt.schema` and `@stxt.template` documents applicable to

@@ -10,7 +10,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 	
 	Content >>
 		Este documento es **STXT-TEMPLATE-SPEC**; las demás especificaciones lo citan con ese nombre.
-		Forma parte de las especificaciones de @STXT@ **versión 1.0** (campo `Version`); la regla de versionado está en [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
+		Esta es su **versión 1.0** (campo `Version`); depende de [*STXT-SCHEMA-SPEC*](stxt-schema-ref) 1.0 y se versiona por separado, según [*STXT-SPEC* §1.1](stxt-core-ref#s1-1).
 
 		Este documento define la especificación del lenguaje **STXT Template**, un mecanismo para describir reglas semánticas
 		(estructura, tipos, cardinalidades y valores permitidos) aplicables a documentos @STXT@.
