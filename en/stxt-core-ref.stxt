@@ -224,18 +224,9 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Subsubheader: 5.1 Value normalization
 	
 	Content>>
-		The (INLINE) value of a node must be normalized with a trim (right and left).
-		
-		Example:
-	Code>>
-		Name: value 1
-		Name:    value 1    
-		# in both cases, the inline value of Name is "value 1", although in the 
-		# second there are spaces before and after.
-	
-	Content>>	
-		Strong normalization applies only to structural identifiers.
-		Values are literals, although a **simple normalization is applied: right and left trim**.
+		Values are literals: strong normalization applies only to structural identifiers. The inline
+		value only gets a **trim on both sides**; the complete rule and its cases are in
+		[section 10.1](#s10-1).
 
 	Subheader: 6. Text block nodes, BLOCK type
 		
@@ -306,11 +297,10 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		
 		* A namespace **MAY** begin with `@`.
 		* It **MUST** use hierarchical format (`a.b.c`), with at least 2 elements (`a.b`).
-		* The effective namespace of a root node that does not specify a namespace is the empty namespace `""`.
-		* A child node that does not specify a namespace inherits the effective namespace of its parent.
+		* The effective namespace of a node that does not specify one is inherited from its parent, or is the empty namespace `""` for a root node: see [section 7.2](#s7-2).
 		* The empty namespace cannot be specified as `Node name ()`. 
 		* There **MUST NOT** be spaces or tabs between the parentheses: `Node ( a.b ):` and `Node (a. b):` are invalid (`INVALID_NAMESPACE`). They may appear between the name and `(`, and between `)` and `:` or `>>`.
-		* A child node may redefine its namespace by indicating `(another.namespace)`, in which case it uses that namespace instead of the inherited one.
+		* A child node may redefine its namespace by indicating `(another.namespace)`, in which case it uses that namespace instead of the inherited one, and its descendants inherit the new one.
 		* In the input, a namespace **MAY** be written with uppercase or lowercase ASCII letters; the parser **MUST** normalize it to lowercase. The behavior is analogous to domain names: `COM.DEMO.DOCS` and `com.demo.docs` are the same namespace.
 		* Lowercase normalization occurs **during parsing**: the logical representation of the tree contains **only** the lowercase form. The original uppercase form is not preserved.
 		* By style rules, a namespace should be written directly in lowercase.
@@ -368,26 +358,19 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		* **MAY** use spaces or tabs for indentation.
 		* The indentation of a line **MUST** be homogeneous: either only tabs, or only spaces.
 		* Mixing spaces and tabs in the indentation of the same line is a **parse error** (see [section 8.3](#s8-3)).
-		* If it uses tabs:
-		  * Each tab represents exactly 1 level.
-		* If it uses spaces:
-		  * It **MUST** use multiples of **4 spaces**: each group of 4 spaces represents 1 level.
-		* Different lines of the same document **MAY** use different styles (some tabs, some spaces): the hierarchy is compared by **level**, not by columns.
-		  * This is **not recommended** as a matter of style, and a parser **MAY** emit a warning if a document combines both styles.
+		* With tabs, each tab is exactly **1 level**.
+		* With spaces, it **MUST** use multiples of **4 spaces**: each group of 4 spaces is 1 level.
+		* Different lines of the same document **MAY** use different styles (some tabs, some spaces): the hierarchy is compared by **level**, not by columns. This is **not recommended** as a matter of style, and a parser **MAY** emit a warning if a document combines both styles.
 
-		Following the **Human-First** principle, this rule guarantees that the hierarchy of a
-		document looks the same in any editor, whatever the configured tab width: an indentation
-		that mixes tabs and spaces renders differently depending on the editor, and for that
-		reason it is rejected instead of interpreted.
+		**Why it is so strict (non-normative).** The level of a line is computed by looking at that
+		line alone: count its tabs, or divide its spaces by four. There is no need to remember how the
+		previous lines were indented, nor to keep a stack of levels as in variable-indentation
+		languages. That is why there are no other widths (2 spaces, for instance) and why mixing is not
+		allowed: a line that mixes tabs and spaces looks different in every editor depending on the tab
+		width, and @STXT@ prefers to reject it rather than interpret it. Whoever wants a more compact
+		indentation can use tabs and adjust the width in the editor: the visual preference belongs to
+		the editor, not to the language.
 
-		**Design note (non-normative):** the level width is deliberately fixed: 1 tab or
-		4 spaces, with no other widths (for example, 2 spaces). Thanks to this, the level of a
-		line is a function of the line itself (`tabs` or `spaces / 4`), computable in isolation,
-		with no indentation stack and no previous context — unlike languages with variable
-		indentation width, whose parsers need to maintain a stack of levels.
-		Visual preference belongs to the editor, not to the language: whoever prefers a more
-		compact indentation can use tabs and configure their editor's tab width.
-		  
 	Subsubheader: 8.2 Indentation examples
 	
 	Content >>
@@ -538,6 +521,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Subsubheader: 9.1 Comments and >> blocks
 		
 	Content >>
+		The block rules are in [section 6.1](#s6-1); this section only details the case of comments.
 		Within a `>>` block, two situations must be distinguished according to the indentation of the line:
 		
 		* **Indentation strictly greater** than that of the `>>` node: the line is **literal text** of the
@@ -840,33 +824,34 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Subheader: 16. Appendix A — Grammar (Informal)
 		
 	Grammar >>
-		Document        = { Line }
-		
-		Line            = [Indentation] ( Comment | Node | BlockContinuation | EmptyLine )
-		
-		Node            = Indentation Name [Namespace] ( Inline | BlockStart )
-		Inline          = ":" [Space] [InlineText]
-		BlockStart      = [Space] ">>" [TrailingSpaces]
-		
-		Namespace       = "(" ["@"] Ident { "." Ident } ")"   ; at least 2 Ident
-		Ident           = [A-Za-z0-9]+   ; accepted in input; the parser MUST normalize it to lowercase (section 7)
-		                                 ; canonical form (and recommended by style): [a-z0-9]+
-		
-		Comment         = "#" { any character until end of line }   ; discarded; indentation not validated
+		Document         = { Line }
 
-		EmptyLine       = line with no characters or only spaces/tabs   ; ignored outside blocks; preserved inside
-		
-		BlockContinuation = BlockTextLine   ; lines with indentation strictly greater than the >> node
-		                                          ; any other non-empty line (comments included) closes the block
-		
-		Indentation     = Only tabs or only spaces on each line, according to section 8
-		                  - Pure tabs: 1 tab = 1 level
-		                  - Pure spaces: exact multiples of 4 per level
-		                  - Mix of tabs and spaces on the same line: parse error
-		
-		Name            = Normalized text (trim + space compaction) according to section 4.1
-		                  ; characters: \p{L} | \p{Nd} | \p{Mn} | \p{Mc} | "-" | "_" | " ", on the NFC form,
-		                  ; with at least one letter or digit (section 4.2)
+		Line             = Comment | EmptyLine | BlockTextLine | Node
+
+		Comment          = { Blank } "#" { any character until end of line }
+		                   ; outside block content; discarded; its indentation is not validated (section 9)
+		EmptyLine        = { Blank }                      ; ignored outside blocks; inside, a "" line of the content (section 10.3)
+		BlockTextLine    = BlockIndentation FreeText      ; only with an open >> block: homogeneous prefix of level(>> node) + 1;
+		                                                  ; the rest is literal text, right-trimmed (section 10.2)
+
+		Node             = Indentation Name { Blank } [ Namespace { Blank } ] ( Inline | BlockStart )
+		Inline           = ":" InlineText                 ; InlineText = the rest of the line, trimmed on both sides; may be empty (section 10.1)
+		BlockStart       = ">>" { Blank }                 ; nothing significant after >> (section 6.1)
+
+		Namespace        = "(" ["@"] Ident { "." Ident } ")"   ; at least 2 Ident; no blanks inside the parentheses (section 7)
+		Ident            = [A-Za-z0-9]+                   ; accepted in input; the parser MUST normalize it to lowercase (section 7);
+		                                                  ; canonical form (and recommended by style): [a-z0-9]+
+
+		Name             = characters \p{L} | \p{Nd} | \p{Mn} | \p{Mc} | "-" | "_" | " ", on the NFC form, with at
+		                   least one letter or digit (section 4.2); the logical name is the text right-trimmed
+		                   with its spaces compacted (section 4.1)
+
+		Indentation      = { TAB } | { "    " }           ; only tabs or only groups of 4 spaces (section 8):
+		                                                  ; 1 tab = 1 level, 4 spaces = 1 level; mixing on the same line,
+		                                                  ; or a number of spaces that is not a multiple of 4, is a parse error
+		BlockIndentation = Indentation                    ; of exactly level(>> node) + 1; whatever follows is FreeText
+		FreeText         = { any character until end of line }
+		Blank            = " " | TAB                      ; U+0020 or U+0009
 		
 	Content >>	
 		**Key notes for implementers:**
@@ -918,16 +903,23 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Subsubheader: 17.1. Associating a schema with a namespace
 		
 	Content >>
-		To associate a schema with the namespace `com.example.mail`, a document is written:
+		To associate a schema with the namespace `com.example.mail`, a document is written (it is the
+		same model the template of [appendix C](#s18-1) expresses):
 		
 	Code>>
 		Schema (@stxt.schema): com.example.mail
 			Node: Email
 				Children:
 					Child: From
+						Min: 1
+						Max: 1
 					Child: To
+						Min: 1
+						Max: 1
 					Child: Cc
+						Max: 1
 					Child: Bcc
+						Max: 1
 					Child: Title
 						Max: 1
 					Child: Body Content
@@ -936,9 +928,13 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 					Child: Metadata (org.example.meta)
 						Max: 1
 			Node: From
+				Type: EMAIL
 			Node: To
+				Type: EMAIL
 			Node: Cc
+				Type: EMAIL
 			Node: Bcc
+				Type: EMAIL
 			Node: Title
 			Node: Body Content
 				Type: TEXT

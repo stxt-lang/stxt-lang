@@ -224,18 +224,9 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Subsubheader: 5.1 Normalización del valor
 	
 	Content>>
-		El valor (INLINE) de un nodo debe normalizarse con un trim (derecha e izquierda).
-		
-		Ejemplo:
-	Code>>
-		Nombre: valor 1
-		Nombre:    valor 1    
-		# en los dos casos, el valor inline de Nombre es "valor 1", aunque en el 
-		# segundo haya espacios antes y después.
-	
-	Content>>	
-		La normalización fuerte se aplica sólo a identificadores estructurales.
-		Los valores son literales, aunque se aplica una **normalización sencilla: trim derecha e izquierda**.
+		Los valores son literales: la normalización fuerte se aplica sólo a los identificadores
+		estructurales. Al valor inline se le aplica únicamente un **trim a ambos lados**; la regla
+		completa y sus casos están en la [sección 10.1](#s10-1).
 
 	Subheader: 6. Nodos bloque texto, tipo BLOCK
 		
@@ -306,11 +297,10 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		
 		* Un namespace **PUEDE** empezar por `@`.
 		* **DEBE** usar formato jerárquico (`a.b.c`), con al menos 2 elementos (`a.b`).
-		* El namespace efectivo de un nodo raíz que no especifica namespace es el namespace vacío `""`.
-		* Un nodo hijo que no especifica namespace hereda el namespace efectivo de su padre.
+		* El namespace efectivo de un nodo que no especifica namespace se hereda del padre, o es el namespace vacío `""` si es un nodo raíz: ver la [sección 7.2](#s7-2).
 		* El namespace vacío NO puede especificarse como `Nombre nodo ()`. 
 		* Entre los paréntesis **NO DEBE** haber espacios ni tabuladores: `Nodo ( a.b ):` y `Nodo (a. b):` son inválidos (`INVALID_NAMESPACE`). Sí puede haberlos entre el nombre y `(`, y entre `)` y `:` o `>>`.
-		* Un nodo hijo puede redefinir su namespace indicando `(otro.namespace)`, en cuyo caso usa ese namespace en lugar del heredado.
+		* Un nodo hijo puede redefinir su namespace indicando `(otro.namespace)`, en cuyo caso usa ese namespace en lugar del heredado, y sus descendientes heredan el nuevo.
 		* En la entrada, un namespace **PUEDE** escribirse con letras mayúsculas o minúsculas ASCII; el parser **DEBE** normalizarlo a minúsculas. El comportamiento es análogo al de los nombres de dominio: `COM.DEMO.DOCS` y `com.demo.docs` son el mismo namespace.
 		* La normalización a minúsculas ocurre **durante el parseo**: la representación lógica del árbol contiene **únicamente** la forma en minúsculas. La forma original en mayúsculas no se conserva.
 		* Por reglas de estilo, un namespace debería escribirse directamente en minúsculas.
@@ -368,26 +358,19 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* **PUEDE** usar espacios o tabuladores para indentación.
 		* La indentación de una línea **DEBE** ser homogénea: o bien solo tabuladores, o bien solo espacios.
 		* Mezclar espacios y tabuladores en la indentación de una misma línea es un **error de parseo** (ver [sección 8.3](#s8-3)).
-		* Si usa tabs:
-		  * Cada tab representa exactamente 1 nivel.
-		* Si usa espacios:
-		  * **DEBE** usar múltiplos de **4 espacios**: cada grupo de 4 espacios representa 1 nivel.
-		* Líneas distintas de un mismo documento **PUEDEN** usar estilos distintos (unas tabs, otras espacios): la jerarquía se compara por **nivel**, no por columnas.
-		  * **No se recomienda** por estilo, y un parser **PUEDE** emitir un aviso si un documento combina ambos estilos.
+		* Con tabuladores, cada tabulador es exactamente **1 nivel**.
+		* Con espacios, **DEBE** usar múltiplos de **4 espacios**: cada grupo de 4 espacios es 1 nivel.
+		* Líneas distintas de un mismo documento **PUEDEN** usar estilos distintos (unas tabs, otras espacios): la jerarquía se compara por **nivel**, no por columnas. **No se recomienda** por estilo, y un parser **PUEDE** emitir un aviso si un documento combina ambos estilos.
 
-		Siguiendo el principio **Human-First**, esta regla garantiza que la jerarquía de un documento
-		se vea igual en cualquier editor, sea cual sea el ancho de tabulador configurado: una
-		indentación que mezcla tabs y espacios se renderiza distinta según el editor, y por eso
-		se rechaza en lugar de interpretarse.
+		**Por qué es tan estricta (no normativo).** El nivel de una línea se calcula mirando solo esa
+		línea: cuenta sus tabuladores, o divide sus espacios entre cuatro. No hace falta recordar cómo
+		estaban indentadas las anteriores, ni mantener una pila de niveles como en los lenguajes de
+		indentación variable. Ese es el motivo de que no haya otros anchos (2 espacios, por ejemplo) y
+		de que no se permita mezclar: una línea que mezcla tabs y espacios se ve distinta en cada editor
+		según el ancho de tabulador, y @STXT@ prefiere rechazarla a interpretarla. Quien quiera una
+		indentación más compacta puede usar tabuladores y ajustar el ancho en su editor: la preferencia
+		visual es del editor, no del lenguaje.
 
-		**Nota de diseño (no normativa):** el ancho de nivel es fijo de forma deliberada: 1 tab
-		o 4 espacios, sin otros anchos (por ejemplo, 2 espacios). Gracias a ello, el nivel de una
-		línea es una función de la propia línea (`tabs` o `espacios / 4`), calculable de forma
-		aislada, sin pila de indentaciones ni contexto previo — a diferencia de los lenguajes con
-		ancho de indentación variable, cuyos parsers necesitan mantener una pila de niveles.
-		La preferencia visual pertenece al editor, no al lenguaje: quien prefiera una indentación
-		más compacta puede usar tabuladores y configurar el ancho de tabulador de su editor.
-		  
 	Subsubheader: 8.2 Ejemplos de indentación
 	
 	Content >>
@@ -542,7 +525,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Subsubheader: 9.1 Comentarios y bloques >>
 		
 	Content >>
-		Dentro de un bloque `>>` hay que distinguir dos situaciones según la indentación de la línea:
+		Las reglas del bloque están en la [sección 6.1](#s6-1); esta sección solo precisa el caso de los
+		comentarios. Dentro de un bloque `>>` hay que distinguir dos situaciones según la indentación de la línea:
 		
 		* **Indentación estrictamente mayor** que la del nodo `>>`: la línea es **texto literal** del
 		  bloque, **aunque empiece por `#`**. No es un comentario.
@@ -845,33 +829,34 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Subheader: 16. Apéndice A — Gramática (Informal)
 		
 	Grammar >>
-		Documento       = { Linea }
+		Documento        = { Linea }
 
-		Linea           = [Indentacion] ( Comentario | Nodo | BloqueContinuacion | LineaVacia )
+		Linea            = Comentario | LineaVacia | LineaTextoBloque | Nodo
 
-		Nodo            = Indentacion Nombre [Namespace] ( Inline | BlockStart )
-		Inline          = ":" [Espacio] [TextoInline]
-		BlockStart      = [Espacio] ">>" [EspaciosFinales]
-		
-		Namespace       = "(" ["@"] Ident { "." Ident } ")"   ; al menos 2 Ident
-		Ident           = [A-Za-z0-9]+   ; aceptado en entrada; el parser DEBE normalizarlo a minúsculas (sección 7)
-		                                 ; forma canónica (y recomendada por estilo): [a-z0-9]+
-		
-		Comentario      = "#" { cualquier carácter hasta fin de línea }   ; descartado; indentación no validada
+		Comentario       = { Blanco } "#" { cualquier carácter hasta fin de línea }
+		                   ; fuera del contenido de un bloque; se descarta; su indentación no se valida (sección 9)
+		LineaVacia       = { Blanco }                     ; ignorada fuera de bloques; dentro, una línea "" del contenido (sección 10.3)
+		LineaTextoBloque = IndentacionBloque TextoLibre   ; solo con un bloque >> abierto: prefijo homogéneo del nivel del nodo >> + 1;
+		                                                  ; el resto es texto literal, con trim a la derecha (sección 10.2)
 
-		LineaVacia      = línea sin caracteres o solo espacios/tabuladores   ; ignorada fuera de bloques; conservada dentro
-		
-		BloqueContinuacion = LineaTextoBloque   ; líneas con indentación estrictamente mayor que el nodo >>
-		                                          ; cualquier otra línea no vacía (comentario incluido) cierra el bloque
-		
-		Indentacion     = Solo tabuladores o solo espacios en cada línea, según sección 8
-		                  - Puros tabs: 1 tab = 1 nivel
-		                  - Puros espacios: múltiplos exactos de 4 por nivel
-		                  - Mezcla de tabs y espacios en la misma línea: error de parseo
-		
-		Nombre          = Texto normalizado (trim + compactación espacios) según sección 4.1
-		                  ; caracteres: \p{L} | \p{Nd} | \p{Mn} | \p{Mc} | "-" | "_" | " ", sobre la forma NFC,
-		                  ; con al menos una letra o dígito (sección 4.2)
+		Nodo             = Indentacion Nombre { Blanco } [ Namespace { Blanco } ] ( Inline | BlockStart )
+		Inline           = ":" TextoInline                ; TextoInline = el resto de la línea, con trim a ambos lados; puede quedar vacío (sección 10.1)
+		BlockStart       = ">>" { Blanco }                ; nada significativo tras >> (sección 6.1)
+
+		Namespace        = "(" ["@"] Ident { "." Ident } ")"   ; al menos 2 Ident; sin blancos dentro de los paréntesis (sección 7)
+		Ident            = [A-Za-z0-9]+                   ; aceptado en entrada; el parser DEBE normalizarlo a minúsculas (sección 7);
+		                                                  ; forma canónica (y recomendada por estilo): [a-z0-9]+
+
+		Nombre           = caracteres \p{L} | \p{Nd} | \p{Mn} | \p{Mc} | "-" | "_" | " ", sobre la forma NFC, con al
+		                   menos una letra o dígito (sección 4.2); el nombre lógico es el texto con trim a la derecha
+		                   y los espacios compactados (sección 4.1)
+
+		Indentacion      = { TAB } | { "    " }           ; solo tabuladores o solo grupos de 4 espacios (sección 8):
+		                                                  ; 1 tab = 1 nivel, 4 espacios = 1 nivel; mezclar en la misma línea,
+		                                                  ; o un número de espacios que no sea múltiplo de 4, es error de parseo
+		IndentacionBloque = Indentacion                   ; de exactamente nivel(nodo >>) + 1; lo que siga es TextoLibre
+		TextoLibre       = { cualquier carácter hasta fin de línea }
+		Blanco           = " " | TAB                      ; U+0020 o U+0009
 		
 	Content >>	
 		**Notas clave para implementadores:**
@@ -923,16 +908,23 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Subsubheader: 17.1. Asociación de un schema a un namespace
 		
 	Content >>
-		Para asociar un schema al namespace `com.example.mail`, se escribe un documento:
+		Para asociar un schema al namespace `com.example.mail`, se escribe un documento (es el mismo
+		modelo que expresa la plantilla del [apéndice C](#s18-1)):
 		
 	Code>>
 		Schema (@stxt.schema): com.example.mail
 			Node: Email
 				Children:
 					Child: From
+						Min: 1
+						Max: 1
 					Child: To
+						Min: 1
+						Max: 1
 					Child: Cc
+						Max: 1
 					Child: Bcc
+						Max: 1
 					Child: Title
 						Max: 1
 					Child: Body Content
@@ -941,9 +933,13 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 					Child: Metadata (org.example.meta)
 						Max: 1
 			Node: From
+				Type: EMAIL
 			Node: To
+				Type: EMAIL
 			Node: Cc
+				Type: EMAIL
 			Node: Bcc
+				Type: EMAIL
 			Node: Title
 			Node: Body Content
 				Type: TEXT
