@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 
 	Header: @STXT@ Discovery
 
@@ -243,5 +243,3 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		  limiting the search to a configured root directory).
 		* The ascent limit of [section 4.1](#s4-1) protects against pathological directory
 		  structures: circular links or virtual file systems.
-
-	Subheader: 11. End of Document

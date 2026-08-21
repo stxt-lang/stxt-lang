@@ -692,4 +692,3 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		IdentUpper       = [A-Z0-9_]+     ; los tipos se escriben en mayúsculas; comparación exacta (sección 8)
 		Value            = cualquier texto sin "," ni "]", con trim   ; ver sección 9.1
 		
-	Subheader: 19. Fin del Documento

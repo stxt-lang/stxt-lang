@@ -692,4 +692,3 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		IdentUpper       = [A-Z0-9_]+     ; types are written in uppercase; exact comparison (section 8)
 		Value            = any text without "," or "]", with trim   ; see section 9.1
 		
-	Subheader: 19. End of Document

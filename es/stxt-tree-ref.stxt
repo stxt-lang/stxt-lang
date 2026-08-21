@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 
 	Header: @STXT@ Tree
 
@@ -238,5 +238,3 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		    ]
 		  }
 		]
-
-	Subheader: 11. Fin del Documento

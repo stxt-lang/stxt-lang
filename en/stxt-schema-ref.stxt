@@ -819,5 +819,3 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		        Type: INLINE
 		    Node: Author
 		        Type: INLINE
-
-	Subheader: 16. End of Document

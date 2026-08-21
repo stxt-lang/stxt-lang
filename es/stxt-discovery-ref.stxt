@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 
 	Header: @STXT@ Discovery
 
@@ -245,5 +245,3 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		  ascendente (por ejemplo, limitar la búsqueda a un directorio raíz configurado).
 		* El límite de ascenso de la [sección 4.1](#s4-1) protege frente a estructuras de directorios
 		  patológicas: enlaces circulares o sistemas de ficheros virtuales.
-
-	Subheader: 11. Fin del Documento
