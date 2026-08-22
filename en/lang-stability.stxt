@@ -2,19 +2,13 @@ Document (dev.stxt.website): Stability and versions
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: Stability and versions
 
 	Assert >>
-		**A document that is valid in @STXT@ 1.0 is valid across the whole 1.x line**, whatever
-		tool reads it. This page states exactly what 1.0 freezes, what it does not, and how to
-		read the version numbers.
-
-	Content >>
-		Putting a format into a pipeline, building a tool on top of it or porting it to another
-		language are investments, and nobody makes them on something that may move. That is why
-		1.0 is not a number: it is a promise, and it belongs in one short place.
+		**A document that is valid in @STXT@ 1.0 is valid across the whole 1.x line**. This page
+		states exactly what 1.0 freezes, what it does not, and how to read the version numbers.
 
 	Subheader: What is frozen
 
@@ -26,14 +20,9 @@ Document (dev.stxt.website): Stability and versions
 		| **The error codes** (`INDENTATION_MIXED`, `CHILD_NOT_DECLARED`, `SCHEMA_NOT_FOUND`…) | They are identical in every implementation and are neither renamed nor reused. A test that depends on a code keeps working. |
 		| **The in-memory API of each library**, within its 1.x line | What `@stxt-lang/core`, `dev.stxt:stxt-core` or `stxt` exports in its 1.0 is still there, with the same signature, in all of its 1.x releases. Each library has its own line (see below). |
 
-		The first row is the one that matters: it is **your documents** that are protected, not
-		a particular tool. The other three protect what is built on top.
-
 	Subheader: What is not frozen
 
 	Content >>
-		Said out loud so that nobody relies on it:
-
 		* **The text of error messages.** It gets refined and translated. What is stable is the
 		  code (`[CHILD_NOT_DECLARED]`), not the sentence next to it; a test or a script that
 		  compares messages will break sooner or later.
@@ -50,8 +39,6 @@ Document (dev.stxt.website): Stability and versions
 	Subheader: The specification version and the package version
 
 	Content >>
-		There are two numberings, and it matters not to mix them up.
-
 		**Each specification carries its own number**, `major.minor`, in its `Metadata`, and all
 		five start at `1.0`. They are independent: the core is expected to be very stable, while
 		schema or template may evolve at their own pace, as XML Schema does with respect to XML
@@ -62,7 +49,7 @@ Document (dev.stxt.website): Stability and versions
 		`@stxt-lang/core` on npm, `dev.stxt:stxt-core` on Maven Central, `stxt` on PyPI. It
 		goes up when the library changes —a new function, a fix—, not when the language does.
 
-		Hence the rule worth keeping in mind: **conformance is declared against the version of
+		From this follows the rule: **conformance is declared against the version of
 		the specification, not of the package**. If one day `@stxt-lang/core` is at 1.3 and
 		`dev.stxt:stxt-core` at 1.1, they still read **the same @STXT@**, because both implement
 		STXT-SPEC 1.0. The three libraries expose that version as a constant (`SPEC_VERSION`)
@@ -77,7 +64,7 @@ Document (dev.stxt.website): Stability and versions
 	Subheader: How the numbers go up
 
 	Content >>
-		The rule is in [STXT-SPEC §1.1](stxt-core-ref#s1-1) and it is deliberately strict:
+		The rule is in [STXT-SPEC §1.1](stxt-core-ref#s1-1):
 
 		* The **major** of a specification goes up if something that was valid **stops being
 		  valid or changes meaning**. A "clarification" that invalidates what a conforming

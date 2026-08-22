@@ -2,19 +2,13 @@ Document (dev.stxt.website): Estabilidad y versiones
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: Estabilidad y versiones
 
 	Assert >>
-		**Un documento válido en @STXT@ 1.0 es válido en toda la línea 1.x**, lo lea la
-		herramienta que lo lea. Esta página dice exactamente qué queda congelado con la 1.0,
-		qué no, y cómo leer los números de versión.
-
-	Content >>
-		Meter un formato en un pipeline, escribir sobre él una herramienta o hacer un puerto a
-		otro lenguaje son inversiones, y nadie las hace sobre algo que puede moverse. Por eso
-		la 1.0 no es un número: es una promesa, y conviene que esté escrita en un sitio corto.
+		**Un documento válido en @STXT@ 1.0 es válido en toda la línea 1.x**. Esta página dice
+		exactamente qué queda congelado con la 1.0, qué no, y cómo leer los números de versión.
 
 	Subheader: Qué se congela
 
@@ -26,14 +20,9 @@ Document (dev.stxt.website): Estabilidad y versiones
 		| **Los códigos de error** (`INDENTATION_MIXED`, `CHILD_NOT_DECLARED`, `SCHEMA_NOT_FOUND`…) | Son idénticos en todas las implementaciones y no se renombran ni se reutilizan. Un test que dependa de un código sigue valiendo. |
 		| **La API en memoria de cada biblioteca**, dentro de su línea 1.x | Lo que exporta `@stxt-lang/core`, `dev.stxt:stxt-core` o `stxt` en su 1.0 sigue ahí, con la misma firma, en todas sus 1.x. Cada biblioteca tiene su propia línea (ver más abajo). |
 
-		La primera fila es la que importa: son **tus documentos** los que quedan protegidos, no
-		una herramienta concreta. Las otras tres protegen lo que se construye encima.
-
 	Subheader: Qué no se congela
 
 	Content >>
-		Lo decimos en voz alta para que nadie se apoye en ello:
-
 		* **El texto de los mensajes de error.** Se afinan y se traducen. Lo estable es el
 		  código (`[CHILD_NOT_DECLARED]`), no la frase que lo acompaña; un test o un script
 		  que compare mensajes se romperá tarde o temprano.
@@ -51,8 +40,6 @@ Document (dev.stxt.website): Estabilidad y versiones
 	Subheader: La versión de la especificación y la del paquete
 
 	Content >>
-		Hay dos numeraciones, y es importante no confundirlas.
-
 		**Cada especificación lleva su propio número**, `mayor.menor`, en su `Metadata`, y las
 		cinco arrancan en `1.0`. Son independientes: el núcleo se espera muy estable, y el
 		esquema o la plantilla pueden evolucionar a otro ritmo, como XML Schema respecto a XML o
@@ -64,7 +51,7 @@ Document (dev.stxt.website): Estabilidad y versiones
 		PyPI. Sube cuando cambia la biblioteca —una función nueva, un arreglo—, no cuando
 		cambia el lenguaje.
 
-		De ahí la regla que conviene tener clara: **la conformidad se declara contra la versión
+		De ahí se deriva la siguiente regla: **la conformidad se declara contra la versión
 		de la especificación, no contra la del paquete**. Si un día `@stxt-lang/core` va por la
 		1.3 y `dev.stxt:stxt-core` por la 1.1, siguen leyendo **el mismo @STXT@**, porque las dos
 		implementan STXT-SPEC 1.0. Las tres bibliotecas exponen esa versión como constante
@@ -79,7 +66,7 @@ Document (dev.stxt.website): Estabilidad y versiones
 	Subheader: Cómo suben los números
 
 	Content >>
-		La regla está en [STXT-SPEC §1.1](stxt-core-ref#s1-1) y es deliberadamente dura:
+		La regla está en [STXT-SPEC §1.1](stxt-core-ref#s1-1):
 
 		* El **mayor** de una especificación sube si algo que era válido **deja de serlo o cambia
 		  de significado**. Cuenta también una "aclaración" que deje inválido lo que una
