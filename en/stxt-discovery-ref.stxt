@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: @STXT@ Discovery
 
@@ -17,17 +17,14 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		an @STXT@ document.
 
 		The [*STXT-SCHEMA-SPEC*](stxt-schema-ref) and [*STXT-TEMPLATE-SPEC*](stxt-template-ref) specifications define how
-		definitions are written and how they validate; they deliberately do not say **where
-		they live**. This specification fills that gap with a single goal: that the same
-		document validates against the same definitions in every tool — an editor, a command
-		line, a continuous integration process. If every tool searched for definitions its
+		definitions are written and how they validate; they deliberately do not state where
+		they are located. This specification covers that omission with a single goal: that the
+		same document validates against the same definitions in every tool — an editor, a
+		command line, a continuous integration process. If every tool searched for definitions its
 		own way, the outcome of validating would depend on who validates.
 
 		Resolution is **identical for schemas and templates**: both are discovered by the
 		same procedure and compete for the same namespaces.
-
-		In the rest of the specifications, this document is referenced as
-		*STXT-DISCOVERY-SPEC*.
 
 	Subsubheader: 1.1 Version of this specification
 
@@ -171,7 +168,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		* An `STXT_PATH` that is defined but empty leaves the chain empty: documents are
 		  parsed without validation.
 
-		`STXT_PATH` exists for environments where the implicit search gets in the way:
+		`STXT_PATH` exists for environments in which the implicit search is not appropriate:
 		continuous integration, the tools' own tests, or environments with a restricted
 		file system.
 
@@ -225,7 +222,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		* A tool that implements file-system discovery **MUST** follow this specification
 		  in full: implementing only part of the chain produces exactly the disagreement
 		  between tools that this specification exists to avoid.
-		* This specification does not define **when** definitions are reloaded (file
+		* This specification does not define when definitions are reloaded (file
 		  watching, caches, invalidation): that is each tool's decision, as long as the
 		  observable result honors [sections 4](#s4) to [8](#s8).
 

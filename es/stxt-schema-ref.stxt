@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: @STXT@ Schema
 
@@ -223,7 +223,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		schema, en la **carga del schema**; para hijos de otro namespace, en la **validación del
 		documento** (cuando el nodo aparece).
 
-		Así evitamos hijos "fantasma" y garantizamos que todos los nodos tienen semántica definida.
+		Esta regla excluye los hijos sin definición y garantiza que todos los nodos tienen semántica definida.
 
 		Esto implica:
 
@@ -258,13 +258,13 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		* **Admite hijos**: SÍ o NO.
 
 		Estas dos propiedades son **independientes entre sí**. En particular, "admite hijos" **no**
-		se deriva de la forma del valor. La regla de compatibilidad es deliberadamente simple:
+		se deriva de la forma del valor. La regla de compatibilidad es la siguiente:
 
 		**Sólo los dos tipos estructurales genéricos — `INLINE` y `GROUP` — admiten hijos. Todos los
 		tipos con validación de contenido específico son hojas (no admiten hijos).**
 
-		La intuición: en cuanto un tipo declara que valida un dato concreto (`NUMBER`, `DATE`,
-		`BOOLEAN`, `ENUM`, etc.), ese nodo **es** un dato, y un dato es una hoja. Si se necesita
+		Razón: en cuanto un tipo declara que valida un dato concreto (`NUMBER`, `DATE`,
+		`BOOLEAN`, `ENUM`, etc.), ese nodo es un dato, y un dato es una hoja. Si se necesita
 		valor más estructura, se usa el tipo genérico `INLINE`, que existe precisamente para eso;
 		y si se necesita sólo estructura, se usa `GROUP`.
 
@@ -498,14 +498,14 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		decisión de diseño coherente con el principio Human-First: el autor de un documento no debería
 		tener que recordar el orden de los campos.
 
-		**Orden preservado, no validado.** Aunque el orden no se *valida*, el orden de aparición de
+		**Orden preservado, no validado.** Aunque el orden no se valida, el orden de aparición de
 		los hijos **se preserva** en el árbol parseado (garantía del núcleo, [*STXT-SPEC*](stxt-core-ref)). Por tanto,
 		una aplicación que necesite significado posicional (por ejemplo, secciones consecutivas de un
 		documento) lo obtiene del propio árbol, no de la validación. La semántica del orden corresponde
 		a la aplicación.
 
 		La validación de orden secuencial es un **no-objetivo** explícito de @STXT@ Schema: introducir
-		modelos de contenido ordenados (al estilo de `xs:sequence`) complicaría notablemente los
+		modelos de contenido ordenados (al estilo de `xs:sequence`) complicaría los
 		validadores (autómatas, ambigüedad de partículas) sin un beneficio claro para los casos de uso
 		objetivo.
 
@@ -551,7 +551,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 	Subsubheader: 12.3 Estructura recursiva
 
 	Content >>
-		El modelo cerrado admite recursión sin esfuerzo: un `Node` puede declararse como hijo de sí
+		El modelo cerrado admite recursión: un `Node` puede declararse como hijo de sí
 		mismo o de un ancestro.
 
 	Code >>
@@ -606,7 +606,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 	Content >>
 		Como en [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), cada error lleva un código estable e idéntico
 		en todas las implementaciones; **desde la 1.0 no cambian**. Un documento schema se valida
-		primero **como documento** contra el meta-esquema de la [sección 15](#s15), así que sus
+		primero **como documento** contra el meta-esquema de la [sección 15](#s15), por lo que sus
 		errores de forma (un `Node` sin valor, dos `Type`, un `Min` que no es `NATURAL`…) llegan con
 		los códigos de la segunda tabla; después se aplican las reglas propias de la primera.
 		

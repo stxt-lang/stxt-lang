@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 		
 	Header: @STXT@ Core
 	
@@ -22,7 +22,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		@STXT@ is a hierarchical and semantic textual format oriented to:
 		
 		* Representing documents and data clearly.
-		* Being extremely simple to read and write.
+		* Being simple to read and write.
 		* Being trivial to parse in any language.
 		* Allowing both structured content and free text.
 		* Extending its semantics through `@stxt.schema` or `@stxt.template`.
@@ -34,20 +34,22 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 
 	Content >>
 		This specification carries its version number in the `Version` field of its `Metadata`, in
-		`major.minor` format, with no patch. The `Last modif` field answers a different question: *when
-		the document actually changed*.
+		`major.minor` format, with no patch. The `Last modif` field records the date of the last
+		modification of the document, regardless of whether that modification affects the version
+		number.
 
 		* The **major** number goes up if a document that was valid **stops being valid or changes
-		  meaning**. It is the only kind of change that can break someone, and it is stated. A
-		  clarification that invalidates something a conforming implementation accepted counts as a
-		  major change: what decides is the effect, not the intent.
+		  meaning**. It is the only kind of change that can affect existing documents and
+		  implementations, and it is stated. A clarification that invalidates something a conforming
+		  implementation accepted counts as a major change: the criterion is the effect of the change,
+		  not its intent.
 		* The **minor** number goes up if something is **only added** —a clarification, a normative
 		  case— without invalidating anything existing. Everything valid in `1.0` is valid in any `1.x`.
-		* The first version is **`1.0`**. Earlier drafts carry no number.
+		* The first version is `1.0`. Earlier drafts carry no number.
 
-		**"STXT 1.0"**, said on its own, is the version of this specification: the base syntax is what
-		defines what an @STXT@ document is. A conforming implementation **SHOULD** expose it (for
-		instance, a `SPEC_VERSION` constant), **distinct from its package version**: two
+		"STXT 1.0", without further qualification, designates the version of this specification: the
+		base syntax is what defines what an @STXT@ document is. A conforming implementation **SHOULD**
+		expose it (for instance, as a `SPEC_VERSION` constant), distinct from its package version: two
 		implementations with different packages read the same @STXT@ as long as this number matches.
 		Conformance is declared against the specification version, not the package one.
 
@@ -396,7 +398,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		* Different lines of the same document **MAY** use different styles (some tabs, some spaces): the hierarchy is compared by **level**, not by columns. This is **not recommended** as a matter of style, and a parser **MAY** emit a warning if a document combines both styles.
 
 		**Why it is so strict (non-normative).** The level of a line is computed by looking at that
-		line alone: count its tabs, or divide its spaces by four. There is no need to remember how the
+		line alone: count its tabs, or divide its spaces by four. It is not necessary to remember how the
 		previous lines were indented, nor to keep a stack of levels as in variable-indentation
 		languages. That is why there are no other widths (2 spaces, for instance) and why mixing is not
 		allowed: a line that mixes tabs and spaces looks different in every editor depending on the tab
@@ -532,7 +534,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		* *Streaming* of successive records.
 		* Combining files with a simple text concatenation (`cat a.stxt b.stxt > c.stxt`).
 		
-		@STXT@ does not need a derived format for "lists of documents": a document already **is**
+		@STXT@ does not need a derived format for "lists of documents": a document already is
 		a sequence of root nodes.
 		
 	Subheader: 9. Comments
@@ -578,8 +580,8 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		|-->....# ERROR: mix of TAB and spaces on the same line
 		
 	Content >>
-		The rule comes from visual coherence: indentation is the structure of the document, and a
-		comment floating outside it misleads the reader about which node it refers to.
+		The rule follows from visual coherence: indentation is the structure of the document, and a
+		comment placed outside it gives a wrong indication of which node it refers to.
 		
 	Subsubheader: 9.1 Comments and >> blocks
 		
@@ -761,7 +763,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Content >>
 		Every error carries a stable **code**, in uppercase English, which is the same in every
 		conforming implementation: a program that filters or counts errors does so by code, not by
-		the message text, which each implementation words (and translates) as it sees fit. These are
+		the message text, which each implementation words (and translates) at its own discretion. These are
 		the codes of the syntax errors; each one points to the condition of the list above. **From
 		1.0 on the codes do not change**; until then, a minor version may rename them.
 		
@@ -946,7 +948,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		Blank            = " " | TAB                      ; U+0020 or U+0009
 		
 	Content >>	
-		**Key notes for implementers:**
+		**Notes for implementers:**
 		
 		* The parser must process the document line by line, maintaining state of:
 		  - Current indentation level of the parent node.
@@ -1074,7 +1076,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		and whose purpose is to define the structural rules, value types, and cardinalities of the nodes belonging to a specific namespace.
 		
 		The template system is analogous to schemas, but with a simplified syntax, oriented toward rapid prototypes. 
-		Even so, it is a perfectly valid system for all kinds of documents. It could be considered *syntactic sugar*, since internally it can use 
+		Even so, it is a valid system for all kinds of documents. It could be considered *syntactic sugar*, since internally it can use 
 		the same representation as a schema.
 		
 		The template system **MAY** coexist alongside a system with schemas, since in the end a template defines the same information as a schema.

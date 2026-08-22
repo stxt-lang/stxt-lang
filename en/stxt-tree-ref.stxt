@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: @STXT@ Tree
 
@@ -10,7 +10,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 
 	Content >>
 		This document is **STXT-TREE-SPEC**; the other specifications cite it by that name.
-				It defines the canonical JSON representation of the
+		It defines the canonical JSON representation of the
 		logical tree produced when a valid @STXT@ document is parsed.
 
 		Its purpose is for two conforming implementations to display, exchange and compare

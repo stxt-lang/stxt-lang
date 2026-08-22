@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: @STXT@ Discovery
 
@@ -17,17 +17,14 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		aplicables a un documento @STXT@.
 
 		Las especificaciones [*STXT-SCHEMA-SPEC*](stxt-schema-ref) y [*STXT-TEMPLATE-SPEC*](stxt-template-ref) definen cómo se
-		escriben las definiciones y cómo validan; deliberadamente no dicen **dónde viven**.
-		Esta especificación cubre ese hueco con un único objetivo: que un mismo documento se
+		escriben las definiciones y cómo validan; deliberadamente no indican dónde se ubican.
+		Esta especificación cubre esa omisión con un único objetivo: que un mismo documento se
 		valide con las mismas definiciones en cualquier herramienta — un editor, una línea de
 		comandos, un proceso de integración continua. Si cada herramienta buscara las
 		definiciones a su manera, el resultado de validar dependería de quién valida.
 
 		La resolución es **idéntica para schemas y para templates**: ambos se descubren por
 		el mismo procedimiento y compiten por los mismos namespaces.
-
-		En el resto de especificaciones, este documento se referencia como
-		*STXT-DISCOVERY-SPEC*.
 
 	Subsubheader: 1.1 Versión de esta especificación
 
@@ -171,9 +168,9 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		* Una `STXT_PATH` definida pero vacía deja la cadena vacía: los documentos se
 		  parsean sin validación.
 
-		`STXT_PATH` existe para los entornos donde la búsqueda implícita estorba: integración
-		continua, tests de las propias herramientas, o entornos con el sistema de ficheros
-		restringido.
+		`STXT_PATH` existe para los entornos en los que la búsqueda implícita no es adecuada:
+		integración continua, tests de las propias herramientas, o entornos con el sistema
+		de ficheros restringido.
 
 	Subheader: 7. Resolución por documento
 
@@ -227,7 +224,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		  seguir esta especificación completa: implementar sólo una parte de la cadena
 		  produce exactamente el desacuerdo entre herramientas que esta especificación
 		  existe para evitar.
-		* Esta especificación no define **cuándo** se recargan las definiciones (vigilancia
+		* Esta especificación no define cuándo se recargan las definiciones (vigilancia
 		  de ficheros, cachés, invalidación): eso es decisión de cada herramienta, siempre
 		  que el resultado observable respete las [secciones 4](#s4) a [8](#s8).
 

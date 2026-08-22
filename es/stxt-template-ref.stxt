@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 		
 	Header: @STXT@ Template
 	
@@ -111,14 +111,14 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		El bloque `Structure >>` define un **árbol de plantillas de nodos** usando indentación, donde:
 		
 		* Cada línea no vacía define una **plantilla de nodo**.
-		* La indentación define nodos hijos (igual que @STXT@), pero **dentro de `Structure >>` no se está describiendo 
-		  un documento de datos, sino una estructura esperada**.
+		* La indentación define nodos hijos (igual que @STXT@), pero dentro de `Structure >>` no se está describiendo
+		  un documento de datos, sino una estructura esperada.
 		* Las reglas de indentación del documento @STXT@ base aplican al documento template fuera del bloque.
 		* El contenido de `Structure >>` se interpreta mediante la gramática de templates definida en este documento.
 		* La jerarquía dentro de `Structure >>` **DEBE** construirse con el mismo modelo de indentación consecutiva que en [*STXT-SPEC*](stxt-core-ref).
 		
 	Content >>
-		**Nivel superior y nodos definidos.** Las líneas de nivel superior de `Structure` **no** tienen
+		**Nivel superior y nodos definidos.** Las líneas de nivel superior de `Structure` no tienen
 		semántica especial de "raíz": son plantillas de nodo como cualquier otra, y su anidamiento define
 		sus hijos. Cada línea de `Structure` (a cualquier nivel) define o referencia un nodo del namespace
 		correspondiente, exactamente igual que un `Node` en un schema.
@@ -230,7 +230,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 						Sección: (*) @Sección
 		
 	Content >>
-		Aquí la última línea, `Sección: (*) @Sección`, declara `Sección` como hijo de sí misma,
+		En este ejemplo, la última línea, `Sección: (*) @Sección`, declara `Sección` como hijo de sí misma,
 		referenciando al ancestro `Sección` cuya definición está abierta. `Título: (1) @Título`
 		reutiliza la definición local previa de `Título`.
 		
@@ -369,7 +369,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		contener una coma `,` (separador de valores) ni un corchete de cierre `]` (fin de lista).
 		Tampoco conserva espacios al inicio o final, que el trim elimina.
 		
-		Ésta es una limitación del **subconjunto expresable por templates**. Si se necesitan valores
+		Esta es una limitación del **subconjunto expresable por templates**. Si se necesitan valores
 		`ENUM` con comas, corchetes o espacios significativos, debe usarse un **schema** (`@stxt.schema`),
 		cuyos nodos `Value` admiten cualquier valor inline.
 		
@@ -409,7 +409,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 	Content >>
 		Un template **PUEDE** incluir un nodo `Description`, y como máximo uno, en forma inline (`:`) o de bloque (`>>`).
 
-		Su contenido **NO** es texto libre que describa el template: es un documento @STXT@ cuyos
+		Su contenido no es texto libre que describa el template: es un documento @STXT@ cuyos
 		nodos raíz son **entradas de descripción**. Cada entrada asocia una descripción a un nodo
 		definido en `Structure`:
 
@@ -421,7 +421,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 
 		Es la misma información que un schema expresa con el nodo `Description` de cada `Node`
 		([*STXT-SCHEMA-SPEC*](stxt-schema-ref), [sección 7.1](stxt-schema-ref#s7-1)); el template la agrupa en un único bloque porque su
-		sintaxis de línea no tiene sitio para descripciones. Los editores **PUEDEN** usar estas
+		sintaxis de línea no admite descripciones. Los editores **PUEDEN** usar estas
 		descripciones, por ejemplo, como ayuda contextual (hover) sobre los nodos de un documento.
 
 	Content >>

@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 		
 	Header: @STXT@ Template
 	
@@ -111,14 +111,14 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		The `Structure >>` block defines a **tree of node templates** using indentation, where:
 		
 		* Each non-empty line defines a **node template**.
-		* Indentation defines child nodes (just like @STXT@), but **inside `Structure >>` a data document is not being described,
-		  but rather an expected structure**.
+		* Indentation defines child nodes (just like @STXT@), but inside `Structure >>` a data document is not being described,
+		  but rather an expected structure.
 		* The indentation rules of the base @STXT@ document apply to the template document outside the block.
 		* The content of `Structure >>` is interpreted through the template grammar defined in this document.
 		* The hierarchy within `Structure >>` **MUST** be built with the same consecutive indentation model as in [*STXT-SPEC*](stxt-core-ref).
 		
 	Content >>
-		**Top level and defined nodes.** The top-level lines of `Structure` do **not** have
+		**Top level and defined nodes.** The top-level lines of `Structure` do not have
 		special "root" semantics: they are node templates like any other, and their nesting defines
 		their children. Each line of `Structure` (at any level) defines or references a node of the
 		corresponding namespace, exactly like a `Node` in a schema.
@@ -230,7 +230,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 						Section: (*) @Section
 		
 	Content >>
-		Here the last line, `Section: (*) @Section`, declares `Section` as a child of itself,
+		In this example, the last line, `Section: (*) @Section`, declares `Section` as a child of itself,
 		referencing the ancestor `Section` whose definition is open. `Title: (1) @Title`
 		reuses the previous local definition of `Title`.
 		
@@ -409,7 +409,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 	Content >>
 		A template **MAY** include a `Description` node, and at most one, in inline (`:`) or block (`>>`) form.
 
-		Its content is **NOT** free text describing the template: it is an @STXT@ document whose
+		Its content is not free text describing the template: it is an @STXT@ document whose
 		root nodes are **description entries**. Each entry associates a description with a node
 		defined in `Structure`:
 
@@ -421,7 +421,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 
 		It is the same information that a schema expresses with the `Description` node of each `Node`
 		([*STXT-SCHEMA-SPEC*](stxt-schema-ref), [section 7.1](stxt-schema-ref#s7-1)); the template groups it in a single block because its
-		line syntax has no room for descriptions. Editors **MAY** use these
+		line syntax does not allow descriptions. Editors **MAY** use these
 		descriptions, for example, as contextual help (hover) over the nodes of a document.
 
 	Content >>

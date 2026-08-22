@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: @STXT@ Tree
 
@@ -10,7 +10,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 
 	Content >>
 		Este documento es **STXT-TREE-SPEC**; las demás especificaciones lo citan con ese nombre.
-				Define la representación JSON canónica del
+		Define la representación JSON canónica del
 		árbol lógico que produce el parseo de un documento @STXT@ válido.
 
 		Su propósito es que dos implementaciones conformes puedan mostrar, intercambiar

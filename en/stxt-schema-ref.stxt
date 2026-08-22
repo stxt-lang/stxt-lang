@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: @STXT@ Schema
 
@@ -221,7 +221,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		namespace, at **schema load**; for children of another namespace, at **document
 		validation** (when the node appears).
 
-		This avoids "ghost" children and guarantees that all nodes have defined semantics.
+		This rule excludes children without a definition and guarantees that all nodes have defined semantics.
 
 		This implies:
 
@@ -256,13 +256,13 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		* **Allows children**: YES or NO.
 
 		These two properties are **independent from each other**. In particular, "allows children" **is not**
-		derived from the value form. The compatibility rule is deliberately simple:
+		derived from the value form. The compatibility rule is as follows:
 
 		**Only the two generic structural types — `INLINE` and `GROUP` — allow children. All
 		types with specific content validation are leaves (they do not allow children).**
 
-		The intuition: as soon as a type declares that it validates a specific datum (`NUMBER`, `DATE`,
-		`BOOLEAN`, `ENUM`, etc.), that node **is** a datum, and a datum is a leaf. If both
+		Rationale: as soon as a type declares that it validates a specific datum (`NUMBER`, `DATE`,
+		`BOOLEAN`, `ENUM`, etc.), that node is a datum, and a datum is a leaf. If both
 		value and structure are needed, the generic `INLINE` type is used, which exists precisely for that;
 		and if only structure is needed, `GROUP` is used.
 
@@ -496,14 +496,14 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		design decision consistent with the Human-First principle: the author of a document should not
 		have to remember the order of the fields.
 
-		**Order preserved, not validated.** Although order is not *validated*, the order of appearance of
+		**Order preserved, not validated.** Although order is not validated, the order of appearance of
 		children **is preserved** in the parsed tree (core guarantee, [*STXT-SPEC*](stxt-core-ref)). Therefore,
 		an application that needs positional meaning (for example, consecutive sections of a
 		document) obtains it from the tree itself, not from validation. The semantics of order belong
 		to the application.
 
 		Sequential order validation is an explicit **non-goal** of @STXT@ Schema: introducing
-		ordered content models (in the style of `xs:sequence`) would considerably complicate
+		ordered content models (in the style of `xs:sequence`) would complicate
 		validators (automata, particle ambiguity) without a clear benefit for the target use cases.
 
 		Other explicit **non-goals** of @STXT@ Schema are: patterns or regular expressions over
@@ -548,7 +548,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 	Subsubheader: 12.3 Recursive structure
 
 	Content >>
-		The closed model allows recursion effortlessly: a `Node` may be declared as a child of itself
+		The closed model allows recursion: a `Node` may be declared as a child of itself
 		or of an ancestor.
 
 	Code >>

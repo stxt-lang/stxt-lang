@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 		
 	Header: @STXT@ Core
 	
@@ -21,7 +21,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		@STXT@ es un formato textual jerárquico y semántico orientado a:
 		
 		* Representar documentos y datos de manera clara.
-		* Ser extremadamente sencillo de leer y escribir.
+		* Ser sencillo de leer y escribir.
 		* Ser trivial de parsear en cualquier lenguaje.
 		* Permitir tanto contenido estructurado como texto libre.
 		* Extender su semántica mediante `@stxt.schema` o `@stxt.template`.
@@ -33,20 +33,22 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 
 	Content >>
 		Esta especificación lleva su número de versión en el campo `Version` de su `Metadata`, con el
-		formato `mayor.menor`, sin parche. El campo `Last modif` responde a otra pregunta: *cuándo cambió
-		de verdad* el documento.
+		formato `mayor.menor`, sin parche. El campo `Last modif` indica la fecha de la última
+		modificación del documento, con independencia de si esa modificación afecta al número de
+		versión.
 
 		* El número **mayor** sube si un documento que era válido **deja de serlo o cambia de
-		  significado**. Es la única clase de cambio que puede romper a alguien, y se hace constar. Una
-		  aclaración que deje inválido algo que una implementación conforme aceptaba cuenta como cambio
-		  mayor: lo que decide es el efecto, no la intención.
+		  significado**. Es el único tipo de cambio que puede afectar a documentos e implementaciones
+		  existentes, y se hace constar. Una aclaración que deje inválido algo que una implementación
+		  conforme aceptaba cuenta como cambio mayor: el criterio es el efecto del cambio, no su
+		  intención.
 		* El número **menor** sube si **solo se añade** —una aclaración, un caso normativo— sin
 		  invalidar nada existente. Todo lo válido en `1.0` lo es en cualquier `1.x`.
-		* La primera versión es la **`1.0`**. Los borradores anteriores no llevan número.
+		* La primera versión es la `1.0`. Los borradores anteriores no llevan número.
 
-		**«STXT 1.0»**, dicho por sí solo, es la versión de esta especificación: la sintaxis base es lo que
-		define qué es un documento @STXT@. Una implementación conforme **DEBERÍA** exponerla (por
-		ejemplo, una constante `SPEC_VERSION`), **distinta de la versión de su paquete**: dos
+		«STXT 1.0», sin más calificación, designa la versión de esta especificación: la sintaxis base es
+		lo que define qué es un documento @STXT@. Una implementación conforme **DEBERÍA** exponerla (por
+		ejemplo, como una constante `SPEC_VERSION`), distinta de la versión de su paquete: dos
 		implementaciones con paquetes distintos leen el mismo @STXT@ mientras coincida este número. La
 		conformidad se declara contra la versión de la especificación, no contra la del paquete.
 
@@ -396,7 +398,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* Líneas distintas de un mismo documento **PUEDEN** usar estilos distintos (unas tabs, otras espacios): la jerarquía se compara por **nivel**, no por columnas. **No se recomienda** por estilo, y un parser **PUEDE** emitir un aviso si un documento combina ambos estilos.
 
 		**Por qué es tan estricta (no normativo).** El nivel de una línea se calcula mirando solo esa
-		línea: cuenta sus tabuladores, o divide sus espacios entre cuatro. No hace falta recordar cómo
+		línea: cuenta sus tabuladores, o divide sus espacios entre cuatro. No es necesario recordar cómo
 		estaban indentadas las anteriores, ni mantener una pila de niveles como en los lenguajes de
 		indentación variable. Ese es el motivo de que no haya otros anchos (2 espacios, por ejemplo) y
 		de que no se permita mezclar: una línea que mezcla tabs y espacios se ve distinta en cada editor
@@ -533,7 +535,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* *Streaming* de registros sucesivos.
 		* Combinar ficheros con una simple concatenación de texto (`cat a.stxt b.stxt > c.stxt`).
 		
-		@STXT@ no necesita un formato derivado para "listas de documentos": un documento ya **es**
+		@STXT@ no necesita un formato derivado para "listas de documentos": un documento ya es
 		una secuencia de nodos raíz.
 		
 	Subheader: 9. Comentarios
@@ -579,8 +581,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		|-->....# ERROR: mezcla de TAB y espacios en la misma línea
 		
 	Content >>
-		La regla nace de la coherencia visual: la indentación es la estructura del documento, y un
-		comentario que flota fuera de ella engaña al lector sobre a qué nodo se refiere.
+		La regla responde a la coherencia visual: la indentación es la estructura del documento, y un
+		comentario situado fuera de ella induce a error sobre a qué nodo se refiere.
 		
 	Subsubheader: 9.1 Comentarios y bloques >>
 		
@@ -763,7 +765,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Content >>
 		Todo error lleva un **código** estable, en mayúsculas y en inglés, que es el mismo en todas
 		las implementaciones conformes: un programa que filtra o cuenta errores lo hace por código, no
-		por el texto del mensaje, que cada implementación redacta (y traduce) como quiera. Estos son
+		por el texto del mensaje, que cada implementación redacta (y traduce) a su criterio. Estos son
 		los códigos de los errores de sintaxis; cada uno remite a la condición de la lista anterior.
 		**Desde la 1.0 los códigos no cambian**; hasta entonces, una versión menor puede renombrarlos.
 		
@@ -948,7 +950,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		Blanco           = " " | TAB                      ; U+0020 o U+0009
 		
 	Content >>	
-		**Notas clave para implementadores:**
+		**Notas para implementadores:**
 		
 		* El parser debe procesar el documento línea por línea, manteniendo estado de:
 		  - Nivel de indentación actual del nodo padre.
@@ -1076,7 +1078,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		y cuyo objetivo es definir las reglas estructurales, tipos de valor y cardinalidades de los nodos pertenecientes a un namespace concreto.
 		
 		El sistema de templates es análogo a los schemas, pero con una sintaxis simplificada, orientada a prototipos rápidos. 
-		Aun así, es un sistema perfectamente válido para todo tipo de documentos. Podría considerarse *azúcar sintáctico*, ya que internamente puede usar 
+		Aun así, es un sistema válido para todo tipo de documentos. Podría considerarse *azúcar sintáctico*, ya que internamente puede usar 
 		la misma representación que un schema.
 		
 		El sistema de templates **PUEDE** convivir junto a un sistema con schemas, ya que al final un template define la misma información que un schema.
