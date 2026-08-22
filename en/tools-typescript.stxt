@@ -381,15 +381,27 @@ Document (dev.stxt.website): The TypeScript library
 		`IndentStyle.SPACES_4`. It writes the namespace where the node declares it, not
 		where it differs from the parent. Since it starts from the
 		logical tree, a text that goes through `parse` and `NodeWriter` comes out without
-		comments or blank lines outside blocks —that is what `stxt format --clean` does—;
-		the reformatting that keeps them is the job of the CLI and the extension, not of
-		the library.
+		comments or blank lines outside blocks —that is what `stxt format --clean` does—.
 
 	TypeScript >>
 		import { NodeWriter, IndentStyle } from '@stxt-lang/core';
 
 		const one = NodeWriter.toSTXT(email);                                   // one node, with tabs
 		const all = NodeWriter.toSTXTDocs(result.getNodes(), IndentStyle.SPACES_4);   // a whole document
+
+	Content >>
+		The reformatting that **keeps** comments and blank lines is `Formatter` (since 0.11.1):
+		it rewrites the original text line by line —the lines that open a node in canonical
+		form, those of a block at the level of the block, the rest as they are, with their
+		indentation units converted to the requested style— and returns, along with the text,
+		the syntax errors it met, so that the caller decides what to do with a document that
+		does not parse. It is the formatter behind `stxt format`, the extension and the
+		playground.
+
+	TypeScript >>
+		import { Formatter, IndentStyle } from '@stxt-lang/core';
+
+		const { text, errors } = Formatter.format(source, IndentStyle.TABS);
 
 	Content >>
 		The `email` built above, written with `toSTXT`:
@@ -439,7 +451,7 @@ Document (dev.stxt.website): The TypeScript library
 		| Errors               | `ParseException`, `ValidationException`                                                                                |
 		| Extension points     | `Observer`                                                                                                             |
 		| Schemas              | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaValidator`, `transformNodeToSchema`, `transformTemplateNodeToSchema` |
-		| Runtime              | `UnifiedSchemaProvider`, `NodeWriter`, `IndentStyle`, `toCanonicalTree`, `toCanonicalJson` and the `Canonical*` types |
+		| Runtime              | `UnifiedSchemaProvider`, `NodeWriter`, `IndentStyle`, `Formatter`, `FormatResult`, `toCanonicalTree`, `toCanonicalJson` and the `Canonical*` types |
 		| Resolution           | `DiscoveryResolver`, `DiscoveryOptions`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryFileSystem`, `DiscoveryEntry`, `DiscoveryEnvironment` |
 
 		From 1.0 on this API is frozen within the package's 1.x line, and the language
