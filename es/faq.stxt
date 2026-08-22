@@ -2,57 +2,58 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: Preguntas frecuentes
 
 	Content >>
-		Respuestas cortas a las dudas que aparecen al empezar con @STXT@. Cada respuesta
-		enlaza a la sección de la referencia que la fija; ante cualquier discrepancia,
-		manda la referencia.
+		Respuestas breves a las dudas habituales al empezar con @STXT@. Cada respuesta enlaza
+		a la sección de la referencia que la fija; ante cualquier discrepancia, manda la
+		referencia.
 
 	Subheader: El lenguaje
 
 	Subsubheader: ¿Por qué no YAML, JSON o TOML?
 
 	Content >>
-		Porque resuelven otro problema. JSON y TOML están pensados para datos; YAML intenta
-		cubrir datos y texto y paga por ello con una gramática enorme y sorpresas conocidas
-		(`NO` que se convierte en falso, indentación con anchos variables, anclas, tags que
-		instancian objetos). @STXT@ está pensado para **documentos**: cosas que una persona
-		escribe y lee, con estructura y con párrafos de texto libre mezclados.
+		Porque resuelven otro problema. JSON y TOML están pensados para datos; YAML cubre datos
+		y texto a costa de una gramática extensa y de comportamientos conocidos (`NO` que se
+		convierte en falso, indentación de ancho variable, anclas, tags que instancian
+		objetos). @STXT@ está pensado para **documentos**: contenido que una persona escribe y
+		lee, con estructura y con párrafos de texto libre mezclados.
 
 		Lo que lo distingue:
 
-		* **Un texto libre es literal.** Todo lo indentado bajo un nodo `>>` es texto tal cual,
-		  sin escapes, sin comillas y sin que `:`, `#` o `>>` signifiquen nada dentro.
-		* **Una sola forma de escribir cada cosa.** `Nombre: valor` o `Nombre >>`, un tabulador o
-		  cuatro espacios por nivel. No hay tres sintaxis para una lista.
-		* **El parser es trivial y seguro por diseño**: sin entidades, sin referencias, sin
+		* **El texto libre es literal.** Todo lo indentado bajo un nodo `>>` es texto literal,
+		  sin escapes ni comillas; `:`, `#` y `>>` no tienen significado dentro.
+		* **Una sola forma de escribir cada elemento.** `Nombre: valor` o `Nombre >>`, un
+		  tabulador o cuatro espacios por nivel. No hay varias sintaxis para una lista.
+		* **El parser es mínimo y seguro por diseño**: sin entidades, sin referencias, sin
 		  inclusión de ficheros, sin ejecución de código, sin ambigüedad de identificadores. Ver
 		  [STXT-SPEC §15](stxt-core-ref#s15).
-		* **La validación es una capa aparte y opcional**, con un modelo cerrado que detecta un
-		  nombre mal escrito en lugar de aceptarlo en silencio.
+		* **La validación es una capa aparte y opcional**, con un modelo de contenido cerrado
+		  que rechaza un nombre mal escrito en lugar de aceptarlo en silencio.
 
-		Cuando lo que tienes son datos para que los lea otra máquina, JSON sigue siendo una
-		buena elección; y de hecho todo documento @STXT@ tiene una representación JSON
-		canónica (ver *¿Cómo lo convierto a JSON?*).
+		Para datos destinados a otra máquina, JSON sigue siendo una opción adecuada; todo
+		documento @STXT@ tiene además una representación JSON canónica (ver *¿Cómo lo
+		convierto a JSON?*).
 
 	Subsubheader: ¿Es un formato de datos o de documentos?
 
 	Content >>
-		Las dos cosas, porque la línea entre ambas es artificial: un email tiene campos y un
+		Ambas cosas, porque la línea entre ambas es artificial: un email tiene campos y un
 		cuerpo, un contrato tiene cláusulas y metadatos, una configuración tiene valores y
 		comentarios largos. @STXT@ es un árbol de nodos con nombre; cada nodo lleva o bien un
 		valor y unos hijos, o bien un bloque de texto. Con eso se describe tanto una ficha de
 		datos como un documento de veinte páginas. Los [casos de uso](use-cases-corporate-docs)
 		recorren ese abanico.
 
-	Subsubheader: ¿Qué extensión y qué media type uso?
+	Subsubheader: ¿Qué extensión y qué media type se usan?
 
 	Content >>
-		Extensión `.stxt`; media type `text/stxt` (registro en IANA previsto, aún no registrado), y `text/plain` como alternativa compatible.
-		Codificación UTF-8 sin BOM, finales de línea `LF` (se acepta `CRLF`).
+		Extensión `.stxt`; media type `text/stxt` (registro en IANA previsto, aún no
+		registrado), y `text/plain` como alternativa compatible. Codificación UTF-8 sin BOM,
+		finales de línea `LF` (se acepta `CRLF`).
 		Ver [STXT-SPEC §3](stxt-core-ref#s3) y [§13](stxt-core-ref#s13).
 
 	Subheader: Escribir documentos
@@ -60,15 +61,15 @@ Document (dev.stxt.website): Preguntas frecuentes
 	Subsubheader: ¿Tabuladores o espacios?
 
 	Content >>
-		Los dos valen, y significan lo mismo: **un tabulador es un nivel, cuatro espacios son un
-		nivel**. Lo que no vale es mezclarlos en la indentación de una misma línea (error
-		`INDENTATION_MIXED`), ni usar otro ancho (dos espacios no son medio nivel: son un error).
-		Líneas distintas de un documento pueden usar estilos distintos, pero por estilo conviene
-		elegir uno; `stxt format --tabs` o `--spaces` lo unifican.
+		Ambos son válidos y equivalentes: **un tabulador es un nivel, cuatro espacios son un
+		nivel**. No es válido mezclarlos en la indentación de una misma línea (error
+		`INDENTATION_MIXED`), ni usar otro ancho (dos espacios no son medio nivel: son un
+		error). Líneas distintas de un documento pueden usar estilos distintos; `stxt format
+		--tabs` o `--spaces` unifican el estilo de un fichero.
 
-		El ancho fijo es deliberado: el nivel de una línea se calcula mirando solo esa línea, y la
-		jerarquía se ve igual en cualquier editor. Quien prefiera una indentación más compacta
-		usa tabuladores y ajusta el ancho de tabulador de su editor.
+		El ancho fijo es deliberado: el nivel de una línea se calcula a partir de esa sola
+		línea, y la jerarquía se ve igual en cualquier editor. Una indentación visualmente más
+		compacta se obtiene con tabuladores y el ancho de tabulador del editor.
 		Ver [STXT-SPEC §8.1](stxt-core-ref#s8-1).
 
 	Subsubheader: ¿Importan las mayúsculas, los acentos y los espacios en los nombres?
@@ -76,21 +77,21 @@ Document (dev.stxt.website): Preguntas frecuentes
 	Content >>
 		Los nombres se comparan por su **nombre canónico**: minúsculas, y toda secuencia de
 		espacios, guiones y guiones bajos reducida a un solo guion. Los acentos y las letras no
-		latinas **se conservan**. Así:
+		latinas se conservan. Así:
 
-		* `Fecha de nacimiento`, `fecha_de_nacimiento` y `Fecha-De-Nacimiento` son el **mismo** nodo.
-		* `Título` y `título` son el mismo nodo; `Titulo` es **otro**.
-		* `Caña` y `cana`, o `Peña` y `pena`, son nodos distintos, como es de esperar.
+		* `Fecha de nacimiento`, `fecha_de_nacimiento` y `Fecha-De-Nacimiento` son el mismo nodo.
+		* `Título` y `título` son el mismo nodo; `Titulo` es otro.
+		* `Caña` y `cana`, o `Peña` y `pena`, son nodos distintos.
 
 		Los **namespaces** son más estrictos: solo ASCII `[a-z0-9]` y puntos, al menos `a.b`, y se
 		pasan a minúsculas. Ver [STXT-SPEC §4.3](stxt-core-ref#s4-3) y [§7](stxt-core-ref#s7).
 
-	Subsubheader: ¿Cómo escribo un valor con dos puntos o almohadilla dentro?
+	Subsubheader: ¿Cómo se escribe un valor con dos puntos o almohadilla dentro?
 
 	Content >>
-		Tal cual. En un nodo inline el valor es todo lo que hay después del **primer** `:`, así
-		que `Hora: 10:30` vale `10:30`, y `#` solo abre un comentario cuando es el primer
-		carácter de la línea. En un bloque `>>` no hay que pensar nada: es texto literal.
+		Sin ninguna marca. En un nodo inline el valor es todo lo que sigue al **primer** `:`,
+		de modo que `Hora: 10:30` vale `10:30`, y `#` solo abre un comentario cuando es el
+		primer carácter no blanco de la línea. En un bloque `>>` todo es texto literal.
 
 	Code >>
 		Cita: 10:30 en la sala 2 # esto forma parte del valor
@@ -102,9 +103,9 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 	Content >>
 		Sí. Un fichero puede contener varios nodos de nivel 0, cada uno con su árbol, y las
-		herramientas los devuelven en orden. Es lo que permite parsear en *streaming*
-		ficheros grandes: cada raíz se emite completa en cuanto empieza la siguiente.
-		Los namespaces **no** se heredan lateralmente entre raíces: cada una declara el suyo.
+		herramientas los devuelven en orden. Eso permite parsear en *streaming* ficheros
+		grandes: cada raíz se emite completa en cuanto empieza la siguiente. Los namespaces
+		no se heredan lateralmente entre raíces: cada una declara el suyo.
 		Ver [STXT-SPEC §8.5](stxt-core-ref#s8-5).
 
 	Subsubheader: ¿Y los comentarios?
@@ -112,43 +113,44 @@ Document (dev.stxt.website): Preguntas frecuentes
 	Content >>
 		Una línea cuyo primer carácter no blanco es `#` es un comentario. No forma parte del
 		árbol ni mueve la jerarquía, pero su indentación se valida como la de un nodo: estilo
-		homogéneo, múltiplos de 4 si son espacios, y como máximo un nivel más que el último nodo.
-		Las líneas vacías sí están exentas. Dentro de un bloque `>>`, una línea con `#` **más
-		indentada** que el nodo es texto del bloque; una **menos o igual de indentada** es un
+		homogéneo, múltiplos de 4 si son espacios, y como máximo un nivel más que el último
+		nodo. Las líneas vacías están exentas. Dentro de un bloque `>>`, una línea con `#` más
+		indentada que el nodo es texto del bloque; una menos o igual de indentada es un
 		comentario y cierra el bloque.
 		Ver [STXT-SPEC §9](stxt-core-ref#s9).
 
 	Subsubheader: ¿Qué pasa con los comentarios al formatear?
 
 	Content >>
-		Se conservan. `stxt format` (y el *Format Document* de la extensión de VS Code) reescribe
-		solo las líneas que abren un nodo; comentarios, líneas en blanco y el contenido de los
-		bloques quedan como están, salvo el espacio final de línea. Perder comentarios exige un
-		flag explícito, `--clean`, que reserializa el árbol y descarta todo lo que el árbol no
-		describe. Ninguna herramienta del ecosistema reescribe un fichero sin que se lo pidas
-		(`--write`).
+		Se conservan. `stxt format` (y *Format Document* de la extensión de VS Code) reescribe
+		solo las líneas que abren un nodo; los comentarios, las líneas en blanco y el contenido
+		de los bloques quedan como están, salvo el blanco final de línea. Descartar los
+		comentarios exige un flag explícito, `--clean`, que reserializa el árbol y elimina todo
+		lo que el árbol no describe. Ninguna herramienta del ecosistema reescribe un fichero
+		sin una petición explícita (`--write`).
 
 	Subheader: Esquemas y plantillas
 
 	Subsubheader: ¿Los esquemas son obligatorios?
 
 	Content >>
-		No. Un documento sin namespace se parsea y punto. Si tiene namespace, la herramienta
-		que valida busca su definición en la cadena de resolución (un directorio `.stxt/`
-		cerca, el de usuario, el del sistema) y, si no hay ninguna para ese namespace, lo
-		señala con `SCHEMA_NOT_FOUND`: el documento no está mal, es que no se ha podido
-		validar, y eso se dice en vez de callarlo, también cuando la cadena está vacía. Lo que
-		decide si se valida es la herramienta, no que haya otras definiciones instaladas: en la
-		CLI, `--warn-schema` lo rebaja a aviso y `--no-schema` desactiva la validación del
-		todo; en VS Code, el ajuste `stxt.schemaValidation`; en el playground, el interruptor
-		*Schema validation*.
+		No. Un documento sin namespace solo se parsea. Si tiene namespace, la herramienta que
+		valida busca su definición en la cadena de resolución (los directorios `.stxt/`
+		ascendentes, el de usuario, el del sistema) y, si ninguna cubre ese namespace, lo
+		señala con `SCHEMA_NOT_FOUND`: el documento no es incorrecto, pero no se ha podido
+		validar, y eso se informa en lugar de omitirse, también cuando la cadena está vacía.
+		Si se valida o no lo decide la herramienta, no la presencia de otras definiciones
+		instaladas: en la CLI, `--warn-schema` lo rebaja a aviso y `--no-schema` desactiva la
+		validación; en VS Code, el ajuste `stxt.schemaValidation`; en el playground, el
+		interruptor *Schema validation*.
 
 	Subsubheader: ¿Esquema o plantilla?
 
 	Content >>
 		Son dos sintaxis para el mismo modelo, y **toda plantilla equivale a un esquema**. La
 		plantilla (`@stxt.template`) se escribe como el documento que describe, con la
-		cardinalidad y el tipo entre paréntesis, y es la forma recomendada para escribir a mano:
+		cardinalidad y el tipo entre paréntesis, y es la forma recomendada para la escritura
+		manual:
 
 	Code >>
 		Template (@stxt.template): com.example.docs
@@ -161,67 +163,69 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 	Content >>
 		El esquema (`@stxt.schema`) es la forma explícita, con `Node`, `Children`, `Child`,
-		`Min`/`Max` y `Type`; es lo que se genera y lo que se procesa. Si dudas, plantilla.
+		`Min`/`Max` y `Type`; es la forma que se genera y la que procesan las herramientas.
 		Ver [STXT-TEMPLATE-SPEC](stxt-template-ref) y [STXT-SCHEMA-SPEC](stxt-schema-ref).
 
-	Subsubheader: ¿Dónde pongo los esquemas y plantillas?
+	Subsubheader: ¿Dónde se colocan los esquemas y plantillas?
 
 	Content >>
 		En un directorio llamado **`.stxt/`** en el proyecto: se cargan todos los `.stxt` que
-		haya dentro, recursivamente, sin que importen los nombres de fichero ni los
-		subdirectorios. La cadena de resolución de un documento son **todos** los `.stxt/` de sus
+		haya dentro, recursivamente, con independencia de los nombres de fichero y de los
+		subdirectorios. La cadena de resolución de un documento son todos los `.stxt/` de sus
 		directorios ascendentes, luego `~/.stxt` y por último `/etc/stxt` (en Windows,
 		`%USERPROFILE%\.stxt` y `%ProgramData%\stxt`). Gana el nivel más cercano, namespace a
 		namespace. La variable `STXT_PATH` sustituye la cadena entera por una lista de
-		directorios, útil en CI.
+		directorios, por ejemplo en CI.
 
-		`stxt install fichero.stxt` deja una definición en su sitio y `stxt schemas` enseña qué
-		aplica en un directorio y de dónde sale. El recorrido completo, con ejemplo, está en
-		[El entorno de trabajo](lang-workflow); la norma, en [STXT-DISCOVERY-SPEC](stxt-discovery-ref).
+		`stxt install fichero.stxt` coloca una definición en su sitio y `stxt schemas` muestra
+		qué definición aplica en un directorio y de dónde procede. El recorrido completo, con
+		ejemplo, está en [El entorno de trabajo](lang-workflow); la norma, en
+		[STXT-DISCOVERY-SPEC](stxt-discovery-ref).
 
-	Subsubheader: ¿Qué pasa si escribo Titel en vez de Title?
+	Subsubheader: ¿Qué pasa si se escribe Titel en vez de Title?
 
 	Content >>
-		Que el validador se queja (`CHILD_NOT_DECLARED`). El modelo de contenido es **cerrado**:
+		El validador lo rechaza (`CHILD_NOT_DECLARED`). El modelo de contenido es **cerrado**:
 		un nodo solo admite los hijos que su definición declara, y si no declara ninguno, no
-		admite ninguno. Es la razón de ser de validar: fallar de forma ruidosa en vez de aceptar
-		en silencio. Ver [STXT-SCHEMA-SPEC §6](stxt-schema-ref#s6).
+		admite ninguno. Ese es el propósito de la validación: fallar de forma explícita en vez
+		de aceptar en silencio. Ver [STXT-SCHEMA-SPEC §6](stxt-schema-ref#s6).
 
 	Subsubheader: ¿Se valida el orden de los hijos?
 
 	Content >>
-		No. Se valida cuántas veces aparece cada hijo, no en qué posición: dos documentos con los
-		mismos hijos en distinto orden validan igual. El orden **se conserva** en el árbol, así
-		que una aplicación que le dé significado lo obtiene del árbol, no del validador.
+		No. Se valida cuántas veces aparece cada hijo, no en qué posición: dos documentos con
+		los mismos hijos en distinto orden validan igual. El orden se conserva en el árbol, de
+		modo que una aplicación que le dé significado lo obtiene del árbol, no del validador.
 		Tampoco hay expresiones regulares, valores por defecto ni reglas condicionales entre
 		campos: son no-objetivos declarados. Ver [STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11).
 
-	Subsubheader: ¿Cómo evoluciono un esquema sin romper documentos?
+	Subsubheader: ¿Cómo se evoluciona un esquema sin romper documentos?
 
 	Content >>
 		Como el modelo es cerrado, añadir un nodo rompe la validación de los documentos que
-		usen la definición antigua. La práctica recomendada es **versionar el namespace**
+		usan la definición anterior. Se recomienda **versionar el namespace**
 		(`com.example.docs.v1` → `com.example.docs.v2`): cada versión tiene su definición y cada
 		documento declara la que usa.
 
 	Subheader: Herramientas
 
-	Subsubheader: ¿Cómo valido en CI?
+	Subsubheader: ¿Cómo se valida en CI?
 
 	Content >>
-		Con la línea de comandos, sin instalar nada de forma permanente:
+		Con la línea de comandos, sin instalación permanente:
 
 	Listing >>
 		npx @stxt-lang/cli validate --recursive docs/
 		npx @stxt-lang/cli format --check --recursive docs/
 
 	Content >>
-		El código de salida es `1` si algún documento no pasa y `2` si la llamada está mal, así
-		que el trabajo falla solo. `--format json` da la salida para máquinas. Y si el entorno de
-		CI no debe depender de lo que haya en `~/.stxt` o `/etc/stxt`, `STXT_PATH=./.stxt` fija
-		la cadena de resolución. Los detalles, en [Herramientas](lang-tools).
+		El código de salida es `1` si algún documento no pasa y `2` si la llamada es
+		incorrecta, de modo que el trabajo de CI falla por sí solo. `--format json` produce
+		salida para máquinas. Si el entorno de CI no debe depender del contenido de `~/.stxt`
+		o `/etc/stxt`, `STXT_PATH=./.stxt` fija la cadena de resolución. Los detalles, en
+		[Herramientas](lang-tools).
 
-	Subsubheader: ¿Cómo lo convierto a JSON?
+	Subsubheader: ¿Cómo se convierte a JSON?
 
 	Content >>
 		Todo documento válido tiene un **árbol canónico** en JSON, definido en
@@ -235,8 +239,8 @@ Document (dev.stxt.website): Preguntas frecuentes
 	Content >>
 		TypeScript/JavaScript (`@stxt-lang/core`), Java (`dev.stxt:stxt-core`) y Python
 		(`stxt`), con el mismo alcance, la misma versión y el mismo corpus de conformidad. Sobre
-		el primero corren la extensión de VS Code, la CLI y el playground. Todo está en la
-		página [Herramientas](lang-tools); y para probar sin instalar nada,
+		el primero se construyen la extensión de VS Code, la CLI y el playground. La lista
+		completa está en [Herramientas](lang-tools); para probar sin instalar nada,
 		[play.stxt.dev](https://play.stxt.dev).
 
 	Subsubheader: ¿Qué promete la 1.0?
@@ -246,4 +250,5 @@ Document (dev.stxt.website): Preguntas frecuentes
 		y los códigos de error quedan congelados, y la API de cada biblioteca dentro de su propia
 		línea 1.x. No se congelan el texto de los mensajes ni las fachadas de comodidad. La
 		conformidad se declara contra la versión de la especificación (`SPEC_VERSION`), no
-		contra la del paquete. Está escrito entero en [Estabilidad y versiones](lang-stability).
+		contra la del paquete. La declaración completa está en
+		[Estabilidad y versiones](lang-stability).

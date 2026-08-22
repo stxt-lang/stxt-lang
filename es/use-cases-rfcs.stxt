@@ -2,34 +2,34 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-01-11
+		Last modif: 2026-08-22
 		
 	Header: RFCs y propuestas técnicas
 	
 	Content >>
-		Los RFCs (*Request for Comments*) y documentos de propuesta técnica
-		son una herramienta habitual para tomar decisiones de diseño
-		de forma explícita, revisable y compartida.
+		Los RFCs (*Request for Comments*) y los documentos de propuesta técnica
+		sirven para tomar decisiones de diseño de forma explícita, revisable y
+		compartida.
 		
-		Suelen ser documentos **largos**, **argumentativos** y **vivos**,
-		que combinan texto narrativo con información estructurada.
+		Suelen ser documentos largos, argumentativos y vivos, que combinan texto
+		narrativo con información estructurada.
 		
 	Assert >>
-		@STXT@ encaja de forma natural como formato fuente para este tipo de documentos,
-		sin cambiar el flujo habitual de trabajo.
+		@STXT@ sirve como formato fuente para este tipo de documentos sin cambiar el
+		flujo de trabajo habitual.
 		
-	Subheader: Qué entendemos aquí por RFC
+	Subheader: Qué se entiende aquí por RFC
 	
 	Content >>
 		En este contexto, “RFC” incluye:
 		
 		* Propuestas técnicas internas.
-		* RFCs clásicos inspirados en IETF.
-		* ADRs (Architecture Decision Records, registros de decisiones de arquitectura).
-		* Documentos de diseño previo a implementación.
+		* RFCs clásicos, al estilo del IETF.
+		* ADRs (*Architecture Decision Records*, registros de decisiones de arquitectura).
+		* Documentos de diseño previos a la implementación.
 		
-		No se asume un proceso concreto:  
-		el foco está en **el documento**, no en la metodología.
+		No se asume ningún proceso concreto: el objeto es el documento, no la
+		metodología.
 		
 	Subheader: Problemas habituales con RFCs actuales
 	
@@ -37,22 +37,22 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 		En la práctica, estos documentos suelen:
 		
 		* Vivir en Markdown con convenciones implícitas.
-		* Mezclar metadatos con texto libre sin separación clara.
-		* Depender de disciplina humana para mantener estructura.
+		* Mezclar metadatos y texto libre sin una separación clara.
+		* Depender de la disciplina de los autores para mantener la estructura.
 		* Ser difíciles de validar automáticamente.
 		
-		Aun así, el flujo suele ser bueno:
+		El flujo de trabajo, en cambio, suele funcionar:
 		
 		* Texto plano.
 		* Versionado en Git.
 		* Revisión por diff.
 		
-		@STXT@ no reemplaza ese flujo: lo **refuerza**.
+		@STXT@ conserva ese flujo y añade estructura explícita.
 		
 	Subheader: Ejemplo 1 — RFC mínimo
 	
 	Content >>
-		Un RFC muy pequeño, suficiente para discusión inicial.
+		Un RFC reducido, suficiente para la discusión inicial.
 		
 	Code >>
 		RFC (com.acme.rfc):
@@ -75,17 +75,17 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 			Decision >>
 				Pendiente de evaluación.
 	
-	Subheader: Qué aporta aquí STXT
+	Subheader: Qué aporta aquí @STXT@
 	
 	Content >>
-		* El texto largo vive en bloques `>>`, sin restricciones.
-		* Los metadatos son nodos claros, no convenciones.
+		* El texto largo vive en bloques de texto (`>>`), sin restricciones.
+		* Los metadatos son nodos, no convenciones.
 		* La estructura del RFC es visible de un vistazo.
 		
 	Subheader: Ejemplo 2 — RFC más completo
 	
 	Content >>
-		RFC realista con alternativas, impacto y riesgos.
+		Un RFC con alternativas, impacto y riesgos.
 		
 	Code >>
 		RFC (com.acme.rfc):
@@ -136,8 +136,8 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 	Subheader: Ejemplo 3 — Evolución de estado
 	
 	Content >>
-		Un RFC suele cambiar de estado a lo largo del tiempo.
-		El estado es un dato explícito, no una frase en el texto.
+		Un RFC cambia de estado a lo largo del tiempo.
+		El estado es un dato explícito, no una frase del texto.
 		
 	Code >>
 		RFC (com.acme.rfc):
@@ -166,7 +166,7 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 	
 	Content >>
 		Es habitual referenciar otros documentos.
-		En STXT, estas relaciones pueden ser explícitas.
+		En @STXT@ estas relaciones pueden ser nodos explícitos.
 		
 	Code >>
 		RFC (com.acme.rfc):
@@ -223,8 +223,8 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 	Subheader: Ejemplo 6 — Template mínimo para RFCs
 	
 	Content >>
-		Si se desea coherencia sin rigidez, un template ligero
-		puede asegurar que ningún RFC esté incompleto.
+		Una plantilla (`@stxt.template`) ligera garantiza que ningún RFC omita los
+		elementos obligatorios, sin fijar el resto del contenido.
 		
 	Code >>
 		Template (@stxt.template): com.acme.rfc
@@ -272,24 +272,22 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 		* Versionados en Git.
 		* Revisados por personas.
 		
-		STXT añade:
+		@STXT@ añade:
 		
 		* Estructura explícita.
 		* Metadatos procesables.
 		* Validación opcional.
 		* Menos dependencia de convenciones implícitas.
 		
-		Sin cambiar la naturaleza del documento.
+		La naturaleza del documento no cambia.
 		
 	Subheader: Resumen
 	
 	Content >>
-		Usar STXT para RFCs y propuestas técnicas permite:
+		Usar @STXT@ para RFCs y propuestas técnicas permite:
 		
-		* Escribir documentos claros y argumentados.
-		* Mantener estructura visible y consistente.
-		* Facilitar revisión, automatización y trazabilidad.
+		* Escribir documentos argumentados en texto libre.
+		* Mantener una estructura visible y consistente.
+		* Automatizar la revisión y la trazabilidad.
 		
-		Todo ello sin convertir el documento
-		en un lenguaje formal ni en código.
-			
+		El documento no se convierte en un lenguaje formal ni en código.

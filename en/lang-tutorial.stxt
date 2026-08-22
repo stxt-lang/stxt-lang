@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 		
 	Header: @STXT@ Tutorial
 	
@@ -15,7 +15,8 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		* Easy for people to read and write.
 		* Trivial for machines to parse.
-		* Secure by design.
+		* Secure by design: no entities, external references, file inclusion or code
+		  execution ([STXT-SPEC §15](stxt-core-ref#s15)).
 		
 		@STXT@ allows representing structured documents through:
 		
@@ -36,42 +37,33 @@ Document (dev.stxt.website): STXT Tutorial
 	Subheader: 2. Tools
 
 	Content >>
-		To start working with @STXT@, the most practical option is to use an editor
-		that lets you write documents comfortably and navigate the hierarchy well.
-		The recommended choice is **Visual Studio Code**, together with the official
-		@STXT@ extension.
+		The reference editor is Visual Studio Code with the official `stxt-lang.stxt`
+		extension.
 		
 		* Tutorial and examples repository:
 		  [STXT Documents](https://github.com/stxt-lang/stxt-web)
-		* Recommended editor:
+		* Reference editor:
 		  [Visual Studio Code](https://code.visualstudio.com/)
 		* Official extension:
 		  [STXT (stxt-lang.stxt)](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt)
-		* Quick installation:
+		* Installation:
 		  `code --install-extension stxt-lang.stxt`
 
-		With this combination you can read and edit the tutorial examples more
-		comfortably, keep indentation under control, and experiment with the
-		structure of the documents without having to prepare a complex environment.
+		Besides this tutorial, the repository contains other documents and examples
+		that can be opened, modified and reused to try out nodes, text blocks,
+		namespaces, templates and schemas.
 
-		In addition, the GitHub project does not contain only this tutorial: it
-		includes more documents and examples that you can open, modify, copy, and
-		reuse for testing. It is advisable to use them freely to experiment with
-		nodes, text blocks, namespaces, templates, and schemas, because that is the
-		fastest way to become familiar with the language.
-
-		If you would rather not install anything, the [playground](https://play.stxt.dev)
-		lets you follow the whole tutorial from the browser. The full list —playground,
-		extension, command line and libraries— is on the [Tools](lang-tools) page; and how
-		to set up a project and actually validate it, with this same book example, is in
+		The [playground](https://play.stxt.dev) allows following the tutorial from the
+		browser without installing anything. The full list —playground, extension,
+		command line and libraries— is on the [Tools](lang-tools) page; how to organize
+		a project and validate it, with this same book example, is in
 		[The working environment](lang-workflow).
 
 	Subheader: 3. Basic example: a book record
 	
 	Content >>
-		Let's look at a simple example of an @STXT@ document that describes a book (tutorial/book-raw.stxt).
-		There is no validation yet: it is only @STXT@ language. Also, it has
-		no associated namespace.
+		The following document describes a book (tutorial/book-raw.stxt). It has no
+		namespace and is not validated: it is @STXT@ syntax only.
 				
 	Code >>
 		Book:
@@ -95,7 +87,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		Notes:
 		
-		* Hierarchy is defined **only by indentation**.
+		* Hierarchy is defined only by indentation.
 		* `Summary >>` and `Content >>` are literal text blocks: their content is not interpreted as @STXT@.
 		* There is no implicit type: everything is text unless it is validated.
 
@@ -105,21 +97,22 @@ Document (dev.stxt.website): STXT Tutorial
 	Subheader: 4. Indentation and levels
 
 	Assert >>
-		In @STXT@ indentation **is** the structure: there are no braces, brackets, or
-		closing tags. A line's level is the only thing that decides whose child it is.
+		In @STXT@ indentation is the structure: there are no braces, brackets, or
+		closing tags. A line's level is the only thing that determines which node it
+		is a child of.
 
 	Content >>
-		The rules are deliberately small:
+		The rules are:
 
 		* **1 tab = 1 level.**
 		* **4 spaces = 1 level**, always in multiples of 4.
 		* A line's indentation **must be homogeneous**: either tabs only, or spaces
 		  only. **Mixing both on the same line is a parse error.**
-		* Levels must be **consecutive**: you cannot jump from level 1 to level 3.
+		* Levels must be **consecutive**: a line cannot jump from level 1 to level 3.
 
-		Different lines of the same document **may** use different styles, because
-		hierarchy is compared by **level** and not by columns. It is not advisable, and
-		a parser may emit a warning, but it is not an error.
+		Different lines of the same document may use different styles, because
+		hierarchy is compared by level and not by columns. It is not an error, although
+		a parser may emit a warning.
 
 	Content >>
 		In the following example `.` represents a space and `|-->` a tab:
@@ -137,9 +130,8 @@ Document (dev.stxt.website): STXT Tutorial
 		width, and the hierarchy would stop being obvious just by reading it.
 
 		A fixed level width (1 tab or 4 spaces, never 2) also has a practical
-		consequence: a line's level is computed by looking at **that line only**,
-		without carrying context or maintaining a stack of indentations. That is why
-		parsing @STXT@ is trivial.
+		consequence: a line's level is computed from that line alone, without prior
+		context or a stack of indentations.
 
 		Reference: [STXT-SPEC §8](stxt-core-ref#s8) (indentation and hierarchy) and [§8.3](stxt-core-ref#s8-3)
 		(level errors).
@@ -149,7 +141,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		A `>>` text block has a **fixed block level**: the level of the `>>` node plus
 		one. That prefix is the only thing validated; everything after it is **literal
-		text**, and its relative indentation is preserved as is.
+		text**, and its relative indentation is preserved.
 
 	Code >>
 		Summary >>
@@ -159,8 +151,8 @@ Document (dev.stxt.website): STXT Tutorial
 			Title: this is not a node either.
 
 	Content >>
-		The block ends at the first non-empty line whose indentation is **less than or
-		equal to** that of the `>>` node, be it a node or a comment. Empty lines do not
+		The block ends at the first non-empty line whose indentation is less than or
+		equal to that of the `>>` node, be it a node or a comment. Empty lines do not
 		close it. There are no comments inside a block: it is a literal.
 
 		Reference: [STXT-SPEC §6.1](stxt-core-ref#s6-1) (block rules) and [§10.2](stxt-core-ref#s10-2) (lines
@@ -195,10 +187,9 @@ Document (dev.stxt.website): STXT Tutorial
 		but `Caña` and `Cana`, or `Peña` and `Pena`, are different nodes.
 
 	Content >>
-		This is the same criterion used by internationalized domain names (IDN), and it
-		is deliberate: it lets you write documents in any language without the language
-		"correcting" the words behind your back, and without merging into one two names
-		that are distinct to a reader.
+		This is the same criterion applied by internationalized domain names (IDN): it
+		allows writing documents in any language without the language altering the
+		words or merging two names that are distinct to a reader.
 
 		**Namespaces** are the exception: they remain restricted to ASCII `[a-z0-9]`
 		(see section 7).
@@ -210,8 +201,8 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Content >>
 		@STXT@ supports **line comments**. A line is a comment when its first
-		character (after the indentation) is `#`; the parser **discards it
-		completely**, so it is not part of the tree or the data.
+		character (after the indentation) is `#`; the parser discards it
+		completely, so it is not part of the tree or the data.
 
 	Code >>
 		# A book record
@@ -221,11 +212,11 @@ Document (dev.stxt.website): STXT Tutorial
 			ISBN: 978-84-123456-7-8
 
 	Content >>
-		Key points:
+		Rules:
 
 		* Comments are **whole-line**. There are no end-of-line comments: in
 		  `Title: My book # note`, the `#` and what follows are part of the
-		  **value**, not a comment.
+		  value, not a comment.
 		* A comment's indentation is **validated like a node's**: homogeneous style and, at
 		  most, one level deeper than the last node. It does not move the hierarchy. As a style
 		  rule, align it with the node it describes.
@@ -238,9 +229,8 @@ Document (dev.stxt.website): STXT Tutorial
 	Subheader: 7. Use of namespaces
 	
 	Assert >>
-		Namespaces allow grouping nodes into categories. In addition, if a
-		namespace is defined for a node, **child nodes inherit the parent's namespace**, unless one of them
-		redefines it.
+		Namespaces group nodes into categories. If a node declares a namespace,
+		**its child nodes inherit it**, unless one of them redefines it.
 		
 	Content >>
 		Example of a document with a namespace (tutorial/book-ns.stxt):
@@ -266,15 +256,14 @@ Document (dev.stxt.website): STXT Tutorial
 					Protocols, messaging, and integration patterns are described.
 	
 	Content >>
-		In this example we see the `Book` node that belongs to the `com.acme.book` namespace.
-		In addition, we also see `Title`, `Authors`, `Author`, and `ISBN` nodes, which, being
-		descendants of `Book`, also inherit the `com.acme.book` namespace.
+		The `Book` node belongs to the `com.acme.book` namespace. The `Title`,
+		`Authors`, `Author` and `ISBN` nodes, descendants of `Book`, inherit that namespace.
 		
-		Key rules:
+		Rules:
 		
 		* The namespace is inherited by child nodes.
-		* A node can redefine its namespace if necessary.
-		* The @STXT@ language **does not validate** the namespace, it only defines the 
+		* A node can redefine its namespace.
+		* The @STXT@ language does not validate the namespace, it only defines the 
 		  propagation rules.
 
 		Reference: [STXT-SPEC §7](stxt-core-ref#s7) (namespaces) and [§7.2](stxt-core-ref#s7-2) (inheritance and
@@ -282,38 +271,36 @@ Document (dev.stxt.website): STXT Tutorial
 		
 	Subsubheader: 7.1 Special namespaces with `@`
 	Content >>
-		Namespaces may or may not start with `@`. This indicates that they are 
-		**special or reserved namespaces**. For example, both templates
-		and schemas start with `@`. 
-		
-		This is only a semantic indication, but the behavior is the same.
+		A namespace may start with `@`. That prefix marks the **special or reserved
+		namespaces**; for example, those of templates and schemas start with `@`. It
+		is a semantic convention: the inheritance and comparison rules are the same.
 
-		That said, `@` is part of the namespace: `@com.acme.book` and `com.acme.book`
-		are **different** namespaces, and a document only validates against the template
-		or schema whose namespace matches exactly. The `@stxt.*` branch is **reserved**
-		for the language itself (`@stxt.schema`, `@stxt.template`): it must not be used
-		for your own namespaces.
+		`@` is part of the namespace: `@com.acme.book` and `com.acme.book` are
+		different namespaces, and a document only validates against the template or
+		schema whose namespace matches exactly. The `@stxt.*` branch is **reserved**
+		for the language itself (`@stxt.schema`, `@stxt.template`) and must not be
+		used for custom namespaces.
 	
 	Subsubheader: 7.2 Document validation
 	
 	Content >>
-		In order to semantically validate a document, it must be associated with a **namespace**.
-		Once it has a namespace, a schema (`@stxt.schema`)
-		or template (`@stxt.template`) is used to validate it. Validations are extensions
-		to the base language, which parsers may or may not implement.
+		Semantic validation requires the document to have a **namespace**; with it,
+		the document is validated against a schema (`@stxt.schema`) or a template
+		(`@stxt.template`). Validations are extensions to the base language, which
+		parsers may or may not implement.
 
 		Reference: [STXT-SPEC §17](stxt-core-ref#s17) and [§18](stxt-core-ref#s18), the appendices on the
 		interaction with `@stxt.schema` and `@stxt.template`.
 		
 	Assert >>
 		To validate a document, **it is necessary for it to belong to a namespace**.\\
-		On the other hand, a document with a namespace does not have to be validated.
+		A document with a namespace is not required to be validated.
 			
 	Subheader: 8. Validation with Templates
 	
 	Content >>
-		**Templates** allow defining structural and type rules
-		in a compact way. They are ideal for prototypes and living documentation.
+		**Templates** define structure and type rules in a compact way, oriented
+		toward prototypes and living documentation.
 		
 		A template is an @STXT@ document whose namespace is `@stxt.template`.
 		
@@ -367,7 +354,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Subsubheader: 8.3 Available types
 
 	Content >>
-		The type is written **after** the cardinality. If none is given, the default
+		The type is written after the cardinality. If none is given, the default
 		type is `INLINE`. The most common ones:
 
 		| Type       | Value form      | What for                                        |
@@ -386,7 +373,7 @@ Document (dev.stxt.website): STXT Tutorial
 		exporters, editors—, which should read it as CommonMark.
 
 		Only `INLINE` and `GROUP` accept children: as soon as a type validates a
-		specific piece of data (`NUMBER`, `DATE`, `ENUM`…), that node **is** data, and
+		specific piece of data (`NUMBER`, `DATE`, `ENUM`…), that node is data, and
 		data is a leaf.
 
 		The complete list of types is in [STXT-SCHEMA-SPEC §9](stxt-schema-ref#s9); how they are written
@@ -401,15 +388,15 @@ Document (dev.stxt.website): STXT Tutorial
 		* Check cardinalities.
 		* Validate basic types (number, date, boolean, text).
 		
-		The @STXT@ language **does not change**: the template is applied over the already parsed tree.
-		Depending on the parser, it may validate at the same time it parses the content. 
+		The @STXT@ language does not change: the template is applied over the already parsed tree.
+		Depending on the implementation, validation may take place during parsing itself.
 		
 		
 	Subheader: 9. Validation with Schemas
 	
 	Content >>
 		**Schemas** provide the same information as a template,
-		but in a more explicit and formal way.
+		in a more explicit and formal way.
 		
 		A schema:
 		
@@ -478,7 +465,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Subheader: 10. Final validatable document
 	
 	Content >>
-		Complete @STXT@ document that can be validated with the previous template or schema:
+		Complete @STXT@ document that can be validated with the template or schema above:
 		
 	Code >>
 		Book (com.acme.book):
@@ -500,21 +487,23 @@ Document (dev.stxt.website): STXT Tutorial
 		* Complies with the `com.acme.book` template.
 		* Complies with the `com.acme.book` schema.
 
-		To actually check it —put the template in a `.stxt/` directory and validate from
-		the terminal or the editor— follow [The working environment](lang-workflow).
+		The procedure to check it —placing the template in a `.stxt/` directory and
+		validating from the terminal or the editor— is described in
+		[The working environment](lang-workflow).
 		
 	Subheader: 11. Best practices
 
 	Content >>
 		* Use `>>` blocks for long or literal text.
 		* Pick one indentation style —tabs or spaces— and keep it throughout the
-		  document. Remember that mixing them **on the same line** is not a matter of
-		  style: it is a parse error (section 4).
+		  document. Mixing them on the same line is not a matter of style but a parse
+		  error (section 4).
 		* Write node names in the document's own language: accents and non-Latin
-		  scripts are first-class citizens (section 5).
-		* Use templates to iterate quickly or to have a view as close as possible to what the documents are like.
+		  scripts are accepted without restriction (section 5).
+		* Use templates to iterate quickly or for a definition with the same shape as
+		  the documents.
 		* Use schemas when a more formal description of the fields is needed.
 		* Mark as `MARKDOWN` the text meant to be rendered, and as `TEXT` the text that
-		  must be read as is.
+		  must be read literally.
 
 		The language's own style rules are in [STXT-SPEC §4.4](stxt-core-ref#s4-4) and [§9.2](stxt-core-ref#s9-2).

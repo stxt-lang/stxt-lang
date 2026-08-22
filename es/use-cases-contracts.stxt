@@ -2,17 +2,16 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-01-11
+		Last modif: 2026-08-22
 		
 	Header: Contratos y acuerdos legales
 	
 	Content >>
-		Este apartado **no pretende sustituir** a documentos legales formales,
-		ni a procesos jurídicos existentes.
+		Este apartado no sustituye a los documentos legales formales ni a los
+		procesos jurídicos existentes.
 		
-		El objetivo es mostrar cómo @STXT@ puede utilizarse como
-		**formato fuente legible y estructurado** para contratos, acuerdos
-		y documentos normativos que:
+		Describe cómo @STXT@ puede usarse como formato fuente legible y estructurado
+		para contratos, acuerdos y documentos normativos que:
 		
 		* deben ser leídos y entendidos por personas,
 		* contienen reglas, condiciones y excepciones,
@@ -21,19 +20,19 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 	Subheader: Qué tipo de documentos
 	
 	Content >>
-		En este contexto, hablamos de:
+		En este contexto se incluyen:
 		
 		* Contratos de prestación de servicios.
 		* Acuerdos marco.
-		* SLAs (Service Level Agreements).
+		* SLAs (*Service Level Agreements*, acuerdos de nivel de servicio).
 		* NDAs (acuerdos de confidencialidad).
 		* Términos y condiciones.
 		* Políticas internas y normativas corporativas.
 		
 		Muchos de estos documentos:
 		
-		* empiezan siendo “texto legal”,
-		* pero acaban teniendo impacto directo en operaciones, sistemas o personas.
+		* empiezan como texto legal,
+		* y acaban teniendo impacto directo en operaciones, sistemas o personas.
 		
 	Subheader: Problemas habituales en documentos legales
 	
@@ -41,16 +40,15 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 		En la práctica:
 		
 		* El texto es largo y denso.
-		* Las condiciones importantes están “enterradas” en párrafos.
-		* Los datos clave (fechas, partes, importes, plazos) no son fácilmente extraíbles.
-		* Versionar cambios es complejo (PDFs, Word).
-		* No hay una separación clara entre:
+		* Las condiciones relevantes quedan dentro de párrafos extensos.
+		* Los datos clave (fechas, partes, importes, plazos) no son extraíbles de forma directa.
+		* Versionar los cambios es complejo (PDF, Word).
+		* No hay separación entre:
 		  * contenido normativo,
 		  * datos contractuales,
 		  * y contexto explicativo.
 		
-		@STXT@ no elimina la complejidad legal,
-		pero **ordena el documento**.
+		@STXT@ no elimina la complejidad legal; separa esas tres capas en el documento.
 		
 	Subheader: Ejemplo 1 — Acuerdo sencillo
 	
@@ -90,14 +88,14 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 	Subheader: Qué se gana con esta estructura
 	
 	Content >>
-		* Las partes y fechas son datos claros.
-		* El texto legal sigue siendo texto, sin “trocearlo”.
+		* Las partes y las fechas son datos explícitos.
+		* El texto legal sigue siendo texto, sin fragmentarlo.
 		* El documento es legible sin conocimientos técnicos.
 		
 	Subheader: Ejemplo 2 — Cláusulas como secciones explícitas
 	
 	Content >>
-		Las cláusulas son un árbol natural.
+		Las cláusulas forman un árbol.
 		
 	Code >>
 		Agreement (com.acme.legal.contract):
@@ -138,7 +136,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 	Subheader: Ejemplo 3 — SLA (acuerdo de nivel de servicio)
 	
 	Content >>
-		Un SLA mezcla texto normativo con métricas concretas.
+		Un SLA combina texto normativo con métricas concretas.
 		
 	Code >>
 		SLA (com.acme.legal.sla):
@@ -171,7 +169,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 	Subheader: Ejemplo 4 — Excepciones y condiciones
 	
 	Content >>
-		Los contratos suelen tener reglas con excepciones.
+		Los contratos contienen reglas con excepciones.
 		
 	Code >>
 		Clause:
@@ -186,7 +184,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 	Subheader: Ejemplo 5 — Historial y versiones
 	
 	Content >>
-		Los acuerdos evolucionan: enmiendas, renovaciones, revisiones.
+		Los acuerdos cambian: enmiendas, renovaciones, revisiones.
 		
 	Code >>
 		Agreement (com.acme.legal.contract):
@@ -235,8 +233,8 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 	Subheader: Ejemplo 7 — Template mínimo para acuerdos
 	
 	Content >>
-		Un template puede asegurar que un acuerdo tenga
-		los elementos esenciales, sin imponer redacción legal.
+		Una plantilla (`@stxt.template`) garantiza que un acuerdo contenga los
+		elementos esenciales, sin imponer la redacción legal.
 		
 	Code >>
 		Template (@stxt.template): com.acme.legal.contract
@@ -280,26 +278,23 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 	Subheader: Por qué este enfoque resulta útil
 	
 	Content >>
-		Usar STXT como formato fuente para contratos permite:
+		Usar @STXT@ como formato fuente para contratos permite:
 		
-		* Documentos legibles sin herramientas especiales.
-		* Estructura clara para revisión humana.
-		* Extracción automática de datos clave.
-		* Versionado y auditoría mediante control de versiones.
+		* Leer los documentos sin herramientas especiales.
+		* Revisarlos sobre una estructura explícita.
+		* Extraer los datos clave de forma automática.
+		* Versionarlos y auditarlos con control de versiones.
 		
-		Sin convertir el contrato en código
-		ni imponer un lenguaje formal artificial.
+		El contrato no se convierte en código ni adopta un lenguaje formal artificial.
 		
 	Subheader: Resumen
 	
 	Content >>
-		Contratos y acuerdos legales son, en esencia:
+		Los contratos y acuerdos legales son, en esencia:
 		
 		* texto normativo,
 		* con estructura repetible,
 		* y datos críticos.
 		
-		@STXT@ permite representarlos de forma clara,
-		legible y estructurada,
-		respetando su naturaleza humana y legal.
-			
+		@STXT@ los representa de forma legible y estructurada, sin alterar su
+		naturaleza legal.

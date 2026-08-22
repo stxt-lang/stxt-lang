@@ -7,8 +7,8 @@ Document (dev.stxt.website): Estabilidad y versiones
 	Header: Estabilidad y versiones
 
 	Assert >>
-		**Un documento válido en @STXT@ 1.0 es válido en toda la línea 1.x**. Esta página dice
-		exactamente qué queda congelado con la 1.0, qué no, y cómo leer los números de versión.
+		**Un documento válido en @STXT@ 1.0 es válido en toda la línea 1.x**. Esta página establece
+		qué queda congelado con la 1.0, qué no, y cómo leer los números de versión.
 
 	Subheader: Qué se congela
 
@@ -52,16 +52,16 @@ Document (dev.stxt.website): Estabilidad y versiones
 		cambia el lenguaje.
 
 		De ahí se deriva la siguiente regla: **la conformidad se declara contra la versión
-		de la especificación, no contra la del paquete**. Si un día `@stxt-lang/core` va por la
-		1.3 y `dev.stxt:stxt-core` por la 1.1, siguen leyendo **el mismo @STXT@**, porque las dos
+		de la especificación, no contra la del paquete**. Si `@stxt-lang/core` va por la
+		1.3 y `dev.stxt:stxt-core` por la 1.1, siguen leyendo el mismo @STXT@, porque las dos
 		implementan STXT-SPEC 1.0. Las tres bibliotecas exponen esa versión como constante
 		(`SPEC_VERSION`) y `stxt --version` la enseña junto a la de la propia línea de comandos.
-		Un puerto que escriba otra persona hace exactamente lo mismo: anuncia contra qué versión
-		de la especificación es conforme.
+		Un puerto de terceros hace lo mismo: declara contra qué versión de la especificación
+		es conforme.
 
 		Hasta la 1.0 las tres bibliotecas han ido con el mismo número y el mismo alcance. A
-		partir de ahí, el número que las une es el de la especificación; el del paquete lo marca
-		la vida de cada una.
+		partir de ahí, el número que las une es el de la especificación; el del paquete sigue
+		la evolución de cada una.
 
 	Subheader: Cómo suben los números
 
@@ -75,6 +75,7 @@ Document (dev.stxt.website): Estabilidad y versiones
 
 		Las bibliotecas siguen versionado semántico dentro de su línea: un cambio incompatible
 		en la API en memoria es un mayor del paquete, y se anuncia como tal. Un mayor de la
-		especificación es otra cosa, mucho más rara: no hay ninguno previsto, y el día que lo
-		hubiera, las implementaciones lo dirían con `SPEC_VERSION` y vendría acompañado de una
-		explicación y de un camino de migración; **nunca de una reinterpretación silenciosa**.
+		especificación es distinto y mucho menos frecuente: no hay ninguno previsto, y si se
+		produjera, las implementaciones lo indicarían con `SPEC_VERSION` y vendría acompañado
+		de una explicación y de un camino de migración; **nunca de una reinterpretación
+		silenciosa**.

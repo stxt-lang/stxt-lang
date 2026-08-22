@@ -2,18 +2,17 @@ Document (dev.stxt.website): Documentos corporativos
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-01-11
+		Last modif: 2026-08-22
 		
 	Header: Documentos corporativos
 	
 	Content >>
-		Los documentos corporativos suelen vivir en un punto intermedio incómodo:
-		necesitan ser **legibles y editables por personas**, pero también deben ser
-		**consistentes**, **revisables** y **procesables** para automatización.
+		Los documentos corporativos deben ser legibles y editables por personas y, al mismo
+		tiempo, consistentes, revisables y procesables por programas.
 		
-		@STXT@ encaja especialmente bien cuando un “documento” es a la vez:
+		@STXT@ se aplica a los documentos que combinan a la vez:
 		
-		* contenido humano (texto),
+		* texto narrativo,
 		* estructura (secciones, metadatos),
 		* y datos (campos, listas, estados).
 		
@@ -32,26 +31,29 @@ Document (dev.stxt.website): Documentos corporativos
 	Subheader: Por qué @STXT@ aquí
 	
 	Content >>
-		En entorno corporativo suelen aparecer estos problemas:
+		Requisitos habituales de un documento corporativo:
 		
-		* **Múltiples autores**: gente no técnica y técnica editando el mismo documento.
-		* **Plantillas**: todos quieren el mismo formato, pero nadie quiere pelearse con un editor pesado.
-		* **Revisión**: comparaciones (diff) claras en Git.
-		* **Automatización**: extraer campos (estado, responsables, fechas, acciones) sin romper el texto.
+		* **Múltiples autores**: personas técnicas y no técnicas editan el mismo documento.
+		* **Plantillas**: todos los documentos de un tipo siguen el mismo formato, sin depender de
+		  un editor concreto.
+		* **Revisión**: diferencias (diff) legibles en Git.
+		* **Automatización**: extracción de campos (estado, responsables, fechas, acciones) sin
+		  alterar el texto.
 		* **Evolución**: el formato del documento cambia con el tiempo.
 		
 		@STXT@ aporta:
 		
-		* Estructura explícita por indentación, fácil de escribir.
-		* Texto libre en bloques `>>` sin “escapes” ni sintaxis extra.
+		* Estructura explícita por indentación.
+		* Texto libre en bloques de texto `>>`, sin secuencias de escape ni sintaxis adicional.
 		* Validación opcional con `@stxt.template` o `@stxt.schema`.
-		* Namespaces para separar semántica por tipo de documento (`com.acme.minutes`, `com.acme.report`, etc.).
+		* Namespaces que separan la semántica por tipo de documento (`com.acme.minutes`,
+		  `com.acme.report`, etc.).
 		
 	Subheader: Ejemplo 1 — Acta de reunión
 	
 	Content >>
-		Documento realista: mezcla metadatos, agenda, decisiones y acciones.
-		El texto libre vive en bloques, y lo procesable queda como nodos.
+		El acta combina metadatos, agenda, decisiones y acciones. El texto libre va en bloques
+		de texto; los datos procesables, en nodos inline.
 		
 	Code >>
 		Minutes (com.acme.corp.minutes):
@@ -119,25 +121,25 @@ Document (dev.stxt.website): Documentos corporativos
 	Subheader: Qué se automatiza con este documento
 	
 	Content >>
-		Con el árbol STXT puedes:
+		A partir del árbol del documento, un programa puede:
 		
-		* Listar acciones abiertas y fechas de vencimiento.
+		* Listar las acciones abiertas y sus fechas de vencimiento.
 		* Generar un resumen para correo o chat.
-		* Calcular métricas: acciones por equipo, tiempos, porcentaje “done”.
-		* Exportar a otros formatos (por ejemplo, JSON para un dashboard).
+		* Calcular métricas: acciones por equipo, plazos, porcentaje de acciones en estado `Done`.
+		* Exportar a otros formatos (por ejemplo, JSON para un panel de control).
 		
 		Al mismo tiempo:
 		
-		* `Notes >>` y `Rationale >>` mantienen texto humano sin restricciones artificiales.
+		* Los bloques `Notes >>` y `Rationale >>` conservan el texto libre sin interpretarlo.
 		
 	Subheader: Ejemplo 2 — Informe de estado
 	
 	Content >>
-		Un informe de estado es ideal para:
+		Un informe de estado combina:
 		
-		* “Estado” como dato validable.
-		* “Detalle” como texto libre.
-		* Riesgos y bloqueos como listas procesables.
+		* el estado como dato validable,
+		* el detalle como texto libre,
+		* los riesgos y bloqueos como listas procesables.
 		
 	Code >>
 		Status Report (com.acme.corp.status):
@@ -180,8 +182,8 @@ Document (dev.stxt.website): Documentos corporativos
 	Subheader: Validación con @stxt.template
 	
 	Content >>
-		Para evitar documentos “a medias”, un template puede asegurar estructura mínima
-		(sin volverse demasiado verboso).
+		Una plantilla (`@stxt.template`) define la estructura mínima del documento; el validador
+		rechaza los documentos incompletos.
 		
 	Code >>
 		Template (@stxt.template): com.acme.corp.minutes
@@ -223,42 +225,48 @@ Document (dev.stxt.website): Documentos corporativos
 							Action status: (1) ENUM [Open, In Progress, Done, Blocked]
 	
 	Content >>
-		Este template:
+		Esta plantilla:
 		
-		* Garantiza campos mínimos (por ejemplo `Title`, `Date`).
-		* Controla estados con `ENUM`.
-		* Permite texto libre donde toca (`TEXT`).
-		* Mantiene el documento agradable de editar (no obliga a “Node:” como en schema).
-		* Reutiliza `Title`, `Id` y `Owner` con referencias `@Nombre Nodo`: dentro de un namespace un nombre de nodo identifica **un solo** nodo, así que sus reapariciones se referencian en lugar de redefinirse.
-		* Por eso `Decision status` y `Action status` son nodos distintos: sus `ENUM` no coinciden, y una referencia no puede cambiar los valores.
+		* Exige los campos obligatorios (`Title`, `Date`) con la cardinalidad `(1)`.
+		* Restringe los estados con `ENUM`.
+		* Declara los campos de texto libre con el tipo `TEXT`.
+		* Usa la forma de autoría abreviada: no requiere los nodos `Node` y `Child` de un esquema.
+		* Reutiliza `Title`, `Id` y `Owner` con referencias `@Nombre Nodo`: dentro de un namespace
+		  un nombre de nodo identifica **un solo** nodo, así que sus reapariciones se referencian
+		  en lugar de redefinirse.
+		* Por eso `Decision status` y `Action status` son nodos distintos: sus `ENUM` no
+		  coinciden, y una referencia no puede cambiar los valores.
 		
 	Subheader: Validación con @stxt.schema
 	
 	Content >>
-		Si necesitas contratos estrictos, el schema es la forma más explícita.
-		Es útil cuando:
+		El esquema (`@stxt.schema`) es la forma explícita de la misma definición. Se usa cuando:
 		
-		* Hay múltiples productores/consumidores del documento.
-		* Se quiere interoperabilidad fuerte entre equipos o sistemas.
-		* Hay “compliance” (auditorías, controles, archivado).
+		* Hay varios productores y consumidores del documento.
+		* Se requiere interoperabilidad entre equipos o sistemas.
+		* Hay requisitos de cumplimiento normativo (auditorías, controles, archivado).
 		
-		Nota: el schema equivalente es más largo; normalmente se genera a partir del template.
+		El esquema equivalente es más extenso; toda plantilla se compila a un esquema
+		equivalente, de modo que no es necesario escribirlo a mano.
 		
 	Subheader: Ventajas prácticas en empresa
 	
 	Content >>
-		* **Diffs claros en Git**: los cambios suelen afectar líneas concretas, no blobs.
-		* **Menos fricción**: se edita con cualquier editor de texto.
-		* **Estandarización**: template como contrato ligero para “todos escribimos igual”.
-		* **Automatización gradual**: puedes empezar sin validación, y añadirla después sin cambiar la sintaxis.
-		* **Integración**: un parser produce un árbol; de ahí puedes exportar a JSON/XML/YAML o alimentar herramientas internas.
+		* **Diffs en Git**: los cambios afectan a líneas concretas, no a ficheros binarios.
+		* **Edición**: con cualquier editor de texto.
+		* **Estandarización**: la plantilla actúa como contrato del formato.
+		* **Adopción gradual**: un documento sin validación es válido; la plantilla se añade
+		  después sin cambiar la sintaxis.
+		* **Integración**: el parser produce un árbol que se exporta a JSON, XML o YAML o se
+		  consume desde herramientas internas.
 		
 	Subheader: Recomendaciones de estilo
 	
 	Content >>
-		* Usa nombres de nodos estables (“Action Items”, “Decision”, “Action status”…).
-		* Reserva `>>` para texto largo, contexto o argumentación.
-		* Mantén cardinalidades pequeñas y explícitas en templates para evitar ambigüedad.
-		* Si necesitas estados, usa `ENUM` con valores acotados.
-		* Si el documento va a vivir en Git, evita re-formateos automáticos (cambios masivos de espacios) para mantener diffs útiles.
+		* Nombres de nodo estables (“Action Items”, “Decision”, “Action status”…).
+		* Bloques de texto `>>` solo para texto largo, contexto o argumentación.
+		* Cardinalidades explícitas y acotadas en las plantillas.
+		* Estados como `ENUM` con valores acotados.
+		* En documentos versionados en Git, sin reformateos automáticos (cambios masivos de
+		  blancos) que oculten los cambios en los diffs.
 			

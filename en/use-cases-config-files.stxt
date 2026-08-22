@@ -2,70 +2,69 @@ Document (dev.stxt.website): Configuration files
 
 	Metadata: 
 		Author: ChatGPT 5.2
-		Last modif: 2026-01-11
+		Last modif: 2026-08-22
 
 	Header: Configuration files
 
 	Content >>
-		Configuration files often start out simple…
-		and end up turning into a fragile mix of:
+		Configuration files tend to start out simple and, over time, turn into a
+		fragile mix of:
 
 		* data,
 		* implicit conventions,
-		* human comments,
-		* and “memorized” logic.
+		* comments,
+		* and rules known only to whoever maintains them.
 
 	Assert >>
-		@STXT@ is especially designed for this friction point:
-		**human-readable**, **structured**, and **validatable** configuration without
-		turning into a programming language.
+		@STXT@ is designed for this point: readable, structured, and validatable
+		configuration that does not turn into a programming language.
 
 	Subheader: What kind of configurations
 
 	Content >>
-		Common examples where @STXT@ fits well:
+		Common cases:
 
 		* Application configuration (server, ports, flags, limits).
 		* Per-environment configuration (dev / staging / prod).
 		* Pipelines and jobs.
 		* Feature flags.
 		* Service configuration (timeouts, retries, endpoints).
-		* “Documented” configuration (long comments, context).
+		* Documented configuration (long comments, context).
 
 	Subheader: Common problems with other formats
 
 	Content >>
-		In practice, teams run into:
+		Known limitations of the most widespread formats:
 
 		* JSON:
-		  * Strict but not very human.
-		  * No real comments.
+		  * Strict, with a syntax designed for machines.
+		  * No comments.
 		  * Hard to maintain as it grows.
 
 		* YAML:
-		  * More human, but fragile with indentation.
-		  * Too many equivalent ways to express the same thing.
-		  * Complex parsers and surprising behavior.
+		  * Readable, but fragile with indentation.
+		  * Several equivalent ways to express the same thing.
+		  * Complex parsers and hard-to-predict behavior.
 
 		* INI / properties:
-		  * Flat, with no real hierarchy.
-		  * Implicit types and ad-hoc rules.
+		  * Flat, with no hierarchy.
+		  * Implicit types and ad hoc rules.
 
 		* XML:
 		  * Verbose.
-		  * Not very friendly for manual editing.
+		  * Costly to edit by hand.
 
-		@STXT@ aims for a different balance:
+		@STXT@ starts from a different balance:
 
 		* Minimal syntax.
-		* Clear hierarchy via indentation.
-		* Literal text when needed.
-		* Optional validation, not mandatory.
+		* Hierarchy by indentation.
+		* Literal text blocks when needed.
+		* Optional validation.
 
 	Subheader: Example 1 — Server configuration
 
 	Content >>
-		Human-readable, hand-editable, and structured configuration.
+		Structured, readable, hand-editable configuration.
 
 	Code >>
 		Server Config (com.acme.server):
@@ -107,15 +106,15 @@ Document (dev.stxt.website): Configuration files
 	Subheader: What @STXT@ adds here
 
 	Content >>
-		* Node names provide clear semantics.
-		* The hierarchy “shows” itself without thinking.
+		* Node names carry the semantics.
+		* The hierarchy is visible in the indentation.
 		* Explanatory text lives alongside the configuration (`Description >>`).
 		* There are no magic keys or implicit structures.
 
 	Subheader: Example 2 — Per-environment configuration
 
 	Content >>
-		Same format, different environments, without duplicating structure.
+		The same format for every environment, without duplicating the structure.
 
 	Code >>
 		Application Config (com.acme.app):
@@ -146,14 +145,14 @@ Document (dev.stxt.website): Configuration files
 	Subheader: Advantages over “copy and paste”
 
 	Content >>
-		* The structure is always the same.
-		* It’s easy to detect differences between environments with `diff`.
-		* You can validate that all environments have the same fields.
+		* The structure is the same in every environment.
+		* Differences between environments are located with `diff`.
+		* It can be validated that every environment declares the same fields.
 
 	Subheader: Example 3 — Feature flags
 
 	Content >>
-		A classic case where data and explanatory text coexist.
+		A case where data and explanatory text coexist.
 
 	Code >>
 		Feature Flags (com.acme.features):
@@ -176,11 +175,11 @@ Document (dev.stxt.website): Configuration files
 	Subheader: Validation with @stxt.template
 
 	Content >>
-		In configuration it’s very common to want to:
+		A template (`@stxt.template`) covers three common needs in configuration:
 
-		* Avoid misspelled fields.
-		* Control types (numbers, booleans, dates).
-		* Restrict possible values (ENUM).
+		* Rejecting misspelled field names.
+		* Checking types (numbers, booleans, dates).
+		* Restricting the possible values (`ENUM`).
 
 	Code >>
 		Template (@stxt.template): com.acme.server
@@ -218,59 +217,59 @@ Document (dev.stxt.website): Configuration files
 	Content >>
 		This template:
 
-		* Prevents typos (`Port` vs `Ports`).
-		* Guarantees basic types.
-		* Keeps flexibility (many fields are still optional).
+		* Rejects undeclared names (`Port` versus `Ports`).
+		* Checks the basic types.
+		* Leaves most fields optional.
 
 	Subheader: Validation with @stxt.schema
 
 	Content >>
-		When configuration becomes a contract between systems:
+		When configuration is a contract between systems:
 
 		* agents,
 		* external validators,
 		* automated deployments,
 
-		a schema provides full and explicit control.
+		a schema (`@stxt.schema`) provides complete and explicit control.
 
-		In practice:
+		Usual workflow:
 
-		* The template is designed (more readable).
+		* The template is written (more readable).
 		* It is compiled to a schema.
-		* The runtime validates against the schema.
+		* The system validates against the schema.
 
 	Subheader: Conceptual comparison
 
 	Content >>
 		@STXT@ for configuration sits between:
 
-		* JSON → too rigid and not very human.
-		* YAML → human but ambiguous.
-		* DSL languages → powerful, but dangerous.
+		* JSON → rigid and machine-oriented.
+		* YAML → readable but ambiguous.
+		* DSL languages → expressive, but able to execute code.
 
-		STXT:
+		@STXT@:
 
 		* Executes nothing.
 		* Evaluates no expressions.
 		* Includes no external files.
 
-		It only describes **structure + data + text**.
+		It only describes structure, data, and text.
 
 	Subheader: Usage recommendations
 
 	Content >>
-		* Use stable and descriptive node names.
-		* Group by domains (`Network`, `Logging`, `Features`).
-		* Use `ENUM` for environments, levels, states.
-		* Document important decisions with `>>` blocks.
-		* Keep validation as an additional layer, not as an initial requirement.
+		* Stable, descriptive node names.
+		* Grouping by domain (`Network`, `Logging`, `Features`).
+		* `ENUM` for environments, levels, and states.
+		* Decisions documented in text blocks (`>>`).
+		* Validation as an additional layer, not as an initial requirement.
 
 	Subheader: Summary
 
 	Content >>
 		Configuration files are a natural use case for @STXT@:
 
-		* Humans can read and modify them with confidence.
-		* Machines can validate and process them unambiguously.
-		* The format scales from “simple config” to strict contracts
-		  without changing languages.
+		* People read and modify them without special tools.
+		* Machines validate and process them unambiguously.
+		* The same format covers everything from simple configuration to strict
+		  contracts.

@@ -15,12 +15,13 @@ Document (dev.stxt.website): STXT - Semantic Text
 		@STXT@ es un formato textual jerárquico y semántico orientado a:
 		
 		* Representar documentos y datos de manera clara.
-		* Ser extremadamente sencillo de leer y escribir.
+		* Ser sencillo de leer y escribir.
 		* Ser trivial de parsear en cualquier lenguaje.
 		* Permitir tanto contenido estructurado como texto libre.
 		* Aplicar reglas de contenido mediante `@stxt.schema` o `@stxt.template`.
 	
-		Un documento @STXT@ equilibra la claridad humana con una estructura semántica explícita, ideal para **documentos, wikis y configuraciones**:
+		Un documento @STXT@ combina la legibilidad con una estructura semántica explícita,
+		lo que lo hace adecuado para documentos, wikis y configuraciones:
 	
 	Code >>
 		# Un email sencillo, sin validación
@@ -38,7 +39,7 @@ Document (dev.stxt.website): STXT - Semantic Text
 	
 	Content >>
 		@STXT@ permite el uso de namespaces para agrupar documentos.
-		Además, también se pueden definir esquemas o plantillas 
+		Se pueden definir además esquemas o plantillas
 		para validar el contenido de un documento.
 		
 		Un documento `Email` del namespace `com.example.docs`:
@@ -53,7 +54,7 @@ Document (dev.stxt.website): STXT - Semantic Text
 				Hello Mery!! 
 				The book is finished!!
 	Content >>
-		Y la definición de la plantilla:
+		La definición de la plantilla:
 		
 	Code >>
 		Template (@stxt.template): com.example.docs

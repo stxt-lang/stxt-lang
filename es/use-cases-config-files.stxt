@@ -2,70 +2,69 @@ Document (dev.stxt.website): Ficheros de configuración
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-01-11
+		Last modif: 2026-08-22
 		
 	Header: Ficheros de configuración
 	
 	Content >>
-		Los ficheros de configuración suelen empezar siendo simples…
-		y acabar convirtiéndose en una mezcla frágil de:
+		Los ficheros de configuración suelen empezar siendo simples y, con el tiempo,
+		convertirse en una mezcla frágil de:
 		
 		* datos,
 		* convenciones implícitas,
-		* comentarios humanos,
-		* y lógica “aprendida de memoria”.
+		* comentarios,
+		* y reglas que solo conoce quien los mantiene.
 		
 	Assert >>
-		@STXT@ está especialmente pensado para este punto de fricción:
-		configuración **legible por humanos**, **estructurada**, y **validable** sin
-		convertirse en un lenguaje de programación.
+		@STXT@ está diseñado para este punto: configuración legible, estructurada y
+		validable, sin convertirse en un lenguaje de programación.
 		
 	Subheader: Qué tipo de configuraciones
 	
 	Content >>
-		Ejemplos habituales donde @STXT@ encaja bien:
+		Casos habituales:
 		
-		* Configuración de aplicaciones (server, puertos, flags, límites).
+		* Configuración de aplicaciones (servidor, puertos, flags, límites).
 		* Configuración por entorno (dev / staging / prod).
 		* Pipelines y jobs.
 		* Feature flags.
-		* Configuración de servicios (timeouts, retries, endpoints).
-		* Configuración “documentada” (comentarios largos, contexto).
+		* Configuración de servicios (timeouts, reintentos, endpoints).
+		* Configuración documentada (comentarios largos, contexto).
 		
 	Subheader: Problemas habituales con otros formatos
 	
 	Content >>
-		En la práctica, los equipos se encuentran con:
+		Limitaciones conocidas de los formatos más extendidos:
 		
 		* JSON:
-		  * Estricto pero poco humano.
-		  * Sin comentarios reales.
+		  * Estricto, con una sintaxis pensada para máquinas.
+		  * Sin comentarios.
 		  * Difícil de mantener cuando crece.
 		
 		* YAML:
-		  * Más humano, pero frágil con indentación.
-		  * Demasiadas formas equivalentes de expresar lo mismo.
-		  * Parsers complejos y comportamiento sorprendente.
+		  * Legible, pero frágil con la indentación.
+		  * Varias formas equivalentes de expresar lo mismo.
+		  * Parsers complejos y comportamiento difícil de predecir.
 		
 		* INI / properties:
-		  * Planos, sin jerarquía real.
-		  * Tipos implícitos y reglas ad-hoc.
+		  * Planos, sin jerarquía.
+		  * Tipos implícitos y reglas ad hoc.
 		
 		* XML:
 		  * Verboso.
-		  * Poco amigable para edición manual.
+		  * Costoso de editar a mano.
 		
-		@STXT@ busca un equilibrio distinto:
+		@STXT@ parte de otro equilibrio:
 		
 		* Sintaxis mínima.
-		* Jerarquía clara por indentación.
-		* Texto literal cuando hace falta.
-		* Validación opcional, no obligatoria.
+		* Jerarquía por indentación.
+		* Bloques de texto literal cuando hacen falta.
+		* Validación opcional.
 		
 	Subheader: Ejemplo 1 — Configuración de servidor
 	
 	Content >>
-		Configuración legible, editable a mano y estructurada.
+		Configuración estructurada, legible y editable a mano.
 		
 	Code >>
 		Server Config (com.acme.server):
@@ -107,15 +106,15 @@ Document (dev.stxt.website): Ficheros de configuración
 	Subheader: Qué aporta aquí @STXT@
 	
 	Content >>
-		* Los nombres de nodos aportan semántica clara.
-		* La jerarquía se “ve” sin pensar.
+		* Los nombres de nodo aportan la semántica.
+		* La jerarquía es visible en la indentación.
 		* El texto explicativo vive junto a la configuración (`Description >>`).
 		* No hay claves mágicas ni estructuras implícitas.
 		
 	Subheader: Ejemplo 2 — Configuración por entorno
 	
 	Content >>
-		Mismo formato, distintos entornos, sin duplicar estructura.
+		El mismo formato para todos los entornos, sin duplicar la estructura.
 		
 	Code >>
 		Application Config (com.acme.app):
@@ -146,14 +145,14 @@ Document (dev.stxt.website): Ficheros de configuración
 	Subheader: Ventajas frente a “copiar y pegar”
 	
 	Content >>
-		* La estructura es siempre la misma.
-		* Es fácil detectar diferencias entre entornos con `diff`.
-		* Se puede validar que todos los entornos tengan los mismos campos.
+		* La estructura es la misma en todos los entornos.
+		* Las diferencias entre entornos se localizan con `diff`.
+		* Se puede validar que todos los entornos declaran los mismos campos.
 		
 	Subheader: Ejemplo 3 — Feature flags
 	
 	Content >>
-		Un caso clásico donde conviven datos y texto explicativo.
+		Un caso en el que conviven datos y texto explicativo.
 		
 	Code >>
 		Feature Flags (com.acme.features):
@@ -176,11 +175,11 @@ Document (dev.stxt.website): Ficheros de configuración
 	Subheader: Validación con @stxt.template
 	
 	Content >>
-		En configuración es muy común querer:
+		Una plantilla (`@stxt.template`) cubre tres necesidades habituales en configuración:
 		
-		* Evitar campos mal escritos.
-		* Controlar tipos (números, booleanos, fechas).
-		* Limitar valores posibles (ENUM).
+		* Rechazar nombres de campo mal escritos.
+		* Comprobar tipos (números, booleanos, fechas).
+		* Restringir los valores posibles (`ENUM`).
 		
 	Code >>
 		Template (@stxt.template): com.acme.server
@@ -216,62 +215,61 @@ Document (dev.stxt.website): Ficheros de configuración
 					Description: (?) TEXT
 	
 	Content >>
-		Este template:
+		Esta plantilla:
 		
-		* Evita errores tipográficos (`Port` vs `Ports`).
-		* Garantiza tipos básicos.
-		* Mantiene flexibilidad (muchos campos siguen siendo opcionales).
+		* Rechaza los nombres no declarados (`Port` frente a `Ports`).
+		* Comprueba los tipos básicos.
+		* Deja opcionales la mayoría de los campos.
 		
 	Subheader: Validación con @stxt.schema
 	
 	Content >>
-		Cuando la configuración se convierte en contrato entre sistemas:
+		Cuando la configuración es un contrato entre sistemas:
 		
 		* agentes,
 		* validadores externos,
 		* despliegues automatizados,
 		
-		un schema ofrece control total y explícito.
+		un esquema (`@stxt.schema`) ofrece el control completo y explícito.
 		
-		En la práctica:
+		Flujo habitual:
 		
-		* Se diseña el template (más legible).
-		* Se compila a schema.
-		* El runtime valida contra el schema.
+		* Se escribe la plantilla (más legible).
+		* Se compila a esquema.
+		* El sistema valida contra el esquema.
 		
 	Subheader: Comparación conceptual
 	
 	Content >>
 		@STXT@ para configuración se sitúa entre:
 		
-		* JSON → demasiado rígido y poco humano.
-		* YAML → humano pero ambiguo.
-		* Lenguajes DSL → potentes, pero peligrosos.
+		* JSON → rígido y orientado a máquinas.
+		* YAML → legible pero ambiguo.
+		* Lenguajes DSL → expresivos, pero con capacidad de ejecución.
 		
-		STXT:
+		@STXT@:
 		
 		* No ejecuta nada.
 		* No evalúa expresiones.
-		* No incluye archivos externos.
+		* No incluye ficheros externos.
 		
-		Solo describe **estructura + datos + texto**.
+		Solo describe estructura, datos y texto.
 		
 	Subheader: Recomendaciones de uso
 	
 	Content >>
-		* Usa nombres de nodos estables y descriptivos.
-		* Agrupa por dominios (`Network`, `Logging`, `Features`).
-		* Usa `ENUM` para entornos, niveles, estados.
-		* Documenta decisiones importantes con bloques `>>`.
-		* Mantén la validación como una capa adicional, no como requisito inicial.
+		* Nombres de nodo estables y descriptivos.
+		* Agrupación por dominios (`Network`, `Logging`, `Features`).
+		* `ENUM` para entornos, niveles y estados.
+		* Decisiones documentadas en bloques de texto (`>>`).
+		* Validación como capa adicional, no como requisito inicial.
 		
 	Subheader: Resumen
 	
 	Content >>
 		Los ficheros de configuración son un caso natural para @STXT@:
 		
-		* Humanos pueden leerlos y modificarlos con confianza.
-		* Las máquinas pueden validarlos y procesarlos sin ambigüedad.
-		* El formato escala desde “simple config” hasta contratos estrictos
-		  sin cambiar de lenguaje.
-			
+		* Las personas los leen y modifican sin herramientas especiales.
+		* Las máquinas los validan y procesan sin ambigüedad.
+		* El mismo formato cubre desde la configuración simple hasta los contratos
+		  estrictos.

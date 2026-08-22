@@ -2,29 +2,29 @@ Document (dev.stxt.website): The Java library
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: The Java library
 
 	Assert >>
 		[`dev.stxt:stxt-core`](https://central.sonatype.com/artifact/dev.stxt/stxt-core) is the
-		@STXT@ parser for **Java**, published on Maven Central. It implements the five
+		@STXT@ parser for Java, published on Maven Central. It implements the five
 		specifications —syntax, canonical tree, schemas, templates and resolution— and
-		reports **the same error codes** as the [TypeScript](tools-typescript) library, the
-		[Python](tools-python) one and the [command line](tools-cli). It is a library: **it
-		ships no CLI**; the command of the ecosystem is `stxt`.
+		reports the same error codes as the [TypeScript](tools-typescript) library, the
+		[Python](tools-python) one and the [command line](tools-cli). It is a library with
+		no CLI; the command of the ecosystem is `stxt`.
 
 	Content >>
 		This page is the usage guide: parsing, walking and building trees, validating
 		against schemas and templates, resolving which grammar applies to a document,
 		obtaining its canonical JSON and writing @STXT@ back out. It has the same
-		structure as the TypeScript library guide, so you can move from one to the other
-		without surprises; where the Java API differs, it says so.
+		structure as the TypeScript library guide; where the Java API differs, it is
+		noted.
 
 	Subheader: Installation
 
 	Content >>
-		Requires **Java 17** or later. **It has no runtime dependencies** and under JPMS it
+		Requires Java 17 or later. It has no runtime dependencies and under JPMS it
 		is an automatic module named `dev.stxt`.
 
 	Xml >>
@@ -49,12 +49,12 @@ Document (dev.stxt.website): The Java library
 	Subheader: Parsing
 
 	Content >>
-		`Parser` has two entry points. `parseResult(text)` **collects every error** and
+		`Parser` has two entry points. `parseResult(text)` collects every error and
 		also returns the nodes it managed to build; `parse(text)` throws a
 		`ParseException` on the first one and returns `List<Node>` when there is none.
 		Both have a file-based counterpart: `parseResultFile(File)` and `parseFile(File)`.
-		The `STXT` facade gives ready-made parsers: `STXT.rawParser()` is a parser **with
-		no validation** (syntax only) and `STXT.parser(loader)` one with schema and
+		The `STXT` facade gives ready-made parsers: `STXT.rawParser()` is a parser with
+		no validation (syntax only) and `STXT.parser(loader)` one with schema and
 		template validation registered, as shown below.
 
 	Java >>
@@ -96,8 +96,8 @@ Document (dev.stxt.website): The Java library
 	Subheader: The tree
 
 	Content >>
-		`Node` is a `sealed` class with **exactly two forms**, and each one owns only what
-		is really its own:
+		`Node` is a `sealed` class with exactly two forms, and each one exposes only what
+		is its own:
 
 		| Class        | Syntax        | What it owns                                                                                                 |
 		|--------------|---------------|--------------------------------------------------------------------------------------------------------------|
@@ -175,7 +175,7 @@ Document (dev.stxt.website): The Java library
 	Subsubheader: Building and editing
 
 	Content >>
-		Trees are mutable and **keep their own integrity**: every node knows its parent,
+		Trees are mutable and keep their own integrity: every node knows its parent,
 		`addChild` links both ends and refuses a node that already has one
 		(`NODE_ALREADY_ATTACHED`) or that is an ancestor (`NODE_CYCLE`); `removeChild` and
 		`detach()` undo it. Levels are derived from the chain of parents, and the line is
@@ -209,17 +209,18 @@ Document (dev.stxt.website): The Java library
 
 	Content >>
 		Grammars are @STXT@ documents in the reserved namespaces `@stxt.schema` and
-		`@stxt.template`; the template is the short authoring form and **compiles to a
-		schema** when loaded. In Java, a `ResourcesLoader` says **where** they come from:
+		`@stxt.template`; the template is the short authoring form and compiles to a
+		schema when loaded. In Java, a `ResourcesLoader` determines where they come from:
 		`ResourcesLoaderDirectory` looks them up on disk with the layout
 		`<dir>/@stxt.schema/<namespace>.stxt` and `<dir>/@stxt.template/<namespace>.stxt`
-		—exactly the one `stxt install` leaves, so a project's `.stxt/` works as is—, and
+		—the same one `stxt install` leaves, so a project's `.stxt/` can be used
+		directly—, and
 		`STXT.parser(loader)` returns a parser that resolves both kinds, validates each
 		grammar against its meta-schema when loading it, caches it and validates every
-		node **with a namespace** as it is closed: underneath it registers a
-		`SchemaValidator`, which lets the nodes without a namespace through because that
+		node with a namespace as it is closed: underneath it registers a
+		`SchemaValidator`, which does not validate nodes without a namespace because that
 		is the rule of the language (STXT-SCHEMA-SPEC §5) —a document without a namespace
-		is not wrong, it just cannot be validated—.
+		is not invalid, but it cannot be validated—.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -268,7 +269,7 @@ Document (dev.stxt.website): The Java library
 	Content >>
 		`ResourcesLoader` is a single-method interface, `retrieve(namespace, resource)`
 		—where `namespace` is `@stxt.schema` or `@stxt.template` and `resource` the
-		namespace being looked up—, so a grammar **in memory**, or taken from the
+		namespace being looked up—, so a grammar in memory, or taken from the
 		classpath, a database or a URL, is a lambda that returns its text, or throws
 		`ResourceNotFoundException` when it does not have it:
 
@@ -282,18 +283,18 @@ Document (dev.stxt.website): The Java library
 		Parser parser = STXT.parser(loader);
 
 	Content >>
-		Rules worth knowing:
+		Behaviour rules:
 
 		* A cardinality error is reported on the line of the **parent**, which is the one
 		  with zero `ISBN`.
 		* If the document uses a namespace the loader does not know, each node produces a
-		  `SCHEMA_NOT_FOUND`; the provider **never throws** for a missing namespace
+		  `SCHEMA_NOT_FOUND`; the provider never throws for a missing namespace
 		  (`getSchema()` returns `null`).
 		* A grammar that does not validate against its meta-schema is reported as a
 		  finding of the document (for instance `TYPE_NOT_VALID`), not as an exception.
 		* Nodes without a namespace are not validated (a rule of `SchemaValidator` itself);
 		  a document that is itself a definition is always validated against its
-		  meta-schema. Registering a `SchemaValidator` by hand gives the same behaviour as
+		  meta-schema. Registering a `SchemaValidator` explicitly gives the same behaviour as
 		  the facade, the CLI and the extension.
 
 	Java >>
@@ -306,8 +307,8 @@ Document (dev.stxt.website): The Java library
 		* The available value types are those of STXT-SCHEMA-SPEC: `INLINE`, `BLOCK`,
 		  `TEXT`, `MARKDOWN`, `BOOLEAN`, `INTEGER`, `NATURAL`, `NUMBER`, `DATE`, `TIME`,
 		  `TIMESTAMP`, `UUID`, `EMAIL`, `URL`, `HEXADECIMAL`, `BINARY`, `BASE64`, `GROUP`
-		  and `ENUM`. To add your own, implement `dev.stxt.schema.Type` and register it
-		  in `TypeRegistry`.
+		  and `ENUM`. To add a custom type, implement `dev.stxt.schema.Type` and register
+		  it in `TypeRegistry`.
 
 		The compiled schema can be inspected: `STXT.schemaProvider(loader)` is the
 		`SchemaProvider` the facade uses, and `getSchema(ns)` returns a `Schema` with
@@ -319,8 +320,8 @@ Document (dev.stxt.website): The Java library
 	Subheader: Resolution: which grammar applies to a document
 
 	Content >>
-		`ResourcesLoaderDirectory` looks in **one** directory. **Resolution** answers the
-		full question: *given this document, which definitions apply to it?*
+		`ResourcesLoaderDirectory` looks in a single directory. **Resolution** answers the
+		full question: given a document, which definitions apply to it.
 		`DiscoveryResolver` implements [STXT-DISCOVERY-SPEC](stxt-discovery-ref) —the
 		`.stxt/` directories of the document and of all its ancestors, then `~/.stxt` and
 		`/etc/stxt`, per-namespace precedence, `STXT_PATH` replacing the chain—, just like
@@ -330,10 +331,10 @@ Document (dev.stxt.website): The Java library
 		direct through `java.nio.file`; the only injectable piece is the
 		`DiscoveryEnvironment` (`STXT_PATH`, user and system directories), with
 		`SystemDiscoveryEnvironment` as the real implementation —the one the no-argument
-		constructor uses— and the option of passing your own in a test. The chain is per
+		constructor uses— and the option of injecting a custom one in a test. The chain is per
 		document: pass the directory it lives in (`null` for standard input or an unsaved
 		buffer, which starts the chain at the user level). Since `DiscoveryResult`
-		**implements `SchemaProvider`**, resolving and validating are two steps:
+		implements `SchemaProvider`, resolving and validating are two steps:
 
 	Java >>
 		import java.nio.file.Path;
@@ -360,8 +361,9 @@ Document (dev.stxt.website): The Java library
 		ParseResult result = parser.parseResult(documentText);
 
 	Content >>
-		`DiscoveryResult` also tells you **where** each grammar came from, which is what an
-		editor needs for "go to definition" or a diagnostic that explains itself:
+		`DiscoveryResult` also records where each grammar came from, which is what an
+		editor needs for "go to definition" or a diagnostic that names the origin of the
+		applied definition:
 
 	Java >>
 		DiscoveryDefinition definition = discovery.getDefinition("com.acme.book");
@@ -388,8 +390,8 @@ Document (dev.stxt.website): The Java library
 		writes the JSON of [STXT-TREE-SPEC](stxt-tree-ref), the same one `stxt describe`
 		emits, with two-space indentation. It is an explicit function that emits only the
 		normative fields —`children` for inline nodes and `lines` for blocks, with no
-		positions or comments— and **depends on no JSON library**: it returns the text,
-		which you then hand to Jackson, Gson or whatever the program uses.
+		positions or comments— and depends on no JSON library: it returns the text,
+		which can then be passed to Jackson, Gson or any other library.
 
 	Java >>
 		import dev.stxt.runtime.TreeJson;
@@ -400,10 +402,10 @@ Document (dev.stxt.website): The Java library
 	Subheader: Writing STXT
 
 	Content >>
-		`NodeWriter` makes the trip back: it serialises a node, or a list of documents, to
+		`NodeWriter` performs the inverse operation: it serialises a node, or a list of documents, to
 		@STXT@ text in canonical form, with `IndentStyle.TABS` (default) or
-		`IndentStyle.SPACES_4`. It writes the namespace **where the node declares it**, not
-		where it differs from the parent: faithful to the source. Writing a tree out and
+		`IndentStyle.SPACES_4`. It writes the namespace where the node declares it, not
+		where it differs from the parent. Writing a tree out and
 		parsing it back yields the same tree, in both styles. Since it starts from the
 		logical tree, a text that goes through `parse` and `NodeWriter` comes out without
 		comments or blank lines outside blocks —that is what `stxt format --clean` does—;
@@ -433,14 +435,14 @@ Document (dev.stxt.website): The Java library
 	Subheader: Observing and validating while streaming
 
 	Content >>
-		The parser knows nothing about schemas: validation is a decoupled layer plugged in
-		through two hooks. `Observer` receives **streaming** callbacks while the document
-		is parsed —`onCreate(node)` when a node is opened, already with its parent,
+		The parser does not depend on schemas: validation is a decoupled layer connected
+		through two extension points. `Observer` receives streaming callbacks while the
+		document is parsed —`onCreate(node)` when a node is opened, already with its parent,
 		effective namespace and level, and `onFinish(node)` when it is closed—, and
-		`Validator` runs on each node as it is closed and **returns** a list of
+		`Validator` runs on each node as it is closed and returns a list of
 		`ValidationException` (it does not throw), so a document is validated while it is
-		read, without waiting for the end. `SchemaValidator` is just a built-in
-		`Validator`; `Validator` is a functional interface, so a lambda will do.
+		read, without waiting for the end. `SchemaValidator` is a built-in `Validator`;
+		`Validator` is a functional interface, so it accepts a lambda.
 
 	Java >>
 		import java.util.List;
@@ -492,7 +494,7 @@ Document (dev.stxt.website): The Java library
 		| `dev.stxt.runtime`    | `STXT` (the facade), `NodeWriter` and `IndentStyle`, `TreeJson`                              |
 		| `dev.stxt.discovery`  | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryEnvironment`, `SystemDiscoveryEnvironment` |
 
-		From 1.0 on this API is **frozen within the package's 1.x line**, and the language
+		From 1.0 on this API is frozen within the package's 1.x line, and the language
 		and the canonical tree are frozen across the whole 1.x line of the specification: a
 		document that parses and validates today parses and validates the same tomorrow.
 		What exactly is frozen, what is not, and why the package version is not the

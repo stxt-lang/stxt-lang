@@ -8,7 +8,7 @@ Document (dev.stxt.website): Stability and versions
 
 	Assert >>
 		**A document that is valid in @STXT@ 1.0 is valid across the whole 1.x line**. This page
-		states exactly what 1.0 freezes, what it does not, and how to read the version numbers.
+		states what 1.0 freezes, what it does not, and how to read the version numbers.
 
 	Subheader: What is frozen
 
@@ -50,16 +50,15 @@ Document (dev.stxt.website): Stability and versions
 		goes up when the library changes —a new function, a fix—, not when the language does.
 
 		From this follows the rule: **conformance is declared against the version of
-		the specification, not of the package**. If one day `@stxt-lang/core` is at 1.3 and
-		`dev.stxt:stxt-core` at 1.1, they still read **the same @STXT@**, because both implement
+		the specification, not of the package**. If `@stxt-lang/core` is at 1.3 and
+		`dev.stxt:stxt-core` at 1.1, they still read the same @STXT@, because both implement
 		STXT-SPEC 1.0. The three libraries expose that version as a constant (`SPEC_VERSION`)
-		and `stxt --version` prints it next to the command line's own. A port written by
-		someone else does exactly the same: it states which specification version it conforms
-		to.
+		and `stxt --version` prints it next to the command line's own. A third-party port
+		does the same: it declares which specification version it conforms to.
 
 		Up to 1.0 the three libraries have shared the same number and the same scope. From
 		there on, the number that ties them together is the specification's; the package number
-		follows the life of each one.
+		follows the evolution of each one.
 
 	Subheader: How the numbers go up
 
@@ -73,6 +72,6 @@ Document (dev.stxt.website): Stability and versions
 
 		The libraries follow semantic versioning within their line: an incompatible change in
 		the in-memory API is a package major, and is announced as such. A specification major
-		is something else, far rarer: none is planned, and should one ever happen, the
-		implementations would say so through `SPEC_VERSION` and it would come with an
+		is a different matter and far less frequent: none is planned, and should one occur, the
+		implementations would indicate it through `SPEC_VERSION` and it would come with an
 		explanation and a migration path; **never as a silent reinterpretation**.

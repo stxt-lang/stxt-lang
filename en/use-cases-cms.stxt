@@ -3,16 +3,15 @@ Document (dev.stxt.website): CMS and publishing
 	Metadata:
 		Author: ChatGPT 5.2
 		Revision: Claude Fable 5
-		Last modif: 2026-08-17
+		Last modif: 2026-08-22
 
 	Header: CMS and publishing
 
 	Content >>
 		A website, a blog, a book, the documentation of a product: every piece of content
-		that gets published lives in the same tension between **narrative text**
-		(sections, context), **structure** (chapters, blocks, relations) and **data**
-		(status, dates, authors, tags). And the tools that manage it —the CMSs— tend to
-		mix too many responsibilities:
+		that gets published combines **narrative text** (sections, context), **structure**
+		(chapters, blocks, relations) and **data** (status, dates, authors, tags). The
+		tools that manage it —the CMSs— tend to couple several responsibilities:
 
 		* data model,
 		* editing interface,
@@ -20,15 +19,15 @@ Document (dev.stxt.website): CMS and publishing
 		* and final presentation.
 
 	Assert >>
-		@STXT@ proposes separating those layers with a **document format** that is stable,
-		readable and reusable outside any particular tool: the publication is **a human
-		document first**, without giving up validation, transformation or automation.
+		@STXT@ separates those layers with a **document format** that is stable, readable
+		and reusable outside any particular tool: the publication is a text document, with
+		validation, transformation and automation as optional steps.
 
 	Subheader: What this case covers
 
 	Content >>
-		Everything that is written to be published and goes through some editing and
-		output workflow:
+		This case covers everything that is written to be published and goes through an
+		editing and output workflow:
 
 		* Corporate websites, blogs and content portals.
 		* Articles, long posts and whitepapers.
@@ -39,28 +38,28 @@ Document (dev.stxt.website): CMS and publishing
 	Subheader: Common problems
 
 	Content >>
-		In practice the same patterns keep coming back:
+		The usual formats and tools have these limitations:
 
 		* **Markdown**: flexible, but semantically poor; ad-hoc metadata in YAML front
 		  matter; structure impossible to validate.
 		* **Traditional CMSs**: rigid models that are hard to evolve; editing coupled to
 		  one specific interface; hard to version and review; limited or proprietary
 		  exports; strong dependency on the database.
-		* **Editorial XML**: very powerful, far too verbose for manual editing.
+		* **Editorial XML**: expressive, but verbose for manual editing.
 
-		Over time, the content ends up "trapped" in the tool.
+		In all three cases the content is tied to the tool that manages it.
 
 	Subheader: The @STXT@ approach
 
 	Content >>
-		@STXT@ fits as the **source format** of the content:
+		@STXT@ acts as the **source format** of the content:
 
 		* The CMS does not define the document format: it interprets it and offers tools
 		  around it.
 		* The content lives in files, not in the tool; it is versioned in Git and every
 		  change is a clear textual diff, with no hidden state in a database.
-		* One format for text, structure and data, with a clear separation between
-		  **content** and **rules** (the templates).
+		* One format for text, structure and data, with a separation between content and
+		  rules (the templates).
 		* Renderers are interchangeable: the same document comes out as web, PDF, EPUB,
 		  feed or API. In a *headless* CMS, @STXT@ is the origin, the parser produces a
 		  neutral tree and the front end consumes transformed data.
@@ -68,10 +67,10 @@ Document (dev.stxt.website): CMS and publishing
 	Subheader: Example 1 — Web page
 
 	Content >>
-		A typical page of a site, with metadata, SEO and free content; the header and the
-		body are `MARKDOWN` blocks, so the editor and the playground colour them as such. A
+		A page of a site, with metadata, SEO and free content; the header and the body are
+		`MARKDOWN` blocks, and the editor and the playground highlight them as Markdown. A
 		CMS usually works with blocks or components as well; in @STXT@ they are nodes with
-		a `Type` that the renderer transforms however it likes.
+		a `Type` that the renderer transforms according to its own rules.
 
 	Code >>
 		Page (com.acme.cms.page):
@@ -139,9 +138,10 @@ Document (dev.stxt.website): CMS and publishing
 	Subheader: Example 2 — Article
 
 	Content >>
-		An article with metadata, authors, status and long text. The text lives in `>>`
-		blocks —the body, of type `MARKDOWN`, carries Markdown inside without interfering
-		with @STXT@—; the editorial structure —title, authors, status— is explicit.
+		An article with metadata, authors, status and long text. The text goes in `>>`
+		text blocks —the body, of type `MARKDOWN`, contains Markdown that the @STXT@
+		parser does not interpret—; the editorial structure —title, authors, status— is
+		explicit.
 
 	Code >>
 		Article (com.acme.editorial.article):
@@ -246,30 +246,28 @@ Document (dev.stxt.website): CMS and publishing
 		4. It is transformed to HTML, PDF, EPUB or other formats.
 		5. It is published.
 
-		The document **knows nothing** about HTML, CSS or layout: presentation is decided
-		in a later phase, and the same content can be rendered in several ways.
+		The document contains no HTML, CSS or layout: presentation is decided in a later
+		phase, and the same content can be rendered in several ways.
 
 	Subheader: Practical advantages
 
 	Content >>
 		* **Visible structure**: an editor sees it without a graphical interface; a
 		  developer maps nodes and blocks without guessing.
-		* **Comfortable authoring**: writing without fighting tags.
-		* **Clean diffs** and review under version control.
-		* **Light validation**: prevents incomplete pages and articles.
+		* **Plain-text authoring**: no markup tags.
+		* **Readable diffs** and review under version control.
+		* **Validation**: the template rejects incomplete pages and articles.
 		* **Automation**: indexes, tables of contents, feeds, APIs.
-		* **Longevity**: the content outlives specific tools.
+		* **Longevity**: the content does not depend on a specific tool.
 
 	Subheader: Recommendations
 
 	Content >>
-		* Define a few clear document types, and a template for each one.
-		* Use `TEXT` or `MARKDOWN` for the body and long sections; keep metadata concise
-		  and stable.
-		* Keep blocks simple and well named.
-		* Leave presentation out of the document and avoid conditional logic in the
-		  content.
-		* Use templates to guide, not to constrain.
+		* Few document types, and a template for each one.
+		* `TEXT` or `MARKDOWN` for the body and long sections; concise, stable metadata.
+		* Simple blocks, with descriptive names.
+		* Presentation outside the document, and no conditional logic in the content.
+		* Templates that require the minimum structure and leave the rest optional.
 
 	Subheader: Summary
 

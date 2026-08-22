@@ -2,40 +2,38 @@ Document (dev.stxt.website): Herramientas
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: Herramientas
 
 	Assert >>
-		Todo lo que hay en esta página —playground, extensión, línea de comandos y
-		bibliotecas— implementa **las mismas cinco especificaciones** y devuelve
-		**los mismos códigos de error**. Elige la herramienta por comodidad, no por
-		compatibilidad.
+		Todas las herramientas de esta página —playground, extensión, línea de comandos y
+		bibliotecas— implementan las mismas cinco especificaciones y devuelven los mismos
+		códigos de error. La elección entre ellas no afecta a la compatibilidad.
 
 	Content >>
-		@STXT@ no necesita instalación para empezar. Según lo que quieras hacer:
+		@STXT@ no necesita instalación para empezar. Según el uso previsto:
 
-		| Quiero…                                       | Uso…                                                       |
+		| Uso                                           | Herramienta                                                |
 		|-----------------------------------------------|------------------------------------------------------------|
-		| Probar el lenguaje ahora mismo, sin instalar  | El [playground](https://play.stxt.dev)                     |
-		| Escribir documentos a diario                  | La extensión de **VS Code**                                |
+		| Probar el lenguaje sin instalar nada          | El [playground](https://play.stxt.dev)                     |
+		| Escribir documentos habitualmente             | La extensión de VS Code                                    |
 		| Validar en un script, un `Makefile` o en CI   | La línea de comandos `stxt`                                |
-		| Leer o generar @STXT@ desde mi programa       | Una biblioteca: **TypeScript**, **Java** o **Python**      |
+		| Leer o generar @STXT@ desde un programa       | Una biblioteca: TypeScript, Java o Python                  |
 
 	Subheader: Playground
 
 	Content >>
-		[play.stxt.dev](https://play.stxt.dev) es un editor en el navegador, pensado como
+		[play.stxt.dev](https://play.stxt.dev) es un editor en el navegador, concebido como
 		un VS Code simplificado: varios documentos a la vez, sus esquemas o plantillas al
-		lado, errores de sintaxis y de validación mientras escribes, autocompletado guiado
+		lado, errores de sintaxis y de validación durante la edición, autocompletado guiado
 		por la gramática y hover con la definición de cada nodo.
 
-		* No hay nada que instalar ni cuenta que crear; el trabajo se guarda en el propio
-		  navegador.
-		* Viene con una semilla de documentos de ejemplo para tocar y romper.
+		* No requiere instalación ni cuenta; el trabajo se guarda en el propio navegador.
+		* Incluye una semilla de documentos de ejemplo.
 		* Un documento se puede compartir con un enlace que lleva el contenido dentro.
 
-		Es el sitio para seguir el [tutorial](lang-tutorial) sin salir del navegador.
+		Permite seguir el [tutorial](lang-tutorial) sin salir del navegador.
 
 	Subheader: Extensión de VS Code
 
@@ -48,7 +46,7 @@ Document (dev.stxt.website): Herramientas
 		code --install-extension stxt-lang.stxt
 
 	Content >>
-		Qué aporta:
+		Funciones:
 
 		* Errores de sintaxis en tiempo real, y de esquema cuando hay una gramática que
 		  aplica.
@@ -74,7 +72,7 @@ Document (dev.stxt.website): Herramientas
 		stxt --version
 
 	Content >>
-		O sin instalar nada de forma permanente:
+		Sin instalación permanente, con `npx`:
 
 	Listing >>
 		npx @stxt-lang/cli validate docs/
@@ -84,10 +82,10 @@ Document (dev.stxt.website): Herramientas
 
 		| Comando          | Qué hace                                                                     |
 		|------------------|------------------------------------------------------------------------------|
-		| `stxt validate`  | Parsea y valida uno o varios ficheros o directorios; calla si todo pasa      |
+		| `stxt validate`  | Parsea y valida uno o varios ficheros o directorios; sin salida si todo pasa |
 		| `stxt format`    | Reformatea (`--tabs` / `--spaces`); `--check` para CI, `--write` para guardar |
 		| `stxt describe`  | Muestra el árbol lógico de un documento en JSON (STXT-TREE-SPEC)             |
-		| `stxt schemas`   | Dice qué esquemas y plantillas aplican en un directorio, y de qué nivel      |
+		| `stxt schemas`   | Muestra qué esquemas y plantillas aplican en un directorio, y de qué nivel   |
 		| `stxt install`   | Instala una definición en `./.stxt`, `~/.stxt` o el nivel del sistema        |
 
 		Un ejemplo de uso en CI, que falla si algún documento no valida o no está
@@ -98,10 +96,10 @@ Document (dev.stxt.website): Herramientas
 		stxt format --check --recursive docs/
 
 	Content >>
-		El código de salida distingue *tus documentos tienen errores* de *el comando se ha
-		usado mal*, así que se puede usar directamente en un script. Ningún comando
-		reescribe ficheros sin `--write`. Todas las opciones, las salidas y los códigos de
-		salida están en la [referencia de la línea de comandos](tools-cli).
+		El código de salida distingue los errores de los documentos (`1`) del uso incorrecto
+		del comando (`2`), de modo que se puede usar directamente en un script. Ningún
+		comando reescribe ficheros sin `--write`. Todas las opciones, las salidas y los
+		códigos de salida están en la [referencia de la línea de comandos](tools-cli).
 
 	Subheader: Bibliotecas
 

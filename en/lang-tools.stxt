@@ -2,39 +2,38 @@ Document (dev.stxt.website): Tools
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: Tools
 
 	Assert >>
-		Everything on this page —playground, extension, command line and libraries—
-		implements **the same five specifications** and reports **the same error
-		codes**. Pick a tool for convenience, not for compatibility.
+		Every tool on this page —playground, extension, command line and libraries—
+		implements the same five specifications and reports the same error codes. The
+		choice between them does not affect compatibility.
 
 	Content >>
-		@STXT@ needs no installation to get started. Depending on what you want to do:
+		@STXT@ needs no installation to get started. Depending on the intended use:
 
-		| I want to…                                     | Use…                                                       |
+		| Use                                            | Tool                                                       |
 		|------------------------------------------------|------------------------------------------------------------|
-		| Try the language right now, without installing | The [playground](https://play.stxt.dev)                    |
-		| Write documents every day                      | The **VS Code** extension                                  |
+		| Try the language without installing anything   | The [playground](https://play.stxt.dev)                    |
+		| Write documents regularly                      | The VS Code extension                                      |
 		| Validate from a script, a `Makefile` or CI     | The `stxt` command line                                    |
-		| Read or generate @STXT@ from my own program    | A library: **TypeScript**, **Java** or **Python**          |
+		| Read or generate @STXT@ from a program         | A library: TypeScript, Java or Python                      |
 
 	Subheader: Playground
 
 	Content >>
 		[play.stxt.dev](https://play.stxt.dev) is an editor in the browser, designed as a
 		simplified VS Code: several documents at once, their schemas or templates next to
-		them, syntax and validation errors as you type, grammar-driven autocompletion and
+		them, syntax and validation errors while editing, grammar-driven autocompletion and
 		hover with the definition of each node.
 
-		* Nothing to install and no account to create; your work is kept in the browser
-		  itself.
-		* It comes seeded with example documents to play with and break.
+		* No installation and no account; the work is kept in the browser itself.
+		* It includes a seed of example documents.
 		* A document can be shared with a link that carries the content inside.
 
-		It is the place to follow the [tutorial](lang-tutorial) without leaving the browser.
+		It allows following the [tutorial](lang-tutorial) without leaving the browser.
 
 	Subheader: VS Code extension
 
@@ -47,7 +46,7 @@ Document (dev.stxt.website): Tools
 		code --install-extension stxt-lang.stxt
 
 	Content >>
-		What it brings:
+		Features:
 
 		* Syntax errors in real time, and schema errors when a grammar applies.
 		* Semantic highlighting driven by the parser itself.
@@ -72,7 +71,7 @@ Document (dev.stxt.website): Tools
 		stxt --version
 
 	Content >>
-		Or without installing anything permanently:
+		Without a permanent installation, through `npx`:
 
 	Listing >>
 		npx @stxt-lang/cli validate docs/
@@ -82,10 +81,10 @@ Document (dev.stxt.website): Tools
 
 		| Command          | What it does                                                                  |
 		|------------------|-------------------------------------------------------------------------------|
-		| `stxt validate`  | Parses and validates one or more files or directories; silent when all pass   |
+		| `stxt validate`  | Parses and validates one or more files or directories; no output when all pass |
 		| `stxt format`    | Reformats (`--tabs` / `--spaces`); `--check` for CI, `--write` to save        |
 		| `stxt describe`  | Prints the logical tree of a document as JSON (STXT-TREE-SPEC)                |
-		| `stxt schemas`   | Tells which schemas and templates apply in a directory, and from which level  |
+		| `stxt schemas`   | Shows which schemas and templates apply in a directory, and from which level  |
 		| `stxt install`   | Installs a definition into `./.stxt`, `~/.stxt` or the system level           |
 
 		A CI example, which fails if any document does not validate or is not
@@ -96,9 +95,9 @@ Document (dev.stxt.website): Tools
 		stxt format --check --recursive docs/
 
 	Content >>
-		The exit code distinguishes *your documents have errors* from *the command was
-		misused*, so it can be used directly from a script. No command rewrites files
-		without `--write`. Every option, output and exit code is in the
+		The exit code distinguishes document errors (`1`) from command misuse (`2`), so it
+		can be used directly from a script. No command rewrites files without `--write`.
+		Every option, output and exit code is in the
 		[command-line reference](tools-cli).
 
 	Subheader: Libraries

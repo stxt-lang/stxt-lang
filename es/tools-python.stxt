@@ -2,18 +2,18 @@ Document (dev.stxt.website): La biblioteca Python
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: La biblioteca Python
 
 	Assert >>
-		[`stxt`](https://pypi.org/project/stxt/) es el parser de @STXT@ para **Python**,
+		[`stxt`](https://pypi.org/project/stxt/) es el parser de @STXT@ para Python,
 		publicado en PyPI: Python puro, sin dependencias, 3.10 o superior. Es un puerto
 		módulo a módulo del pseudocódigo de referencia del lenguaje, así que implementa las
 		cinco especificaciones —sintaxis, árbol canónico, esquemas, plantillas y
-		resolución— y devuelve **los mismos códigos de error** que las bibliotecas
+		resolución— y devuelve los mismos códigos de error que las bibliotecas
 		[TypeScript](tools-typescript) y [Java](tools-java) y la
-		[línea de comandos](tools-cli). Es una biblioteca: **no lleva CLI**; el comando del
+		[línea de comandos](tools-cli). Es una biblioteca y no incluye CLI; el comando del
 		ecosistema es `stxt`.
 
 	Content >>
@@ -21,8 +21,8 @@ Document (dev.stxt.website): La biblioteca Python
 		contra esquemas y plantillas, resolver qué gramática aplica a un documento, obtener
 		su JSON canónico y volver a escribir @STXT@. Tiene la misma estructura que las guías
 		de TypeScript y Java, y la API es la misma con nombres en `snake_case`
-		(`getCanonicalName` → `get_canonical_name`): pasar de un puerto a otro es cambiar
-		la grafía.
+		(`getCanonicalName` → `get_canonical_name`): la diferencia entre puertos se reduce
+		a la grafía.
 
 	Subheader: Instalación
 
@@ -38,11 +38,11 @@ Document (dev.stxt.website): La biblioteca Python
 	Subheader: Parsear
 
 	Content >>
-		`Parser` tiene dos entradas. `parse_result(text)` **acumula todos los errores** y
+		`Parser` tiene dos entradas. `parse_result(text)` acumula todos los errores y
 		devuelve además los nodos que ha podido construir; `parse(text)` lanza una
 		`ParseException` en el primero y devuelve `list[Node]` si no hay ninguno. La primera
-		es la que quiere un editor o un validador; la segunda, un programa para el que un
-		documento inválido es simplemente una excepción.
+		es la adecuada para un editor o un validador; la segunda, para un programa que
+		trata un documento inválido como una excepción.
 
 	Python >>
 		from stxt import Parser, ParseException
@@ -68,14 +68,14 @@ Document (dev.stxt.website): La biblioteca Python
 		`get_line()`, `get_code()` y `get_message()`—. Los errores de gramática son
 		`ValidationException`, una subclase con los mismos atributos, así que un solo bucle
 		recorre los dos e `isinstance` distingue la severidad. Un documento con un error de
-		sintaxis puede seguir devolviendo nodos: el parser se recupera y sigue, para que un
-		editor pueda subrayar todo lo que está mal de una vez.
+		sintaxis puede seguir devolviendo nodos: el parser se recupera y continúa, de modo
+		que un editor pueda señalar todos los errores de una vez.
 
 	Subheader: El árbol
 
 	Content >>
-		`Node` es una clase abstracta con **exactamente dos formas**, y cada una tiene solo lo
-		que es suyo:
+		`Node` es una clase abstracta con exactamente dos formas, y cada una expone solo
+		las operaciones propias de su forma:
 
 		| Clase        | Sintaxis        | Lo propio                                                                                                    |
 		|--------------|-----------------|--------------------------------------------------------------------------------------------------------------|
@@ -94,7 +94,7 @@ Document (dev.stxt.website): La biblioteca Python
 		`TextNode`.
 
 		Detalle propio de este puerto: `get_children()` y `get_text_lines()` devuelven
-		**tuplas** (vistas de solo lectura); el árbol se cambia con `add_child`,
+		tuplas (vistas de solo lectura); el árbol se modifica con `add_child`,
 		`remove_child` y `detach`, nunca mutando lo que devuelven.
 
 		Con el documento del [tutorial](lang-tutorial), la ficha de un libro:
@@ -147,12 +147,12 @@ Document (dev.stxt.website): La biblioteca Python
 	Subsubheader: Construir y modificar
 
 	Content >>
-		Los árboles son mutables y **mantienen su propia integridad**: cada nodo conoce a su
+		Los árboles son mutables y mantienen su propia integridad: cada nodo conoce a su
 		padre, `add_child` engancha los dos extremos y lanza `RuntimeException` si el nodo ya
 		tiene padre (`NODE_ALREADY_ATTACHED`) o es un ancestro (`NODE_CYCLE`); `remove_child`
 		y `detach()` lo deshacen. Los niveles se derivan de la cadena de padres, y la línea
 		solo la fija el parser. En los constructores y fábricas con dos cadenas, la segunda
-		es siempre el **contenido** (valor o texto); el namespace solo aparece en la forma
+		es siempre el contenido (valor o texto); el namespace solo aparece en la forma
 		de tres argumentos, `InlineNode(name, namespace, value)`, y también valen los
 		argumentos con nombre `value=`, `namespace=` y `text=`.
 
@@ -181,13 +181,13 @@ Document (dev.stxt.website): La biblioteca Python
 
 	Content >>
 		Las gramáticas son documentos @STXT@ en los namespaces reservados `@stxt.schema` y
-		`@stxt.template`; la plantilla es la forma de autoría corta y **se compila a un
-		esquema** al cargarla. `UnifiedSchemaProvider` carga cualquiera de las dos con
+		`@stxt.template`; la plantilla es la forma de autoría corta y se compila a un
+		esquema al cargarla. `UnifiedSchemaProvider` carga cualquiera de las dos con
 		`add_file(text)`: parsea, valida contra el meta-esquema que corresponda y registra el
 		esquema por namespace. La validación es un `Validator` que se registra en el
-		`Parser` y corre sobre cada nodo al cerrarlo; solo valida los nodos **con namespace**, que es la regla del lenguaje
-		(STXT-SCHEMA-SPEC §5): un documento sin namespace no está mal, solo no se puede
-		validar.
+		`Parser` y se ejecuta sobre cada nodo al cerrarlo; solo valida los nodos con
+		namespace, que es la regla del lenguaje (STXT-SCHEMA-SPEC §5): un documento sin
+		namespace no es inválido, solo no se puede validar.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -231,12 +231,12 @@ Document (dev.stxt.website): La biblioteca Python
 		schema line 1 [TOO_FEW_CHILDREN]: 0 nodes of 'com.acme.book:isbn' and min is 1
 
 	Content >>
-		Reglas que conviene saber:
+		Reglas de la validación:
 
-		* Un error de cardinalidad se señala en la línea del **padre**, que es quien tiene
+		* Un error de cardinalidad se señala en la línea del padre, que es el nodo con
 		  cero `ISBN`.
 		* Si el documento usa un namespace que el proveedor no conoce, cada nodo produce
-		  un `SCHEMA_NOT_FOUND`; el proveedor **nunca lanza** por un namespace ausente
+		  un `SCHEMA_NOT_FOUND`; el proveedor nunca lanza por un namespace ausente
 		  (`get_schema()` devuelve `None`).
 		* Los nodos sin namespace no se validan (regla del propio `SchemaValidator`); un
 		  documento que es a su vez una definición se valida siempre contra su
@@ -257,9 +257,9 @@ Document (dev.stxt.website): La biblioteca Python
 	Subheader: Resolución: qué gramática aplica a un documento
 
 	Content >>
-		`UnifiedSchemaProvider` espera que le des el texto de la gramática. **La resolución**
-		responde a la pregunta anterior: *dado este documento, ¿qué definiciones le
-		aplican?* `DiscoveryResolver` implementa
+		`UnifiedSchemaProvider` recibe el texto de la gramática. La **resolución**
+		determina qué definiciones aplican a un documento dado. `DiscoveryResolver`
+		implementa
 		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) —los `.stxt/` del documento y de todos
 		sus ancestros, después `~/.stxt` y `/etc/stxt`, precedencia por namespace,
 		`STXT_PATH` sustituye la cadena—, igual que la CLI y la extensión, así que las tres
@@ -267,13 +267,13 @@ Document (dev.stxt.website): La biblioteca Python
 
 		Como en el puerto TypeScript, el resolutor no toca por sí mismo ni el sistema de
 		ficheros ni el entorno: recibe un `DiscoveryFileSystem` y un `DiscoveryEnvironment`.
-		La diferencia es que el paquete **ya trae los dos adaptadores de host**
+		La diferencia es que el paquete incluye los dos adaptadores de host
 		—`OsDiscoveryFileSystem` sobre `os` y `SystemDiscoveryEnvironment` sobre
 		`STXT_PATH`, `~/.stxt` y `/etc/stxt` (o `%ProgramData%\stxt`)— y el atajo
 		`stxt.discovery.resolve(document_dir)` sobre ellos; un test puede pasar un árbol en
 		memoria. La cadena es por documento: se pasa el directorio en el que vive (`None`
 		para la entrada estándar o un búfer sin guardar, que arranca la cadena en el nivel
-		de usuario). Como `DiscoveryResult` **implementa `SchemaProvider`**, resolver y
+		de usuario). Como `DiscoveryResult` implementa `SchemaProvider`, resolver y
 		validar son dos pasos:
 
 	Python >>
@@ -293,8 +293,8 @@ Document (dev.stxt.website): La biblioteca Python
 		result = parser.parse_result(document_text)
 
 	Content >>
-		`DiscoveryResult` dice además **de dónde** sale cada gramática, que es lo que necesita
-		un editor para "ir a la definición" o un diagnóstico que se explique solo:
+		`DiscoveryResult` registra además el origen de cada gramática, que es lo que necesita
+		un editor para «ir a la definición» o un diagnóstico que indique el fichero:
 
 	Python >>
 		definition = discovery.get_definition("com.acme.book")
@@ -306,9 +306,10 @@ Document (dev.stxt.website): La biblioteca Python
 		discovery.get_all_schemas()          # solo los esquemas de las anteriores
 
 	Content >>
-		Para resolver muchos documentos conviene un `DiscoveryResolver` propio, que cachea
-		los niveles por directorio y lee cada `.stxt/` una sola vez; `clear_cache()`
-		cuando los ficheros de definición puedan haber cambiado:
+		Para resolver muchos documentos se puede mantener un `DiscoveryResolver` propio,
+		que cachea los niveles por directorio y lee cada `.stxt/` una sola vez;
+		`clear_cache()` invalida la caché cuando los ficheros de definición pueden haber
+		cambiado:
 
 	Python >>
 		from stxt import DiscoveryResolver, OsDiscoveryFileSystem, SystemDiscoveryEnvironment
@@ -321,8 +322,8 @@ Document (dev.stxt.website): La biblioteca Python
 		Los códigos de error de la resolución son `DISCOVERY_DUPLICATE_NAMESPACE`,
 		`DISCOVERY_NOT_A_DEFINITION`, `DISCOVERY_NOT_PARSEABLE` y
 		`DISCOVERY_INVALID_DEFINITION`; `DiscoveryError` es una clase de datos (`code`,
-		`file`, `message`, `namespace`), no una excepción, porque la spec quiere informar
-		de una definición mala sin detener la carga del resto.
+		`file`, `message`, `namespace`), no una excepción, porque la especificación exige
+		informar de una definición inválida sin detener la carga del resto.
 
 	Subheader: El árbol canónico en JSON
 
@@ -346,10 +347,10 @@ Document (dev.stxt.website): La biblioteca Python
 	Subheader: Escribir STXT
 
 	Content >>
-		`NodeWriter` hace el viaje inverso: serializa un nodo, o una lista de documentos,
-		a texto @STXT@ en forma canónica, con `IndentStyle.TABS` (por defecto) o
-		`IndentStyle.SPACES_4`. Escribe el namespace **donde el nodo lo declara**, no donde
-		difiere del padre: fiel al fuente. Como parte del árbol lógico, un texto que pase
+		`NodeWriter` realiza la operación inversa: serializa un nodo, o una lista de
+		documentos, a texto @STXT@ en forma canónica, con `IndentStyle.TABS` (por defecto)
+		o `IndentStyle.SPACES_4`. Escribe el namespace donde el nodo lo declara, no donde
+		difiere del padre: fiel al texto de origen. Como parte del árbol lógico, un texto que pase
 		por `parse` y `NodeWriter` sale sin comentarios ni líneas en blanco fuera de los
 		bloques —es lo que hace `stxt format --clean`—; el reformateo que los conserva es
 		trabajo de la CLI y de la extensión, no de la biblioteca.
@@ -376,14 +377,13 @@ Document (dev.stxt.website): La biblioteca Python
 	Subheader: Observar el parseo
 
 	Content >>
-		`Observer` es una clase base con cuatro *callbacks* vacíos que se redefinen los que
-		interesen, y que el parser llama **en streaming**: `on_create(node, line_string)` al
+		`Observer` es una clase base con cuatro *callbacks* vacíos, de los que se redefinen
+		los necesarios, y que el parser llama en streaming: `on_create(node, line_string)` al
 		abrir un nodo —ya con padre, namespace efectivo y nivel—, `on_finish(node)` al
 		cerrarlo, `on_comment(line_number, line_string)` y `on_text_line(node,
 		line_number, line_string, line_indent)` por cada línea de un bloque. `Validator` es
-		el otro gancho: corre sobre cada nodo al cerrarlo y **devuelve** una lista de
-		`ValidationException` (no lanza); `SchemaValidator` no es más que un `Validator`
-		integrado.
+		el otro gancho: se ejecuta sobre cada nodo al cerrarlo y devuelve una lista de
+		`ValidationException` (no lanza); `SchemaValidator` es un `Validator` integrado.
 
 	Python >>
 		from stxt import Parser, Observer, Node
@@ -414,7 +414,7 @@ Document (dev.stxt.website): La biblioteca Python
 		| Runtime              | `UnifiedSchemaProvider`, `NodeWriter`, `IndentStyle`, `to_canonical_tree`, `to_canonical_json`  |
 		| Resolución           | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryFileSystem`, `DiscoveryEntry`, `DiscoveryEnvironment`, `OsDiscoveryFileSystem`, `SystemDiscoveryEnvironment` y `stxt.discovery.resolve` |
 
-		Desde la 1.0 esta API queda **congelada dentro de la línea 1.x** del paquete, y el
+		Desde la 1.0 esta API queda congelada dentro de la línea 1.x del paquete, y el
 		lenguaje y el árbol canónico lo están en toda la línea 1.x de la especificación: un
 		documento que parsea y valida hoy parsea y valida igual mañana. Qué se congela
 		exactamente, qué no, y por qué la versión del paquete no es la de la especificación,

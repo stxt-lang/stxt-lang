@@ -2,17 +2,17 @@ Document (dev.stxt.website): The TypeScript library
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 
 	Header: The TypeScript library
 
 	Assert >>
 		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) is the @STXT@
-		parser for **TypeScript and JavaScript**, and the reference port of the ecosystem:
+		parser for TypeScript and JavaScript, and the reference port of the ecosystem:
 		the [command line](tools-cli), the VS Code extension and the
 		[playground](https://play.stxt.dev) run on it and carry no parser of their own. It
 		implements the five specifications —syntax, canonical tree, schemas, templates and
-		resolution— and reports **the same error codes** as the [Java](tools-java) and
+		resolution— and reports the same error codes as the [Java](tools-java) and
 		[Python](tools-python) libraries.
 
 	Content >>
@@ -27,9 +27,9 @@ Document (dev.stxt.website): The TypeScript library
 		npm install @stxt-lang/core
 
 	Content >>
-		The package ships as **CommonJS with type declarations**, so it works the same from
+		The package ships as CommonJS with type declarations, so it works the same from
 		TypeScript, from `require` and from ES modules (`import { Parser } from
-		'@stxt-lang/core'`). **It has no runtime dependencies** and touches neither the
+		'@stxt-lang/core'`). It has no runtime dependencies and touches neither the
 		file system nor the environment —those are injected, as shown under
 		*Resolution*—, so it runs equally in Node and in the browser: the playground is
 		this very library bundled for the client. Its version, and that of the CLI that
@@ -39,11 +39,11 @@ Document (dev.stxt.website): The TypeScript library
 	Subheader: Parsing
 
 	Content >>
-		`Parser` has two entry points. `parseResult(text)` **collects every error** and
+		`Parser` has two entry points. `parseResult(text)` collects every error and
 		also returns the nodes it managed to build; `parse(text)` throws a
 		`ParseException` on the first one and returns `Node[]` when there is none. The
-		former is what an editor or a validator wants; the latter, a program for which an
-		invalid document is simply an exception.
+		former suits an editor or a validator; the latter, a program in which an invalid
+		document is an exception.
 
 	TypeScript >>
 		import { Parser, ParseResult, ParseException } from '@stxt-lang/core';
@@ -77,8 +77,8 @@ Document (dev.stxt.website): The TypeScript library
 	Subheader: The tree
 
 	Content >>
-		`Node` is an abstract class with **exactly two forms**, and each one owns only what
-		is really its own:
+		`Node` is an abstract class with exactly two forms, and each one exposes only what
+		is its own:
 
 		| Class        | Syntax        | What it owns                                                                                                 |
 		|--------------|---------------|--------------------------------------------------------------------------------------------------------------|
@@ -150,7 +150,7 @@ Document (dev.stxt.website): The TypeScript library
 	Subsubheader: Building and editing
 
 	Content >>
-		Trees are mutable and **keep their own integrity**: every node knows its parent,
+		Trees are mutable and keep their own integrity: every node knows its parent,
 		`addChild` links both ends and refuses a node that already has one
 		(`NODE_ALREADY_ATTACHED`) or that is an ancestor (`NODE_CYCLE`); `removeChild` and
 		`detach()` undo it. Levels are derived from the chain of parents, and the line is
@@ -183,13 +183,13 @@ Document (dev.stxt.website): The TypeScript library
 
 	Content >>
 		Grammars are @STXT@ documents in the reserved namespaces `@stxt.schema` and
-		`@stxt.template`; the template is the short authoring form and **compiles to a
-		schema** when loaded. `UnifiedSchemaProvider` loads either kind with
+		`@stxt.template`; the template is the short authoring form and compiles to a
+		schema when loaded. `UnifiedSchemaProvider` loads either kind with
 		`addFile(text)`: it parses, validates against the corresponding meta-schema and
 		registers the schema by namespace. Validation is a `Validator` registered on the
-		`Parser` that runs on each node as it is closed; it only validates nodes
-		**with a namespace**, which is the rule of the language (STXT-SCHEMA-SPEC §5): a
-		document without a namespace is not wrong, it just cannot be validated.
+		`Parser` that runs on each node as it is closed; it only validates nodes with a
+		namespace, which is the rule of the language (STXT-SCHEMA-SPEC §5): a document
+		without a namespace is not invalid, but it cannot be validated.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -234,12 +234,12 @@ Document (dev.stxt.website): The TypeScript library
 		schema line 1 [TOO_FEW_CHILDREN]: 0 nodes of 'com.acme.book:isbn' and min is 1
 
 	Content >>
-		Rules worth knowing:
+		Behaviour rules:
 
 		* A cardinality error is reported on the line of the **parent**, which is the one
 		  with zero `ISBN`.
 		* If the document uses a namespace the provider does not know, each node produces
-		  a `SCHEMA_NOT_FOUND`; the provider **never throws** for a missing namespace
+		  a `SCHEMA_NOT_FOUND`; the provider never throws for a missing namespace
 		  (`getSchema()` returns `null`).
 		* Nodes without a namespace are not validated (a rule of `SchemaValidator` itself);
 		  a document that is itself a definition is always validated against its
@@ -260,18 +260,18 @@ Document (dev.stxt.website): The TypeScript library
 	Subheader: Resolution: which grammar applies to a document
 
 	Content >>
-		`UnifiedSchemaProvider` expects you to hand it the grammar text. **Resolution**
-		answers the previous question: *given this document, which definitions apply to
-		it?* `DiscoveryResolver` is the reference implementation of
+		`UnifiedSchemaProvider` receives the grammar text. **Resolution** answers the
+		previous question: given a document, which definitions apply to it.
+		`DiscoveryResolver` is the reference implementation of
 		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) —the `.stxt/` directories of the
 		document and of all its ancestors, then `~/.stxt` and `/etc/stxt`, per-namespace
 		precedence, `STXT_PATH` replacing the chain—, and it is the same one the CLI and
 		the extension use, so all three agree by construction.
 
-		The resolver **touches neither the file system nor the environment by itself**: a
+		The resolver accesses neither the file system nor the environment by itself: a
 		`DiscoveryFileSystem` and a `DiscoveryEnvironment` are injected. That is what lets
 		the same logic run over Node's `fs`, over an editor's virtual file system or over
-		an in-memory tree in a test. The Node adapters fit in twenty lines:
+		an in-memory tree in a test. Adapters for Node:
 
 	TypeScript >>
 		import * as fs from 'fs/promises';
@@ -307,7 +307,7 @@ Document (dev.stxt.website): The TypeScript library
 
 	Content >>
 		With those in place, resolving a document and validating it are two steps,
-		because `DiscoveryResult` **implements `SchemaProvider`** and goes straight into
+		because `DiscoveryResult` implements `SchemaProvider` and is passed directly to
 		the validator. The chain is per document: pass the directory it lives in (`null`
 		for standard input or an unsaved buffer, which starts the chain at the user
 		level).
@@ -330,8 +330,9 @@ Document (dev.stxt.website): The TypeScript library
 		const result = parser.parseResult(documentText);
 
 	Content >>
-		`DiscoveryResult` also tells you **where** each grammar came from, which is what an
-		editor needs for "go to definition" or a diagnostic that explains itself:
+		`DiscoveryResult` also records where each grammar came from, which is what an
+		editor needs for "go to definition" or a diagnostic that names the origin of the
+		applied definition:
 
 	TypeScript >>
 		const definition = discovery.getDefinition('com.acme.book');
@@ -375,10 +376,10 @@ Document (dev.stxt.website): The TypeScript library
 	Subheader: Writing STXT
 
 	Content >>
-		`NodeWriter` makes the trip back: it serialises a node, or a list of documents, to
+		`NodeWriter` performs the inverse operation: it serialises a node, or a list of documents, to
 		@STXT@ text in canonical form, with `IndentStyle.TABS` (default) or
-		`IndentStyle.SPACES_4`. It writes the namespace **where the node declares it**, not
-		where it differs from the parent: faithful to the source. Since it starts from the
+		`IndentStyle.SPACES_4`. It writes the namespace where the node declares it, not
+		where it differs from the parent. Since it starts from the
 		logical tree, a text that goes through `parse` and `NodeWriter` comes out without
 		comments or blank lines outside blocks —that is what `stxt format --clean` does—;
 		the reformatting that keeps them is the job of the CLI and the extension, not of
@@ -406,7 +407,7 @@ Document (dev.stxt.website): The TypeScript library
 	Subheader: Observing the parse
 
 	Content >>
-		`Observer` receives **streaming** callbacks while the document is parsed:
+		`Observer` receives streaming callbacks while the document is parsed:
 		`onCreate(node, line)` when a node is opened —already with its parent, effective
 		namespace and level—, `onFinish(node)` when it is closed, `onComment(lineNumber,
 		line)` and `onTextLine(node, lineNumber, lineString, line)` for each line of a
@@ -430,7 +431,7 @@ Document (dev.stxt.website): The TypeScript library
 	Subheader: The API surface
 
 	Content >>
-		Everything importable, and only this; nothing else in the package is a contract:
+		The package exports; nothing else is a contract:
 
 		| Group                | Exports                                                                                                                |
 		|----------------------|------------------------------------------------------------------------------------------------------------------------|
@@ -441,7 +442,7 @@ Document (dev.stxt.website): The TypeScript library
 		| Runtime              | `UnifiedSchemaProvider`, `NodeWriter`, `IndentStyle`, `toCanonicalTree`, `toCanonicalJson` and the `Canonical*` types |
 		| Resolution           | `DiscoveryResolver`, `DiscoveryOptions`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryFileSystem`, `DiscoveryEntry`, `DiscoveryEnvironment` |
 
-		From 1.0 on this API is **frozen within the package's 1.x line**, and the language
+		From 1.0 on this API is frozen within the package's 1.x line, and the language
 		and the canonical tree are frozen across the whole 1.x line of the specification: a
 		document that parses and validates today parses and validates the same tomorrow.
 		What exactly is frozen, what is not, and why the package version is not the

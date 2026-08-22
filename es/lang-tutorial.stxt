@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-08-21
+		Last modif: 2026-08-22
 		
 	Header: @STXT@ Tutorial
 	
@@ -15,7 +15,8 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		* Fácil de leer y escribir por personas.
 		* Trivial de parsear por máquinas.
-		* Seguro por diseño.
+		* Seguro por diseño: sin entidades, referencias externas, inclusión de ficheros ni
+		  ejecución de código ([STXT-SPEC §15](stxt-core-ref#s15)).
 		
 		@STXT@ permite representar documentos estructurados mediante:
 		
@@ -36,42 +37,33 @@ Document (dev.stxt.website): STXT Tutorial
 	Subheader: 2. Herramientas
 
 	Content >>
-		Para empezar a trabajar con @STXT@, lo más práctico es usar un editor que
-		permita escribir documentos con comodidad y navegar bien por la jerarquía.
-		La opción recomendada es **Visual Studio Code**, junto con la extensión oficial
-		de @STXT@.
+		El editor de referencia es Visual Studio Code con la extensión oficial
+		`stxt-lang.stxt`.
 		
 		* Repositorio del tutorial y ejemplos:
 		  [Documentos STXT](https://github.com/stxt-lang/stxt-web)
-		* Editor recomendado:
+		* Editor de referencia:
 		  [Visual Studio Code](https://code.visualstudio.com/)
 		* Extensión oficial:
 		  [STXT (stxt-lang.stxt)](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt)
-		* Instalación rápida:
+		* Instalación:
 		  `code --install-extension stxt-lang.stxt`
 		
-		Con esta combinación puedes leer y editar los ejemplos del tutorial de forma
-		más cómoda, mantener bien la indentación y experimentar con la estructura
-		de los documentos sin tener que preparar un entorno complejo.
-		
-		Además, el proyecto de GitHub no contiene sólo este tutorial: incluye más
-		documentos y ejemplos que puedes abrir, modificar, copiar y reutilizar para
-		hacer pruebas. Es recomendable usarlos libremente para experimentar con nodos,
-		bloques de texto, namespaces, templates y schemas, porque esa es la forma más
-		rápida de familiarizarse con el lenguaje.
+		El repositorio contiene, además de este tutorial, otros documentos y ejemplos
+		que pueden abrirse, modificarse y reutilizarse para probar nodos, bloques de
+		texto, namespaces, plantillas y esquemas.
 
-		Si prefieres no instalar nada, el [playground](https://play.stxt.dev) permite
-		seguir todo el tutorial desde el navegador. La lista completa —playground,
-		extensión, línea de comandos y bibliotecas— está en la página
-		[Herramientas](lang-tools); y cómo montar un proyecto y validarlo de verdad, con
-		este mismo ejemplo del libro, en [El entorno de trabajo](lang-workflow).
+		El [playground](https://play.stxt.dev) permite seguir el tutorial desde el
+		navegador sin instalar nada. La lista completa —playground, extensión, línea de
+		comandos y bibliotecas— está en la página [Herramientas](lang-tools); cómo
+		organizar un proyecto y validarlo, con este mismo ejemplo del libro, en
+		[El entorno de trabajo](lang-workflow).
 
 	Subheader: 3. Ejemplo básico: ficha de un libro
 	
 	Content >>
-		Veamos un ejemplo sencillo de un documento @STXT@ que describe un libro (tutorial/book-raw.stxt).
-		No hay validación todavía: es sólo lenguaje @STXT@. Además, no tiene
-		ningún namespace asociado.
+		El siguiente documento describe un libro (tutorial/book-raw.stxt). No tiene
+		namespace ni se valida: es únicamente sintaxis @STXT@.
 				
 	Code >>
 		Book:
@@ -95,7 +87,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		Observaciones:
 		
-		* La jerarquía se define **únicamente por indentación**.
+		* La jerarquía se define únicamente por indentación.
 		* `Summary >>` y `Content >>` son bloques de texto literal: su contenido no se interpreta como @STXT@.
 		* No existe ningún tipo implícito: todo es texto mientras no se valide.
 
@@ -105,12 +97,12 @@ Document (dev.stxt.website): STXT Tutorial
 	Subheader: 4. Indentación y niveles
 
 	Assert >>
-		En @STXT@ la indentación **es** la estructura: no hay llaves, corchetes ni
-		etiquetas de cierre. El nivel de una línea es lo único que decide de quién
-		es hija.
+		En @STXT@ la indentación es la estructura: no hay llaves, corchetes ni
+		etiquetas de cierre. El nivel de una línea es lo único que determina de qué
+		nodo es hija.
 
 	Content >>
-		Las reglas son deliberadamente pequeñas:
+		Las reglas son:
 
 		* **1 tabulador = 1 nivel.**
 		* **4 espacios = 1 nivel**, siempre en múltiplos de 4.
@@ -118,9 +110,9 @@ Document (dev.stxt.website): STXT Tutorial
 		  sólo espacios. **Mezclar ambos en una misma línea es un error de parseo.**
 		* Los niveles deben ser **consecutivos**: no se puede saltar del nivel 1 al 3.
 
-		Líneas distintas de un mismo documento **pueden** usar estilos distintos, porque
-		la jerarquía se compara por **nivel** y no por columnas. No es recomendable, y un
-		parser puede emitir un aviso, pero no es un error.
+		Líneas distintas de un mismo documento pueden usar estilos distintos, porque
+		la jerarquía se compara por nivel y no por columnas. No es un error, aunque un
+		parser puede emitir un aviso.
 
 	Content >>
 		En el ejemplo siguiente `.` representa un espacio y `|-->` un tabulador:
@@ -137,10 +129,9 @@ Document (dev.stxt.website): STXT Tutorial
 		una línea que combina tabuladores y espacios se ve distinta según el ancho de
 		tabulador de cada editor, y la jerarquía dejaría de ser evidente al leerla.
 
-		Que el ancho de nivel sea fijo (1 tab o 4 espacios, nunca 2) tiene además una
-		consecuencia práctica: el nivel de una línea se calcula mirando **sólo esa
-		línea**, sin arrastrar contexto ni mantener una pila de indentaciones. Por eso
-		parsear @STXT@ es trivial.
+		Que el ancho de nivel sea fijo (1 tabulador o 4 espacios, nunca 2) tiene además
+		una consecuencia práctica: el nivel de una línea se calcula a partir de esa
+		línea únicamente, sin contexto previo ni pila de indentaciones.
 
 		Referencia: [STXT-SPEC §8](stxt-core-ref#s8) (indentación y jerarquía) y [§8.3](stxt-core-ref#s8-3)
 		(errores de nivel).
@@ -150,7 +141,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		Un bloque de texto `>>` tiene un **nivel de bloque fijo**: el del nodo `>>` más
 		uno. Ese prefijo es lo único que se valida; todo lo que va después es **texto
-		literal**, y su sangría relativa se conserva tal cual.
+		literal**, y su sangría relativa se conserva.
 
 	Code >>
 		Summary >>
@@ -160,8 +151,8 @@ Document (dev.stxt.website): STXT Tutorial
 			Title: esto tampoco es un nodo.
 
 	Content >>
-		El bloque termina en la primera línea no vacía cuya indentación sea **menor o
-		igual** que la del nodo `>>`, sea un nodo o un comentario. Las líneas vacías no lo
+		El bloque termina en la primera línea no vacía cuya indentación sea menor o
+		igual que la del nodo `>>`, sea un nodo o un comentario. Las líneas vacías no lo
 		cierran. Dentro de un bloque no hay comentarios: es un literal.
 
 		Referencia: [STXT-SPEC §6.1](stxt-core-ref#s6-1) (reglas de los bloques) y [§10.2](stxt-core-ref#s10-2)
@@ -196,10 +187,9 @@ Document (dev.stxt.website): STXT Tutorial
 		pero `Caña` y `Cana`, o `Peña` y `Pena`, son nodos distintos.
 
 	Content >>
-		Es el mismo criterio que usan los nombres de dominio internacionalizados (IDN),
-		y es deliberado: permite escribir documentos en cualquier idioma sin que el
-		lenguaje "corrija" las palabras por detrás ni funda en uno solo dos nombres que
-		para quien lee son distintos.
+		Es el mismo criterio que aplican los nombres de dominio internacionalizados
+		(IDN): permite escribir documentos en cualquier idioma sin que el lenguaje
+		altere las palabras ni unifique dos nombres que para quien lee son distintos.
 
 		Los **namespaces** son la excepción: siguen restringidos a ASCII `[a-z0-9]`
 		(ver sección 7).
@@ -211,8 +201,8 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Content >>
 		@STXT@ admite **comentarios de línea**. Una línea es un comentario cuando su
-		primer carácter (tras la indentación) es `#`; el parser la **descarta por
-		completo**, así que no forma parte ni del árbol ni de los datos.
+		primer carácter (tras la indentación) es `#`; el parser la descarta por
+		completo, de modo que no forma parte ni del árbol ni de los datos.
 
 	Code >>
 		# Ficha de un libro
@@ -222,11 +212,11 @@ Document (dev.stxt.website): STXT Tutorial
 			ISBN: 978-84-123456-7-8
 
 	Content >>
-		Puntos clave:
+		Reglas:
 
 		* Los comentarios son **de línea completa**. No existen comentarios a final de
 		  línea: en `Title: Mi libro # nota`, el `#` y lo que le sigue forman parte del
-		  **valor**, no un comentario.
+		  valor, no un comentario.
 		* La indentación de un comentario **se valida como la de un nodo**: estilo homogéneo
 		  y, como máximo, un nivel más que el último nodo. No mueve la jerarquía. Por estilo,
 		  se recomienda alinearlo con el nodo que describe.
@@ -239,9 +229,8 @@ Document (dev.stxt.website): STXT Tutorial
 	Subheader: 7. Uso de namespaces
 	
 	Assert >>
-		Los namespaces permiten agrupar nodos en categorías. Además, si se define un
-		namespace para un nodo, **los nodos hijos heredan el namespace del padre**, a no ser que uno de ellos
-		lo redefina.
+		Los namespaces agrupan nodos en categorías. Si un nodo declara un namespace,
+		**sus nodos hijos lo heredan**, salvo que uno de ellos lo redefina.
 		
 	Content >>
 		Ejemplo de un documento con namespace (tutorial/book-ns.stxt):
@@ -267,15 +256,14 @@ Document (dev.stxt.website): STXT Tutorial
 					Se describen protocolos, mensajería y patrones de integración.
 	
 	Content >>
-		En este ejemplo vemos el nodo `Book` que pertenece al namespace `com.acme.book`.
-		Además, también vemos nodos `Title`, `Authors`, `Author` y `ISBN`, que al ser
-		descendientes de `Book` también heredan el namespace `com.acme.book`.
+		El nodo `Book` pertenece al namespace `com.acme.book`. Los nodos `Title`,
+		`Authors`, `Author` e `ISBN`, descendientes de `Book`, heredan ese namespace.
 		
-		Reglas clave:
+		Reglas:
 		
 		* El namespace se hereda por los nodos hijos.
-		* Un nodo puede redefinir su namespace si es necesario.
-		* El lenguaje @STXT@ **no valida** el namespace, sólo define las reglas de 
+		* Un nodo puede redefinir su namespace.
+		* El lenguaje @STXT@ no valida el namespace, sólo define las reglas de 
 		  propagación.
 
 		Referencia: [STXT-SPEC §7](stxt-core-ref#s7) (namespaces) y [§7.2](stxt-core-ref#s7-2) (herencia y
@@ -283,40 +271,39 @@ Document (dev.stxt.website): STXT Tutorial
 		
 	Subsubheader: 7.1 Namespaces especiales con `@`
 	Content >>
-		Los namespace pueden empezar o no con `@`. Esto nos indica que son 
-		**namespaces especiales o reservados**. Por ejemplo, tanto los plantillas
-		como los esquemas empiezan por `@`. 
-		
-		Esto es sólo una indicación semántica, pero el funcionamiento es el mismo.
+		Un namespace puede empezar por `@`. Ese prefijo marca los **namespaces
+		especiales o reservados**; por ejemplo, los de las plantillas y los esquemas
+		empiezan por `@`. Es una convención semántica: las reglas de herencia y de
+		comparación son las mismas.
 
-		Eso sí, `@` forma parte del namespace: `@com.acme.book` y `com.acme.book` son
-		namespaces **distintos**, y un documento sólo valida contra el template o schema
-		cuyo namespace coincida exactamente. La rama `@stxt.*` está **reservada** al
-		propio lenguaje (`@stxt.schema`, `@stxt.template`): no debe usarse para
-		namespaces propios.
+		`@` forma parte del namespace: `@com.acme.book` y `com.acme.book` son
+		namespaces distintos, y un documento sólo valida contra la plantilla o el
+		esquema cuyo namespace coincida exactamente. La rama `@stxt.*` está
+		**reservada** al propio lenguaje (`@stxt.schema`, `@stxt.template`) y no debe
+		usarse para namespaces propios.
 	
 	Subsubheader: 7.2 Validación de documentos
 	
 	Content >>
-		Para poder validar semánticamente un documento, debe asociarse a un **namespace**.
-		Una vez tiene el namespace, se usa un esquema (`@stxt.schema`)
-		o template (`@stxt.template`) para validarlo. Las validaciones son extensiones
-		al lenguaje base, que los parsers pueden o no implementar.
+		La validación semántica requiere que el documento tenga un **namespace**; con
+		él, se valida contra un esquema (`@stxt.schema`) o una plantilla
+		(`@stxt.template`). Las validaciones son extensiones al lenguaje base, que los
+		parsers pueden o no implementar.
 
 		Referencia: [STXT-SPEC §17](stxt-core-ref#s17) y [§18](stxt-core-ref#s18), los apéndices sobre la
 		interacción con `@stxt.schema` y `@stxt.template`.
 		
 	Assert >>
 		Para validar un documento **es necesario que pertenezca a un namespace**.\\
-		Por otro lado, un documento con namespace no es obligatorio validarlo.
+		Un documento con namespace no está obligado a validarse.
 			
 	Subheader: 8. Validación con Plantillas
 	
 	Content >>
-		Las **Plantillas** permiten definir reglas estructurales y de tipo
-		de forma compacta. Son ideales para prototipos y documentación viva.
+		Las **plantillas** definen reglas de estructura y de tipo de forma compacta,
+		orientadas a prototipos y documentación viva.
 		
-		Un template es un documento @STXT@ cuyo namespace es `@stxt.template`.
+		Una plantilla es un documento @STXT@ cuyo namespace es `@stxt.template`.
 		
 	Subsubheader: 8.1 Template para libros
 	
@@ -337,7 +324,7 @@ Document (dev.stxt.website): STXT Tutorial
 						Content: (?) TEXT
 							
 	Content >>
-		Qué define este template:
+		Qué define esta plantilla:
 		
 		* `Book` es el nodo raíz esperado.
 		* `Title`, `ISBN` y `Authors` son obligatorios (`(1)`).
@@ -368,7 +355,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Subsubheader: 8.3 Tipos disponibles
 
 	Content >>
-		El tipo se escribe **después** de la cardinalidad. Si no se indica ninguno, el
+		El tipo se escribe después de la cardinalidad. Si no se indica ninguno, el
 		tipo por defecto es `INLINE`. Los más habituales:
 
 		| Tipo       | Forma del valor | Para qué                                        |
@@ -387,10 +374,10 @@ Document (dev.stxt.website): STXT Tutorial
 		—renderizadores, exportadores, editores—, que debería leerlo como CommonMark.
 
 		Sólo `INLINE` y `GROUP` admiten hijos: en cuanto un tipo valida un dato concreto
-		(`NUMBER`, `DATE`, `ENUM`…), ese nodo **es** un dato, y un dato es una hoja.
+		(`NUMBER`, `DATE`, `ENUM`…), ese nodo es un dato, y un dato es una hoja.
 
 		La lista completa de tipos está en [STXT-SCHEMA-SPEC §9](stxt-schema-ref#s9); cómo se escriben
-		en un template, en [STXT-TEMPLATE-SPEC §8](stxt-template-ref#s8) y [§9](stxt-template-ref#s9) (`ENUM`).
+		en una plantilla, en [STXT-TEMPLATE-SPEC §8](stxt-template-ref#s8) y [§9](stxt-template-ref#s9) (`ENUM`).
 
 	Subsubheader: 8.4 Aplicación del template
 
@@ -401,17 +388,17 @@ Document (dev.stxt.website): STXT Tutorial
 		* Comprobar cardinalidades.
 		* Validar tipos básicos (número, fecha, boolean, texto).
 		
-		El lenguaje @STXT@ **no cambia**: el template se aplica sobre el árbol ya parseado.
-		Dependiendo del parser, puede validar al mismo tiempo que parsea el contenido. 
+		El lenguaje @STXT@ no cambia: la plantilla se aplica sobre el árbol ya parseado.
+		Según la implementación, la validación puede realizarse durante el propio parseo.
 		
 		
 	Subheader: 9. Validación con Schemas
 	
 	Content >>
-		Los **Schemas** proporcionan la misma información que un template,
-		pero de forma más explícita y formal.
+		Los **esquemas** proporcionan la misma información que una plantilla,
+		de forma más explícita y formal.
 		
-		Un schema:
+		Un esquema:
 		
 		* Es un documento @STXT@ con namespace `@stxt.schema`.
 		* Define nodos, tipos y cardinalidades por separado.
@@ -464,21 +451,21 @@ Document (dev.stxt.website): STXT Tutorial
 				Type: TEXT
 				
 	Content >>
-		* El schema es más verboso, pero más explícito.
-		* Un template puede compilarse automáticamente a esta forma.
+		* El esquema es más verboso, pero más explícito.
+		* Una plantilla puede compilarse automáticamente a esta forma.
 		* Un validador **DEBERÍA** establecer un criterio de prioridad si
-		  existen esquemas y templates de forma simultánea para un mismo namespace. **Sólo puede
+		  existen esquemas y plantillas de forma simultánea para un mismo namespace. **Sólo puede
 		  haber uno activo**.
 
 		Referencia: [STXT-SCHEMA-SPEC §7](stxt-schema-ref#s7) (`Node`), [§8](stxt-schema-ref#s8) (`Children`) y
-		[§10](stxt-schema-ref#s10) (cardinalidades); la equivalencia con el template, en
+		[§10](stxt-schema-ref#s10) (cardinalidades); la equivalencia con la plantilla, en
 		[STXT-TEMPLATE-SPEC §13](stxt-template-ref#s13); y qué definición gana cuando hay varias, en
 		[STXT-DISCOVERY-SPEC §5](stxt-discovery-ref#s5).
 		
 	Subheader: 10. Documento final validable
 	
 	Content >>
-		Documento @STXT@ completo que puede validarse con el template o el schema anterior:
+		Documento @STXT@ completo que puede validarse con la plantilla o el esquema anteriores:
 		
 	Code >>
 		Book (com.acme.book):
@@ -497,25 +484,27 @@ Document (dev.stxt.website): STXT Tutorial
 		Este documento:
 		
 		* Es @STXT@ válido.
-		* Cumple el template `com.acme.book`.
-		* Cumple el schema `com.acme.book`.
+		* Cumple la plantilla `com.acme.book`.
+		* Cumple el esquema `com.acme.book`.
 
-		Para comprobarlo de verdad —dejar la plantilla en un directorio `.stxt/` y validar
-		desde el terminal o desde el editor— sigue [El entorno de trabajo](lang-workflow).
+		El procedimiento para comprobarlo —colocar la plantilla en un directorio `.stxt/`
+		y validar desde el terminal o desde el editor— está en
+		[El entorno de trabajo](lang-workflow).
 		
 	Subheader: 11. Buenas prácticas
 	
 	Content >>
 		* Usar bloques `>>` para texto largo o literal.
 		* Elegir un estilo de indentación —tabuladores o espacios— y mantenerlo en todo
-		  el documento. Recuerda que mezclarlos **en una misma línea** no es cuestión de
-		  estilo: es un error de parseo (sección 4).
+		  el documento. Mezclarlos en una misma línea no es cuestión de estilo sino un
+		  error de parseo (sección 4).
 		* Escribir los nombres de nodo en el idioma del documento: los acentos y los
-		  alfabetos no latinos son ciudadanos de primera (sección 5).
-		* Usar plantillas para iterar rápido o tener una visión lo más parecida posible a como son los documentos.
+		  alfabetos no latinos se admiten sin restricción (sección 5).
+		* Usar plantillas para iterar con rapidez o para una definición con la misma forma
+		  que los documentos.
 		* Usar esquemas cuando se necesite una descripción más formal de los campos.
 		* Marcar como `MARKDOWN` el texto pensado para renderizarse, y como `TEXT` el que
-		  debe leerse tal cual.
+		  debe leerse literalmente.
 
 		Las normas de estilo del propio lenguaje están en [STXT-SPEC §4.4](stxt-core-ref#s4-4) y
 		[§9.2](stxt-core-ref#s9-2).

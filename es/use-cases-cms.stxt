@@ -3,16 +3,15 @@ Document (dev.stxt.website): CMS y publicaciones
 	Metadata:
 		Author: ChatGPT 5.2
 		Revision: Claude Fable 5
-		Last modif: 2026-08-17
+		Last modif: 2026-08-22
 
 	Header: CMS y publicaciones
 
 	Content >>
 		Un sitio web, un blog, un libro, la documentación de un producto: todo contenido
-		que se publica vive en la misma tensión entre **texto narrativo** (secciones,
-		contexto), **estructura** (capítulos, bloques, relaciones) y **datos** (estado,
-		fechas, autores, etiquetas). Y las herramientas que lo gestionan —los CMS— suelen
-		mezclar demasiadas responsabilidades:
+		que se publica combina **texto narrativo** (secciones, contexto), **estructura**
+		(capítulos, bloques, relaciones) y **datos** (estado, fechas, autores, etiquetas).
+		Las herramientas que lo gestionan —los CMS— suelen acoplar varias responsabilidades:
 
 		* modelo de datos,
 		* interfaz de edición,
@@ -20,14 +19,14 @@ Document (dev.stxt.website): CMS y publicaciones
 		* y presentación final.
 
 	Assert >>
-		@STXT@ propone separar esas capas usando un **formato documental** estable, legible
-		y reutilizable fuera de cualquier herramienta concreta: la publicación es **un
-		documento humano primero**, sin perder validación, transformación ni automatización.
+		@STXT@ separa esas capas con un **formato documental** estable, legible y
+		reutilizable fuera de cualquier herramienta concreta: la publicación es un documento
+		de texto, con validación, transformación y automatización como pasos opcionales.
 
 	Subheader: Qué cubre este caso
 
 	Content >>
-		Aquí entra todo lo que se escribe para publicarse y pasa por algún flujo de
+		Este caso cubre todo lo que se escribe para publicarse y pasa por un flujo de
 		edición y salida:
 
 		* Sitios web corporativos, blogs y portales de contenidos.
@@ -39,28 +38,28 @@ Document (dev.stxt.website): CMS y publicaciones
 	Subheader: Problemas habituales
 
 	Content >>
-		En la práctica se repiten los mismos patrones:
+		Los formatos y herramientas habituales presentan estas limitaciones:
 
 		* **Markdown**: flexible, pero pobre en semántica; metadatos ad hoc en *front matter*
 		  YAML; estructura imposible de validar.
 		* **CMS tradicionales**: modelos rígidos y difíciles de evolucionar; edición
 		  acoplada a una interfaz concreta; versionado y revisión difíciles; exportaciones
 		  limitadas o propietarias; dependencia fuerte de la base de datos.
-		* **XML editorial**: muy potente, demasiado verboso para edición manual.
+		* **XML editorial**: expresivo, pero verboso para la edición manual.
 
-		Con el tiempo, el contenido queda "atrapado" en la herramienta.
+		En los tres casos el contenido queda ligado a la herramienta que lo gestiona.
 
 	Subheader: Enfoque @STXT@
 
 	Content >>
-		@STXT@ encaja como **formato fuente** del contenido:
+		@STXT@ actúa como **formato fuente** del contenido:
 
 		* El CMS no define el formato del documento: lo interpreta y ofrece herramientas
 		  alrededor.
 		* El contenido vive en ficheros, no en la herramienta; se versiona en Git y cada
 		  cambio es un diff textual claro, sin estado oculto en una base de datos.
-		* Un único formato para texto, estructura y datos, con separación clara entre
-		  **contenido** y **reglas** (las plantillas).
+		* Un único formato para texto, estructura y datos, con separación entre contenido
+		  y reglas (las plantillas).
 		* Los renderizadores son intercambiables: el mismo documento sale como web, PDF,
 		  EPUB, feed o API. En un CMS *headless*, @STXT@ es el origen, el parser produce un
 		  árbol neutro y el front consume datos transformados.
@@ -68,10 +67,10 @@ Document (dev.stxt.website): CMS y publicaciones
 	Subheader: Ejemplo 1 — Página web
 
 	Content >>
-		Página típica de un sitio, con metadatos, SEO y contenido libre; la cabecera y el
-		cuerpo son bloques de tipo `MARKDOWN`, así que el editor y el playground los
-		colorean como tal. Un CMS suele trabajar además con bloques o componentes; en
-		@STXT@ son nodos con un `Type` que el renderizador transforma como quiera.
+		Página de un sitio, con metadatos, SEO y contenido libre; la cabecera y el cuerpo
+		son bloques de tipo `MARKDOWN`, y el editor y el playground los resaltan como
+		Markdown. Un CMS suele trabajar además con bloques o componentes; en @STXT@ son
+		nodos con un `Type` que el renderizador transforma según sus propias reglas.
 
 	Code >>
 		Page (com.acme.cms.page):
@@ -139,9 +138,9 @@ Document (dev.stxt.website): CMS y publicaciones
 	Subheader: Ejemplo 2 — Artículo
 
 	Content >>
-		Un artículo con metadatos, autores, estado y texto largo. El texto vive en bloques
-		`>>` —el cuerpo, de tipo `MARKDOWN`, lleva Markdown dentro sin interferir con
-		@STXT@—; la estructura editorial —título, autores, estado— es explícita.
+		Un artículo con metadatos, autores, estado y texto largo. El texto va en bloques
+		de texto `>>` —el cuerpo, de tipo `MARKDOWN`, contiene Markdown que el parser de
+		@STXT@ no interpreta—; la estructura editorial —título, autores, estado— es explícita.
 
 	Code >>
 		Article (com.acme.editorial.article):
@@ -246,7 +245,7 @@ Document (dev.stxt.website): CMS y publicaciones
 		4. Se transforma a HTML, PDF, EPUB u otros formatos.
 		5. Se publica.
 
-		El documento **no conoce** HTML, CSS ni *layout*: la presentación se decide en una
+		El documento no contiene HTML, CSS ni *layout*: la presentación se decide en una
 		fase posterior, y el mismo contenido puede renderizarse de varias formas.
 
 	Subheader: Ventajas prácticas
@@ -254,22 +253,21 @@ Document (dev.stxt.website): CMS y publicaciones
 	Content >>
 		* **Estructura visible**: un editor la ve sin interfaz gráfica; un desarrollador
 		  mapea nodos y bloques sin adivinar.
-		* **Autoría cómoda**: escribir sin pelearse con etiquetas.
-		* **Diffs limpios** y revisión en control de versiones.
-		* **Validación ligera**: evita páginas y artículos incompletos.
+		* **Autoría en texto plano**: sin etiquetas de marcado.
+		* **Diffs legibles** y revisión en control de versiones.
+		* **Validación**: la plantilla rechaza páginas y artículos incompletos.
 		* **Automatización**: índices, tablas de contenidos, feeds, APIs.
-		* **Longevidad**: el contenido sobrevive a herramientas concretas.
+		* **Longevidad**: el contenido no depende de una herramienta concreta.
 
 	Subheader: Recomendaciones
 
 	Content >>
-		* Define pocos tipos de documento claros, y una plantilla para cada uno.
-		* Usa `TEXT` o `MARKDOWN` para el cuerpo y las secciones largas; mantén los
-		  metadatos concisos y estables.
-		* Mantén los bloques simples y bien nombrados.
-		* Deja la presentación fuera del documento y evita lógica condicional en el
-		  contenido.
-		* Usa las plantillas para guiar, no para limitar.
+		* Pocos tipos de documento, y una plantilla para cada uno.
+		* `TEXT` o `MARKDOWN` para el cuerpo y las secciones largas; metadatos concisos y
+		  estables.
+		* Bloques simples, con nombres descriptivos.
+		* La presentación fuera del documento, y sin lógica condicional en el contenido.
+		* Plantillas que exigen la estructura mínima y dejan opcional el resto.
 
 	Subheader: Resumen
 

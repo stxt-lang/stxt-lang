@@ -2,18 +2,17 @@ Document (dev.stxt.website): Corporate documents
 
 	Metadata:
 		Author: ChatGPT 5.2
-		Last modif: 2026-01-11
+		Last modif: 2026-08-22
 		
 	Header: Corporate documents
 	
 	Content >>
-		Corporate documents often live in an awkward middle ground:
-		they need to be **readable and editable by people**, but they also must be
-		**consistent**, **reviewable**, and **processable** for automation.
+		Corporate documents must be readable and editable by people and, at the same time,
+		consistent, reviewable and processable by programs.
 		
-		@STXT@ fits especially well when a “document” is at the same time:
+		@STXT@ applies to documents that combine, at once:
 		
-		* human content (text),
+		* narrative text,
 		* structure (sections, metadata),
 		* and data (fields, lists, states).
 		
@@ -32,26 +31,29 @@ Document (dev.stxt.website): Corporate documents
 	Subheader: Why @STXT@ here
 	
 	Content >>
-		In a corporate environment these problems tend to show up:
+		Common requirements of a corporate document:
 		
-		* **Multiple authors**: non-technical and technical people editing the same document.
-		* **Templates**: everyone wants the same format, but nobody wants to fight with a heavy editor.
-		* **Review**: clear comparisons (diff) in Git.
-		* **Automation**: extract fields (status, owners, dates, actions) without breaking the text.
+		* **Multiple authors**: technical and non-technical people edit the same document.
+		* **Templates**: every document of a given type follows the same format, without
+		  depending on a specific editor.
+		* **Review**: readable differences (diff) in Git.
+		* **Automation**: extraction of fields (status, owners, dates, actions) without
+		  altering the text.
 		* **Evolution**: the document format changes over time.
 		
 		@STXT@ provides:
 		
-		* Explicit structure via indentation, easy to write.
-		* Free text in `>>` blocks without “escapes” or extra syntax.
+		* Explicit structure through indentation.
+		* Free text in `>>` text blocks, with no escape sequences or additional syntax.
 		* Optional validation with `@stxt.template` or `@stxt.schema`.
-		* Namespaces to separate semantics by document type (`com.acme.minutes`, `com.acme.report`, etc.).
+		* Namespaces that separate semantics by document type (`com.acme.minutes`,
+		  `com.acme.report`, etc.).
 		
 	Subheader: Example 1 — Meeting minutes
 	
 	Content >>
-		Realistic document: mix of metadata, agenda, decisions, and actions.
-		Free text lives in blocks, and what’s processable remains as nodes.
+		The minutes combine metadata, agenda, decisions and actions. Free text goes in text
+		blocks; processable data, in inline nodes.
 		
 	Code >>
 		Minutes (com.acme.corp.minutes):
@@ -119,25 +121,25 @@ Document (dev.stxt.website): Corporate documents
 	Subheader: What gets automated with this document
 	
 	Content >>
-		With the STXT tree you can:
+		From the document tree, a program can:
 		
-		* List open actions and due dates.
+		* List the open actions and their due dates.
 		* Generate a summary for email or chat.
-		* Calculate metrics: actions per team, times, “done” percentage.
+		* Compute metrics: actions per team, deadlines, percentage of actions in state `Done`.
 		* Export to other formats (for example, JSON for a dashboard).
 		
 		At the same time:
 		
-		* `Notes >>` and `Rationale >>` keep human text without artificial constraints.
+		* The `Notes >>` and `Rationale >>` blocks preserve the free text without interpreting it.
 		
 	Subheader: Example 2 — Status report
 	
 	Content >>
-		A status report is ideal for:
+		A status report combines:
 		
-		* “Status” as validatable data.
-		* “Detail” as free text.
-		* Risks and blockers as processable lists.
+		* the status as validatable data,
+		* the detail as free text,
+		* the risks and blockers as processable lists.
 		
 	Code >>
 		Status Report (com.acme.corp.status):
@@ -180,8 +182,8 @@ Document (dev.stxt.website): Corporate documents
 	Subheader: Validation with @stxt.template
 	
 	Content >>
-		To avoid “half-done” documents, a template can ensure minimal structure
-		(without becoming too verbose).
+		A template (`@stxt.template`) defines the minimum structure of the document; the
+		validator rejects incomplete documents.
 		
 	Code >>
 		Template (@stxt.template): com.acme.corp.minutes
@@ -225,39 +227,46 @@ Document (dev.stxt.website): Corporate documents
 	Content >>
 		This template:
 		
-		* Guarantees minimum fields (for example `Title`, `Date`).
-		* Controls states with `ENUM`.
-		* Allows free text where appropriate (`TEXT`).
-		* Keeps the document pleasant to edit (doesn’t force “Node:” like in schema).
-		* Reuses `Title`, `Id`, and `Owner` through `@Node Name` references: within a namespace a node name identifies **one** node, so its reappearances are referenced instead of redefined.
-		* That is why `Decision status` and `Action status` are distinct nodes: their `ENUM` values differ, and a reference cannot change them.
+		* Requires the mandatory fields (`Title`, `Date`) with the `(1)` cardinality.
+		* Restricts the states with `ENUM`.
+		* Declares the free-text fields with the `TEXT` type.
+		* Uses the short authoring form: it does not require the `Node` and `Child` nodes of a
+		  schema.
+		* Reuses `Title`, `Id` and `Owner` through `@Node Name` references: within a namespace a
+		  node name identifies **one** node, so its reappearances are referenced instead of
+		  redefined.
+		* That is why `Decision status` and `Action status` are distinct nodes: their `ENUM`
+		  values differ, and a reference cannot change them.
 		
 	Subheader: Validation with @stxt.schema
 	
 	Content >>
-		If you need strict contracts, schema is the most explicit form.
-		It is useful when:
+		The schema (`@stxt.schema`) is the explicit form of the same definition. It is used when:
 		
-		* There are multiple producers/consumers of the document.
-		* Strong interoperability between teams or systems is desired.
-		* There is “compliance” (audits, controls, archiving).
+		* There are several producers and consumers of the document.
+		* Interoperability between teams or systems is required.
+		* There are compliance requirements (audits, controls, archiving).
 		
-		Note: the equivalent schema is longer; it is usually generated from the template.
+		The equivalent schema is longer; every template compiles to an equivalent schema, so
+		it does not need to be written by hand.
 		
 	Subheader: Practical advantages in a company
 	
 	Content >>
-		* **Clear diffs in Git**: changes usually affect specific lines, not blobs.
-		* **Less friction**: it’s edited with any text editor.
-		* **Standardization**: template as a lightweight contract for “we all write the same way”.
-		* **Gradual automation**: you can start without validation, and add it later without changing the syntax.
-		* **Integration**: a parser produces a tree; from there you can export to JSON/XML/YAML or feed internal tools.
+		* **Diffs in Git**: changes affect specific lines, not binary files.
+		* **Editing**: with any text editor.
+		* **Standardization**: the template acts as the contract of the format.
+		* **Gradual adoption**: a document without validation is valid; the template is added
+		  later without changing the syntax.
+		* **Integration**: the parser produces a tree that is exported to JSON, XML or YAML or
+		  consumed by internal tools.
 		
 	Subheader: Style recommendations
 	
 	Content >>
-		* Use stable node names (“Action Items”, “Decision”, “Action status”…).
-		* Reserve `>>` for long text, context, or rationale.
-		* Keep cardinalities small and explicit in templates to avoid ambiguity.
-		* If you need states, use `ENUM` with bounded values.
-		* If the document is going to live in Git, avoid automatic re-formatting (mass whitespace changes) to keep diffs useful.
+		* Stable node names (“Action Items”, “Decision”, “Action status”…).
+		* `>>` text blocks only for long text, context or rationale.
+		* Explicit, bounded cardinalities in templates.
+		* States as `ENUM` with bounded values.
+		* In documents versioned in Git, no automatic reformatting (mass whitespace changes)
+		  that hides the changes in the diffs.
