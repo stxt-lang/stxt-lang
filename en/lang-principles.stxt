@@ -1,0 +1,190 @@
+Document (dev.stxt.website): Design principles
+
+	Metadata:
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-08-22
+
+	Header: Design principles
+
+	Assert >>
+		@STXT@ is a language designed for people (**Human-First**). Everything else
+		—simplicity, indentation as structure, parsing safety, validation as a separate
+		layer— derives from that principle. This page collects those decisions, what each one
+		costs, and where the rule that makes it normative lives.
+
+	Content >>
+		The specifications state what is valid; this page states why. It adds no rule: each
+		principle links to the section of the reference that fixes it, and in case of any
+		discrepancy the reference prevails.
+
+	Subheader: 1. The document is written for people
+
+	Content >>
+		This is the principle the others follow from. An @STXT@ document must be readable and
+		writable without tools: the natural form of the text is the correct form, and the
+		machine adapts to that form, not the other way round. Hence there are no braces,
+		brackets, mandatory quotes or closing tags, and a document looks like an outline of
+		notes. Where the convenience of the person and that of the machine conflict, the
+		person wins.
+
+		**Cost.** What a person does not need to read or write does not exist in the
+		language, however convenient it would be for a program: no internal references, no
+		implicit types, no compact notations. Each of the following principles is a
+		consequence of this one, with its own cost.
+
+		Reference: [STXT-SPEC §1](stxt-core-ref#s1).
+
+	Subheader: 2. Simplicity above all
+
+	Content >>
+		Simplicity is a requirement of the language on three planes at once, and none of them
+		is sacrificed for the other two:
+
+		* **Simple to write and read.** The rules a person needs to know fit in one page of
+		  the [tutorial](lang-tutorial): a node, a text block, indentation, a comment.
+		* **Simple to implement.** A conforming parser is a line-by-line pass with a stack;
+		  the complete grammar fits in an appendix, and the language is described in neutral
+		  pseudocode from which the existing ports were derived. Writing a new parser is a
+		  matter of days, not months, and requires no library.
+		* **Simple to process.** The cost of parsing is linear in the size of the document: a
+		  single pass, no backtracking, no reference resolution and no second traversal. The
+		  level of each line is decided from that line alone, and a parser can emit each root
+		  tree as soon as the next one begins, with memory proportional to the nesting depth
+		  rather than to the file size.
+
+		**Cost.** What does not fit in a simple language is left out, however useful it might
+		be: no syntactic shortcuts, no sugar, no extensions. Every proposal to add something is
+		measured against the three planes, and making any one of them more expensive is enough
+		to reject it.
+
+		Reference: [STXT-SPEC §8.1](stxt-core-ref#s8-1), [§15](stxt-core-ref#s15) and
+		[§16](stxt-core-ref#s16).
+
+	Subheader: 3. Indentation is the structure
+
+	Content >>
+		Hierarchy is expressed by indentation alone: one tab or four spaces per level, never
+		mixed on the same line, and never skipping levels. The level of a line is computed
+		from that line alone, without remembering the previous ones, and the hierarchy looks
+		the same in any editor.
+
+		**Cost.** Two spaces are not half a level: they are an error. A document with
+		inconsistent indentation is not interpreted charitably; it is rejected
+		(`INDENTATION_MIXED`, `INDENTATION_SPACES_NOT_VALID`). The `stxt format` tool exists
+		to normalize a file, not the parser to guess it.
+
+		Reference: [STXT-SPEC §8.1](stxt-core-ref#s8-1) and [§8.3](stxt-core-ref#s8-3).
+
+	Subheader: 4. Few forms, and none redundant
+
+	Content >>
+		A node is `Name: value` or `Name >>`. There is no list syntax, no quoted string
+		syntax, no escaping, and no shorthand for the frequent case. A list is a repeated
+		node:
+
+	Code >>
+		Authors:
+			Author: María Pérez
+			Author: Juan García
+
+	Content >>
+		This is not an end in itself, but what results from applying simplicity to the
+		syntax: each additional form would be one more rule to learn, to implement and to
+		maintain.
+
+		**Cost.** Some things take longer to write than in other formats. In exchange, two
+		authors write the same document the same way, a reader does not have to know several
+		equivalent notations, and the parser has no special cases.
+
+		Reference: [STXT-SPEC §4](stxt-core-ref#s4), [§5](stxt-core-ref#s5) and
+		[§6](stxt-core-ref#s6).
+
+	Subheader: 5. Free text is literal
+
+	Content >>
+		Everything indented under a `>>` node is text as written: `:`, `#` and `>>` mean
+		nothing inside, there are no escape sequences, and relative indentation is preserved.
+		A paragraph, a code fragment or a block of Markdown is pasted into the document
+		without transformation.
+
+		**Cost.** Inside a block there is no @STXT@ structure and no comments: a `#` at the
+		block's level closes the block instead of commenting. What needs structure is written
+		as nodes; what is text, as a block. There is no middle ground.
+
+		Reference: [STXT-SPEC §6](stxt-core-ref#s6) and [§9.1](stxt-core-ref#s9-1).
+
+	Subheader: 6. Parsing safety ahead of expressiveness
+
+	Content >>
+		@STXT@ has no entities, references, anchors, file inclusion, tags that instantiate
+		objects, or any form of evaluation. Namespaces are restricted to ASCII to rule out
+		homograph attacks. The result of parsing is always a tree of nodes and text, and a
+		conforming parser can process a document from an untrusted source with bounded
+		memory.
+
+		**Cost.** There is no way to reuse a fragment within a document or to compose
+		several files from the language. What repeats, repeats; what is composed, the
+		application composes.
+
+		Reference: [STXT-SPEC §15](stxt-core-ref#s15) and [§7.1](stxt-core-ref#s7-1).
+
+	Subheader: 7. Names are compared by their canonical form
+
+	Content >>
+		`Title`, `title` and `TITLE` are the same node; `Start date`, `start-date` and
+		`start_date` too. The comparison lowercases and unifies separators, but keeps accents
+		and non-Latin letters: `Peña` and `Pena` are two different nodes, as they are two
+		different words.
+
+		**Cost.** A missing accent in a name is not silently corrected: it produces a
+		different node, which a schema detects as undeclared. It is the same criterion applied
+		by internationalized domain names.
+
+		Reference: [STXT-SPEC §4.3](stxt-core-ref#s4-3).
+
+	Subheader: 8. Validation is a separate, optional and closed layer
+
+	Content >>
+		The parser needs no schemas. A document without a namespace, or with a namespace for
+		which there is no definition, is a valid document that cannot be validated. When
+		there is a schema, the content model is closed: an undeclared node is an error, not
+		extra data to be ignored. The order of children is preserved in the tree but not
+		validated.
+
+		**Cost.** Every field a document uses must be declared. And there are things an
+		@STXT@ schema deliberately does not express: patterns over values, default values,
+		conditional rules between fields, mandatory order, and types for embedded formats.
+		That semantics belongs to the application; the schema stays small and predictable.
+
+		Reference: [STXT-SCHEMA-SPEC §5](stxt-schema-ref#s5), [§6](stxt-schema-ref#s6) and
+		[§11](stxt-schema-ref#s11); [STXT-DISCOVERY-SPEC §4](stxt-discovery-ref#s4) for how
+		definitions are located.
+
+	Subheader: 9. The same tree everywhere
+
+	Content >>
+		Two conforming implementations produce, for the same document, the same canonical
+		tree and the same error codes. The tree has a normative JSON representation, and the
+		codes are identical across all libraries and do not change from 1.0 on. Human-facing
+		output —the text of a message, the layout of a report— is deliberately outside that
+		guarantee.
+
+		**Cost.** A new port has no freedom in the shape of the tree or in the codes, and must
+		pass the same conformance corpus as the others.
+
+		Reference: [STXT-TREE-SPEC](stxt-tree-ref), [STXT-SPEC §11.1](stxt-core-ref#s11-1) and
+		[Stability and versions](lang-stability).
+
+	Subheader: What @STXT@ is not
+
+	Content >>
+		* **It is not a lightweight markup language.** Markdown formats a text; @STXT@ gives
+		  structure to a document, and formatted text goes inside its blocks.
+		* **It is not a programming or templating language.** There are no variables,
+		  inclusions, conditionals or expressions, and there will not be.
+		* **It is not a format closed on itself.** Every document has a canonical JSON
+		  representation, and from there any other format can be reached.
+
+		These decisions are closed: a change to any of them would be a major version of the
+		corresponding specification, not an extension.

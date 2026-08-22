@@ -1,0 +1,190 @@
+Document (dev.stxt.website): Principios de diseño
+
+	Metadata:
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-08-22
+
+	Header: Principios de diseño
+
+	Assert >>
+		@STXT@ es un lenguaje pensado para las personas (**Human-First**). Todo lo demás
+		—la sencillez, la indentación como estructura, la seguridad del parseo, la validación
+		como capa aparte— se deriva de ese principio. Esta página recoge esas decisiones, lo
+		que cada una cuesta y dónde está la regla que la hace normativa.
+
+	Content >>
+		Las especificaciones dicen qué es válido; esta página dice por qué. No añade ninguna
+		regla: cada principio enlaza a la sección de la referencia que lo fija, y ante
+		cualquier discrepancia manda la referencia.
+
+	Subheader: 1. El documento se escribe para personas
+
+	Content >>
+		Este es el principio del que salen los demás. Un documento @STXT@ debe poder leerse y
+		escribirse sin herramientas: la forma natural del texto es la forma correcta, y la
+		máquina se adapta a esa forma, no al revés. De ahí que no haya llaves, corchetes,
+		comillas obligatorias ni etiquetas de cierre, y que un documento parezca un esquema de
+		notas. Donde la comodidad de la persona y la de la máquina entran en conflicto, gana
+		la persona.
+
+		**Coste.** Lo que una persona no necesita leer ni escribir no existe en el lenguaje,
+		aunque a un programa le resultara cómodo: no hay referencias internas, ni tipos
+		implícitos, ni notaciones compactas. Cada uno de los principios siguientes es una
+		consecuencia de este, con su propio coste.
+
+		Referencia: [STXT-SPEC §1](stxt-core-ref#s1).
+
+	Subheader: 2. La sencillez por encima de todo
+
+	Content >>
+		La sencillez es un requisito del lenguaje en tres planos a la vez, y ninguno se
+		sacrifica por los otros dos:
+
+		* **Sencillo de escribir y leer.** Las reglas que una persona necesita conocer caben en
+		  una página del [tutorial](lang-tutorial): un nodo, un bloque de texto, la
+		  indentación, un comentario.
+		* **Sencillo de implementar.** Un parser conforme es un recorrido línea a línea con
+		  una pila; la gramática completa cabe en un apéndice y el lenguaje se describe en
+		  pseudocódigo neutro del que se han derivado los puertos existentes. Escribir un
+		  parser nuevo es un trabajo de días, no de meses, y no requiere ninguna biblioteca.
+		* **Sencillo de procesar.** El coste de parsear es lineal en el tamaño del documento:
+		  una sola pasada, sin retroceso, sin resolver referencias y sin segundo recorrido. El
+		  nivel de cada línea se decide con esa sola línea, y un parser puede emitir cada
+		  árbol raíz en cuanto empieza el siguiente, con memoria del orden de la profundidad
+		  de anidamiento y no del tamaño del fichero.
+
+		**Coste.** Lo que no cabe en un lenguaje sencillo se queda fuera, aunque sea útil:
+		no hay atajos sintácticos, ni azúcar, ni extensiones. Cada propuesta de añadir algo se
+		mide contra los tres planos, y basta con que encarezca uno para descartarla.
+
+		Referencia: [STXT-SPEC §8.1](stxt-core-ref#s8-1), [§15](stxt-core-ref#s15) y
+		[§16](stxt-core-ref#s16).
+
+	Subheader: 3. La indentación es la estructura
+
+	Content >>
+		La jerarquía se expresa únicamente con la indentación: un tabulador o cuatro espacios
+		por nivel, sin mezclarlos en una misma línea, y sin saltar niveles. El nivel de una
+		línea se calcula a partir de esa sola línea, sin recordar las anteriores, y la
+		jerarquía se ve igual en cualquier editor.
+
+		**Coste.** Dos espacios no son medio nivel: son un error. Un documento con indentación
+		inconsistente no se interpreta con la mejor intención; se rechaza
+		(`INDENTATION_MIXED`, `INDENTATION_SPACES_NOT_VALID`). La herramienta `stxt format`
+		existe para normalizar un fichero, no el parser para adivinarlo.
+
+		Referencia: [STXT-SPEC §8.1](stxt-core-ref#s8-1) y [§8.3](stxt-core-ref#s8-3).
+
+	Subheader: 4. Pocas formas, y ninguna redundante
+
+	Content >>
+		Un nodo es `Nombre: valor` o `Nombre >>`. No hay sintaxis de lista, ni de cadena entre
+		comillas, ni de escape, ni notación abreviada para el caso frecuente. Una lista es un
+		nodo repetido:
+
+	Code >>
+		Authors:
+			Author: María Pérez
+			Author: Juan García
+
+	Content >>
+		Esto no es un fin en sí mismo, sino lo que sale de aplicar la sencillez a la sintaxis:
+		cada forma adicional sería una regla más que aprender, que implementar y que
+		mantener.
+
+		**Coste.** Algunas cosas son más largas de escribir que en otros formatos. A cambio,
+		dos autores escriben el mismo documento de la misma manera, un lector no tiene que
+		conocer varias notaciones equivalentes, y el parser no tiene casos especiales.
+
+		Referencia: [STXT-SPEC §4](stxt-core-ref#s4), [§5](stxt-core-ref#s5) y
+		[§6](stxt-core-ref#s6).
+
+	Subheader: 5. El texto libre es literal
+
+	Content >>
+		Todo lo indentado bajo un nodo `>>` es texto tal cual: `:`, `#` y `>>` no significan
+		nada dentro, no hay secuencias de escape y la indentación relativa se conserva. Un
+		párrafo, un fragmento de código o un bloque de Markdown se pegan en el documento sin
+		transformarlos.
+
+		**Coste.** Dentro de un bloque no hay estructura @STXT@ ni comentarios: un `#` al
+		nivel del bloque cierra el bloque en lugar de comentarlo. Lo que necesita estructura
+		se escribe como nodos; lo que es texto, como bloque. No hay un punto intermedio.
+
+		Referencia: [STXT-SPEC §6](stxt-core-ref#s6) y [§9.1](stxt-core-ref#s9-1).
+
+	Subheader: 6. La seguridad del parseo por delante de la expresividad
+
+	Content >>
+		@STXT@ no tiene entidades, referencias, anclas, inclusión de ficheros, etiquetas que
+		instancien objetos ni ninguna forma de evaluación. Los namespaces se restringen a
+		ASCII para excluir los ataques homográficos. El resultado de parsear es siempre un
+		árbol de nodos y texto, y un parser conforme puede procesar un documento de una fuente
+		no confiable con memoria acotada.
+
+		**Coste.** No hay forma de reutilizar un fragmento dentro de un documento ni de
+		componer varios ficheros desde el lenguaje. Lo que se repite, se repite; lo que se
+		compone, lo compone la aplicación.
+
+		Referencia: [STXT-SPEC §15](stxt-core-ref#s15) y [§7.1](stxt-core-ref#s7-1).
+
+	Subheader: 7. Los nombres se comparan por su forma canónica
+
+	Content >>
+		`Título`, `título` y `TÍTULO` son el mismo nodo; `Fecha de alta`, `fecha-de-alta` y
+		`fecha_de_alta`, también. La comparación pasa a minúsculas y unifica los separadores,
+		pero conserva los acentos y las letras no latinas: `Peña` y `Pena` son dos nodos
+		distintos, como lo son dos palabras distintas.
+
+		**Coste.** Un acento olvidado en un nombre no se corrige en silencio: produce un nodo
+		distinto, que con un esquema se detecta como no declarado. Es el mismo criterio que
+		aplican los nombres de dominio internacionalizados.
+
+		Referencia: [STXT-SPEC §4.3](stxt-core-ref#s4-3).
+
+	Subheader: 8. La validación es una capa aparte, opcional y cerrada
+
+	Content >>
+		El parser no necesita esquemas. Un documento sin namespace, o con un namespace para el
+		que no hay definición, es un documento válido que no se puede validar. Cuando hay
+		esquema, el modelo de contenido es cerrado: un nodo no declarado es un error, no un
+		dato extra que se ignora. El orden de los hijos se conserva en el árbol pero no se
+		valida.
+
+		**Coste.** Cada campo que un documento usa debe estar declarado. Y hay cosas que un
+		esquema @STXT@ no expresa a propósito: patrones sobre valores, valores por defecto,
+		reglas condicionales entre campos, orden obligatorio y tipos para formatos incrustados.
+		Esa semántica pertenece a la aplicación; el esquema se mantiene pequeño y predecible.
+
+		Referencia: [STXT-SCHEMA-SPEC §5](stxt-schema-ref#s5), [§6](stxt-schema-ref#s6) y
+		[§11](stxt-schema-ref#s11); [STXT-DISCOVERY-SPEC §4](stxt-discovery-ref#s4) para cómo
+		se localizan las definiciones.
+
+	Subheader: 9. El mismo árbol en todas partes
+
+	Content >>
+		Dos implementaciones conformes producen, para el mismo documento, el mismo árbol
+		canónico y los mismos códigos de error. El árbol tiene una representación JSON
+		normativa, y los códigos son idénticos en todas las bibliotecas y no cambian a partir
+		de la 1.0. La salida para personas —el texto de un mensaje, el formato de un informe—
+		queda deliberadamente fuera de esa garantía.
+
+		**Coste.** Un puerto nuevo no tiene libertad en la forma del árbol ni en los códigos, y
+		debe pasar el mismo corpus de conformidad que los demás.
+
+		Referencia: [STXT-TREE-SPEC](stxt-tree-ref), [STXT-SPEC §11.1](stxt-core-ref#s11-1) y
+		[Estabilidad y versiones](lang-stability).
+
+	Subheader: Lo que @STXT@ no es
+
+	Content >>
+		* **No es un lenguaje de marcado ligero.** Markdown da formato a un texto; @STXT@ da
+		  estructura a un documento, y el texto con formato va dentro de sus bloques.
+		* **No es un lenguaje de programación ni de plantillas.** No hay variables, inclusiones,
+		  condicionales ni expresiones, y no las habrá.
+		* **No es un formato cerrado sobre sí mismo.** Todo documento tiene una representación
+		  JSON canónica, y de ahí se llega a cualquier otro formato.
+
+		Estas decisiones están cerradas: un cambio en cualquiera de ellas sería una versión
+		mayor de la especificación correspondiente, no una ampliación.

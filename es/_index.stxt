@@ -4,6 +4,9 @@ Document (dev.stxt.website): STXT: El Libro
 	Link: Introducción
 		Page: index
 		
+	Link: Principios de diseño
+		Page: lang-principles
+		
 	Link: Tutorial
 		Page: lang-tutorial
 	
