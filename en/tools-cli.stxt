@@ -30,7 +30,7 @@ Document (dev.stxt.website): The command line
 		npm install -g @stxt-lang/cli
 		stxt --version
 
-		stxt 0.10.0 (@stxt-lang/core 0.10.0, spec 1.0)
+		stxt 1.0.0 (@stxt-lang/core 1.0.0, spec 1.0)
 
 	Content >>
 		`--version` prints three versions: the command's, that of the parser inside it, and that of
@@ -44,8 +44,10 @@ Document (dev.stxt.website): The command line
 
 	Content >>
 		To update, `npm update -g @stxt-lang/cli`; to remove it,
-		`npm uninstall -g @stxt-lang/cli`. Until 1.0, a minor release can change the
-		command surface; the version number and the release notes are in the
+		`npm uninstall -g @stxt-lang/cli`. From 1.0 on, the commands, their options, the
+		exit codes and `--format json` are stable within the 1.x line; the human-facing
+		output is not (see [Stability and versions](lang-stability)). The version number
+		and the release notes are in the
 		[repository](https://github.com/stxt-lang/stxt-cli).
 
 	Subheader: Synopsis

@@ -13,6 +13,9 @@ Document (dev.stxt.website): STXT: The Book
 	Link: Tools
 		Page: lang-tools
 	
+	Link: Stability and versions
+		Page: lang-stability
+	
 	Link: FAQ
 		Page: faq
 	

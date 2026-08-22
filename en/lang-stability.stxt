@@ -1,0 +1,91 @@
+Document (dev.stxt.website): Stability and versions
+
+	Metadata:
+		Author: Claude Fable 5
+		Last modif: 2026-08-21
+
+	Header: Stability and versions
+
+	Assert >>
+		**A document that is valid in @STXT@ 1.0 is valid across the whole 1.x line**, whatever
+		tool reads it. This page states exactly what 1.0 freezes, what it does not, and how to
+		read the version numbers.
+
+	Content >>
+		Putting a format into a pipeline, building a tool on top of it or porting it to another
+		language are investments, and nobody makes them on something that may move. That is why
+		1.0 is not a number: it is a promise, and it belongs in one short place.
+
+	Subheader: What is frozen
+
+	Content >>
+		| Surface | Promise |
+		|---|---|
+		| **The language** —the five specifications: [STXT-SPEC](stxt-core-ref), [STXT-SCHEMA-SPEC](stxt-schema-ref), [STXT-TEMPLATE-SPEC](stxt-template-ref), [STXT-DISCOVERY-SPEC](stxt-discovery-ref) and [STXT-TREE-SPEC](stxt-tree-ref)— | Whatever is valid in 1.0 is valid in any 1.x, and means the same. A 1.x only **adds**; it never invalidates or reinterprets. |
+		| **The canonical tree** (STXT-TREE-SPEC) | The JSON produced by `stxt describe` and exposed by the libraries is a stable interchange format: same fields, same meaning, same result in every implementation. |
+		| **The error codes** (`INDENTATION_MIXED`, `CHILD_NOT_DECLARED`, `SCHEMA_NOT_FOUND`…) | They are identical in every implementation and are neither renamed nor reused. A test that depends on a code keeps working. |
+		| **The in-memory API of each library**, within its 1.x line | What `@stxt-lang/core`, `dev.stxt:stxt-core` or `stxt` exports in its 1.0 is still there, with the same signature, in all of its 1.x releases. Each library has its own line (see below). |
+
+		The first row is the one that matters: it is **your documents** that are protected, not
+		a particular tool. The other three protect what is built on top.
+
+	Subheader: What is not frozen
+
+	Content >>
+		Said out loud so that nobody relies on it:
+
+		* **The text of error messages.** It gets refined and translated. What is stable is the
+		  code (`[CHILD_NOT_DECLARED]`), not the sentence next to it; a test or a script that
+		  compares messages will break sooner or later.
+		* **The convenience facades and adapters** of the libraries —what exists to type less in
+		  the easy case, or to bind the library to a platform's file system or environment—.
+		  They are outside the normative scope and may grow or change shape within a 1.x; the
+		  core API they wrap may not.
+		* **The human-facing output of the [command line](tools-cli)**: the layout of the
+		  `validate` report, the `--help` text. What goes to machines —the exit codes
+		  `0`/`1`/`2`, `--format json` and the canonical tree— is stable.
+		* **The style rules** (the sections marked *SHOULD* in the specifications): they are
+		  recommendations and may be refined without any document becoming invalid.
+
+	Subheader: The specification version and the package version
+
+	Content >>
+		There are two numberings, and it matters not to mix them up.
+
+		**Each specification carries its own number**, `major.minor`, in its `Metadata`, and all
+		five start at `1.0`. They are independent: the core is expected to be very stable, while
+		schema or template may evolve at their own pace, as XML Schema does with respect to XML
+		or JSON Schema with respect to JSON. **"@STXT@ 1.0", said on its own, is the version of
+		[STXT-SPEC](stxt-core-ref)**: the base syntax is what defines what a document is.
+
+		**Each library carries its package version**, and that one is a number per product:
+		`@stxt-lang/core` on npm, `dev.stxt:stxt-core` on Maven Central, `stxt` on PyPI. It
+		goes up when the library changes —a new function, a fix—, not when the language does.
+
+		Hence the rule worth keeping in mind: **conformance is declared against the version of
+		the specification, not of the package**. If one day `@stxt-lang/core` is at 1.3 and
+		`dev.stxt:stxt-core` at 1.1, they still read **the same @STXT@**, because both implement
+		STXT-SPEC 1.0. The three libraries expose that version as a constant (`SPEC_VERSION`)
+		and `stxt --version` prints it next to the command line's own. A port written by
+		someone else does exactly the same: it states which specification version it conforms
+		to.
+
+		Up to 1.0 the three libraries have shared the same number and the same scope. From
+		there on, the number that ties them together is the specification's; the package number
+		follows the life of each one.
+
+	Subheader: How the numbers go up
+
+	Content >>
+		The rule is in [STXT-SPEC §1.1](stxt-core-ref#s1-1) and it is deliberately strict:
+
+		* The **major** of a specification goes up if something that was valid **stops being
+		  valid or changes meaning**. A "clarification" that invalidates what a conforming
+		  implementation accepted counts too: the effect decides, not the intent.
+		* The **minor** goes up if something is **only added** without invalidating anything.
+
+		The libraries follow semantic versioning within their line: an incompatible change in
+		the in-memory API is a package major, and is announced as such. A specification major
+		is something else, far rarer: none is planned, and should one ever happen, the
+		implementations would say so through `SPEC_VERSION` and it would come with an
+		explanation and a migration path; **never as a silent reinterpretation**.

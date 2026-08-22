@@ -238,3 +238,12 @@ Document (dev.stxt.website): Preguntas frecuentes
 		el primero corren la extensión de VS Code, la CLI y el playground. Todo está en la
 		página [Herramientas](lang-tools); y para probar sin instalar nada,
 		[play.stxt.dev](https://play.stxt.dev).
+
+	Subsubheader: ¿Qué promete la 1.0?
+
+	Content >>
+		Que un documento válido hoy lo será en toda la línea 1.x: el lenguaje, el árbol canónico
+		y los códigos de error quedan congelados, y la API de cada biblioteca dentro de su propia
+		línea 1.x. No se congelan el texto de los mensajes ni las fachadas de comodidad. La
+		conformidad se declara contra la versión de la especificación (`SPEC_VERSION`), no
+		contra la del paquete. Está escrito entero en [Estabilidad y versiones](lang-stability).

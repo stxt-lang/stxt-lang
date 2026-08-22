@@ -190,8 +190,6 @@ Document (dev.stxt.website): The TypeScript library
 		`Parser` that runs on each node as it is closed; it only validates nodes
 		**with a namespace**, which is the rule of the language (STXT-SCHEMA-SPEC §5): a
 		document without a namespace is not wrong, it just cannot be validated.
-		`ConditionalValidator` used to wrap it to apply that rule; it is now redundant and
-		deprecated.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -211,7 +209,7 @@ Document (dev.stxt.website): The TypeScript library
 
 	TypeScript >>
 		import {
-		    Parser, UnifiedSchemaProvider, SchemaValidator, ConditionalValidator,
+		    Parser, UnifiedSchemaProvider, SchemaValidator,
 		    ValidationException,
 		} from '@stxt-lang/core';
 
@@ -219,7 +217,7 @@ Document (dev.stxt.website): The TypeScript library
 		provider.addFile(templateText);            // throws if the template does not validate against its meta-schema
 
 		const parser = new Parser();
-		parser.registerValidator(new ConditionalValidator(new SchemaValidator(provider)));
+		parser.registerValidator(new SchemaValidator(provider));
 
 		const result = parser.parseResult(documentText);
 		for (const error of result.getErrors()) {
@@ -315,7 +313,7 @@ Document (dev.stxt.website): The TypeScript library
 		level).
 
 	TypeScript >>
-		import { Parser, SchemaValidator, ConditionalValidator, DiscoveryResolver } from '@stxt-lang/core';
+		import { Parser, SchemaValidator, DiscoveryResolver } from '@stxt-lang/core';
 
 		const resolver = new DiscoveryResolver(new NodeFileSystem(), new NodeEnvironment());
 		const discovery = await resolver.resolve('/home/ana/libros/docs');
@@ -328,7 +326,7 @@ Document (dev.stxt.website): The TypeScript library
 		}
 
 		const parser = new Parser();
-		parser.registerValidator(new ConditionalValidator(new SchemaValidator(discovery)));
+		parser.registerValidator(new SchemaValidator(discovery));
 		const result = parser.parseResult(documentText);
 
 	Content >>
@@ -440,12 +438,14 @@ Document (dev.stxt.website): The TypeScript library
 		| Errors               | `ParseException`, `ValidationException`                                                                                |
 		| Extension points     | `Observer`                                                                                                             |
 		| Schemas              | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaValidator`, `transformNodeToSchema`, `transformTemplateNodeToSchema` |
-		| Runtime              | `UnifiedSchemaProvider`, `ConditionalValidator`, `NodeWriter`, `IndentStyle`, `toCanonicalTree`, `toCanonicalJson` and the `Canonical*` types |
+		| Runtime              | `UnifiedSchemaProvider`, `NodeWriter`, `IndentStyle`, `toCanonicalTree`, `toCanonicalJson` and the `Canonical*` types |
 		| Resolution           | `DiscoveryResolver`, `DiscoveryOptions`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryFileSystem`, `DiscoveryEntry`, `DiscoveryEnvironment` |
 
-		Until 1.0, a minor release can change the in-memory API (0.7.0 redid the node
-		model), but **never the language or the canonical tree**: a document that parses
-		and validates today parses and validates the same tomorrow. The release notes of
+		From 1.0 on this API is **frozen within the package's 1.x line**, and the language
+		and the canonical tree are frozen across the whole 1.x line of the specification: a
+		document that parses and validates today parses and validates the same tomorrow.
+		What exactly is frozen, what is not, and why the package version is not the
+		specification version, in [Stability and versions](lang-stability). The release notes of
 		each version are in the [repository](https://github.com/stxt-lang/stxt-js), which
 		is also where parser and validation errors are reported —including those seen
 		through the CLI, the extension or the playground—.

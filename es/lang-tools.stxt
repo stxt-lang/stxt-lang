@@ -2,7 +2,7 @@ Document (dev.stxt.website): Herramientas
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-20
+		Last modif: 2026-08-21
 
 	Header: Herramientas
 
@@ -148,14 +148,14 @@ Document (dev.stxt.website): Herramientas
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>0.8.0</version>
+		    <version>1.0.0</version>
 		</dependency>
 
 	Content >>
 		O con Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:0.8.0'
+		implementation 'dev.stxt:stxt-core:1.0.0'
 
 	Subsubheader: Python
 

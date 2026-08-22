@@ -239,3 +239,12 @@ Document (dev.stxt.website): Frequently asked questions
 		Code extension, the CLI and the playground run on the first one. Everything is on the
 		[Tools](lang-tools) page; and to try it without installing anything,
 		[play.stxt.dev](https://play.stxt.dev).
+
+	Subsubheader: What does 1.0 promise?
+
+	Content >>
+		That a document valid today stays valid across the whole 1.x line: the language, the
+		canonical tree and the error codes are frozen, and each library's API within its own
+		1.x line. Message text and convenience facades are not frozen. Conformance is declared
+		against the specification version (`SPEC_VERSION`), not the package version. The full
+		statement is in [Stability and versions](lang-stability).

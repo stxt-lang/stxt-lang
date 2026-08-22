@@ -188,8 +188,6 @@ Document (dev.stxt.website): The Python library
 		`Parser` that runs on each node as it is closed; it only validates nodes
 		**with a namespace**, which is the rule of the language (STXT-SCHEMA-SPEC §5): a
 		document without a namespace is not wrong, it just cannot be validated.
-		`ConditionalValidator` used to wrap it to apply that rule; it is now redundant and
-		deprecated.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -209,7 +207,7 @@ Document (dev.stxt.website): The Python library
 
 	Python >>
 		from stxt import (
-		    Parser, UnifiedSchemaProvider, SchemaValidator, ConditionalValidator,
+		    Parser, UnifiedSchemaProvider, SchemaValidator,
 		    ValidationException,
 		)
 
@@ -217,7 +215,7 @@ Document (dev.stxt.website): The Python library
 		provider.add_file(template_text)            # raises if the template does not validate against its meta-schema
 
 		parser = Parser()
-		parser.register_validator(ConditionalValidator(SchemaValidator(provider)))
+		parser.register_validator(SchemaValidator(provider))
 
 		result = parser.parse_result(document_text)
 		for error in result.get_errors():
@@ -278,7 +276,7 @@ Document (dev.stxt.website): The Python library
 		validating are two steps:
 
 	Python >>
-		from stxt import Parser, SchemaValidator, ConditionalValidator
+		from stxt import Parser, SchemaValidator
 		from stxt.discovery import resolve
 
 		discovery = resolve("/home/ana/libros/docs")
@@ -290,7 +288,7 @@ Document (dev.stxt.website): The Python library
 		    print(f"[{error.code}] {error.file}: {error.message}")
 
 		parser = Parser()
-		parser.register_validator(ConditionalValidator(SchemaValidator(discovery)))
+		parser.register_validator(SchemaValidator(discovery))
 		result = parser.parse_result(document_text)
 
 	Content >>
@@ -413,11 +411,14 @@ Document (dev.stxt.website): The Python library
 		| Extension points     | `Observer`, `Validator`                                                                                                |
 		| Schemas              | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaProviderMemory`, `SchemaProviderMeta`, `SchemaValidator`, `transform_node_to_schema`, `SCHEMA_NAMESPACE` |
 		| Templates            | `MetaTemplateSchemaProvider`, `TemplateSchemaProviderMemory`, `transform_template_node_to_schema`, `TEMPLATE_NAMESPACE`  |
-		| Runtime              | `UnifiedSchemaProvider`, `ConditionalValidator`, `NodeWriter`, `IndentStyle`, `to_canonical_tree`, `to_canonical_json`  |
+		| Runtime              | `UnifiedSchemaProvider`, `NodeWriter`, `IndentStyle`, `to_canonical_tree`, `to_canonical_json`  |
 		| Resolution           | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryFileSystem`, `DiscoveryEntry`, `DiscoveryEnvironment`, `OsDiscoveryFileSystem`, `SystemDiscoveryEnvironment` and `stxt.discovery.resolve` |
 
-		Until 1.0, a minor release can change the in-memory API, but **never the language
-		or the canonical tree**: a document that parses and validates today parses and
-		validates the same tomorrow. The release notes of each version are in the
+		From 1.0 on this API is **frozen within the package's 1.x line**, and the language
+		and the canonical tree are frozen across the whole 1.x line of the specification: a
+		document that parses and validates today parses and validates the same tomorrow.
+		What exactly is frozen, what is not, and why the package version is not the
+		specification version, in [Stability and versions](lang-stability). The release
+		notes of each version are in the
 		[repository](https://github.com/stxt-lang/stxt-python), which is also where its
 		errors are reported.

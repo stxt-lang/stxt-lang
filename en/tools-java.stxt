@@ -31,14 +31,14 @@ Document (dev.stxt.website): The Java library
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>0.9.1</version>
+		    <version>1.0.0</version>
 		</dependency>
 
 	Content >>
 		Or with Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:0.9.1'
+		implementation 'dev.stxt:stxt-core:1.0.0'
 
 	Content >>
 		The javadoc of every version is on
@@ -294,15 +294,13 @@ Document (dev.stxt.website): The Java library
 		* Nodes without a namespace are not validated (a rule of `SchemaValidator` itself);
 		  a document that is itself a definition is always validated against its
 		  meta-schema. Registering a `SchemaValidator` by hand gives the same behaviour as
-		  the facade, the CLI and the extension; the old `ConditionalValidator` that wrapped
-		  it is now redundant and deprecated.
+		  the facade, the CLI and the extension.
 
 	Java >>
-		import dev.stxt.runtime.ConditionalValidator;
 		import dev.stxt.schema.SchemaValidator;
 
 		Parser parser = new Parser();
-		parser.registerValidator(new ConditionalValidator(new SchemaValidator(STXT.schemaProvider(loader))));
+		parser.registerValidator(new SchemaValidator(STXT.schemaProvider(loader)));
 
 	Content >>
 		* The available value types are those of STXT-SCHEMA-SPEC: `INLINE`, `BLOCK`,
@@ -345,7 +343,6 @@ Document (dev.stxt.website): The Java library
 		import dev.stxt.discovery.DiscoveryError;
 		import dev.stxt.discovery.DiscoveryResolver;
 		import dev.stxt.discovery.DiscoveryResult;
-		import dev.stxt.runtime.ConditionalValidator;
 		import dev.stxt.schema.SchemaValidator;
 
 		DiscoveryResolver resolver = new DiscoveryResolver();
@@ -359,7 +356,7 @@ Document (dev.stxt.website): The Java library
 		}
 
 		Parser parser = new Parser();
-		parser.registerValidator(new ConditionalValidator(new SchemaValidator(discovery)));
+		parser.registerValidator(new SchemaValidator(discovery));
 		ParseResult result = parser.parseResult(documentText);
 
 	Content >>
@@ -492,12 +489,14 @@ Document (dev.stxt.website): The Java library
 		| `dev.stxt.schema`     | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaValidator`, `SchemaProviderResources`, `SchemaProviderCache`, `SchemaProviderMeta`, `SchemaParser`, `Type`, `TypeRegistry`, and the types in `dev.stxt.schema.type` |
 		| `dev.stxt.template`   | `TemplateParser`, `TemplateSchemaProvider`, `MetaTemplateSchemaProvider`                                              |
 		| `dev.stxt.resources`  | `ResourcesLoader`, `ResourcesLoaderDirectory`                                                                        |
-		| `dev.stxt.runtime`    | `STXT` (the facade), `ConditionalValidator`, `NodeWriter` and `IndentStyle`, `TreeJson`                              |
+		| `dev.stxt.runtime`    | `STXT` (the facade), `NodeWriter` and `IndentStyle`, `TreeJson`                              |
 		| `dev.stxt.discovery`  | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryEnvironment`, `SystemDiscoveryEnvironment` |
 
-		Until 1.0, a minor release can change the in-memory API (0.7.0 redid the node
-		model), but **never the language or the canonical tree**: a document that parses
-		and validates today parses and validates the same tomorrow. The release notes of
+		From 1.0 on this API is **frozen within the package's 1.x line**, and the language
+		and the canonical tree are frozen across the whole 1.x line of the specification: a
+		document that parses and validates today parses and validates the same tomorrow.
+		What exactly is frozen, what is not, and why the package version is not the
+		specification version, in [Stability and versions](lang-stability). The release notes of
 		each version are in the `CHANGELOG.md` of the
 		[repository](https://github.com/stxt-lang/stxt-java), which is also where its
 		errors are reported.

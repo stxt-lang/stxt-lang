@@ -1,0 +1,93 @@
+Document (dev.stxt.website): Estabilidad y versiones
+
+	Metadata:
+		Author: Claude Fable 5
+		Last modif: 2026-08-21
+
+	Header: Estabilidad y versiones
+
+	Assert >>
+		**Un documento válido en @STXT@ 1.0 es válido en toda la línea 1.x**, lo lea la
+		herramienta que lo lea. Esta página dice exactamente qué queda congelado con la 1.0,
+		qué no, y cómo leer los números de versión.
+
+	Content >>
+		Meter un formato en un pipeline, escribir sobre él una herramienta o hacer un puerto a
+		otro lenguaje son inversiones, y nadie las hace sobre algo que puede moverse. Por eso
+		la 1.0 no es un número: es una promesa, y conviene que esté escrita en un sitio corto.
+
+	Subheader: Qué se congela
+
+	Content >>
+		| Superficie | Promesa |
+		|---|---|
+		| **El lenguaje** —las cinco especificaciones: [STXT-SPEC](stxt-core-ref), [STXT-SCHEMA-SPEC](stxt-schema-ref), [STXT-TEMPLATE-SPEC](stxt-template-ref), [STXT-DISCOVERY-SPEC](stxt-discovery-ref) y [STXT-TREE-SPEC](stxt-tree-ref)— | Lo que es válido en 1.0 lo es en cualquier 1.x, y significa lo mismo. Una 1.x solo **añade**; nunca invalida ni reinterpreta. |
+		| **El árbol canónico** (STXT-TREE-SPEC) | El JSON que produce `stxt describe` y que exponen las bibliotecas es un formato de intercambio estable: mismos campos, mismo significado, mismo resultado en todas las implementaciones. |
+		| **Los códigos de error** (`INDENTATION_MIXED`, `CHILD_NOT_DECLARED`, `SCHEMA_NOT_FOUND`…) | Son idénticos en todas las implementaciones y no se renombran ni se reutilizan. Un test que dependa de un código sigue valiendo. |
+		| **La API en memoria de cada biblioteca**, dentro de su línea 1.x | Lo que exporta `@stxt-lang/core`, `dev.stxt:stxt-core` o `stxt` en su 1.0 sigue ahí, con la misma firma, en todas sus 1.x. Cada biblioteca tiene su propia línea (ver más abajo). |
+
+		La primera fila es la que importa: son **tus documentos** los que quedan protegidos, no
+		una herramienta concreta. Las otras tres protegen lo que se construye encima.
+
+	Subheader: Qué no se congela
+
+	Content >>
+		Lo decimos en voz alta para que nadie se apoye en ello:
+
+		* **El texto de los mensajes de error.** Se afinan y se traducen. Lo estable es el
+		  código (`[CHILD_NOT_DECLARED]`), no la frase que lo acompaña; un test o un script
+		  que compare mensajes se romperá tarde o temprano.
+		* **Las fachadas de comodidad y los adaptadores** de las bibliotecas —lo que existe para
+		  escribir menos en el caso fácil, o para atar la biblioteca al sistema de ficheros o al
+		  entorno de una plataforma—. Están fuera del alcance normativo y pueden crecer o cambiar
+		  de forma dentro de una 1.x; la API de núcleo que envuelven, no.
+		* **La salida de la [línea de comandos](tools-cli)** pensada para personas: el formato
+		  del informe de `validate`, el texto de `--help`. Lo que va a máquinas —los códigos de
+		  salida `0`/`1`/`2`, `--format json` y el árbol canónico— sí es estable.
+		* **Las normas de estilo** (las secciones marcadas como *DEBERÍA* en las
+		  especificaciones): son recomendaciones y pueden afinarse sin que un documento deje de
+		  ser válido.
+
+	Subheader: La versión de la especificación y la del paquete
+
+	Content >>
+		Hay dos numeraciones, y es importante no confundirlas.
+
+		**Cada especificación lleva su propio número**, `mayor.menor`, en su `Metadata`, y las
+		cinco arrancan en `1.0`. Son independientes: el núcleo se espera muy estable, y el
+		esquema o la plantilla pueden evolucionar a otro ritmo, como XML Schema respecto a XML o
+		JSON Schema respecto a JSON. **«@STXT@ 1.0», dicho por sí solo, es la versión de
+		[STXT-SPEC](stxt-core-ref)**: la sintaxis base es lo que define qué es un documento.
+
+		**Cada biblioteca lleva la versión de su paquete**, y esa sí es un número por
+		producto: `@stxt-lang/core` en npm, `dev.stxt:stxt-core` en Maven Central, `stxt` en
+		PyPI. Sube cuando cambia la biblioteca —una función nueva, un arreglo—, no cuando
+		cambia el lenguaje.
+
+		De ahí la regla que conviene tener clara: **la conformidad se declara contra la versión
+		de la especificación, no contra la del paquete**. Si un día `@stxt-lang/core` va por la
+		1.3 y `dev.stxt:stxt-core` por la 1.1, siguen leyendo **el mismo @STXT@**, porque las dos
+		implementan STXT-SPEC 1.0. Las tres bibliotecas exponen esa versión como constante
+		(`SPEC_VERSION`) y `stxt --version` la enseña junto a la de la propia línea de comandos.
+		Un puerto que escriba otra persona hace exactamente lo mismo: anuncia contra qué versión
+		de la especificación es conforme.
+
+		Hasta la 1.0 las tres bibliotecas han ido con el mismo número y el mismo alcance. A
+		partir de ahí, el número que las une es el de la especificación; el del paquete lo marca
+		la vida de cada una.
+
+	Subheader: Cómo suben los números
+
+	Content >>
+		La regla está en [STXT-SPEC §1.1](stxt-core-ref#s1-1) y es deliberadamente dura:
+
+		* El **mayor** de una especificación sube si algo que era válido **deja de serlo o cambia
+		  de significado**. Cuenta también una "aclaración" que deje inválido lo que una
+		  implementación conforme aceptaba: decide el efecto, no la intención.
+		* El **menor** sube si **solo se añade** sin invalidar nada existente.
+
+		Las bibliotecas siguen versionado semántico dentro de su línea: un cambio incompatible
+		en la API en memoria es un mayor del paquete, y se anuncia como tal. Un mayor de la
+		especificación es otra cosa, mucho más rara: no hay ninguno previsto, y el día que lo
+		hubiera, las implementaciones lo dirían con `SPEC_VERSION` y vendría acompañado de una
+		explicación y de un camino de migración; **nunca de una reinterpretación silenciosa**.
