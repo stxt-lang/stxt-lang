@@ -13,31 +13,6 @@ Document (dev.stxt.website): Frequently asked questions
 
 	Subheader: The language
 
-	Subsubheader: Why not YAML, JSON or TOML?
-
-	Content >>
-		Because they solve a different problem. JSON and TOML are designed for data; YAML covers
-		data and text at the cost of a large grammar and well-known behaviours (`NO` turning
-		into false, variable indentation widths, anchors, tags that instantiate objects).
-		@STXT@ is designed for **documents**: content a person writes and reads, with
-		structure and paragraphs of free text mixed together.
-
-		What sets it apart:
-
-		* **Free text is literal.** Everything indented under a `>>` node is literal text, with
-		  no escapes and no quotes; `:`, `#` and `>>` have no meaning inside it.
-		* **One way to write each element.** `Name: value` or `Name >>`, one tab or four
-		  spaces per level. There are no several syntaxes for a list.
-		* **The parser is minimal and secure by design**: no entities, no references, no file
-		  inclusion, no code execution, no ambiguous identifiers. See
-		  [STXT-SPEC §15](stxt-core-ref#s15).
-		* **Validation is a separate, optional layer**, with a closed content model that
-		  rejects a misspelled name instead of accepting it silently.
-
-		For data intended for another machine, JSON remains a suitable choice; every @STXT@
-		document also has a canonical JSON representation (see *How is it converted to
-		JSON?*).
-
 	Subsubheader: Is it a data format or a document format?
 
 	Content >>
@@ -46,6 +21,63 @@ Document (dev.stxt.website): Frequently asked questions
 		is a tree of named nodes; each node carries either a value and children, or a block of
 		text. That describes a data record as well as a twenty-page document. The
 		[use cases](use-cases-corporate-docs) walk through that range.
+
+	Subsubheader: What sets it apart from other formats?
+
+	Content >>
+		@STXT@ is designed for people, and the characteristics that define it follow from
+		that principle:
+
+		* **Simplicity on three planes.** The rules to know fit in one page; a conforming
+		  parser is a line-by-line pass with a stack and is written in days, without
+		  libraries; and the cost of parsing is linear, in a single pass, with no backtracking
+		  or references, and memory proportional to the depth rather than to the size of the
+		  document.
+		* **Indentation is the structure.** One tab or four spaces per level; the level of a
+		  line is decided from that line alone. No braces, brackets, mandatory quotes or
+		  closing tags.
+		* **Free text is literal.** Everything indented under a `>>` node is text as written,
+		  with no escapes and no quotes; `:`, `#` and `>>` have no meaning inside it.
+		* **Few forms, and none redundant.** `Name: value` or `Name >>`; a list is a repeated
+		  node. Two authors write the same document the same way.
+		* **Parsing safety by design.** No entities, references, anchors, file inclusion or
+		  code execution; ASCII namespaces, no ambiguous identifiers. See
+		  [STXT-SPEC §15](stxt-core-ref#s15).
+		* **Names by their canonical form.** `Title` and `title` are the same node; accents are
+		  kept, as in internationalized domain names.
+		* **Separate, optional and closed validation.** The parser needs no schemas; when
+		  there are schemas, an undeclared node is an error, not data to be ignored.
+		* **The same tree everywhere.** A canonical JSON representation and the same error
+		  codes in every implementation.
+
+		Each of these decisions, with its cost and the reference section that fixes it, is in
+		[Design principles](lang-principles).
+
+	Subsubheader: Why are there no lists?
+
+	Content >>
+		Because everything is a list. The children of a node are an ordered sequence, and the
+		same name may be repeated as many times as needed; the tree preserves the order of
+		appearance. An @STXT@ document is already a list of root nodes, and every inline node
+		is a list of children. That is why no separate syntax is needed to express one.
+
+		A list of elements of the same kind is written as a container node with the same
+		child repeated:
+
+	Code >>
+		Authors:
+			Author: María Pérez
+			Author: Juan García
+			Author: Ana López
+
+	Content >>
+		With a schema, the child's cardinality (`Min`/`Max`, or `(+)` and `(*)` in a
+		template) fixes how many times it may appear. And since the children of any node may
+		have different names, a heterogeneous sequence —chapters and annexes interleaved, for
+		instance— needs nothing more than writing them in order.
+
+		It is a consequence of having few forms and none redundant; see
+		[Design principles](lang-principles) and [STXT-SPEC §8.5](stxt-core-ref#s8-5).
 
 	Subsubheader: Which file extension and media type are used?
 

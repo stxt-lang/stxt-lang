@@ -13,31 +13,6 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 	Subheader: El lenguaje
 
-	Subsubheader: ¿Por qué no YAML, JSON o TOML?
-
-	Content >>
-		Porque resuelven otro problema. JSON y TOML están pensados para datos; YAML cubre datos
-		y texto a costa de una gramática extensa y de comportamientos conocidos (`NO` que se
-		convierte en falso, indentación de ancho variable, anclas, tags que instancian
-		objetos). @STXT@ está pensado para **documentos**: contenido que una persona escribe y
-		lee, con estructura y con párrafos de texto libre mezclados.
-
-		Lo que lo distingue:
-
-		* **El texto libre es literal.** Todo lo indentado bajo un nodo `>>` es texto literal,
-		  sin escapes ni comillas; `:`, `#` y `>>` no tienen significado dentro.
-		* **Una sola forma de escribir cada elemento.** `Nombre: valor` o `Nombre >>`, un
-		  tabulador o cuatro espacios por nivel. No hay varias sintaxis para una lista.
-		* **El parser es mínimo y seguro por diseño**: sin entidades, sin referencias, sin
-		  inclusión de ficheros, sin ejecución de código, sin ambigüedad de identificadores. Ver
-		  [STXT-SPEC §15](stxt-core-ref#s15).
-		* **La validación es una capa aparte y opcional**, con un modelo de contenido cerrado
-		  que rechaza un nombre mal escrito en lugar de aceptarlo en silencio.
-
-		Para datos destinados a otra máquina, JSON sigue siendo una opción adecuada; todo
-		documento @STXT@ tiene además una representación JSON canónica (ver *¿Cómo lo
-		convierto a JSON?*).
-
 	Subsubheader: ¿Es un formato de datos o de documentos?
 
 	Content >>
@@ -47,6 +22,63 @@ Document (dev.stxt.website): Preguntas frecuentes
 		valor y unos hijos, o bien un bloque de texto. Con eso se describe tanto una ficha de
 		datos como un documento de veinte páginas. Los [casos de uso](use-cases-corporate-docs)
 		recorren ese abanico.
+
+	Subsubheader: ¿Qué lo distingue de otros formatos?
+
+	Content >>
+		@STXT@ está diseñado para las personas, y de ese principio salen las características
+		que lo definen:
+
+		* **La sencillez en los tres planos.** Las reglas que hay que conocer caben en una
+		  página; un parser conforme es un recorrido línea a línea con una pila y se escribe en
+		  días, sin bibliotecas; y el coste de parsear es lineal, en una sola pasada, sin
+		  retroceso ni referencias, con memoria proporcional a la profundidad y no al tamaño
+		  del documento.
+		* **La indentación es la estructura.** Un tabulador o cuatro espacios por nivel; el
+		  nivel de una línea se decide con esa sola línea. No hay llaves, corchetes, comillas
+		  obligatorias ni etiquetas de cierre.
+		* **El texto libre es literal.** Todo lo indentado bajo un nodo `>>` es texto tal cual,
+		  sin escapes ni comillas; `:`, `#` y `>>` no tienen significado dentro.
+		* **Pocas formas, y ninguna redundante.** `Nombre: valor` o `Nombre >>`; una lista es
+		  un nodo repetido. Dos autores escriben el mismo documento de la misma manera.
+		* **Seguridad del parseo por diseño.** Sin entidades, referencias, anclas, inclusión de
+		  ficheros ni ejecución de código; namespaces en ASCII, sin ambigüedad de
+		  identificadores. Ver [STXT-SPEC §15](stxt-core-ref#s15).
+		* **Nombres por su forma canónica.** `Título` y `título` son el mismo nodo; los acentos
+		  se conservan, como en los nombres de dominio internacionalizados.
+		* **Validación aparte, opcional y cerrada.** El parser no necesita esquemas; cuando los
+		  hay, un nodo no declarado es un error, no un dato que se ignora.
+		* **El mismo árbol en todas partes.** Una representación JSON canónica y los mismos
+		  códigos de error en todas las implementaciones.
+
+		Cada una de estas decisiones, con lo que cuesta y la sección de la referencia que la
+		fija, está en [Principios de diseño](lang-principles).
+
+	Subsubheader: ¿Por qué no hay listas?
+
+	Content >>
+		Porque todo son listas. Los hijos de un nodo son una secuencia ordenada, y un mismo
+		nombre puede repetirse tantas veces como haga falta; el árbol conserva el orden de
+		aparición. Un documento @STXT@ es ya una lista de nodos raíz, y cada nodo inline es
+		una lista de hijos. Por eso no hace falta una sintaxis aparte para expresarla.
+
+		Una lista de elementos de un mismo tipo se escribe como un nodo contenedor con el
+		mismo hijo repetido:
+
+	Code >>
+		Authors:
+			Author: María Pérez
+			Author: Juan García
+			Author: Ana López
+
+	Content >>
+		Con un esquema, la cardinalidad del hijo (`Min`/`Max`, o `(+)` y `(*)` en una
+		plantilla) fija cuántas veces puede aparecer. Y como los hijos de cualquier nodo
+		admiten nombres distintos, una secuencia heterogénea —capítulos y anexos
+		intercalados, por ejemplo— no necesita nada más que escribirlos en orden.
+
+		Es una consecuencia de tener pocas formas y ninguna redundante; ver
+		[Principios de diseño](lang-principles) y [STXT-SPEC §8.5](stxt-core-ref#s8-5).
 
 	Subsubheader: ¿Qué extensión y qué media type se usan?
 
