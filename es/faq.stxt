@@ -82,6 +82,30 @@ Document (dev.stxt.website): Preguntas frecuentes
 		Es una consecuencia de tener pocas formas y ninguna redundante; ver
 		[Principios de diseño](lang-principles) y [STXT-SPEC §8.5](stxt-core-ref#s8-5).
 
+	Subsubheader: ¿Por qué no hay caracteres de escape?
+
+	Content >>
+		Porque no hacen falta. La sintaxis de @STXT@ solo tiene significado en dos puntos de
+		una línea: el nombre del nodo y el separador (`:` o `>>`) que lo sigue. Todo lo que
+		viene después del separador es el valor, y todo lo indentado bajo un `>>` es texto
+		literal; en ninguno de los dos hay nada que escapar, porque el parser no busca nada
+		ahí. Un valor puede contener `:`, un bloque puede contener `#` o `>>`, y una barra
+		invertida es una barra invertida.
+
+	Code >>
+		Ruta: C:\Users\ana\docs
+		Nota >>
+			Los símbolos :, # y >> no significan nada aquí.
+
+	Content >>
+		El precio es que los nombres de nodo no pueden contener los caracteres que delimitan
+		la sintaxis —ni `:`, ni `(`, `)`, `>`, `#`, `@`— ni ningún otro signo: solo letras,
+		dígitos y los separadores `-`, `_` y espacio (`INVALID_NODE_NAME` en otro caso). Es
+		una restricción asumida a cambio de que quien escribe un documento nunca tenga que
+		pensar en el parser.
+
+		Ver [Principios de diseño](lang-principles) y [STXT-SPEC §4.2](stxt-core-ref#s4-2).
+
 	Subsubheader: ¿Qué extensión y qué media type se usan?
 
 	Content >>

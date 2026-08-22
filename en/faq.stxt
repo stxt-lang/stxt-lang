@@ -81,6 +81,30 @@ Document (dev.stxt.website): Frequently asked questions
 		It is a consequence of having few forms and none redundant; see
 		[Design principles](lang-principles) and [STXT-SPEC §8.5](stxt-core-ref#s8-5).
 
+	Subsubheader: Why are there no escape characters?
+
+	Content >>
+		Because they are not needed. @STXT@ syntax has meaning at only two points of a
+		line: the node name and the separator (`:` or `>>`) that follows it. Everything after
+		the separator is the value, and everything indented under a `>>` is literal text; in
+		neither of them is there anything to escape, because the parser looks for nothing
+		there. A value may contain `:`, a block may contain `#` or `>>`, and a backslash is a
+		backslash.
+
+	Code >>
+		Path: C:\Users\ana\docs
+		Note >>
+			The symbols :, # and >> mean nothing here.
+
+	Content >>
+		The price is that node names cannot contain the characters that delimit the syntax
+		—neither `:` nor `(`, `)`, `>`, `#`, `@`— nor any other symbol: only letters, digits
+		and the separators `-`, `_` and space (`INVALID_NODE_NAME` otherwise). It is a
+		restriction accepted in exchange for the author of a document never having to think
+		about the parser.
+
+		See [Design principles](lang-principles) and [STXT-SPEC §4.2](stxt-core-ref#s4-2).
+
 	Subsubheader: Which file extension and media type are used?
 
 	Content >>
