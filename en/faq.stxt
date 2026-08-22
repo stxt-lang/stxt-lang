@@ -105,6 +105,41 @@ Document (dev.stxt.website): Frequently asked questions
 
 		See [Design principles](lang-principles) and [STXT-SPEC §4.2](stxt-core-ref#s4-2).
 
+	Subsubheader: Why can a text block not have children?
+
+	Content >>
+		Not because of a technical limitation —it could be done— but by design: allowing it
+		would go against the Human-First principle on three fronts.
+
+		* **Visual noise.** To know where the text ends and the children begin, an end-of-block
+		  marker would be needed, and a document would no longer read like an outline of
+		  notes.
+		* **More complexity in the parser.** Today a line under a `>>` is text, with no
+		  further analysis; with possible children, every line would require a decision.
+		* **Mixed meaning.** A node that needs both children and a text block is describing
+		  two different things, and that points to two nodes.
+
+		That is why a node is one of two things, and not both at once: an inline node, with a
+		value and children, or a block, with text. And the way to write it is the same in
+		every case: the block is one more child of an inline node, next to whatever siblings
+		it needs.
+
+	Code >>
+		Chapter: Introduction
+			Author: María Pérez
+			Summary >>
+				Basic concepts: monoliths, microservices and design criteria.
+			Content >>
+				The chapter presents...
+
+	Content >>
+		This way `Chapter` carries the structure —title, author, summary, content— and each
+		block carries only text. With a schema, `Summary` and `Content` are declared of type
+		`TEXT` (or `MARKDOWN`), and a type with content validation admits no children.
+
+		See [STXT-SPEC §6](stxt-core-ref#s6) and
+		[STXT-SCHEMA-SPEC §9.1](stxt-schema-ref#s9-1).
+
 	Subsubheader: Which file extension and media type are used?
 
 	Content >>

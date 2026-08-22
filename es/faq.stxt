@@ -106,6 +106,40 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 		Ver [Principios de diseño](lang-principles) y [STXT-SPEC §4.2](stxt-core-ref#s4-2).
 
+	Subsubheader: ¿Por qué un bloque de texto no puede tener hijos?
+
+	Content >>
+		No por una limitación técnica —podría hacerse—, sino por diseño: permitirlo iría en
+		contra del principio Human-First en tres frentes.
+
+		* **Ruido visual.** Para saber dónde acaba el texto y empiezan los hijos haría falta
+		  una marca de fin de bloque, y un documento dejaría de leerse como un esquema de
+		  notas.
+		* **Más complejidad en el parser.** Hoy una línea bajo un `>>` es texto, sin más
+		  análisis; con hijos posibles, cada línea necesitaría una decisión.
+		* **Mezcla de significado.** Un nodo que necesita a la vez hijos y un bloque de texto
+		  está describiendo dos cosas distintas, y eso apunta a que son dos nodos.
+
+		Por eso un nodo es una de dos cosas, y no las dos a la vez: un nodo inline, con valor
+		e hijos, o un bloque, con texto. Y la forma de escribirlo es la misma en todos los
+		casos: el bloque es un hijo más de un nodo inline, junto a los hermanos que necesite.
+
+	Code >>
+		Chapter: Introducción
+			Author: María Pérez
+			Summary >>
+				Conceptos básicos: monolitos, microservicios y criterios de diseño.
+			Content >>
+				El capítulo presenta...
+
+	Content >>
+		Así `Chapter` lleva la estructura —título, autor, resumen, contenido— y cada bloque
+		lleva solo texto. Con un esquema, `Summary` y `Content` se declaran de tipo `TEXT` (o
+		`MARKDOWN`), y un tipo con validación de contenido no admite hijos.
+
+		Ver [STXT-SPEC §6](stxt-core-ref#s6) y
+		[STXT-SCHEMA-SPEC §9.1](stxt-schema-ref#s9-1).
+
 	Subsubheader: ¿Qué extensión y qué media type se usan?
 
 	Content >>
