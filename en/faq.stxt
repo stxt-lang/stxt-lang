@@ -40,6 +40,8 @@ Document (dev.stxt.website): Frequently asked questions
 		  with no escapes and no quotes; `:`, `#` and `>>` have no meaning inside it.
 		* **Few forms, and none redundant.** `Name: value` or `Name >>`; a list is a repeated
 		  node. Two authors write the same document the same way.
+		* **No escape characters.** Any character is allowed in a value or a block; in
+		  exchange, node names only admit letters, digits and separators.
 		* **Parsing safety by design.** No entities, references, anchors, file inclusion or
 		  code execution; ASCII namespaces, no ambiguous identifiers. See
 		  [STXT-SPEC §15](stxt-core-ref#s15).

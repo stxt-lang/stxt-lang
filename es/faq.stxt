@@ -41,6 +41,8 @@ Document (dev.stxt.website): Preguntas frecuentes
 		  sin escapes ni comillas; `:`, `#` y `>>` no tienen significado dentro.
 		* **Pocas formas, y ninguna redundante.** `Nombre: valor` o `Nombre >>`; una lista es
 		  un nodo repetido. Dos autores escriben el mismo documento de la misma manera.
+		* **Sin caracteres de escape.** Cualquier carácter vale en un valor o en un bloque; a
+		  cambio, los nombres de nodo solo admiten letras, dígitos y separadores.
 		* **Seguridad del parseo por diseño.** Sin entidades, referencias, anclas, inclusión de
 		  ficheros ni ejecución de código; namespaces en ASCII, sin ambigüedad de
 		  identificadores. Ver [STXT-SPEC §15](stxt-core-ref#s15).

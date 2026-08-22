@@ -9,9 +9,10 @@ Document (dev.stxt.website): Principios de diseño
 
 	Assert >>
 		@STXT@ es un lenguaje pensado para las personas (**Human-First**). Todo lo demás
-		—la sencillez, la indentación como estructura, la seguridad del parseo, la validación
-		como capa aparte— se deriva de ese principio. Esta página recoge esas decisiones, lo
-		que cada una cuesta y dónde está la regla que la hace normativa.
+		—la sencillez, la indentación como estructura, la ausencia de escapes, la seguridad
+		del parseo, la validación como capa aparte— se deriva de ese principio. Esta página
+		recoge esas decisiones, lo que cada una cuesta y dónde está la regla que la hace
+		normativa.
 
 	Content >>
 		Las especificaciones dicen qué es válido; esta página dice por qué. No añade ninguna
@@ -114,7 +115,28 @@ Document (dev.stxt.website): Principios de diseño
 
 		Referencia: [STXT-SPEC §6](stxt-core-ref#s6) y [§9.1](stxt-core-ref#s9-1).
 
-	Subheader: 6. La seguridad del parseo por delante de la expresividad
+	Subheader: 6. No hay caracteres de escape
+
+	Content >>
+		@STXT@ no tiene secuencias de escape. Un carácter de escape es lo menos Human-First
+		que existe: obliga a quien escribe a pensar en el parser en lugar de en el texto, y a
+		quien lee a descifrar lo que hay detrás de una barra. Se han eliminado de forma
+		consciente. Un valor es lo que hay tras los dos puntos; un bloque es lo que hay
+		indentado debajo del `>>`; y cualquier carácter vale dentro de ambos, incluidos `:`,
+		`#` y `>>`.
+
+		**Coste.** La ausencia de escapes se paga en los nombres de nodo: como un nombre no
+		puede contener los caracteres que delimitan la sintaxis, el lenguaje no los permite,
+		ni a ellos ni a ningún otro signo. Un nombre se compone únicamente de letras, dígitos,
+		marcas combinantes y los separadores `-`, `_` y espacio; `:`, `(`, `)`, `>`, `#` o `@`
+		en un nombre son un error (`INVALID_NODE_NAME`). Es una restricción asumida en el
+		diseño del lenguaje, a cambio de que ni los valores ni los bloques necesiten escape
+		nunca.
+
+		Referencia: [STXT-SPEC §4.2](stxt-core-ref#s4-2), [§5](stxt-core-ref#s5) y
+		[§6](stxt-core-ref#s6).
+
+	Subheader: 7. La seguridad del parseo por delante de la expresividad
 
 	Content >>
 		@STXT@ no tiene entidades, referencias, anclas, inclusión de ficheros, etiquetas que
@@ -129,7 +151,7 @@ Document (dev.stxt.website): Principios de diseño
 
 		Referencia: [STXT-SPEC §15](stxt-core-ref#s15) y [§7.1](stxt-core-ref#s7-1).
 
-	Subheader: 7. Los nombres se comparan por su forma canónica
+	Subheader: 8. Los nombres se comparan por su forma canónica
 
 	Content >>
 		`Título`, `título` y `TÍTULO` son el mismo nodo; `Fecha de alta`, `fecha-de-alta` y
@@ -143,7 +165,7 @@ Document (dev.stxt.website): Principios de diseño
 
 		Referencia: [STXT-SPEC §4.3](stxt-core-ref#s4-3).
 
-	Subheader: 8. La validación es una capa aparte, opcional y cerrada
+	Subheader: 9. La validación es una capa aparte, opcional y cerrada
 
 	Content >>
 		El parser no necesita esquemas. Un documento sin namespace, o con un namespace para el
@@ -161,7 +183,7 @@ Document (dev.stxt.website): Principios de diseño
 		[§11](stxt-schema-ref#s11); [STXT-DISCOVERY-SPEC §4](stxt-discovery-ref#s4) para cómo
 		se localizan las definiciones.
 
-	Subheader: 9. El mismo árbol en todas partes
+	Subheader: 10. El mismo árbol en todas partes
 
 	Content >>
 		Dos implementaciones conformes producen, para el mismo documento, el mismo árbol
@@ -183,8 +205,9 @@ Document (dev.stxt.website): Principios de diseño
 		  estructura a un documento, y el texto con formato va dentro de sus bloques.
 		* **No es un lenguaje de programación ni de plantillas.** No hay variables, inclusiones,
 		  condicionales ni expresiones, y no las habrá.
-		* **No es un formato cerrado sobre sí mismo.** Todo documento tiene una representación
-		  JSON canónica, y de ahí se llega a cualquier otro formato.
+		* **No tiene tipos implícitos.** Todo valor es texto hasta que un esquema lo valida:
+		  `true`, `007` o `2026-01-01` no cambian de naturaleza por su forma, y un parser nunca
+		  decide por su cuenta que un valor es un booleano, un número o una fecha.
 
 		Estas decisiones están cerradas: un cambio en cualquiera de ellas sería una versión
 		mayor de la especificación correspondiente, no una ampliación.
