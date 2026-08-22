@@ -51,7 +51,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 		El resto del tutorial desarrolla cada uno de estos puntos. El documento completo del
 		que sale este ejemplo está en `tutorial/book-raw.stxt` del
-		[repositorio](https://github.com/stxt-lang/stxt-web).
+		[repositorio](https://github.com/stxt-lang/stxt-lang).
 
 		Referencia: [STXT-SPEC §1](stxt-core-ref#s1).
 

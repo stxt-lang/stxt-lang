@@ -50,7 +50,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 		The rest of the tutorial develops each of these points. The full document this
 		example comes from is `tutorial/book-raw.stxt` in the
-		[repository](https://github.com/stxt-lang/stxt-web).
+		[repository](https://github.com/stxt-lang/stxt-lang).
 
 		Reference: [STXT-SPEC §1](stxt-core-ref#s1).
 

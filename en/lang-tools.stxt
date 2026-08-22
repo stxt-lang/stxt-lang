@@ -185,7 +185,7 @@ Document (dev.stxt.website): Tools
 
 		| Repository                                                      | Contents                                              |
 		|-----------------------------------------------------------------|-------------------------------------------------------|
-		| [stxt-web](https://github.com/stxt-lang/stxt-web)               | This site: the specifications and the example corpus  |
+		| [stxt-lang](https://github.com/stxt-lang/stxt-lang)               | This site: the specifications and the example corpus  |
 		| [stxt-js](https://github.com/stxt-lang/stxt-js)                 | `@stxt-lang/core`, the TypeScript library             |
 		| [stxt-java](https://github.com/stxt-lang/stxt-java)             | `dev.stxt:stxt-core`, the Java library                |
 		| [stxt-python](https://github.com/stxt-lang/stxt-python)         | `stxt`, the Python library                            |
@@ -194,4 +194,4 @@ Document (dev.stxt.website): Tools
 		| [stxt-play](https://github.com/stxt-lang/stxt-play)             | The playground                                        |
 
 		Issues and proposals go to the repository of the tool concerned; those about the
-		language itself, to `stxt-web`.
+		language itself, to `stxt-lang`.
