@@ -1,0 +1,589 @@
+{
+  "kit": "1.0",
+  "specifications": {
+    "STXT-SPEC": "1.0",
+    "STXT-TREE-SPEC": "1.0"
+  },
+  "categories": {
+    "tree": "Parse `input` and emit its canonical tree (STXT-TREE-SPEC); it must equal `expected`, compared as a JSON value, never as text.",
+    "parse-error": "Parsing `input` must fail; the first error reported must carry `error.code` and `error.line` (1-based)."
+  },
+  "cases": [
+    {
+      "id": "tree/blank-line",
+      "category": "tree",
+      "spec": "STXT-SPEC §10.3; STXT-TREE-SPEC §5",
+      "description": "A blank line of a block is \"\" however it is written, and a block whose only line is blank is [\"\"], not [].",
+      "input": "tree/blank-line.stxt",
+      "expected": "tree/blank-line.json"
+    },
+    {
+      "id": "tree/block-indent",
+      "category": "tree",
+      "spec": "STXT-SPEC §10.2",
+      "description": "Indentation beyond the level of the block is literal content and is kept.",
+      "input": "tree/block-indent.stxt",
+      "expected": "tree/block-indent.json"
+    },
+    {
+      "id": "tree/block-literal",
+      "category": "tree",
+      "spec": "STXT-SPEC §6.1",
+      "description": "Inside a block, ':', '>>' and '#' are literal text.",
+      "input": "tree/block-literal.stxt",
+      "expected": "tree/block-literal.json"
+    },
+    {
+      "id": "tree/block-root",
+      "category": "tree",
+      "spec": "STXT-SPEC §6, §8.5",
+      "description": "A block node can be a root node.",
+      "input": "tree/block-root.stxt",
+      "expected": "tree/block-root.json"
+    },
+    {
+      "id": "tree/bom-crlf",
+      "category": "tree",
+      "spec": "STXT-SPEC §3",
+      "description": "A BOM and CRLF line endings are accepted; the BOM and every trailing CR are discarded.",
+      "input": "tree/bom-crlf.stxt",
+      "expected": "tree/bom-crlf.json"
+    },
+    {
+      "id": "tree/comment-closes-block",
+      "category": "tree",
+      "spec": "STXT-SPEC §6.1, §9.1",
+      "description": "A comment at the level of the block node (or shallower) closes the block.",
+      "input": "tree/comment-closes-block.stxt",
+      "expected": "tree/comment-closes-block.json"
+    },
+    {
+      "id": "tree/comment-indent",
+      "category": "tree",
+      "spec": "STXT-SPEC §9, §11",
+      "description": "A comment is validated like a node but never moves the hierarchy.",
+      "input": "tree/comment-indent.stxt",
+      "expected": "tree/comment-indent.json"
+    },
+    {
+      "id": "tree/empty",
+      "category": "tree",
+      "spec": "STXT-TREE-SPEC §3",
+      "description": "A document without nodes has an empty tree.",
+      "input": "tree/empty.stxt",
+      "expected": "tree/empty.json"
+    },
+    {
+      "id": "tree/marks",
+      "category": "tree",
+      "spec": "STXT-SPEC §4.2",
+      "description": "Combining marks (Mn, Mc) are name characters.",
+      "input": "tree/marks.stxt",
+      "expected": "tree/marks.json"
+    },
+    {
+      "id": "tree/name-spacing",
+      "category": "tree",
+      "spec": "STXT-SPEC §4.1, §4.3",
+      "description": "The logical name is trimmed and its inner whitespace runs compacted; the canonical name compacts every run of separators into one '-'.",
+      "input": "tree/name-spacing.stxt",
+      "expected": "tree/name-spacing.json"
+    },
+    {
+      "id": "tree/names",
+      "category": "tree",
+      "spec": "STXT-SPEC §4.1, §4.3",
+      "description": "Canonical names keep accents and are case-insensitive: 'Caña' and 'Cana' are different, 'Straße' and 'STRASSE' too (lower-casing, not case folding).",
+      "input": "tree/names.stxt",
+      "expected": "tree/names.json"
+    },
+    {
+      "id": "tree/namespace-override",
+      "category": "tree",
+      "spec": "STXT-SPEC §7.2",
+      "description": "A child may redeclare the namespace; its descendants inherit the new one and later siblings keep the old one.",
+      "input": "tree/namespace-override.stxt",
+      "expected": "tree/namespace-override.json"
+    },
+    {
+      "id": "tree/nbsp",
+      "category": "tree",
+      "spec": "STXT-SPEC §4, §10",
+      "description": "Blanks are only U+0020 and U+0009: a no-break space is content, neither trimmed nor making a line empty.",
+      "input": "tree/nbsp.stxt",
+      "expected": "tree/nbsp.json"
+    },
+    {
+      "id": "tree/nfc",
+      "category": "tree",
+      "spec": "STXT-SPEC §4.1, §4.3",
+      "description": "canonicalName is NFC; name keeps the characters as they were written.",
+      "input": "tree/nfc.stxt",
+      "expected": "tree/nfc.json"
+    },
+    {
+      "id": "tree/spaces",
+      "category": "tree",
+      "spec": "STXT-SPEC §8.1",
+      "description": "Four spaces are one level, like a tab.",
+      "input": "tree/spaces.stxt",
+      "expected": "tree/spaces.json"
+    },
+    {
+      "id": "tree/tree",
+      "category": "tree",
+      "spec": "STXT-TREE-SPEC §10",
+      "description": "The normative example of the specification: namespace lower-cased and inherited, a block with blank lines, a second root without lateral inheritance.",
+      "input": "tree/tree.stxt",
+      "expected": "tree/tree.json"
+    },
+    {
+      "id": "tree/trim",
+      "category": "tree",
+      "spec": "STXT-SPEC §10.1, §10.2, §10.3, §6.1",
+      "description": "Inline values are trimmed; block lines are right-trimmed only, inner blank lines are kept, and the block ends at the first non-empty line at its level.",
+      "input": "tree/trim.stxt",
+      "expected": "tree/trim.json"
+    },
+    {
+      "id": "parse/indentation-spaces",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §8.1, §11 (1)",
+      "description": "Two spaces of indentation: spaces must be a multiple of 4.",
+      "input": "parse/indentation-spaces.stxt",
+      "error": {
+        "code": "INDENTATION_SPACES_NOT_VALID",
+        "line": 2
+      }
+    },
+    {
+      "id": "parse/indentation-spaces-six",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §8.1, §11 (1)",
+      "description": "Six spaces of indentation: not a multiple of 4 even though it is more than one level.",
+      "input": "parse/indentation-spaces-six.stxt",
+      "error": {
+        "code": "INDENTATION_SPACES_NOT_VALID",
+        "line": 3
+      }
+    },
+    {
+      "id": "parse/indentation-mixed-tab-space",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §8.1, §11 (2)",
+      "description": "A tab followed by a space in the indentation of one line.",
+      "input": "parse/indentation-mixed-tab-space.stxt",
+      "error": {
+        "code": "INDENTATION_MIXED",
+        "line": 2
+      }
+    },
+    {
+      "id": "parse/indentation-mixed-space-tab",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §8.1, §11 (2)",
+      "description": "A space followed by a tab in the indentation of one line.",
+      "input": "parse/indentation-mixed-space-tab.stxt",
+      "error": {
+        "code": "INDENTATION_MIXED",
+        "line": 2
+      }
+    },
+    {
+      "id": "parse/indentation-level-jump",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §8.3, §11 (3)",
+      "description": "A jump of two levels right after a root.",
+      "input": "parse/indentation-level-jump.stxt",
+      "error": {
+        "code": "INDENTATION_LEVEL_NOT_VALID",
+        "line": 2
+      }
+    },
+    {
+      "id": "parse/indentation-level-jump-deep",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §8.3, §11 (3)",
+      "description": "A jump of two levels after a nested node.",
+      "input": "parse/indentation-level-jump-deep.stxt",
+      "error": {
+        "code": "INDENTATION_LEVEL_NOT_VALID",
+        "line": 3
+      }
+    },
+    {
+      "id": "parse/indentation-level-jump-spaces",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §8.3, §11 (3)",
+      "description": "Eight spaces after a root: a valid multiple of 4 but a jump of two levels.",
+      "input": "parse/indentation-level-jump-spaces.stxt",
+      "error": {
+        "code": "INDENTATION_LEVEL_NOT_VALID",
+        "line": 2
+      }
+    },
+    {
+      "id": "parse/block-value",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §6.1, §11 (4)",
+      "description": "Content after the >> of a block node.",
+      "input": "parse/block-value.stxt",
+      "error": {
+        "code": "BLOCK_VALUE_NOT_ALLOWED",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/block-value-nested",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §6.1, §11 (4)",
+      "description": "Content after the >> of a nested block node.",
+      "input": "parse/block-value-nested.stxt",
+      "error": {
+        "code": "BLOCK_VALUE_NOT_ALLOWED",
+        "line": 2
+      }
+    },
+    {
+      "id": "parse/block-value-nbsp",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4, §6.1, §11 (4)",
+      "description": "A no-break space after >> is content, not a blank.",
+      "input": "parse/block-value-nbsp.stxt",
+      "error": {
+        "code": "BLOCK_VALUE_NOT_ALLOWED",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/block-line-mixed-tab-space",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §8.1, §11 (2)",
+      "description": "Mixed indentation inside a block line is still an error.",
+      "input": "parse/block-line-mixed-tab-space.stxt",
+      "error": {
+        "code": "INDENTATION_MIXED",
+        "line": 3
+      }
+    },
+    {
+      "id": "parse/block-line-mixed-space-tab",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §8.1, §11 (2)",
+      "description": "Mixed indentation inside a block line, space first.",
+      "input": "parse/block-line-mixed-space-tab.stxt",
+      "error": {
+        "code": "INDENTATION_MIXED",
+        "line": 3
+      }
+    },
+    {
+      "id": "parse/line-no-separator",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4, §11 (5)",
+      "description": "A line with neither ':' nor '>>'.",
+      "input": "parse/line-no-separator.stxt",
+      "error": {
+        "code": "INVALID_LINE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/line-no-separator-nested",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4, §11 (5)",
+      "description": "A nested line with neither ':' nor '>>'.",
+      "input": "parse/line-no-separator-nested.stxt",
+      "error": {
+        "code": "INVALID_LINE",
+        "line": 2
+      }
+    },
+    {
+      "id": "parse/line-block-before-colon",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4, §11 (5)",
+      "description": "The '>>' precedes the ':': neither an inline node nor a clean block.",
+      "input": "parse/line-block-before-colon.stxt",
+      "error": {
+        "code": "INVALID_LINE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/line-empty-name",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4, §11 (6)",
+      "description": "The logical name is the empty string.",
+      "input": "parse/line-empty-name.stxt",
+      "error": {
+        "code": "INVALID_LINE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/line-empty-name-block",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4, §11 (6)",
+      "description": "A block node with an empty name.",
+      "input": "parse/line-empty-name-block.stxt",
+      "error": {
+        "code": "INVALID_LINE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/line-nbsp-only",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4, §11 (5)",
+      "description": "A line holding only a no-break space is not empty: it is a line without separator.",
+      "input": "parse/line-nbsp-only.stxt",
+      "error": {
+        "code": "INVALID_LINE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/name-invalid-char",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4.2, §11 (8)",
+      "description": "A character that is not a letter, digit, mark, '-', '_' or space.",
+      "input": "parse/name-invalid-char.stxt",
+      "error": {
+        "code": "INVALID_NODE_NAME",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/name-canonical-empty",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4.3, §11 (7)",
+      "description": "Only separators: the canonical name is the empty string.",
+      "input": "parse/name-canonical-empty.stxt",
+      "error": {
+        "code": "INVALID_NODE_NAME",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/name-only-mark",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4.2, §11 (7)",
+      "description": "A combining mark alone: a name needs at least a letter or a digit.",
+      "input": "parse/name-only-mark.stxt",
+      "error": {
+        "code": "INVALID_NODE_NAME",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/name-enclosing-mark",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4.2, §11 (8)",
+      "description": "An enclosing mark (Me) is not a name character; only Mn and Mc are.",
+      "input": "parse/name-enclosing-mark.stxt",
+      "error": {
+        "code": "INVALID_NODE_NAME",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/name-nbsp-trailing",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4, §4.2, §11 (8)",
+      "description": "A no-break space is not trimmed from the name, and it is not a name character.",
+      "input": "parse/name-nbsp-trailing.stxt",
+      "error": {
+        "code": "INVALID_NODE_NAME",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/name-nbsp-inside",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4, §4.2, §11 (8)",
+      "description": "A no-break space inside the name.",
+      "input": "parse/name-nbsp-inside.stxt",
+      "error": {
+        "code": "INVALID_NODE_NAME",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/name-nested",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §4.2, §11 (8)",
+      "description": "An invalid name in a nested node reports the line of that node.",
+      "input": "parse/name-nested.stxt",
+      "error": {
+        "code": "INVALID_NODE_NAME",
+        "line": 2
+      }
+    },
+    {
+      "id": "parse/namespace-one-segment",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §7, §11 (9)",
+      "description": "A namespace needs at least two segments.",
+      "input": "parse/namespace-one-segment.stxt",
+      "error": {
+        "code": "INVALID_NAMESPACE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/namespace-inner-blanks",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §7, §11 (9)",
+      "description": "No blanks between the parentheses.",
+      "input": "parse/namespace-inner-blanks.stxt",
+      "error": {
+        "code": "INVALID_NAMESPACE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/namespace-blank-in-segment",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §7, §11 (9)",
+      "description": "No blanks inside a namespace.",
+      "input": "parse/namespace-blank-in-segment.stxt",
+      "error": {
+        "code": "INVALID_NAMESPACE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/namespace-invalid-char",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §7.1, §11 (9)",
+      "description": "Only [a-z0-9] per segment: '-' is not allowed.",
+      "input": "parse/namespace-invalid-char.stxt",
+      "error": {
+        "code": "INVALID_NAMESPACE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/namespace-non-ascii",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §7.1, §11 (9)",
+      "description": "Namespaces are ASCII only.",
+      "input": "parse/namespace-non-ascii.stxt",
+      "error": {
+        "code": "INVALID_NAMESPACE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/namespace-empty-segment",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §7, §11 (9)",
+      "description": "An empty segment.",
+      "input": "parse/namespace-empty-segment.stxt",
+      "error": {
+        "code": "INVALID_NAMESPACE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/namespace-trailing-dot",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §7, §11 (9)",
+      "description": "A trailing dot.",
+      "input": "parse/namespace-trailing-dot.stxt",
+      "error": {
+        "code": "INVALID_NAMESPACE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/namespace-empty",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §7, §11 (9)",
+      "description": "Empty parentheses.",
+      "input": "parse/namespace-empty.stxt",
+      "error": {
+        "code": "INVALID_NAMESPACE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/namespace-at-alone",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §7, §11 (9)",
+      "description": "The '@' prefix needs a namespace after it.",
+      "input": "parse/namespace-at-alone.stxt",
+      "error": {
+        "code": "INVALID_NAMESPACE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/comment-mixed",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §9, §11 (2)",
+      "description": "A comment with a tab and a space in its indentation.",
+      "input": "parse/comment-mixed.stxt",
+      "error": {
+        "code": "INDENTATION_MIXED",
+        "line": 2
+      }
+    },
+    {
+      "id": "parse/comment-spaces",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §9, §11 (1)",
+      "description": "A comment indented with three spaces.",
+      "input": "parse/comment-spaces.stxt",
+      "error": {
+        "code": "INDENTATION_SPACES_NOT_VALID",
+        "line": 2
+      }
+    },
+    {
+      "id": "parse/comment-level-jump",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §9, §11 (3)",
+      "description": "A comment two levels deeper than the last node.",
+      "input": "parse/comment-level-jump.stxt",
+      "error": {
+        "code": "INDENTATION_LEVEL_NOT_VALID",
+        "line": 2
+      }
+    },
+    {
+      "id": "parse/comment-does-not-open-level",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §9, §11 (3)",
+      "description": "A comment never moves the hierarchy: the node after it is checked against the last node.",
+      "input": "parse/comment-does-not-open-level.stxt",
+      "error": {
+        "code": "INDENTATION_LEVEL_NOT_VALID",
+        "line": 4
+      }
+    },
+    {
+      "id": "parse/comment-closes-block-text-after",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §9.1, §11 (3)",
+      "description": "After a comment closes a block, a deeper line is a level jump, not block text.",
+      "input": "parse/comment-closes-block-text-after.stxt",
+      "error": {
+        "code": "INDENTATION_LEVEL_NOT_VALID",
+        "line": 5
+      }
+    },
+    {
+      "id": "parse/comment-closes-root-block-text-after",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §9.1, §11 (5)",
+      "description": "After a comment closes a root block, a level-1 line is parsed as a node, and has no separator.",
+      "input": "parse/comment-closes-root-block-text-after.stxt",
+      "error": {
+        "code": "INVALID_LINE",
+        "line": 4
+      }
+    }
+  ]
+}

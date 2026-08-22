@@ -1,0 +1,7 @@
+﻿# BOM and CRLF are accepted; the BOM and every trailing CR are discarded.
+First (com.example.crlf): one
+	Child: value  
+	Body >>
+		line 1
+		line 2
+Second: two

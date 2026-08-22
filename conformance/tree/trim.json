@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.trim",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Padded",
+        "canonicalName": "padded",
+        "namespace": "com.example.trim",
+        "form": "inline",
+        "value": "both sides",
+        "children": []
+      },
+      {
+        "name": "Empty",
+        "canonicalName": "empty",
+        "namespace": "com.example.trim",
+        "form": "inline",
+        "value": "",
+        "children": []
+      },
+      {
+        "name": "Body",
+        "canonicalName": "body",
+        "namespace": "com.example.trim",
+        "form": "block",
+        "lines": [
+          "  leading kept, trailing gone",
+          "",
+          "second",
+          ""
+        ]
+      },
+      {
+        "name": "After",
+        "canonicalName": "after",
+        "namespace": "com.example.trim",
+        "form": "inline",
+        "value": "x",
+        "children": []
+      }
+    ]
+  }
+]

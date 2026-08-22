@@ -1,0 +1,11 @@
+# Inline values are trimmed; block lines are right-trimmed only, keep their inner blank
+# lines, and the block ends at the first non-empty line at its own level or shallower.
+Root (com.example.trim):
+	Padded:    both sides   
+	Empty:    
+	Body >>
+		  leading kept, trailing gone   
+
+		second
+		
+	After: x
