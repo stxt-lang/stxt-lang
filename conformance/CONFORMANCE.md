@@ -21,7 +21,7 @@ results are data, and the runner is a few dozen lines you write once.
   `tree/`.
 - `format/` — documents to reformat, each with its reformatted text in both styles.
 
-The kit has its own version (`kit` in the manifest, currently **1.4**), independent of the
+The kit has its own version (`kit` in the manifest, currently **1.0**), independent of the
 specifications' versions. Adding cases raises the minor; changing what an existing case expects
 raises the major, and only happens when a specification changes.
 
@@ -43,17 +43,17 @@ cases— an implementation must pass:
 
 `text` is a side branch: it needs only `core`, and `discovery` does not include it. An
 implementation that offers the writer and the formatter certifies it on top of whichever
-other profile it claims: "kit 1.4, `discovery` and `text` profiles".
+other profile it claims: "kit 1.0, `discovery` and `text` profiles".
 
 An implementation **conforms to a profile of the kit** if it passes every case of that profile
 and of the ones it includes. Conformance is declared against the versions of the specifications
 the profile certifies (`specifications` in the manifest), never against the version of a
 package:
 
-> Conforms to STXT-SPEC 1.0 and STXT-TREE-SPEC 1.0 (conformance kit 1.4, `core` profile).
+> Conforms to STXT-SPEC 1.0 and STXT-TREE-SPEC 1.0 (conformance kit 1.0, `core` profile).
 
 > Conforms to STXT-SPEC 1.0, STXT-TREE-SPEC 1.0, STXT-SCHEMA-SPEC 1.0, STXT-TEMPLATE-SPEC 1.0
-> and STXT-DISCOVERY-SPEC 1.0 (conformance kit 1.4, `discovery` and `text` profiles).
+> and STXT-DISCOVERY-SPEC 1.0 (conformance kit 1.0, `discovery` and `text` profiles).
 
 The `core` profile asks for the canonical tree even though STXT-TREE-SPEC calls emitting it an
 optional capability of a parser: the tree is how the kit checks *what* was parsed, and without
