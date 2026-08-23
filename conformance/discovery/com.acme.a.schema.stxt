@@ -1,0 +1,7 @@
+Schema (@stxt.schema): com.acme.a
+	Node: A
+		Children:
+			Child: Title
+				Min: 1
+				Max: 1
+	Node: Title

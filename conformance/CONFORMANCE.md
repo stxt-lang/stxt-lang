@@ -15,8 +15,10 @@ results are data, and the runner is a few dozen lines you write once.
 - `validate/` — documents to validate against those definitions, valid and invalid.
 - `definition-errors/` — invalid schemas and templates, and the error each one must be
   rejected with.
+- `discovery/` — the files the discovery cases mount in a virtual file system: definitions,
+  and a few files that are not.
 
-The kit has its own version (`kit` in the manifest, currently **1.1**), independent of the
+The kit has its own version (`kit` in the manifest, currently **1.2**), independent of the
 specifications' versions. Adding cases raises the minor; changing what an existing case expects
 raises the major, and only happens when a specification changes.
 
@@ -26,8 +28,12 @@ An implementation **conforms to the STXT conformance kit 1.0** if it passes ever
 `manifest.json`. Conformance is declared against the versions of the specifications the kit
 covers (`specifications` in the manifest), never against the version of a package:
 
-> Conforms to STXT-SPEC 1.0, STXT-TREE-SPEC 1.0, STXT-SCHEMA-SPEC 1.0 and STXT-TEMPLATE-SPEC 1.0
-> (conformance kit 1.1).
+> Conforms to STXT-SPEC 1.0, STXT-TREE-SPEC 1.0, STXT-SCHEMA-SPEC 1.0, STXT-TEMPLATE-SPEC 1.0
+> and STXT-DISCOVERY-SPEC 1.0 (conformance kit 1.2).
+
+Discovery is optional for a core parser (STXT-DISCOVERY-SPEC §9): an implementation that
+does not offer it declares conformance without that specification and skips the `discovery`
+cases; one that offers it must pass them all.
 
 Every input is a UTF-8 file read **byte by byte**: do not normalise line endings, Unicode
 forms or whitespace when loading it (`.gitattributes` keeps git from doing it either). Several
@@ -78,12 +84,34 @@ must carry `error.code` and `error.line`. Two conventions follow from the specif
   carry **line 0**. Errors inside a `Structure >>` or `Description >>` block carry the line of
   the template, not the line within the block.
 
+### Category `discovery`
+
+The input is not a file but a **file system**. `files` maps virtual absolute paths (always
+`/`-separated, rooted at `/`) to real files of this directory; `dirs` lists empty directories
+that must exist too (every ancestor of a file exists implicitly). `environment` is what the
+host would tell the tool: `stxtPath` (`null` = the variable is not defined, `[]` = defined and
+empty, otherwise the list of directories in order), `userDir` and `systemDir` (`null` = no such
+level). Mount them in an in-memory file system, give them to the resolver and resolve for
+`documentDir` (`null` = a document with no location). Then compare:
+
+- `expected.chain`: the ordered list of level directories;
+- `expected.active`: for each namespace, the virtual path of its active definition, or `null`
+  (undefined, or conflicting at the nearest level that defines it);
+- `expected.errors`: the resolution errors of STXT-DISCOVERY-SPEC §8, as a set: each expected
+  error must match one actual error by `code` and, when given, `file` and `namespace`. For a
+  duplicate namespace the file is not given, because which of the two files is reported
+  depends on the listing order of the directory.
+
+The three reference runners mount the cases with the same in-memory adapters their own
+discovery tests use (`DiscoveryFileSystem` / `DiscoveryEnvironment`), so no real file system
+is touched.
+
 ## Running it
 
 A runner needs to: read `manifest.json`; for every case read `input` as bytes, decode UTF-8,
 and either parse and emit the tree, parse and capture the first error, load the definitions and
-validate, or load a definition and capture the error; then compare. The three reference runners
-are each around 150 lines:
+validate, load a definition and capture the error, or mount a virtual file system and resolve;
+then compare. The three reference runners are each around 200 lines:
 
 - TypeScript: `stxt-js/src/test/conformance.test.ts`
 - Java: `stxt-java/src/test/java/dev/stxt/corpus/ConformanceKitTest.java`
@@ -107,9 +135,9 @@ declared.
 
 ## What the kit does not cover yet
 
-Schema discovery (STXT-DISCOVERY-SPEC) and the writer round-trip are exercised today by the
-ports' own suites; turning them into manifest categories is the next step of the kit. The
-validation categories cover the 19 types, the cardinalities, the closed content model, the
+The writer round-trip (a document written back from its tree must reparse to the same tree, in
+both indentation styles) is exercised today by the ports' own suites over the corpus; it is not
+a manifest category because the writer is not normative. The validation categories cover the 19 types, the cardinalities, the closed content model, the
 cross-namespace children and every error code of STXT-SCHEMA-SPEC §13.1 and
 STXT-TEMPLATE-SPEC §14.1 that an implementation can actually reach; the larger documents of
 `docs/` remain a corpus of the existing ports, not kit cases.

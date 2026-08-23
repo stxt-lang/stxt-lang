@@ -1,0 +1,4 @@
+Template (@stxt.template): com.acme.web
+	Structure >>
+		OldWeb (com.acme.web):
+			Title: (1)

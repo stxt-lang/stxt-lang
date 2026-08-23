@@ -1,0 +1,4 @@
+Template (@stxt.template): com.acme.common
+	Structure >>
+		Common (com.acme.common):
+			Title: (1)

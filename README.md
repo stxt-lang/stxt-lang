@@ -52,7 +52,7 @@ tools, stability and versions, use cases and FAQ. `_index.stxt` is the table of 
 | Directory | Contents |
 |---|---|
 | `es/`, `en/` | The specifications and the portal pages, one `.stxt` file per page. `es/` is canonical; `en/` mirrors it file by file |
-| `conformance/` | **The conformance kit**: `manifest.json` lists every case with its category, input and expected result; `tree/` holds documents with the canonical JSON tree each must produce (*STXT-TREE-SPEC*), `parse/` invalid documents with the error code and line each must be rejected with (*STXT-SPEC* §11.1), `definitions/` schemas and templates in pairs, `validate/` documents that must validate or fail against them (*STXT-SCHEMA-SPEC* §13.1), and `definition-errors/` invalid schemas and templates (§13.1, *STXT-TEMPLATE-SPEC* §14.1). The contract and how to run it are in [`conformance/CONFORMANCE.md`](conformance/CONFORMANCE.md) |
+| `conformance/` | **The conformance kit**: `manifest.json` lists every case with its category, input and expected result; `tree/` holds documents with the canonical JSON tree each must produce (*STXT-TREE-SPEC*), `parse/` invalid documents with the error code and line each must be rejected with (*STXT-SPEC* §11.1), `definitions/` schemas and templates in pairs, `validate/` documents that must validate or fail against them (*STXT-SCHEMA-SPEC* §13.1), `definition-errors/` invalid schemas and templates (§13.1, *STXT-TEMPLATE-SPEC* §14.1), and `discovery/` the files of the discovery cases, which describe a virtual file system in the manifest and the chain, active definitions and errors it must resolve to (*STXT-DISCOVERY-SPEC*). The contract and how to run it are in [`conformance/CONFORMANCE.md`](conformance/CONFORMANCE.md) |
 | `.stxt/` | The repository's own resolution directory, as described by STXT-DISCOVERY-SPEC: one definition per namespace. `website/` holds `dev.stxt.website`, the template every portal page validates against; `schemas/`, `templates/`, `examples/` and `tutorial/` hold the example definitions (`com.example.*`, `org.example.*`…) the documents below use |
 | `docs/` | Example STXT documents (emails, recipes, configuration files…) that instantiate the definitions in `.stxt/`. They must all parse and validate without errors or warnings |
 | `examples/` | More example documents, plus `definitions/`: the same model written twice, as a schema and as a template, kept outside `.stxt/` so the two do not collide as duplicates of one namespace |
@@ -62,8 +62,8 @@ tools, stability and versions, use cases and FAQ. `_index.stxt` is the table of 
 
 `conformance/` is the kit proper: data-only cases any implementation can run with a small
 runner, and the declaration an implementation makes when it passes them
-([`CONFORMANCE.md`](conformance/CONFORMANCE.md)). It covers the syntax, the tree, and the
-validation of documents, schemas and templates; discovery is the next category.
+([`CONFORMANCE.md`](conformance/CONFORMANCE.md)). It covers the five specifications: the syntax,
+the tree, the validation of documents, schemas and templates, and discovery.
 
 The rest of the repository is the corpus the existing ports also run over. They do not copy it:
 their test suites locate it as a sibling directory (`../stxt-lang`, or wherever `STXT_LANG`

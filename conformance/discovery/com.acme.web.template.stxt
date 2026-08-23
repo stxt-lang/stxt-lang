@@ -1,0 +1,4 @@
+Template (@stxt.template): com.acme.web
+	Structure >>
+		Web (com.acme.web):
+			Title: (1)
