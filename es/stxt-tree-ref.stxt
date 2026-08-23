@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 
 	Header: @STXT@ Tree
 
@@ -11,7 +11,9 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 	Content >>
 		Este documento es **STXT-TREE-SPEC**; las demás especificaciones lo citan con ese nombre.
 		Define la representación JSON canónica del
-		árbol lógico que produce el parseo de un documento @STXT@ válido.
+		árbol lógico que produce el parseo de un documento @STXT@ válido y las dos operaciones
+		de escritura: la forma canónica de texto de un árbol
+		([sección 11](#s11)) y el reformateado de un documento ([sección 12](#s12)).
 
 		Su propósito es que dos implementaciones conformes puedan mostrar, intercambiar
 		y comparar el mismo resultado de parseo sin depender de las clases, los getters o
@@ -238,3 +240,186 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		    ]
 		  }
 		]
+
+	Subheader: 11. Forma canónica de texto
+
+	Content >>
+		Esta sección define la operación inversa a la de las secciones anteriores: **del
+		árbol lógico al texto @STXT@**. Dos implementaciones que escriban el mismo árbol
+		**DEBEN** producir exactamente el mismo texto. Es lo que permite que una herramienta
+		reescriba un fichero sin ruido en los diffs, que `stxt export` y las bibliotecas
+		serialicen igual, y que el kit de conformidad compare el texto escrito y no solo el
+		árbol.
+
+		La forma canónica es una función del árbol de la [sección 4](#s4) y de un **estilo de
+		indentación**, que es un parámetro de la operación: `TABS` (un tabulador por nivel) o
+		`SPACES_4` (cuatro espacios por nivel). Hay, por tanto, dos formas canónicas de cada
+		árbol, una por estilo; una herramienta **DEBE** ofrecer las dos y **DEBERÍA** usar
+		`TABS` cuando no se le indica otra cosa, de acuerdo con [*STXT-SPEC* §4.4](stxt-core-ref#s4-4).
+
+	Subsubheader: 11.1 Reglas
+
+	Content >>
+		Para un array de nodos raíz, el texto es la concatenación de la escritura de cada
+		raíz, con **una línea vacía** entre una raíz y la siguiente. Un array vacío produce la
+		cadena vacía. Cada nodo se escribe así, con *nivel* 0 para las raíces y el del padre
+		más uno para los hijos:
+
+		1. La **indentación** del nivel, en el estilo elegido: *nivel* tabuladores o *nivel*
+		   grupos de cuatro espacios. El nivel 0 no lleva indentación.
+		2. El **nombre** (`name`) tal cual está en el árbol: es el nombre lógico, ya
+		   normalizado según [*STXT-SPEC* §4.1](stxt-core-ref#s4-1), nunca el canónico.
+		3. El **namespace** entre paréntesis, precedido de un espacio, **solo cuando hace
+		   falta declararlo**: en una raíz, si su `namespace` no es la cadena vacía; en un
+		   hijo, si su `namespace` es distinto del de su padre. Un hijo cuyo namespace
+		   coincide con el del padre no lo escribe, aunque el fuente original lo repitiera:
+		   el árbol no guarda dónde se declaró, solo cuál es el efectivo
+		   ([sección 6](#s6)), y al reparsear el texto la herencia produce el mismo resultado.
+		   Se escribe en minúsculas, que es como está en el árbol.
+		4. La **forma**. Un nodo `inline` escribe `:` y, si `value` no es la cadena vacía, un
+		   espacio y el valor; sin valor, la línea termina en `:` sin espacio detrás. Un nodo
+		   `block` escribe un espacio y `>>`.
+		5. El **salto de línea** `LF`. Toda línea, incluida la última del documento, termina
+		   en `LF`; nunca se escribe `CRLF`.
+		6. El **contenido**: los hijos de un nodo `inline`, en orden, cada uno escrito con esta
+		   misma regla un nivel más adentro; o las líneas de un nodo `block`, cada una con la
+		   indentación de *nivel* + 1 seguida del texto de la línea y `LF`. Una línea vacía
+		   del bloque (`""`) se escribe con esa indentación y nada más: así el bloque se lee
+		   como una pieza y una línea vacía final no se confunde con el salto de línea del
+		   fichero.
+
+		No se escribe nada más: ni BOM, ni comentarios, ni líneas vacías fuera de los bloques,
+		ni blancos finales. El texto resultante es un documento @STXT@ válido y, reparseado,
+		**DEBE** producir un árbol igual al de partida: esa es la garantía de ida y vuelta.
+		Un texto canónico es además un punto fijo: escribir el árbol de un texto canónico
+		devuelve ese mismo texto.
+
+	Subsubheader: 11.2 Ejemplo
+
+	Content >>
+		El árbol del ejemplo de la [sección 10](#s10) tiene esta forma canónica con el estilo
+		`TABS`. El comentario del fuente ha desaparecido, el namespace sale en minúsculas y
+		solo en la raíz que lo declara, y la línea vacía del bloque lleva la indentación del
+		bloque:
+
+	Code >>
+		Documento (com.example.docs):
+			Título: Informe
+			Cuerpo >>
+				Primera línea
+				
+				# Esto es texto
+
+		Anexo:
+			Nota: sin namespace heredado lateralmente
+
+	Content >>
+		Con `SPACES_4` el texto es el mismo con cada tabulador sustituido por cuatro espacios.
+
+	Subsubheader: 11.3 Conformidad
+
+	Content >>
+		Un escritor @STXT@ es conforme si, para todo árbol y en los dos estilos, produce
+		exactamente el texto de la [sección 11.1](#s11-1). El directorio `conformance/` de
+		la fuente de especificaciones contiene casos normativos de árbol y texto esperado; toda
+		implementación que sostenga esta sección **DEBE** producir el texto esperado de cada
+		uno, byte a byte.
+
+	Subheader: 12. Reformateado de un documento
+
+	Content >>
+		La forma canónica pierde lo que el árbol no guarda: comentarios, líneas vacías fuera
+		de los bloques, el estilo de indentación original. **Reformatear** un documento es la
+		otra operación de escritura: reescribirlo **línea a línea, sobre el texto original**,
+		de modo que las líneas que el árbol describe queden en forma canónica y todas las
+		demás se conserven como las escribió su autor. Es lo que hacen `stxt format`, el
+		formateador de la extensión de VS Code y el playground, y dos herramientas conformes
+		**DEBEN** producir el mismo resultado.
+
+		El reformateado toma el documento y un estilo de indentación, y devuelve el documento
+		reformateado junto con los errores de sintaxis encontrados. **No repara** un documento
+		con errores ni los oculta; si conviene reformatear un documento con errores es
+		decisión de la herramienta que llama.
+
+	Subsubheader: 12.1 Reglas
+
+	Content >>
+		El resultado tiene **las mismas líneas que el fuente, en el mismo orden**, con el mismo
+		terminador de línea (si el fuente usa `CRLF` en alguna línea, todas salen con `CRLF`;
+		si no, con `LF`) y con salto de línea final solo si el fuente lo tenía. Un BOM inicial
+		**NO DEBE** conservarse. Cada línea se transforma según lo que es en el parseo del
+		documento sin esquema alguno (el formateado no tiene que ver con la validación):
+
+		1. Una línea que **abre un nodo** se escribe en forma canónica
+		   ([sección 11.1](#s11-1), reglas 1 a 4): la indentación de su nivel en el estilo
+		   pedido, el nombre lógico, `: valor` con exactamente un espacio —o `:` a secas sin
+		   valor—, o ` >>` para un bloque. El **namespace** se escribe si, y solo si, el fuente
+		   lo escribía en esa línea: un hijo que repite el namespace de su padre es redundante
+		   pero legal, y quitarlo sería una edición, no un reformateado. Se escribe en
+		   minúsculas.
+		2. Una **línea de texto de un bloque** recibe la indentación del bloque (el nivel del
+		   nodo `>>` más uno) en el estilo pedido, seguida de su contenido tal cual: la
+		   indentación que la línea tuviera más allá de la del bloque es contenido
+		   ([*STXT-SPEC* §10.2](stxt-core-ref#s10-2)) y se conserva exactamente. Una línea
+		   vacía del bloque es `""` en el contenido sea cual sea su aspecto en el fuente
+		   ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)) y se escribe con la indentación del
+		   bloque, como en la forma canónica.
+		3. Cualquier **otra línea** —un comentario, una línea vacía fuera de un bloque, o una
+		   línea que el árbol no describe por un error de sintaxis— se conserva como está, con
+		   dos únicos retoques: se eliminan sus blancos finales, y las **unidades enteras de
+		   indentación** de su inicio se convierten una a una al estilo pedido. Una unidad es
+		   un tabulador o cuatro espacios, en cualquiera de los dos estilos; lo que sigue a la
+		   última unidad entera, incluido un resto que no llega a unidad, se conserva tal cual.
+		   Como [*STXT-SPEC* §9](stxt-core-ref#s9) valida la indentación de un comentario
+		   como la de un nodo, en un documento que parsea todo comentario tiene un número
+		   entero de unidades y sale completo en el nuevo estilo; el resto solo sobrevive en
+		   documentos con errores, que esta conversión ni repara ni esconde.
+
+		De estas reglas se siguen tres propiedades que una implementación **DEBE** cumplir:
+		el resultado es **idempotente** (reformatearlo de nuevo en el mismo estilo lo deja
+		igual); reformatear al otro estilo y volver devuelve el texto de partida si este ya
+		estaba formateado; y el documento reformateado produce **el mismo árbol canónico**
+		que el fuente.
+
+	Subsubheader: 12.2 Ejemplo
+
+	Content >>
+		Este documento, indentado con espacios, con un comentario, una línea vacía entre
+		raíces y blancos sobrantes:
+
+	Code >>
+		# Proyecto de ejemplo
+		Documento (COM.EXAMPLE.DOCS):    
+		    Título:Informe
+		    Cuerpo  >>
+		          con dos espacios de más
+		        última línea
+		
+		Anexo (com.example.docs):
+		    Nota: aquí no hay nada
+
+	Content >>
+		reformateado con `TABS` queda así. Se conservan el comentario, la línea vacía y el
+		namespace redundante de `Anexo`; se normalizan la separación de `Título`, el `>>` de
+		`Cuerpo`, los blancos finales y la indentación; y la primera línea del bloque conserva
+		sus dos espacios de más, que son contenido:
+
+	Code >>
+		# Proyecto de ejemplo
+		Documento (com.example.docs):
+			Título: Informe
+			Cuerpo >>
+				  con dos espacios de más
+				última línea
+		
+		Anexo (com.example.docs):
+			Nota: aquí no hay nada
+
+	Subsubheader: 12.3 Conformidad
+
+	Content >>
+		Un formateador @STXT@ es conforme si, para todo documento y en los dos estilos,
+		produce exactamente el texto de la [sección 12.1](#s12-1) y los mismos errores de
+		sintaxis que el parser. Los casos normativos de documento y texto reformateado
+		esperado viven también en el directorio `conformance/` de la fuente de
+		especificaciones.

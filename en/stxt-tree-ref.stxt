@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 
 	Header: @STXT@ Tree
 
@@ -11,7 +11,9 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 	Content >>
 		This document is **STXT-TREE-SPEC**; the other specifications cite it by that name.
 		It defines the canonical JSON representation of the
-		logical tree produced when a valid @STXT@ document is parsed.
+		logical tree produced when a valid @STXT@ document is parsed, and the two writing
+		operations: the canonical text form of a tree ([section 11](#s11)) and
+		the reformatting of a document ([section 12](#s12)).
 
 		Its purpose is for two conforming implementations to display, exchange and compare
 		the same parsing result without relying on a platform-specific class, getters or
@@ -234,3 +236,184 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		    ]
 		  }
 		]
+
+	Subheader: 11. Canonical text form
+
+	Content >>
+		This section defines the inverse of the operation of the previous sections: **from
+		the logical tree to @STXT@ text**. Two implementations writing the same tree **MUST**
+		produce exactly the same text. It is what lets a tool rewrite a file with no noise in
+		the diffs, `stxt export` and the libraries serialize alike, and the conformance kit
+		compare the written text and not only the tree.
+
+		The canonical form is a function of the tree of [section 4](#s4) and of an
+		**indentation style**, a parameter of the operation: `TABS` (one tab per level) or
+		`SPACES_4` (four spaces per level). There are therefore two canonical forms of each
+		tree, one per style; a tool **MUST** offer both and **SHOULD** use `TABS` when told
+		nothing else, following [*STXT-SPEC* §4.4](stxt-core-ref#s4-4).
+
+	Subsubheader: 11.1 Rules
+
+	Content >>
+		For an array of root nodes, the text is the concatenation of the writing of each root,
+		with **one empty line** between a root and the next. An empty array produces the empty
+		string. Each node is written as follows, with *level* 0 for the roots and the parent's
+		plus one for the children:
+
+		1. The **indentation** of the level, in the chosen style: *level* tabs or *level*
+		   groups of four spaces. Level 0 has no indentation.
+		2. The **name** (`name`) as it is in the tree: the logical name, already normalized
+		   per [*STXT-SPEC* §4.1](stxt-core-ref#s4-1), never the canonical one.
+		3. The **namespace** in parentheses, preceded by a space, **only where it needs
+		   declaring**: in a root, if its `namespace` is not the empty string; in a child, if
+		   its `namespace` differs from its parent's. A child whose namespace equals its
+		   parent's does not write it, even if the original source repeated it: the tree does
+		   not record where it was declared, only which one applies ([section 6](#s6)), and
+		   re-parsing the text yields the same result through inheritance. It is written in
+		   lowercase, as it is in the tree.
+		4. The **form**. An `inline` node writes `:` and, if `value` is not the empty string,
+		   a space and the value; with no value the line ends in `:` with no space after it. A
+		   `block` node writes a space and `>>`.
+		5. The **line ending** `LF`. Every line, the last one of the document included, ends
+		   in `LF`; `CRLF` is never written.
+		6. The **content**: the children of an `inline` node, in order, each written with this
+		   same rule one level deeper; or the lines of a `block` node, each one with the
+		   indentation of *level* + 1 followed by the text of the line and `LF`. An empty line
+		   of the block (`""`) is written with that indentation and nothing else: the block
+		   reads as one piece, and a trailing empty line is not mistaken for the file's line
+		   ending.
+
+		Nothing else is written: no BOM, no comments, no empty lines outside the blocks, no
+		trailing blanks. The resulting text is a valid @STXT@ document and, re-parsed, **MUST**
+		produce a tree equal to the one it came from: that is the round-trip guarantee. A
+		canonical text is also a fixed point: writing the tree of a canonical text gives that
+		same text back.
+
+	Subsubheader: 11.2 Example
+
+	Content >>
+		The tree of the example of [section 10](#s10) has this canonical form in the `TABS`
+		style. The comment of the source is gone, the namespace comes out in lowercase and
+		only on the root that declares it, and the empty line of the block carries the
+		indentation of the block:
+
+	Code >>
+		Documento (com.example.docs):
+			Título: Informe
+			Cuerpo >>
+				Primera línea
+				
+				# Esto es texto
+
+		Anexo:
+			Nota: sin namespace heredado lateralmente
+
+	Content >>
+		With `SPACES_4` the text is the same with every tab replaced by four spaces.
+
+	Subsubheader: 11.3 Conformance
+
+	Content >>
+		An @STXT@ writer is conforming if, for every tree and in both styles, it produces
+		exactly the text of [section 11.1](#s11-1). The `conformance/` directory of the
+		specification source holds normative cases of tree and expected text; every
+		implementation claiming this section **MUST** produce the expected text of each one,
+		byte for byte.
+
+	Subheader: 12. Reformatting a document
+
+	Content >>
+		The canonical form loses what the tree does not hold: comments, empty lines outside
+		the blocks, the original indentation style. **Reformatting** a document is the other
+		writing operation: rewriting it **line by line, over the original text**, so that the
+		lines the tree describes end up in canonical form and every other line is kept as its
+		author wrote it. It is what `stxt format`, the formatter of the VS Code extension and
+		the playground do, and two conforming tools **MUST** produce the same result.
+
+		Reformatting takes the document and an indentation style, and returns the reformatted
+		document together with the syntax errors found. It **does not repair** a document
+		with errors nor hide them; whether a document with errors should be reformatted at all
+		is the calling tool's decision.
+
+	Subsubheader: 12.1 Rules
+
+	Content >>
+		The result has **the same lines as the source, in the same order**, with the same line
+		ending (if the source uses `CRLF` on any line, every line comes out with `CRLF`;
+		otherwise with `LF`) and with a final line break only if the source had one. An
+		initial BOM **MUST NOT** be kept. Each line is transformed according to what it is in
+		the parse of the document with no schema at all (formatting has nothing to do with
+		validation):
+
+		1. A line that **opens a node** is written in canonical form
+		   ([section 11.1](#s11-1), rules 1 to 4): the indentation of its level in the
+		   requested style, the logical name, `: value` with exactly one space —or a bare `:`
+		   with no value—, or ` >>` for a block. The **namespace** is written if, and only if,
+		   the source wrote it on that line: a child repeating its parent's namespace is
+		   redundant but legal, and dropping it would be an edit, not a reformat. It is
+		   written in lowercase.
+		2. A **text line of a block** gets the indentation of the block (the level of the
+		   `>>` node plus one) in the requested style, followed by its content as it is: any
+		   indentation the line had beyond the block's is content
+		   ([*STXT-SPEC* §10.2](stxt-core-ref#s10-2)) and is kept exactly. An empty line of
+		   the block is `""` in the content whatever it looks like in the source
+		   ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)) and is written with the indentation of
+		   the block, as in the canonical form.
+		3. Every **other line** —a comment, an empty line outside a block, or a line the tree
+		   does not describe because of a syntax error— is kept as it is, with only two
+		   touches: its trailing blanks are removed, and the **whole indentation units** at
+		   its start are converted one for one to the requested style. A unit is a tab or
+		   four spaces, in either style; whatever follows the last whole unit, including a
+		   remainder that is not a whole unit, is kept as it is. As
+		   [*STXT-SPEC* §9](stxt-core-ref#s9) validates the indentation of a comment like a
+		   node's, in a document that parses every comment has a whole number of units and
+		   comes out fully in the new style; the remainder only survives in documents with
+		   errors, which this conversion neither repairs nor hides.
+
+		Three properties follow from these rules, and an implementation **MUST** honor them:
+		the result is **idempotent** (reformatting it again in the same style leaves it
+		unchanged); reformatting to the other style and back returns the starting text if it
+		was already formatted; and the reformatted document produces **the same canonical
+		tree** as the source.
+
+	Subsubheader: 12.2 Example
+
+	Content >>
+		This document, indented with spaces, with a comment, an empty line between roots and
+		spare blanks:
+
+	Code >>
+		# Proyecto de ejemplo
+		Documento (COM.EXAMPLE.DOCS):    
+		    Título:Informe
+		    Cuerpo  >>
+		          con dos espacios de más
+		        última línea
+		
+		Anexo (com.example.docs):
+		    Nota: aquí no hay nada
+
+	Content >>
+		reformatted with `TABS` comes out as follows. The comment, the empty line and the
+		redundant namespace of `Anexo` are kept; the spacing of `Título`, the `>>` of
+		`Cuerpo`, the trailing blanks and the indentation are normalized; and the first line
+		of the block keeps its two extra spaces, which are content:
+
+	Code >>
+		# Proyecto de ejemplo
+		Documento (com.example.docs):
+			Título: Informe
+			Cuerpo >>
+				  con dos espacios de más
+				última línea
+		
+		Anexo (com.example.docs):
+			Nota: aquí no hay nada
+
+	Subsubheader: 12.3 Conformance
+
+	Content >>
+		An @STXT@ formatter is conforming if, for every document and in both styles, it
+		produces exactly the text of [section 12.1](#s12-1) and the same syntax errors as the
+		parser. The normative cases of document and expected reformatted text live in the
+		`conformance/` directory of the specification source as well.
