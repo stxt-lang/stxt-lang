@@ -63,8 +63,10 @@ Document (dev.stxt.website): Stability and versions
 		document and the definition it must validate or fail against, an invalid schema or
 		template— together with the section of the specification it exercises. An implementer
 		writes a runner of a few dozen lines in their language, without reading the tests of any
-		other implementation, and declares "conforms to kit X.Y". The kit carries its own
-		version, independent of the specifications': adding cases raises the minor; changing
+		other implementation, and declares "conforms to kit X.Y". As the specifications are
+		layered, the kit has cumulative **profiles** —`core` (syntax and tree), `schema`,
+		`template` and `discovery`— and an implementation may certify only the layers it offers:
+		"conforms to kit X.Y, `core` profile". The kit carries its own version, independent of the specifications': adding cases raises the minor; changing
 		what a case expects only happens when a specification changes. The three libraries run
 		it in their test suites, and a case enters the kit only when all three agree with it.
 

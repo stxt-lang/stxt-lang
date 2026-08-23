@@ -62,8 +62,9 @@ tools, stability and versions, use cases and FAQ. `_index.stxt` is the table of 
 
 `conformance/` is the kit proper: data-only cases any implementation can run with a small
 runner, and the declaration an implementation makes when it passes them
-([`CONFORMANCE.md`](conformance/CONFORMANCE.md)). It covers the five specifications: the syntax,
-the tree, the validation of documents, schemas and templates, and discovery.
+([`CONFORMANCE.md`](conformance/CONFORMANCE.md)). It covers the five specifications in four cumulative
+profiles —`core`, `schema`, `template`, `discovery`— so an implementation can certify just the
+layers it offers.
 
 The rest of the repository is the corpus the existing ports also run over. They do not copy it:
 their test suites locate it as a sibling directory (`../stxt-lang`, or wherever `STXT_LANG`

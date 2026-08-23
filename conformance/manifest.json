@@ -1,11 +1,59 @@
 {
-  "kit": "1.2",
+  "kit": "1.3",
   "specifications": {
     "STXT-SPEC": "1.0",
     "STXT-TREE-SPEC": "1.0",
     "STXT-SCHEMA-SPEC": "1.0",
     "STXT-TEMPLATE-SPEC": "1.0",
     "STXT-DISCOVERY-SPEC": "1.0"
+  },
+  "profiles": {
+    "core": {
+      "description": "A parser of the base syntax that emits the canonical tree. Required by every other profile.",
+      "specifications": [
+        "STXT-SPEC",
+        "STXT-TREE-SPEC"
+      ],
+      "categories": [
+        "tree",
+        "parse-error"
+      ]
+    },
+    "schema": {
+      "description": "core, plus validation of documents against schemas.",
+      "includes": "core",
+      "specifications": [
+        "STXT-SCHEMA-SPEC"
+      ],
+      "categories": [
+        "validate",
+        "validate-error",
+        "definition-error"
+      ],
+      "restrictions": "In `validate` and `validate-error`, run only the definition sets that hold no `.template.stxt` file (skip a case whose every set has one); in `definition-error`, run only the cases with `kind` = `schema`."
+    },
+    "template": {
+      "description": "schema, plus templates: the cases of the schema categories without restriction.",
+      "includes": "schema",
+      "specifications": [
+        "STXT-TEMPLATE-SPEC"
+      ],
+      "categories": [
+        "validate",
+        "validate-error",
+        "definition-error"
+      ]
+    },
+    "discovery": {
+      "description": "template, plus the discovery of definitions on the file system: the whole kit.",
+      "includes": "template",
+      "specifications": [
+        "STXT-DISCOVERY-SPEC"
+      ],
+      "categories": [
+        "discovery"
+      ]
+    }
   },
   "categories": {
     "tree": "Parse `input` and emit its canonical tree (STXT-TREE-SPEC); it must equal `expected`, compared as a JSON value, never as text.",

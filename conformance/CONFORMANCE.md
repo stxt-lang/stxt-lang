@@ -18,22 +18,39 @@ results are data, and the runner is a few dozen lines you write once.
 - `discovery/` — the files the discovery cases mount in a virtual file system: definitions,
   and a few files that are not.
 
-The kit has its own version (`kit` in the manifest, currently **1.2**), independent of the
+The kit has its own version (`kit` in the manifest, currently **1.3**), independent of the
 specifications' versions. Adding cases raises the minor; changing what an existing case expects
 raises the major, and only happens when a specification changes.
 
 ## The contract
 
-An implementation **conforms to the STXT conformance kit 1.0** if it passes every case in
-`manifest.json`. Conformance is declared against the versions of the specifications the kit
-covers (`specifications` in the manifest), never against the version of a package:
+The specifications are layered: the syntax is mandatory, and schemas, templates and discovery
+are optional layers on top of it (STXT-SPEC §12, §17.3; STXT-DISCOVERY-SPEC §9). The kit
+follows the same structure with **profiles**, declared in `profiles` of the manifest. Each
+profile includes the previous one and names the categories —and, for `schema`, the subset of
+cases— an implementation must pass:
+
+| Profile | Includes | Specifications it certifies | Cases |
+|---|---|---|---|
+| `core` | — | STXT-SPEC, STXT-TREE-SPEC | `tree`, `parse-error` (59) |
+| `schema` | `core` | + STXT-SCHEMA-SPEC | `validate`, `validate-error` with the definition sets that hold no template, `definition-error` with `kind` = `schema` (+129) |
+| `template` | `schema` | + STXT-TEMPLATE-SPEC | the same categories, every set and every case (+38) |
+| `discovery` | `template` | + STXT-DISCOVERY-SPEC | `discovery` (+23) |
+
+An implementation **conforms to a profile of the kit** if it passes every case of that profile
+and of the ones it includes. Conformance is declared against the versions of the specifications
+the profile certifies (`specifications` in the manifest), never against the version of a
+package:
+
+> Conforms to STXT-SPEC 1.0 and STXT-TREE-SPEC 1.0 (conformance kit 1.3, `core` profile).
 
 > Conforms to STXT-SPEC 1.0, STXT-TREE-SPEC 1.0, STXT-SCHEMA-SPEC 1.0, STXT-TEMPLATE-SPEC 1.0
-> and STXT-DISCOVERY-SPEC 1.0 (conformance kit 1.2).
+> and STXT-DISCOVERY-SPEC 1.0 (conformance kit 1.3, `discovery` profile).
 
-Discovery is optional for a core parser (STXT-DISCOVERY-SPEC §9): an implementation that
-does not offer it declares conformance without that specification and skips the `discovery`
-cases; one that offers it must pass them all.
+The `core` profile asks for the canonical tree even though STXT-TREE-SPEC calls emitting it an
+optional capability of a parser: the tree is how the kit checks *what* was parsed, and without
+it a parser could only prove what it rejects. A parser that does not expose the tree can still
+run `parse-error`, but cannot claim the profile.
 
 Every input is a UTF-8 file read **byte by byte**: do not normalise line endings, Unicode
 forms or whitespace when loading it (`.gitattributes` keeps git from doing it either). Several

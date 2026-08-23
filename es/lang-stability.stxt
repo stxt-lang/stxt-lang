@@ -66,8 +66,11 @@ Document (dev.stxt.website): Estabilidad y versiones
 		rechazarse, documento y definición contra la que debe validar o fallar, esquema o
 		plantilla inválidos— junto con la sección de la especificación que ejercita. Un
 		implementador escribe un ejecutor de unas pocas decenas de líneas en su lenguaje, sin
-		leer las pruebas de ninguna otra implementación, y declara «conforme al kit X.Y». El kit
-		lleva su propia versión, independiente de la de las especificaciones: añadir casos sube
+		leer las pruebas de ninguna otra implementación, y declara «conforme al kit X.Y». Como las
+		especificaciones van por capas, el kit tiene **perfiles** acumulativos —`core` (sintaxis y
+		árbol), `schema`, `template` y `discovery`—, y una implementación puede certificar solo
+		las capas que ofrece: «conforme al kit X.Y, perfil `core`». El kit lleva su propia
+		versión, independiente de la de las especificaciones: añadir casos sube
 		el menor; cambiar lo que un caso espera solo ocurre cuando cambia una especificación.
 		Las tres bibliotecas lo ejecutan en sus pruebas, y un caso solo entra en él cuando las
 		tres coinciden con lo esperado.
