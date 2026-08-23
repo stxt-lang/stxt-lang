@@ -1,0 +1,5 @@
+Types (com.example.types):
+	Email: joan@example.com
+	Email: Joan Costa <joan@example.com>
+	Email: Joan<joan@example.com>
+	Email: "Joan" <joan@example.com>

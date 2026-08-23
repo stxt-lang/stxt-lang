@@ -1,0 +1,5 @@
+Schema (@stxt.schema): com.example.x
+	Node: A
+		Type: TEXT
+		Values:
+			Value: x

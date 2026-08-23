@@ -1,0 +1,5 @@
+Root (com.example.card):
+	Title: one
+		Sub: x
+	Note: a
+	Note: b

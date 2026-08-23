@@ -1,0 +1,4 @@
+Template (@stxt.template): com.example.x
+	Structure >>
+		A:
+			B: TEXT [a, b]

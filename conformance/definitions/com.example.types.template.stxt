@@ -1,0 +1,23 @@
+Template (@stxt.template): com.example.types
+	Structure >>
+		Types:
+			Inline:
+			Group: GROUP
+				Item:
+			Block: BLOCK
+			Text: TEXT
+			Markdown: MARKDOWN
+			Boolean: BOOLEAN
+			Number: NUMBER
+			Integer: INTEGER
+			Natural: NATURAL
+			Date: DATE
+			Time: TIME
+			Timestamp: TIMESTAMP
+			Uuid: UUID
+			Url: URL
+			Email: EMAIL
+			Hexadecimal: HEXADECIMAL
+			Binary: BINARY
+			Base64: BASE64
+			Enum: ENUM [red, green, blue]

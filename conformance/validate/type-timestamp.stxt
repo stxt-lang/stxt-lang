@@ -1,0 +1,6 @@
+Types (com.example.types):
+	Timestamp: 2026-08-23T10:30
+	Timestamp: 2026-08-23T10:30:00
+	Timestamp: 2026-08-23T10:30:00.5Z
+	Timestamp: 2026-08-23T10:30:00+02:00
+	Timestamp: 2026-08-23T10:30:00.123456-05:30

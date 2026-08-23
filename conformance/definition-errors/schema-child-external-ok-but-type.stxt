@@ -1,0 +1,5 @@
+Schema (@stxt.schema): com.example.x
+	Node: A
+		Children:
+			Child: B (com.example.y)
+	Node: A

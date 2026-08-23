@@ -1,0 +1,7 @@
+Root (com.example.card):
+	Title: one
+	Note: a
+	Note: b
+	Meta (com.example.meta):
+		Author: Joan
+		Author: Ana

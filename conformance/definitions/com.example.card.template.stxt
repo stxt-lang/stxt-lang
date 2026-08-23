@@ -1,0 +1,8 @@
+Template (@stxt.template): com.example.card
+	Structure >>
+		Root:
+			Title: (1)
+			Tag: (3-)
+			Note: (2+)
+			Meta (com.example.meta):
+		Leaf:

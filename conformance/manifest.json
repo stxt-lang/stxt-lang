@@ -1,12 +1,17 @@
 {
-  "kit": "1.0",
+  "kit": "1.1",
   "specifications": {
     "STXT-SPEC": "1.0",
-    "STXT-TREE-SPEC": "1.0"
+    "STXT-TREE-SPEC": "1.0",
+    "STXT-SCHEMA-SPEC": "1.0",
+    "STXT-TEMPLATE-SPEC": "1.0"
   },
   "categories": {
     "tree": "Parse `input` and emit its canonical tree (STXT-TREE-SPEC); it must equal `expected`, compared as a JSON value, never as text.",
-    "parse-error": "Parsing `input` must fail; the first error reported must carry `error.code` and `error.line` (1-based)."
+    "parse-error": "Parsing `input` must fail; the first error reported must carry `error.code` and `error.line` (1-based).",
+    "validate": "`definitions` is a list of sets of definition files (schemas or templates, by their `.schema.stxt` / `.template.stxt` suffix). For every set: load its files into one provider, parse `input` and validate each of its root nodes. There must be no error, with every set (a schema and its template must behave the same).",
+    "validate-error": "Same, but with every set the first error reported must carry `error.code` and `error.line` (STXT-SCHEMA-SPEC §13.1).",
+    "definition-error": "Loading `input` as a definition of `kind` (`schema` or `template`) must fail; the first error must carry `error.code` and `error.line` (STXT-SCHEMA-SPEC §13.1, STXT-TEMPLATE-SPEC §14.1; `line` 0 when the error is about the whole document)."
   },
   "cases": [
     {
@@ -605,6 +610,2637 @@
       "error": {
         "code": "INDENTATION_LEVEL_NOT_VALID",
         "line": 4
+      }
+    },
+    {
+      "id": "validate/type-inline",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of INLINE.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-inline.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-group",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of GROUP.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-group.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-block",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of BLOCK.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-block.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-text",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of TEXT.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-text.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-markdown",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of MARKDOWN.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-markdown.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-boolean",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of BOOLEAN.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-boolean.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-number",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of NUMBER.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-number.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-integer",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of INTEGER.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-integer.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-natural",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of NATURAL.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-natural.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-date",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of DATE.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-date.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-time",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of TIME.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-time.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-timestamp",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of TIMESTAMP.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-timestamp.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-uuid",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of UUID.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-uuid.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-url",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of URL.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-url.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-email",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of EMAIL.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-email.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-hexadecimal",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of HEXADECIMAL.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-hexadecimal.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-binary",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of BINARY.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-binary.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-base64",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of BASE64.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-base64.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-enum",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "Valid values of ENUM.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-enum.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/type-group-value",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "GROUP: 'Group: x' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-group-value.stxt",
+      "error": {
+        "code": "VALUE_NOT_ALLOWED",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-group-block",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "GROUP: a >> block is a value, and GROUP allows none.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-group-block.stxt",
+      "error": {
+        "code": "VALUE_NOT_ALLOWED",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-block-inline",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "BLOCK: 'Block: x' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-block-inline.stxt",
+      "error": {
+        "code": "BLOCK_FORM_REQUIRED",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-text-children",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "TEXT: 'Text: x / \\tChild: y' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-text-children.stxt",
+      "error": {
+        "code": "CHILDREN_NOT_ALLOWED",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-markdown-children",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "MARKDOWN: 'Markdown: x / \\tChild: y' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-markdown-children.stxt",
+      "error": {
+        "code": "CHILDREN_NOT_ALLOWED",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-inline-children",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "INLINE without declared Children: any child is undeclared; the error is at the child's line.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-inline-children.stxt",
+      "error": {
+        "code": "CHILD_NOT_DECLARED",
+        "line": 3
+      }
+    },
+    {
+      "id": "validate/type-inline-block",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "INLINE: 'Inline >> / \\tx' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-inline-block.stxt",
+      "error": {
+        "code": "BLOCK_FORM_NOT_ALLOWED",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-boolean-case",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "BOOLEAN: 'Boolean: True' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-boolean-case.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-boolean-yes",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "BOOLEAN: 'Boolean: yes' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-boolean-yes.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-boolean-empty",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "BOOLEAN: 'Boolean:' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-boolean-empty.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-boolean-block",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "BOOLEAN: 'Boolean >> / \\ttrue' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-boolean-block.stxt",
+      "error": {
+        "code": "BLOCK_FORM_NOT_ALLOWED",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-number-letters",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "NUMBER: 'Number: 1x' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-number-letters.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-number-dot",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "NUMBER: 'Number: .' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-number-dot.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-number-comma",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "NUMBER: 'Number: 1,5' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-number-comma.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-number-exp",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "NUMBER: 'Number: 1e' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-number-exp.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-integer-decimal",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "INTEGER: 'Integer: 1.0' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-integer-decimal.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-integer-empty",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "INTEGER: 'Integer:' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-integer-empty.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-natural-sign",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "NATURAL: 'Natural: +1' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-natural-sign.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-natural-negative",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "NATURAL: 'Natural: -1' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-natural-negative.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-date-feb30",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "DATE: 'Date: 2026-02-30' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-date-feb30.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-date-month13",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "DATE: 'Date: 2026-13-01' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-date-month13.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-date-apr31",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "DATE: 'Date: 2026-04-31' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-date-apr31.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-date-noleap",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "DATE: 'Date: 2023-02-29' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-date-noleap.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-date-format",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "DATE: 'Date: 23/08/2026' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-date-format.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-time-hour24",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "TIME: 'Time: 24:00:00' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-time-hour24.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-time-min60",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "TIME: 'Time: 10:60:00' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-time-min60.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-time-sec60",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "TIME: 'Time: 10:00:60' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-time-sec60.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-time-noseconds",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "TIME: 'Time: 10:30' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-time-noseconds.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-time-fraction",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "TIME: 'Time: 10:30:00.5' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-time-fraction.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-timestamp-space",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "TIMESTAMP: 'Timestamp: 2026-08-23 10:30:00' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-timestamp-space.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-timestamp-hour",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "TIMESTAMP: 'Timestamp: 2026-08-23T24:00' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-timestamp-hour.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-timestamp-zone",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "TIMESTAMP: 'Timestamp: 2026-08-23T10:30:00+25:00' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-timestamp-zone.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-timestamp-date",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "TIMESTAMP: 'Timestamp: 2026-02-30T10:30' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-timestamp-date.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-timestamp-dateonly",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "TIMESTAMP: 'Timestamp: 2026-08-23' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-timestamp-dateonly.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-uuid-short",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "UUID: 'Uuid: 123e4567-e89b-12d3-a456-42661417400' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-uuid-short.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-uuid-braces",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "UUID: 'Uuid: {123e4567-e89b-12d3-a456-426614174000}' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-uuid-braces.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-uuid-nodash",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "UUID: 'Uuid: 123e4567e89b12d3a456426614174000' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-uuid-nodash.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-url-noscheme",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "URL: 'Url: stxt.dev' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-url-noscheme.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-url-www",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "URL: 'Url: www.stxt.dev/x' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-url-www.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-url-mailto",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "URL: 'Url: mailto:ana@example.com' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-url-mailto.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-url-file",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "URL: 'Url: file:///etc/hosts' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-url-file.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-url-blank",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "URL: 'Url: https://stxt.dev/a b' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-url-blank.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-url-port",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "URL: 'Url: https://stxt.dev:abc/' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-url-port.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-url-nohost",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "URL: 'Url: https:///path' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-url-nohost.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-email-noat",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "EMAIL: 'Email: joan.example.com' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-email-noat.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-email-noname",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "EMAIL: 'Email: <joan@example.com>' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-email-noname.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-email-unbalanced",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "EMAIL: 'Email: Joan <joan@example.com' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-email-unbalanced.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-email-trailing",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "EMAIL: 'Email: Joan <joan@example.com> x' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-email-trailing.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-email-blank",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "EMAIL: 'Email: joan costa@example.com' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-email-blank.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-hexadecimal-g",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "HEXADECIMAL: 'Hexadecimal: DEAG' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-hexadecimal-g.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-hexadecimal-colon",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "HEXADECIMAL: 'Hexadecimal: DE:AD' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-hexadecimal-colon.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-hexadecimal-empty",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "HEXADECIMAL: 'Hexadecimal:' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-hexadecimal-empty.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-hexadecimal-prefix",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "HEXADECIMAL: 'Hexadecimal: 0xDEAD' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-hexadecimal-prefix.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-binary-two",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "BINARY: 'Binary: 102' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-binary-two.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-binary-empty",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "BINARY: 'Binary:' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-binary-empty.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-base64-urlsafe",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "BASE64: 'Base64: aGVs-G8_' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-base64-urlsafe.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-base64-leftover",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "BASE64: 'Base64: aGVsbG8x=' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-base64-leftover.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-base64-empty",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "BASE64: 'Base64:' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-base64-empty.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-base64-padding",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "BASE64: 'Base64: aGVsbG8==' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-base64-padding.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-enum-unknown",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "ENUM: 'Enum: yellow' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-enum-unknown.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-enum-case",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "ENUM: 'Enum: Red' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-enum-case.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-enum-empty",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "ENUM: 'Enum:' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-enum-empty.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-enum-children",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9",
+      "description": "ENUM declares no Children, so a child is CHILD_NOT_DECLARED (closed model comes first), at the child's line.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-enum-children.stxt",
+      "error": {
+        "code": "CHILD_NOT_DECLARED",
+        "line": 3
+      }
+    },
+    {
+      "id": "validate/card-ok",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §6, §10",
+      "description": "Cardinalities satisfied, order free.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-ok.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/card-leaf-root",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §8.1",
+      "description": "Any Node of the schema can be a root node.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-leaf-root.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/card-several-roots",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §6, §10",
+      "description": "Several roots of the same namespace validate independently.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-several-roots.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/card-order-free",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §11",
+      "description": "The order of the children is not validated.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-order-free.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/card-too-few",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §10",
+      "description": "Fewer Note than Min.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-too-few.stxt",
+      "error": {
+        "code": "TOO_FEW_CHILDREN",
+        "line": 1
+      }
+    },
+    {
+      "id": "validate/card-missing-required",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §10",
+      "description": "No Title at all (Min 1).",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-missing-required.stxt",
+      "error": {
+        "code": "TOO_FEW_CHILDREN",
+        "line": 1
+      }
+    },
+    {
+      "id": "validate/card-too-many",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §10",
+      "description": "Two Title (Max 1).",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-too-many.stxt",
+      "error": {
+        "code": "TOO_MANY_CHILDREN",
+        "line": 1
+      }
+    },
+    {
+      "id": "validate/card-too-many-tags",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §10",
+      "description": "Four Tag (Max 3).",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-too-many-tags.stxt",
+      "error": {
+        "code": "TOO_MANY_CHILDREN",
+        "line": 1
+      }
+    },
+    {
+      "id": "validate/card-child-not-declared",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §6",
+      "description": "A child not declared in Children (closed model).",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-child-not-declared.stxt",
+      "error": {
+        "code": "CHILD_NOT_DECLARED",
+        "line": 5
+      }
+    },
+    {
+      "id": "validate/card-child-under-leaf",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §6",
+      "description": "Any child under a Node without Children.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-child-under-leaf.stxt",
+      "error": {
+        "code": "CHILD_NOT_DECLARED",
+        "line": 3
+      }
+    },
+    {
+      "id": "validate/card-node-not-defined",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §8.1",
+      "description": "A root whose name is not a Node of the schema.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-node-not-defined.stxt",
+      "error": {
+        "code": "NODE_NOT_DEFINED_IN_SCHEMA",
+        "line": 1
+      }
+    },
+    {
+      "id": "validate/card-canonical-names",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §7.1, §10; STXT-SPEC §4.3",
+      "description": "Names and namespaces match by canonical form: 'TITLE' is Title and 'note' is Note.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-canonical-names.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/card-canonical-too-many",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §7.1, §10; STXT-SPEC §4.3",
+      "description": "'Title' and 'title' are the same child: two of them exceed Max 1.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/card-canonical-too-many.stxt",
+      "error": {
+        "code": "TOO_MANY_CHILDREN",
+        "line": 1
+      }
+    },
+    {
+      "id": "validate/no-namespace",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §5",
+      "description": "A node with no namespace is never validated.",
+      "definitions": [
+        []
+      ],
+      "input": "validate/no-namespace.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/schema-not-found",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §5, §13",
+      "description": "A non-empty namespace with no definition available.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/schema-not-found.stxt",
+      "error": {
+        "code": "SCHEMA_NOT_FOUND",
+        "line": 1
+      }
+    },
+    {
+      "id": "validate/cross-namespace-ok",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §8",
+      "description": "A child of another namespace is validated against that namespace's definition.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt",
+          "definitions/com.example.meta.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt",
+          "definitions/com.example.meta.schema.stxt"
+        ]
+      ],
+      "input": "validate/cross-namespace-ok.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/cross-namespace-error",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §8",
+      "description": "An error inside the other namespace is reported there.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt",
+          "definitions/com.example.meta.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt",
+          "definitions/com.example.meta.schema.stxt"
+        ]
+      ],
+      "input": "validate/cross-namespace-error.stxt",
+      "error": {
+        "code": "TOO_MANY_CHILDREN",
+        "line": 5
+      }
+    },
+    {
+      "id": "validate/cross-namespace-not-found",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §5, §8",
+      "description": "The other namespace has no definition available.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt"
+        ]
+      ],
+      "input": "validate/cross-namespace-not-found.stxt",
+      "error": {
+        "code": "SCHEMA_NOT_FOUND",
+        "line": 5
+      }
+    },
+    {
+      "id": "validate/cross-namespace-inherited",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §8; STXT-SPEC §7.2",
+      "description": "The child inherits the namespace of its root.",
+      "definitions": [
+        [
+          "definitions/com.example.card.schema.stxt",
+          "definitions/com.example.meta.schema.stxt"
+        ],
+        [
+          "definitions/com.example.card.template.stxt",
+          "definitions/com.example.meta.schema.stxt"
+        ]
+      ],
+      "input": "validate/cross-namespace-inherited.stxt",
+      "valid": true
+    },
+    {
+      "id": "definition-errors/schema-root-not-valid",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (1), §13.1",
+      "description": "The root is not 'Schema': the meta-schema has no such Node. The definition is validated against the meta-schema first, so the error comes from the document table of §13.1.",
+      "kind": "schema",
+      "input": "definition-errors/schema-root-not-valid.stxt",
+      "error": {
+        "code": "NODE_NOT_DEFINED_IN_SCHEMA",
+        "line": 1
+      }
+    },
+    {
+      "id": "definition-errors/schema-root-namespace",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (1), §13.1",
+      "description": "The root namespace is not @stxt.schema: no definition for it in the meta provider. The definition is validated against the meta-schema first, so the error comes from the document table of §13.1.",
+      "kind": "schema",
+      "input": "definition-errors/schema-root-namespace.stxt",
+      "error": {
+        "code": "SCHEMA_NOT_FOUND",
+        "line": 1
+      }
+    },
+    {
+      "id": "definition-errors/schema-target-not-valid",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (1)",
+      "description": "The target namespace is not valid.",
+      "kind": "schema",
+      "input": "definition-errors/schema-target-not-valid.stxt",
+      "error": {
+        "code": "SCHEMA_ROOT_NOT_VALID",
+        "line": 1
+      }
+    },
+    {
+      "id": "definition-errors/schema-namespace-empty",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (1)",
+      "description": "The target namespace is empty.",
+      "kind": "schema",
+      "input": "definition-errors/schema-namespace-empty.stxt",
+      "error": {
+        "code": "SCHEMA_NAMESPACE_EMPTY",
+        "line": 1
+      }
+    },
+    {
+      "id": "definition-errors/schema-no-node",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (2)",
+      "description": "No Node at all (the meta-schema requires at least one).",
+      "kind": "schema",
+      "input": "definition-errors/schema-no-node.stxt",
+      "error": {
+        "code": "TOO_FEW_CHILDREN",
+        "line": 1
+      }
+    },
+    {
+      "id": "definition-errors/schema-two-roots",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (12)",
+      "description": "Two root nodes.",
+      "kind": "schema",
+      "input": "definition-errors/schema-two-roots.stxt",
+      "error": {
+        "code": "SCHEMA_MULTIPLE_ROOTS",
+        "line": 0
+      }
+    },
+    {
+      "id": "definition-errors/schema-no-roots",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (12)",
+      "description": "No root node.",
+      "kind": "schema",
+      "input": "definition-errors/schema-no-roots.stxt",
+      "error": {
+        "code": "SCHEMA_MULTIPLE_ROOTS",
+        "line": 0
+      }
+    },
+    {
+      "id": "definition-errors/schema-node-not-inline",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (13), §13.1",
+      "description": "A Node written as a block: the meta-schema declares it INLINE. The definition is validated against the meta-schema first, so the error comes from the document table of §13.1.",
+      "kind": "schema",
+      "input": "definition-errors/schema-node-not-inline.stxt",
+      "error": {
+        "code": "BLOCK_FORM_NOT_ALLOWED",
+        "line": 2
+      }
+    },
+    {
+      "id": "definition-errors/schema-node-duplicated",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (3)",
+      "description": "Two Node with the same canonical name. The error is about the schema as a whole: line 0.",
+      "kind": "schema",
+      "input": "definition-errors/schema-node-duplicated.stxt",
+      "error": {
+        "code": "NODE_DUPLICATED",
+        "line": 0
+      }
+    },
+    {
+      "id": "definition-errors/schema-node-name-invalid",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (8 of STXT-SPEC)",
+      "description": "A Node whose value is not a valid name.",
+      "kind": "schema",
+      "input": "definition-errors/schema-node-name-invalid.stxt",
+      "error": {
+        "code": "INVALID_NODE_NAME",
+        "line": 2
+      }
+    },
+    {
+      "id": "definition-errors/schema-child-name-invalid",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13",
+      "description": "A Child whose value is not a valid name.",
+      "kind": "schema",
+      "input": "definition-errors/schema-child-name-invalid.stxt",
+      "error": {
+        "code": "INVALID_NODE_NAME",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/schema-type-unknown",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (4)",
+      "description": "Unknown type: the meta-schema catches it as INVALID_VALUE of the Type ENUM.",
+      "kind": "schema",
+      "input": "definition-errors/schema-type-unknown.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 3
+      }
+    },
+    {
+      "id": "definition-errors/schema-type-lowercase",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (4)",
+      "description": "Types are case-sensitive.",
+      "kind": "schema",
+      "input": "definition-errors/schema-type-lowercase.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 3
+      }
+    },
+    {
+      "id": "definition-errors/schema-children-not-allowed",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (5)",
+      "description": "Children on a TEXT node.",
+      "kind": "schema",
+      "input": "definition-errors/schema-children-not-allowed.stxt",
+      "error": {
+        "code": "CHILDREN_NOT_ALLOWED_FOR_TYPE",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/schema-values-not-allowed",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (6)",
+      "description": "Values on a type other than ENUM; reported at the line of the Node.",
+      "kind": "schema",
+      "input": "definition-errors/schema-values-not-allowed.stxt",
+      "error": {
+        "code": "VALUES_NOT_ALLOWED_FOR_TYPE",
+        "line": 2
+      }
+    },
+    {
+      "id": "definition-errors/schema-min-not-natural",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (7)",
+      "description": "Min is not a NATURAL: the meta-schema catches it first.",
+      "kind": "schema",
+      "input": "definition-errors/schema-min-not-natural.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 5
+      }
+    },
+    {
+      "id": "definition-errors/schema-max-not-number",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (7)",
+      "description": "Max is not a number.",
+      "kind": "schema",
+      "input": "definition-errors/schema-max-not-number.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 5
+      }
+    },
+    {
+      "id": "definition-errors/schema-min-greater-than-max",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (7)",
+      "description": "Min greater than Max.",
+      "kind": "schema",
+      "input": "definition-errors/schema-min-greater-than-max.stxt",
+      "error": {
+        "code": "MIN_GREATER_THAN_MAX",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/schema-min-duplicated",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (7)",
+      "description": "Two Min: the meta-schema allows at most one.",
+      "kind": "schema",
+      "input": "definition-errors/schema-min-duplicated.stxt",
+      "error": {
+        "code": "TOO_MANY_CHILDREN",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/schema-enum-no-values",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (8)",
+      "description": "ENUM without Values.",
+      "kind": "schema",
+      "input": "definition-errors/schema-enum-no-values.stxt",
+      "error": {
+        "code": "VALUES_REQUIRED",
+        "line": 2
+      }
+    },
+    {
+      "id": "definition-errors/schema-enum-empty-values",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (8), §13.1",
+      "description": "A Values that holds no Value: the meta-schema requires at least one. The definition is validated against the meta-schema first, so the error comes from the document table of §13.1.",
+      "kind": "schema",
+      "input": "definition-errors/schema-enum-empty-values.stxt",
+      "error": {
+        "code": "TOO_FEW_CHILDREN",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/schema-value-duplicated",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (9)",
+      "description": "Two equal Value after trimming.",
+      "kind": "schema",
+      "input": "definition-errors/schema-value-duplicated.stxt",
+      "error": {
+        "code": "VALUE_DUPLICATED",
+        "line": 6
+      }
+    },
+    {
+      "id": "definition-errors/schema-value-empty",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (14)",
+      "description": "An empty Value.",
+      "kind": "schema",
+      "input": "definition-errors/schema-value-empty.stxt",
+      "error": {
+        "code": "VALUE_EMPTY",
+        "line": 6
+      }
+    },
+    {
+      "id": "definition-errors/schema-values-duplicated",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13",
+      "description": "Two Values nodes: the meta-schema allows at most one.",
+      "kind": "schema",
+      "input": "definition-errors/schema-values-duplicated.stxt",
+      "error": {
+        "code": "TOO_MANY_CHILDREN",
+        "line": 2
+      }
+    },
+    {
+      "id": "definition-errors/schema-child-duplicated",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (10)",
+      "description": "Two Child with the same canonical name and namespace. Line 0: about the schema as a whole.",
+      "kind": "schema",
+      "input": "definition-errors/schema-child-duplicated.stxt",
+      "error": {
+        "code": "CHILD_DUPLICATED",
+        "line": 0
+      }
+    },
+    {
+      "id": "definition-errors/schema-child-not-defined",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (11)",
+      "description": "A Child of the own namespace without its Node. Line 0: about the schema as a whole.",
+      "kind": "schema",
+      "input": "definition-errors/schema-child-not-defined.stxt",
+      "error": {
+        "code": "CHILD_NOT_DEFINED",
+        "line": 0
+      }
+    },
+    {
+      "id": "definition-errors/schema-child-external-ok-but-type",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13 (3, 11)",
+      "description": "A cross-namespace Child needs no Node; the error here is the duplicated Node (line 0).",
+      "kind": "schema",
+      "input": "definition-errors/schema-child-external-ok-but-type.stxt",
+      "error": {
+        "code": "NODE_DUPLICATED",
+        "line": 0
+      }
+    },
+    {
+      "id": "definition-errors/schema-unknown-member",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §13",
+      "description": "A member the meta-schema does not declare.",
+      "kind": "schema",
+      "input": "definition-errors/schema-unknown-member.stxt",
+      "error": {
+        "code": "CHILD_NOT_DECLARED",
+        "line": 3
+      }
+    },
+    {
+      "id": "definition-errors/template-root-not-valid",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (2), §14.1",
+      "description": "The root is not 'Template': the meta-template has no such Node. The definition is validated against the meta-template first, so the error comes from the document table of STXT-SCHEMA-SPEC §13.1.",
+      "kind": "template",
+      "input": "definition-errors/template-root-not-valid.stxt",
+      "error": {
+        "code": "NODE_NOT_DEFINED_IN_SCHEMA",
+        "line": 1
+      }
+    },
+    {
+      "id": "definition-errors/template-target-not-valid",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (2)",
+      "description": "The target namespace is not valid.",
+      "kind": "template",
+      "input": "definition-errors/template-target-not-valid.stxt",
+      "error": {
+        "code": "TEMPLATE_ROOT_NOT_VALID",
+        "line": 1
+      }
+    },
+    {
+      "id": "definition-errors/template-namespace-empty",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (2)",
+      "description": "The target namespace is empty.",
+      "kind": "template",
+      "input": "definition-errors/template-namespace-empty.stxt",
+      "error": {
+        "code": "TEMPLATE_NAMESPACE_EMPTY",
+        "line": 1
+      }
+    },
+    {
+      "id": "definition-errors/template-two-roots",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14",
+      "description": "Two root nodes.",
+      "kind": "template",
+      "input": "definition-errors/template-two-roots.stxt",
+      "error": {
+        "code": "TEMPLATE_MULTIPLE_ROOTS",
+        "line": 0
+      }
+    },
+    {
+      "id": "definition-errors/template-structure-missing",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (3), §14.1",
+      "description": "No Structure: the meta-template requires it (Min 1). The definition is validated against the meta-template first, so the error comes from the document table of STXT-SCHEMA-SPEC §13.1.",
+      "kind": "template",
+      "input": "definition-errors/template-structure-missing.stxt",
+      "error": {
+        "code": "TOO_FEW_CHILDREN",
+        "line": 1
+      }
+    },
+    {
+      "id": "definition-errors/template-structure-inline",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (3), §14.1",
+      "description": "Structure is not a block: the meta-template declares it BLOCK. The definition is validated against the meta-template first, so the error comes from the document table of STXT-SCHEMA-SPEC §13.1.",
+      "kind": "template",
+      "input": "definition-errors/template-structure-inline.stxt",
+      "error": {
+        "code": "BLOCK_FORM_REQUIRED",
+        "line": 2
+      }
+    },
+    {
+      "id": "definition-errors/template-line-no-colon",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (4), §14.1; STXT-SPEC §11",
+      "description": "A Structure line with neither ':' nor '>>': the block is parsed as STXT, so it is INVALID_LINE of STXT-SPEC, at the line of the template.",
+      "kind": "template",
+      "input": "definition-errors/template-line-no-colon.stxt",
+      "error": {
+        "code": "INVALID_LINE",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-indent-mixed",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (1)",
+      "description": "Mixed indentation inside Structure.",
+      "kind": "template",
+      "input": "definition-errors/template-indent-mixed.stxt",
+      "error": {
+        "code": "INDENTATION_MIXED",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-indent-jump",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (1)",
+      "description": "A level jump inside Structure.",
+      "kind": "template",
+      "input": "definition-errors/template-indent-jump.stxt",
+      "error": {
+        "code": "INDENTATION_LEVEL_NOT_VALID",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-indent-spaces",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (1)",
+      "description": "Three spaces inside Structure.",
+      "kind": "template",
+      "input": "definition-errors/template-indent-spaces.stxt",
+      "error": {
+        "code": "INDENTATION_SPACES_NOT_VALID",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-cardinality-malformed",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (5)",
+      "description": "A cardinality that is not a known form.",
+      "kind": "template",
+      "input": "definition-errors/template-cardinality-malformed.stxt",
+      "error": {
+        "code": "CARDINALITY_NOT_VALID",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-cardinality-negative",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (5)",
+      "description": "A negative number.",
+      "kind": "template",
+      "input": "definition-errors/template-cardinality-negative.stxt",
+      "error": {
+        "code": "CARDINALITY_NOT_VALID",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-cardinality-unclosed",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (4), §14.1",
+      "description": "An unclosed parenthesis: the rule part of the line does not follow §6.2.",
+      "kind": "template",
+      "input": "definition-errors/template-cardinality-unclosed.stxt",
+      "error": {
+        "code": "STRUCTURE_LINE_NOT_VALID",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-min-greater-than-max",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (5)",
+      "description": "(min,max) with min greater than max.",
+      "kind": "template",
+      "input": "definition-errors/template-min-greater-than-max.stxt",
+      "error": {
+        "code": "MIN_GREATER_THAN_MAX",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-type-unknown",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (6)",
+      "description": "Unknown type.",
+      "kind": "template",
+      "input": "definition-errors/template-type-unknown.stxt",
+      "error": {
+        "code": "TYPE_NOT_VALID",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-type-lowercase",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (6)",
+      "description": "Types are case-sensitive.",
+      "kind": "template",
+      "input": "definition-errors/template-type-lowercase.stxt",
+      "error": {
+        "code": "TYPE_NOT_VALID",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-enum-no-values",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (7)",
+      "description": "ENUM without a value list.",
+      "kind": "template",
+      "input": "definition-errors/template-enum-no-values.stxt",
+      "error": {
+        "code": "VALUES_REQUIRED",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-enum-empty-list",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (7)",
+      "description": "ENUM with an empty list.",
+      "kind": "template",
+      "input": "definition-errors/template-enum-empty-list.stxt",
+      "error": {
+        "code": "VALUES_REQUIRED",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-values-not-allowed",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (8)",
+      "description": "A value list on a type other than ENUM.",
+      "kind": "template",
+      "input": "definition-errors/template-values-not-allowed.stxt",
+      "error": {
+        "code": "VALUES_NOT_ALLOWED_FOR_TYPE",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-children-not-allowed",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (9)",
+      "description": "Children under a TEXT node.",
+      "kind": "template",
+      "input": "definition-errors/template-children-not-allowed.stxt",
+      "error": {
+        "code": "CHILDREN_NOT_ALLOWED_FOR_TYPE",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-reference-required",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (10)",
+      "description": "A local node (B, already defined under A) appears again under C without @.",
+      "kind": "template",
+      "input": "definition-errors/template-reference-required.stxt",
+      "error": {
+        "code": "REFERENCE_REQUIRED",
+        "line": 7
+      }
+    },
+    {
+      "id": "definition-errors/template-reference-not-found",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (11)",
+      "description": "A reference to a node never defined.",
+      "kind": "template",
+      "input": "definition-errors/template-reference-not-found.stxt",
+      "error": {
+        "code": "REFERENCE_NOT_FOUND",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-reference-name",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (12)",
+      "description": "B is already defined, and the name after @ is not B.",
+      "kind": "template",
+      "input": "definition-errors/template-reference-name.stxt",
+      "error": {
+        "code": "REFERENCE_NAME_NOT_VALID",
+        "line": 6
+      }
+    },
+    {
+      "id": "definition-errors/template-reference-with-type",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (13)",
+      "description": "A reference and an explicit type on the same line.",
+      "kind": "template",
+      "input": "definition-errors/template-reference-with-type.stxt",
+      "error": {
+        "code": "REFERENCE_WITH_TYPE_NOT_ALLOWED",
+        "line": 6
+      }
+    },
+    {
+      "id": "definition-errors/template-reference-with-children",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (21)",
+      "description": "A reference that declares children.",
+      "kind": "template",
+      "input": "definition-errors/template-reference-with-children.stxt",
+      "error": {
+        "code": "CHILDREN_NOT_ALLOWED_IN_REFERENCE",
+        "line": 7
+      }
+    },
+    {
+      "id": "definition-errors/template-reference-with-values",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (22)",
+      "description": "A reference that declares ENUM values.",
+      "kind": "template",
+      "input": "definition-errors/template-reference-with-values.stxt",
+      "error": {
+        "code": "VALUES_NOT_ALLOWED_IN_REFERENCE",
+        "line": 6
+      }
+    },
+    {
+      "id": "definition-errors/template-value-duplicated",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (14)",
+      "description": "Repeated ENUM values.",
+      "kind": "template",
+      "input": "definition-errors/template-value-duplicated.stxt",
+      "error": {
+        "code": "VALUE_DUPLICATED",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-value-empty",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (14)",
+      "description": "An empty ENUM value.",
+      "kind": "template",
+      "input": "definition-errors/template-value-empty.stxt",
+      "error": {
+        "code": "VALUE_EMPTY",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-value-trailing-comma",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (14)",
+      "description": "A trailing comma is an empty value.",
+      "kind": "template",
+      "input": "definition-errors/template-value-trailing-comma.stxt",
+      "error": {
+        "code": "VALUE_EMPTY",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-external-children",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (15)",
+      "description": "Children on a cross-namespace node.",
+      "kind": "template",
+      "input": "definition-errors/template-external-children.stxt",
+      "error": {
+        "code": "CHILDREN_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-external-type",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (15)",
+      "description": "An explicit type on a cross-namespace node.",
+      "kind": "template",
+      "input": "definition-errors/template-external-type.stxt",
+      "error": {
+        "code": "TYPE_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-external-values",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (15)",
+      "description": "A value list on a cross-namespace node.",
+      "kind": "template",
+      "input": "definition-errors/template-external-values.stxt",
+      "error": {
+        "code": "VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-description-not-found",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (17)",
+      "description": "A Description entry with no node in Structure.",
+      "kind": "template",
+      "input": "definition-errors/template-description-not-found.stxt",
+      "error": {
+        "code": "DESCRIPTION_NODE_NOT_FOUND",
+        "line": 6
+      }
+    },
+    {
+      "id": "definition-errors/template-description-children",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (18)",
+      "description": "A Description entry with children.",
+      "kind": "template",
+      "input": "definition-errors/template-description-children.stxt",
+      "error": {
+        "code": "DESCRIPTION_CHILDREN_NOT_ALLOWED",
+        "line": 6
+      }
+    },
+    {
+      "id": "definition-errors/template-description-external",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (19)",
+      "description": "A Description entry with another namespace.",
+      "kind": "template",
+      "input": "definition-errors/template-description-external.stxt",
+      "error": {
+        "code": "DESCRIPTION_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE",
+        "line": 6
+      }
+    },
+    {
+      "id": "definition-errors/template-description-duplicated",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (20)",
+      "description": "Two Description entries for the same node.",
+      "kind": "template",
+      "input": "definition-errors/template-description-duplicated.stxt",
+      "error": {
+        "code": "DESCRIPTION_DUPLICATED",
+        "line": 7
+      }
+    },
+    {
+      "id": "definition-errors/template-description-not-stxt",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (16)",
+      "description": "The content of Description does not parse as STXT.",
+      "kind": "template",
+      "input": "definition-errors/template-description-not-stxt.stxt",
+      "error": {
+        "code": "INVALID_LINE",
+        "line": 6
+      }
+    },
+    {
+      "id": "definition-errors/template-reference-not-found-other-name",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §14 (11, 12), §14.1",
+      "description": "D is not defined yet, so '@B' on its line is a reference that resolves to nothing (not a name mismatch).",
+      "kind": "template",
+      "input": "definition-errors/template-reference-not-found-other-name.stxt",
+      "error": {
+        "code": "REFERENCE_NOT_FOUND",
+        "line": 6
       }
     }
   ]

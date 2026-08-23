@@ -1,0 +1,15 @@
+Schema (@stxt.schema): com.example.card
+	Node: Root
+		Children:
+			Child: Title
+				Min: 1
+				Max: 1
+			Child: Tag
+				Max: 3
+			Child: Note
+				Min: 2
+			Child: Meta (com.example.meta)
+	Node: Title
+	Node: Tag
+	Node: Note
+	Node: Leaf

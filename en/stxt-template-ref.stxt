@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 		
 	Header: @STXT@ Template
 	
@@ -509,7 +509,11 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 	Content >>
 		As in [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), every error carries a stable code, identical
 		in every implementation; **from 1.0 on they do not change**. The numbers point to the
-		conditions of the list above.
+		conditions of the list above. A template document is first validated **as a document**
+		against the meta-template of [section 16](#s16), so its form errors (a root that is not
+		`Template`, a missing or inline `Structure`) come with the codes of
+		[*STXT-SCHEMA-SPEC* §13.1](stxt-schema-ref#s13-1); the rules of this section are applied
+		afterwards.
 		
 		| Code | Condition |
 		|---|---|
@@ -518,7 +522,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		| `TEMPLATE_NAMESPACE_EMPTY` | 2: the target namespace is empty |
 		| `TEMPLATE_MULTIPLE_ROOTS` | the template document has more than one root node, or none |
 		| `TEMPLATE_STRUCTURE_REQUIRED` | 3: `Structure >>` missing or not a block |
-		| `STRUCTURE_LINE_NOT_VALID` | 4: a `Structure` line without `:` |
+		| `STRUCTURE_LINE_NOT_VALID` | 4: a `Structure` line written in `>>` form, or whose rule part does not follow [section 6.2](#s6-2) (for instance an unclosed parenthesis); a line with neither `:` nor `>>` is already rejected by the core with `INVALID_LINE` ([*STXT-SPEC* §11.1](stxt-core-ref#s11-1)), at the line of the template |
 		| `CARDINALITY_NOT_VALID` | 5: malformed cardinality or invalid numbers |
 		| `MIN_GREATER_THAN_MAX` | 5: `(min,max)` with `min` greater than `max` |
 		| `TYPE_NOT_VALID` | 6: unknown type |

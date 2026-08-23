@@ -1,0 +1,4 @@
+root (COM.EXAMPLE.CARD):
+	TITLE: one
+	note: a
+	Note: b

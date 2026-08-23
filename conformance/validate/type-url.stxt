@@ -1,0 +1,8 @@
+Types (com.example.types):
+	Url: https://stxt.dev/path?q=1#f
+	Url: HTTP://EXAMPLE.COM/
+	Url: http://localhost:8080/
+	Url: ftp://user:pw@example.com/
+	Url: http://[::1]:80/x
+	Url: git+ssh://host/repo.git
+	Url: https://例え.jp/

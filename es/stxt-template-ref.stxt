@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 		
 	Header: @STXT@ Template
 	
@@ -509,7 +509,11 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 	Content >>
 		Como en [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), cada error lleva un código estable e idéntico
 		en todas las implementaciones; **desde la 1.0 no cambian**. Los números remiten a las
-		condiciones de la lista anterior.
+		condiciones de la lista anterior. Un documento de plantilla se valida primero **como
+		documento** contra la meta-plantilla de la [sección 16](#s16), así que sus errores de forma
+		(una raíz que no es `Template`, un `Structure` ausente o escrito en línea) llegan con los
+		códigos de [*STXT-SCHEMA-SPEC* §13.1](stxt-schema-ref#s13-1); las reglas de esta sección se
+		aplican después.
 		
 		| Código | Condición |
 		|---|---|
@@ -518,7 +522,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		| `TEMPLATE_NAMESPACE_EMPTY` | 2: el namespace objetivo está vacío |
 		| `TEMPLATE_MULTIPLE_ROOTS` | el documento template tiene más de un nodo raíz, o ninguno |
 		| `TEMPLATE_STRUCTURE_REQUIRED` | 3: falta `Structure >>` o no es bloque |
-		| `STRUCTURE_LINE_NOT_VALID` | 4: línea de `Structure` sin `:` |
+		| `STRUCTURE_LINE_NOT_VALID` | 4: línea de `Structure` escrita en forma `>>`, o cuya parte de regla no sigue la [sección 6.2](#s6-2) (por ejemplo un paréntesis sin cerrar); una línea sin `:` ni `>>` la rechaza ya el núcleo con `INVALID_LINE` ([*STXT-SPEC* §11.1](stxt-core-ref#s11-1)), en la línea de la plantilla |
 		| `CARDINALITY_NOT_VALID` | 5: cardinalidad mal formada o con números inválidos |
 		| `MIN_GREATER_THAN_MAX` | 5: `(min,max)` con `min` mayor que `max` |
 		| `TYPE_NOT_VALID` | 6: tipo desconocido |

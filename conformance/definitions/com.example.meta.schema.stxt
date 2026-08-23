@@ -1,0 +1,7 @@
+Schema (@stxt.schema): com.example.meta
+	Node: Meta
+		Children:
+			Child: Author
+				Min: 1
+				Max: 1
+	Node: Author

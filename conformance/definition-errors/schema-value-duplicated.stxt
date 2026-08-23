@@ -1,0 +1,6 @@
+Schema (@stxt.schema): com.example.x
+	Node: A
+		Type: ENUM
+		Values:
+			Value: red
+			Value:  red 

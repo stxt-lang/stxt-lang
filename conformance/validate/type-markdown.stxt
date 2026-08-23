@@ -1,0 +1,6 @@
+Types (com.example.types):
+	Markdown: **inline**
+	Markdown >>
+		# Heading
+		
+		- item
