@@ -1,0 +1,22 @@
+Template (@stxt.template): com.acme.reports
+	Structure >>
+		Report (com.acme.reports):
+			Title: (1)
+			Date: (1) DATE
+			Author: (1)
+			Status: (1) ENUM [Draft, Final]
+			Summary: (1) TEXT
+			Section: (*)
+				Title: (1) @Title
+				Content: (1) TEXT
+			Action: (*)
+				Owner: (1)
+				Due: (?) DATE
+				Description: (1) TEXT
+	Description >>
+		Report: A short internal report extracted from free text (notes, emails, minutes)
+		Date: Date of the source material, YYYY-MM-DD
+		Status: Draft until a person has reviewed it
+		Summary: Three sentences at most
+		Section: One per topic discussed
+		Action: One per agreed follow-up

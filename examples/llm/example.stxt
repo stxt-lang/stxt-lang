@@ -1,0 +1,27 @@
+Report (com.acme.reports): Kick-off of the billing migration
+	Title: Kick-off of the billing migration
+	Date: 2026-03-02
+	Author: Ana García
+	Status: Final
+	Summary >>
+		The team agreed to move invoicing to the new service before the summer.
+		Payments stay on the legacy system until the reconciliation job is ready.
+	Section:
+		Title: Scope
+		Content >>
+			Only invoicing moves in the first phase. Credit notes and refunds follow
+			once the reconciliation job runs nightly without manual fixes.
+	Section:
+		Title: Risks
+		Content >>
+			The legacy export has no test coverage; any change there needs a manual
+			check against last month's figures.
+	Action:
+		Owner: Luis Moreno
+		Due: 2026-03-16
+		Description >>
+			Write the reconciliation job and run it against February's data.
+	Action:
+		Owner: Ana García
+		Description >>
+			Schedule the review with finance once the first run is clean.

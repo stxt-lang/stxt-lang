@@ -1,0 +1,13 @@
+{
+  "name": "stxt-llm-example",
+  "private": true,
+  "type": "module",
+  "description": "Generate -> validate -> fix: an LLM writes an STXT document, @stxt-lang/core checks it",
+  "scripts": {
+    "start": "node generate.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.120.0",
+    "@stxt-lang/core": "^0.13.0"
+  }
+}

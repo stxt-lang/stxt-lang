@@ -3,7 +3,7 @@ Document (dev.stxt.website): IA y LLMs — Documentos generados y verificables
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 
 	Header: IA y LLMs
 
@@ -99,6 +99,39 @@ Document (dev.stxt.website): IA y LLMs — Documentos generados y verificables
 			# ERROR: hijo no declarado (modelo cerrado)
 			Subtítulo: Versión corta
 			# ERROR: falta Resumen, que es obligatorio
+
+	Subheader: Un ejemplo ejecutable
+
+	Content >>
+		El bucle completo está en
+		[`examples/llm/`](https://github.com/stxt-lang/stxt-lang/tree/master/examples/llm)
+		del repositorio de la especificación: un programa de Node de unas ochenta líneas
+		que convierte unas notas de reunión en texto libre en un `Report (com.acme.reports)`
+		válido. Lo acompañan la plantilla en `.stxt/`, un documento de ejemplo correcto, el
+		prompt con las reglas del formato y las notas de partida.
+
+		* **Genera**: el prompt lleva las reglas de @STXT@ en diez líneas, la plantilla
+		  entera, el ejemplo válido y el texto a convertir; pide el documento y nada más.
+		* **Valida**: `UnifiedSchemaProvider` carga la plantilla y `Parser` con
+		  `SchemaValidator` devuelve los errores con línea y código, como haría
+		  `stxt validate -`.
+		* **Corrige**: los errores vuelven al modelo tal cual, a continuación de su propia
+		  respuesta, y se repite hasta que el documento valida o se agotan los intentos.
+
+	Listing >>
+		$ node generate.mjs > report.stxt
+		--- attempt 1: 3 error(s)
+		    line 3: [INVALID_VALUE] Date: Invalid date (12 March 2026) (schema)
+		    line 5: [INVALID_VALUE] The value 'draft' not allowed. Only: Draft, Final (schema)
+		    line 1: [TOO_FEW_CHILDREN] 0 nodes of 'com.acme.reports:summary' and min is 1 (schema)
+		--- attempt 2: valid
+
+	Content >>
+		El documento sale por la salida estándar y el diálogo por la de error, con código
+		de salida `0` solo si la última versión valida: es un paso de *pipeline* más. El
+		ejemplo usa la API de Anthropic, pero nada del bucle depende del proveedor; la
+		llamada al modelo es una función que devuelve texto. El `README` del directorio
+		resume qué error del modelo produce qué código.
 
 	Subheader: Sin escapado: prosa larga dentro de estructura
 

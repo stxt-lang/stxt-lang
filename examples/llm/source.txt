@@ -1,0 +1,19 @@
+Notes from the weekly product sync, Thursday 12 March 2026. Taken by Marta Ruiz.
+
+We spent most of the hour on the onboarding funnel. Drop-off between the signup
+form and the first project is still around 40%. Pablo showed the session
+recordings: most people stall on the "invite your team" step, which is mandatory
+today. We agreed to make it optional and to measure again in two weeks.
+
+Second topic: the mobile app crash reported by three customers on Monday. It is
+the date picker on Android 14, reproducible. Sergio has a fix in review and wants
+to ship a hotfix tomorrow rather than wait for the regular release on the 20th.
+Nobody objected.
+
+Short mention of pricing: sales keep asking for an annual plan with a discount.
+No decision, Marta will put together a one-page proposal for next week's meeting.
+
+Actions: Pablo makes the invite step optional (by the 19th). Sergio ships the
+hotfix. Marta writes the pricing proposal before next Thursday, the 19th.
+
+These notes are a draft until Pablo reviews them.

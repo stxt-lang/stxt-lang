@@ -58,6 +58,9 @@ Document (dev.stxt.website): STXT: El Libro
 	Link: Documentos Corporativos
 		Page: use-cases-corporate-docs
 		
+	Link: IA y LLMs
+		Page: ia-llms
+		
 	Link: CMS y publicaciones
 		Page: use-cases-cms
 		
@@ -69,8 +72,3 @@ Document (dev.stxt.website): STXT: El Libro
 		
 	Link: Contratos y acuerdos legales
 		Page: use-cases-contracts
-
-	Link: IA y LLMs
-		Page: ia-llms
-	
-	
