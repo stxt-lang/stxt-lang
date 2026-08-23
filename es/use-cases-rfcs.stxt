@@ -1,92 +1,34 @@
 Document (dev.stxt.website): RFCs y propuestas técnicas
 
 	Metadata:
-		Author: ChatGPT 5.2
-		Last modif: 2026-08-22
-		
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-08-23
+
 	Header: RFCs y propuestas técnicas
-	
-	Content >>
-		Los RFCs (*Request for Comments*) y los documentos de propuesta técnica
-		sirven para tomar decisiones de diseño de forma explícita, revisable y
-		compartida.
-		
-		Suelen ser documentos largos, argumentativos y vivos, que combinan texto
-		narrativo con información estructurada.
-		
+
 	Assert >>
-		@STXT@ sirve como formato fuente para este tipo de documentos sin cambiar el
-		flujo de trabajo habitual.
-		
-	Subheader: Qué se entiende aquí por RFC
-	
+		Una propuesta técnica es un documento argumentativo con un ciclo de vida: se
+		redacta, se discute, se acepta o se rechaza, y queda como registro de por qué se
+		decidió algo. @STXT@ conserva el flujo de texto plano y revisión que estos documentos
+		ya tienen, y hace explícitos el estado, los autores y las relaciones entre
+		propuestas.
+
 	Content >>
-		En este contexto, “RFC” incluye:
-		
-		* Propuestas técnicas internas.
-		* RFCs clásicos, al estilo del IETF.
-		* ADRs (*Architecture Decision Records*, registros de decisiones de arquitectura).
-		* Documentos de diseño previos a la implementación.
-		
-		No se asume ningún proceso concreto: el objeto es el documento, no la
-		metodología.
-		
-	Subheader: Problemas habituales con RFCs actuales
-	
-	Content >>
-		En la práctica, estos documentos suelen:
-		
-		* Vivir en Markdown con convenciones implícitas.
-		* Mezclar metadatos y texto libre sin una separación clara.
-		* Depender de la disciplina de los autores para mantener la estructura.
-		* Ser difíciles de validar automáticamente.
-		
-		El flujo de trabajo, en cambio, suele funcionar:
-		
-		* Texto plano.
-		* Versionado en Git.
-		* Revisión por diff.
-		
-		@STXT@ conserva ese flujo y añade estructura explícita.
-		
-	Subheader: Ejemplo 1 — RFC mínimo
-	
-	Content >>
-		Un RFC reducido, suficiente para la discusión inicial.
-		
-	Code >>
-		RFC (com.acme.rfc):
-			Id: RFC-012
-			Title: Cache distribuida para el módulo X
-			Status: Draft
-			Authors:
-				Author: Joan Costa
-			Created: 2026-01-11
-			
-			Context >>
-				El módulo X presenta problemas de latencia bajo carga.
-				Actualmente cada instancia consulta la base de datos
-				para operaciones repetitivas.
-			
-			Proposal >>
-				Introducir una capa de cache distribuida compartida
-				entre instancias para reducir accesos a base de datos.
-			
-			Decision >>
-				Pendiente de evaluación.
-	
-	Subheader: Qué aporta aquí @STXT@
-	
-	Content >>
-		* El texto largo vive en bloques de texto (`>>`), sin restricciones.
-		* Los metadatos son nodos, no convenciones.
-		* La estructura del RFC es visible de un vistazo.
-		
-	Subheader: Ejemplo 2 — RFC más completo
-	
-	Content >>
-		Un RFC con alternativas, impacto y riesgos.
-		
+		Los equipos que escriben propuestas técnicas —RFC internos, registros de decisiones
+		de arquitectura, documentos de diseño— suelen hacerlo ya en texto plano y en un
+		repositorio: el documento se revisa como el código, con un *diff* y comentarios. Lo
+		que falla no es el flujo sino la estructura: el estado de la propuesta es una palabra
+		en la cabecera que cada autor escribe a su manera, las relaciones entre documentos
+		son enlaces en el texto, y saber qué propuestas siguen abiertas o cuáles dependen de
+		una que se acaba de rechazar es un trabajo manual.
+
+		Con @STXT@ la propuesta sigue siendo un documento de texto con secciones largas, pero
+		su cabecera son datos. El estado es un `ENUM`, los autores son nodos, las referencias
+		a otras propuestas son valores que un programa puede seguir.
+
+	Subheader: Una propuesta
+
 	Code >>
 		RFC (com.acme.rfc):
 			Id: RFC-013
@@ -96,140 +38,52 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 				Author: Platform Team
 			Created: 2026-01-05
 			Updated: 2026-01-10
-			
+
 			Context >>
-				Actualmente existen múltiples formatos de configuración
-				(JSON, YAML, properties) con reglas distintas.
-			
-			Problem >>
-				La diversidad de formatos dificulta la validación,
-				la automatización y el soporte.
-			
+				Hoy conviven varios formatos de configuración en los servicios internos,
+				cada uno con sus propias reglas de validación y sus propias herramientas.
+				Cada equipo nuevo elige uno, y el soporte tiene que conocerlos todos.
+
 			Proposal >>
-				Adoptar STXT como formato único de configuración
-				para servicios internos.
-			
+				Adoptar un único formato de configuración para los servicios internos, con
+				una plantilla por tipo de servicio mantenida por Plataforma. Los servicios
+				existentes migran cuando cambien de versión mayor; los nuevos arrancan ya con
+				el formato único.
+
 			Alternatives:
-				Alternative:
-					Title: Mantener formatos actuales
+				Alternative: Mantener los formatos actuales
 					Pros >>
-						Cero coste inicial.
+						Sin coste inicial.
 					Cons >>
-						Se mantiene la fragmentación.
-						
-				Alternative:
-					Title: Estandarizar en YAML
+						La fragmentación se mantiene y crece con cada servicio nuevo.
+				Alternative: Estandarizar en el formato más extendido hoy
 					Pros >>
-						Herramientas existentes.
+						Herramientas y conocimiento ya existentes en los equipos.
 					Cons >>
-						Ambigüedad y validación compleja.
-			
+						Su validación es externa y ambigua; no resuelve el problema de fondo.
+
 			Impact >>
-				Equipos deberán migrar gradualmente sus configuraciones.
-			
-			Risks >>
-				Resistencia inicial al cambio.
-			
+				Los equipos migran gradualmente. Plataforma mantiene las plantillas y un
+				validador en integración continua.
+
 			Decision >>
-				En revisión por arquitectura.
-	
-	Subheader: Ejemplo 3 — Evolución de estado
-	
+				En revisión por el comité de arquitectura.
+
 	Content >>
-		Un RFC cambia de estado a lo largo del tiempo.
-		El estado es un dato explícito, no una frase del texto.
-		
-	Code >>
-		RFC (com.acme.rfc):
-			Id: RFC-013
-			Title: Unificación del sistema de configuración
-			Status: Accepted
-			Authors:
-				Author: Platform Team
-			Accepted date: 2026-01-18
-			
-			Context >>
-				Múltiples formatos de configuración con reglas distintas.
-			
-			Proposal >>
-				Adoptar STXT como formato único de configuración.
-			
-			Decision >>
-				Se aprueba la adopción progresiva de STXT
-				como formato estándar de configuración.
-			
-			Consequences >>
-				* Nuevos servicios usarán STXT.
-				* Los existentes migrarán de forma incremental.
-	
-	Subheader: Ejemplo 4 — Relación entre RFCs
-	
-	Content >>
-		Es habitual referenciar otros documentos.
-		En @STXT@ estas relaciones pueden ser nodos explícitos.
-		
-	Code >>
-		RFC (com.acme.rfc):
-			Id: RFC-020
-			Title: Deprecación del sistema legacy
-			Status: Draft
-			Authors:
-				Author: Joan Costa
-			
-			Related:
-				Reference: RFC-013
-				Reference: RFC-007
-			
-			Context >>
-				Este RFC depende de la adopción del nuevo sistema
-				de configuración descrito en RFC-013.
-			
-			Proposal >>
-				Retirar el sistema legacy una vez migrados los servicios.
-	
-	Subheader: Ejemplo 5 — Comentarios y revisión
-	
-	Content >>
-		Un RFC puede acumular comentarios sin mezclarlos
-		con el texto principal.
-		
-	Code >>
-		RFC (com.acme.rfc):
-			Id: RFC-021
-			Title: Nuevo pipeline de despliegue
-			Status: Review
-			Authors:
-				Author: Platform Team
-			
-			Context >>
-				Cada equipo mantiene hoy su propio pipeline.
-			
-			Proposal >>
-				Unificar pipelines CI/CD en una única definición.
-			
-			Comments:
-				Comment:
-					Author: Mery Adams
-					Date: 2026-01-12
-					Text >>
-						Me preocupa el impacto en los equipos con tooling propio.
-						
-				Comment:
-					Author: Keyla Brown
-					Date: 2026-01-13
-					Text >>
-						¿Se ha evaluado el coste de migración?
-	
-	Subheader: Ejemplo 6 — Template mínimo para RFCs
-	
-	Content >>
-		Una plantilla (`@stxt.template`) ligera garantiza que ningún RFC omita los
-		elementos obligatorios, sin fijar el resto del contenido.
-		
+		La cabecera es un bloque de datos: identificador, estado, autores y fechas. El
+		cuerpo son bloques de texto con los nombres que el proceso de la organización ya
+		usa —contexto, propuesta, alternativas, impacto, decisión—. Las alternativas son la
+		parte más estructurada: cada una es un nodo con su título, y sus pros y contras son
+		bloques, porque es texto que se argumenta, no datos que se cuentan.
+
+	Subheader: La plantilla
+
 	Code >>
 		Template (@stxt.template): com.acme.rfc
 			Description >>
-				RFC: Estructura mínima para RFCs técnicos
+				RFC: Propuesta técnica sujeta a revisión y decisión
+				Status: Ciclo de vida de la propuesta
+				Related: Identificadores de otras propuestas relacionadas
 			Structure >>
 				RFC:
 					Id: (1)
@@ -242,52 +96,135 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 					Accepted date: (?) DATE
 					Related: (?)
 						Reference: (+)
-					
 					Context: (1) TEXT
-					Problem: (?) TEXT
 					Proposal: (1) TEXT
-					Decision: (?) TEXT
-					Consequences: (?) TEXT
-					
 					Alternatives: (?)
 						Alternative: (*)
-							Title: (1) @Title
 							Pros: (?) TEXT
 							Cons: (?) TEXT
-					
 					Impact: (?) TEXT
 					Risks: (?) TEXT
+					Decision: (?) TEXT
+					Consequences: (?) TEXT
 					Comments: (?)
 						Comment: (*)
 							Author: (1) @Author
 							Date: (1) DATE
 							Text: (1) TEXT
-	
-	Subheader: Por qué este caso encaja especialmente bien
-	
+
 	Content >>
-		Los RFCs ya son:
-		
-		* Texto plano.
-		* Versionados en Git.
-		* Revisados por personas.
-		
-		@STXT@ añade:
-		
-		* Estructura explícita.
-		* Metadatos procesables.
-		* Validación opcional.
-		* Menos dependencia de convenciones implícitas.
-		
-		La naturaleza del documento no cambia.
-		
-	Subheader: Resumen
-	
+		La plantilla fija lo mínimo que toda propuesta debe tener —identificador, título,
+		estado, al menos un autor, contexto y propuesta— y deja el resto opcional: una
+		propuesta en borrador puede no tener alternativas todavía, y una aceptada tendrá
+		decisión y consecuencias. Lo que no hace es restringir el texto: un bloque `TEXT`
+		admite cualquier contenido y cualquier longitud.
+
+		El `ENUM` de `Status` es el ciclo de vida del proceso. Una propuesta no está
+		«pendiente» ni «aprobada con matices»: está en uno de cinco estados, y cambiar de
+		estado es cambiar una línea.
+
+	Subheader: El ciclo de vida en el repositorio
+
 	Content >>
-		Usar @STXT@ para RFCs y propuestas técnicas permite:
-		
-		* Escribir documentos argumentados en texto libre.
-		* Mantener una estructura visible y consistente.
-		* Automatizar la revisión y la trazabilidad.
-		
-		El documento no se convierte en un lenguaje formal ni en código.
+		La misma propuesta, semanas después, aceptada:
+
+	Code >>
+		RFC (com.acme.rfc):
+			Id: RFC-013
+			Title: Unificación del sistema de configuración
+			Status: Accepted
+			Authors:
+				Author: Platform Team
+			Created: 2026-01-05
+			Updated: 2026-01-18
+			Accepted date: 2026-01-18
+
+			Context >>
+				Hoy conviven varios formatos de configuración en los servicios internos,
+				cada uno con sus propias reglas de validación y sus propias herramientas.
+
+			Proposal >>
+				Adoptar un único formato de configuración para los servicios internos, con
+				una plantilla por tipo de servicio mantenida por Plataforma.
+
+			Decision >>
+				Se aprueba la adopción progresiva. Plataforma publica las plantillas antes
+				del fin del trimestre.
+
+			Consequences >>
+				Los servicios nuevos usan el formato único desde su creación. Los existentes
+				migran en su siguiente versión mayor, sin fecha límite.
+
+			Comments:
+				Comment:
+					Author: Mery Adams
+					Date: 2026-01-12
+					Text >>
+						Preocupa el impacto en los equipos con herramientas propias. Propongo
+						que la migración de los servicios existentes no tenga fecha límite.
+				Comment:
+					Author: Keyla Brown
+					Date: 2026-01-13
+					Text >>
+						De acuerdo con la adopción progresiva si Plataforma mantiene las
+						plantillas.
+
+	Content >>
+		Entre las dos versiones, el *diff* muestra exactamente qué cambió: el estado, la
+		fecha de aceptación, la decisión, las consecuencias y dos comentarios. Los
+		comentarios de la revisión se guardan en el propio documento, con autor y fecha,
+		separados del texto principal; la discusión queda junto a la decisión, donde
+		alguien la buscará dentro de dos años.
+
+	Subheader: Relaciones entre propuestas
+
+	Content >>
+		Una propuesta que depende de otra lo declara como dato, no solo como una frase:
+
+	Code >>
+		RFC (com.acme.rfc):
+			Id: RFC-020
+			Title: Retirada del sistema de configuración anterior
+			Status: Draft
+			Authors:
+				Author: Joan Costa
+			Related:
+				Reference: RFC-013
+				Reference: RFC-007
+
+			Context >>
+				Con la adopción del formato único (RFC-013), el sistema anterior queda
+				sin servicios nuevos y con coste de mantenimiento creciente.
+
+			Proposal >>
+				Retirar el sistema anterior una vez migrados los servicios que aún lo usan.
+
+	Content >>
+		Con `Related` como nodo, un programa que recorra el directorio de propuestas puede
+		responder qué depende de qué, qué propuestas en borrador citan una rechazada, o
+		dibujar el grafo entero. Con la referencia solo en el texto del contexto, ninguna de
+		esas preguntas se puede responder sin leer.
+
+	Subheader: En el flujo de trabajo
+
+	Content >>
+		* Las propuestas viven en un directorio del repositorio, una por fichero, con la
+		  plantilla en `.stxt/`.
+		* Integración continua ejecuta `stxt validate rfcs/` en cada cambio: una propuesta
+		  sin contexto o con un estado fuera de la lista no entra.
+		* Un script sobre el árbol canónico genera el índice de propuestas por estado, avisa
+		  de las que llevan más de un mes en `Review` o lista las consecuencias de todas las
+		  aceptadas del trimestre.
+		* El texto de cada sección se publica tal cual, en el formato que la organización
+		  use para su documentación.
+
+	Subheader: Límites
+
+	Content >>
+		@STXT@ no impone un proceso: los nombres de las secciones, los estados y quién
+		puede cambiarlos son decisiones de cada organización, y la plantilla solo las
+		recoge. Tampoco sustituye a la herramienta de revisión: los comentarios del ejemplo
+		son el registro de la discusión, no un sistema de hilos con notificaciones. Y la
+		validación no comprueba relaciones entre documentos —que `RFC-007` exista, que una
+		propuesta aceptada no cite una rechazada—: eso lo hace el script que recorre el
+		directorio.

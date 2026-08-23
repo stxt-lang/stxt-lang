@@ -1,275 +1,190 @@
 Document (dev.stxt.website): Ficheros de configuración
 
 	Metadata:
-		Author: ChatGPT 5.2
-		Last modif: 2026-08-22
-		
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-08-23
+
 	Header: Ficheros de configuración
-	
-	Content >>
-		Los ficheros de configuración suelen empezar siendo simples y, con el tiempo,
-		convertirse en una mezcla frágil de:
-		
-		* datos,
-		* convenciones implícitas,
-		* comentarios,
-		* y reglas que solo conoce quien los mantiene.
-		
+
 	Assert >>
-		@STXT@ está diseñado para este punto: configuración legible, estructurada y
-		validable, sin convertirse en un lenguaje de programación.
-		
-	Subheader: Qué tipo de configuraciones
-	
+		Una configuración es un documento que leen dos públicos: la persona que la ajusta y
+		el programa que la carga. @STXT@ sirve a los dos con el mismo fichero, y con una
+		plantilla detecta en el editor el error que de otro modo aparecería en producción.
+
 	Content >>
-		Casos habituales:
-		
-		* Configuración de aplicaciones (servidor, puertos, flags, límites).
-		* Configuración por entorno (dev / staging / prod).
-		* Pipelines y jobs.
-		* Feature flags.
-		* Configuración de servicios (timeouts, reintentos, endpoints).
-		* Configuración documentada (comentarios largos, contexto).
-		
-	Subheader: Problemas habituales con otros formatos
-	
-	Content >>
-		Limitaciones conocidas de los formatos más extendidos:
-		
-		* JSON:
-		  * Estricto, con una sintaxis pensada para máquinas.
-		  * Sin comentarios.
-		  * Difícil de mantener cuando crece.
-		
-		* YAML:
-		  * Legible, pero frágil con la indentación.
-		  * Varias formas equivalentes de expresar lo mismo.
-		  * Parsers complejos y comportamiento difícil de predecir.
-		
-		* INI / properties:
-		  * Planos, sin jerarquía.
-		  * Tipos implícitos y reglas ad hoc.
-		
-		* XML:
-		  * Verboso.
-		  * Costoso de editar a mano.
-		
-		@STXT@ parte de otro equilibrio:
-		
-		* Sintaxis mínima.
-		* Jerarquía por indentación.
-		* Bloques de texto literal cuando hacen falta.
-		* Validación opcional.
-		
-	Subheader: Ejemplo 1 — Configuración de servidor
-	
-	Content >>
-		Configuración estructurada, legible y editable a mano.
-		
+		Los ficheros de configuración empiezan pequeños y crecen sin plan: se añaden claves,
+		se copian bloques entre entornos, se acumulan comentarios que explican por qué un
+		valor es el que es. Con el tiempo, las reglas que hacen válido el fichero —qué
+		claves existen, qué valores admiten, cuáles son obligatorias— solo están en la cabeza
+		de quien lo mantiene y en el código que lo lee. Un nombre mal escrito no falla al
+		cargar: simplemente se ignora, y el valor por defecto entra en silencio.
+
+		@STXT@ aborda esto con tres cosas: una jerarquía visible, que no necesita llaves ni
+		sangrías ambiguas; bloques de texto donde la explicación larga vive junto al valor
+		que explica; y una plantilla que convierte las reglas implícitas en un contrato que
+		el editor aplica al escribir.
+
+	Subheader: La configuración de un servicio
+
 	Code >>
 		Server Config (com.acme.server):
 			Name: api-gateway
 			Environment: production
-			
+
 			Network:
 				Host: 0.0.0.0
 				Port: 8080
 				Public url: https://api.acme.com
-			
+
 			Threads:
 				Min: 8
 				Max: 64
-			
+
 			Timeouts:
 				Read ms: 5000
 				Write ms: 5000
-			
+
 			Logging:
 				Level: INFO
 				Format: json
-			
+
 			Features:
-				Feature:
-					Name: experimental-cache
+				Feature: experimental-cache
 					Enabled: false
-				Feature:
-					Name: audit-logging
+				Feature: audit-logging
 					Enabled: true
-			
-			Description >>
-				Configuración principal del gateway de APIs.
-				Este fichero se versiona en Git y se despliega junto
-				con la aplicación.
-				
-				Cambios críticos deben pasar por revisión.
-	
-	Subheader: Qué aporta aquí @STXT@
-	
+
+			Notes >>
+				Configuración principal del gateway de APIs. Se versiona con la aplicación
+				y se despliega con ella.
+
+				Los cambios en Network y Timeouts pasan por revisión de Reliability:
+				el límite de 5000 ms viene del SLA con el proveedor de pagos.
+
 	Content >>
-		* Los nombres de nodo aportan la semántica.
-		* La jerarquía es visible en la indentación.
-		* El texto explicativo vive junto a la configuración (`Description >>`).
-		* No hay claves mágicas ni estructuras implícitas.
-		
-	Subheader: Ejemplo 2 — Configuración por entorno
-	
+		Cada grupo (`Network`, `Threads`, `Logging`) es un nodo sin valor que agrupa a sus
+		hijos; cada ajuste es un nodo con valor; cada *feature flag* es un nodo cuyo valor
+		es su nombre y cuyo hijo es su estado. El bloque `Notes >>` lleva lo que en otros
+		formatos va en comentarios dispersos: aquí es parte del documento, con párrafos, y
+		un programa puede enseñarlo o ignorarlo.
+
+	Subheader: La plantilla
+
 	Content >>
-		El mismo formato para todos los entornos, sin duplicar la estructura.
-		
-	Code >>
-		Application Config (com.acme.app):
-			App name: Billing
-			
-			Environments:
-				Environment:
-					Name: dev
-					Database:
-						Url: jdbc:postgresql://localhost/dev
-						Max connections: 5
-					Debug: true
-					
-				Environment:
-					Name: staging
-					Database:
-						Url: jdbc:postgresql://staging/db
-						Max connections: 10
-					Debug: false
-					
-				Environment:
-					Name: prod
-					Database:
-						Url: jdbc:postgresql://prod/db
-						Max connections: 30
-					Debug: false
-	
-	Subheader: Ventajas frente a “copiar y pegar”
-	
-	Content >>
-		* La estructura es la misma en todos los entornos.
-		* Las diferencias entre entornos se localizan con `diff`.
-		* Se puede validar que todos los entornos declaran los mismos campos.
-		
-	Subheader: Ejemplo 3 — Feature flags
-	
-	Content >>
-		Un caso en el que conviven datos y texto explicativo.
-		
-	Code >>
-		Feature Flags (com.acme.features):
-			Feature:
-				Key: new-checkout
-				Enabled: false
-				Owner: Payments
-				Description >>
-					Nuevo flujo de checkout.
-					Activar progresivamente por entorno.
-					
-			Feature:
-				Key: rate-limit-v2
-				Enabled: true
-				Owner: Platform
-				Description >>
-					Nuevo sistema de rate limiting.
-					Reemplaza la versión anterior basada en filtros.
-	
-	Subheader: Validación con @stxt.template
-	
-	Content >>
-		Una plantilla (`@stxt.template`) cubre tres necesidades habituales en configuración:
-		
-		* Rechazar nombres de campo mal escritos.
-		* Comprobar tipos (números, booleanos, fechas).
-		* Restringir los valores posibles (`ENUM`).
-		
+		La plantilla hace explícito lo que el programa que carga la configuración da por
+		supuesto:
+
 	Code >>
 		Template (@stxt.template): com.acme.server
 			Description >>
-				Server Config: Configuración del servidor API
+				Server Config: Configuración de un servicio del gateway
+				Features: Interruptores de funcionalidad, uno por nodo
 			Structure >>
 				Server Config:
 					Name: (1)
 					Environment: (1) ENUM [dev, staging, production]
-					
 					Network: (1)
 						Host: (1)
-						Port: (1) INTEGER
-						Public url: (?)
-					
+						Port: (1) NATURAL
+						Public url: (?) URL
 					Threads: (?)
 						Min: (1) NATURAL
 						Max: (1) NATURAL
-					
 					Timeouts: (?)
 						Read ms: (?) NATURAL
 						Write ms: (?) NATURAL
-					
 					Logging: (?)
 						Level: (1) ENUM [DEBUG, INFO, WARN, ERROR]
 						Format: (?) ENUM [text, json]
-					
 					Features: (?)
 						Feature: (*)
-							Name: (1) @Name
 							Enabled: (1) BOOLEAN
-					
-					Description: (?) TEXT
-	
+					Notes: (?) TEXT
+
 	Content >>
-		Esta plantilla:
-		
-		* Rechaza los nombres no declarados (`Port` frente a `Ports`).
-		* Comprueba los tipos básicos.
-		* Deja opcionales la mayoría de los campos.
-		
-	Subheader: Validación con @stxt.schema
-	
+		Con ella, los errores típicos de configuración dejan de ser silenciosos:
+
+		* `Ports: 8080` (con una `s` de más) es `CHILD_NOT_DECLARED`, no una clave ignorada
+		  que deja al servicio escuchando en el puerto por defecto.
+		* `Port: 80a` o `Enabled: yes` son `INVALID_VALUE`: un natural es un natural y un
+		  booleano es `true` o `false`.
+		* `Level: info` en minúsculas no es `INFO`: el `ENUM` compara el valor tal cual.
+		* Falta `Network`, o `Host` dentro de `Network`: `TOO_FEW_CHILDREN`.
+
+		Y todo eso se ve en el editor, subrayado, antes de guardar el fichero. En
+		integración continua, `stxt validate config/` hace la misma comprobación y detiene
+		el despliegue de una configuración inválida.
+
+	Subheader: Varios entornos, una estructura
+
 	Content >>
-		Cuando la configuración es un contrato entre sistemas:
-		
-		* agentes,
-		* validadores externos,
-		* despliegues automatizados,
-		
-		un esquema (`@stxt.schema`) ofrece el control completo y explícito.
-		
-		Flujo habitual:
-		
-		* Se escribe la plantilla (más legible).
-		* Se compila a esquema.
-		* El sistema valida contra el esquema.
-		
-	Subheader: Comparación conceptual
-	
+		Cuando la misma aplicación se configura para varios entornos, la tentación es copiar
+		el fichero y cambiar valores. Con @STXT@ se puede mantener un solo documento con un
+		nodo por entorno, y la plantilla garantiza que todos declaran lo mismo:
+
+	Code >>
+		Application Config (com.acme.app):
+			App name: Billing
+
+			Environments:
+				Environment: dev
+					Database:
+						Url: jdbc:postgresql://localhost/dev
+						Max connections: 5
+					Debug: true
+				Environment: staging
+					Database:
+						Url: jdbc:postgresql://staging/db
+						Max connections: 10
+					Debug: false
+				Environment: production
+					Database:
+						Url: jdbc:postgresql://prod/db
+						Max connections: 30
+					Debug: false
+
+	Code >>
+		Template (@stxt.template): com.acme.app
+			Description >>
+				Application Config: Configuración de una aplicación en todos sus entornos
+			Structure >>
+				Application Config:
+					App name: (1)
+					Environments: (1)
+						Environment: (+)
+							Database: (1)
+								Url: (1)
+								Max connections: (1) NATURAL
+							Debug: (1) BOOLEAN
+
 	Content >>
-		@STXT@ para configuración se sitúa entre:
-		
-		* JSON → rígido y orientado a máquinas.
-		* YAML → legible pero ambiguo.
-		* Lenguajes DSL → expresivos, pero con capacidad de ejecución.
-		
-		@STXT@:
-		
-		* No ejecuta nada.
-		* No evalúa expresiones.
-		* No incluye ficheros externos.
-		
-		Solo describe estructura, datos y texto.
-		
-	Subheader: Recomendaciones de uso
-	
+		La diferencia entre `staging` y `production` es un *diff* de tres líneas, y un
+		entorno al que le falte `Database` no valida. Si la aplicación prefiere un fichero
+		por entorno, el mismo documento se parte en tres con el mismo namespace y la misma
+		plantilla; la garantía no cambia.
+
+	Subheader: Cómo lo lee el programa
+
 	Content >>
-		* Nombres de nodo estables y descriptivos.
-		* Agrupación por dominios (`Network`, `Logging`, `Features`).
-		* `ENUM` para entornos, niveles y estados.
-		* Decisiones documentadas en bloques de texto (`>>`).
-		* Validación como capa adicional, no como requisito inicial.
-		
-	Subheader: Resumen
-	
+		El programa que carga la configuración no parsea texto: recibe un árbol. Con la
+		biblioteca de su lenguaje recorre los nodos por nombre canónico —`port`,
+		`max-connections`— y obtiene valores ya validados contra la plantilla, de modo que
+		el código de carga no necesita comprobar tipos ni valores permitidos: eso ya ha
+		pasado. Las guías de [TypeScript](tools-typescript), [Java](tools-java) y
+		[Python](tools-python) muestran el recorrido; la resolución de la plantilla sigue la
+		cadena de directorios `.stxt/` de [STXT-DISCOVERY-SPEC](stxt-discovery-ref), igual que
+		en el editor, así que validador y programa aplican la misma definición.
+
+	Subheader: Límites
+
 	Content >>
-		Los ficheros de configuración son un caso natural para @STXT@:
-		
-		* Las personas los leen y modifican sin herramientas especiales.
-		* Las máquinas los validan y procesan sin ambigüedad.
-		* El mismo formato cubre desde la configuración simple hasta los contratos
-		  estrictos.
+		@STXT@ describe la configuración; no la calcula. No hay variables, ni referencias a
+		otros valores, ni inclusión de ficheros, ni expresiones: un valor es el texto que
+		está escrito. Es una decisión de diseño ([Principios de diseño](lang-principles)),
+		a cambio de que un fichero de configuración no pueda ejecutar nada ni depender de
+		otro. La composición —un fichero base más uno por entorno— la hace la aplicación al
+		cargar, de forma explícita.
+
+		Tampoco hay valores por defecto en la plantilla: un campo es obligatorio u opcional,
+		y si es opcional y falta, es el programa quien decide qué vale.

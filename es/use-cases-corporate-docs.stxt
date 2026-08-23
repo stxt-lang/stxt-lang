@@ -1,272 +1,243 @@
 Document (dev.stxt.website): Documentos corporativos
 
 	Metadata:
-		Author: ChatGPT 5.2
-		Last modif: 2026-08-22
-		
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-08-23
+
 	Header: Documentos corporativos
-	
+
+	Assert >>
+		Actas, informes de estado, *postmortems*, registros de decisiones: documentos que
+		escriben personas de perfiles distintos, que se revisan, y de los que alguien acaba
+		extrayendo datos a mano. @STXT@ permite que el mismo fichero sea el documento que se
+		lee y la fuente de la que se extraen.
+
 	Content >>
-		Los documentos corporativos deben ser legibles y editables por personas y, al mismo
-		tiempo, consistentes, revisables y procesables por programas.
-		
-		@STXT@ se aplica a los documentos que combinan a la vez:
-		
-		* texto narrativo,
-		* estructura (secciones, metadatos),
-		* y datos (campos, listas, estados).
-		
-	Subheader: Qué tipo de documentos
-	
+		Un acta de reunión tiene una parte que es texto —lo que se discutió, por qué se
+		decidió algo— y una parte que son datos: quién asistió, qué acciones quedaron
+		abiertas, para cuándo y a cargo de quién. En la práctica las dos partes acaban en el
+		mismo documento de texto, y los datos se recuperan después leyendo: alguien repasa
+		las actas del trimestre para saber qué acciones siguen abiertas, o copia los estados
+		de veinte informes a una hoja de cálculo.
+
+		El problema no es el formato del texto sino que los datos no están marcados como
+		tales. @STXT@ resuelve exactamente eso: los datos son nodos con nombre y valor, el
+		texto va en bloques literales, y el documento sigue leyéndose de arriba abajo como
+		siempre.
+
+	Subheader: Un acta de reunión
+
 	Content >>
-		Ejemplos habituales:
-		
-		* Actas de reunión
-		* Informes de estado (semanales/mensuales)
-		* Propuestas / RFC internos
-		* Políticas y procedimientos
-		* Postmortems (incidentes)
-		* Requisitos y decisiones (ADR: Architecture Decision Record, registro de decisiones de arquitectura)
-		
-	Subheader: Por qué @STXT@ aquí
-	
-	Content >>
-		Requisitos habituales de un documento corporativo:
-		
-		* **Múltiples autores**: personas técnicas y no técnicas editan el mismo documento.
-		* **Plantillas**: todos los documentos de un tipo siguen el mismo formato, sin depender de
-		  un editor concreto.
-		* **Revisión**: diferencias (diff) legibles en Git.
-		* **Automatización**: extracción de campos (estado, responsables, fechas, acciones) sin
-		  alterar el texto.
-		* **Evolución**: el formato del documento cambia con el tiempo.
-		
-		@STXT@ aporta:
-		
-		* Estructura explícita por indentación.
-		* Texto libre en bloques de texto `>>`, sin secuencias de escape ni sintaxis adicional.
-		* Validación opcional con `@stxt.template` o `@stxt.schema`.
-		* Namespaces que separan la semántica por tipo de documento (`com.acme.minutes`,
-		  `com.acme.report`, etc.).
-		
-	Subheader: Ejemplo 1 — Acta de reunión
-	
-	Content >>
-		El acta combina metadatos, agenda, decisiones y acciones. El texto libre va en bloques
-		de texto; los datos procesables, en nodos inline.
-		
+		El acta de una reunión semanal, tal como la escribiría quien la toma:
+
 	Code >>
 		Minutes (com.acme.corp.minutes):
-			Title: Weekly sync — Platform
+			Title: Sincronización semanal — Plataforma
 			Date: 2026-01-09
-			Time: 10:00:00
 			Duration minutes: 45
-			Meeting id: PLAT-2026-01-09
-			Location: Google Meet
-			Confidential: false
-			
 			Attendees:
 				Attendee: Joan Costa
 				Attendee: Mery Adams
 				Attendee: Keyla Brown
-			
-			Agenda:
-				Item:
-					Title: Estado del roadmap Q1
-				Item:
-					Title: Incidencias y riesgos
-				Item:
-					Title: Decisiones pendientes
-			
+
 			Notes >>
-				Resumen ejecutivo:
-				- Roadmap en verde, pero falta cerrar capacidad del equipo.
-				- Riesgo principal: dependencia de proveedor externo en el módulo X.
-				
-				Observaciones:
-				- Se acuerda mover el despliegue del viernes al lunes.
-				- Se revisará el coste de la opción B.
-			
+				El roadmap del trimestre va según lo previsto, pero falta cerrar la
+				capacidad del equipo para febrero. El riesgo principal sigue siendo la
+				dependencia del proveedor externo en el módulo X: los tiempos de respuesta
+				varían demasiado entre días.
+
+				Se acuerda mover la ventana de despliegue del viernes al lunes, para tener
+				soporte completo el día siguiente. Se revisará el coste de la opción B
+				antes de decidir sobre la caché.
+
 			Decisions:
-				Decision:
+				Decision: Mover la ventana de despliegue al lunes
 					Id: DEC-0142
-					Title: Mover ventana de despliegue a lunes
 					Decision status: Approved
 					Owner: Platform Team
 					Rationale >>
-						Reducimos riesgo operativo y facilitamos soporte el lunes.
-						
-				Decision:
+						Reduce el riesgo operativo: el soporte del martes es completo y el del
+						sábado no.
+				Decision: Congelar cambios no críticos en el módulo X
 					Id: DEC-0143
-					Title: Congelar cambios no críticos en módulo X
 					Decision status: Proposed
 					Owner: Reliability
-					Rationale >>
-						Dependencia externa con variabilidad alta en tiempos de respuesta.
-			
-			Action Items:
-				Action:
+
+			Actions:
+				Action: Preparar la propuesta de capacidad del trimestre
 					Id: ACT-0991
-					Title: Preparar propuesta de capacidad (Q1)
 					Owner: Mery Adams
 					Due: 2026-01-16
 					Action status: Open
-				Action:
+				Action: Estimar el coste de la opción B
 					Id: ACT-0992
-					Title: Estimar coste opción B
 					Owner: Joan Costa
 					Due: 2026-01-14
 					Action status: In Progress
-	
-	Subheader: Qué se automatiza con este documento
-	
+
 	Content >>
-		A partir del árbol del documento, un programa puede:
-		
-		* Listar las acciones abiertas y sus fechas de vencimiento.
-		* Generar un resumen para correo o chat.
-		* Calcular métricas: acciones por equipo, plazos, porcentaje de acciones en estado `Done`.
-		* Exportar a otros formatos (por ejemplo, JSON para un panel de control).
-		
-		Al mismo tiempo:
-		
-		* Los bloques `Notes >>` y `Rationale >>` conservan el texto libre sin interpretarlo.
-		
-	Subheader: Ejemplo 2 — Informe de estado
-	
+		Se lee como un acta. Y a la vez, para un programa, es un árbol en el que cada acción
+		tiene un responsable, una fecha y un estado.
+
+	Subheader: Qué es dato y qué es texto
+
 	Content >>
-		Un informe de estado combina:
-		
-		* el estado como dato validable,
-		* el detalle como texto libre,
-		* los riesgos y bloqueos como listas procesables.
-		
-	Code >>
-		Status Report (com.acme.corp.status):
-			Period:
-				From: 2026-01-05
-				To: 2026-01-09
-			
-			Project: STXT Web
-			Owner: Platform Docs
-			Status: Green
-			
-			Summary >>
-				Avance sostenido en la documentación base y consolidación de ejemplos.
-				Queda trabajo en herramientas (CLI y editor online) y casos de uso.
-			
-			Progress:
-				Item:
-					Title: Página de introducción
-					Done: true
-				Item:
-					Title: Tutorial actualizado
-					Done: true
-				Item:
-					Title: Especificaciones (core/schema/template)
-					Done: In Progress
-			
-			Risks:
-				Risk:
-					Id: RSK-020
-					Level: Medium
-					Title: Falta de ejemplos de migración
-					Mitigation >>
-						Crear ejemplos de XML/YAML y explicar equivalencias.
-			
-			Next:
-				Item: Cerrar páginas de casos de uso
-				Item: Publicar primera versión del parser Java
-				Item: Preparar repositorio de ejemplos
-	
-	Subheader: Validación con @stxt.template
-	
+		La única decisión de modelado que hay que tomar es esa, y el criterio es práctico:
+		**es dato lo que alguien va a buscar, filtrar o contar; es texto lo demás**.
+
+		* Los asistentes, las decisiones y las acciones son datos: se listan, se cruzan con
+		  otras actas, se vencen. Van en nodos inline, uno por elemento.
+		* El resumen de la discusión y la justificación de cada decisión son texto: se leen,
+		  no se procesan. Van en bloques `>>`, donde se escriben párrafos sin ninguna
+		  restricción.
+		* El título de cada decisión y de cada acción es el valor del propio nodo
+		  (`Decision: Mover la ventana…`), y sus atributos son hijos. Así la lista se lee de
+		  un vistazo.
+
+		Si más adelante hace falta procesar algo que hoy es texto —por ejemplo, los riesgos
+		mencionados en las notas—, se saca a un nodo propio. El documento no cambia de
+		formato; gana un nodo.
+
+	Subheader: La plantilla
+
 	Content >>
-		Una plantilla (`@stxt.template`) define la estructura mínima del documento; el validador
-		rechaza los documentos incompletos.
-		
+		Una plantilla fija qué debe tener toda acta y qué es opcional, y acota los estados:
+
 	Code >>
 		Template (@stxt.template): com.acme.corp.minutes
 			Description >>
-				Minutes: Plantilla de actas corporativas
+				Minutes: Acta de reunión
+				Decisions: Decisiones tomadas o propuestas en la reunión
+				Actions: Acciones acordadas, con responsable y fecha límite
 			Structure >>
 				Minutes:
 					Title: (1)
 					Date: (1) DATE
-					Time: (?) TIME
 					Duration minutes: (?) NATURAL
-					Meeting id: (?) 
-					Location: (?)
-					Confidential: (?) BOOLEAN
-					
-					Attendees: (?)
+					Attendees: (1)
 						Attendee: (+)
-					
-					Agenda: (?)
-						Item: (*)
-							Title: (1) @Title
-					
 					Notes: (?) TEXT
-					
 					Decisions: (?)
 						Decision: (*)
 							Id: (1)
-							Title: (1) @Title
 							Decision status: (1) ENUM [Proposed, Approved, Rejected]
 							Owner: (?)
 							Rationale: (?) TEXT
-					
-					Action Items: (?)
+					Actions: (?)
 						Action: (*)
 							Id: (1) @Id
-							Title: (1) @Title
 							Owner: (?) @Owner
 							Due: (?) DATE
 							Action status: (1) ENUM [Open, In Progress, Done, Blocked]
-	
+
 	Content >>
-		Esta plantilla:
-		
-		* Exige los campos obligatorios (`Title`, `Date`) con la cardinalidad `(1)`.
-		* Restringe los estados con `ENUM`.
-		* Declara los campos de texto libre con el tipo `TEXT`.
-		* Usa la forma de autoría abreviada: no requiere los nodos `Node` y `Child` de un esquema.
-		* Reutiliza `Title`, `Id` y `Owner` con referencias `@Nombre Nodo`: dentro de un namespace
-		  un nombre de nodo identifica **un solo** nodo, así que sus reapariciones se referencian
-		  en lugar de redefinirse.
-		* Por eso `Decision status` y `Action status` son nodos distintos: sus `ENUM` no
-		  coinciden, y una referencia no puede cambiar los valores.
-		
-	Subheader: Validación con @stxt.schema
-	
+		Lo que garantiza, acta a acta:
+
+		* Toda acta tiene título, fecha y al menos un asistente; sin eso no valida.
+		* Una decisión está en uno de tres estados, y una acción en uno de cuatro. Un estado
+		  escrito de otra manera (`Aprobada`, `open`) es un error, no una variante.
+		* Las fechas son fechas: `2026-01-32` no pasa.
+		* Un nodo que no está en la plantilla —`Atendees` con una sola `t`, un `Priority`
+		  que alguien añadió por su cuenta— se rechaza. Es el modelo de contenido cerrado: la
+		  plantilla es la lista completa de lo que puede aparecer.
+		* `Id` y `Owner` se declaran una vez y se reutilizan con `@Id` y `@Owner`: dentro de un
+		  namespace, un nombre de nodo identifica un solo nodo. Por la misma regla, el estado
+		  de una decisión y el de una acción son nodos distintos —`Decision status` y
+		  `Action status`—: sus listas de valores no coinciden, y un mismo nombre no puede
+		  tener dos definiciones.
+
+		La plantilla se guarda en el directorio `.stxt/` del repositorio donde viven las
+		actas, y a partir de ahí el editor y la línea de comandos la aplican sin configurar
+		nada ([El entorno de trabajo](lang-workflow)).
+
+	Subheader: Un informe de estado
+
 	Content >>
-		El esquema (`@stxt.schema`) es la forma explícita de la misma definición. Se usa cuando:
-		
-		* Hay varios productores y consumidores del documento.
-		* Se requiere interoperabilidad entre equipos o sistemas.
-		* Hay requisitos de cumplimiento normativo (auditorías, controles, archivado).
-		
-		El esquema equivalente es más extenso; toda plantilla se compila a un esquema
-		equivalente, de modo que no es necesario escribirlo a mano.
-		
-	Subheader: Ventajas prácticas en empresa
-	
+		El mismo enfoque sirve para cualquier documento periódico. Un informe de estado
+		semanal:
+
+	Code >>
+		Status Report (com.acme.corp.status):
+			Project: Portal de clientes
+			Owner: Platform Docs
+			Period:
+				From: 2026-01-05
+				To: 2026-01-09
+			Status: Green
+
+			Summary >>
+				Avance sostenido en la documentación base. Queda trabajo en las
+				herramientas de línea de comandos y en los casos de uso; ninguno bloquea
+				la entrega de febrero.
+
+			Progress:
+				Item: Página de introducción
+					Item status: Done
+				Item: Tutorial
+					Item status: Done
+				Item: Referencia de la línea de comandos
+					Item status: In Progress
+
+			Risks:
+				Risk: Faltan ejemplos de migración desde otros formatos
+					Id: RSK-020
+					Level: Medium
+					Mitigation >>
+						Preparar dos ejemplos de migración antes del cierre del trimestre.
+
+	Code >>
+		Template (@stxt.template): com.acme.corp.status
+			Description >>
+				Status Report: Informe de estado periódico de un proyecto
+			Structure >>
+				Status Report:
+					Project: (1)
+					Owner: (1)
+					Period: (1)
+						From: (1) DATE
+						To: (1) DATE
+					Status: (1) ENUM [Green, Amber, Red]
+					Summary: (1) TEXT
+					Progress: (?)
+						Item: (*)
+							Item status: (1) ENUM [Done, In Progress, Blocked]
+					Risks: (?)
+						Risk: (*)
+							Id: (1)
+							Level: (1) ENUM [Low, Medium, High]
+							Mitigation: (?) TEXT
+
 	Content >>
-		* **Diffs en Git**: los cambios afectan a líneas concretas, no a ficheros binarios.
-		* **Edición**: con cualquier editor de texto.
-		* **Estandarización**: la plantilla actúa como contrato del formato.
-		* **Adopción gradual**: un documento sin validación es válido; la plantilla se añade
-		  después sin cambiar la sintaxis.
-		* **Integración**: el parser produce un árbol que se exporta a JSON, XML o YAML o se
-		  consume desde herramientas internas.
-		
-	Subheader: Recomendaciones de estilo
-	
+		El semáforo `Status` es un `ENUM`, no un adjetivo en el resumen. Con veinte informes
+		en un directorio, un script de diez líneas responde cuántos proyectos están en rojo
+		y cuáles son sus riesgos altos, sin que nadie los haya leído uno a uno.
+
+	Subheader: En el flujo de trabajo
+
 	Content >>
-		* Nombres de nodo estables (“Action Items”, “Decision”, “Action status”…).
-		* Bloques de texto `>>` solo para texto largo, contexto o argumentación.
-		* Cardinalidades explícitas y acotadas en las plantillas.
-		* Estados como `ENUM` con valores acotados.
-		* En documentos versionados en Git, sin reformateos automáticos (cambios masivos de
-		  blancos) que oculten los cambios en los diffs.
-			
+		Los documentos viven en un repositorio, como el código:
+
+		* **Escritura**: cualquier editor de texto. Con la extensión de VS Code, la plantilla
+		  da autocompletado de nombres y estados, y marca los errores mientras se escribe.
+		* **Revisión**: una modificación es un *diff* de líneas concretas —una acción que
+		  pasa de `Open` a `Done`, una decisión nueva—, no un fichero binario que hay que
+		  abrir para ver qué cambió.
+		* **Integración continua**: `stxt validate --recursive minutes/` rechaza la
+		  incorporación de un acta incompleta o con un estado inválido antes de que llegue
+		  al repositorio ([La línea de comandos](tools-cli)).
+		* **Explotación**: el árbol canónico (`stxt describe`, o la biblioteca de cada
+		  lenguaje) alimenta lo que haga falta: la lista de acciones abiertas por persona,
+		  un resumen semanal por correo, un panel con los semáforos de todos los proyectos.
+
+		Nada de esto obliga a cambiar cómo se escribe: un acta sin plantilla es un documento
+		@STXT@ válido, y la validación se añade cuando el equipo decide qué quiere garantizar.
+
+	Subheader: Límites
+
+	Content >>
+		@STXT@ estructura el documento; no aporta flujo de aprobación, control de acceso ni
+		notificaciones. Eso lo pone el repositorio y las herramientas de alrededor. Tampoco
+		valida reglas entre campos —que una acción en estado `Done` no tenga fecha futura,
+		por ejemplo—: esa lógica pertenece a la aplicación que explota los datos, no a la
+		plantilla.

@@ -1,90 +1,33 @@
 Document (dev.stxt.website): RFCs and technical proposals
 
-	Metadata: 
-		Author: ChatGPT 5.2
-		Last modif: 2026-08-22
+	Metadata:
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-08-23
 
 	Header: RFCs and technical proposals
 
-	Content >>
-		RFCs (*Request for Comments*) and technical proposal documents serve to make
-		design decisions in an explicit, reviewable, and shared way.
-
-		They are usually long, argumentative, living documents that combine
-		narrative text with structured information.
-
 	Assert >>
-		@STXT@ serves as a source format for this type of document without changing
-		the usual workflow.
-
-	Subheader: What is meant here by RFC
-
-	Content >>
-		In this context, “RFC” includes:
-
-		* Internal technical proposals.
-		* Classic RFCs, in the style of the IETF.
-		* ADRs (*Architecture Decision Records*).
-		* Design documents prior to implementation.
-
-		No specific process is assumed: the subject is the document, not the
-		methodology.
-
-	Subheader: Common problems with current RFCs
+		A technical proposal is an argumentative document with a life cycle: it is drafted,
+		discussed, accepted or rejected, and remains as a record of why something was
+		decided. @STXT@ keeps the plain-text, review-based flow these documents already
+		have, and makes the status, the authors and the relations between proposals
+		explicit.
 
 	Content >>
-		In practice, these documents tend to:
+		Teams that write technical proposals —internal RFCs, architecture decision records,
+		design documents— usually already do so in plain text and in a repository: the
+		document is reviewed like code, with a diff and comments. What fails is not the flow
+		but the structure: the status of the proposal is a word in the header that each
+		author writes their own way, relations between documents are links in the text, and
+		knowing which proposals are still open or which depend on one that has just been
+		rejected is manual work.
 
-		* Live in Markdown with implicit conventions.
-		* Mix metadata and free text without a clear separation.
-		* Depend on the authors' discipline to maintain the structure.
-		* Be difficult to validate automatically.
+		With @STXT@ the proposal is still a text document with long sections, but its
+		header is data. The status is an `ENUM`, the authors are nodes, references to other
+		proposals are values a program can follow.
 
-		The workflow itself, however, usually works:
-
-		* Plain text.
-		* Versioned in Git.
-		* Reviewed by diff.
-
-		@STXT@ keeps that workflow and adds explicit structure.
-
-	Subheader: Example 1 — Minimal RFC
-
-	Content >>
-		A reduced RFC, sufficient for the initial discussion.
-
-	Code >>
-		RFC (com.acme.rfc):
-			Id: RFC-012
-			Title: Distributed cache for module X
-			Status: Draft
-			Authors:
-				Author: Joan Costa
-			Created: 2026-01-11
-
-			Context >>
-				Module X has latency problems under load.
-				Currently each instance queries the database
-				for repetitive operations.
-
-			Proposal >>
-				Introduce a shared distributed cache layer
-				across instances to reduce database accesses.
-
-			Decision >>
-				Pending evaluation.
-
-	Subheader: What @STXT@ brings here
-
-	Content >>
-		* Long text lives in text blocks (`>>`), without restrictions.
-		* Metadata are nodes, not conventions.
-		* The RFC structure is visible at a glance.
-
-	Subheader: Example 2 — More complete RFC
-
-	Content >>
-		An RFC with alternatives, impact, and risks.
+	Subheader: A proposal
 
 	Code >>
 		RFC (com.acme.rfc):
@@ -97,138 +40,50 @@ Document (dev.stxt.website): RFCs and technical proposals
 			Updated: 2026-01-10
 
 			Context >>
-				Currently there are multiple configuration formats
-				(JSON, YAML, properties) with different rules.
-
-			Problem >>
-				The diversity of formats makes validation,
-				automation, and support difficult.
+				Several configuration formats coexist today in the internal services,
+				each with its own validation rules and its own tooling. Every new team
+				picks one, and support has to know them all.
 
 			Proposal >>
-				Adopt STXT as the single configuration format
-				for internal services.
+				Adopt a single configuration format for internal services, with one
+				template per service type maintained by Platform. Existing services migrate
+				when they change major version; new ones start with the single format.
 
 			Alternatives:
-				Alternative:
-					Title: Keep current formats
+				Alternative: Keep the current formats
 					Pros >>
-						Zero initial cost.
+						No initial cost.
 					Cons >>
-						Fragmentation remains.
-
-				Alternative:
-					Title: Standardize on YAML
+						Fragmentation remains and grows with every new service.
+				Alternative: Standardize on the most widespread format today
 					Pros >>
-						Existing tools.
+						Tooling and knowledge already present in the teams.
 					Cons >>
-						Ambiguity and complex validation.
+						Its validation is external and ambiguous; it does not solve the
+						underlying problem.
 
 			Impact >>
-				Teams will need to gradually migrate their configurations.
-
-			Risks >>
-				Initial resistance to change.
+				Teams migrate gradually. Platform maintains the templates and a validator
+				in continuous integration.
 
 			Decision >>
-				Under architecture review.
-
-	Subheader: Example 3 — Status evolution
+				Under review by the architecture committee.
 
 	Content >>
-		An RFC changes status over time.
-		The status is explicit data, not a sentence in the text.
+		The header is a block of data: identifier, status, authors and dates. The body is
+		text blocks with the names the organization's process already uses —context,
+		proposal, alternatives, impact, decision—. The alternatives are the most structured
+		part: each one is a node with its title, and its pros and cons are blocks, because
+		that is text that is argued, not data that is counted.
 
-	Code >>
-		RFC (com.acme.rfc):
-			Id: RFC-013
-			Title: Unification of the configuration system
-			Status: Accepted
-			Authors:
-				Author: Platform Team
-			Accepted date: 2026-01-18
-
-			Context >>
-				Multiple configuration formats with different rules.
-
-			Proposal >>
-				Adopt STXT as the single configuration format.
-
-			Decision >>
-				The progressive adoption of STXT is approved
-				as the standard configuration format.
-
-			Consequences >>
-				* New services will use STXT.
-				* Existing ones will migrate incrementally.
-
-	Subheader: Example 4 — Relationship between RFCs
-
-	Content >>
-		It is common to reference other documents.
-		In @STXT@ these relationships can be explicit nodes.
-
-	Code >>
-		RFC (com.acme.rfc):
-			Id: RFC-020
-			Title: Deprecation of the legacy system
-			Status: Draft
-			Authors:
-				Author: Joan Costa
-
-			Related:
-				Reference: RFC-013
-				Reference: RFC-007
-
-			Context >>
-				This RFC depends on the adoption of the new configuration system
-				described in RFC-013.
-
-			Proposal >>
-				Retire the legacy system once the services have migrated.
-
-	Subheader: Example 5 — Comments and review
-
-	Content >>
-		An RFC can accumulate comments without mixing them
-		with the main text.
-
-	Code >>
-		RFC (com.acme.rfc):
-			Id: RFC-021
-			Title: New deployment pipeline
-			Status: Review
-			Authors:
-				Author: Platform Team
-
-			Context >>
-				Today every team maintains its own pipeline.
-
-			Proposal >>
-				Unify CI/CD pipelines into a single definition.
-
-			Comments:
-				Comment:
-					Author: Mery Adams
-					Date: 2026-01-12
-					Text >>
-						I’m concerned about the impact on teams with their own tooling.
-
-				Comment:
-					Author: Keyla Brown
-					Date: 2026-01-13
-					Text >>
-						Has the migration cost been evaluated?
-
-	Subheader: Example 6 — Minimal template for RFCs
-
-	Content >>
-		A lightweight template (`@stxt.template`) guarantees that no RFC omits the
-		mandatory elements, without fixing the rest of the content.
+	Subheader: The template
 
 	Code >>
 		Template (@stxt.template): com.acme.rfc
 			Description >>
-				RFC: Minimal structure for technical RFCs
+				RFC: Technical proposal subject to review and decision
+				Status: Life cycle of the proposal
+				Related: Identifiers of other related proposals
 			Structure >>
 				RFC:
 					Id: (1)
@@ -241,52 +96,135 @@ Document (dev.stxt.website): RFCs and technical proposals
 					Accepted date: (?) DATE
 					Related: (?)
 						Reference: (+)
-
 					Context: (1) TEXT
-					Problem: (?) TEXT
 					Proposal: (1) TEXT
-					Decision: (?) TEXT
-					Consequences: (?) TEXT
-
 					Alternatives: (?)
 						Alternative: (*)
-							Title: (1) @Title
 							Pros: (?) TEXT
 							Cons: (?) TEXT
-
 					Impact: (?) TEXT
 					Risks: (?) TEXT
+					Decision: (?) TEXT
+					Consequences: (?) TEXT
 					Comments: (?)
 						Comment: (*)
 							Author: (1) @Author
 							Date: (1) DATE
 							Text: (1) TEXT
 
-	Subheader: Why this case fits especially well
+	Content >>
+		The template fixes the minimum every proposal must have —identifier, title, status,
+		at least one author, context and proposal— and leaves the rest optional: a draft
+		may not have alternatives yet, and an accepted one will have a decision and
+		consequences. What it does not do is restrict the text: a `TEXT` block admits any
+		content and any length.
+
+		The `Status` `ENUM` is the life cycle of the process. A proposal is neither
+		"pending" nor "approved with remarks": it is in one of five statuses, and changing
+		status is changing one line.
+
+	Subheader: The life cycle in the repository
 
 	Content >>
-		RFCs are already:
+		The same proposal, weeks later, accepted:
 
-		* Plain text.
-		* Versioned in Git.
-		* Reviewed by people.
+	Code >>
+		RFC (com.acme.rfc):
+			Id: RFC-013
+			Title: Unification of the configuration system
+			Status: Accepted
+			Authors:
+				Author: Platform Team
+			Created: 2026-01-05
+			Updated: 2026-01-18
+			Accepted date: 2026-01-18
 
-		@STXT@ adds:
+			Context >>
+				Several configuration formats coexist today in the internal services,
+				each with its own validation rules and its own tooling.
 
-		* Explicit structure.
-		* Processable metadata.
-		* Optional validation.
-		* Less dependence on implicit conventions.
+			Proposal >>
+				Adopt a single configuration format for internal services, with one
+				template per service type maintained by Platform.
 
-		The nature of the document does not change.
+			Decision >>
+				Gradual adoption is approved. Platform publishes the templates before the
+				end of the quarter.
 
-	Subheader: Summary
+			Consequences >>
+				New services use the single format from their creation. Existing ones
+				migrate in their next major version, with no deadline.
+
+			Comments:
+				Comment:
+					Author: Mery Adams
+					Date: 2026-01-12
+					Text >>
+						Concerned about the impact on teams with their own tooling. I propose
+						that the migration of existing services has no deadline.
+				Comment:
+					Author: Keyla Brown
+					Date: 2026-01-13
+					Text >>
+						Agreed on gradual adoption provided Platform maintains the
+						templates.
 
 	Content >>
-		Using @STXT@ for RFCs and technical proposals makes it possible to:
+		Between the two versions, the diff shows exactly what changed: the status, the
+		acceptance date, the decision, the consequences and two comments. The review
+		comments are stored in the document itself, with author and date, separate from
+		the main text; the discussion stays next to the decision, where someone will look
+		for it two years from now.
 
-		* Write argued documents in free text.
-		* Keep a visible, consistent structure.
-		* Automate review and traceability.
+	Subheader: Relations between proposals
 
-		The document does not become a formal language or code.
+	Content >>
+		A proposal that depends on another declares it as data, not only as a sentence:
+
+	Code >>
+		RFC (com.acme.rfc):
+			Id: RFC-020
+			Title: Retirement of the previous configuration system
+			Status: Draft
+			Authors:
+				Author: Joan Costa
+			Related:
+				Reference: RFC-013
+				Reference: RFC-007
+
+			Context >>
+				With the adoption of the single format (RFC-013), the previous system has
+				no new services and a growing maintenance cost.
+
+			Proposal >>
+				Retire the previous system once the services still using it have
+				migrated.
+
+	Content >>
+		With `Related` as a node, a program walking the proposals directory can answer what
+		depends on what, which drafts cite a rejected proposal, or draw the whole graph.
+		With the reference only in the context text, none of those questions can be
+		answered without reading.
+
+	Subheader: In the workflow
+
+	Content >>
+		* Proposals live in a directory of the repository, one per file, with the template
+		  in `.stxt/`.
+		* Continuous integration runs `stxt validate rfcs/` on every change: a proposal
+		  without context or with a status outside the list does not get in.
+		* A script over the canonical tree generates the index of proposals by status,
+		  warns about those that have been in `Review` for more than a month, or lists the
+		  consequences of all the ones accepted in the quarter.
+		* The text of each section is published as is, in whatever format the organization
+		  uses for its documentation.
+
+	Subheader: Limits
+
+	Content >>
+		@STXT@ imposes no process: section names, statuses and who may change them are
+		decisions of each organization, and the template only records them. Nor does it
+		replace the review tool: the comments in the example are the record of the
+		discussion, not a threading system with notifications. And validation does not
+		check relations between documents —that `RFC-007` exists, that an accepted proposal
+		does not cite a rejected one—: that is done by the script that walks the directory.

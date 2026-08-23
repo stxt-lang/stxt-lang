@@ -1,300 +1,255 @@
 Document (dev.stxt.website): Contratos y acuerdos legales
 
 	Metadata:
-		Author: ChatGPT 5.2
-		Last modif: 2026-08-22
-		
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-08-23
+
 	Header: Contratos y acuerdos legales
-	
+
+	Assert >>
+		Un contrato es texto normativo con datos dentro: partes, fechas, importes, plazos,
+		niveles de servicio. @STXT@ permite escribirlo de modo que el texto siga siendo
+		texto —párrafo a párrafo, cláusula a cláusula— y los datos sean datos, extraíbles y
+		comprobables, en el mismo documento.
+
 	Content >>
-		Este apartado no sustituye a los documentos legales formales ni a los
-		procesos jurídicos existentes.
-		
-		Describe cómo @STXT@ puede usarse como formato fuente legible y estructurado
-		para contratos, acuerdos y documentos normativos que:
-		
-		* deben ser leídos y entendidos por personas,
-		* contienen reglas, condiciones y excepciones,
-		* y a menudo conviven con procesos técnicos u operativos.
-		
-	Subheader: Qué tipo de documentos
-	
-	Content >>
-		En este contexto se incluyen:
-		
-		* Contratos de prestación de servicios.
-		* Acuerdos marco.
-		* SLAs (*Service Level Agreements*, acuerdos de nivel de servicio).
-		* NDAs (acuerdos de confidencialidad).
-		* Términos y condiciones.
-		* Políticas internas y normativas corporativas.
-		
-		Muchos de estos documentos:
-		
-		* empiezan como texto legal,
-		* y acaban teniendo impacto directo en operaciones, sistemas o personas.
-		
-	Subheader: Problemas habituales en documentos legales
-	
-	Content >>
-		En la práctica:
-		
-		* El texto es largo y denso.
-		* Las condiciones relevantes quedan dentro de párrafos extensos.
-		* Los datos clave (fechas, partes, importes, plazos) no son extraíbles de forma directa.
-		* Versionar los cambios es complejo (PDF, Word).
-		* No hay separación entre:
-		  * contenido normativo,
-		  * datos contractuales,
-		  * y contexto explicativo.
-		
-		@STXT@ no elimina la complejidad legal; separa esas tres capas en el documento.
-		
-	Subheader: Ejemplo 1 — Acuerdo sencillo
-	
-	Content >>
-		Un acuerdo básico entre dos partes, con texto legal y datos explícitos.
-		
+		Esta página no trata de sustituir al documento legal firmado ni al proceso jurídico
+		que lo acompaña. Trata del **formato fuente** de contratos, acuerdos marco, acuerdos
+		de nivel de servicio, acuerdos de confidencialidad y políticas internas: el fichero
+		del que salen el PDF, la plantilla de la siguiente versión y los datos que otros
+		sistemas necesitan.
+
+		Hoy esos datos están dentro de los párrafos. Para saber cuándo vence un acuerdo, qué
+		importe se factura o qué tiempo de respuesta se comprometió hay que leer el
+		documento, y un sistema que necesite esos valores los recibe copiados a mano. Las
+		versiones se comparan abriendo dos ficheros binarios, y la cláusula estándar que el
+		departamento legal aprobó una vez se reescribe en cada contrato con pequeñas
+		variaciones que nadie detecta.
+
+	Subheader: Un acuerdo de servicios
+
 	Code >>
 		Agreement (com.acme.legal.contract):
 			Id: AGR-2026-001
-			Title: Acuerdo de prestación de servicios
-			Status: Draft
+			Title: Acuerdo de prestación de servicios de soporte
+			Status: Signed
 			Effective date: 2026-02-01
-			
+
 			Parties:
-				Party:
-					Name: ACME Corp
+				Party: ACME Corp
 					Role: Proveedor
-				Party:
-					Name: Example Ltd
+					Registration: B-12345678
+				Party: Example Ltd
 					Role: Cliente
-			
-			Purpose >>
-				El presente acuerdo regula la prestación de servicios
-				de soporte técnico entre las partes.
-			
+					Registration: GB-87654321
+
 			Term:
 				Start: 2026-02-01
 				End: 2027-01-31
-			
+
 			Payment:
 				Fee: 12000
 				Currency: EUR
 				Billing period: Monthly
-			
+
 			Governing law: ES
-	
-	Subheader: Qué se gana con esta estructura
-	
-	Content >>
-		* Las partes y las fechas son datos explícitos.
-		* El texto legal sigue siendo texto, sin fragmentarlo.
-		* El documento es legible sin conocimientos técnicos.
-		
-	Subheader: Ejemplo 2 — Cláusulas como secciones explícitas
-	
-	Content >>
-		Las cláusulas forman un árbol.
-		
-	Code >>
-		Agreement (com.acme.legal.contract):
-			Id: AGR-2026-002
-			Title: Acuerdo de confidencialidad
-			Status: Signed
-			
-			Parties:
-				Party:
-					Name: ACME Corp
-					Role: Parte reveladora
-				Party:
-					Name: Example Ltd
-					Role: Parte receptora
-			
+
 			Clauses:
-				Clause:
+				Clause: Objeto
 					Number: 1
-					Title: Definición de información confidencial
 					Text >>
-						Se entenderá por información confidencial toda aquella
-						información no pública revelada por cualquiera de las partes.
-						
-				Clause:
+						El Proveedor prestará al Cliente los servicios de soporte técnico
+						descritos en el Anexo I, en el horario y con los niveles de servicio
+						que en él se establecen.
+				Clause: Confidencialidad
 					Number: 2
-					Title: Obligaciones de confidencialidad
 					Text >>
-						Las partes se comprometen a no divulgar la información
-						confidencial a terceros sin consentimiento previo.
-						
-				Clause:
+						Cada parte tratará como confidencial toda información no pública
+						recibida de la otra en el marco de este acuerdo, y no la divulgará a
+						terceros sin consentimiento previo y por escrito.
+
+						No se considerará confidencial la información que sea de dominio
+						público o cuya divulgación exija la ley.
+				Clause: Limitación de responsabilidad
 					Number: 3
-					Title: Excepciones
 					Text >>
-						No se considerará confidencial la información que sea
-						de dominio público o exigida por ley.
-	
-	Subheader: Ejemplo 3 — SLA (acuerdo de nivel de servicio)
-	
-	Content >>
-		Un SLA combina texto normativo con métricas concretas.
-		
-	Code >>
-		SLA (com.acme.legal.sla):
-			Service: Plataforma de pagos
-			Effective date: 2026-03-01
-			
-			Availability:
-				Target percentage: 99.9
-				Measurement period: Monthly
-			
-			Response times:
-				Severity:
-					Level: Critical
-					Max response minutes: 30
-				Severity:
-					Level: High
-					Max response minutes: 120
-			
-			Penalties:
-				Penalty:
-					Condition >>
-						Disponibilidad inferior al objetivo mensual.
-					Consequence >>
-						Descuento del 10% en la factura mensual.
-			
-			Legal text >>
-				Las métricas se medirán conforme a los procedimientos
-				descritos en el anexo técnico.
-	
-	Subheader: Ejemplo 4 — Excepciones y condiciones
-	
-	Content >>
-		Los contratos contienen reglas con excepciones.
-		
-	Code >>
-		Clause:
-			Title: Limitación de responsabilidad
-			Rule >>
-				La responsabilidad total no excederá el importe anual del contrato.
-			
-			Exceptions:
-				Exception >>
-					Dicha limitación no aplicará en casos de dolo o negligencia grave.
-	
-	Subheader: Ejemplo 5 — Historial y versiones
-	
-	Content >>
-		Los acuerdos cambian: enmiendas, renovaciones, revisiones.
-		
-	Code >>
-		Agreement (com.acme.legal.contract):
-			Id: AGR-2026-003
-			Title: Acuerdo marco
-			Status: Signed
-			
-			Parties:
-				Party:
-					Name: ACME Corp
-					Role: Proveedor
-				Party:
-					Name: Example Ltd
-					Role: Cliente
-			
+						La responsabilidad total de cada parte no excederá el importe anual
+						del contrato. Esta limitación no se aplicará en caso de dolo o
+						negligencia grave.
+					Internal notes >>
+						Cláusula estándar LEG-07, aprobada por el departamento legal el
+						2025-11-03. No modificar sin revisión jurídica.
+
 			History:
-				Revision:
+				Revision: Versión inicial
 					Date: 2026-01-15
-					Summary: Versión inicial
-				Revision:
-					Date: 2026-03-10
-					Summary: Actualización de cláusulas de pago
-			
-			Current version: 2
-	
-	Subheader: Ejemplo 6 — Comentarios legales y notas internas
-	
+				Revision: Actualización de las condiciones de pago
+					Date: 2026-01-28
+
 	Content >>
-		Es habitual separar:
-		
-		* texto contractual,
-		* notas internas,
-		* y observaciones legales.
-		
-	Code >>
-		Clause:
-			Title: Jurisdicción
-			
-			Text >>
-				Las partes se someten a los juzgados de Madrid.
-			
-			Internal notes >>
-				Cláusula estándar aprobada por legal.
-				No modificar sin revisión jurídica.
-	
-	Subheader: Ejemplo 7 — Template mínimo para acuerdos
-	
+		El documento se lee de arriba abajo como un contrato: identificación, partes,
+		duración, pago, cláusulas. Lo que cambia respecto a un documento de texto corriente
+		es que cada dato tiene nombre, y que cada cláusula es un nodo con su texto dentro.
+
+	Subheader: Qué es dato y qué es texto
+
 	Content >>
-		Una plantilla (`@stxt.template`) garantiza que un acuerdo contenga los
-		elementos esenciales, sin imponer la redacción legal.
-		
+		El criterio es el mismo que en cualquier documento: es dato lo que alguien va a
+		consultar, comparar o comprobar sin leer el contrato entero.
+
+		* **Las partes, las fechas, el importe y la ley aplicable** son datos. Son lo que un
+		  sistema de facturación, una alerta de vencimiento o un informe de riesgos
+		  necesitan, y con un nodo propio se obtienen sin interpretar prosa.
+		* **El texto de cada cláusula** es texto, en un bloque `>>` que admite varios
+		  párrafos. No se fragmenta en frases ni se reescribe en una notación formal: es la
+		  redacción legal, tal cual.
+		* **Cada cláusula es un nodo** con su título como valor y su número como hijo, lo
+		  que permite referirse a ella, ordenarla y compararla entre versiones. Dos contratos
+		  que comparten una cláusula estándar la tienen como el mismo bloque, y un *diff*
+		  muestra si alguien la alteró.
+		* **Las notas internas** van en un bloque aparte, dentro de la cláusula a la que se
+		  refieren, y no forman parte del texto contractual: el proceso que genera el PDF
+		  las omite, el que prepara la revisión las muestra.
+
+	Subheader: La plantilla
+
 	Code >>
 		Template (@stxt.template): com.acme.legal.contract
 			Description >>
-				Agreement: Estructura básica de contratos
+				Agreement: Contrato o acuerdo entre dos o más partes
+				Clauses: Cláusulas numeradas; el texto es la redacción legal literal
+				Internal notes: Notas de revisión; no forman parte del contrato
 			Structure >>
 				Agreement:
 					Id: (1)
 					Title: (1)
 					Status: (1) ENUM [Draft, Signed, Terminated]
-					Effective date: (?)
-					
+					Effective date: (?) DATE
 					Parties: (1)
-						Party: (+)
-							Name: (1)
+						Party: (2+)
 							Role: (1)
-					
-					Purpose: (?) TEXT
+							Registration: (?)
 					Term: (?)
 						Start: (1) DATE
 						End: (?) DATE
 					Payment: (?)
 						Fee: (1) NUMBER
-						Currency: (1)
-						Billing period: (?)
+						Currency: (1) ENUM [EUR, USD, GBP]
+						Billing period: (?) ENUM [Monthly, Quarterly, Yearly]
 					Governing law: (?)
-					
 					Clauses: (?)
 						Clause: (*)
 							Number: (?) NATURAL
-							Title: (1) @Title
 							Text: (1) TEXT
 							Internal notes: (?) TEXT
-					
 					History: (?)
 						Revision: (*)
 							Date: (1) DATE
-							Summary: (1)
-					Current version: (?) NATURAL
-	
-	Subheader: Por qué este enfoque resulta útil
-	
+
 	Content >>
-		Usar @STXT@ como formato fuente para contratos permite:
-		
-		* Leer los documentos sin herramientas especiales.
-		* Revisarlos sobre una estructura explícita.
-		* Extraer los datos clave de forma automática.
-		* Versionarlos y auditarlos con control de versiones.
-		
-		El contrato no se convierte en código ni adopta un lenguaje formal artificial.
-		
-	Subheader: Resumen
-	
+		Lo que la plantilla garantiza es lo que una revisión legal comprueba primero, y lo
+		comprueba el editor al escribir:
+
+		* Un acuerdo tiene **al menos dos partes** (`(2+)`), cada una con su papel.
+		* Las fechas son fechas válidas y el importe es un número; `Fee: 12.000 €` no pasa.
+		* La moneda y el periodo de facturación están en una lista cerrada: no hay
+		  `Euros`, `eur` y `EUR` conviviendo en tres contratos.
+		* Toda cláusula tiene texto. Un título sin redacción no es una cláusula.
+		* El estado es uno de tres; un contrato `Signed` sin `Effective date` sigue siendo
+		  válido para la plantilla (la fecha es opcional), y es el proceso quien decide si lo
+		  admite.
+
+		Y lo que no restringe, a propósito: la redacción de las cláusulas, su número y su
+		orden. La plantilla no impone el contrato; impone que el contrato sea completo.
+
+	Subheader: Un acuerdo de nivel de servicio
+
 	Content >>
-		Los contratos y acuerdos legales son, en esencia:
-		
-		* texto normativo,
-		* con estructura repetible,
-		* y datos críticos.
-		
-		@STXT@ los representa de forma legible y estructurada, sin alterar su
-		naturaleza legal.
+		Un SLA es el caso en el que más datos hay dentro del texto legal: objetivos,
+		tiempos, penalizaciones. Con nodos propios, esos valores son los que un sistema de
+		monitorización compara con la realidad:
+
+	Code >>
+		SLA (com.acme.legal.sla):
+			Service: Plataforma de pagos
+			Agreement: AGR-2026-001
+			Effective date: 2026-03-01
+
+			Availability:
+				Target percentage: 99.9
+				Measurement period: Monthly
+
+			Response times:
+				Severity: Critical
+					Max response minutes: 30
+				Severity: High
+					Max response minutes: 120
+				Severity: Normal
+					Max response minutes: 480
+
+			Penalties:
+				Penalty: Incumplimiento de disponibilidad
+					Condition >>
+						Disponibilidad mensual inferior al objetivo.
+					Consequence >>
+						Descuento del 10 % en la factura del mes afectado.
+
+			Legal text >>
+				Las métricas se medirán conforme a los procedimientos descritos en el
+				anexo técnico. Las partes revisarán los objetivos anualmente.
+
+	Code >>
+		Template (@stxt.template): com.acme.legal.sla
+			Description >>
+				SLA: Acuerdo de nivel de servicio asociado a un contrato
+			Structure >>
+				SLA:
+					Service: (1)
+					Agreement: (?)
+					Effective date: (1) DATE
+					Availability: (1)
+						Target percentage: (1) NUMBER
+						Measurement period: (1) ENUM [Monthly, Quarterly]
+					Response times: (?)
+						Severity: (*)
+							Max response minutes: (1) NATURAL
+					Penalties: (?)
+						Penalty: (*)
+							Condition: (1) TEXT
+							Consequence: (1) TEXT
+					Legal text: (?) TEXT
+
+	Content >>
+		`Agreement: AGR-2026-001` enlaza el SLA con el contrato al que pertenece, por su
+		identificador. El objetivo de disponibilidad y los tiempos de respuesta son números:
+		el panel que mide el servicio los lee del mismo fichero que firmaron las partes, y
+		no de una copia en su configuración.
+
+	Subheader: En el flujo de trabajo
+
+	Content >>
+		* **Versiones**: cada contrato es un fichero en un repositorio, y cada revisión es un
+		  *diff* legible: qué cláusula cambió, qué fecha se movió. El nodo `History` recoge
+		  el resumen; el repositorio, el detalle.
+		* **Cláusulas estándar**: el departamento legal mantiene sus cláusulas aprobadas
+		  como fragmentos de texto; un contrato las incorpora copiándolas, y un script
+		  compara cada cláusula con la versión aprobada y señala las que difieren.
+		* **Validación**: `stxt validate contracts/` en integración continua rechaza un
+		  acuerdo sin partes, sin fecha válida o con un estado fuera de la lista.
+		* **Extracción**: del árbol canónico salen los vencimientos del trimestre, los
+		  importes por cliente o los SLA con objetivo inferior al 99,9 %, sin leer un solo
+		  contrato.
+		* **Publicación**: el PDF o el documento firmable se genera a partir del fichero,
+		  omitiendo las notas internas.
+
+	Subheader: Límites
+
+	Content >>
+		@STXT@ no aporta validez jurídica, firma electrónica ni custodia: el documento
+		firmado sigue siendo el que produce el proceso legal, y este fichero es su fuente.
+		Tampoco interpreta el texto de las cláusulas: una condición escrita en prosa («salvo
+		en caso de dolo») es texto para el lenguaje, y solo una persona, o una aplicación
+		que la modele como datos, puede evaluarla. Y la plantilla no comprueba coherencia
+		entre campos —que `End` sea posterior a `Start`, que el SLA cite un contrato que
+		exista—: eso es trabajo del script que recorre el repositorio.

@@ -1,76 +1,33 @@
 Document (dev.stxt.website): CMS and publishing
 
 	Metadata:
-		Author: ChatGPT 5.2
-		Revision: Claude Fable 5
-		Last modif: 2026-08-22
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-08-23
 
 	Header: CMS and publishing
 
-	Content >>
-		A website, a blog, a book, the documentation of a product: every piece of content
-		that gets published combines **narrative text** (sections, context), **structure**
-		(chapters, blocks, relations) and **data** (status, dates, authors, tags). The
-		tools that manage it —the CMSs— tend to couple several responsibilities:
-
-		* data model,
-		* editing interface,
-		* validation rules,
-		* and final presentation.
-
 	Assert >>
-		@STXT@ separates those layers with a **document format** that is stable, readable
-		and reusable outside any particular tool: the publication is a text document, with
-		validation, transformation and automation as optional steps.
-
-	Subheader: What this case covers
-
-	Content >>
-		This case covers everything that is written to be published and goes through an
-		editing and output workflow:
-
-		* Corporate websites, blogs and content portals.
-		* Articles, long posts and whitepapers.
-		* Books and chapters.
-		* Living technical documentation.
-		* Public reports, catalogues and records.
-
-	Subheader: Common problems
+		A website, a blog, a product's documentation, a book in chapters: everything that is
+		written to be published. @STXT@ is the **source format** of that content: the text
+		lives in files, the structure is visible, validation is a template and presentation
+		is decided afterwards.
 
 	Content >>
-		The usual formats and tools have these limitations:
+		Published content always has three layers: the text someone writes, the structure
+		that organizes it —pages, sections, chapters— and the data that accompanies it
+		—title, author, date, editorial status, tags—. The tools that manage it tend to fuse
+		those layers with the editing interface and with the final presentation, and the
+		result is well known: the content ends up inside a database, in a shape only that
+		tool understands, and changing tools is a migration.
 
-		* **Markdown**: flexible, but semantically poor; ad-hoc metadata in YAML front
-		  matter; structure impossible to validate.
-		* **Traditional CMSs**: rigid models that are hard to evolve; editing coupled to
-		  one specific interface; hard to version and review; limited or proprietary
-		  exports; strong dependency on the database.
-		* **Editorial XML**: expressive, but verbose for manual editing.
+		With @STXT@ as the source format, each page is a text file with its data as nodes
+		and its body in blocks. The content manager —a static site generator, a headless
+		CMS or a typesetting process— reads the tree and decides what to do with it. This
+		very portal is built that way: each page of `stxt.dev` is an @STXT@ document of the
+		`dev.stxt.website` namespace, and the generator turns it into HTML.
 
-		In all three cases the content is tied to the tool that manages it.
-
-	Subheader: The @STXT@ approach
-
-	Content >>
-		@STXT@ acts as the **source format** of the content:
-
-		* The CMS does not define the document format: it interprets it and offers tools
-		  around it.
-		* The content lives in files, not in the tool; it is versioned in Git and every
-		  change is a clear textual diff, with no hidden state in a database.
-		* One format for text, structure and data, with a separation between content and
-		  rules (the templates).
-		* Renderers are interchangeable: the same document comes out as web, PDF, EPUB,
-		  feed or API. In a *headless* CMS, @STXT@ is the origin, the parser produces a
-		  neutral tree and the front end consumes transformed data.
-
-	Subheader: Example 1 — Web page
-
-	Content >>
-		A page of a site, with metadata, SEO and free content; the header and the body are
-		`MARKDOWN` blocks, and the editor and the playground highlight them as Markdown. A
-		CMS usually works with blocks or components as well; in @STXT@ they are nodes with
-		a `Type` that the renderer transforms according to its own rules.
+	Subheader: A page
 
 	Code >>
 		Page (com.acme.cms.page):
@@ -81,7 +38,7 @@ Document (dev.stxt.website): CMS and publishing
 			Layout: default
 
 			SEO:
-				Title: STXT — Human First language
+				Title: STXT — A Human-First language
 				Description: A readable, validatable text format
 				Keywords:
 					Keyword: stxt
@@ -91,7 +48,7 @@ Document (dev.stxt.website): CMS and publishing
 			Header >>
 				## STXT
 
-				A semantic text language, readable by humans
+				A semantic text language, readable by people
 				and reliable for machines.
 
 			Content >>
@@ -110,13 +67,19 @@ Document (dev.stxt.website): CMS and publishing
 				Last updated: January 2026
 
 	Content >>
-		Its template guarantees title, slug and status, controls the editorial states and
-		leaves the rest optional:
+		The editorial metadata —slug, language, status, layout, SEO— are nodes the manager
+		reads directly. The body goes in blocks of type `MARKDOWN`: @STXT@ does not
+		interpret that Markdown, it only hands it over as is to the renderer; the type is a
+		contract for whoever consumes it (and for the editor and the playground, which
+		highlight it as Markdown). The footer is `TEXT`: it is shown literally.
+
+	Subheader: The template
 
 	Code >>
 		Template (@stxt.template): com.acme.cms.page
 			Description >>
-				Page: Standard CMS page
+				Page: A page of a website
+				Status: Editorial status; only Published is published
 			Structure >>
 				Page:
 					Title: (1)
@@ -124,88 +87,84 @@ Document (dev.stxt.website): CMS and publishing
 					Language: (?) ENUM [es, en, fr]
 					Status: (1) ENUM [Draft, Published, Archived]
 					Layout: (?)
-
 					SEO: (?)
 						Title: (?) @Title
 						Description: (?)
 						Keywords: (?)
 							Keyword: (+)
-
 					Header: (?) MARKDOWN
 					Content: (?) MARKDOWN
 					Footer: (?) TEXT
 
-	Subheader: Example 2 — Article
+	Content >>
+		The template guarantees what the generator needs to work —title, slug and a status
+		from the list— and leaves the rest optional. A page without `Slug` does not
+		validate, and therefore is not generated; neither does a lowercase
+		`Status: published`. That is the difference between an error that shows up in the
+		editor and a page that disappears from the site without anyone knowing why.
+
+		`SEO/Title` reuses the definition of `Title` with `@Title`: it is the same node,
+		with the same definition, in another place of the tree.
+
+	Subheader: An article with authors and status
 
 	Content >>
-		An article with metadata, authors, status and long text. The text goes in `>>`
-		text blocks —the body, of type `MARKDOWN`, contains Markdown that the @STXT@
-		parser does not interpret—; the editorial structure —title, authors, status— is
-		explicit.
+		A blog or a magazine adds authorship, a date and an editorial workflow:
 
 	Code >>
 		Article (com.acme.editorial.article):
 			Title: Introduction to STXT
 			Slug: introduction-to-stxt
 			Authors:
-				Author:
-					Name: Joan Costa
+				Author: Joan Costa
 					Role: Editor
 			Published date: 2026-01-10
 			Status: Draft
 			Tags:
 				Tag: stxt
 				Tag: formats
-				Tag: documentation
 
 			Abstract >>
 				STXT is a text language designed to balance
 				human readability and machine reliability.
 
 			Content >>
-				## Why another format?
+				## Why another format
 
 				Most existing formats force a choice:
-				either they are comfortable for humans or reliable for machines.
+				either they are convenient for people or reliable for machines.
 
-				STXT tries to remove that dichotomy.
-
-				## Principles
-
-				- Human First
-				- Minimal syntax
-				- Optional validation
-				- Security by design
-
-	Content >>
-		Its template ensures the minimum metadata and the editorial status, and does not
-		constrain the text:
+				STXT removes that dichotomy.
 
 	Code >>
 		Template (@stxt.template): com.acme.editorial.article
 			Description >>
-				Article: Standard editorial article
+				Article: Article of a blog or a periodical
 			Structure >>
 				Article:
 					Title: (1)
 					Slug: (1)
 					Authors: (1)
 						Author: (+)
-							Name: (1)
 							Role: (?)
 					Published date: (?) DATE
 					Status: (1) ENUM [Draft, Review, Published]
 					Tags: (?)
 						Tag: (+)
-
 					Abstract: (?) TEXT
 					Content: (1) MARKDOWN
 
-	Subheader: Example 3 — Multi-section publication
+	Content >>
+		The editorial workflow is the `ENUM` of `Status`: an article goes from `Draft` to
+		`Review` and to `Published`, and that change is one line in the review's diff. The
+		generator publishes only what is in `Published` and has a date; the rest exists in
+		the repository, but not on the site.
+
+	Subheader: A book in chapters
 
 	Content >>
-		A book or a long document split into chapters follows the same pattern, with the
-		structure visible and the text in blocks:
+		A long publication follows the same pattern, with the structure in plain sight and
+		each chapter as a node that groups its data and its text:
 
 	Code >>
 		Publication (com.acme.editorial.publication):
@@ -214,68 +173,61 @@ Document (dev.stxt.website): CMS and publishing
 			Language: en
 			Status: In Progress
 
-			Chapters:
-				Chapter:
-					Number: 1
-					Title: Introduction
-					Content >>
-						This chapter introduces the basic concepts of STXT.
+			Chapter: Introduction
+				Number: 1
+				Content >>
+					This chapter introduces the basic concepts of STXT.
+			Chapter: Syntax
+				Number: 2
+				Content >>
+					The syntax of the language is described with examples.
+			Chapter: Validation
+				Number: 3
+				Content >>
+					Templates and schemas add semantic rules.
 
-				Chapter:
-					Number: 2
-					Title: Syntax
-					Content >>
-						This chapter describes the syntax of the language
-						with practical examples.
-
-				Chapter:
-					Number: 3
-					Title: Validation
-					Content >>
-						Templates and Schemas add semantic rules.
-
-	Subheader: The workflow
-
-	Content >>
-		A common workflow, in which every step is independent and replaceable:
-
-		1. The author writes the @STXT@ document with any text editor.
-		2. It is versioned in Git; review is a diff.
-		3. A template validates the minimum structure (in the editor, on the command line
-		   or in continuous integration).
-		4. It is transformed to HTML, PDF, EPUB or other formats.
-		5. It is published.
-
-		The document contains no HTML, CSS or layout: presentation is decided in a later
-		phase, and the same content can be rendered in several ways.
-
-	Subheader: Practical advantages
+	Code >>
+		Template (@stxt.template): com.acme.editorial.publication
+			Description >>
+				Publication: Book or long document divided into chapters
+			Structure >>
+				Publication:
+					Title: (1)
+					ISBN: (?)
+					Language: (1) ENUM [es, en, fr]
+					Status: (1) ENUM [In Progress, Published]
+					Chapter: (+)
+						Number: (1) NATURAL
+						Content: (1) MARKDOWN
 
 	Content >>
-		* **Visible structure**: an editor sees it without a graphical interface; a
-		  developer maps nodes and blocks without guessing.
-		* **Plain-text authoring**: no markup tags.
-		* **Readable diffs** and review under version control.
-		* **Validation**: the template rejects incomplete pages and articles.
-		* **Automation**: indexes, tables of contents, feeds, APIs.
-		* **Longevity**: the content does not depend on a specific tool.
+		Chapters are written in order and the tree preserves it, so the generator needs to
+		sort nothing; `Number` exists so the number appears in the output and so a chapter
+		can be referred to from outside. A forty-chapter book can be split into forty files
+		with the same namespace, and the template still holds for each one.
 
-	Subheader: Recommendations
+	Subheader: The publishing flow
 
 	Content >>
-		* Few document types, and a template for each one.
-		* `TEXT` or `MARKDOWN` for the body and long sections; concise, stable metadata.
-		* Simple blocks, with descriptive names.
-		* Presentation outside the document, and no conditional logic in the content.
-		* Templates that require the minimum structure and leave the rest optional.
+		Each step is independent and replaceable:
 
-	Subheader: Summary
+		1. The document is written with any editor; with the VS Code extension, the
+		   template provides completion and immediate errors.
+		2. It is versioned in a repository; editorial review is a diff.
+		3. It is validated —in the editor, on the command line or in continuous
+		   integration— with `stxt validate`, which rejects a page without a slug or an
+		   article without an author before it reaches the generator.
+		4. The generator reads the canonical tree and produces HTML, PDF, EPUB, a feed or an
+		   API; the same document goes out through several channels.
+
+		The document contains no HTML, CSS or layout: presentation is decided in step 4
+		and can be changed entirely without touching the content.
+
+	Subheader: Limits
 
 	Content >>
-		@STXT@ as the basis of a CMS and of editorial publishing gives:
-
-		* Portable content: text stays text.
-		* Explicit structure.
-		* Optional validation.
-		* Independence from tools and frameworks: the content evolves without changing
-		  format.
+		@STXT@ is not a CMS: it has no editing interface, no users, no approval workflow,
+		no preview. It is the format in which that CMS stores the content, and what it
+		guarantees is that the content outlives the CMS. Nor does it define how a
+		`MARKDOWN` block is rendered or which Markdown dialect is accepted: the renderer
+		fixes that, and the template only declares that the block must be treated as such.

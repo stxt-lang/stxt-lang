@@ -1,78 +1,48 @@
 Document (dev.stxt.website): Contracts and legal agreements
 
-	Metadata: 
-		Author: ChatGPT 5.2
-		Last modif: 2026-08-22
+	Metadata:
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-08-23
 
 	Header: Contracts and legal agreements
 
-	Content >>
-		This section does not replace formal legal documents or existing legal
-		processes.
-
-		It describes how @STXT@ can be used as a readable, structured source format
-		for contracts, agreements, and regulatory documents that:
-
-		* must be read and understood by people,
-		* contain rules, conditions, and exceptions,
-		* and often coexist with technical or operational processes.
-
-	Subheader: What types of documents
+	Assert >>
+		A contract is normative text with data inside: parties, dates, amounts, deadlines,
+		service levels. @STXT@ allows writing it so that the text remains text —paragraph
+		by paragraph, clause by clause— and the data is data, extractable and checkable, in
+		the same document.
 
 	Content >>
-		In this context, this includes:
+		This page is not about replacing the signed legal document or the legal process
+		around it. It is about the **source format** of contracts, framework agreements,
+		service level agreements, non-disclosure agreements and internal policies: the
+		file from which the PDF, the template for the next version and the data other
+		systems need all come.
 
-		* Service provision contracts.
-		* Master agreements.
-		* SLAs (*Service Level Agreements*).
-		* NDAs (confidentiality agreements).
-		* Terms and conditions.
-		* Internal policies and corporate regulations.
+		Today that data is inside the paragraphs. To know when an agreement expires, what
+		amount is invoiced or what response time was committed, the document has to be
+		read, and a system that needs those values receives them copied by hand. Versions
+		are compared by opening two binary files, and the standard clause the legal
+		department approved once is rewritten in every contract with small variations
+		nobody notices.
 
-		Many of these documents:
-
-		* start out as legal text,
-		* and end up having a direct impact on operations, systems, or people.
-
-	Subheader: Common problems in legal documents
-
-	Content >>
-		In practice:
-
-		* The text is long and dense.
-		* The relevant conditions sit inside long paragraphs.
-		* Key data (dates, parties, amounts, deadlines) cannot be extracted directly.
-		* Versioning changes is complex (PDF, Word).
-		* There is no separation between:
-		  * regulatory content,
-		  * contractual data,
-		  * and explanatory context.
-
-		@STXT@ does not remove legal complexity; it separates those three layers in the document.
-
-	Subheader: Example 1 — Simple agreement
-
-	Content >>
-		A basic agreement between two parties, with legal text and explicit data.
+	Subheader: A services agreement
 
 	Code >>
 		Agreement (com.acme.legal.contract):
 			Id: AGR-2026-001
-			Title: Service provision agreement
-			Status: Draft
+			Title: Technical support services agreement
+			Status: Signed
 			Effective date: 2026-02-01
 
 			Parties:
-				Party:
-					Name: ACME Corp
+				Party: ACME Corp
 					Role: Provider
-				Party:
-					Name: Example Ltd
+					Registration: B-12345678
+				Party: Example Ltd
 					Role: Client
-
-			Purpose >>
-				This agreement governs the provision of technical support services
-				between the parties.
+					Registration: GB-87654321
 
 			Term:
 				Start: 2026-02-01
@@ -85,62 +55,126 @@ Document (dev.stxt.website): Contracts and legal agreements
 
 			Governing law: ES
 
-	Subheader: What this structure provides
+			Clauses:
+				Clause: Subject matter
+					Number: 1
+					Text >>
+						The Provider shall render to the Client the technical support
+						services described in Annex I, within the hours and at the service
+						levels established therein.
+				Clause: Confidentiality
+					Number: 2
+					Text >>
+						Each party shall treat as confidential all non-public information
+						received from the other under this agreement, and shall not disclose
+						it to third parties without prior written consent.
+
+						Information in the public domain, or whose disclosure is required by
+						law, shall not be considered confidential.
+				Clause: Limitation of liability
+					Number: 3
+					Text >>
+						The total liability of each party shall not exceed the annual amount
+						of the contract. This limitation shall not apply in case of wilful
+						misconduct or gross negligence.
+					Internal notes >>
+						Standard clause LEG-07, approved by the legal department on
+						2025-11-03. Do not modify without legal review.
+
+			History:
+				Revision: Initial version
+					Date: 2026-01-15
+				Revision: Update of the payment terms
+					Date: 2026-01-28
 
 	Content >>
-		* The parties and dates are explicit data.
-		* The legal text remains text, without fragmenting it.
-		* The document is readable without technical knowledge.
+		The document reads top to bottom like a contract: identification, parties, term,
+		payment, clauses. What changes with respect to an ordinary text document is that
+		every datum has a name, and every clause is a node with its text inside.
 
-	Subheader: Example 2 — Clauses as explicit sections
+	Subheader: What is data and what is text
 
 	Content >>
-		Clauses form a tree.
+		The criterion is the same as in any document: data is what someone will look up,
+		compare or check without reading the whole contract.
+
+		* **The parties, the dates, the amount and the governing law** are data. They are
+		  what an invoicing system, an expiry alert or a risk report need, and with a node
+		  of their own they are obtained without interpreting prose.
+		* **The text of each clause** is text, in a `>>` block that admits several
+		  paragraphs. It is not fragmented into sentences or rewritten in a formal
+		  notation: it is the legal wording, as is.
+		* **Each clause is a node** with its title as value and its number as a child, which
+		  makes it possible to refer to it, order it and compare it between versions. Two
+		  contracts sharing a standard clause have it as the same block, and a diff shows
+		  whether someone altered it.
+		* **Internal notes** go in a separate block, inside the clause they refer to, and
+		  are not part of the contractual text: the process that generates the PDF omits
+		  them, the one that prepares the review shows them.
+
+	Subheader: The template
 
 	Code >>
-		Agreement (com.acme.legal.contract):
-			Id: AGR-2026-002
-			Title: Confidentiality agreement
-			Status: Signed
-
-			Parties:
-				Party:
-					Name: ACME Corp
-					Role: Disclosing party
-				Party:
-					Name: Example Ltd
-					Role: Receiving party
-
-			Clauses:
-				Clause:
-					Number: 1
-					Title: Definition of confidential information
-					Text >>
-						Confidential information shall be understood as any
-						non-public information disclosed by either party.
-
-				Clause:
-					Number: 2
-					Title: Confidentiality obligations
-					Text >>
-						The parties undertake not to disclose confidential
-						information to third parties without prior consent.
-
-				Clause:
-					Number: 3
-					Title: Exceptions
-					Text >>
-						Information that is
-						in the public domain or required by law shall not be considered confidential.
-
-	Subheader: Example 3 — SLA (service level agreement)
+		Template (@stxt.template): com.acme.legal.contract
+			Description >>
+				Agreement: Contract or agreement between two or more parties
+				Clauses: Numbered clauses; the text is the literal legal wording
+				Internal notes: Review notes; not part of the contract
+			Structure >>
+				Agreement:
+					Id: (1)
+					Title: (1)
+					Status: (1) ENUM [Draft, Signed, Terminated]
+					Effective date: (?) DATE
+					Parties: (1)
+						Party: (2+)
+							Role: (1)
+							Registration: (?)
+					Term: (?)
+						Start: (1) DATE
+						End: (?) DATE
+					Payment: (?)
+						Fee: (1) NUMBER
+						Currency: (1) ENUM [EUR, USD, GBP]
+						Billing period: (?) ENUM [Monthly, Quarterly, Yearly]
+					Governing law: (?)
+					Clauses: (?)
+						Clause: (*)
+							Number: (?) NATURAL
+							Text: (1) TEXT
+							Internal notes: (?) TEXT
+					History: (?)
+						Revision: (*)
+							Date: (1) DATE
 
 	Content >>
-		An SLA combines regulatory text with concrete metrics.
+		What the template guarantees is what a legal review checks first, and the editor
+		checks it while typing:
+
+		* An agreement has **at least two parties** (`(2+)`), each with its role.
+		* Dates are valid dates and the amount is a number; `Fee: 12,000 €` does not pass.
+		* Currency and billing period are in a closed list: there are no `Euros`, `eur` and
+		  `EUR` coexisting in three contracts.
+		* Every clause has text. A title without wording is not a clause.
+		* The status is one of three; a `Signed` contract without `Effective date` is still
+		  valid for the template (the date is optional), and it is the process that decides
+		  whether to admit it.
+
+		And what it deliberately does not restrict: the wording of the clauses, their
+		number and their order. The template does not impose the contract; it imposes that
+		the contract be complete.
+
+	Subheader: A service level agreement
+
+	Content >>
+		An SLA is the case with the most data inside legal text: targets, times,
+		penalties. With nodes of their own, those values are the ones a monitoring system
+		compares with reality:
 
 	Code >>
 		SLA (com.acme.legal.sla):
 			Service: Payments platform
+			Agreement: AGR-2026-001
 			Effective date: 2026-03-01
 
 			Availability:
@@ -148,153 +182,76 @@ Document (dev.stxt.website): Contracts and legal agreements
 				Measurement period: Monthly
 
 			Response times:
-				Severity:
-					Level: Critical
+				Severity: Critical
 					Max response minutes: 30
-				Severity:
-					Level: High
+				Severity: High
 					Max response minutes: 120
+				Severity: Normal
+					Max response minutes: 480
 
 			Penalties:
-				Penalty:
+				Penalty: Availability breach
 					Condition >>
-						Availability below the monthly target.
+						Monthly availability below the target.
 					Consequence >>
-						10% discount on the monthly invoice.
+						10 % discount on the invoice of the affected month.
 
 			Legal text >>
-				The metrics will be measured in accordance with the procedures
-				described in the technical annex.
-
-	Subheader: Example 4 — Exceptions and conditions
-
-	Content >>
-		Contracts contain rules with exceptions.
+				Metrics shall be measured according to the procedures described in the
+				technical annex. The parties shall review the targets yearly.
 
 	Code >>
-		Clause:
-			Title: Limitation of liability
-			Rule >>
-				Total liability shall not exceed the annual amount of the contract.
-
-			Exceptions:
-				Exception >>
-					Such limitation shall not apply in cases of willful misconduct or gross negligence.
-
-	Subheader: Example 5 — History and versions
-
-	Content >>
-		Agreements change: amendments, renewals, revisions.
-
-	Code >>
-		Agreement (com.acme.legal.contract):
-			Id: AGR-2026-003
-			Title: Master agreement
-			Status: Signed
-
-			Parties:
-				Party:
-					Name: ACME Corp
-					Role: Provider
-				Party:
-					Name: Example Ltd
-					Role: Customer
-
-			History:
-				Revision:
-					Date: 2026-01-15
-					Summary: Initial version
-				Revision:
-					Date: 2026-03-10
-					Summary: Update to payment clauses
-
-			Current version: 2
-
-	Subheader: Example 6 — Legal comments and internal notes
-
-	Content >>
-		It is common to separate:
-
-		* contractual text,
-		* internal notes,
-		* and legal observations.
-
-	Code >>
-		Clause:
-			Title: Jurisdiction
-
-			Text >>
-				The parties submit to the courts of Madrid.
-
-			Internal notes >>
-				Standard clause approved by legal.
-				Do not modify without legal review.
-
-	Subheader: Example 7 — Minimal template for agreements
-
-	Content >>
-		A template (`@stxt.template`) guarantees that an agreement contains the
-		essential elements, without imposing the legal drafting.
-
-	Code >>
-		Template (@stxt.template): com.acme.legal.contract
+		Template (@stxt.template): com.acme.legal.sla
 			Description >>
-				Agreement: Basic contract structure
+				SLA: Service level agreement attached to a contract
 			Structure >>
-				Agreement:
-					Id: (1)
-					Title: (1)
-					Status: (1) ENUM [Draft, Signed, Terminated]
-					Effective date: (?)
-
-					Parties: (1)
-						Party: (+)
-							Name: (1)
-							Role: (1)
-
-					Purpose: (?) TEXT
-					Term: (?)
-						Start: (1) DATE
-						End: (?) DATE
-					Payment: (?)
-						Fee: (1) NUMBER
-						Currency: (1)
-						Billing period: (?)
-					Governing law: (?)
-
-					Clauses: (?)
-						Clause: (*)
-							Number: (?) NATURAL
-							Title: (1) @Title
-							Text: (1) TEXT
-							Internal notes: (?) TEXT
-
-					History: (?)
-						Revision: (*)
-							Date: (1) DATE
-							Summary: (1)
-					Current version: (?) NATURAL
-
-	Subheader: Why this approach is useful
+				SLA:
+					Service: (1)
+					Agreement: (?)
+					Effective date: (1) DATE
+					Availability: (1)
+						Target percentage: (1) NUMBER
+						Measurement period: (1) ENUM [Monthly, Quarterly]
+					Response times: (?)
+						Severity: (*)
+							Max response minutes: (1) NATURAL
+					Penalties: (?)
+						Penalty: (*)
+							Condition: (1) TEXT
+							Consequence: (1) TEXT
+					Legal text: (?) TEXT
 
 	Content >>
-		Using @STXT@ as a source format for contracts makes it possible to:
+		`Agreement: AGR-2026-001` links the SLA to the contract it belongs to, by its
+		identifier. The availability target and the response times are numbers: the
+		dashboard that measures the service reads them from the same file the parties
+		signed, not from a copy in its configuration.
 
-		* Read the documents without special tools.
-		* Review them against an explicit structure.
-		* Extract the key data automatically.
-		* Version and audit them with version control.
-
-		The contract does not become code or adopt an artificial formal language.
-
-	Subheader: Summary
+	Subheader: In the workflow
 
 	Content >>
-		Contracts and legal agreements are, in essence:
+		* **Versions**: each contract is a file in a repository, and each revision is a
+		  readable diff: which clause changed, which date moved. The `History` node holds
+		  the summary; the repository, the detail.
+		* **Standard clauses**: the legal department maintains its approved clauses as text
+		  fragments; a contract incorporates them by copying, and a script compares each
+		  clause with the approved version and flags the ones that differ.
+		* **Validation**: `stxt validate contracts/` in continuous integration rejects an
+		  agreement without parties, without a valid date or with a status outside the
+		  list.
+		* **Extraction**: from the canonical tree come the quarter's expiries, the amounts
+		  per client or the SLAs with a target below 99.9 %, without reading a single
+		  contract.
+		* **Publishing**: the PDF or the signable document is generated from the file,
+		  omitting the internal notes.
 
-		* regulatory text,
-		* with a repeatable structure,
-		* and critical data.
+	Subheader: Limits
 
-		@STXT@ represents them in a readable, structured form without altering their
-		legal nature.
+	Content >>
+		@STXT@ provides no legal validity, electronic signature or custody: the signed
+		document is still the one the legal process produces, and this file is its source.
+		Nor does it interpret the text of the clauses: a condition written in prose ("except
+		in case of wilful misconduct") is text to the language, and only a person, or an
+		application that models it as data, can evaluate it. And the template does not
+		check consistency between fields —that `End` is after `Start`, that the SLA cites a
+		contract that exists—: that is the job of the script that walks the repository.

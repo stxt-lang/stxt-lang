@@ -1,272 +1,242 @@
 Document (dev.stxt.website): Corporate documents
 
 	Metadata:
-		Author: ChatGPT 5.2
-		Last modif: 2026-08-22
-		
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-08-23
+
 	Header: Corporate documents
-	
+
+	Assert >>
+		Minutes, status reports, postmortems, decision records: documents written by people
+		with different profiles, reviewed, and from which someone ends up extracting data by
+		hand. @STXT@ lets the same file be both the document that is read and the source the
+		data is extracted from.
+
 	Content >>
-		Corporate documents must be readable and editable by people and, at the same time,
-		consistent, reviewable and processable by programs.
-		
-		@STXT@ applies to documents that combine, at once:
-		
-		* narrative text,
-		* structure (sections, metadata),
-		* and data (fields, lists, states).
-		
-	Subheader: What kind of documents
-	
+		Meeting minutes have a part that is text —what was discussed, why something was
+		decided— and a part that is data: who attended, which actions were left open, by
+		when and by whom. In practice both parts end up in the same text document, and the
+		data is recovered later by reading: someone goes through the quarter's minutes to
+		find out which actions are still open, or copies the status of twenty reports into a
+		spreadsheet.
+
+		The problem is not the text format but that the data is not marked as such. @STXT@
+		solves exactly that: data are nodes with a name and a value, text goes in literal
+		blocks, and the document still reads top to bottom as it always did.
+
+	Subheader: Meeting minutes
+
 	Content >>
-		Common examples:
-		
-		* Meeting minutes
-		* Status reports (weekly/monthly)
-		* Proposals / internal RFCs
-		* Policies and procedures
-		* Postmortems (incidents)
-		* Requirements and decisions (ADR: Architecture Decision Record, architecture decision log)
-		
-	Subheader: Why @STXT@ here
-	
-	Content >>
-		Common requirements of a corporate document:
-		
-		* **Multiple authors**: technical and non-technical people edit the same document.
-		* **Templates**: every document of a given type follows the same format, without
-		  depending on a specific editor.
-		* **Review**: readable differences (diff) in Git.
-		* **Automation**: extraction of fields (status, owners, dates, actions) without
-		  altering the text.
-		* **Evolution**: the document format changes over time.
-		
-		@STXT@ provides:
-		
-		* Explicit structure through indentation.
-		* Free text in `>>` text blocks, with no escape sequences or additional syntax.
-		* Optional validation with `@stxt.template` or `@stxt.schema`.
-		* Namespaces that separate semantics by document type (`com.acme.minutes`,
-		  `com.acme.report`, etc.).
-		
-	Subheader: Example 1 — Meeting minutes
-	
-	Content >>
-		The minutes combine metadata, agenda, decisions and actions. Free text goes in text
-		blocks; processable data, in inline nodes.
-		
+		The minutes of a weekly meeting, as the person taking them would write them:
+
 	Code >>
 		Minutes (com.acme.corp.minutes):
 			Title: Weekly sync — Platform
 			Date: 2026-01-09
-			Time: 10:00:00
 			Duration minutes: 45
-			Meeting id: PLAT-2026-01-09
-			Location: Google Meet
-			Confidential: false
-			
 			Attendees:
 				Attendee: Joan Costa
 				Attendee: Mery Adams
 				Attendee: Keyla Brown
-			
-			Agenda:
-				Item:
-					Title: Q1 roadmap status
-				Item:
-					Title: Incidents and risks
-				Item:
-					Title: Pending decisions
-			
+
 			Notes >>
-				Executive summary:
-				- Roadmap is green, but team capacity still needs to be finalized.
-				- Main risk: dependency on an external vendor in module X.
-				
-				Observations:
-				- It is agreed to move Friday’s deployment to Monday.
-				- The cost of option B will be reviewed.
-			
+				The quarter's roadmap is on track, but the team's capacity for February is
+				still open. The main risk is still the external provider dependency in
+				module X: response times vary too much from day to day.
+
+				Agreed to move the deployment window from Friday to Monday, to have full
+				support the following day. The cost of option B will be reviewed before
+				deciding on the cache.
+
 			Decisions:
-				Decision:
+				Decision: Move the deployment window to Monday
 					Id: DEC-0142
-					Title: Move deployment window to Monday
 					Decision status: Approved
 					Owner: Platform Team
 					Rationale >>
-						We reduce operational risk and make support easier on Monday.
-						
-				Decision:
+						Reduces operational risk: Tuesday support is full, Saturday support
+						is not.
+				Decision: Freeze non-critical changes in module X
 					Id: DEC-0143
-					Title: Freeze non-critical changes in module X
 					Decision status: Proposed
 					Owner: Reliability
-					Rationale >>
-						External dependency with high variability in response times.
-			
-			Action Items:
-				Action:
+
+			Actions:
+				Action: Prepare the quarter's capacity proposal
 					Id: ACT-0991
-					Title: Prepare capacity proposal (Q1)
 					Owner: Mery Adams
 					Due: 2026-01-16
 					Action status: Open
-				Action:
+				Action: Estimate the cost of option B
 					Id: ACT-0992
-					Title: Estimate cost of option B
 					Owner: Joan Costa
 					Due: 2026-01-14
 					Action status: In Progress
-	
-	Subheader: What gets automated with this document
-	
+
 	Content >>
-		From the document tree, a program can:
-		
-		* List the open actions and their due dates.
-		* Generate a summary for email or chat.
-		* Compute metrics: actions per team, deadlines, percentage of actions in state `Done`.
-		* Export to other formats (for example, JSON for a dashboard).
-		
-		At the same time:
-		
-		* The `Notes >>` and `Rationale >>` blocks preserve the free text without interpreting it.
-		
-	Subheader: Example 2 — Status report
-	
+		It reads like minutes. And at the same time, for a program, it is a tree in which
+		every action has an owner, a date and a status.
+
+	Subheader: What is data and what is text
+
 	Content >>
-		A status report combines:
-		
-		* the status as validatable data,
-		* the detail as free text,
-		* the risks and blockers as processable lists.
-		
-	Code >>
-		Status Report (com.acme.corp.status):
-			Period:
-				From: 2026-01-05
-				To: 2026-01-09
-			
-			Project: STXT Web
-			Owner: Platform Docs
-			Status: Green
-			
-			Summary >>
-				Steady progress on the base documentation and consolidation of examples.
-				Work remains on tools (CLI and online editor) and use cases.
-			
-			Progress:
-				Item:
-					Title: Introduction page
-					Done: true
-				Item:
-					Title: Updated tutorial
-					Done: true
-				Item:
-					Title: Specifications (core/schema/template)
-					Done: In Progress
-			
-			Risks:
-				Risk:
-					Id: RSK-020
-					Level: Medium
-					Title: Lack of migration examples
-					Mitigation >>
-						Create XML/YAML examples and explain equivalences.
-			
-			Next:
-				Item: Close use case pages
-				Item: Publish first version of the Java parser
-				Item: Prepare examples repository
-	
-	Subheader: Validation with @stxt.template
-	
+		That is the only modelling decision to make, and the criterion is practical: **data
+		is what someone will search, filter or count; text is everything else**.
+
+		* Attendees, decisions and actions are data: they are listed, cross-referenced with
+		  other minutes, they fall due. They go in inline nodes, one per element.
+		* The summary of the discussion and the rationale of each decision are text: they
+		  are read, not processed. They go in `>>` blocks, where paragraphs are written
+		  without any restriction.
+		* The title of each decision and each action is the value of the node itself
+		  (`Decision: Move the deployment…`), and its attributes are children. That way the
+		  list reads at a glance.
+
+		If later something that is text today needs processing —the risks mentioned in the
+		notes, for instance—, it is moved to a node of its own. The document does not change
+		format; it gains a node.
+
+	Subheader: The template
+
 	Content >>
-		A template (`@stxt.template`) defines the minimum structure of the document; the
-		validator rejects incomplete documents.
-		
+		A template fixes what every set of minutes must have and what is optional, and
+		narrows the statuses:
+
 	Code >>
 		Template (@stxt.template): com.acme.corp.minutes
 			Description >>
-				Minutes: Corporate minutes template
+				Minutes: Meeting minutes
+				Decisions: Decisions taken or proposed in the meeting
+				Actions: Agreed actions, with owner and due date
 			Structure >>
 				Minutes:
 					Title: (1)
 					Date: (1) DATE
-					Time: (?) TIME
 					Duration minutes: (?) NATURAL
-					Meeting id: (?) 
-					Location: (?)
-					Confidential: (?) BOOLEAN
-					
-					Attendees: (?)
+					Attendees: (1)
 						Attendee: (+)
-					
-					Agenda: (?)
-						Item: (*)
-							Title: (1) @Title
-					
 					Notes: (?) TEXT
-					
 					Decisions: (?)
 						Decision: (*)
 							Id: (1)
-							Title: (1) @Title
 							Decision status: (1) ENUM [Proposed, Approved, Rejected]
 							Owner: (?)
 							Rationale: (?) TEXT
-					
-					Action Items: (?)
+					Actions: (?)
 						Action: (*)
 							Id: (1) @Id
-							Title: (1) @Title
 							Owner: (?) @Owner
 							Due: (?) DATE
 							Action status: (1) ENUM [Open, In Progress, Done, Blocked]
-	
+
 	Content >>
-		This template:
-		
-		* Requires the mandatory fields (`Title`, `Date`) with the `(1)` cardinality.
-		* Restricts the states with `ENUM`.
-		* Declares the free-text fields with the `TEXT` type.
-		* Uses the short authoring form: it does not require the `Node` and `Child` nodes of a
-		  schema.
-		* Reuses `Title`, `Id` and `Owner` through `@Node Name` references: within a namespace a
-		  node name identifies **one** node, so its reappearances are referenced instead of
-		  redefined.
-		* That is why `Decision status` and `Action status` are distinct nodes: their `ENUM`
-		  values differ, and a reference cannot change them.
-		
-	Subheader: Validation with @stxt.schema
-	
+		What it guarantees, minutes after minutes:
+
+		* Every set of minutes has a title, a date and at least one attendee; without that
+		  it does not validate.
+		* A decision is in one of three statuses, and an action in one of four. A status
+		  written any other way (`Approved.`, `open`) is an error, not a variant.
+		* Dates are dates: `2026-01-32` does not pass.
+		* A node that is not in the template —`Atendees` with a single `t`, a `Priority`
+		  someone added on their own— is rejected. That is the closed content model: the
+		  template is the complete list of what may appear.
+		* `Id` and `Owner` are declared once and reused with `@Id` and `@Owner`: within a
+		  namespace, a node name identifies a single node. By the same rule, the status of a
+		  decision and that of an action are different nodes —`Decision status` and
+		  `Action status`—: their value lists differ, and one name cannot have two
+		  definitions.
+
+		The template is stored in the `.stxt/` directory of the repository where the minutes
+		live, and from then on the editor and the command line apply it with no
+		configuration ([Working environment](lang-workflow)).
+
+	Subheader: A status report
+
 	Content >>
-		The schema (`@stxt.schema`) is the explicit form of the same definition. It is used when:
-		
-		* There are several producers and consumers of the document.
-		* Interoperability between teams or systems is required.
-		* There are compliance requirements (audits, controls, archiving).
-		
-		The equivalent schema is longer; every template compiles to an equivalent schema, so
-		it does not need to be written by hand.
-		
-	Subheader: Practical advantages in a company
-	
+		The same approach serves any periodic document. A weekly status report:
+
+	Code >>
+		Status Report (com.acme.corp.status):
+			Project: Customer portal
+			Owner: Platform Docs
+			Period:
+				From: 2026-01-05
+				To: 2026-01-09
+			Status: Green
+
+			Summary >>
+				Steady progress on the base documentation. Work remains on the command
+				line tools and the use cases; none of it blocks the February delivery.
+
+			Progress:
+				Item: Introduction page
+					Item status: Done
+				Item: Tutorial
+					Item status: Done
+				Item: Command line reference
+					Item status: In Progress
+
+			Risks:
+				Risk: Missing migration examples from other formats
+					Id: RSK-020
+					Level: Medium
+					Mitigation >>
+						Prepare two migration examples before the end of the quarter.
+
+	Code >>
+		Template (@stxt.template): com.acme.corp.status
+			Description >>
+				Status Report: Periodic status report of a project
+			Structure >>
+				Status Report:
+					Project: (1)
+					Owner: (1)
+					Period: (1)
+						From: (1) DATE
+						To: (1) DATE
+					Status: (1) ENUM [Green, Amber, Red]
+					Summary: (1) TEXT
+					Progress: (?)
+						Item: (*)
+							Item status: (1) ENUM [Done, In Progress, Blocked]
+					Risks: (?)
+						Risk: (*)
+							Id: (1)
+							Level: (1) ENUM [Low, Medium, High]
+							Mitigation: (?) TEXT
+
 	Content >>
-		* **Diffs in Git**: changes affect specific lines, not binary files.
-		* **Editing**: with any text editor.
-		* **Standardization**: the template acts as the contract of the format.
-		* **Gradual adoption**: a document without validation is valid; the template is added
-		  later without changing the syntax.
-		* **Integration**: the parser produces a tree that is exported to JSON, XML or YAML or
-		  consumed by internal tools.
-		
-	Subheader: Style recommendations
-	
+		The `Status` traffic light is an `ENUM`, not an adjective in the summary. With twenty
+		reports in a directory, a ten-line script answers how many projects are red and
+		what their high risks are, without anyone having read them one by one.
+
+	Subheader: In the workflow
+
 	Content >>
-		* Stable node names (“Action Items”, “Decision”, “Action status”…).
-		* `>>` text blocks only for long text, context or rationale.
-		* Explicit, bounded cardinalities in templates.
-		* States as `ENUM` with bounded values.
-		* In documents versioned in Git, no automatic reformatting (mass whitespace changes)
-		  that hides the changes in the diffs.
+		The documents live in a repository, like code:
+
+		* **Writing**: any text editor. With the VS Code extension, the template provides
+		  completion of names and statuses, and marks errors while typing.
+		* **Review**: a change is a diff of specific lines —an action going from `Open` to
+		  `Done`, a new decision—, not a binary file that has to be opened to see what
+		  changed.
+		* **Continuous integration**: `stxt validate --recursive minutes/` rejects incomplete
+		  minutes or an invalid status before they reach the repository
+		  ([The command line](tools-cli)).
+		* **Exploitation**: the canonical tree (`stxt describe`, or the library of each
+		  language) feeds whatever is needed: the list of open actions per person, a weekly
+		  summary by email, a dashboard with every project's traffic light.
+
+		None of this forces a change in how people write: minutes without a template are a
+		valid @STXT@ document, and validation is added when the team decides what it wants
+		to guarantee.
+
+	Subheader: Limits
+
+	Content >>
+		@STXT@ structures the document; it provides no approval workflow, access control or
+		notifications. Those come from the repository and the tools around it. Nor does it
+		validate rules between fields —that an action in `Done` status has no future date,
+		for instance—: that logic belongs to the application that exploits the data, not to
+		the template.
