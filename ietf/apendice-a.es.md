@@ -1,8 +1,7 @@
 # Apéndice A — Relación con otros formatos (borrador en castellano)
 
 Documento de trabajo: versión en castellano del apéndice A de `draft-stxt-media-type-00.md`,
-para revisarlo y reescribirlo con palabras propias. Lo que vale es el inglés del draft;
-cuando este texto esté a gusto, se traslada allí.
+para revisarlo y reescribirlo.
 
 ---
 
