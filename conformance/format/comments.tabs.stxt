@@ -1,0 +1,7 @@
+# top comment
+Documento (test.fmt):
+	# tab comment
+	# spaces comment
+	Titulo: Hello
+		# two units, after a childless node
+#  a   b	 c

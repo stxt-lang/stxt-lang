@@ -68,7 +68,8 @@ Document (dev.stxt.website): Estabilidad y versiones
 		implementador escribe un ejecutor de unas pocas decenas de líneas en su lenguaje, sin
 		leer las pruebas de ninguna otra implementación, y declara «conforme al kit X.Y». Como las
 		especificaciones van por capas, el kit tiene **perfiles** acumulativos —`core` (sintaxis y
-		árbol), `schema`, `template` y `discovery`—, y una implementación puede certificar solo
+		árbol), `schema`, `template` y `discovery`, más `text` para el escritor y el formateador—,
+		y una implementación puede certificar solo
 		las capas que ofrece: «conforme al kit X.Y, perfil `core`». El kit lleva su propia
 		versión, independiente de la de las especificaciones: añadir casos sube
 		el menor; cambiar lo que un caso espera solo ocurre cuando cambia una especificación.

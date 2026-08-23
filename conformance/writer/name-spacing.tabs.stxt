@@ -1,0 +1,4 @@
+Root (com.example.spacing):
+	Node with spaces: value
+	Trailing before colon: value
+	Mixed _ and - separators: value

@@ -2,7 +2,7 @@ Document (dev.stxt.website): The TypeScript library
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 
 	Header: The TypeScript library
 
@@ -377,9 +377,9 @@ Document (dev.stxt.website): The TypeScript library
 
 	Content >>
 		`NodeWriter` performs the inverse operation: it serialises a node, or a list of documents, to
-		@STXT@ text in canonical form, with `IndentStyle.TABS` (default) or
-		`IndentStyle.SPACES_4`. It writes the namespace where the node declares it, not
-		where it differs from the parent. Since it starts from the
+		@STXT@ text in the canonical form of [STXT-TREE-SPEC §11](stxt-tree-ref#s11), with
+		`IndentStyle.TABS` (default) or `IndentStyle.SPACES_4`. It writes the namespace only
+		where it changes from the parent's, wherever the source declared it. Since it starts from the
 		logical tree, a text that goes through `parse` and `NodeWriter` comes out without
 		comments or blank lines outside blocks —that is what `stxt format --clean` does—.
 
@@ -390,7 +390,8 @@ Document (dev.stxt.website): The TypeScript library
 		const all = NodeWriter.toSTXTDocs(result.getNodes(), IndentStyle.SPACES_4);   // a whole document
 
 	Content >>
-		The reformatting that **keeps** comments and blank lines is `Formatter` (since 0.11.1):
+		The reformatting that **keeps** comments and blank lines is `Formatter` (since 0.11.1;
+		[STXT-TREE-SPEC §12](stxt-tree-ref#s12)):
 		it rewrites the original text line by line —the lines that open a node in canonical
 		form, those of a block at the level of the block, the rest as they are, with their
 		indentation units converted to the requested style— and returns, along with the text,

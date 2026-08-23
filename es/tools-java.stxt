@@ -2,7 +2,7 @@ Document (dev.stxt.website): La biblioteca Java
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 
 	Header: La biblioteca Java
 
@@ -402,13 +402,12 @@ Document (dev.stxt.website): La biblioteca Java
 
 	Content >>
 		`NodeWriter` realiza la operación inversa: serializa un nodo, o una lista de documentos,
-		a texto @STXT@ en forma canónica, con `IndentStyle.TABS` (por defecto) o
-		`IndentStyle.SPACES_4`. Escribe el namespace donde el nodo lo declara, no donde
-		difiere del padre. Escribir un árbol y volver a parsearlo da el
-		mismo árbol, en los dos estilos. Como parte del árbol lógico, un texto que pase por
-		`parse` y `NodeWriter` sale sin comentarios ni líneas en blanco fuera de los
-		bloques —es lo que hace `stxt format --clean`—; el reformateo que los conserva es
-		trabajo de la CLI y de la extensión, no de la biblioteca.
+		a texto @STXT@ en la forma canónica de [STXT-TREE-SPEC §11](stxt-tree-ref#s11), con
+		`IndentStyle.TABS` (por defecto) o `IndentStyle.SPACES_4`. Escribe el namespace solo
+		donde cambia respecto al padre, esté donde esté en el fuente. Escribir un árbol y
+		volver a parsearlo da el mismo árbol, en los dos estilos. Como parte del árbol lógico,
+		un texto que pase por `parse` y `NodeWriter` sale sin comentarios ni líneas en blanco
+		fuera de los bloques —es lo que hace `stxt format --clean`—.
 
 	Java >>
 		import dev.stxt.runtime.NodeWriter;
@@ -416,6 +415,23 @@ Document (dev.stxt.website): La biblioteca Java
 
 		String one = NodeWriter.toSTXT(email);                                   // un nodo, con tabuladores
 		String all = NodeWriter.toSTXT(result.getNodes(), IndentStyle.SPACES_4);   // un documento entero
+
+	Content >>
+		El reformateo que **conserva** comentarios y líneas en blanco es `Formatter`
+		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)): reescribe el texto original línea a línea —las
+		líneas que abren un nodo en forma canónica, las de un bloque al nivel del bloque, el
+		resto tal cual, con sus unidades de indentación convertidas al estilo pedido— y
+		devuelve, junto al texto, los errores de sintaxis que haya encontrado, para que quien
+		llama decida qué hacer con un documento que no parsea. Es el mismo formateador, con las
+		mismas reglas, que el de `stxt format`, la extensión y el playground.
+
+	Java >>
+		import dev.stxt.runtime.Formatter;
+		import dev.stxt.runtime.FormatResult;
+
+		FormatResult formatted = Formatter.format(source, IndentStyle.TABS);
+		String text = formatted.text();
+		List<ParseException> errors = formatted.errors();
 
 	Content >>
 		El `email` construido más arriba, escrito con `toSTXT`:
@@ -488,7 +504,7 @@ Document (dev.stxt.website): La biblioteca Java
 		| `dev.stxt.schema`     | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaValidator`, `SchemaProviderResources`, `SchemaProviderCache`, `SchemaProviderMeta`, `SchemaParser`, `Type`, `TypeRegistry`, y los tipos en `dev.stxt.schema.type` |
 		| `dev.stxt.template`   | `TemplateParser`, `TemplateSchemaProvider`, `MetaTemplateSchemaProvider`                                              |
 		| `dev.stxt.resources`  | `ResourcesLoader`, `ResourcesLoaderDirectory`                                                                        |
-		| `dev.stxt.runtime`    | `STXT` (la fachada), `NodeWriter` e `IndentStyle`, `TreeJson`                                |
+		| `dev.stxt.runtime`    | `STXT` (la fachada), `NodeWriter` e `IndentStyle`, `Formatter` y `FormatResult`, `TreeJson` |
 		| `dev.stxt.discovery`  | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryEnvironment`, `SystemDiscoveryEnvironment` |
 
 		Desde la 1.0 esta API queda congelada dentro de la línea 1.x del paquete, y el

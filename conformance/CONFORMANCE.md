@@ -17,8 +17,11 @@ results are data, and the runner is a few dozen lines you write once.
   rejected with.
 - `discovery/` — the files the discovery cases mount in a virtual file system: definitions,
   and a few files that are not.
+- `writer/` — the canonical text form, in both indentation styles, of the documents of
+  `tree/`.
+- `format/` — documents to reformat, each with its reformatted text in both styles.
 
-The kit has its own version (`kit` in the manifest, currently **1.3**), independent of the
+The kit has its own version (`kit` in the manifest, currently **1.4**), independent of the
 specifications' versions. Adding cases raises the minor; changing what an existing case expects
 raises the major, and only happens when a specification changes.
 
@@ -36,16 +39,21 @@ cases— an implementation must pass:
 | `schema` | `core` | + STXT-SCHEMA-SPEC | `validate`, `validate-error` with the definition sets that hold no template, `definition-error` with `kind` = `schema` (+129) |
 | `template` | `schema` | + STXT-TEMPLATE-SPEC | the same categories, every set and every case (+38) |
 | `discovery` | `template` | + STXT-DISCOVERY-SPEC | `discovery` (+23) |
+| `text` | `core` | STXT-TREE-SPEC §11–12 (the writing operations) | `writer`, `format` (+27) |
+
+`text` is a side branch: it needs only `core`, and `discovery` does not include it. An
+implementation that offers the writer and the formatter certifies it on top of whichever
+other profile it claims: "kit 1.4, `discovery` and `text` profiles".
 
 An implementation **conforms to a profile of the kit** if it passes every case of that profile
 and of the ones it includes. Conformance is declared against the versions of the specifications
 the profile certifies (`specifications` in the manifest), never against the version of a
 package:
 
-> Conforms to STXT-SPEC 1.0 and STXT-TREE-SPEC 1.0 (conformance kit 1.3, `core` profile).
+> Conforms to STXT-SPEC 1.0 and STXT-TREE-SPEC 1.0 (conformance kit 1.4, `core` profile).
 
 > Conforms to STXT-SPEC 1.0, STXT-TREE-SPEC 1.0, STXT-SCHEMA-SPEC 1.0, STXT-TEMPLATE-SPEC 1.0
-> and STXT-DISCOVERY-SPEC 1.0 (conformance kit 1.3, `discovery` profile).
+> and STXT-DISCOVERY-SPEC 1.0 (conformance kit 1.4, `discovery` and `text` profiles).
 
 The `core` profile asks for the canonical tree even though STXT-TREE-SPEC calls emitting it an
 optional capability of a parser: the tree is how the kit checks *what* was parsed, and without
@@ -123,19 +131,35 @@ The three reference runners mount the cases with the same in-memory adapters the
 discovery tests use (`DiscoveryFileSystem` / `DiscoveryEnvironment`), so no real file system
 is touched.
 
+### Category `writer`
+
+Parse `input` and write its root nodes in the canonical text form of STXT-TREE-SPEC §11.1,
+once with tabs and once with four spaces; each result must equal `expected.tabs` /
+`expected.spaces` **byte for byte** (`LF` endings, final newline included). The inputs are
+the documents of `tree/`: the writer is a function of the tree, so the same tree cases serve.
+
+### Category `format`
+
+Reformat `input` as STXT-TREE-SPEC §12.1 says, once per style; the text must equal
+`expected.tabs` / `expected.spaces` byte for byte (the expected file keeps `CRLF`, the missing
+final newline or the dropped BOM of its input), and the syntax errors reported must be exactly
+`errors` — code and line, in order — with both styles. A case with errors is there to check
+that the document is **not** repaired.
+
 ## Running it
 
 A runner needs to: read `manifest.json`; for every case read `input` as bytes, decode UTF-8,
 and either parse and emit the tree, parse and capture the first error, load the definitions and
-validate, load a definition and capture the error, or mount a virtual file system and resolve;
-then compare. The three reference runners are each around 200 lines:
+validate, load a definition and capture the error, mount a virtual file system and resolve, or
+write and reformat; then compare. The three reference runners are each around 200 lines:
 
 - TypeScript: `stxt-js/src/test/conformance.test.ts`
 - Java: `stxt-java/src/test/java/dev/stxt/corpus/ConformanceKitTest.java`
 - Python: `stxt-python/tests/test_conformance.py`
 
 Each also checks that the manifest lists every `.stxt` file under `tree/`, `parse/`,
-`validate/` and `definition-errors/` exactly once, so a case cannot be added without being
+`validate/`, `definition-errors/` and `format/` (inputs, not the `.tabs` / `.spaces` outputs)
+exactly once, so a case cannot be added without being
 declared.
 
 ## Adding a case
@@ -150,11 +174,11 @@ declared.
    specification or the ports first, and the case waits.
 5. Raise `kit` (minor).
 
-## What the kit does not cover yet
+## What the kit covers
 
-The writer round-trip (a document written back from its tree must reparse to the same tree, in
-both indentation styles) is exercised today by the ports' own suites over the corpus; it is not
-a manifest category because the writer is not normative. The validation categories cover the 19 types, the cardinalities, the closed content model, the
+Every operation the five specifications define, plus the two writing operations of
+STXT-TREE-SPEC §11–12, which became normative on 2026-08-23 so that the `text` profile could
+exist. The validation categories cover the 19 types, the cardinalities, the closed content model, the
 cross-namespace children and every error code of STXT-SCHEMA-SPEC §13.1 and
 STXT-TEMPLATE-SPEC §14.1 that an implementation can actually reach; the larger documents of
 `docs/` remain a corpus of the existing ports, not kit cases.

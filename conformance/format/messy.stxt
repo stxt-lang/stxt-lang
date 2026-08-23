@@ -1,0 +1,11 @@
+# top comment
+Documento (test.fmt):   
+    # indented comment
+    Titulo:Hello   
+
+	Cuerpo >>
+		first line
+
+		    indented content
+				
+	After (test.fmt): block

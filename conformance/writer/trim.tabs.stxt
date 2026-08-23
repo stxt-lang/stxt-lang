@@ -1,0 +1,9 @@
+Root (com.example.trim):
+	Padded: both sides
+	Empty:
+	Body >>
+		  leading kept, trailing gone
+		
+		second
+		
+	After: x

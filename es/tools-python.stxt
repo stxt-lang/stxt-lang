@@ -2,7 +2,7 @@ Document (dev.stxt.website): La biblioteca Python
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 
 	Header: La biblioteca Python
 
@@ -348,18 +348,33 @@ Document (dev.stxt.website): La biblioteca Python
 
 	Content >>
 		`NodeWriter` realiza la operación inversa: serializa un nodo, o una lista de
-		documentos, a texto @STXT@ en forma canónica, con `IndentStyle.TABS` (por defecto)
-		o `IndentStyle.SPACES_4`. Escribe el namespace donde el nodo lo declara, no donde
-		difiere del padre: fiel al texto de origen. Como parte del árbol lógico, un texto que pase
-		por `parse` y `NodeWriter` sale sin comentarios ni líneas en blanco fuera de los
-		bloques —es lo que hace `stxt format --clean`—; el reformateo que los conserva es
-		trabajo de la CLI y de la extensión, no de la biblioteca.
+		documentos, a texto @STXT@ en la forma canónica de
+		[STXT-TREE-SPEC §11](stxt-tree-ref#s11), con `IndentStyle.TABS` (por defecto) o
+		`IndentStyle.SPACES_4`. Escribe el namespace solo donde cambia respecto al padre, esté
+		donde esté en el fuente. Como parte del árbol lógico, un texto que pase por `parse` y
+		`NodeWriter` sale sin comentarios ni líneas en blanco fuera de los bloques —es lo que
+		hace `stxt format --clean`—.
 
 	Python >>
 		from stxt import NodeWriter, IndentStyle
 
 		one = NodeWriter.to_stxt(email)                                          # un nodo, con tabuladores
 		all = NodeWriter.to_stxt_docs(result.get_nodes(), IndentStyle.SPACES_4)   # un documento entero
+
+	Content >>
+		El reformateo que **conserva** comentarios y líneas en blanco es `Formatter`
+		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)): reescribe el texto original línea a línea —las
+		líneas que abren un nodo en forma canónica, las de un bloque al nivel del bloque, el
+		resto tal cual, con sus unidades de indentación convertidas al estilo pedido— y
+		devuelve, junto al texto, los errores de sintaxis que haya encontrado, para que quien
+		llama decida qué hacer con un documento que no parsea. Es el mismo formateador, con las
+		mismas reglas, que el de `stxt format`, la extensión y el playground.
+
+	Python >>
+		from stxt import Formatter, IndentStyle
+
+		formatted = Formatter.format(source, IndentStyle.TABS)
+		text, errors = formatted.text, formatted.errors
 
 	Content >>
 		El `email` construido más arriba, escrito con `to_stxt`:
@@ -411,7 +426,7 @@ Document (dev.stxt.website): La biblioteca Python
 		| Puntos de extensión  | `Observer`, `Validator`                                                                                                |
 		| Esquemas             | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaProviderMemory`, `SchemaProviderMeta`, `SchemaValidator`, `transform_node_to_schema`, `SCHEMA_NAMESPACE` |
 		| Plantillas           | `MetaTemplateSchemaProvider`, `TemplateSchemaProviderMemory`, `transform_template_node_to_schema`, `TEMPLATE_NAMESPACE`  |
-		| Runtime              | `UnifiedSchemaProvider`, `NodeWriter`, `IndentStyle`, `to_canonical_tree`, `to_canonical_json`  |
+		| Runtime              | `UnifiedSchemaProvider`, `NodeWriter`, `IndentStyle`, `Formatter`, `FormatResult`, `to_canonical_tree`, `to_canonical_json` |
 		| Resolución           | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryFileSystem`, `DiscoveryEntry`, `DiscoveryEnvironment`, `OsDiscoveryFileSystem`, `SystemDiscoveryEnvironment` y `stxt.discovery.resolve` |
 
 		Desde la 1.0 esta API queda congelada dentro de la línea 1.x del paquete, y el

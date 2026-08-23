@@ -1,0 +1,7 @@
+First (com.example.crlf): one
+    Child: value
+    Body >>
+        line 1
+        line 2
+
+Second: two
