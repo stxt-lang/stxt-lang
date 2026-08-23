@@ -194,5 +194,6 @@ Document (dev.stxt.website): Herramientas
 		| [stxt-vscode](https://github.com/stxt-lang/stxt-vscode)         | La extensión de VS Code                              |
 		| [stxt-play](https://github.com/stxt-lang/stxt-play)             | El playground                                        |
 
-		Las incidencias y propuestas se abren en el repositorio de la herramienta afectada;
-		las que son del lenguaje en sí, en `stxt-lang`.
+		Las preguntas, las ideas y todo lo que sea del lenguaje en sí van a las
+		[discusiones](https://github.com/orgs/stxt-lang/discussions) de la organización; los
+		errores, a las incidencias del repositorio de la herramienta afectada.

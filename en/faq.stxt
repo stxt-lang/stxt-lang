@@ -344,3 +344,12 @@ Document (dev.stxt.website): Frequently asked questions
 		1.x line. Message text and convenience facades are not frozen. Conformance is declared
 		against the specification version (`SPEC_VERSION`), not the package version. The full
 		statement is in [Stability and versions](lang-stability).
+
+	Subsubheader: Where do I ask, or give feedback?
+
+	Content >>
+		In the [discussions](https://github.com/orgs/stxt-lang/discussions) of the `stxt-lang`
+		organization on GitHub: questions, ideas, ambiguities in the specifications, and
+		anything you have built with STXT. Every change to the language starts there. Bugs in
+		a specific tool go to the issues of its repository, listed on the [Tools](lang-tools)
+		page.

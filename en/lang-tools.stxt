@@ -193,5 +193,6 @@ Document (dev.stxt.website): Tools
 		| [stxt-vscode](https://github.com/stxt-lang/stxt-vscode)         | The VS Code extension                                 |
 		| [stxt-play](https://github.com/stxt-lang/stxt-play)             | The playground                                        |
 
-		Issues and proposals go to the repository of the tool concerned; those about the
-		language itself, to `stxt-lang`.
+		Questions, ideas and anything about the language itself go to the
+		[discussions](https://github.com/orgs/stxt-lang/discussions) of the organization; bugs,
+		to the issues of the repository of the tool concerned.

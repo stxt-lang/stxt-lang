@@ -344,3 +344,12 @@ Document (dev.stxt.website): Preguntas frecuentes
 		conformidad se declara contra la versión de la especificación (`SPEC_VERSION`), no
 		contra la del paquete. La declaración completa está en
 		[Estabilidad y versiones](lang-stability).
+
+	Subsubheader: ¿Dónde pregunto, o doy mi opinión?
+
+	Content >>
+		En las [discusiones](https://github.com/orgs/stxt-lang/discussions) de la organización
+		`stxt-lang` en GitHub: preguntas, ideas, ambigüedades de las especificaciones y lo que
+		hayas construido con STXT. Todo cambio del lenguaje empieza ahí. Los errores de una
+		herramienta concreta van a las incidencias de su repositorio, listados en la página de
+		[Herramientas](lang-tools).
