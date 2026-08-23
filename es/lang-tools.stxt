@@ -2,7 +2,7 @@ Document (dev.stxt.website): Herramientas
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 
 	Header: Herramientas
 
@@ -106,8 +106,9 @@ Document (dev.stxt.website): Herramientas
 	Content >>
 		Tres implementaciones, una por ecosistema, con el mismo alcance y la misma versión.
 		Las tres derivan de la especificación a través de un mismo pseudocódigo de
-		referencia, y las tres pasan el mismo corpus de conformidad. Ninguna tiene
-		dependencias en tiempo de ejecución.
+		referencia, y las tres pasan el mismo [kit de conformidad](lang-stability), el que un
+		puerto nuevo ejecuta para declararse conforme. Ninguna tiene dependencias en tiempo de
+		ejecución.
 
 	Subsubheader: TypeScript / JavaScript
 
@@ -185,7 +186,7 @@ Document (dev.stxt.website): Herramientas
 
 		| Repositorio                                                     | Contenido                                            |
 		|-----------------------------------------------------------------|------------------------------------------------------|
-		| [stxt-lang](https://github.com/stxt-lang/stxt-lang)               | Este sitio: las especificaciones y el corpus de ejemplos |
+		| [stxt-lang](https://github.com/stxt-lang/stxt-lang)               | Este sitio: las especificaciones, el kit de conformidad y el corpus de ejemplos |
 		| [stxt-js](https://github.com/stxt-lang/stxt-js)                 | `@stxt-lang/core`, la biblioteca TypeScript          |
 		| [stxt-java](https://github.com/stxt-lang/stxt-java)             | `dev.stxt:stxt-core`, la biblioteca Java             |
 		| [stxt-python](https://github.com/stxt-lang/stxt-python)         | `stxt`, la biblioteca Python                         |

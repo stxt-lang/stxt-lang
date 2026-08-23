@@ -2,7 +2,7 @@ Document (dev.stxt.website): Estabilidad y versiones
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 
 	Header: Estabilidad y versiones
 
@@ -58,6 +58,19 @@ Document (dev.stxt.website): Estabilidad y versiones
 		(`SPEC_VERSION`) y `stxt --version` la enseña junto a la de la propia línea de comandos.
 		Un puerto de terceros hace lo mismo: declara contra qué versión de la especificación
 		es conforme.
+
+		Y lo demuestra con el **kit de conformidad**: el directorio
+		[`conformance/`](https://github.com/stxt-lang/stxt-lang/tree/master/conformance) del repositorio de la
+		especificación, con un manifiesto JSON que enumera cada caso —documento y árbol
+		canónico que debe producir, documento inválido y código de error con el que debe
+		rechazarse, documento y definición contra la que debe validar o fallar, esquema o
+		plantilla inválidos— junto con la sección de la especificación que ejercita. Un
+		implementador escribe un ejecutor de unas pocas decenas de líneas en su lenguaje, sin
+		leer las pruebas de ninguna otra implementación, y declara «conforme al kit X.Y». El kit
+		lleva su propia versión, independiente de la de las especificaciones: añadir casos sube
+		el menor; cambiar lo que un caso espera solo ocurre cuando cambia una especificación.
+		Las tres bibliotecas lo ejecutan en sus pruebas, y un caso solo entra en él cuando las
+		tres coinciden con lo esperado.
 
 		Hasta la 1.0 las tres bibliotecas han ido con el mismo número y el mismo alcance. A
 		partir de ahí, el número que las une es el de la especificación; el del paquete sigue

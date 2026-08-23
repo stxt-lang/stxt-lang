@@ -2,7 +2,7 @@ Document (dev.stxt.website): Tools
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 
 	Header: Tools
 
@@ -105,8 +105,8 @@ Document (dev.stxt.website): Tools
 	Content >>
 		Three implementations, one per ecosystem, with the same scope and the same version.
 		All three derive from the specification through one shared reference pseudocode,
-		and all three pass the same conformance corpus. None of them has runtime
-		dependencies.
+		and all three pass the same [conformance kit](lang-stability), the one a new port runs
+		to declare itself conforming. None of them has runtime dependencies.
 
 	Subsubheader: TypeScript / JavaScript
 
@@ -185,7 +185,7 @@ Document (dev.stxt.website): Tools
 
 		| Repository                                                      | Contents                                              |
 		|-----------------------------------------------------------------|-------------------------------------------------------|
-		| [stxt-lang](https://github.com/stxt-lang/stxt-lang)               | This site: the specifications and the example corpus  |
+		| [stxt-lang](https://github.com/stxt-lang/stxt-lang)               | This site: the specifications, the conformance kit and the example corpus |
 		| [stxt-js](https://github.com/stxt-lang/stxt-js)                 | `@stxt-lang/core`, the TypeScript library             |
 		| [stxt-java](https://github.com/stxt-lang/stxt-java)             | `dev.stxt:stxt-core`, the Java library                |
 		| [stxt-python](https://github.com/stxt-lang/stxt-python)         | `stxt`, the Python library                            |

@@ -2,7 +2,7 @@ Document (dev.stxt.website): Stability and versions
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-23
 
 	Header: Stability and versions
 
@@ -55,6 +55,18 @@ Document (dev.stxt.website): Stability and versions
 		STXT-SPEC 1.0. The three libraries expose that version as a constant (`SPEC_VERSION`)
 		and `stxt --version` prints it next to the command line's own. A third-party port
 		does the same: it declares which specification version it conforms to.
+
+		And it proves it with the **conformance kit**: the
+		[`conformance/`](https://github.com/stxt-lang/stxt-lang/tree/master/conformance) directory of the specification
+		repository, with a JSON manifest that lists every case —a document and the canonical
+		tree it must produce, an invalid document and the error code it must be rejected with, a
+		document and the definition it must validate or fail against, an invalid schema or
+		template— together with the section of the specification it exercises. An implementer
+		writes a runner of a few dozen lines in their language, without reading the tests of any
+		other implementation, and declares "conforms to kit X.Y". The kit carries its own
+		version, independent of the specifications': adding cases raises the minor; changing
+		what a case expects only happens when a specification changes. The three libraries run
+		it in their test suites, and a case enters the kit only when all three agree with it.
 
 		Up to 1.0 the three libraries have shared the same number and the same scope. From
 		there on, the number that ties them together is the specification's; the package number
