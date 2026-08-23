@@ -467,6 +467,15 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		............Nivel3: ERROR, no se puede pasar de nivel 1 a nivel 3
 		
 	Content >>
+		* Una primera línea indentada. Un nodo de nivel 0 no tiene padre, y antes del primer nodo
+		  no hay ningún nodo de referencia: el nivel de referencia es −1, de modo que el primer
+		  nodo —o el primer comentario— del documento **DEBE** estar en el nivel 0. Lo mismo vale
+		  tras cerrar todos los nodos: un nodo de nivel 0 siempre puede seguir a cualquier otro.
+		
+	Listing >>
+		....Nivel 1: ERROR, el primer nodo del documento debe estar en el nivel 0
+		
+	Content >>
 		* No llegar a un múltiplo de 4 al usar espacios
 		* Mezclar espacios y tabuladores en la indentación de una misma línea
 		
@@ -747,7 +756,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		
 		1. Espacios que no sean múltiplos de 4 (cuando se usan espacios para indentación).
 		2. Mezcla de espacios y tabuladores en la indentación de una misma línea ([sección 8.1](#s8-1)).
-		3. Saltos en los niveles de indentación.
+		3. Saltos en los niveles de indentación, incluida una primera línea indentada ([sección 8.3](#s8-3)).
 		4. Un nodo `>>` contiene contenido significativo inline en la misma línea que `>>`.
 		5. Un nodo no contiene ni `:` ni `>>`.
 		6. El nombre lógico de un nodo es la cadena vacía.
@@ -773,7 +782,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		|---|---|
 		| `INDENTATION_SPACES_NOT_VALID` | 1: espacios de indentación que no son múltiplo de 4 |
 		| `INDENTATION_MIXED` | 2: tabuladores y espacios mezclados en la indentación de una línea |
-		| `INDENTATION_LEVEL_NOT_VALID` | 3: salto de más de un nivel respecto al último nodo |
+		| `INDENTATION_LEVEL_NOT_VALID` | 3: salto de más de un nivel respecto al último nodo, o primera línea indentada |
 		| `BLOCK_VALUE_NOT_ALLOWED` | 4: contenido tras `>>` en la línea del nodo |
 		| `INVALID_LINE` | 5 y 6: la línea no contiene `:` ni `>>`, el `>>` precede al `:`, o el nombre es la cadena vacía |
 		| `INVALID_NODE_NAME` | 7 y 8: nombre canónico vacío o con caracteres no permitidos |

@@ -223,6 +223,28 @@
       }
     },
     {
+      "id": "parse/indentation-first-line",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §8.3, §11 (3)",
+      "description": "The first node of the document is indented: before the first node the reference level is -1.",
+      "input": "parse/indentation-first-line.stxt",
+      "error": {
+        "code": "INDENTATION_LEVEL_NOT_VALID",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/comment-first-line",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §8.3, §9, §11 (3)",
+      "description": "An indented comment before any node is a level jump too.",
+      "input": "parse/comment-first-line.stxt",
+      "error": {
+        "code": "INDENTATION_LEVEL_NOT_VALID",
+        "line": 1
+      }
+    },
+    {
       "id": "parse/block-value",
       "category": "parse-error",
       "spec": "STXT-SPEC §6.1, §11 (4)",
@@ -577,11 +599,11 @@
     {
       "id": "parse/comment-closes-root-block-text-after",
       "category": "parse-error",
-      "spec": "STXT-SPEC §9.1, §11 (5)",
-      "description": "After a comment closes a root block, a level-1 line is parsed as a node, and has no separator.",
+      "spec": "STXT-SPEC §8.3, §9.1, §11 (3)",
+      "description": "After a comment closes a root block, every node is closed and the reference level is -1: a level-1 line is a level jump.",
       "input": "parse/comment-closes-root-block-text-after.stxt",
       "error": {
-        "code": "INVALID_LINE",
+        "code": "INDENTATION_LEVEL_NOT_VALID",
         "line": 4
       }
     }
