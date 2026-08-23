@@ -397,8 +397,9 @@ for its existence:
 
 - Compared with YAML, STXT has no implicit typing, no flow syntax, no anchors or aliases,
   no tags, no multi-document markers and no indentation-sensitive scalar folding rules. A
-  YAML parser is several thousand lines and the specification has a long history of
-  surprising coercions ("no", "1e3", "22:30") and of unsafe loading in common libraries.
+  YAML parser is several thousand lines, and YAML 1.1 — still what most libraries
+  implement — has a long history of surprising coercions ("no", "022", "22:30") and of
+  unsafe loading in common libraries.
   An STXT parser is line-oriented and every value is a string; the two forms of a node
   and the four-space rule are the whole syntax. And where YAML stops at syntax, STXT
   goes on: YAML has no namespaces — a "Title" in one document and in another are told
@@ -414,7 +415,7 @@ for its existence:
   is meant for documents with paragraphs of prose, not only for configuration. TOML's
   quoting and escape rules are precisely what STXT omits. TOML has no namespaces or
   schema either: all keys live in the same space, and there is no way to declare which
-  ones are valid, mandatory or of what type beyond the implicit typing of each value. In
+  ones are valid, mandatory or of what type beyond the type each value's syntax implies. In
   STXT a configuration file carries its namespace, and a ten-line template states which
   keys it accepts, which are mandatory and which values they may take; the same validator
   serves the configuration file and the prose document.

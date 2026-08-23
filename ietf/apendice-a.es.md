@@ -29,8 +29,9 @@ de ellos en algo que es, precisamente, la razón de que exista:
 - **Frente a YAML**, STXT no tiene tipado implícito, ni sintaxis de flujo, ni anclas ni
   alias, ni etiquetas, ni marcadores de multidocumento, ni reglas de plegado de escalares
   sensibles a la indentación. Un parser de YAML tiene varios miles de líneas, y la
-  especificación arrastra una larga historia de coerciones sorprendentes (`no`, `1e3`,
-  `22:30`) y de carga insegura en bibliotecas muy usadas. Un parser de STXT va línea a
+  versión 1.1 —que es la que implementan aún la mayoría de bibliotecas— arrastra una
+  larga historia de coerciones sorprendentes (`no`, `022`, `22:30`) y de carga insegura
+  en bibliotecas muy usadas. Un parser de STXT va línea a
   línea y todo valor es una cadena; las dos formas de un nodo y la regla de los cuatro
   espacios son toda la sintaxis. Y donde YAML se queda en sintaxis, STXT sigue: YAML no
   tiene namespaces —un `Title` de un documento y el de otro no se distinguen más que por
@@ -47,7 +48,7 @@ de ellos en algo que es, precisamente, la razón de que exista:
   solo para configuración. Las reglas de comillas y escapado de TOML son exactamente lo
   que STXT omite. TOML tampoco tiene namespaces ni esquema: las claves viven todas en el
   mismo espacio y no hay forma de declarar cuáles son válidas, obligatorias o de qué tipo,
-  más allá del tipado implícito de cada valor. En STXT el fichero de configuración lleva
+  más allá del tipo que la sintaxis de cada valor implica. En STXT el fichero de configuración lleva
   su namespace, y una plantilla de diez líneas dice qué claves admite, cuáles son
   obligatorias y qué valores pueden tomar; el mismo validador sirve para el fichero de
   configuración y para el documento de prosa.

@@ -565,20 +565,21 @@ Internet-Draft                  text/stxt                    August 2026
    *  Compared with YAML, STXT has no implicit typing, no flow syntax,
       no anchors or aliases, no tags, no multi-document markers and no
       indentation-sensitive scalar folding rules.  A YAML parser is
-      several thousand lines and the specification has a long history of
-      surprising coercions ("no", "1e3", "22:30") and of unsafe loading
-      in common libraries.  An STXT parser is line-oriented and every
-      value is a string; the two forms of a node and the four-space rule
-      are the whole syntax.  And where YAML stops at syntax, STXT goes
-      on: YAML has no namespaces — a "Title" in one document and in
-      another are told apart only by convention — and does not define
-      how a document is validated; validation comes from outside,
-      typically with JSON Schema applied to the already-loaded result,
-      after the coercions have taken effect.  In STXT the namespace is
-      part of the language and is inherited by children, and validation
-      is a specification of its own, applied to the text as written: it
-      declares which nodes exist, how many and of what type, and a tool
-      rejects what does not fit before any program loads it.
+      several thousand lines, and YAML 1.1 — still what most libraries
+      implement — has a long history of surprising coercions ("no",
+      "022", "22:30") and of unsafe loading in common libraries.  An
+      STXT parser is line-oriented and every value is a string; the two
+      forms of a node and the four-space rule are the whole syntax.  And
+      where YAML stops at syntax, STXT goes on: YAML has no namespaces —
+      a "Title" in one document and in another are told apart only by
+      convention — and does not define how a document is validated;
+      validation comes from outside, typically with JSON Schema applied
+      to the already-loaded result, after the coercions have taken
+      effect.  In STXT the namespace is part of the language and is
+      inherited by children, and validation is a specification of its
+      own, applied to the text as written: it declares which nodes
+      exist, how many and of what type, and a tool rejects what does not
+      fit before any program loads it.
 
    *  Compared with TOML, STXT is nested by indentation rather than by
       table headers, keeps the order of nodes, allows the same name to
@@ -587,9 +588,9 @@ Internet-Draft                  text/stxt                    August 2026
       TOML's quoting and escape rules are precisely what STXT omits.
       TOML has no namespaces or schema either: all keys live in the same
       space, and there is no way to declare which ones are valid,
-      mandatory or of what type beyond the implicit typing of each
-      value.  In STXT a configuration file carries its namespace, and a
-      ten-line template states which keys it accepts, which are
+      mandatory or of what type beyond the type each value's syntax
+      implies.  In STXT a configuration file carries its namespace, and
+      a ten-line template states which keys it accepts, which are
       mandatory and which values they may take; the same validator
       serves the configuration file and the prose document.
 
@@ -605,7 +606,6 @@ Internet-Draft                  text/stxt                    August 2026
       invalid, and its structure is not addressable.  The two compose
       well — a text block commonly contains Markdown — and that
       composition is one of the intended uses of the format.
-
 
 
 
