@@ -39,31 +39,6 @@ Document (dev.stxt.website): STXT: El Libro
 	Link: @STXT@ Tree
 		Page: stxt-tree-ref
 		
-#	Subheader: Transformaciones		
-	
-#	Link: STXT a XML
-#		Page: stxt2xml
-		
-#	Link: STXT a YAML
-#		Page: stxt2yaml
-		
-#	Link: STXT a JSON
-#		Page: stxt2json
-		
-#	Link: STXT a HTML
-#		Page: stxt2html
-		
-#	Link: STXT a PDF
-#		Page: stxt2pdf
-		
-#	Subheader: Migraciones		
-	
-#	Link: XML a STXT
-#		Page: migrate-xml		
-		
-#	Link: YAML a STXT
-#		Page: migrate-yaml		
-		
 	Subheader: Referencia de herramientas
 
 	Link: Línea de comandos
