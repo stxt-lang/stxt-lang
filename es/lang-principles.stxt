@@ -3,7 +3,7 @@ Document (dev.stxt.website): Principios de diseño
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-22
+		Last modif: 2026-08-24
 
 	Header: Principios de diseño
 
@@ -125,13 +125,14 @@ Document (dev.stxt.website): Principios de diseño
 		indentado debajo del `>>`; y cualquier carácter vale dentro de ambos, incluidos `:`,
 		`#` y `>>`.
 
-		**Coste.** La ausencia de escapes se paga en los nombres de nodo: como un nombre no
-		puede contener los caracteres que delimitan la sintaxis, el lenguaje no los permite,
-		ni a ellos ni a ningún otro signo. Un nombre se compone únicamente de letras, dígitos,
-		marcas combinantes y los separadores `-`, `_` y espacio; `:`, `(`, `)`, `>`, `#` o `@`
-		en un nombre son un error (`INVALID_NODE_NAME`). Es una restricción asumida en el
-		diseño del lenguaje, a cambio de que ni los valores ni los bloques necesiten escape
-		nunca.
+		**Coste.** La ausencia de escapes se paga en los nombres de nodo: como nada puede
+		escaparse, un nombre no puede contener los caracteres que delimitan la sintaxis, y
+		`:`, `(`, `)`, `>`, `#` o `@` en un nombre son un error (`INVALID_NODE_NAME`). Es el
+		precio de que ni los valores ni los bloques necesiten escape nunca. La restricción
+		alcanza además al resto de signos por una decisión distinta, esta vez del propio
+		principio **Human-First**: un nombre se compone únicamente de letras, dígitos, marcas
+		combinantes y los separadores `-`, `_` y espacio, para reducir el ruido visual y que
+		se lea como texto, no como código.
 
 		Referencia: [STXT-SPEC §4.2](stxt-core-ref#s4-2), [§5](stxt-core-ref#s5) y
 		[§6](stxt-core-ref#s6).

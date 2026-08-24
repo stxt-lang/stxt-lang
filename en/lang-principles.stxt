@@ -3,7 +3,7 @@ Document (dev.stxt.website): Design principles
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-22
+		Last modif: 2026-08-24
 
 	Header: Design principles
 
@@ -124,12 +124,13 @@ Document (dev.stxt.website): Design principles
 		A value is whatever follows the colon; a block is whatever is indented below the
 		`>>`; and any character is allowed inside both, including `:`, `#` and `>>`.
 
-		**Cost.** The absence of escapes is paid for in node names: since a name cannot
-		contain the characters that delimit the syntax, the language does not allow them,
-		nor any other symbol. A name consists only of letters, digits, combining marks and the
-		separators `-`, `_` and space; `:`, `(`, `)`, `>`, `#` or `@` in a name are an error
-		(`INVALID_NODE_NAME`). It is a restriction accepted in the design of the language, in
-		exchange for values and blocks never needing an escape.
+		**Cost.** The absence of escapes is paid for in node names: since nothing can be
+		escaped, a name cannot contain the characters that delimit the syntax, and `:`, `(`,
+		`)`, `>`, `#` or `@` in a name are an error (`INVALID_NODE_NAME`). That is the price
+		of values and blocks never needing an escape. The restriction reaches the remaining
+		symbols for a different reason, this time the **Human-First** principle itself: a
+		name consists only of letters, digits, combining marks and the separators `-`, `_`
+		and space, to reduce visual noise and read as text, not as code.
 
 		Reference: [STXT-SPEC §4.2](stxt-core-ref#s4-2), [§5](stxt-core-ref#s5) and
 		[§6](stxt-core-ref#s6).
