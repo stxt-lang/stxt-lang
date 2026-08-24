@@ -90,9 +90,11 @@ Document (dev.stxt.website): Design principles
 			Author: Juan García
 
 	Content >>
-		This is not an end in itself, but what results from applying simplicity to the
-		syntax: each additional form would be one more rule to learn, to implement and to
-		maintain.
+		This is not an end in itself, but what results from applying two criteria to the
+		syntax. One is simplicity: each additional form would be one more rule to learn, to
+		implement and to maintain. The other, **explicit is better than implicit**: in the
+		example, each element says what it is, and there is no dash, comma or bracket whose
+		meaning has to be inferred from context.
 
 		**Cost.** Some things take longer to write than in other formats. In exchange, two
 		authors write the same document the same way, a reader does not have to know several

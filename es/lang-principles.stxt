@@ -90,9 +90,11 @@ Document (dev.stxt.website): Principios de diseño
 			Author: Juan García
 
 	Content >>
-		Esto no es un fin en sí mismo, sino lo que sale de aplicar la sencillez a la sintaxis:
-		cada forma adicional sería una regla más que aprender, que implementar y que
-		mantener.
+		Esto no es un fin en sí mismo, sino lo que sale de aplicar dos criterios a la
+		sintaxis. Uno es la sencillez: cada forma adicional sería una regla más que aprender,
+		que implementar y que mantener. El otro, **mejor explícito que implícito**: en el
+		ejemplo, cada elemento dice lo que es, y no hay un guion, una coma ni un corchete
+		cuyo significado haya que deducir del contexto.
 
 		**Coste.** Algunas cosas son más largas de escribir que en otros formatos. A cambio,
 		dos autores escriben el mismo documento de la misma manera, un lector no tiene que
