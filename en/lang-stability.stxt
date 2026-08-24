@@ -2,7 +2,7 @@ Document (dev.stxt.website): Stability and versions
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-23
+		Last modif: 2026-08-24
 
 	Header: Stability and versions
 
@@ -41,39 +41,20 @@ Document (dev.stxt.website): Stability and versions
 	Content >>
 		**Each specification carries its own number**, `major.minor`, in its `Metadata`, and all
 		five start at `1.0`. They are independent: the core is expected to be very stable, while
-		schema or template may evolve at their own pace, as XML Schema does with respect to XML
-		or JSON Schema with respect to JSON. **"@STXT@ 1.0", said on its own, is the version of
-		[STXT-SPEC](stxt-core-ref)**: the base syntax is what defines what a document is.
+		schema or template may evolve at their own pace, as XML Schema does with respect to XML.
+		**"@STXT@ 1.0", said on its own, is the version of [STXT-SPEC](stxt-core-ref)**.
 
-		**Each library carries its package version**, and that one is a number per product:
-		`@stxt-lang/core` on npm, `dev.stxt:stxt-core` on Maven Central, `stxt` on PyPI. It
-		goes up when the library changes —a new function, a fix—, not when the language does.
+		**Each library carries its package version** —`@stxt-lang/core` on npm,
+		`dev.stxt:stxt-core` on Maven Central, `stxt` on PyPI—, which goes up when the library
+		changes, not when the language does.
 
-		From this follows the rule: **conformance is declared against the version of
+		The rule that ties the two together: **conformance is declared against the version of
 		the specification, not of the package**. If `@stxt-lang/core` is at 1.3 and
-		`dev.stxt:stxt-core` at 1.1, they still read the same @STXT@, because both implement
-		STXT-SPEC 1.0. The three libraries expose that version as a constant (`SPEC_VERSION`)
-		and `stxt --version` prints it next to the command line's own. A third-party port
-		does the same: it declares which specification version it conforms to.
-
-		And it proves it with the **conformance kit**: the
-		[`conformance/`](https://github.com/stxt-lang/stxt-lang/tree/master/conformance) directory of the specification
-		repository, with a JSON manifest that lists every case —a document and the canonical
-		tree it must produce, an invalid document and the error code it must be rejected with, a
-		document and the definition it must validate or fail against, an invalid schema or
-		template— together with the section of the specification it exercises. An implementer
-		writes a runner of a few dozen lines in their language, without reading the tests of any
-		other implementation, and declares "conforms to kit X.Y". As the specifications are
-		layered, the kit has cumulative **profiles** —`core` (syntax and tree), `schema`,
-		`template` and `discovery`, plus `text` for the writer and the formatter— and an
-		implementation may certify only the layers it offers:
-		"conforms to kit X.Y, `core` profile". The kit carries its own version, independent of the specifications': adding cases raises the minor; changing
-		what a case expects only happens when a specification changes. The three libraries run
-		it in their test suites, and a case enters the kit only when all three agree with it.
-
-		Up to 1.0 the three libraries have shared the same number and the same scope. From
-		there on, the number that ties them together is the specification's; the package number
-		follows the evolution of each one.
+		`dev.stxt:stxt-core` at 1.1, they still read the same @STXT@: both implement
+		STXT-SPEC 1.0. Each library exposes that version as a constant (`SPEC_VERSION`) and
+		proves its conformance by running the
+		[conformance kit](https://github.com/stxt-lang/stxt-lang/tree/master/conformance)
+		of the specification repository. A third-party port does the same.
 
 	Subheader: How the numbers go up
 
@@ -81,8 +62,8 @@ Document (dev.stxt.website): Stability and versions
 		The rule is in [STXT-SPEC §1.1](stxt-core-ref#s1-1):
 
 		* The **major** of a specification goes up if something that was valid **stops being
-		  valid or changes meaning**. A "clarification" that invalidates what a conforming
-		  implementation accepted counts too: the effect decides, not the intent.
+		  valid or changes meaning**: a deliberate change of intent, not a clarification of
+		  the text.
 		* The **minor** goes up if something is **only added** without invalidating anything.
 
 		The libraries follow semantic versioning within their line: an incompatible change in

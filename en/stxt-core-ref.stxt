@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-22
+		Last modif: 2026-08-24
 		
 	Header: @STXT@ Core
 	
@@ -39,10 +39,9 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		number.
 
 		* The **major** number goes up if a document that was valid **stops being valid or changes
-		  meaning**. It is the only kind of change that can affect existing documents and
-		  implementations, and it is stated. A clarification that invalidates something a conforming
-		  implementation accepted counts as a major change: the criterion is the effect of the change,
-		  not its intent.
+		  meaning**: a deliberate change of the specification's intent. It is the only kind of change
+		  that can affect existing documents and implementations, and it is stated. A clarification
+		  that sharpens the text without changing that intent is not a major change.
 		* The **minor** number goes up if something is **only added** —a clarification, a normative
 		  case— without invalidating anything existing. Everything valid in `1.0` is valid in any `1.x`.
 		* The first version is `1.0`. Earlier drafts carry no number.

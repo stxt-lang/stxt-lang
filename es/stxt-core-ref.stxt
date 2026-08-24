@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-22
+		Last modif: 2026-08-24
 		
 	Header: @STXT@ Core
 	
@@ -38,10 +38,9 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		versión.
 
 		* El número **mayor** sube si un documento que era válido **deja de serlo o cambia de
-		  significado**. Es el único tipo de cambio que puede afectar a documentos e implementaciones
-		  existentes, y se hace constar. Una aclaración que deje inválido algo que una implementación
-		  conforme aceptaba cuenta como cambio mayor: el criterio es el efecto del cambio, no su
-		  intención.
+		  significado**: un cambio deliberado de la intención de la especificación. Es el único tipo
+		  de cambio que puede afectar a documentos e implementaciones existentes, y se hace constar.
+		  Una aclaración que precisa el texto sin cambiar esa intención no es un cambio mayor.
 		* El número **menor** sube si **solo se añade** —una aclaración, un caso normativo— sin
 		  invalidar nada existente. Todo lo válido en `1.0` lo es en cualquier `1.x`.
 		* La primera versión es la `1.0`. Los borradores anteriores no llevan número.
