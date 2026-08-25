@@ -46,8 +46,8 @@ Document (dev.stxt.website): Preguntas frecuentes
 		* **Validación aparte, opcional y cerrada.** El parser no necesita esquemas; pero sí que
 		  existe un sistema de esquemas opcional y sencillo, adecuado para la mayoría de casos.
 
-		Cada una de estas decisiones, con lo que cuesta y la sección de la referencia que la
-		fija, está en [Principios de diseño](lang-principles).
+		El razonamiento que hay detrás de cada una de estas decisiones está en
+		[Principios de diseño](lang-principles).
 
 	Subsubheader: ¿Qué extensión y qué media type se usan?
 

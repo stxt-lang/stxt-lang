@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-22
+		Last modif: 2026-08-25
 
 	Header: @STXT@ Tutorial
 
@@ -510,8 +510,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		* [Working environment](lang-workflow): organizing a project, installing templates,
 		  validating from the terminal and in continuous integration.
-		* [Design principles](lang-principles): why the language is the way it is, and what
-		  each decision costs.
+		* [Design principles](lang-principles): why the language is the way it is.
 		* [FAQ](faq): short answers with a link to the rule.
 		* The specifications: [STXT-SPEC](stxt-core-ref) for the syntax,
 		  [STXT-SCHEMA-SPEC](stxt-schema-ref) and [STXT-TEMPLATE-SPEC](stxt-template-ref) for

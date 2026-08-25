@@ -45,7 +45,7 @@ Document (dev.stxt.website): Frequently asked questions
 		* **Separate, optional and closed validation.** The parser needs no schemas; but
 		  there is an optional, simple schema system, adequate for most cases.
 
-		Each of these decisions, with its cost and the reference section that fixes it, is in
+		The reasoning behind each of these decisions is in
 		[Design principles](lang-principles).
 
 	Subsubheader: Which file extension and media type are used?
