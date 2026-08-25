@@ -2,7 +2,7 @@ Document (dev.stxt.website): Frequently asked questions
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-25
 
 	Header: Frequently asked questions
 
@@ -30,30 +30,69 @@ Document (dev.stxt.website): Frequently asked questions
 
 		* **Simplicity on three planes.** The rules to know fit in one page; a conforming
 		  parser is a line-by-line pass with a stack and is written in days, without
-		  libraries; and the cost of parsing is linear, in a single pass, with no backtracking
-		  or references, and memory proportional to the depth rather than to the size of the
-		  document.
+		  libraries. The cost of parsing is linear, in a single pass, with no backtracking
+		  or references.
 		* **Indentation is the structure.** One tab or four spaces per level; the level of a
 		  line is decided from that line alone. No braces, brackets, mandatory quotes or
 		  closing tags.
 		* **Free text is literal.** Everything indented under a `>>` node is text as written,
 		  with no escapes and no quotes; `:`, `#` and `>>` have no meaning inside it.
-		* **Few forms, and none redundant.** `Name: value` or `Name >>`; a list is a repeated
-		  node. Two authors write the same document the same way.
 		* **No escape characters.** Any character is allowed in a value or a block; in
-		  exchange, node names only admit letters, digits and separators.
+		  exchange, node names do have restrictions.
 		* **Parsing safety by design.** No entities, references, anchors, file inclusion or
 		  code execution; ASCII namespaces, no ambiguous identifiers. See
 		  [STXT-SPEC §15](stxt-core-ref#s15).
-		* **Names by their canonical form.** `Title` and `title` are the same node; accents are
-		  kept, as in internationalized domain names.
-		* **Separate, optional and closed validation.** The parser needs no schemas; when
-		  there are schemas, an undeclared node is an error, not data to be ignored.
-		* **The same tree everywhere.** A canonical JSON representation and the same error
-		  codes in every implementation.
+		* **Separate, optional and closed validation.** The parser needs no schemas; but
+		  there is an optional, simple schema system, adequate for most cases.
 
 		Each of these decisions, with its cost and the reference section that fixes it, is in
 		[Design principles](lang-principles).
+
+	Subsubheader: Which file extension and media type are used?
+
+	Content >>
+		Extension `.stxt`; media type `text/stxt` (IANA registration planned, not yet
+		registered), with `text/plain` as a compatible alternative. UTF-8 without BOM, `LF`
+		line endings (`CRLF` is accepted).
+		See [STXT-SPEC §3](stxt-core-ref#s3) and [§13](stxt-core-ref#s13).
+
+	Subheader: Why not...?
+
+	Subsubheader: Why not XML, YAML or TOML?
+
+	Content >>
+		None of these formats is a mistake; each optimizes for something else. The table
+		compares, criterion by criterion, the design decisions of @STXT@ with those of the
+		formats that usually come up in the same conversation:
+
+		| | @STXT@ | XML | YAML | TOML |
+		|---|---|---|---|---|
+		| **Human-First** | Designed to be written by hand; the rules fit in one page | Verbose: closing tags, attributes, escapes | Readable, but with subtle rules: optional quotes, values that change type | Clear for flat configuration; nesting is awkward |
+		| **Schemas and validation** | Built into the language, optional and closed | XSD, DTD, RELAX NG: powerful and as complex as the format itself | None; validated with tools from other ecosystems | None |
+		| **Ease of parsing** | Linear, in a single pass; a conforming parser is written in days | Requires an industrial parser | Huge specification; parsers disagree with each other | Approachable, with laborious edges: dates, tables, strings |
+		| **Attack surface** | No entities, references, anchors or code execution ([STXT-SPEC §15](stxt-core-ref#s15)) | External entities (XXE) and entity expansion | Expandable anchors and tags that instantiate objects | Small |
+		| **Free text** | Literal `>>` blocks: any character, no escapes | Escape `<` and `&`, or CDATA | Block scalars with subtle indentation and chomping rules | Multi-line strings between triple quotes |
+
+		XML solves interchange between systems; YAML and TOML, configuration. @STXT@ fills
+		the gap where data and free text live together in the same document and a person
+		writes it.
+
+	Subsubheader: Why not Markdown?
+
+	Content >>
+		Markdown is not an alternative to @STXT@: **it is its complement**. They cover
+		different domains —Markdown gives **format** to prose: bold, links, lists within the
+		text; @STXT@ gives **structure** to the document: nodes, hierarchy, validation— and
+		that is why they work together. In fact, `MARKDOWN` is the only embedded format the
+		schemas define: a node declared with that type marks its text as formatted prose, to
+		be interpreted as CommonMark, and its raw form remains readable.
+		See [STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7).
+
+	Code >>
+		Article: Style guide
+			Summary >>
+				A MARKDOWN block admits **bold**, [links](https://stxt.dev) or lists;
+				the structure of the document comes from the nodes around it.
 
 	Subsubheader: Why are there no lists?
 
@@ -139,14 +178,6 @@ Document (dev.stxt.website): Frequently asked questions
 
 		See [STXT-SPEC §6](stxt-core-ref#s6) and
 		[STXT-SCHEMA-SPEC §9.1](stxt-schema-ref#s9-1).
-
-	Subsubheader: Which file extension and media type are used?
-
-	Content >>
-		Extension `.stxt`; media type `text/stxt` (IANA registration planned, not yet
-		registered), with `text/plain` as a compatible alternative. UTF-8 without BOM, `LF`
-		line endings (`CRLF` is accepted).
-		See [STXT-SPEC §3](stxt-core-ref#s3) and [§13](stxt-core-ref#s13).
 
 	Subheader: Writing documents
 
@@ -318,7 +349,7 @@ Document (dev.stxt.website): Frequently asked questions
 		`STXT_PATH=./.stxt` pins the resolution chain. Details on the [Tools](lang-tools)
 		page.
 
-	Subsubheader: How is it converted to JSON?
+	Subsubheader: Is there a canonical representation of an STXT document?
 
 	Content >>
 		Every valid document has a **canonical tree** in JSON, defined in

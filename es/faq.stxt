@@ -2,7 +2,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-25
 
 	Header: Preguntas frecuentes
 
@@ -31,30 +31,69 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 		* **La sencillez en los tres planos.** Las reglas que hay que conocer caben en una
 		  página; un parser conforme es un recorrido línea a línea con una pila y se escribe en
-		  días, sin bibliotecas; y el coste de parsear es lineal, en una sola pasada, sin
-		  retroceso ni referencias, con memoria proporcional a la profundidad y no al tamaño
-		  del documento.
+		  días, sin bibliotecas. El coste de parsear es lineal, en una sola pasada, sin
+		  retroceso ni referencias.
 		* **La indentación es la estructura.** Un tabulador o cuatro espacios por nivel; el
 		  nivel de una línea se decide con esa sola línea. No hay llaves, corchetes, comillas
 		  obligatorias ni etiquetas de cierre.
 		* **El texto libre es literal.** Todo lo indentado bajo un nodo `>>` es texto tal cual,
 		  sin escapes ni comillas; `:`, `#` y `>>` no tienen significado dentro.
-		* **Pocas formas, y ninguna redundante.** `Nombre: valor` o `Nombre >>`; una lista es
-		  un nodo repetido. Dos autores escriben el mismo documento de la misma manera.
 		* **Sin caracteres de escape.** Cualquier carácter vale en un valor o en un bloque; a
-		  cambio, los nombres de nodo solo admiten letras, dígitos y separadores.
+		  cambio, los nombres de nodo sí que tienen restricciones.
 		* **Seguridad del parseo por diseño.** Sin entidades, referencias, anclas, inclusión de
 		  ficheros ni ejecución de código; namespaces en ASCII, sin ambigüedad de
 		  identificadores. Ver [STXT-SPEC §15](stxt-core-ref#s15).
-		* **Nombres por su forma canónica.** `Título` y `título` son el mismo nodo; los acentos
-		  se conservan, como en los nombres de dominio internacionalizados.
-		* **Validación aparte, opcional y cerrada.** El parser no necesita esquemas; cuando los
-		  hay, un nodo no declarado es un error, no un dato que se ignora.
-		* **El mismo árbol en todas partes.** Una representación JSON canónica y los mismos
-		  códigos de error en todas las implementaciones.
+		* **Validación aparte, opcional y cerrada.** El parser no necesita esquemas; pero sí que
+		  existe un sistema de esquemas opcional y sencillo, adecuado para la mayoría de casos.
 
 		Cada una de estas decisiones, con lo que cuesta y la sección de la referencia que la
 		fija, está en [Principios de diseño](lang-principles).
+
+	Subsubheader: ¿Qué extensión y qué media type se usan?
+
+	Content >>
+		Extensión `.stxt`; media type `text/stxt` (registro en IANA previsto, aún no
+		registrado), y `text/plain` como alternativa compatible. Codificación UTF-8 sin BOM,
+		finales de línea `LF` (se acepta `CRLF`).
+		Ver [STXT-SPEC §3](stxt-core-ref#s3) y [§13](stxt-core-ref#s13).
+
+	Subheader: ¿Por qué no...?
+
+	Subsubheader: ¿Por qué no XML, YAML o TOML?
+
+	Content >>
+		Ninguno de estos formatos es un error; cada uno optimiza otra cosa. La tabla compara,
+		criterio a criterio, las decisiones de diseño de @STXT@ con las de los formatos que
+		suelen aparecer en la misma conversación:
+
+		| | @STXT@ | XML | YAML | TOML |
+		|---|---|---|---|---|
+		| **Human-First** | Diseñado para escribirse a mano; las reglas caben en una página | Verboso: etiquetas de cierre, atributos, escapes | Legible, pero con reglas sutiles: comillas opcionales, valores que cambian de tipo | Claro en configuración plana; anidar es incómodo |
+		| **Esquemas y validación** | Integrados en el lenguaje, opcionales y cerrados | XSD, DTD, RELAX NG: potentes y tan complejos como el propio formato | No tiene; se valida con herramientas de otros ecosistemas | No tiene |
+		| **Facilidad de parseo** | Lineal, en una sola pasada; un parser conforme se escribe en días | Exige un parser industrial | Especificación enorme; los parsers discrepan entre sí | Asequible, con bordes laboriosos: fechas, tablas, strings |
+		| **Superficie de ataque** | Sin entidades, referencias, anclas ni ejecución de código ([STXT-SPEC §15](stxt-core-ref#s15)) | Entidades externas (XXE) y expansión de entidades | Anclas expansibles y etiquetas que instancian objetos | Pequeña |
+		| **Texto libre** | Bloques `>>` literales: cualquier carácter, sin escapes | Escapar `<` y `&`, o CDATA | Escalares de bloque con reglas de indentación y recorte sutiles | Strings multilínea entre triples comillas |
+
+		XML resuelve el intercambio entre sistemas; YAML y TOML, la configuración. @STXT@
+		ocupa el hueco en el que datos y texto libre conviven en el mismo documento y lo
+		escribe una persona.
+
+	Subsubheader: ¿Por qué no Markdown?
+
+	Content >>
+		Markdown no es una alternativa a @STXT@: **es su complemento**. Cubren dominios distintos
+		—Markdown da **formato** a la prosa: negrita, enlaces, listas dentro del texto; @STXT@
+		da **estructura** al documento: nodos, jerarquía, validación— y por eso funcionan
+		juntos. De hecho, `MARKDOWN` es el único formato incrustado que los esquemas definen:
+		un nodo declarado de ese tipo marca su texto como prosa con formato, a interpretar
+		según CommonMark, y su forma cruda sigue siendo legible.
+		Ver [STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7).
+
+	Code >>
+		Article: Guía de estilo
+			Summary >>
+				Un bloque de tipo MARKDOWN admite **negrita**, [enlaces](https://stxt.dev)
+				o listas; la estructura del documento la ponen los nodos de alrededor.
 
 	Subsubheader: ¿Por qué no hay listas?
 
@@ -139,14 +178,6 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 		Ver [STXT-SPEC §6](stxt-core-ref#s6) y
 		[STXT-SCHEMA-SPEC §9.1](stxt-schema-ref#s9-1).
-
-	Subsubheader: ¿Qué extensión y qué media type se usan?
-
-	Content >>
-		Extensión `.stxt`; media type `text/stxt` (registro en IANA previsto, aún no
-		registrado), y `text/plain` como alternativa compatible. Codificación UTF-8 sin BOM,
-		finales de línea `LF` (se acepta `CRLF`).
-		Ver [STXT-SPEC §3](stxt-core-ref#s3) y [§13](stxt-core-ref#s13).
 
 	Subheader: Escribir documentos
 
@@ -317,7 +348,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		o `/etc/stxt`, `STXT_PATH=./.stxt` fija la cadena de resolución. Los detalles, en
 		[Herramientas](lang-tools).
 
-	Subsubheader: ¿Cómo se convierte a JSON?
+	Subsubheader: ¿Existe una representación canónica de un documento STXT?
 
 	Content >>
 		Todo documento válido tiene un **árbol canónico** en JSON, definido en
