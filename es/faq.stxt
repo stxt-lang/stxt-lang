@@ -95,6 +95,15 @@ Document (dev.stxt.website): Preguntas frecuentes
 				Un bloque de tipo MARKDOWN admite **negrita**, [enlaces](https://stxt.dev)
 				o listas; la estructura del documento la ponen los nodos de alrededor.
 
+	Subsubheader: ¿Por qué no JSON?
+
+	Content >>
+		Porque JSON no está pensado para escribirse a mano: es un formato de serialización
+		para máquinas. Todo va entre comillas, llaves y comas; los saltos de línea se
+		escriben `\n`; no hay comentarios, y un texto largo acaba en una sola línea llena de
+		escapes. Nada de eso es un defecto —JSON no promete otra cosa—, pero lo descarta
+		como formato Human-First.
+
 	Subsubheader: ¿Por qué no hay listas?
 
 	Content >>

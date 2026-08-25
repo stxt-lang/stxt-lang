@@ -94,6 +94,15 @@ Document (dev.stxt.website): Frequently asked questions
 				A MARKDOWN block admits **bold**, [links](https://stxt.dev) or lists;
 				the structure of the document comes from the nodes around it.
 
+	Subsubheader: Why not JSON?
+
+	Content >>
+		Because JSON is not meant to be written by hand: it is a serialization format for
+		machines. Everything goes between quotes, braces and commas; line breaks are written
+		`\n`; there are no comments, and a long text ends up on a single line full of
+		escapes. None of that is a flaw —JSON promises nothing else—, but it rules it out as
+		a Human-First format.
+
 	Subsubheader: Why are there no lists?
 
 	Content >>
