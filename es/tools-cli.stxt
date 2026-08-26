@@ -56,8 +56,9 @@ Document (dev.stxt.website): La línea de comandos
 	Listing >>
 		stxt [--version | --help]
 		stxt validate <file|dir|->... [--recursive] [--format text|json] [--warn-schema | --no-schema]
+		              [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt format   <file|dir|->... [--recursive] [--tabs | --spaces] [--write | --check] [--clean]
-		stxt describe <file|->
+		stxt describe <file|-> [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt schemas  [path]
 		stxt install  <file> [--local | --user | --system | --root <dir>] [--force] [--ignore-non-definitions]
 
@@ -108,6 +109,7 @@ Document (dev.stxt.website): La línea de comandos
 
 	Listing >>
 		stxt validate <file|dir|->... [--recursive] [--format text|json] [--warn-schema | --no-schema]
+		              [--max-nesting N] [--max-line-length N] [--max-input-size N]
 
 	Content >>
 		Para cada documento: lo parsea, resuelve su cadena de gramáticas —los directorios
@@ -123,6 +125,13 @@ Document (dev.stxt.website): La línea de comandos
 		| `--format json`     | Los mismos hallazgos como array JSON, para procesamiento automático                              |
 		| `--warn-schema`     | Los errores de gramática se reportan como avisos y no hacen fallar; los de sintaxis, sí          |
 		| `--no-schema`       | Solo sintaxis: no resuelve ni aplica ninguna gramática                                           |
+		| `--max-nesting N`, `--max-line-length N`, `--max-input-size N` | Los límites del parser ([STXT-SPEC §11.2](stxt-core-ref#s11-2)): niveles de anidamiento, longitud de línea y tamaño total de la entrada; por defecto `100`, `10000` y `10000000`; `-1` desactiva el límite |
+
+		Los límites del parser protegen frente a entradas desbocadas, y a veces hay que
+		ampliarlos a sabiendas: un registro de eventos en @STXT@ supera con facilidad el
+		tamaño por defecto. `stxt validate registro.stxt --max-input-size -1` lo valida
+		entero. Un límite excedido se reporta como cualquier otro error de parseo y corta
+		el parseo de ese documento, así que es siempre su último hallazgo.
 
 		Un directorio como argumento exige `--recursive`; sin él es un error de uso (`2`),
 		lo que evita validar un árbol de directorios por accidente. Se pueden mezclar
@@ -326,7 +335,7 @@ Document (dev.stxt.website): La línea de comandos
 	Subheader: stxt describe
 
 	Listing >>
-		stxt describe <file|->
+		stxt describe <file|-> [--max-nesting N] [--max-line-length N] [--max-input-size N]
 
 	Content >>
 		Parsea un único documento y escribe por la salida estándar su árbol lógico en el JSON
@@ -340,7 +349,10 @@ Document (dev.stxt.website): La línea de comandos
 		árbol lógico. Si el documento tiene errores de sintaxis no emite un árbol parcial:
 		informa los errores por la salida de error y termina con `1`. Con `-` lee el
 		documento de la entrada estándar (`stxt describe - < config.stxt`), y en los
-		errores lo llama `<stdin>`.
+		errores lo llama `<stdin>`. Acepta los mismos límites del parser que `validate`
+		(`--max-nesting`, `--max-line-length`, `--max-input-size`; `-1` desactiva):
+		`stxt describe registro.stxt --max-input-size -1` emite el árbol de un documento
+		mayor que el tamaño por defecto.
 
 	Code >>
 		Book (com.acme.book):

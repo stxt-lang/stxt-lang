@@ -55,8 +55,9 @@ Document (dev.stxt.website): The command line
 	Listing >>
 		stxt [--version | --help]
 		stxt validate <file|dir|->... [--recursive] [--format text|json] [--warn-schema | --no-schema]
+		              [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt format   <file|dir|->... [--recursive] [--tabs | --spaces] [--write | --check] [--clean]
-		stxt describe <file|->
+		stxt describe <file|-> [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt schemas  [path]
 		stxt install  <file> [--local | --user | --system | --root <dir>] [--force] [--ignore-non-definitions]
 
@@ -107,6 +108,7 @@ Document (dev.stxt.website): The command line
 
 	Listing >>
 		stxt validate <file|dir|->... [--recursive] [--format text|json] [--warn-schema | --no-schema]
+		              [--max-nesting N] [--max-line-length N] [--max-input-size N]
 
 	Content >>
 		For each document: it parses it, resolves its grammar chain —the `.stxt/`
@@ -122,6 +124,13 @@ Document (dev.stxt.website): The command line
 		| `--format json`     | The same findings as a JSON array, for automated processing                                     |
 		| `--warn-schema`     | Grammar errors are reported as warnings and do not fail; syntax errors still do                 |
 		| `--no-schema`       | Syntax only: no grammar is resolved or applied                                                  |
+		| `--max-nesting N`, `--max-line-length N`, `--max-input-size N` | The parser limits ([STXT-SPEC §11.2](stxt-core-ref#s11-2)): nesting levels, line length and total input size; defaults `100`, `10000` and `10000000`; `-1` disables the limit |
+
+		The parser limits protect against runaway inputs, and sometimes they must be
+		raised knowingly: an event log in @STXT@ easily exceeds the default input size.
+		`stxt validate log.stxt --max-input-size -1` validates it whole. An exceeded
+		limit is reported like any other parse error and aborts the parse of that
+		document, so it is always its last finding.
 
 		A directory as argument requires `--recursive`; without it, it is a usage error
 		(`2`), which prevents validating a directory tree by accident. Files, directories
@@ -321,7 +330,7 @@ Document (dev.stxt.website): The command line
 	Subheader: stxt describe
 
 	Listing >>
-		stxt describe <file|->
+		stxt describe <file|-> [--max-nesting N] [--max-line-length N] [--max-input-size N]
 
 	Content >>
 		Parses a single document and writes its logical tree to standard output in the
@@ -335,7 +344,10 @@ Document (dev.stxt.website): The command line
 		part of the logical tree. If the document has syntax errors it emits no partial
 		tree: it reports the errors on standard error and exits with `1`. With `-` it
 		reads the document from standard input (`stxt describe - < config.stxt`), and
-		calls it `<stdin>` in the errors.
+		calls it `<stdin>` in the errors. It takes the same parser limits as `validate`
+		(`--max-nesting`, `--max-line-length`, `--max-input-size`; `-1` disables):
+		`stxt describe log.stxt --max-input-size -1` emits the tree of a document
+		larger than the default input size.
 
 	Code >>
 		Book (com.acme.book):
