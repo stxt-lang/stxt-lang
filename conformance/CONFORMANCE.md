@@ -35,7 +35,7 @@ cases— an implementation must pass:
 
 | Profile | Includes | Specifications it certifies | Cases |
 |---|---|---|---|
-| `core` | — | STXT-SPEC, STXT-TREE-SPEC | `tree`, `parse-error` (59) |
+| `core` | — | STXT-SPEC, STXT-TREE-SPEC | `tree`, `parse-error` (61) |
 | `schema` | `core` | + STXT-SCHEMA-SPEC | `validate`, `validate-error` with the definition sets that hold no template, `definition-error` with `kind` = `schema` (+129) |
 | `template` | `schema` | + STXT-TEMPLATE-SPEC | the same categories, every set and every case (+38) |
 | `discovery` | `template` | + STXT-DISCOVERY-SPEC | `discovery` (+23) |

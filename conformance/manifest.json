@@ -675,6 +675,28 @@
       }
     },
     {
+      "id": "parse/limit-nesting",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §11.2",
+      "description": "101 nesting levels: the default nesting limit (100 open levels) aborts the parse when the node at level 100 opens.",
+      "input": "parse/limit-nesting.stxt",
+      "error": {
+        "code": "LIMIT_NESTING_EXCEEDED",
+        "line": 101
+      }
+    },
+    {
+      "id": "parse/limit-line-length",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §11.2",
+      "description": "A line of more than 10 000 characters: the default line length limit aborts the parse.",
+      "input": "parse/limit-line-length.stxt",
+      "error": {
+        "code": "LIMIT_LINE_LENGTH_EXCEEDED",
+        "line": 2
+      }
+    },
+    {
       "id": "validate/type-inline",
       "category": "validate",
       "spec": "STXT-SCHEMA-SPEC §9",

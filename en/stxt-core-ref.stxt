@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-24
+		Last modif: 2026-08-26
 		
 	Header: @STXT@ Core
 	
@@ -787,10 +787,45 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		| `UNEXPECTED_ERROR` | an unforeseen exception of the implementation, wrapped with its line; a document conforming to this specification never produces it |
 		
 		The three `INDENTATION_*` codes apply equally to comment lines ([section 9](#s9)). The
+		codes of the parser limits are defined in [section 11.2](#s11-2). The
 		codes of semantic validation are defined in [*STXT-SCHEMA-SPEC*](stxt-schema-ref#s13-1) and
 		[*STXT-TEMPLATE-SPEC*](stxt-template-ref#s14-1); those of schema discovery, in
 		[*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
-		
+
+	Subsubheader: 11.2 Parser limits
+
+	Content >>
+		A conforming parser **MUST** apply limits to the input that bound memory and processing
+		time against hostile or runaway documents. This specification fixes three, with their
+		default values:
+
+		| Limit | Default value | Exceeded when… |
+		|---|---|---|
+		| Nesting depth | `100` levels | a line opens a node at level `100` or deeper (level 0 is the first: at most 100 levels are open) |
+		| Line length | `10 000` characters | one input line, indentation included, exceeds that length |
+		| Input size | `10 000 000` characters | the total input consumed exceeds that size |
+
+		The three limits **MUST** be configurable by the program using the parser; the value `-1`
+		disables the corresponding limit. Lengths are measured in the natural units of the
+		platform's string representation (code points or UTF-16 units); for ASCII content they all
+		coincide. The input size limit is checked as the input is consumed, compatibly with
+		streaming parsing ([section 15](#s15)).
+
+		| Code | Limit |
+		|---|---|
+		| `LIMIT_NESTING_EXCEEDED` | nesting depth |
+		| `LIMIT_LINE_LENGTH_EXCEEDED` | line length |
+		| `LIMIT_INPUT_SIZE_EXCEEDED` | input size |
+
+		A limit error **MUST abort the parse**: the error is emitted and no further input is
+		processed. This also holds for the modes that collect several errors and continue: keeping
+		on processing an input that has already exceeded a limit would void the protection the
+		limit provides, so the limit error is in every case the last one.
+
+		Exceeding a limit does not make the document invalid in the sense of
+		[section 11](#s11): the same document may parse under higher limits. The limit error
+		reports that the parser stopped, not that the document breaks the syntax.
+
 	Subheader: 12. Conformance
 		
 	Content >>
@@ -807,6 +842,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		* It normalizes namespaces to lowercase during parsing.
 		* It applies the whitespace normalization rules of [section 10](#s10).
 		* It rejects invalid documents according to [section 11](#s11).
+		* It applies the parser limits of [section 11.2](#s11-2), with their default values unless explicitly configured, and aborts the parse when one is exceeded.
 
 		The interoperable representation of the logical tree resulting from this parsing is
 		defined by [*STXT-TREE-SPEC*](stxt-tree-ref). Emitting it as JSON is an optional capability of a base
@@ -903,10 +939,10 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		  as literal text without any interpretation, even if it contains `:`, `>>`, `#`, or other @STXT@ syntax.
 		* **No identifier ambiguity**: namespaces are restricted to ASCII ([section 7.1](#s7-1)), 
 		  eliminating homographic attacks based on visually equivalent Unicode characters.
-		* **Low risk of denial of service**: the strict rules of consecutive indentation 
-		  and the absence of circular references or anchors limit structural complexity. 
-		  An implementation **MAY** impose limits on nesting depth or document size according to its
-		  environment; this specification fixes none.
+		* **Low risk of denial of service**: the strict rules of consecutive indentation
+		  and the absence of circular references or anchors limit structural complexity.
+		  In addition, every conforming parser applies the configurable limits of
+		  [section 11.2](#s11-2) —nesting depth, line length and input size—, enabled by default.
 		* **Streaming parsing with bounded memory**: thanks to allowing multiple level 0 nodes 
 		  and the absence of backward references, a parser **MAY** emit each complete root tree as soon as 
 		  it detects the start of the next level 0 node, with memory usage on the order of the nesting 
