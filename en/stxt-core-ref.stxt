@@ -795,18 +795,22 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Subsubheader: 11.2 Parser limits
 
 	Content >>
-		A conforming parser **MUST** apply limits to the input that bound memory and processing
-		time against hostile or runaway documents. This specification fixes three, with their
-		default values:
+		A parser **SHOULD** apply limits to the input that bound memory and processing time
+		against hostile or runaway documents: they are the last line of defense when the input is
+		not trusted. The concrete values are deliberately arbitrary and this specification does
+		not impose them; the three limits below, with the default values of the official
+		implementations, are the **recommended** configuration:
 
-		| Limit | Default value | Exceeded when… |
+		| Limit | Recommended default | Exceeded when… |
 		|---|---|---|
 		| Nesting depth | `100` levels | a line opens a node at level `100` or deeper (level 0 is the first: at most 100 levels are open) |
 		| Line length | `10 000` characters | one input line, indentation included, exceeds that length |
 		| Input size | `10 000 000` characters | the total input consumed exceeds that size |
 
-		The three limits **MUST** be configurable by the program using the parser; the value `-1`
-		disables the corresponding limit. Lengths are measured in the natural units of the
+		What matters is not the numbers but the contract, and that one is normative. A parser
+		that applies limits **MUST** let the program using it configure them —the value `-1`
+		disables the corresponding limit— and **MUST** use the error codes of the table below,
+		the same in every implementation. Lengths are measured in the natural units of the
 		platform's string representation (code points or UTF-16 units); for ASCII content they all
 		coincide. The input size limit is checked as the input is consumed, compatibly with
 		streaming parsing ([section 15](#s15)).
@@ -842,7 +846,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		* It normalizes namespaces to lowercase during parsing.
 		* It applies the whitespace normalization rules of [section 10](#s10).
 		* It rejects invalid documents according to [section 11](#s11).
-		* It applies the parser limits of [section 11.2](#s11-2), with their default values unless explicitly configured, and aborts the parse when one is exceeded.
+		* If it applies parser limits, it follows the contract of [section 11.2](#s11-2): configurable, `LIMIT_*` codes, and the parse aborted when one is exceeded.
 
 		The interoperable representation of the logical tree resulting from this parsing is
 		defined by [*STXT-TREE-SPEC*](stxt-tree-ref). Emitting it as JSON is an optional capability of a base
@@ -941,8 +945,8 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		  eliminating homographic attacks based on visually equivalent Unicode characters.
 		* **Low risk of denial of service**: the strict rules of consecutive indentation
 		  and the absence of circular references or anchors limit structural complexity.
-		  In addition, every conforming parser applies the configurable limits of
-		  [section 11.2](#s11-2) —nesting depth, line length and input size—, enabled by default.
+		  In addition, [section 11.2](#s11-2) recommends configurable limits —nesting depth,
+		  line length and input size—, which the official implementations enable by default.
 		* **Streaming parsing with bounded memory**: thanks to allowing multiple level 0 nodes 
 		  and the absence of backward references, a parser **MAY** emit each complete root tree as soon as 
 		  it detects the start of the next level 0 node, with memory usage on the order of the nesting 

@@ -797,21 +797,27 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Subsubheader: 11.2 Límites del parser
 
 	Content >>
-		Un parser conforme **DEBE** aplicar límites a la entrada que acoten la memoria y el tiempo
-		de proceso frente a documentos hostiles o desbocados. Esta especificación fija tres, con
-		sus valores por defecto:
+		Un parser **DEBERÍA** aplicar límites a la entrada que acoten la memoria y el tiempo
+		de proceso frente a documentos hostiles o desbocados: son la última línea de defensa
+		cuando la entrada no es de confianza. Los valores concretos son deliberadamente
+		arbitrarios y esta especificación no los impone; los tres límites siguientes, con los
+		valores por defecto de las implementaciones oficiales, son la configuración
+		**recomendada**:
 
-		| Límite | Valor por defecto | Se excede cuando… |
+		| Límite | Valor por defecto recomendado | Se excede cuando… |
 		|---|---|---|
 		| Profundidad de anidamiento | `100` niveles | una línea abre un nodo a nivel `100` o mayor (el nivel 0 es el primero: como máximo hay 100 niveles abiertos) |
 		| Longitud de línea | `10 000` caracteres | una línea de la entrada, con su indentación incluida, supera esa longitud |
 		| Tamaño de la entrada | `10 000 000` caracteres | el total de la entrada consumida supera ese tamaño |
 
-		Los tres límites **DEBEN** ser configurables por el programa que usa el parser; el valor
-		`-1` desactiva el límite correspondiente. Las longitudes se miden en las unidades naturales
-		de la representación de cadenas de la plataforma (puntos de código o unidades UTF-16); para
-		contenido ASCII todas coinciden. El límite de tamaño de la entrada se comprueba a medida
-		que esta se consume, de forma compatible con el parseo en streaming ([sección 15](#s15)).
+		Lo importante no son los números sino el contrato, y ese sí es normativo. Un parser que
+		aplique límites **DEBE** dejarlos configurar al programa que lo usa —el valor `-1`
+		desactiva el límite correspondiente— y **DEBE** usar los códigos de error de la tabla
+		siguiente, los mismos en toda implementación. Las longitudes se miden en las unidades
+		naturales de la representación de cadenas de la plataforma (puntos de código o unidades
+		UTF-16); para contenido ASCII todas coinciden. El límite de tamaño de la entrada se
+		comprueba a medida que esta se consume, de forma compatible con el parseo en streaming
+		([sección 15](#s15)).
 
 		| Código | Límite |
 		|---|---|
@@ -844,7 +850,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* Normaliza los namespaces a minúsculas durante el parseo.
 		* Aplica las reglas de normalización de espacios en blanco de la [sección 10](#s10).
 		* Rechaza documentos inválidos según la [sección 11](#s11).
-		* Aplica los límites del parser de la [sección 11.2](#s11-2), con sus valores por defecto salvo configuración explícita, y aborta el parseo al excederse uno.
+		* Si aplica límites al parseo, sigue el contrato de la [sección 11.2](#s11-2): configurables, códigos `LIMIT_*` y aborto al excederse uno.
 
 		La representación interoperable del árbol lógico que resulta de este parseo se define
 		en [*STXT-TREE-SPEC*](stxt-tree-ref). Su emisión como JSON es una capacidad opcional del parser base;
@@ -943,8 +949,9 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		  eliminando los ataques homográficos basados en caracteres Unicode visualmente equivalentes.
 		* **Bajo riesgo de denegación de servicio**: las reglas estrictas de indentación consecutiva
 		  y la ausencia de referencias circulares o anchors limitan la complejidad estructural.
-		  Además, todo parser conforme aplica los límites configurables de la [sección 11.2](#s11-2)
-		  —profundidad de anidamiento, longitud de línea y tamaño de la entrada—, activados por defecto.
+		  Además, la [sección 11.2](#s11-2) recomienda límites configurables —profundidad de
+		  anidamiento, longitud de línea y tamaño de la entrada—, que las implementaciones
+		  oficiales activan por defecto.
 		* **Parseo en streaming con memoria acotada**: gracias a que se permiten múltiples nodos de nivel 0 
 		  y a que no existen referencias hacia atrás, un parser **PUEDE** emitir cada árbol raíz completo en cuanto 
 		  detecta el inicio del siguiente nodo de nivel 0, con un uso de memoria del orden de la profundidad de 
