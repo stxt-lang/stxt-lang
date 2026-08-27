@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT - Semantic Text
+Document (dev.stxt.website): STXT
 	Header: @STXT@: Introduction 
 
 	Assert >>
@@ -12,7 +12,7 @@ Document (dev.stxt.website): STXT - Semantic Text
 	Subheader: Documents
 	
 	Content >>
-		@STXT@ is a hierarchical and semantic textual format aimed at:
+		@STXT@ is a structured, indentation-based text format aimed at:
 		
 		* Representing documents and data clearly.
 		* Being simple to read and write.

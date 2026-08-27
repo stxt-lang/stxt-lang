@@ -2,7 +2,7 @@ Document (dev.stxt.website): Frequently asked questions
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-25
+		Last modif: 2026-08-27
 
 	Header: Frequently asked questions
 
@@ -12,6 +12,18 @@ Document (dev.stxt.website): Frequently asked questions
 		wins.
 
 	Subheader: The language
+
+	Subsubheader: What does the name STXT mean?
+
+	Content >>
+		The first version of the language was called **STxT** (*Semantic Text*); that is
+		where the name and the "s-text" pronunciation come from. @STXT@ is its evolution: it
+		keeps the original spirit and motivation, but has been transformed so much since then
+		— the same idea, executed from another perspective — that it can be considered almost
+		another language. References to *STxT* that may still be found refer to the old
+		language; @STXT@, written like this, is always the current one. To avoid confusion —
+		and because it can be misleading — the term *Semantic Text* has also been retired:
+		the name is simply @STXT@.
 
 	Subsubheader: Is it a data format or a document format?
 

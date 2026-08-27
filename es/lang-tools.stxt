@@ -39,7 +39,7 @@ Document (dev.stxt.website): Herramientas
 
 	Content >>
 		La extensión oficial es
-		[STXT – Semantic Text (`stxt-lang.stxt`)](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt).
+		[STXT Language (`stxt-lang.stxt`)](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt).
 		Desde la paleta de extensiones, buscando `stxt`, o desde el terminal:
 
 	Listing >>

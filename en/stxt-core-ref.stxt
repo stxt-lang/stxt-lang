@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-26
+		Last modif: 2026-08-27
 		
 	Header: @STXT@ Core
 	
@@ -13,13 +13,13 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		This document is **STXT-SPEC**, the base specification of the language; the other
 		specifications cite it by that name.
 
-		This document defines the specification of the **@STXT@ (Semantic Text)** language.
+		This document defines the specification of the **@STXT@** language.
 		
 		@STXT@ is a **Human-First** language, designed so that its natural form is readable, 
 		clear, and comfortable for people, while at the same time maintaining a precise 
 		and easily machine-processable structure.
 		
-		@STXT@ is a hierarchical and semantic textual format oriented to:
+		@STXT@ is a structured, indentation-based text format oriented to:
 		
 		* Representing documents and data clearly.
 		* Being simple to read and write.

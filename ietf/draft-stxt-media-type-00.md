@@ -8,7 +8,6 @@ ipr: trust200902
 area: ART
 keyword:
   - STXT
-  - Semantic Text
   - media type
   - text/stxt
 
@@ -102,7 +101,7 @@ informative:
 
 --- abstract
 
-This document registers the text/stxt media type for STXT (Semantic Text), a plain-text,
+This document registers the text/stxt media type for STXT, a plain-text,
 indentation-based format for hierarchical documents that mix structured fields and free
 text. It summarizes the syntax, specifies the encoding and line-ending conventions that
 apply to the media type, and records the security properties of the format. The normative
@@ -113,7 +112,7 @@ references.
 
 # Introduction
 
-STXT (Semantic Text) is a textual format for hierarchical documents. Its design goal is to
+STXT is a textual format for hierarchical documents. Its design goal is to
 be read and written by people first — a document looks like an indented outline of
 "Name: value" lines and blocks of prose — while remaining trivial to parse: every line is
 classified by looking at that line alone, and there are no escape sequences, quoting rules,

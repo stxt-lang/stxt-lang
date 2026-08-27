@@ -1,10 +1,10 @@
 # stxt-lang
 
-The definition of **STXT** (Semantic Text): the five normative specifications, the conformance
+The definition of **STXT**: the five normative specifications, the conformance
 corpus, and the source of the language portal at <https://stxt.dev>. Everything here is written
 in STXT itself.
 
-STXT is a plain-text format for structured, semantic documents: no braces, no closing tags, just
+STXT is a plain-text format for structured documents: no braces, no closing tags, just
 indentation. It is designed to be equally readable by people and by machines, and it comes with an
 optional schema layer so documents can be validated.
 

@@ -16,7 +16,7 @@ Page (com.acme.cms.page):
 	Header >>
 		## STXT
 		
-		Lenguaje textual semántico, legible por humanos
+		Lenguaje de texto estructurado, legible por humanos
 		y fiable para máquinas.
 	
 	Content >>
