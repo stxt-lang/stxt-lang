@@ -57,6 +57,7 @@ Document (dev.stxt.website): The command line
 		stxt validate <file|dir|->... [--recursive] [--format text|json] [--warn-schema | --no-schema]
 		              [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt format   <file|dir|->... [--recursive] [--tabs | --spaces] [--write | --check] [--clean]
+		              [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt describe <file|-> [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt schemas  [path]
 		stxt install  <file> [--local | --user | --system | --root <dir>] [--force] [--ignore-non-definitions]
@@ -130,7 +131,10 @@ Document (dev.stxt.website): The command line
 		raised knowingly: an event log in @STXT@ easily exceeds the default input size.
 		`stxt validate log.stxt --max-input-size -1` validates it whole. An exceeded
 		limit is reported like any other parse error and aborts the parse of that
-		document, so it is always its last finding.
+		document, so it is always its last finding. `validate` also parses in
+		**streaming**: it reads the file in chunks and releases each root node once
+		validated, so the memory it uses is on the order of one root node, not of the
+		document — validating a log larger than memory works.
 
 		A directory as argument requires `--recursive`; without it, it is a usage error
 		(`2`), which prevents validating a directory tree by accident. Files, directories
@@ -241,6 +245,7 @@ Document (dev.stxt.website): The command line
 
 	Listing >>
 		stxt format <file|dir|->... [--recursive] [--tabs | --spaces] [--write | --check] [--clean]
+		            [--max-nesting N] [--max-line-length N] [--max-input-size N]
 
 	Content >>
 		Rewrites documents in their **canonical form**: indentation normalised to tabs (or
@@ -268,6 +273,7 @@ Document (dev.stxt.website): The command line
 		| `--tabs` / `--spaces` | Indent with tabs (default) or with four spaces                                                |
 		| `--recursive`, `-r` | As in `validate`: descends, sorts by name, skips the `.stxt/` directories                       |
 		| `--clean`           | Switches engine: re-serialises the logical tree, so comments and blank lines are lost            |
+		| `--max-nesting N`, `--max-line-length N`, `--max-input-size N` | The parser limits, as in `validate`; they reach both engines |
 
 		`--check` is equivalent to `gofmt -l` or `prettier --check`, and it is the mode
 		suited to CI. `--clean` obtains the pure canonical document; since it loses
