@@ -3,9 +3,9 @@
 
 
 Network Working Group                                  J. Costa Mombiela
-Internet-Draft                                            23 August 2026
+Internet-Draft                                            28 August 2026
 Intended status: Informational                                          
-Expires: 24 February 2027
+Expires: 1 March 2027
 
 
                         The text/stxt Media Type
@@ -13,13 +13,13 @@ Expires: 24 February 2027
 
 Abstract
 
-   This document registers the text/stxt media type for STXT (Semantic
-   Text), a plain-text, indentation-based format for hierarchical
-   documents that mix structured fields and free text.  It summarizes
-   the syntax, specifies the encoding and line-ending conventions that
-   apply to the media type, and records the security properties of the
-   format.  The normative definition of the syntax is the STXT Core
-   specification, version 1.0, which this document references.
+   This document registers the text/stxt media type for STXT, a plain-
+   text, indentation-based format for hierarchical documents that mix
+   structured fields and free text.  It summarizes the syntax, specifies
+   the encoding and line-ending conventions that apply to the media
+   type, and records the security properties of the format.  The
+   normative definition of the syntax is the STXT Core specification,
+   version 1.0, which this document references.
 
 Status of This Memo
 
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 February 2027.
+   This Internet-Draft will expire on 1 March 2027.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Costa Mombiela          Expires 24 February 2027                [Page 1]
+Costa Mombiela            Expires 1 March 2027                  [Page 1]
 
 Internet-Draft                  text/stxt                    August 2026
 
@@ -75,7 +75,7 @@ Table of Contents
      2.1.  Nodes . . . . . . . . . . . . . . . . . . . . . . . . . .   3
      2.2.  Indentation . . . . . . . . . . . . . . . . . . . . . . .   4
      2.3.  Text blocks . . . . . . . . . . . . . . . . . . . . . . .   4
-     2.4.  Namespaces  . . . . . . . . . . . . . . . . . . . . . . .   4
+     2.4.  Namespaces  . . . . . . . . . . . . . . . . . . . . . . .   5
      2.5.  Comments  . . . . . . . . . . . . . . . . . . . . . . . .   5
      2.6.  Logical tree  . . . . . . . . . . . . . . . . . . . . . .   5
    3.  Encoding Considerations . . . . . . . . . . . . . . . . . . .   5
@@ -92,13 +92,12 @@ Table of Contents
 
 1.  Introduction
 
-   STXT (Semantic Text) is a textual format for hierarchical documents.
-   Its design goal is to be read and written by people first — a
-   document looks like an indented outline of "Name: value" lines and
-   blocks of prose — while remaining trivial to parse: every line is
-   classified by looking at that line alone, and there are no escape
-   sequences, quoting rules, entities, anchors, includes, or evaluation
-   of any kind.
+   STXT is a textual format for hierarchical documents.  Its design goal
+   is to be read and written by people first — a document looks like an
+   indented outline of "Name: value" lines and blocks of prose — while
+   remaining trivial to parse: every line is classified by looking at
+   that line alone, and there are no escape sequences, quoting rules,
+   entities, anchors, includes, or evaluation of any kind.
 
    The format is used for documents, content sources for publishing
    systems, configuration files, and structured output produced by
@@ -109,7 +108,8 @@ Table of Contents
 
 
 
-Costa Mombiela          Expires 24 February 2027                [Page 2]
+
+Costa Mombiela            Expires 1 March 2027                  [Page 2]
 
 Internet-Draft                  text/stxt                    August 2026
 
@@ -165,7 +165,7 @@ Internet-Draft                  text/stxt                    August 2026
 
 
 
-Costa Mombiela          Expires 24 February 2027                [Page 3]
+Costa Mombiela            Expires 1 March 2027                  [Page 3]
 
 Internet-Draft                  text/stxt                    August 2026
 
@@ -193,9 +193,10 @@ Internet-Draft                  text/stxt                    August 2026
    or a leading "#" is text, not a node or a comment.  Only the fixed
    block-level prefix of each line is removed; deeper indentation is
    kept as part of the text, trailing blanks are removed, and empty
-   lines are preserved.  The block ends at the first non-empty line
-   indented at or above the level of the block node, or at the end of
-   the document.
+   lines that precede more text are preserved (the final empty lines of
+   a block are discarded when it closes).  The block ends at the first
+   non-empty line indented at or above the level of the block node, or
+   at the end of the document.
 
    Report: Quarterly summary
        Date: 2026-03-02
@@ -210,6 +211,21 @@ Internet-Draft                  text/stxt                    August 2026
            Content >>
                The legacy export has no test coverage.
 
+
+
+
+
+
+
+
+
+
+
+Costa Mombiela            Expires 1 March 2027                  [Page 4]
+
+Internet-Draft                  text/stxt                    August 2026
+
+
 2.4.  Namespaces
 
    A node MAY carry a namespace in parentheses after its name, such as
@@ -218,14 +234,6 @@ Internet-Draft                  text/stxt                    August 2026
    prefixed by "@"; uppercase ASCII is accepted in the input and
    normalized to lowercase.  Children inherit the namespace of their
    parent; root nodes without one have the empty namespace, and there is
-
-
-
-Costa Mombiela          Expires 24 February 2027                [Page 4]
-
-Internet-Draft                  text/stxt                    August 2026
-
-
    no inheritance between sibling root nodes.  Namespaces under "@stxt"
    are reserved for the language itself.  The ASCII restriction is
    deliberate (see Section 5).
@@ -263,24 +271,21 @@ Internet-Draft                  text/stxt                    August 2026
    content.  Parsers MUST NOT apply a broader platform notion of
    whitespace.
 
+
+
+
+
+
+
+Costa Mombiela            Expires 1 March 2027                  [Page 5]
+
+Internet-Draft                  text/stxt                    August 2026
+
+
    The "charset" parameter is not required.  If present, its value MUST
    be "utf-8" (compared case-insensitively, as [RFC6657] requires for
    charset names).  A recipient that receives any other value SHOULD
    treat the document as malformed rather than transcode it.
-
-
-
-
-
-
-
-
-
-
-Costa Mombiela          Expires 24 February 2027                [Page 5]
-
-Internet-Draft                  text/stxt                    August 2026
-
 
 4.  Interoperability Considerations
 
@@ -325,18 +330,18 @@ Internet-Draft                  text/stxt                    August 2026
       extensions that load external content or evaluate content without
       explicit, opt-in security measures.
 
+
+
+
+Costa Mombiela            Expires 1 March 2027                  [Page 6]
+
+Internet-Draft                  text/stxt                    August 2026
+
+
    *  The content of a text block is never interpreted.  Text that
       happens to contain STXT syntax cannot change the structure of the
       document it is embedded in, which removes the usual injection risk
       when a program writes untrusted text into a document.
-
-
-
-
-Costa Mombiela          Expires 24 February 2027                [Page 6]
-
-Internet-Draft                  text/stxt                    August 2026
-
 
    *  Namespaces are restricted to ASCII, so identifiers that decide how
       a document is interpreted cannot be spoofed with visually
@@ -382,18 +387,17 @@ Internet-Draft                  text/stxt                    August 2026
    Security considerations:  See Section 5 of this document and
       Section 15 of [STXT-SPEC].
 
-   Interoperability considerations:  See Section 4.  Documents are
-      versioned by the specification, not by the media type.
-
-   Published specification:  [STXT-SPEC], available at https://stxt.dev/
 
 
-
-Costa Mombiela          Expires 24 February 2027                [Page 7]
+Costa Mombiela            Expires 1 March 2027                  [Page 7]
 
 Internet-Draft                  text/stxt                    August 2026
 
 
+   Interoperability considerations:  See Section 4.  Documents are
+      versioned by the specification, not by the media type.
+
+   Published specification:  [STXT-SPEC], available at https://stxt.dev/
       stxt-core-ref.html, and this document.
 
    Applications that use this media type:  Document authoring and
@@ -439,16 +443,16 @@ Internet-Draft                  text/stxt                    August 2026
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
-   [RFC3629]  Yergeau, F., "UTF-8, a transformation format of ISO
-              10646", STD 63, RFC 3629, DOI 10.17487/RFC3629, November
-              2003, <https://www.rfc-editor.org/rfc/rfc3629>.
 
 
-
-Costa Mombiela          Expires 24 February 2027                [Page 8]
+Costa Mombiela            Expires 1 March 2027                  [Page 8]
 
 Internet-Draft                  text/stxt                    August 2026
 
+
+   [RFC3629]  Yergeau, F., "UTF-8, a transformation format of ISO
+              10646", STD 63, RFC 3629, DOI 10.17487/RFC3629, November
+              2003, <https://www.rfc-editor.org/rfc/rfc3629>.
 
    [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
               Specifications and Registration Procedures", BCP 13,
@@ -492,19 +496,20 @@ Internet-Draft                  text/stxt                    August 2026
               DOI 10.17487/RFC8259, December 2017,
               <https://www.rfc-editor.org/rfc/rfc8259>.
 
+
+
+
+
+
+Costa Mombiela            Expires 1 March 2027                  [Page 9]
+
+Internet-Draft                  text/stxt                    August 2026
+
+
    [STXT-CONFORMANCE]
               Costa Mombiela, J., "STXT Conformance Kit", 2026,
               <https://github.com/stxt-lang/stxt-lang/tree/master/
               conformance>.
-
-
-
-
-
-Costa Mombiela          Expires 24 February 2027                [Page 9]
-
-Internet-Draft                  text/stxt                    August 2026
-
 
    [STXT-SCHEMA-SPEC]
               Costa Mombiela, J., "STXT Schema — Semantic validation,
@@ -549,18 +554,19 @@ Appendix A.  Relationship to Other Formats
       entity expansion, DTDs and external subsets, processing
       instructions, CDATA sections and escaping of markup characters
       inside text.  A text block holds arbitrary prose without any
+
+
+
+Costa Mombiela            Expires 1 March 2027                 [Page 10]
+
+Internet-Draft                  text/stxt                    August 2026
+
+
       escaping; the hierarchy is the indentation a person would write
       anyway.  The result covers most of what XML is used for in
       documents and configuration, in a form that people write by hand,
       with a parser that is a small state machine instead of a full XML
       processor and its attack surface.
-
-
-
-Costa Mombiela          Expires 24 February 2027               [Page 10]
-
-Internet-Draft                  text/stxt                    August 2026
-
 
    *  Compared with YAML, STXT has no implicit typing, no flow syntax,
       no anchors or aliases, no tags, no multi-document markers and no
@@ -601,22 +607,22 @@ Internet-Draft                  text/stxt                    August 2026
       natural interchange form of the parsed tree, which is why
       [STXT-TREE-SPEC] defines one.
 
+
+
+
+
+
+
+Costa Mombiela            Expires 1 March 2027                 [Page 11]
+
+Internet-Draft                  text/stxt                    August 2026
+
+
    *  Compared with Markdown, STXT is a data format with a defined tree
       and a defined notion of validity: a Markdown document is never
       invalid, and its structure is not addressable.  The two compose
       well — a text block commonly contains Markdown — and that
       composition is one of the intended uses of the format.
-
-
-
-
-
-
-
-Costa Mombiela          Expires 24 February 2027               [Page 11]
-
-Internet-Draft                  text/stxt                    August 2026
-
 
 Appendix B.  Example Document
 
@@ -663,10 +669,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-Costa Mombiela          Expires 24 February 2027               [Page 12]
+Costa Mombiela            Expires 1 March 2027                 [Page 12]
