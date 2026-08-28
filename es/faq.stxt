@@ -87,6 +87,18 @@ Document (dev.stxt.website): Preguntas frecuentes
 		finales de línea `LF` (se acepta `CRLF`).
 		Ver [STXT-SPEC §3](stxt-core-ref#s3) y [§13](stxt-core-ref#s13).
 
+	Subsubheader: ¿Nos enseñas un uso real?
+
+	Content >>
+		El que estás leyendo: este mismo portal. Todas las páginas de `stxt.dev` —el
+		tutorial, los casos de uso, las cinco especificaciones, esta FAQ— están escritas en
+		@STXT@, y un generador de sitios estáticos las convierte en el HTML que tienes
+		delante. Se puede comprobar de dos maneras: el enlace `.stxt` de la cabecera abre el
+		fuente de la página actual, y añadir `.stxt` a la dirección de cualquier página
+		devuelve su código tal cual — por ejemplo, [faq.stxt](faq.stxt) es el fuente de esta
+		misma página. El generador también es público:
+		[stxt-cms](https://github.com/stxt-lang/stxt-cms).
+
 	Subheader: ¿Por qué no...?
 
 	Subsubheader: ¿Por qué no XML, YAML o TOML?
