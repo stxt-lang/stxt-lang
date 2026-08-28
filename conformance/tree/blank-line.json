@@ -18,7 +18,7 @@
         "canonicalName": "only-blank",
         "namespace": "com.example.blank",
         "form": "block",
-        "lines": [""]
+        "lines": []
       },
       {
         "name": "No lines",

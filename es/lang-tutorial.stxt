@@ -163,8 +163,9 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		El bloque termina en la primera línea no vacía cuya indentación sea menor o igual
 		que la del nodo `>>`, sea un nodo o un comentario. Las líneas vacías no lo cierran:
-		forman parte del texto como líneas vacías, se escriban sin nada o con la indentación
-		del bloque.
+		las que preceden a más texto forman parte del bloque como líneas vacías, se escriban
+		sin nada o con la indentación del bloque; las que quedan al final se descartan al
+		cerrarse el bloque, porque son separación visual del documento, no contenido.
 
 		Por eso un bloque sirve para cualquier contenido —un párrafo, un fragmento de
 		código, un trozo de Markdown, un texto en otro formato— sin transformarlo ni escapar

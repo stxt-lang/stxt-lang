@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-23
+		Last modif: 2026-08-27
 
 	Header: @STXT@ Tree
 
@@ -101,10 +101,12 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		when a schema may validate it as a date, number or another type.
 
 		The `lines` member retains the logical block lines exactly as defined by
-		[*STXT-SPEC*](stxt-core-ref) [sections 10.2](stxt-core-ref#s10-2) and [10.3](stxt-core-ref#s10-3). Every element is a string, including an empty
-		line represented by `""`. The array is not replaced with a string joined by `\n`:
-		that join would lose the distinction between a block with no lines (`[]`) and a block
-		containing one empty line (`[""]`).
+		[*STXT-SPEC*](stxt-core-ref) [sections 10.2](stxt-core-ref#s10-2) and [10.3](stxt-core-ref#s10-3). Every element is a string, including a leading
+		or intermediate empty line represented by `""`. Since parsing discards the final empty
+		lines of a block ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)), `lines` **never ends in `""`**: a value whose
+		last `lines` element were `""` is not the representation of any document. The array is
+		not replaced with a string joined by `\n`: the lines are the logical unit of the block
+		and the array keeps them without reconstruction.
 
 		Comments and blank lines outside a block create neither nodes nor lines. Inside a
 		block, a line beginning with `#` appears in `lines` only when its indentation makes
@@ -164,7 +166,9 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		* It emits an array containing every root node, preserving their order.
 		* It emits all and only the members required by [section 4](#s4).
 		* It applies the normalization and namespace inheritance of [*STXT-SPEC*](stxt-core-ref) before emitting.
-		* It retains every logical block line, including trailing blank lines.
+		* It retains every logical block line, including leading and intermediate empty lines;
+		  final empty lines never reach the tree: parsing discards them
+		  ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)).
 		* It does not emit source metadata or derived values excluded by [section 6](#s6).
 
 		The `conformance/tree/` directory in the specification source contains normative pairs
@@ -280,8 +284,10 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		   same rule one level deeper; or the lines of a `block` node, each one with the
 		   indentation of *level* + 1 followed by the text of the line and `LF`. An empty line
 		   of the block (`""`) is written with that indentation and nothing else: the block
-		   reads as one piece, and a trailing empty line is not mistaken for the file's line
-		   ending.
+		   reads as one piece. If a programmatically built tree ended `lines` in `""` —which
+		   parsing never produces ([section 5](#s5))— the writer **MUST NOT** emit those final
+		   empty lines: they would not survive re-parsing
+		   ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)) and would break the round-trip guarantee.
 
 		Nothing else is written: no BOM, no comments, no empty lines outside the blocks, no
 		trailing blanks. The resulting text is a valid @STXT@ document and, re-parsed, **MUST**
@@ -355,10 +361,12 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		2. A **text line of a block** gets the indentation of the block (the level of the
 		   `>>` node plus one) in the requested style, followed by its content as it is: any
 		   indentation the line had beyond the block's is content
-		   ([*STXT-SPEC* §10.2](stxt-core-ref#s10-2)) and is kept exactly. An empty line of
-		   the block is `""` in the content whatever it looks like in the source
-		   ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)) and is written with the indentation of
-		   the block, as in the canonical form.
+		   ([*STXT-SPEC* §10.2](stxt-core-ref#s10-2)) and is kept exactly. An empty line
+		   that precedes more block text is `""` in the content whatever it looks like in
+		   the source ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)) and is written with the
+		   indentation of the block, as in the canonical form. The final empty lines of the
+		   block are not content ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)): they are kept
+		   under rule 3, like any empty line outside a block.
 		3. Every **other line** —a comment, an empty line outside a block, or a line the tree
 		   does not describe because of a syntax error— is kept as it is, with only two
 		   touches: its trailing blanks are removed, and the **whole indentation units** at
@@ -394,7 +402,8 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		    Nota: aquí no hay nada
 
 	Content >>
-		reformatted with `TABS` comes out as follows. The comment, the empty line and the
+		reformatted with `TABS` comes out as follows. The comment, the empty line —which,
+		being final in the block, is not content and comes out unindented (rule 3)— and the
 		redundant namespace of `Anexo` are kept; the spacing of `Título`, the `>>` of
 		`Cuerpo`, the trailing blanks and the indentation are normalized; and the first line
 		of the block keeps its two extra spaces, which are content:

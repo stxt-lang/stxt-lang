@@ -179,7 +179,8 @@ valid document.
 Everything indented below a block node is literal text. Lines inside a block are not
 interpreted in any way: a line containing ":", ">>" or a leading "#" is text, not a node or
 a comment. Only the fixed block-level prefix of each line is removed; deeper indentation is
-kept as part of the text, trailing blanks are removed, and empty lines are preserved. The
+kept as part of the text, trailing blanks are removed, and empty lines that precede more
+text are preserved (the final empty lines of a block are discarded when it closes). The
 block ends at the first non-empty line indented at or above the level of the block node,
 or at the end of the document.
 

@@ -1,5 +1,6 @@
-# A blank line of a block is "" however it is written, and a block whose only
-# line is blank is [""], not [].
+# A blank line before more block text is "" however it is written; the final blank
+# lines of a block are discarded when it closes, so a block whose lines are all
+# blank is [], like a block with no lines (STXT-SPEC §10.3).
 Root (com.example.blank):
 	Written blank >>
 		first

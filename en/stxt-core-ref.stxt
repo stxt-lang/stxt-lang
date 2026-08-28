@@ -90,7 +90,8 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 
 		An **empty line** is a line with no characters or composed only of blanks. Outside a
 		`>>` block, empty lines are ignored and their indentation is not validated; inside a
-		block they are preserved (see [section 10.3](#s10-3)).
+		block, those that precede more text are preserved, and the final ones are discarded
+		when the block closes (see [section 10.3](#s10-3)).
 		
 		There are two forms of node:
 		
@@ -288,7 +289,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		  * The parser **MUST NOT** interpret lines beginning with `#` as comments; they are literal text.
 		* The block ends when a **non-empty line** appears whose indentation is **less than or equal** to the indentation of the `>>` node, **whether or not it is a comment**.
 		* A **comment** line (see [section 9](#s9)) with indentation less than or equal to that of the `>>` node **closes** the block like any other non-empty line, and is then discarded as a comment. A block is a literal: it cannot be commented from inside.
-		* Empty lines **within the block** are preserved and **MUST NOT** close the block, regardless of their indentation.
+		* Empty lines **MUST NOT** close the block, regardless of their indentation. Those that precede more block text are preserved as content; the final ones are discarded when the block closes ([section 10.3](#s10-3)).
 		* The comparison of indentations between the lines and the `>>` node is done by **level** ([section 8.1](#s8-1)), regardless of the style (tabs or spaces) each line uses.
 		* The block also ends upon reaching the **end of the document**.
 		* Content lines additionally follow the canonicalization rules of [section 10.2](#s10-2).
@@ -297,6 +298,8 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		As a consequence, the content of a `>>` block is always **contiguous in the file**: it runs
 		from the line after the `>>` node to the last non-empty line with strictly greater
 		indentation, with no comment able to interleave. See [section 9.1](#s9-1).
+		Empty lines after that last line are not part of the content: they are the final empty
+		lines that [section 10.3](#s10-3) discards.
 		
 	Subsubheader: 6.2 Example
 		
@@ -693,7 +696,8 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		   level is reached, no further indentation or character rules apply — it may contain
 		   spaces and tabs in any combination, and any @STXT@ syntax without being interpreted.
 		3. On that content, the parser **MUST** remove all trailing spaces and tabs (right trim).
-		4. Empty lines are preserved in all cases (see [section 10.3](#s10-3)).
+		4. Empty lines that precede more content are preserved; the final empty lines of the
+		   block are discarded when it closes (see [section 10.3](#s10-3)).
 		
 		Example of line canonicalization:
 		
@@ -724,27 +728,49 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		* Line 2: `"Less indented"`
 
 	Subsubheader: 10.3 Empty lines in >> blocks
-		
+
 	Content >>
-		* Empty lines within the block, whether intermediate or final, **MUST** be preserved as empty lines (`""`) in the logical representation of the text.
-		* Only right trim is applied on each individual line (removal of spaces and tabs at end of line).
-		* No empty line is removed, neither intermediate nor final.
-		
+		* **Leading and intermediate** empty lines — those that precede more non-empty content of
+		  the block — **MUST** be preserved as empty lines (`""`) in the logical representation
+		  of the text.
+		* **Final** empty lines — the sequence of empty lines after the last non-empty line of
+		  the block — **MUST** be discarded when the block closes: they are not part of the
+		  logical representation. A block composed only of empty lines has the empty sequence of
+		  lines as its content, just like a block with no lines.
+		* The rule is semantic, not syntactic: an empty line never closes the block
+		  ([section 6.1](#s6-1)). The discard happens when the block closes, by a non-empty line
+		  at a level less than or equal to the block node's, or by the end of the document.
+
+		The reason is the same as for the inline value trim ([section 10.1](#s10-1)): what cannot
+		be seen must not change the meaning. An empty line between the end of a block and the
+		next node is visual separation of the document, not content, and the number of empty
+		lines at the end of a file is often decided by the editor, not the author: two visually
+		identical documents **MUST** produce the same tree. A block thus keeps its left edge (the
+		additional indentation, [section 10.2](#s10-2)) and its top edge (the leading empty
+		lines), which are deliberate and visible, and trims its right edge (per-line trim) and
+		its bottom edge (the final empty lines).
+
 		Example:
-		
+
 	Code >>
 		Text >>
+
 		    Line 1
-		    
+
 		    Line 2
-		    
-	Content >>		
-		Logical content of the block:
-		
-		* Line 1: `"Line 1"`
-		* Line 2: `""`
-		* Line 3: `"Line 2"`
-		* Line 4: `""`
+
+		Next: node
+	Content >>
+		Logical content of the `Text` block:
+
+		* Line 1: `""` (leading: preserved)
+		* Line 2: `"Line 1"`
+		* Line 3: `""` (intermediate: preserved)
+		* Line 4: `"Line 2"`
+
+		The empty line after `Line 2` is final: it is discarded when the line `Next: node`
+		closes the block, and the result would have been the same if the document ended there.
+		The logical representation has exactly four lines.
 		
 	Subheader: 11. Error Rules
 		
@@ -889,16 +915,21 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		        Mode: Active
 		
 	Subsubheader: 14.2 Block with empty lines
-		
+
 	Code >>
 		Text>>
-		    
+
 		    Line 2
-	Content >>		
-		Logical content of the block:
-		
+
+		Next:
+	Content >>
+		Logical content of the `Text` block:
+
 		1. `""`
 		2. `"Line 2"`
+
+		The leading empty line is preserved; the final one is discarded ([section 10.3](#s10-3)).
+		`Next` is a second root node, outside the block.
 
 	Subsubheader: 14.3 Comments inside and outside blocks
 		
@@ -972,7 +1003,8 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		Comment          = Indentation "#" { any character until end of line }
 		                   ; outside block content; discarded; its indentation is validated like a node's
 		                   ; (level <= last node + 1) but does not alter the hierarchy (section 9)
-		EmptyLine        = { Blank }                      ; ignored outside blocks; inside, a "" line of the content (section 10.3)
+		EmptyLine        = { Blank }                      ; ignored outside blocks; inside, a "" line of the content
+		                                                  ; if it precedes more text; the block's final ones are discarded (section 10.3)
 		BlockTextLine    = BlockIndentation FreeText      ; only with an open >> block: homogeneous prefix of level(>> node) + 1;
 		                                                  ; the rest is literal text, right-trimmed (section 10.2)
 
@@ -1007,9 +1039,10 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		* **Basic parsing flow:**
 		  1. Read line (discarding a trailing `\r` if present, [section 3](#s3)) and calculate its indentation level (according to [section 8](#s8) rules).
 		  2. If there is an active `>>` block:
-		     - If the line is empty → add empty line to the block.
+		     - If the line is empty → add an empty line (`""`) to the block.
 		     - If indentation > indentation of the `>>` node → strip the block level (level of the `>>` node + 1) and add the rest as literal text (right trim).
 		     - If indentation ≤ indentation of the `>>` node, **whether or not it is a comment** → close block and process the line outside the block.
+		     - When a block closes —also upon reaching the end of the document— remove the final empty lines from its content ([section 10.3](#s10-3)).
 		  3. If there is no active block:
 		     - Empty line → ignore (does not affect hierarchy).
 		     - Starts with `#` (after indentation) → comment; validate its indentation like a node's (homogeneous style, multiple of 4, level ≤ last node + 1) and discard without touching the hierarchy.
@@ -1025,7 +1058,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		  - Node names: according to [section 4.1](#s4-1)–[4.3](#s4-3).
 		  - Namespaces: normalized to lowercase during parsing ([section 7](#s7)); only the lowercase form is preserved.
 		  - Inline values: left and right trim ([section 10.1](#s10-1)).
-		  - Block lines: strip the block level preserving any additional indentation + right trim + preserve all empty lines ([section 10.2](#s10-2)–[10.3](#s10-3)).
+		  - Block lines: strip the block level preserving any additional indentation + right trim + preserve the empty lines that precede more content and discard the final ones ([section 10.2](#s10-2)–[10.3](#s10-3)).
 
 	Subheader: 17. Appendix B — Interaction with `@stxt.schema`
 		

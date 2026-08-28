@@ -35,11 +35,11 @@ cases— an implementation must pass:
 
 | Profile | Includes | Specifications it certifies | Cases |
 |---|---|---|---|
-| `core` | — | STXT-SPEC, STXT-TREE-SPEC | `tree`, `parse-error` (61) |
+| `core` | — | STXT-SPEC, STXT-TREE-SPEC | `tree`, `parse-error` (62) |
 | `schema` | `core` | + STXT-SCHEMA-SPEC | `validate`, `validate-error` with the definition sets that hold no template, `definition-error` with `kind` = `schema` (+129) |
 | `template` | `schema` | + STXT-TEMPLATE-SPEC | the same categories, every set and every case (+38) |
 | `discovery` | `template` | + STXT-DISCOVERY-SPEC | `discovery` (+23) |
-| `text` | `core` | STXT-TREE-SPEC §11–12 (the writing operations) | `writer`, `format` (+27) |
+| `text` | `core` | STXT-TREE-SPEC §11–12 (the writing operations) | `writer`, `format` (+28) |
 
 `text` is a side branch: it needs only `core`, and `discovery` does not include it. An
 implementation that offers the writer and the formatter certifies it on top of whichever

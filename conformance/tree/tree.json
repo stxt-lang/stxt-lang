@@ -19,7 +19,7 @@
         "canonicalName": "body",
         "namespace": "com.example.docs",
         "form": "block",
-        "lines": ["First line", "", "# This is literal text", "Last line", ""]
+        "lines": ["First line", "", "# This is literal text", "Last line"]
       }
     ]
   },

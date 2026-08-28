@@ -161,8 +161,10 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		The block ends at the first non-empty line whose indentation is less than or equal
 		to that of the `>>` node, whether a node or a comment. Empty lines do not close it:
-		they are part of the text as empty lines, whether written with nothing or with the
-		block's indentation.
+		those that precede more text are part of the block as empty lines, whether written
+		with nothing or with the block's indentation; those left at the end are discarded
+		when the block closes, because they are visual separation of the document, not
+		content.
 
 		That is why a block serves for any content —a paragraph, a code fragment, a piece
 		of Markdown, text in another format— without transforming or escaping anything.

@@ -7,5 +7,5 @@ Documento (test.fmt):
         first line
         
             indented content
-        
+
     After (test.fmt): block

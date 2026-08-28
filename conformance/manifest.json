@@ -80,7 +80,7 @@
       "id": "tree/blank-line",
       "category": "tree",
       "spec": "STXT-SPEC §10.3; STXT-TREE-SPEC §5",
-      "description": "A blank line of a block is \"\" however it is written, and a block whose only line is blank is [\"\"], not [].",
+      "description": "A blank line before more block text is \"\" however it is written; a block whose lines are all blank is [], like a block with no lines.",
       "input": "tree/blank-line.stxt",
       "expected": "tree/blank-line.json"
     },
@@ -197,6 +197,14 @@
       "expected": "tree/spaces.json"
     },
     {
+      "id": "tree/trailing-blank",
+      "category": "tree",
+      "spec": "STXT-SPEC §10.3; STXT-TREE-SPEC §5",
+      "description": "The final blank lines of a block are discarded when it closes, by a shallower line or by the end of the document; leading and inner blank lines are kept.",
+      "input": "tree/trailing-blank.stxt",
+      "expected": "tree/trailing-blank.json"
+    },
+    {
       "id": "tree/tree",
       "category": "tree",
       "spec": "STXT-TREE-SPEC §10",
@@ -208,7 +216,7 @@
       "id": "tree/trim",
       "category": "tree",
       "spec": "STXT-SPEC §10.1, §10.2, §10.3, §6.1",
-      "description": "Inline values are trimmed; block lines are right-trimmed only, inner blank lines are kept, and the block ends at the first non-empty line at its level.",
+      "description": "Inline values are trimmed; block lines are right-trimmed only, inner blank lines are kept before more text, final ones are dropped, and the block ends at the first non-empty line at its level.",
       "input": "tree/trim.stxt",
       "expected": "tree/trim.json"
     },
@@ -4140,6 +4148,17 @@
       }
     },
     {
+      "id": "writer/trailing-blank",
+      "category": "writer",
+      "spec": "STXT-TREE-SPEC §11.1",
+      "description": "Canonical text form of the tree of tree/trailing-blank.",
+      "input": "tree/trailing-blank.stxt",
+      "expected": {
+        "tabs": "writer/trailing-blank.tabs.stxt",
+        "spaces": "writer/trailing-blank.spaces.stxt"
+      }
+    },
+    {
       "id": "writer/tree",
       "category": "writer",
       "spec": "STXT-TREE-SPEC §11.1",
@@ -4165,7 +4184,7 @@
       "id": "format/block-lines",
       "category": "format",
       "spec": "STXT-TREE-SPEC §12.1 (2)",
-      "description": "Block lines re-indented to the level of the block, their own extra indentation kept, blank lines of the block with the block's indentation, trailing blanks removed.",
+      "description": "Block lines re-indented to the level of the block, their own extra indentation kept, blank lines before more block text with the block's indentation, final blank lines of the block plain, trailing blanks removed.",
       "input": "format/block-lines.stxt",
       "expected": {
         "tabs": "format/block-lines.tabs.stxt",

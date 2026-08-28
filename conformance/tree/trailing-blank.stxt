@@ -1,0 +1,15 @@
+# The final blank lines of a block are discarded when it closes (STXT-SPEC §10.3),
+# whether a shallower line closes it or the document ends; leading and inner blank
+# lines are kept. Two visually identical documents produce the same tree.
+Root (com.example.final):
+	Leading >>
+
+		text
+	Padding >>
+		text
+		
+
+Next root >>
+	last
+
+

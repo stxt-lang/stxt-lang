@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.final",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Leading",
+        "canonicalName": "leading",
+        "namespace": "com.example.final",
+        "form": "block",
+        "lines": ["", "text"]
+      },
+      {
+        "name": "Padding",
+        "canonicalName": "padding",
+        "namespace": "com.example.final",
+        "form": "block",
+        "lines": ["text"]
+      }
+    ]
+  },
+  {
+    "name": "Next root",
+    "canonicalName": "next-root",
+    "namespace": "",
+    "form": "block",
+    "lines": ["last"]
+  }
+]

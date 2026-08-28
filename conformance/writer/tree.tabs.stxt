@@ -5,7 +5,6 @@ Document (com.example.docs):
 		
 		# This is literal text
 		Last line
-		
 
 Appendix:
 	Note: no lateral namespace inheritance

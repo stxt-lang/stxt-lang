@@ -1,0 +1,9 @@
+Root (com.example.final):
+	Leading >>
+		
+		text
+	Padding >>
+		text
+
+Next root >>
+	last

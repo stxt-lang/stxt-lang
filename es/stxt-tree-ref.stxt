@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-23
+		Last modif: 2026-08-27
 
 	Header: @STXT@ Tree
 
@@ -104,9 +104,11 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 
 		El miembro `lines` conserva de forma exacta las líneas lógicas de un bloque según
 		[*STXT-SPEC*](stxt-core-ref) [secciones 10.2](stxt-core-ref#s10-2) y [10.3](stxt-core-ref#s10-3). Cada elemento es una string, incluida una línea
-		vacía representada por `""`. No se sustituye el array por una string unida con
-		`\n`: esa unión perdería la diferencia entre un bloque sin líneas (`[]`) y un bloque
-		que contiene una única línea vacía (`[""]`).
+		vacía inicial o intermedia representada por `""`. Como el parseo descarta las líneas
+		vacías finales de un bloque ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)), `lines` **nunca termina en `""`**:
+		un valor cuyo último elemento de `lines` fuera `""` no es la representación de ningún
+		documento. No se sustituye el array por una string unida con `\n`: las líneas son la
+		unidad lógica del bloque y el array las conserva sin reconstrucción.
 
 		Los comentarios y las líneas vacías fuera de un bloque no producen nodos ni líneas.
 		Dentro de un bloque, una línea que empieza por `#` sólo aparece en `lines` si su
@@ -168,7 +170,9 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		* Emite un array de todos los nodos raíz, preservando su orden.
 		* Emite todos y sólo los miembros exigidos por la [sección 4](#s4).
 		* Aplica las normalizaciones y la herencia de namespace de [*STXT-SPEC*](stxt-core-ref) antes de emitir.
-		* Conserva cada línea lógica de un bloque, incluidas las líneas vacías finales.
+		* Conserva cada línea lógica de un bloque, incluidas las líneas vacías iniciales e
+		  intermedias; las finales no llegan al árbol: el parseo las descarta
+		  ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)).
 		* No emite metadatos de fuente ni valores derivados excluidos por la [sección 6](#s6).
 
 		El directorio `conformance/tree/` de la fuente de especificaciones contiene pares
@@ -285,8 +289,10 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		   misma regla un nivel más adentro; o las líneas de un nodo `block`, cada una con la
 		   indentación de *nivel* + 1 seguida del texto de la línea y `LF`. Una línea vacía
 		   del bloque (`""`) se escribe con esa indentación y nada más: así el bloque se lee
-		   como una pieza y una línea vacía final no se confunde con el salto de línea del
-		   fichero.
+		   como una pieza. Si un árbol construido por programa terminara `lines` en `""`
+		   —lo que el parseo nunca produce ([sección 5](#s5))—, el escritor **NO DEBE**
+		   emitir esas líneas vacías finales: no sobrevivirían al reparseo
+		   ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)) y romperían la garantía de ida y vuelta.
 
 		No se escribe nada más: ni BOM, ni comentarios, ni líneas vacías fuera de los bloques,
 		ni blancos finales. El texto resultante es un documento @STXT@ válido y, reparseado,
@@ -361,9 +367,11 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		   nodo `>>` más uno) en el estilo pedido, seguida de su contenido tal cual: la
 		   indentación que la línea tuviera más allá de la del bloque es contenido
 		   ([*STXT-SPEC* §10.2](stxt-core-ref#s10-2)) y se conserva exactamente. Una línea
-		   vacía del bloque es `""` en el contenido sea cual sea su aspecto en el fuente
-		   ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)) y se escribe con la indentación del
-		   bloque, como en la forma canónica.
+		   vacía que precede a más texto del bloque es `""` en el contenido sea cual sea su
+		   aspecto en el fuente ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)) y se escribe con
+		   la indentación del bloque, como en la forma canónica. Las líneas vacías finales
+		   del bloque no son contenido ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)): se
+		   conservan según la regla 3, como cualquier línea vacía fuera de un bloque.
 		3. Cualquier **otra línea** —un comentario, una línea vacía fuera de un bloque, o una
 		   línea que el árbol no describe por un error de sintaxis— se conserva como está, con
 		   dos únicos retoques: se eliminan sus blancos finales, y las **unidades enteras de
@@ -399,7 +407,8 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		    Nota: aquí no hay nada
 
 	Content >>
-		reformateado con `TABS` queda así. Se conservan el comentario, la línea vacía y el
+		reformateado con `TABS` queda así. Se conservan el comentario, la línea vacía —que,
+		por ser final del bloque, no es contenido y sale sin indentar (regla 3)— y el
 		namespace redundante de `Anexo`; se normalizan la separación de `Título`, el `>>` de
 		`Cuerpo`, los blancos finales y la indentación; y la primera línea del bloque conserva
 		sus dos espacios de más, que son contenido:
