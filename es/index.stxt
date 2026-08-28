@@ -42,21 +42,21 @@ Document (dev.stxt.website): STXT
 		Se pueden definir además esquemas o plantillas
 		para validar el contenido de un documento.
 		
-		Un documento `Email` del namespace `com.example.docs`:
-		
+		Un documento `Email` del namespace `com.example.docs`, junto a la plantilla que lo
+		valida:
+
 	Code >>
+		# El documento
 		Email (com.example.docs):
 			From: John Smith <john.smith@example.com>
 			To: Mery Adams <mery.adams@example.com>
 			Cc: Keyla Brown <keyla.brown@example.com>
 			Title: Project report
 			Body Content >>
-				Hello Mery!! 
+				Hello Mery!!
 				The book is finished!!
-	Content >>
-		La definición de la plantilla:
-		
-	Code >>
+
+		# La definición de su plantilla
 		Template (@stxt.template): com.example.docs
 			Structure >>
 				Email (com.example.docs):

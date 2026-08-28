@@ -42,21 +42,21 @@ Document (dev.stxt.website): STXT
 		Schemas or templates can also be defined
 		to validate the content of a document.
 		
-		An `Email` document from the `com.example.docs` namespace:
-		
+		An `Email` document from the `com.example.docs` namespace, together with the template
+		that validates it:
+
 	Code >>
+		# The document
 		Email (com.example.docs):
 			From: John Smith <john.smith@example.com>
 			To: Mery Adams <mery.adams@example.com>
 			Cc: Keyla Brown <keyla.brown@example.com>
 			Title: Project report
 			Body Content >>
-				Hello Mery!! 
+				Hello Mery!!
 				The book is finished!!
-	Content >>
-		The template definition:
-		
-	Code >>
+
+		# Its template definition
 		Template (@stxt.template): com.example.docs
 			Structure >>
 				Email (com.example.docs):
