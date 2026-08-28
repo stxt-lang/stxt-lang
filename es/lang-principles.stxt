@@ -64,7 +64,7 @@ Document (dev.stxt.website): Principios de diseño
 		El texto libre es, así, literal: todo lo indentado bajo un nodo `>>` es texto tal
 		cual, y la indentación relativa se conserva. Un párrafo, un fragmento de código o un
 		bloque de Markdown se pegan en el documento sin transformarlos, y se leen y se editan
-		de forma directa, sin que ninguna convención del formato se interponga entre la
+		de forma directa, sin que ninguna convención del lenguaje se interponga entre la
 		persona y lo que escribe.
 
 	Subheader: 5. La seguridad del parseo, por diseño

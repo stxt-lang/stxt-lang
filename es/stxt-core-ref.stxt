@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-27
+		Last modif: 2026-08-28
 		
 	Header: @STXT@ Core
 	
@@ -18,7 +18,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		clara y cómoda para las personas, manteniendo al mismo tiempo una estructura precisa 
 		y fácilmente procesable por máquinas.
 		
-		@STXT@ es un formato de texto estructurado, basado en indentación, orientado a:
+		@STXT@ es un lenguaje de texto estructurado, basado en indentación, orientado a:
 		
 		* Representar documentos y datos de manera clara.
 		* Ser sencillo de leer y escribir.
@@ -971,7 +971,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		Un parser conforme de @STXT@ es inherentemente resistente a clases comunes de vulnerabilidades:
 		
 		* **Inmune a ataques de expansión de entidades** (como "billion laughs" o XXE): 
-		  el formato no define entidades, referencias externas ni inclusión de recursos remotos.
+		  el lenguaje no define entidades, referencias externas ni inclusión de recursos remotos.
 		* **Inmune a ejecución de código arbitrario**: no existen características dinámicas, tags personalizados, 
 		  loaders ni deserialización de objetos. La única estructura resultante es un árbol simple de nodos y valores textuales.
 		* **Inmune a inyección dentro de bloques literales**: todo contenido dentro de un nodo `>>` se trata 

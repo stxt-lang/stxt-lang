@@ -14,7 +14,7 @@ Document (dev.stxt.website): AI and LLMs — Generated, verifiable documents
 		metadata.
 
 	Assert >>
-		@STXT@ is a suitable format for AI-generated documents:\\
+		@STXT@ is a suitable language for AI-generated documents:\\
 		as easy to write as Markdown, and **verifiable**.
 
 	Subheader: Why an LLM writes good @STXT@
@@ -107,7 +107,7 @@ Document (dev.stxt.website): AI and LLMs — Generated, verifiable documents
 		[`examples/llm/`](https://github.com/stxt-lang/stxt-lang/tree/master/examples/llm)
 		of the specification repository: a Node program of about eighty lines that turns
 		free-text meeting notes into a valid `Report (com.acme.reports)`. Next to it are the
-		template in `.stxt/`, a correct example document, the prompt with the format rules
+		template in `.stxt/`, a correct example document, the prompt with the language rules
 		and the source notes.
 
 		* **Generate**: the prompt carries the @STXT@ rules in ten lines, the whole

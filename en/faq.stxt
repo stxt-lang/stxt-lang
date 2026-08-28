@@ -2,7 +2,7 @@ Document (dev.stxt.website): Frequently asked questions
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-27
+		Last modif: 2026-08-28
 
 	Header: Frequently asked questions
 
@@ -24,6 +24,24 @@ Document (dev.stxt.website): Frequently asked questions
 		language; @STXT@, written like this, is always the current one. To avoid confusion —
 		and because it can be misleading — the term *Semantic Text* has also been retired:
 		the name is simply @STXT@.
+
+	Subsubheader: Is it a language or a format?
+
+	Content >>
+		Both words are correct: they look at the same thing from different angles. "Language"
+		puts the focus on the grammar and on the person writing: syntax rules, a
+		specification, something that is learned and written by hand. "Format" puts the focus
+		on the role that syntax plays when a system stores or exchanges something with it.
+		They are not exclusive categories — XML literally stands for *Extensible Markup
+		**Language*** and nobody hesitates to say "a file in XML format" — but two ways of
+		looking.
+
+		@STXT@ **is a language**: that is how it defines itself, and the whole Human-First
+		design follows from that starting point — a grammar meant to be written by hand, five
+		normative specifications, schemas, tools. And it **acts as a format** wherever a
+		system employs it: as the source format of a CMS, as a configuration format, as an
+		interchange format between agents. The first word says what it is; the second, the
+		role it plays in each case.
 
 	Subsubheader: Is it a data format or a document format?
 

@@ -62,7 +62,7 @@ Document (dev.stxt.website): Design principles
 		Free text is thus literal: everything indented under a `>>` node is text as written,
 		and relative indentation is preserved. A paragraph, a code fragment or a block of
 		Markdown is pasted into the document without transformation, and is read and edited
-		directly, with no convention of the format standing between the person and what they
+		directly, with no convention of the language standing between the person and what they
 		write.
 
 	Subheader: 5. Parsing safety, by design

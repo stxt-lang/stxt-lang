@@ -12,11 +12,11 @@ Document (dev.stxt.website): STXT
 	Subheader: Documents
 	
 	Content >>
-		@STXT@ is a structured, indentation-based text format aimed at:
+		@STXT@ is a structured, indentation-based text language aimed at:
 		
 		* Representing documents and data clearly.
 		* Being simple to read and write.
-		* Being trivial to parse in any language.
+		* Being trivial to parse in any programming language.
 		* Allowing both structured content and free text.
 		* Applying content rules via `@stxt.schema` or `@stxt.template`.
 	

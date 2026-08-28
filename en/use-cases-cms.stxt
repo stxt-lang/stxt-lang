@@ -39,7 +39,7 @@ Document (dev.stxt.website): CMS and publishing
 
 			SEO:
 				Title: STXT — A Human-First language
-				Description: A readable, validatable text format
+				Description: A readable, validatable text language
 				Keywords:
 					Keyword: stxt
 					Keyword: documents

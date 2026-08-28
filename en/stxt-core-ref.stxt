@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-27
+		Last modif: 2026-08-28
 		
 	Header: @STXT@ Core
 	
@@ -19,7 +19,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		clear, and comfortable for people, while at the same time maintaining a precise 
 		and easily machine-processable structure.
 		
-		@STXT@ is a structured, indentation-based text format oriented to:
+		@STXT@ is a structured, indentation-based text language oriented to:
 		
 		* Representing documents and data clearly.
 		* Being simple to read and write.
@@ -967,7 +967,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		A conforming @STXT@ parser is inherently resistant to common classes of vulnerabilities:
 		
 		* **Immune to entity expansion attacks** (such as "billion laughs" or XXE): 
-		  the format does not define entities, external references, or inclusion of remote resources.
+		  the language does not define entities, external references, or inclusion of remote resources.
 		* **Immune to arbitrary code execution**: there are no dynamic features, custom tags, 
 		  loaders, or object deserialization. The only resulting structure is a simple tree of nodes and textual values.
 		* **Immune to injection inside literal blocks**: all content within a `>>` node is treated 

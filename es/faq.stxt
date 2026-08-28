@@ -2,7 +2,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-27
+		Last modif: 2026-08-28
 
 	Header: Preguntas frecuentes
 
@@ -24,6 +24,24 @@ Document (dev.stxt.website): Preguntas frecuentes
 		escrito así, es siempre el actual. Para evitar confusiones —y porque puede llevar a
 		malentendidos— el término *Semantic Text* también se ha retirado: el nombre es,
 		simplemente, @STXT@.
+
+	Subsubheader: ¿Es un lenguaje o un formato?
+
+	Content >>
+		Las dos palabras son correctas: miran la misma cosa desde ángulos distintos.
+		«Lenguaje» pone el foco en la gramática y en quien escribe: unas reglas de sintaxis,
+		una especificación, algo que se aprende y se escribe a mano. «Formato» pone el foco en
+		el papel que esa sintaxis juega cuando un sistema guarda o intercambia algo con ella.
+		No son categorías excluyentes —XML significa literalmente *Extensible Markup
+		**Language*** y nadie duda al decir «un fichero en formato XML»—, sino dos maneras de
+		mirar.
+
+		@STXT@ **es un lenguaje**: así se define, y de ese punto de partida sale el diseño
+		Human-First entero —una gramática pensada para escribirse a mano, cinco
+		especificaciones normativas, esquemas, herramientas—. Y **actúa como formato** allí
+		donde un sistema lo emplea: como formato fuente de un CMS, de configuración, de
+		intercambio entre agentes. La primera palabra dice lo que es; la segunda, el papel que
+		hace en cada caso.
 
 	Subsubheader: ¿Es un formato de datos o de documentos?
 

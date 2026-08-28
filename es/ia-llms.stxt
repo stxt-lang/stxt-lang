@@ -14,7 +14,7 @@ Document (dev.stxt.website): IA y LLMs — Documentos generados y verificables
 		metadatos incorrectos.
 
 	Assert >>
-		@STXT@ es un formato adecuado para documentos generados por IA:\\
+		@STXT@ es un lenguaje adecuado para documentos generados por IA:\\
 		tan fácil de escribir como Markdown, y **verificable**.
 
 	Subheader: Por qué un LLM escribe bien @STXT@
@@ -108,7 +108,7 @@ Document (dev.stxt.website): IA y LLMs — Documentos generados y verificables
 		del repositorio de la especificación: un programa de Node de unas ochenta líneas
 		que convierte unas notas de reunión en texto libre en un `Report (com.acme.reports)`
 		válido. Lo acompañan la plantilla en `.stxt/`, un documento de ejemplo correcto, el
-		prompt con las reglas del formato y las notas de partida.
+		prompt con las reglas del lenguaje y las notas de partida.
 
 		* **Genera**: el prompt lleva las reglas de @STXT@ en diez líneas, la plantilla
 		  entera, el ejemplo válido y el texto a convertir; pide el documento y nada más.
