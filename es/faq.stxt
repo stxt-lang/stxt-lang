@@ -104,9 +104,6 @@ Document (dev.stxt.website): Preguntas frecuentes
 		| **Superficie de ataque** | Sin entidades, referencias, anclas ni ejecución de código ([STXT-SPEC §15](stxt-core-ref#s15)) | Entidades externas (XXE) y expansión de entidades | Anclas expansibles y etiquetas que instancian objetos | Pequeña |
 		| **Texto libre** | Bloques `>>` literales: cualquier carácter, sin escapes | Escapar `<` y `&`, o CDATA | Escalares de bloque con reglas de indentación y recorte sutiles | Strings multilínea entre triples comillas |
 
-		XML resuelve el intercambio entre sistemas; YAML y TOML, la configuración. @STXT@
-		ocupa el hueco en el que datos y texto libre conviven en el mismo documento y lo
-		escribe una persona.
 
 	Subsubheader: ¿Por qué no Markdown?
 
