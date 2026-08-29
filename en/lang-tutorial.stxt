@@ -15,8 +15,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		The path goes from less to more: first a complete document to read in full, then
 		each of its parts, and validation at the end. Every section closes with a reference
-		to the specification section that fixes the rule; the tutorial explains, the
-		specification decides.
+		to the specification section that fixes the rule.
 
 	Subheader: 1. An @STXT@ document in ten lines
 

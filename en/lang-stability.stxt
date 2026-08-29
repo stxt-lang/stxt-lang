@@ -2,13 +2,12 @@ Document (dev.stxt.website): Stability and versions
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-24
+		Last modif: 2026-08-29
 
 	Header: Stability and versions
 
 	Assert >>
-		**A document that is valid in @STXT@ 1.0 is valid across the whole 1.x line**. This page
-		states what 1.0 freezes, what it does not, and how to read the version numbers.
+		**A document that is valid in @STXT@ 1.0 is valid across the whole 1.x line**.
 
 	Subheader: What is frozen
 

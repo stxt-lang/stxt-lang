@@ -2,7 +2,7 @@ Document (dev.stxt.website): La biblioteca TypeScript
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-23
+		Last modif: 2026-08-29
 
 	Header: La biblioteca TypeScript
 
@@ -16,10 +16,8 @@ Document (dev.stxt.website): La biblioteca TypeScript
 		[Java](tools-java) y [Python](tools-python).
 
 	Content >>
-		Esta página es la guía de uso de la biblioteca: parsear, recorrer y construir
-		árboles, validar contra esquemas y plantillas, resolver qué gramática aplica a un
-		documento, obtener su JSON canónico y volver a escribir @STXT@. Todo lo que aquí
-		se muestra sale de un único punto de entrada, sin subrutas internas.
+		Todo lo que aquí se muestra sale de un único punto de entrada, sin subrutas
+		internas.
 
 	Subheader: Instalación
 

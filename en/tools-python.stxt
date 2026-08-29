@@ -2,7 +2,7 @@ Document (dev.stxt.website): The Python library
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-23
+		Last modif: 2026-08-29
 
 	Header: The Python library
 
@@ -16,12 +16,9 @@ Document (dev.stxt.website): The Python library
 		includes no CLI; the command of the ecosystem is `stxt`.
 
 	Content >>
-		This page is the usage guide: parsing, walking and building trees, validating
-		against schemas and templates, resolving which grammar applies to a document,
-		obtaining its canonical JSON and writing @STXT@ back out. It has the same structure
-		as the TypeScript and Java guides, and the API is the same with `snake_case` names
-		(`getCanonicalName` → `get_canonical_name`): the difference between ports comes
-		down to spelling.
+		The guide has the same structure as the TypeScript and Java ones, and the API is
+		the same with `snake_case` names (`getCanonicalName` → `get_canonical_name`): the
+		difference between ports comes down to spelling.
 
 	Subheader: Installation
 

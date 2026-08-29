@@ -2,7 +2,7 @@ Document (dev.stxt.website): The command line
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-29
 
 	Header: The command line
 
@@ -15,9 +15,9 @@ Document (dev.stxt.website): The command line
 		the only command line in the ecosystem: the libraries do not include one.
 
 	Content >>
-		This page is the reference of the commands. Their use on a complete project, with
-		its `.stxt/` directory and VS Code, is described in
-		[The working environment](lang-workflow); the other tools, in [Tools](lang-tools).
+		The use of the commands on a complete project, with its `.stxt/` directory and
+		VS Code, is described in [The working environment](lang-workflow); the other
+		tools, in [Tools](lang-tools).
 
 	Subheader: Installation
 

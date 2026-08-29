@@ -2,7 +2,7 @@ Document (dev.stxt.website): The TypeScript library
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-23
+		Last modif: 2026-08-29
 
 	Header: The TypeScript library
 
@@ -16,10 +16,7 @@ Document (dev.stxt.website): The TypeScript library
 		[Python](tools-python) libraries.
 
 	Content >>
-		This page is the usage guide of the library: parsing, walking and building trees,
-		validating against schemas and templates, resolving which grammar applies to a
-		document, obtaining its canonical JSON and writing @STXT@ back out. Everything
-		shown here comes from a single entry point, with no internal sub-paths.
+		Everything shown here comes from a single entry point, with no internal sub-paths.
 
 	Subheader: Installation
 

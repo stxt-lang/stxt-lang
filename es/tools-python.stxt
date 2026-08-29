@@ -2,7 +2,7 @@ Document (dev.stxt.website): La biblioteca Python
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-23
+		Last modif: 2026-08-29
 
 	Header: La biblioteca Python
 
@@ -17,12 +17,9 @@ Document (dev.stxt.website): La biblioteca Python
 		ecosistema es `stxt`.
 
 	Content >>
-		Esta página es la guía de uso: parsear, recorrer y construir árboles, validar
-		contra esquemas y plantillas, resolver qué gramática aplica a un documento, obtener
-		su JSON canónico y volver a escribir @STXT@. Tiene la misma estructura que las guías
-		de TypeScript y Java, y la API es la misma con nombres en `snake_case`
-		(`getCanonicalName` → `get_canonical_name`): la diferencia entre puertos se reduce
-		a la grafía.
+		La guía tiene la misma estructura que las de TypeScript y Java, y la API es la
+		misma con nombres en `snake_case` (`getCanonicalName` → `get_canonical_name`): la
+		diferencia entre puertos se reduce a la grafía.
 
 	Subheader: Instalación
 

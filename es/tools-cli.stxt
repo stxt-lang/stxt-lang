@@ -2,7 +2,7 @@ Document (dev.stxt.website): La línea de comandos
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-29
 
 	Header: La línea de comandos
 
@@ -15,10 +15,9 @@ Document (dev.stxt.website): La línea de comandos
 		única línea de comandos del ecosistema: las bibliotecas no incluyen una propia.
 
 	Content >>
-		Esta página es la referencia de los comandos. Su uso sobre un proyecto completo, con
-		su directorio `.stxt/` y VS Code, se describe en
-		[El entorno de trabajo](lang-workflow); el resto de herramientas, en
-		[Herramientas](lang-tools).
+		El uso de los comandos sobre un proyecto completo, con su directorio `.stxt/` y
+		VS Code, se describe en [El entorno de trabajo](lang-workflow); el resto de
+		herramientas, en [Herramientas](lang-tools).
 
 	Subheader: Instalación
 
