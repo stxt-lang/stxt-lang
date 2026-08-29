@@ -6,11 +6,6 @@ Document (dev.stxt.website): Frequently asked questions
 
 	Header: Frequently asked questions
 
-	Content >>
-		Short answers to the usual questions when starting with @STXT@. Each answer links to
-		the section of the reference that settles it; where they disagree, the reference
-		wins.
-
 	Subheader: The language
 
 	Subsubheader: What does the name STXT mean?

@@ -6,11 +6,6 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 	Header: Preguntas frecuentes
 
-	Content >>
-		Respuestas breves a las dudas habituales al empezar con @STXT@. Cada respuesta enlaza
-		a la sección de la referencia que la fija; ante cualquier discrepancia, manda la
-		referencia.
-
 	Subheader: El lenguaje
 
 	Subsubheader: ¿Qué significa el nombre STXT?
