@@ -2,7 +2,7 @@ Document (dev.stxt.website): Frequently asked questions
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-28
+		Last modif: 2026-08-29
 
 	Header: Frequently asked questions
 
@@ -82,8 +82,8 @@ Document (dev.stxt.website): Frequently asked questions
 
 	Content >>
 		Extension `.stxt`; media type `text/stxt` (IANA registration planned, not yet
-		registered), with `text/plain` as a compatible alternative. UTF-8 without BOM, `LF`
-		line endings (`CRLF` is accepted).
+		registered), with `text/plain` as a compatible alternative. UTF-8 without BOM (a
+		parser also accepts the BOM), `LF` line endings (`CRLF` is accepted).
 		See [STXT-SPEC §3](stxt-core-ref#s3) and [§13](stxt-core-ref#s13).
 
 	Subsubheader: Can you show us a real use?
@@ -277,6 +277,42 @@ Document (dev.stxt.website): Frequently asked questions
 		emitted complete as soon as the next one begins. Namespaces are not inherited sideways
 		between roots: each declares its own.
 		See [STXT-SPEC §8.5](stxt-core-ref#s8-5).
+
+	Subsubheader: Can a document use several namespaces?
+
+	Content >>
+		Yes. Any node may declare its own namespace, and its descendants inherit it from
+		it onwards; each namespace is validated against its own definition. This way a
+		common vocabulary is defined once and incorporated from others: in the definition
+		that incorporates it, the external child is declared with its namespace and its
+		cardinality only.
+
+	Code >>
+		Book (com.acme.book):
+			Title: Modern Software Architecture
+			Review (com.acme.reviews):
+				Reviewer: Ana López
+				Score: 9
+
+		Template (@stxt.template): com.acme.book
+			Structure >>
+				Book:
+					Title: (1)
+					Review (com.acme.reviews): (*)
+
+		Template (@stxt.template): com.acme.reviews
+			Structure >>
+				Review:
+					Reviewer: (1)
+					Score: (1) NUMBER
+
+	Content >>
+		`Reviewer` and `Score` belong to `com.acme.reviews` without writing it: they
+		inherit it from `Review`, and each namespace is validated against its template.
+		The two templates accompany the document so that the block validates as a
+		whole; the [tutorial](lang-tutorial#s14) develops the full example.
+		See [STXT-SPEC §7.2](stxt-core-ref#s7-2) and
+		[STXT-SCHEMA-SPEC §8](stxt-schema-ref#s8).
 
 	Subsubheader: What about comments?
 

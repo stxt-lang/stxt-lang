@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-25
+		Last modif: 2026-08-29
 
 	Header: @STXT@ Tutorial
 
@@ -98,8 +98,8 @@ Document (dev.stxt.website): STXT Tutorial
 		inside `Chapter`. That combination —an inline node grouping short values and
 		blocks— is the usual shape of an @STXT@ document.
 
-		A value may contain any character, colons included: in `Path: C:\\Users\\ana`, the
-		value is `C:\\Users\\ana`. The first `:` on the line is the separator; the rest is
+		A value may contain any character, colons included: in `Path: C:\Users\ana`, the
+		value is `C:\Users\ana`. The first `:` on the line is the separator; the rest is
 		value.
 
 		Reference: [STXT-SPEC §4](stxt-core-ref#s4) (the node), [§5](stxt-core-ref#s5)
@@ -503,11 +503,80 @@ Document (dev.stxt.website): STXT Tutorial
 		`Summary` is inline here and was a block in section 9: `TEXT` admits both forms, and
 		the value is the same text. `Publisher` does not appear, and need not: it was `(?)`.
 
-		To check it in a real project —the template in a `.stxt/` directory, the document
-		next to it and `stxt validate` from the terminal, or the errors in the editor—, the
-		next step is [Working environment](lang-workflow).
+		How it is done in a real project —the template in a `.stxt/` directory, the
+		document next to it and `stxt validate` from the terminal, or the errors in the
+		editor— is shown in [Working environment](lang-workflow).
 
-	Subheader: 14. Where to go next
+	Subheader: 14. Several namespaces in one document
+
+	Content >>
+		Nothing forces the whole document to belong to a single namespace. Any node may
+		declare its own in parentheses, just as `Book` did, and its descendants inherit
+		the new one from it onwards. Each namespace is validated against its own
+		definition, so a vocabulary is defined once and incorporated from others:
+		reviews, for instance, which tomorrow could accompany any other product just as
+		well.
+
+		In the template that incorporates the foreign vocabulary, the external node is
+		declared with its namespace and, at most, its cardinality: its shape is not
+		described there, but in the template of its own namespace. The complete set
+		—the document and the two templates— fits in a single file:
+
+	Code >>
+		Book (com.acme.book):
+			Title: Modern Software Architecture
+			Authors:
+				Author: María Pérez
+				Author: Juan García
+			ISBN: 978-84-123456-7-8
+			Published: 2025-10-01
+			Review (com.acme.reviews):
+				Reviewer: Ana López
+				Score: 9
+				Comment >>
+					A clear, well-structured guide, with examples
+					that are easy to follow.
+			Review (com.acme.reviews):
+				Reviewer: Luis Martín
+				Score: 8
+
+		Template (@stxt.template): com.acme.book
+			Structure >>
+				Book:
+					Title: (1)
+					Authors: (1)
+						Author: (+)
+					ISBN: (1)
+					Published: (?) DATE
+					Review (com.acme.reviews): (*)
+
+		Template (@stxt.template): com.acme.reviews
+			Structure >>
+				Review:
+					Reviewer: (1)
+					Score: (1) NUMBER
+					Comment: (?) TEXT
+
+	Content >>
+		The book template —reduced here— adds a single new line,
+		`Review (com.acme.reviews): (*)`: a book admits any number of reviews, and what
+		a review is, the template of `com.acme.reviews` says. In the document, every
+		`Review` declares its namespace, and `Reviewer`, `Score` and `Comment` inherit
+		it without writing it: the reviews are validated against their template, and
+		the rest of the book against its own.
+
+		An @STXT@ document may have several root nodes, and this one has three: the book
+		and the two templates. They travel together on purpose: *Open in the
+		playground* loads the whole block, and the two templates validate the document
+		that accompanies them.
+
+		Reference: [STXT-SPEC §7.2](stxt-core-ref#s7-2) (namespace inheritance),
+		[§8.5](stxt-core-ref#s8-5) (several root nodes),
+		[STXT-TEMPLATE-SPEC §10](stxt-template-ref#s10) (namespaces inside `Structure`)
+		and [STXT-SCHEMA-SPEC §8](stxt-schema-ref#s8) (children from another
+		namespace).
+
+	Subheader: 15. Where to go next
 
 	Content >>
 		* [Working environment](lang-workflow): organizing a project, installing templates,

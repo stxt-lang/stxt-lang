@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-25
+		Last modif: 2026-08-29
 
 	Header: @STXT@ Tutorial
 
@@ -101,7 +101,7 @@ Document (dev.stxt.website): STXT Tutorial
 		la forma habitual de un documento @STXT@.
 
 		Un valor puede contener cualquier carácter, dos puntos incluidos: en
-		`Ruta: C:\\Users\\ana`, el valor es `C:\\Users\\ana`. El primer `:` de la línea es el
+		`Ruta: C:\Users\ana`, el valor es `C:\Users\ana`. El primer `:` de la línea es el
 		separador; el resto es valor.
 
 		Referencia: [STXT-SPEC §4](stxt-core-ref#s4) (el nodo), [§5](stxt-core-ref#s5)
@@ -509,11 +509,79 @@ Document (dev.stxt.website): STXT Tutorial
 		formas, y el valor es el mismo texto. `Publisher` no aparece, y no hace falta:
 		era `(?)`.
 
-		Para comprobarlo en un proyecto real —la plantilla en un directorio `.stxt/`, el
-		documento al lado y `stxt validate` desde el terminal o los errores en el editor—,
-		el siguiente paso es [El entorno de trabajo](lang-workflow).
+		Cómo se hace en un proyecto real —la plantilla en un directorio `.stxt/`, el
+		documento al lado y `stxt validate` desde el terminal o los errores en el
+		editor— lo enseña [El entorno de trabajo](lang-workflow).
 
-	Subheader: 14. Dónde seguir
+	Subheader: 14. Varios namespaces en un mismo documento
+
+	Content >>
+		Nada obliga a que todo el documento pertenezca a un único namespace. Cualquier
+		nodo puede declarar el suyo entre paréntesis, igual que lo declaró `Book`, y sus
+		descendientes heredan el nuevo a partir de él. Cada namespace se valida contra su
+		propia definición, así que un vocabulario se define una vez y se incorpora desde
+		otros: unas reseñas, por ejemplo, que mañana podrían acompañar igual a cualquier
+		otro producto.
+
+		En la plantilla que incorpora el vocabulario ajeno, el nodo externo se declara
+		con su namespace y, como mucho, su cardinalidad: su forma no se describe ahí,
+		sino en la plantilla de su propio namespace. El conjunto completo —el documento
+		y las dos plantillas— cabe en un solo fichero:
+
+	Code >>
+		Book (com.acme.book):
+			Title: Arquitectura de software moderna
+			Authors:
+				Author: María Pérez
+				Author: Juan García
+			ISBN: 978-84-123456-7-8
+			Published: 2025-10-01
+			Review (com.acme.reviews):
+				Reviewer: Ana López
+				Score: 9
+				Comment >>
+					Una guía clara y bien estructurada, con ejemplos
+					que se siguen sin esfuerzo.
+			Review (com.acme.reviews):
+				Reviewer: Luis Martín
+				Score: 8
+
+		Template (@stxt.template): com.acme.book
+			Structure >>
+				Book:
+					Title: (1)
+					Authors: (1)
+						Author: (+)
+					ISBN: (1)
+					Published: (?) DATE
+					Review (com.acme.reviews): (*)
+
+		Template (@stxt.template): com.acme.reviews
+			Structure >>
+				Review:
+					Reviewer: (1)
+					Score: (1) NUMBER
+					Comment: (?) TEXT
+
+	Content >>
+		La plantilla del libro —aquí reducida— añade una sola línea nueva,
+		`Review (com.acme.reviews): (*)`: un libro admite cualquier número de reseñas, y
+		qué es una reseña lo dice la plantilla de `com.acme.reviews`. En el documento,
+		cada `Review` declara su namespace, y `Reviewer`, `Score` y `Comment` lo heredan
+		sin escribirlo: las reseñas se validan contra su plantilla, y el resto del libro
+		contra la suya.
+
+		Un documento @STXT@ puede tener varios nodos raíz, y este tiene tres: el libro y
+		las dos plantillas. Van juntos a propósito: *Abrir en el playground* carga el
+		bloque entero, y las dos plantillas validan el documento que las acompaña.
+
+		Referencia: [STXT-SPEC §7.2](stxt-core-ref#s7-2) (herencia de namespaces),
+		[§8.5](stxt-core-ref#s8-5) (varios nodos raíz),
+		[STXT-TEMPLATE-SPEC §10](stxt-template-ref#s10) (namespaces dentro de
+		`Structure`) y [STXT-SCHEMA-SPEC §8](stxt-schema-ref#s8) (hijos de otro
+		namespace).
+
+	Subheader: 15. Dónde seguir
 
 	Content >>
 		* [El entorno de trabajo](lang-workflow): organizar un proyecto, instalar
