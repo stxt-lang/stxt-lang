@@ -2,7 +2,7 @@ Document (dev.stxt.website): Frequently asked questions
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-29
+		Last modif: 2026-08-30
 
 	Header: Frequently asked questions
 
@@ -178,11 +178,11 @@ Document (dev.stxt.website): Frequently asked questions
 			The symbols :, # and >> mean nothing here.
 
 	Content >>
-		The price is that node names cannot contain the characters that delimit the syntax
-		—neither `:` nor `(`, `)`, `>`, `#`, `@`— nor any other symbol: only letters, digits
-		and the separators `-`, `_` and space (`INVALID_NODE_NAME` otherwise). It is a
-		restriction accepted in exchange for the author of a document never having to think
-		about the parser.
+		The price is paid in node names. Technically it was enough to exclude from them
+		the characters that delimit the syntax —`:`, `>` and the parentheses—, but
+		following the Human-First principle they are limited to letters, digits and the
+		separators `-`, `_` and space (`INVALID_NODE_NAME` otherwise): this way a symbol
+		inside a name does not suggest a meaning that does not exist in @STXT@.
 
 		See [Design principles](lang-principles) and [STXT-SPEC §4.2](stxt-core-ref#s4-2).
 

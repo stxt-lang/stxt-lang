@@ -2,7 +2,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-29
+		Last modif: 2026-08-30
 
 	Header: Preguntas frecuentes
 
@@ -180,11 +180,11 @@ Document (dev.stxt.website): Preguntas frecuentes
 			Los símbolos :, # y >> no significan nada aquí.
 
 	Content >>
-		El precio es que los nombres de nodo no pueden contener los caracteres que delimitan
-		la sintaxis —ni `:`, ni `(`, `)`, `>`, `#`, `@`— ni ningún otro signo: solo letras,
-		dígitos y los separadores `-`, `_` y espacio (`INVALID_NODE_NAME` en otro caso). Es
-		una restricción asumida a cambio de que quien escribe un documento nunca tenga que
-		pensar en el parser.
+		El precio está en los nombres de nodo. Técnicamente bastaba con excluir de ellos
+		los caracteres que delimitan la sintaxis —`:`, `>` y los paréntesis—, pero por el
+		principio Human-First se limitan a letras, dígitos y los separadores `-`, `_` y
+		espacio (`INVALID_NODE_NAME` en otro caso): así un signo dentro de un nombre no
+		sugiere un significado que en @STXT@ no existe.
 
 		Ver [Principios de diseño](lang-principles) y [STXT-SPEC §4.2](stxt-core-ref#s4-2).
 
