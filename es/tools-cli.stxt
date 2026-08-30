@@ -587,7 +587,7 @@ Document (dev.stxt.website): La línea de comandos
 		propia a esta cadena; toda la política vive en la biblioteca, y por eso es
 		idéntica en todas las herramientas.
 
-	Subheader: Recetas
+	Subheader: Tareas frecuentes
 
 	Content >>
 		**Integración continua.** Dos pasos: los documentos validan y están bien

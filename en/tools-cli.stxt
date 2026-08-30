@@ -585,7 +585,7 @@ Document (dev.stxt.website): The command line
 		rule of its own to this chain; the whole policy lives in the library, which
 		is why it is identical in every tool.
 
-	Subheader: Recipes
+	Subheader: Common tasks
 
 	Content >>
 		**Continuous integration.** Two steps: the documents validate and are well
