@@ -2,9 +2,9 @@ Template (@stxt.template): dev.stxt.website
 	Structure >>
 		Document (dev.stxt.website):
 			Metadata: (?)
-				Author: (1)
+				Author: (*)
 				Version: (?)
-				Revision: (?)
+				Revision: (*)
 				Last modif: (?)
 			Header: (?)
 			Subheader:
