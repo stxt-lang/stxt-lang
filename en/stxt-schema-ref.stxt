@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-22
+		Last modif: 2026-08-30
 
 	Header: @STXT@ Schema
 
@@ -134,11 +134,18 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		of being silently accepted.
 
 	Content >>
-		**Note on evolution.** Since the model is closed, **adding** a node to a namespace is a
-		change that breaks validation of documents using old schemas. The recommended practice
-		for evolving a namespace incompatibly is to **version it in the namespace itself**
-		(for example `com.example.docs.v1` → `com.example.docs.v2`), so that each version has its
-		schema and documents declare the version they use.
+		**Note on evolution.** A schema admits **compatible** extensions —adding a `Child` with a
+		minimum cardinality of zero, lowering a `Min`, raising a `Max`: changes that allow more
+		cases, not fewer— without any existing document ceasing to validate. The nuance is that
+		compatibility is relative to the extended definition: a document that uses the addition
+		does not validate against an earlier copy of the schema, so if the consumers of the
+		namespace do not update their copy at the same time, the same document may validate in one
+		and fail in another. Whether an extension needs a new version therefore depends on the use
+		case: on how the definition is distributed, not only on the change. For those situations,
+		and always for incompatible changes —a new mandatory `Child`, removing one, narrowing a
+		cardinality—, the recommended practice is to **version the namespace in the namespace
+		itself** (for example `com.example.docs.v1` → `com.example.docs.v2`), so that each version
+		has its schema and documents declare the version they use.
 
 	Content >>
 		**Unresolved cross-namespace nodes.** Declaring a `Child` that points to another namespace

@@ -404,10 +404,25 @@ Document (dev.stxt.website): Preguntas frecuentes
 	Subsubheader: ¿Cómo se evoluciona un esquema sin romper documentos?
 
 	Content >>
-		Como el modelo es cerrado, añadir un nodo rompe la validación de los documentos que
-		usan la definición anterior. Se recomienda **versionar el namespace**
-		(`com.example.docs.v1` → `com.example.docs.v2`): cada versión tiene su definición y cada
-		documento declara la que usa.
+		Ampliando la definición sin invalidar lo ya escrito: todo documento que validaba
+		sigue validando si el cambio permite más casos, no menos. No hace falta una versión
+		nueva para:
+
+		* Añadir un nodo **opcional**: con cardinalidad `(?)`, `(*)` o cualquier otra de
+		  mínimo cero.
+		* Relajar una cardinalidad: rebajar un mínimo o ampliar un máximo, como pasar de
+		  `(2,5)` a `(1,5)` o a `(2,6)`.
+
+		Un matiz: la compatibilidad es respecto a la definición ampliada. Un documento que
+		use lo añadido no valida contra una copia anterior, así que si los consumidores del
+		namespace no actualizan la definición a la vez, conviene versionar también las
+		ampliaciones; con una definición única —el `.stxt/` del propio repositorio—, no
+		hace falta. Es una decisión del caso de uso, no del cambio.
+
+		Lo que rompe es lo contrario —añadir un nodo obligatorio, retirar uno, estrechar
+		una cardinalidad—, porque el modelo es cerrado. Para esos cambios se recomienda
+		**versionar el namespace** (`com.example.docs.v1` → `com.example.docs.v2`): cada
+		versión tiene su definición y cada documento declara la que usa.
 
 	Subheader: Herramientas
 

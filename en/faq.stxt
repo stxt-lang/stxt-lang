@@ -404,10 +404,26 @@ Document (dev.stxt.website): Frequently asked questions
 	Subsubheader: How is a schema evolved without breaking documents?
 
 	Content >>
-		Because the model is closed, adding a node breaks the validation of documents that use
-		the previous definition. The recommended practice is to **version the namespace**
-		(`com.example.docs.v1` → `com.example.docs.v2`): each version has its definition and
-		each document declares the one it uses.
+		By extending the definition without invalidating what is already written: every
+		document that validated keeps validating if the change allows more cases, not
+		fewer. No new version is needed to:
+
+		* Add an **optional** node: with cardinality `(?)`, `(*)` or any other with a
+		  minimum of zero.
+		* Relax a cardinality: lower a minimum or raise a maximum, such as going from
+		  `(2,5)` to `(1,5)` or to `(2,6)`.
+
+		One nuance: compatibility is relative to the extended definition. A document that
+		uses the addition does not validate against an earlier copy, so if the consumers
+		of the namespace do not update the definition at the same time, extensions are
+		worth versioning too; with a single definition —the `.stxt/` of the repository
+		itself—, there is no need. It is a decision about the use case, not the change.
+
+		What breaks is the opposite —adding a mandatory node, removing one, narrowing a
+		cardinality—, because the model is closed. For those changes the recommended
+		practice is to **version the namespace** (`com.example.docs.v1` →
+		`com.example.docs.v2`): each version has its definition and each document declares
+		the one it uses.
 
 	Subheader: Tools
 

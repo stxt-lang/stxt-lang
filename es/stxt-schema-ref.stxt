@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-22
+		Last modif: 2026-08-30
 
 	Header: @STXT@ Schema
 
@@ -136,11 +136,18 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		de aceptarse silenciosamente.
 
 	Content >>
-		**Nota sobre evolución.** Como el modelo es cerrado, **añadir** un nodo a un namespace es un
-		cambio que rompe la validación de documentos que usen schemas antiguos. La práctica recomendada
-		para evolucionar un namespace de forma incompatible es **versionarlo en el propio namespace**
-		(por ejemplo `com.example.docs.v1` → `com.example.docs.v2`), de modo que cada versión tenga su
-		schema y los documentos declaren la versión que usan.
+		**Nota sobre evolución.** Un schema admite ampliaciones **compatibles** —añadir un `Child`
+		de cardinalidad mínima cero, rebajar un `Min`, ampliar un `Max`: cambios que permiten más
+		casos, no menos— sin que ningún documento existente deje de validar. El matiz es que la
+		compatibilidad es respecto a la definición ampliada: un documento que use lo añadido no
+		valida contra una copia anterior del schema, de modo que si los consumidores del namespace
+		no actualizan su copia a la vez, el mismo documento puede validar en uno y fallar en otro.
+		Decidir si una ampliación necesita versión depende, por tanto, del caso de uso: de cómo se
+		distribuye la definición, no solo del cambio. Para esas situaciones, y siempre para los
+		cambios incompatibles —un `Child` obligatorio nuevo, retirar uno, estrechar una
+		cardinalidad—, la práctica recomendada es **versionar el namespace en el propio namespace**
+		(por ejemplo `com.example.docs.v1` → `com.example.docs.v2`), de modo que cada versión tenga
+		su schema y los documentos declaren la versión que usan.
 
 	Content >>
 		**Nodos cross-namespace no resueltos.** Declarar un `Child` que apunta a otro namespace
