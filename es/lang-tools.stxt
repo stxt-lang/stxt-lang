@@ -2,7 +2,7 @@ Document (dev.stxt.website): Herramientas
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-23
+		Last modif: 2026-08-30
 
 	Header: Herramientas
 
@@ -104,11 +104,8 @@ Document (dev.stxt.website): Herramientas
 	Subheader: Bibliotecas
 
 	Content >>
-		Tres implementaciones, una por ecosistema, con el mismo alcance y la misma versión.
-		Las tres derivan de la especificación a través de un mismo pseudocódigo de
-		referencia, y las tres pasan el mismo [kit de conformidad](lang-stability), el que un
-		puerto nuevo ejecuta para declararse conforme. Ninguna tiene dependencias en tiempo de
-		ejecución.
+		Desde este portal se mantienen tres implementaciones oficiales —TypeScript/JavaScript,
+		Java y Python—, y esperamos que aparezcan muchas más para otros lenguajes.
 
 	Subsubheader: TypeScript / JavaScript
 

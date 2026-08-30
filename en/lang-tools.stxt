@@ -2,7 +2,7 @@ Document (dev.stxt.website): Tools
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-23
+		Last modif: 2026-08-30
 
 	Header: Tools
 
@@ -103,10 +103,8 @@ Document (dev.stxt.website): Tools
 	Subheader: Libraries
 
 	Content >>
-		Three implementations, one per ecosystem, with the same scope and the same version.
-		All three derive from the specification through one shared reference pseudocode,
-		and all three pass the same [conformance kit](lang-stability), the one a new port runs
-		to declare itself conforming. None of them has runtime dependencies.
+		This portal maintains three official implementations —TypeScript/JavaScript, Java
+		and Python—, and we hope many more will appear for other languages.
 
 	Subsubheader: TypeScript / JavaScript
 
