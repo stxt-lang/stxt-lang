@@ -2,7 +2,7 @@ Document (dev.stxt.website): El entorno de trabajo
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-30
 
 	Header: El entorno de trabajo
 
@@ -246,9 +246,11 @@ Document (dev.stxt.website): El entorno de trabajo
 		alguno, como `gofmt -l` o `prettier --check`. Reformatear requiere `--write`; ningún
 		comando reescribe ficheros sin una petición explícita.
 
-		Una `STXT_PATH` definida pero vacía deja la cadena vacía: los documentos se parsean
-		sin validación de gramática. Una entrada que no existe no aporta nada y no es un
-		error. Ver [STXT-DISCOVERY-SPEC §6](stxt-discovery-ref#s6).
+		Una `STXT_PATH` definida pero vacía deja la cadena vacía: ningún documento con
+		namespace encuentra gramática y `validate` falla con `SCHEMA_NOT_FOUND`; para
+		comprobar solo la sintaxis hay que pedirlo explícitamente con `--no-schema`.
+		Una entrada que no existe no aporta nada y no es un error. Ver
+		[STXT-DISCOVERY-SPEC §6](stxt-discovery-ref#s6).
 
 	Subheader: 7. Sin instalar nada: el playground
 

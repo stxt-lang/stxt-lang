@@ -2,7 +2,7 @@ Document (dev.stxt.website): The command line
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-29
+		Last modif: 2026-08-30
 
 	Header: The command line
 
@@ -576,10 +576,14 @@ Document (dev.stxt.website): The command line
 		STXT_PATH=./.stxt stxt validate --recursive docs/
 
 	Content >>
-		A `STXT_PATH` that is set but empty leaves the chain empty: documents are checked
-		for syntax only, and `schemas` shows it as `(empty — no .stxt directory found)`.
-		The CLI adds no rule of its own to this chain; the whole policy lives in the
-		library, which is why it is identical in every tool.
+		A `STXT_PATH` that is set but empty leaves the chain empty: no document with a
+		namespace finds a grammar, so `validate` fails with `SCHEMA_NOT_FOUND` — a
+		document that cannot be validated does not count as validated. Checking the
+		syntax alone in that case is requested explicitly with `--no-schema` (or the
+		error is downgraded to a warning with `--warn-schema`), and `schemas` shows
+		the chain as `(empty — STXT_PATH provides no directories)`. The CLI adds no
+		rule of its own to this chain; the whole policy lives in the library, which
+		is why it is identical in every tool.
 
 	Subheader: Recipes
 

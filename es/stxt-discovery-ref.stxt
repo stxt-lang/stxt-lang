@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-22
+		Last modif: 2026-08-30
 
 	Header: @STXT@ Discovery
 
@@ -165,8 +165,11 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		* Las entradas apuntan **directamente** a directorios de definiciones: no es
 		  necesario que se llamen `.stxt`.
 		* Una entrada inexistente se ignora; no es un error.
-		* Una `STXT_PATH` definida pero vacía deja la cadena vacía: los documentos se
-		  parsean sin validación.
+		* Una `STXT_PATH` definida pero vacía deja la cadena vacía: ningún namespace
+		  tiene definición activa, y validar un documento con namespace falla con
+		  `SCHEMA_NOT_FOUND` ([*STXT-SCHEMA-SPEC* §13](stxt-schema-ref#s13)). La cadena
+		  vacía no es un modo «solo sintaxis»: ese modo, si la herramienta lo ofrece,
+		  se pide explícitamente.
 
 		`STXT_PATH` existe para los entornos en los que la búsqueda implícita no es adecuada:
 		integración continua, tests de las propias herramientas, o entornos con el sistema

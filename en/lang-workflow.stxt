@@ -2,7 +2,7 @@ Document (dev.stxt.website): The working environment
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-22
+		Last modif: 2026-08-30
 
 	Header: The working environment
 
@@ -243,9 +243,11 @@ Document (dev.stxt.website): The working environment
 		there is any, like `gofmt -l` or `prettier --check`. Reformatting requires `--write`;
 		no command rewrites files without an explicit request.
 
-		A `STXT_PATH` that is defined but empty leaves the chain empty: documents are parsed
-		with no grammar validation. An entry that does not exist contributes nothing and is
-		not an error. See [STXT-DISCOVERY-SPEC §6](stxt-discovery-ref#s6).
+		A `STXT_PATH` that is defined but empty leaves the chain empty: no document
+		with a namespace finds a grammar and `validate` fails with `SCHEMA_NOT_FOUND`;
+		checking the syntax alone must be requested explicitly with `--no-schema`. An
+		entry that does not exist contributes nothing and is not an error. See
+		[STXT-DISCOVERY-SPEC §6](stxt-discovery-ref#s6).
 
 	Subheader: 7. Without installing anything: the playground
 

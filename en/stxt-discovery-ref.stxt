@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 	Metadata:
 		Author: Joan Costa Mombiela
 		Version: 1.0
-		Last modif: 2026-08-22
+		Last modif: 2026-08-30
 
 	Header: @STXT@ Discovery
 
@@ -165,8 +165,11 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		* Entries point **directly** to definition directories: they do not need to be
 		  named `.stxt`.
 		* A nonexistent entry is ignored; it is not an error.
-		* An `STXT_PATH` that is defined but empty leaves the chain empty: documents are
-		  parsed without validation.
+		* An `STXT_PATH` that is defined but empty leaves the chain empty: no namespace
+		  has an active definition, and validating a document with a namespace fails
+		  with `SCHEMA_NOT_FOUND` ([*STXT-SCHEMA-SPEC* §13](stxt-schema-ref#s13)). An
+		  empty chain is not a "syntax only" mode: that mode, when a tool offers it,
+		  is requested explicitly.
 
 		`STXT_PATH` exists for environments in which the implicit search is not appropriate:
 		continuous integration, the tools' own tests, or environments with a restricted

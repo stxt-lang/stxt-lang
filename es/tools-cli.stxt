@@ -2,7 +2,7 @@ Document (dev.stxt.website): La línea de comandos
 
 	Metadata:
 		Author: Claude Fable 5
-		Last modif: 2026-08-29
+		Last modif: 2026-08-30
 
 	Header: La línea de comandos
 
@@ -578,11 +578,14 @@ Document (dev.stxt.website): La línea de comandos
 		STXT_PATH=./.stxt stxt validate --recursive docs/
 
 	Content >>
-		Una `STXT_PATH` definida pero vacía deja la cadena vacía: los documentos se
-		comprueban solo sintácticamente, y `schemas` lo enseña como
-		`(empty — no .stxt directory found)`. La CLI no añade ninguna regla propia a
-		esta cadena; toda la política vive en la biblioteca, y por eso es idéntica en
-		todas las herramientas.
+		Una `STXT_PATH` definida pero vacía deja la cadena vacía: ningún documento con
+		namespace encuentra gramática, así que `validate` falla con `SCHEMA_NOT_FOUND`
+		— un documento que no puede validarse no cuenta como validado. Comprobar solo
+		la sintaxis en ese caso se pide explícitamente con `--no-schema` (o se rebaja
+		el error a aviso con `--warn-schema`), y `schemas` enseña la cadena como
+		`(empty — STXT_PATH provides no directories)`. La CLI no añade ninguna regla
+		propia a esta cadena; toda la política vive en la biblioteca, y por eso es
+		idéntica en todas las herramientas.
 
 	Subheader: Recetas
 
