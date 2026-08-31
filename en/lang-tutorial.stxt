@@ -12,11 +12,6 @@ Document (dev.stxt.website): STXT Tutorial
 		with a document validated against its own template. No prior knowledge is required:
 		a text editor is enough.
 
-	Content >>
-		The path goes from less to more: first a complete document to read in full, then
-		each of its parts, and validation at the end. Every section closes with a reference
-		to the specification section that fixes the rule.
-
 	Subheader: 1. An @STXT@ document in ten lines
 
 	Content >>

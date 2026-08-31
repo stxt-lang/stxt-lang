@@ -12,11 +12,6 @@ Document (dev.stxt.website): STXT Tutorial
 		un documento validado contra su propia plantilla. No requiere conocimientos previos:
 		basta con un editor de texto.
 
-	Content >>
-		El recorrido va de menos a más: primero un documento completo para leerlo entero,
-		después cada una de sus piezas, y al final la validación. Cada sección cierra con la
-		referencia a la sección de la especificación que fija la regla.
-
 	Subheader: 1. Un documento @STXT@ en diez líneas
 
 	Content >>
