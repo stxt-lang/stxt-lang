@@ -21,7 +21,7 @@ results are data, and the runner is a few dozen lines you write once.
   `tree/`.
 - `format/` — documents to reformat, each with its reformatted text in both styles.
 
-The kit has its own version (`kit` in the manifest, currently **1.1**), independent of the
+The kit has its own version (`kit` in the manifest, currently **1.0**), independent of the
 specifications' versions. Adding cases raises the minor; changing what an existing case expects
 raises the major, and only happens when a specification changes.
 
