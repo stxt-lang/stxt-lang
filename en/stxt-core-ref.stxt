@@ -855,6 +855,12 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		[section 11](#s11): the same document may parse under higher limits. The limit error
 		reports that the parser stopped, not that the document breaks the syntax.
 
+		**Note (non-normative).** The nesting-depth limit also bounds the operations that walk the
+		tree recursively **after** parsing — semantic validation and writing
+		([*STXT-TREE-SPEC*](stxt-tree-ref)) —, which have no other bound than this. Disabling it
+		(`-1`) leaves them without stack protection against a very deep tree, on top of relaxing
+		the parse.
+
 	Subheader: 12. Conformance
 		
 	Content >>

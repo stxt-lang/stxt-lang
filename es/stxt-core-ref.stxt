@@ -859,6 +859,12 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		el mismo documento puede parsearse con límites más altos. El error de límite informa de que
 		el parser se ha detenido, no de que el documento infrinja la sintaxis.
 
+		**Nota (no normativa).** El límite de profundidad de anidamiento acota además las
+		operaciones que recorren el árbol de forma recursiva **después** del parseo —la validación
+		semántica y la escritura ([*STXT-TREE-SPEC*](stxt-tree-ref))—, que no tienen otra cota que
+		esta. Desactivarlo (`-1`) las deja sin protección de pila frente a un árbol muy profundo,
+		además de relajar el parseo.
+
 	Subheader: 12. Conformidad
 		
 	Content >>
