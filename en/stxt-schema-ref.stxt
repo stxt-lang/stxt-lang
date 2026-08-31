@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-30
+		Last modif: 2026-08-31
 
 	Header: @STXT@ Schema
 
@@ -39,7 +39,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 	Subheader: 2. Terminology
 
 	Content >>
-		The keywords **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119**.
+		The keywords **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119** and **RFC 8174**: they carry that meaning only when they appear in uppercase, as here.
 
 		Terms such as *node*, *indentation*, *namespace*, *inline* and *`>>` block* retain their meaning in [*STXT-SPEC*](stxt-core-ref).
 
@@ -359,11 +359,36 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		* The address preceded by a **display name**, with the address between `<` and `>`:
 		  `Joan Costa <joan@example.com>`. The name is any non-empty text that contains neither
 		  `<` nor `>` (quotes, if present, are part of the name; they are not interpreted), and the
-		  space between the name and `<` is optional.
+		  blank between the name and `<` is optional.
 
 		A conforming implementation **MUST** accept both forms and **MUST NOT** accept `<` and `>`
 		without a name before them, unbalanced, or followed by anything. This is the usual form of
 		email headers (the RFC 5322 *mailbox*), without the quoting and comments of that grammar.
+		The normative grammar is this (*blank* is the one of [*STXT-SPEC* §4](stxt-core-ref#s4):
+		`U+0020` or `U+0009`):
+
+	Grammar >>
+		EMAIL     = Address
+		          | Name { Blank } "<" Address ">"
+		Name      = non-empty text without "<" or ">", whose last character is not a blank
+		Address   = Local "@" Domain                      ; at most 254 characters in total
+		Local     = 1*64( atext | "." )                   ; 1 to 64 characters
+		atext     = ASCII letter or digit, or one of:  ! # $ % & ' * + / = ? ^ _ ` { | } ~ -
+		Domain    = 1*( ASCII letter or digit | "." | "-" ) "." TLD
+		TLD       = 2*63( ASCII letter )                  ; 2 to 63 letters
+
+	Content >>
+		Notes on `EMAIL`:
+
+		* **ASCII only**: internationalized addresses (EAI) and non-ASCII domains not converted
+		  to *punycode* are not accepted. This is deliberate: a single exact grammar, without
+		  Unicode tables that every platform versions its own way.
+		* **Permissive within those limits**: the full RFC 5322 *dot-atom* is not validated
+		  (`a..b@example.com` and `.a@example.com` pass), nor are the domain labels checked one
+		  by one (`a..b.example.com` passes). The value of the type is catching the missing `@`,
+		  blanks, a domain without a dot or a forgotten TLD, not replicating RFC 5322.
+		* The length limits are the practical ones of RFC 5321: 64 characters for the local part
+		  and 254 for the whole address; the TLD, 2 to 63 letters.
 
 	Content >>
 		The `URL` type accepts only **absolute URLs with a scheme and a host**. The grammar belongs
@@ -453,6 +478,13 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 	Content >>
 		A conforming implementation **MUST** check `ENUM` types against their allowed values and **MUST** reject any value that does not match exactly one of them.
 
+		**Interoperability note (non-normative).** The exact comparison is by code points. Values
+		are literal and are **not** normalized to NFC (unlike node names,
+		[*STXT-SPEC* §4.3](stxt-core-ref#s4-3)): `café` in precomposed form (NFC) and `café` in
+		decomposed form (NFD) look identical but do not match. Some input flows — historically,
+		macOS — produce NFD. Whoever defines `ENUM` values with diacritics should write them in
+		NFC, which is what the usual editors produce.
+
 	Subsubheader: 9.7 MARKDOWN type
 
 	Content >>
@@ -487,6 +519,11 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 
 		* If `Min` is omitted, the effective minimum is `0`.
 		* If `Max` is omitted, the effective maximum is unlimited.
+		* `Min` and `Max` **MUST NOT** exceed `4294967295` (2³² − 1); a greater value **MUST**
+		  cause a schema error (`CARDINALITY_NOT_VALID`). The bound is platform-independent and
+		  far above any child count reachable under the recommended parser limits
+		  ([*STXT-SPEC* §11.2](stxt-core-ref#s11-2)); "no maximum" is said by omitting `Max`,
+		  not with a giant number.
 		* `Min` and `Max` **MUST NOT** appear more than once within the same `Child`.
 		* If both exist, `Min` **MUST NOT** be greater than `Max`.
 		* `Max: 0` is legal and declares a **forbidden** child: the `Child` exists in the model but no occurrence is valid. It serves, for instance, to withdraw in one version of a namespace a child that another allowed. An implementation **MUST NOT** treat it as an error.
@@ -588,7 +625,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		4. It uses an unknown `Type`.
 		5. It defines `Children` in a `Node` whose type does not allow children ([section 9](#s9)).
 		6. It defines `Values` in a `Node` whose type is not `ENUM` ([section 7.2](#s7-2)).
-		7. Cardinality is invalid (`Min > Max`, a value that is not a non-negative integer, duplicated `Min`/`Max`).
+		7. Cardinality is invalid (`Min > Max`, a value that is not a non-negative integer, a value greater than `4294967295`, duplicated `Min`/`Max`).
 		8. A `Node` of type `ENUM` does not define `Values`, or `Values` contains no `Value`.
 		9. A duplicated `Value` appears after inline normalization by trim.
 		10. Two equivalent `Child` nodes appear (same `canonical name + effective namespace`) within the same `Children`.
@@ -630,7 +667,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		| `TYPE_NOT_VALID` | 4: unknown type (the meta-schema catches it first as `INVALID_VALUE` of the `Type` `ENUM`; `TYPE_NOT_VALID` is left for an implementation whose type registry lacks the type) |
 		| `CHILDREN_NOT_ALLOWED_FOR_TYPE` | 5: `Children` on a type that allows no children |
 		| `VALUES_NOT_ALLOWED_FOR_TYPE` | 6: `Values` on a type other than `ENUM` |
-		| `CARDINALITY_NOT_VALID` | 7: `Min` or `Max` is not a non-negative integer |
+		| `CARDINALITY_NOT_VALID` | 7: `Min` or `Max` is not a non-negative integer, or exceeds `4294967295` |
 		| `MIN_GREATER_THAN_MAX` | 7: `Min` greater than `Max` |
 		| `VALUES_REQUIRED` | 8: `ENUM` without `Values`, or `Values` without any `Value` |
 		| `VALUE_DUPLICATED` | 9: two equal `Value` after trimming |

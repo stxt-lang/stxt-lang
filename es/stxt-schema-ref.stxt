@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-30
+		Last modif: 2026-08-31
 
 	Header: @STXT@ Schema
 
@@ -40,7 +40,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 	Subheader: 2. Terminología
 
 	Content >>
-		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y **"PUEDE"** deben interpretarse según **RFC 2119**.
+		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y **"PUEDE"** deben interpretarse según **RFC 2119** y **RFC 8174**: tienen ese significado únicamente cuando aparecen en mayúsculas, como aquí.
 
 		Términos como *nodo*, *indentación*, *namespace*, *inline* y *bloque `>>`* mantienen su significado en [*STXT-SPEC*](stxt-core-ref).
 
@@ -360,12 +360,37 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		* La **dirección sola**: `usuario@dominio.tld`.
 		* La dirección con un **nombre para mostrar** delante y la dirección entre `<` y `>`:
 		  `Joan Costa <joan@example.com>`. El nombre es cualquier texto no vacío que no contenga
-		  `<` ni `>` (si lleva comillas, forman parte del nombre; no se interpretan), y el espacio
+		  `<` ni `>` (si lleva comillas, forman parte del nombre; no se interpretan), y el blanco
 		  entre el nombre y `<` es opcional.
 
 		Una implementación conforme **DEBE** aceptar las dos formas y **NO DEBE** aceptar `<` y `>`
 		sin nombre delante, desparejados, ni seguidos de nada. Es la forma habitual de las cabeceras
 		de correo (el *mailbox* de RFC 5322), sin las comillas ni los comentarios de esa gramática.
+		La gramática normativa es esta (*blanco* es el de [*STXT-SPEC* §4](stxt-core-ref#s4):
+		`U+0020` o `U+0009`):
+
+	Grammar >>
+		EMAIL     = Direccion
+		          | Nombre { Blanco } "<" Direccion ">"
+		Nombre    = texto no vacío sin "<" ni ">", cuyo último carácter no es un blanco
+		Direccion = Local "@" Dominio                     ; 254 caracteres como máximo en total
+		Local     = 1*64( atext | "." )                   ; de 1 a 64 caracteres
+		atext     = letra o dígito ASCII, o uno de:  ! # $ % & ' * + / = ? ^ _ ` { | } ~ -
+		Dominio   = 1*( letra o dígito ASCII | "." | "-" ) "." TLD
+		TLD       = 2*63( letra ASCII )                   ; de 2 a 63 letras
+
+	Content >>
+		Precisiones sobre `EMAIL`:
+
+		* **Solo ASCII**: las direcciones internacionalizadas (EAI) y los dominios no ASCII sin
+		  convertir a *punycode* no se admiten. Es deliberado: una única gramática exacta, sin
+		  tablas Unicode que cada plataforma versiona a su manera.
+		* **Permisivo dentro de esos límites**: no se valida el *dot-atom* completo de RFC 5322
+		  (`a..b@example.com` o `.a@example.com` pasan) ni las etiquetas del dominio una a una
+		  (`a..b.example.com` pasa). El valor del tipo está en cazar el `@` ausente, los blancos,
+		  el dominio sin punto o el TLD olvidado, no en replicar RFC 5322.
+		* Los límites de longitud son los prácticos de RFC 5321: 64 caracteres la parte local y
+		  254 la dirección completa; el TLD, de 2 a 63 letras.
 
 	Content >>
 		El tipo `URL` acepta únicamente **URL absolutas con esquema y host**. La gramática es propia
@@ -455,6 +480,13 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 	Content >>
 		Una implementación conforme **DEBE** comprobar los tipos `ENUM` contra sus valores permitidos y **DEBE** rechazar cualquier valor que no coincida exactamente con uno de ellos.
 
+		**Nota de interoperabilidad (no normativa).** La comparación exacta es por puntos de
+		código. Los valores son literales y **no** se normalizan a NFC (a diferencia de los
+		nombres de nodo, [*STXT-SPEC* §4.3](stxt-core-ref#s4-3)): `café` en forma precompuesta
+		(NFC) y `café` en forma descompuesta (NFD) se ven idénticos pero no coinciden. Algunos
+		flujos de entrada — históricamente, macOS — producen NFD. Quien defina valores `ENUM` con
+		diacríticos debería escribirlos en NFC, que es lo que producen los editores habituales.
+
 	Subsubheader: 9.7 Tipo MARKDOWN
 
 	Content >>
@@ -489,6 +521,11 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 
 		* Si `Min` se omite, el mínimo efectivo es `0`.
 		* Si `Max` se omite, el máximo efectivo es ilimitado.
+		* `Min` y `Max` **NO DEBEN** superar `4294967295` (2³² − 1); un valor mayor **DEBE**
+		  provocar un error de schema (`CARDINALITY_NOT_VALID`). La cota es independiente de la
+		  plataforma y está muy por encima de cualquier recuento de hijos alcanzable con los
+		  límites recomendados del parser ([*STXT-SPEC* §11.2](stxt-core-ref#s11-2)); quien
+		  quiera «sin máximo» lo dice omitiendo `Max`, no con un número gigante.
 		* `Min` y `Max` **NO DEBEN** aparecer más de una vez dentro del mismo `Child`.
 		* Si existen ambos, `Min` **NO DEBE** ser mayor que `Max`.
 		* `Max: 0` es legal y declara un hijo **prohibido**: el `Child` existe en el modelo pero ninguna aparición es válida. Sirve, por ejemplo, para retirar en una versión de un namespace un hijo que otra permitía. Una implementación **NO DEBE** tratarlo como error.
@@ -591,7 +628,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		4. Usa un `Type` desconocido.
 		5. Define `Children` en un `Node` cuyo tipo no admite hijos ([sección 9](#s9)).
 		6. Define `Values` en un `Node` cuyo tipo no es `ENUM` ([sección 7.2](#s7-2)).
-		7. La cardinalidad es inválida (`Min > Max`, valor no entero no negativo, `Min`/`Max` duplicados).
+		7. La cardinalidad es inválida (`Min > Max`, valor no entero no negativo, valor mayor que `4294967295`, `Min`/`Max` duplicados).
 		8. Un `Node` de tipo `ENUM` no define `Values`, o `Values` no contiene ningún `Value`.
 		9. Aparece un `Value` duplicado tras la normalización inline por trim.
 		10. Aparecen dos nodos `Child` equivalentes (mismo `nombre canónico + namespace efectivo`) dentro del mismo `Children`.
@@ -633,7 +670,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		| `TYPE_NOT_VALID` | 4: tipo desconocido (el meta-esquema lo detecta antes como `INVALID_VALUE` del `ENUM` `Type`; `TYPE_NOT_VALID` queda para una implementación cuyo registro de tipos no tenga el tipo) |
 		| `CHILDREN_NOT_ALLOWED_FOR_TYPE` | 5: `Children` en un tipo que no admite hijos |
 		| `VALUES_NOT_ALLOWED_FOR_TYPE` | 6: `Values` en un tipo distinto de `ENUM` |
-		| `CARDINALITY_NOT_VALID` | 7: `Min` o `Max` no es un entero no negativo |
+		| `CARDINALITY_NOT_VALID` | 7: `Min` o `Max` no es un entero no negativo, o supera `4294967295` |
 		| `MIN_GREATER_THAN_MAX` | 7: `Min` mayor que `Max` |
 		| `VALUES_REQUIRED` | 8: `ENUM` sin `Values`, o `Values` sin ningún `Value` |
 		| `VALUE_DUPLICATED` | 9: dos `Value` iguales tras el recorte |

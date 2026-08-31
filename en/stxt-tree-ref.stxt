@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-27
+		Last modif: 2026-08-31
 
 	Header: @STXT@ Tree
 
@@ -46,7 +46,8 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 
 	Content >>
 		The key words **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and
-		**"MAY"** in this document are to be interpreted as described in **RFC 2119**.
+		**"MAY"** in this document are to be interpreted as described in **RFC 2119** and
+		**RFC 8174**: they carry that meaning only when they appear in uppercase, as here.
 
 		The terms *node*, *INLINE*, *BLOCK*, *canonical name*, *effective namespace* and
 		*document* retain the meaning defined by [*STXT-SPEC*](stxt-core-ref).
@@ -258,6 +259,14 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		`SPACES_4` (four spaces per level). There are therefore two canonical forms of each
 		tree, one per style; a tool **MUST** offer both and **SHOULD** use `TABS` when told
 		nothing else, following [*STXT-SPEC* §4.4](stxt-core-ref#s4-4).
+
+		The operation is defined for trees that satisfy the invariants of
+		[sections 4](#s4) and [5](#s5) — the ones parsing produces: valid, already normalized
+		names, inline values with no leading or trailing blanks, block lines with no trailing
+		blanks. For a programmatically built tree that does not satisfy them (a `value` with
+		leading or trailing blanks, a line with trailing blanks), the written text would not
+		reparse to the same tree and the result is undefined; the case of a `lines` ending in
+		`""` additionally has the explicit rule of [section 11.1](#s11-1), point 6.
 
 	Subsubheader: 11.1 Rules
 

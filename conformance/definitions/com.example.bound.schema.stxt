@@ -1,0 +1,7 @@
+Schema (@stxt.schema): com.example.bound
+	Node: A
+		Children:
+			Child: B
+				Min: 0
+				Max: 4294967295
+	Node: B

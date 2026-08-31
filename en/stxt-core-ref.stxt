@@ -54,7 +54,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 	Subheader: 2. Terminology
 
 	Content >>
-		The key words **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119**.
+		The key words **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119** and **RFC 8174**: they carry that meaning only when they appear in uppercase, as here.
 		
 	Subheader: 3. Document Encoding
 
@@ -63,8 +63,18 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		
 		A parser:
 		
-		* **SHOULD** accept documents that begin with a BOM.
+		* **SHOULD** accept documents that begin with a BOM and, if it accepts them, **MUST**
+		  discard the leading `U+FEFF` before processing the first line: the BOM is not part of
+		  the content. (If it were not discarded it would be content — it is not a blank,
+		  [section 4](#s4) — and would make the name of the first node invalid.)
 		* **MAY** emit a warning for documents that begin with a BOM.
+
+		**Byte input.** This specification defines the document over characters; decoding belongs
+		to the tool that reads the bytes. A tool that reads the input as bytes **MUST** reject it
+		if it is not valid UTF-8, instead of substituting the invalid sequences (for example with
+		`U+FFFD`): silent substitution makes two tools see different documents from the same
+		bytes. It is a read error, prior to parsing — like a missing file — and carries no syntax
+		error code.
 
 		**Line endings:** a parser **MUST** accept the `LF` (`\n`) and `CRLF` (`\r\n`) terminators.
 		If the line ends in `CRLF`, the trailing `\r` **MUST** be discarded before processing the line:
@@ -543,7 +553,13 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		* Log or record files in *append* mode (add at the end).
 		* *Streaming* of successive records.
 		* Combining files with a simple text concatenation (`cat a.stxt b.stxt > c.stxt`).
-		
+
+		The property is stated over **lines**, and concatenating files has two byte-level
+		preconditions: the first file **MUST** end in a line break (otherwise its last line and
+		the first line of the second merge into one), and the second **MUST NOT** begin with a
+		BOM (a `U+FEFF` that is not at the start of the document is not a BOM but content,
+		[section 3](#s3), and would make the name of the second file's first node invalid).
+
 		@STXT@ does not need a derived format for "lists of documents": a document already is
 		a sequence of root nodes.
 		
@@ -993,8 +1009,14 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		* **Optional external schemas**: semantic validation is a separate layer. 
 		  A basic parser **MAY** operate without loading external schemas, eliminating risks associated with their resolution.
 		
-		Consequently, @STXT@ is especially suitable for processing documents from untrusted sources 
+		Consequently, @STXT@ is especially suitable for processing documents from untrusted sources
 		(remote configurations, user input, data exchange) where parser security is critical.
+
+		Beyond the format itself, the usual precautions for any text apply: **values and blocks
+		admit any character**, including bidirectional controls and other invisible characters
+		that may render misleadingly in a viewer (node names do not, [section 4.2](#s4-2): the
+		format and control categories are not allowed). The application that displays or
+		interprets a value is responsible for the meaning it assigns to it.
 		
 		Implementations **MUST** reject invalid documents according to [section 11](#s11) 
 		and **MUST NOT** introduce extensions that allow external loading 

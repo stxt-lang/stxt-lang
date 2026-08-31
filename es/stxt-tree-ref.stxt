@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-27
+		Last modif: 2026-08-31
 
 	Header: @STXT@ Tree
 
@@ -48,7 +48,8 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 
 	Content >>
 		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y
-		**"PUEDE"** deben interpretarse según **RFC 2119**.
+		**"PUEDE"** deben interpretarse según **RFC 2119** y **RFC 8174**: tienen ese
+		significado únicamente cuando aparecen en mayúsculas, como aquí.
 
 		Los términos *nodo*, *INLINE*, *BLOCK*, *nombre canónico*, *namespace efectivo* y
 		*documento* mantienen el significado de [*STXT-SPEC*](stxt-core-ref).
@@ -263,6 +264,14 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		`SPACES_4` (cuatro espacios por nivel). Hay, por tanto, dos formas canónicas de cada
 		árbol, una por estilo; una herramienta **DEBE** ofrecer las dos y **DEBERÍA** usar
 		`TABS` cuando no se le indica otra cosa, de acuerdo con [*STXT-SPEC* §4.4](stxt-core-ref#s4-4).
+
+		La operación se define para árboles que cumplen los invariantes de las
+		[secciones 4](#s4) y [5](#s5) — los que produce un parseo: nombres válidos y ya
+		normalizados, valores inline sin blancos en los extremos, líneas de bloque sin blancos
+		finales. Para un árbol construido por programa que no los cumpla (un `value` con blancos
+		en los extremos, una línea con blancos finales), el texto escrito no reparsearía al mismo
+		árbol y el resultado no está definido; el caso de un `lines` que termina en `""` tiene
+		además la regla explícita de la [sección 11.1](#s11-1), punto 6.
 
 	Subsubheader: 11.1 Reglas
 

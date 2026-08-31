@@ -1,0 +1,4 @@
+Types (com.example.types):
+	Email: a..b@example.com
+	Email: .ana@example.com
+	Email: a!#$%&'*+/=?^_`{|}~-@x.co

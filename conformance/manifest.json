@@ -945,6 +945,22 @@
       "valid": true
     },
     {
+      "id": "validate/type-email-dots",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9.4",
+      "description": "EMAIL is permissive with dots and accepts the full local-part charset.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-email-dots.stxt",
+      "valid": true
+    },
+    {
       "id": "validate/type-hexadecimal",
       "category": "validate",
       "spec": "STXT-SCHEMA-SPEC §9",
@@ -1012,7 +1028,7 @@
       "id": "validate/enum-nbsp-value",
       "category": "validate",
       "spec": "STXT-SCHEMA-SPEC §9.6, §13.9; STXT-SPEC §4",
-      "description": "NBSP is content, never a language blank: an ENUM may declare 'x' and 'x\u00A0' as two different values, and a document value carrying the NBSP matches exactly.",
+      "description": "NBSP is content, never a language blank: an ENUM may declare 'x' and 'x ' as two different values, and a document value carrying the NBSP matches exactly.",
       "definitions": [
         [
           "definitions/com.example.nbspenum.schema.stxt"
@@ -1956,6 +1972,44 @@
       }
     },
     {
+      "id": "validate/type-email-unicode",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9.4",
+      "description": "EMAIL is ASCII only: 'Email: josé@example.com' is rejected.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-email-unicode.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
+      "id": "validate/type-email-locallong",
+      "category": "validate-error",
+      "spec": "STXT-SCHEMA-SPEC §9.4",
+      "description": "EMAIL: a local part of 65 characters is over the limit of 64.",
+      "definitions": [
+        [
+          "definitions/com.example.types.schema.stxt"
+        ],
+        [
+          "definitions/com.example.types.template.stxt"
+        ]
+      ],
+      "input": "validate/type-email-locallong.stxt",
+      "error": {
+        "code": "INVALID_VALUE",
+        "line": 2
+      }
+    },
+    {
       "id": "validate/type-hexadecimal-g",
       "category": "validate-error",
       "spec": "STXT-SCHEMA-SPEC §9",
@@ -2235,6 +2289,22 @@
         ]
       ],
       "input": "validate/card-ok.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/card-bound-ok",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §10",
+      "description": "The cardinality bound 4294967295 (2^32 - 1) itself is a legal Min/Max.",
+      "definitions": [
+        [
+          "definitions/com.example.bound.schema.stxt"
+        ],
+        [
+          "definitions/com.example.bound.template.stxt"
+        ]
+      ],
+      "input": "validate/card-bound-ok.stxt",
       "valid": true
     },
     {
@@ -2764,6 +2834,18 @@
       }
     },
     {
+      "id": "definition-errors/schema-cardinality-above-bound",
+      "category": "definition-error",
+      "spec": "STXT-SCHEMA-SPEC §10, §13 (7)",
+      "description": "Max above the bound 4294967295 (2^32 - 1).",
+      "kind": "schema",
+      "input": "definition-errors/schema-cardinality-above-bound.stxt",
+      "error": {
+        "code": "CARDINALITY_NOT_VALID",
+        "line": 4
+      }
+    },
+    {
       "id": "definition-errors/schema-min-greater-than-max",
       "category": "definition-error",
       "spec": "STXT-SCHEMA-SPEC §13 (7)",
@@ -3034,6 +3116,18 @@
       "description": "A negative number.",
       "kind": "template",
       "input": "definition-errors/template-cardinality-negative.stxt",
+      "error": {
+        "code": "CARDINALITY_NOT_VALID",
+        "line": 4
+      }
+    },
+    {
+      "id": "definition-errors/template-cardinality-above-bound",
+      "category": "definition-error",
+      "spec": "STXT-TEMPLATE-SPEC §7.1, §14 (5)",
+      "description": "A number above the bound 4294967295 (2^32 - 1).",
+      "kind": "template",
+      "input": "definition-errors/template-cardinality-above-bound.stxt",
       "error": {
         "code": "CARDINALITY_NOT_VALID",
         "line": 4

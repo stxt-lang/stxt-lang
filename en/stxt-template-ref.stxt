@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-23
+		Last modif: 2026-08-31
 		
 	Header: @STXT@ Template
 	
@@ -49,7 +49,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 	Subheader: 2. Terminology
 	
 	Content >>
-		The keywords **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119**.
+		The keywords **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119** and **RFC 8174**: they carry that meaning only when they appear in uppercase, as here.
 		
 		Terms such as *node*, *indentation*, *namespace*, *inline*, and *`>>` block* retain their meaning in [*STXT-SPEC*](stxt-core-ref).
 		
@@ -274,7 +274,10 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		
 		Rules:
 		
-		* `num`, `min`, and `max` **MUST** be non-negative integers.
+		* `num`, `min`, and `max` **MUST** be non-negative integers and **MUST NOT** exceed
+		  `4294967295` (2³² − 1), the same bound as `Min`/`Max` in a schema
+		  ([*STXT-SCHEMA-SPEC* §10](stxt-schema-ref#s10)); a greater value is
+		  `CARDINALITY_NOT_VALID`.
 		* In `min,max`, `min <= max` **MUST** hold.
 		* `+` is equivalent to `1+`.
 		* `?` is equivalent to `0,1`.
@@ -483,7 +486,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		2. The document does not have root `Template (@stxt.template): <target_namespace>`.
 		3. `Structure >>` is missing or `Structure` is not a `>>` block.
 		4. A non-empty line within `Structure` does not contain `:`.
-		5. Malformed cardinality or cardinality with invalid numbers.
+		5. Malformed cardinality or cardinality with invalid numbers (not non-negative integers, or greater than `4294967295`, [section 7.1](#s7-1)).
 		6. Unknown type (according to the set of types supported by the implementation).
 		7. `ENUM` type without a `[...]` value list, or with an empty list.
 		8. Use of `[...]` if the type is not `ENUM`.

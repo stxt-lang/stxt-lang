@@ -42,7 +42,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 	Subheader: 2. Terminología
 
 	Content >>
-		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y **"PUEDE"** deben interpretarse según **RFC 2119**.
+		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y **"PUEDE"** deben interpretarse según **RFC 2119** y **RFC 8174**: tienen ese significado únicamente cuando aparecen en mayúsculas, como aquí.
 
 		Términos como *nodo*, *namespace*, *schema* y *template* mantienen su significado en
 		[*STXT-SPEC*](stxt-core-ref), [*STXT-SCHEMA-SPEC*](stxt-schema-ref) y [*STXT-TEMPLATE-SPEC*](stxt-template-ref).

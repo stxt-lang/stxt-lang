@@ -1,0 +1,4 @@
+Template (@stxt.template): com.example.bound
+	Structure >>
+		A (com.example.bound):
+			B: (0,4294967295)

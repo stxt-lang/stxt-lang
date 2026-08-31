@@ -53,8 +53,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Subheader: 2. Terminología
 
 	Content >>
-		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y **"PUEDE"** deben interpretarse según **RFC 2119**.
-		
+		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y **"PUEDE"** deben interpretarse según **RFC 2119** y **RFC 8174**: tienen ese significado únicamente cuando aparecen en mayúsculas, como aquí.
+
 	Subheader: 3. Codificación del Documento
 
 	Content >>
@@ -62,8 +62,19 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		
 		Un parser:
 		
-		* **DEBERÍA** aceptar documentos que comiencen con BOM.
+		* **DEBERÍA** aceptar documentos que comiencen con BOM y, si los acepta, **DEBE** descartar
+		  el `U+FEFF` inicial antes de procesar la primera línea: el BOM no forma parte del
+		  contenido. (Si no se descartara sería contenido — no es un blanco,
+		  [sección 4](#s4) — y haría inválido el nombre del primer nodo.)
 		* **PUEDE** emitir una advertencia en documentos que comiencen con BOM.
+
+		**Entrada en bytes.** Esta especificación define el documento sobre caracteres; la
+		decodificación pertenece a la herramienta que lee los bytes. Una herramienta que lea la
+		entrada como bytes **DEBE** rechazarla si no es UTF-8 válido, en lugar de sustituir las
+		secuencias inválidas (por ejemplo por `U+FFFD`): la sustitución silenciosa hace que dos
+		herramientas vean documentos distintos a partir de los mismos bytes. Es un error de
+		lectura, previo al parseo — como un fichero inexistente — y no lleva código de error de
+		sintaxis.
 
 		**Fin de línea:** un parser **DEBE** aceptar los terminadores `LF` (`\n`) y `CRLF` (`\r\n`).
 		Si la línea termina en `CRLF`, el `\r` final **DEBE** descartarse antes de procesar la línea:
@@ -544,7 +555,14 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* Ficheros de log o registros en modo *append* (añadir al final).
 		* *Streaming* de registros sucesivos.
 		* Combinar ficheros con una simple concatenación de texto (`cat a.stxt b.stxt > c.stxt`).
-		
+
+		La propiedad se enuncia sobre **líneas**, y la concatenación de ficheros tiene dos
+		condiciones previas del nivel de bytes: el primer fichero **DEBE** terminar en salto de
+		línea (si no, su última línea y la primera del segundo se fusionan en una sola), y el
+		segundo **NO DEBE** empezar con BOM (un `U+FEFF` que no está al inicio del documento no es
+		un BOM sino contenido, [sección 3](#s3), y haría inválido el nombre del primer nodo del
+		segundo fichero).
+
 		@STXT@ no necesita un formato derivado para "listas de documentos": un documento ya es
 		una secuencia de nodos raíz.
 		
@@ -998,8 +1016,15 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* **Schemas externos opcionales**: la validación semántica es una capa separada. 
 		  Un parser básico **PUEDE** operar sin cargar schemas externos, eliminando riesgos asociados a su resolución.
 		
-		En consecuencia, @STXT@ es especialmente adecuado para procesar documentos de fuentes no confiables 
+		En consecuencia, @STXT@ es especialmente adecuado para procesar documentos de fuentes no confiables
 		(configuraciones remotas, entradas de usuario, intercambio de datos) donde la seguridad del parser es crítica.
+
+		Más allá del formato, aplican las precauciones habituales de todo texto: los **valores y
+		los bloques admiten cualquier carácter**, incluidos los controles bidireccionales y otros
+		caracteres invisibles que pueden mostrarse de forma engañosa en un visor (los nombres de
+		nodo no, [sección 4.2](#s4-2): las categorías de formato y control no están permitidas).
+		La aplicación que muestra o interpreta un valor es responsable del significado que le
+		asigna.
 		
 		Las implementaciones **DEBEN** rechazar documentos inválidos según la [sección 11](#s11) 
 		y **NO DEBEN** introducir extensiones que permitan carga externa 

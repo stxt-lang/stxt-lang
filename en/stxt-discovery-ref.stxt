@@ -42,7 +42,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 	Subheader: 2. Terminology
 
 	Content >>
-		The keywords **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119**.
+		The keywords **"MUST"**, **"MUST NOT"**, **"SHOULD"**, **"SHOULD NOT"**, and **"MAY"** must be interpreted according to **RFC 2119** and **RFC 8174**: they carry that meaning only when they appear in uppercase, as here.
 
 		Terms such as *node*, *namespace*, *schema* and *template* retain their meaning in
 		[*STXT-SPEC*](stxt-core-ref), [*STXT-SCHEMA-SPEC*](stxt-schema-ref) and [*STXT-TEMPLATE-SPEC*](stxt-template-ref).

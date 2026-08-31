@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-23
+		Last modif: 2026-08-31
 		
 	Header: @STXT@ Template
 	
@@ -49,7 +49,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 	Subheader: 2. Terminología
 	
 	Content >>
-		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y **"PUEDE"** deben interpretarse según **RFC 2119**.
+		Las palabras clave **"DEBE"**, **"NO DEBE"**, **"DEBERÍA"**, **"NO DEBERÍA"**, y **"PUEDE"** deben interpretarse según **RFC 2119** y **RFC 8174**: tienen ese significado únicamente cuando aparecen en mayúsculas, como aquí.
 		
 		Términos como *nodo*, *indentación*, *namespace*, *inline* y *bloque `>>`* mantienen su significado en [*STXT-SPEC*](stxt-core-ref).
 		
@@ -274,7 +274,10 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		
 		Reglas:
 		
-		* `num`, `min` y `max` **DEBEN** ser enteros no negativos.
+		* `num`, `min` y `max` **DEBEN** ser enteros no negativos y **NO DEBEN** superar
+		  `4294967295` (2³² − 1), la misma cota que `Min`/`Max` en un schema
+		  ([*STXT-SCHEMA-SPEC* §10](stxt-schema-ref#s10)); un valor mayor es
+		  `CARDINALITY_NOT_VALID`.
 		* En `min,max`, **DEBE** cumplirse `min <= max`.
 		* `+` equivale a `1+`.
 		* `?` equivale a `0,1`.
@@ -483,7 +486,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		2. El documento no tiene raíz `Template (@stxt.template): <namespace_objetivo>`.
 		3. Falta `Structure >>` o `Structure` no es bloque `>>`.
 		4. Una línea no vacía dentro de `Structure` no contiene `:`.
-		5. Cardinalidad mal formada o con números inválidos.
+		5. Cardinalidad mal formada o con números inválidos (no enteros no negativos, o mayores que `4294967295`, [sección 7.1](#s7-1)).
 		6. Tipo desconocido (según el conjunto de tipos soportado por la implementación).
 		7. Tipo `ENUM` sin lista de valores `[...]`, o con una lista vacía.
 		8. Uso de `[...]` si el tipo no es `ENUM`.

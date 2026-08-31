@@ -289,9 +289,10 @@ small, line-oriented state machine. The following properties are stated normativ
 - Structural complexity is bounded by the strict indentation rules: levels are consecutive
   and there are no backward references, so a parser MAY operate in streaming mode,
   emitting each root node as soon as the next one begins, with memory proportional to the
-  nesting depth rather than to the document size. This specification sets no limits on
-  document size or depth; implementations MAY impose limits appropriate to their
-  environment, and SHOULD do so when processing untrusted input.
+  largest root tree rather than to the document size. {{STXT-SPEC}} additionally
+  recommends configurable parser limits — nesting depth, line length and input size — with
+  stable error codes and default values that the official implementations enable;
+  implementations SHOULD apply such limits when processing untrusted input.
 
 Beyond the format itself, the usual considerations for text apply: a document may contain
 bidirectional control characters or other content that renders misleadingly in a
