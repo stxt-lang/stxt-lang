@@ -68,9 +68,11 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		  resolution error ([section 8](#s8)).
 		* The recursive walk **SHOULD** be guarded against pathological structures the same way
 		  the ascent is ([section 4.1](#s4-1)): a tool **MAY** limit the descent depth and
-		  **SHOULD NOT** follow directory symbolic links, so as not to enter loops or walk
-		  unrelated trees ([section 10](#s10)). A subdirectory that cannot be listed simply
-		  contributes no files; it does not stop the resolution of the rest of the level.
+		  **SHOULD NOT** follow symbolic links — neither descend through a link to a directory (so
+		  as not to enter loops or walk unrelated trees) nor load as a definition a link to a file
+		  (so as not to read files from outside the `.stxt/`, [section 10](#s10)). A subdirectory
+		  that cannot be listed simply contributes no files; it does not stop the resolution of the
+		  rest of the level.
 
 	Subheader: 4. The resolution chain
 
@@ -252,6 +254,10 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		* Both the ascent limit of [section 4.1](#s4-1) and the limit on the recursive descent
 		  within a resolution directory ([section 3](#s3)) protect against pathological
 		  directory structures: circular symbolic links or virtual file systems. A tool
-		  **SHOULD** bound the descent depth and **SHOULD NOT** follow directory symbolic links
-		  when descending; a directory that cannot be listed contributes no definitions and does
+		  **SHOULD** bound the descent depth and **SHOULD NOT** follow symbolic links when
+		  descending — neither directory nor file links — so that a resolution directory loads only
+		  the definitions it really contains, not files an outside link points to: since the levels
+		  of the chain include directories the validating party does not control, following a file
+		  link would allow reading a file from outside the `.stxt/` (and leaking its content through
+		  a resolution error). A directory that cannot be listed contributes no definitions and does
 		  not stop the resolution of the rest.

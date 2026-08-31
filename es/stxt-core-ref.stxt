@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-29
+		Last modif: 2026-08-31
 		
 	Header: @STXT@ Core
 	
@@ -982,11 +982,13 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		  Además, la [sección 11.2](#s11-2) recomienda límites configurables —profundidad de
 		  anidamiento, longitud de línea y tamaño de la entrada—, que las implementaciones
 		  oficiales activan por defecto.
-		* **Parseo en streaming con memoria acotada**: gracias a que se permiten múltiples nodos de nivel 0 
-		  y a que no existen referencias hacia atrás, un parser **PUEDE** emitir cada árbol raíz completo en cuanto 
-		  detecta el inicio del siguiente nodo de nivel 0, con un uso de memoria del orden de la profundidad de 
-		  anidamiento (`O(profundidad)`) en lugar del tamaño total del documento. Esto hace viable procesar 
-		  ficheros muy grandes (logs, *streams*) de forma segura.
+		* **Parseo en streaming con memoria acotada**: gracias a que se permiten múltiples nodos de nivel 0
+		  y a que no existen referencias hacia atrás, un parser **PUEDE** emitir cada árbol raíz completo en cuanto
+		  detecta el inicio del siguiente nodo de nivel 0, reteniendo solo el árbol de la raíz en curso —que
+		  emite y descarta antes de empezar la siguiente—. El uso de memoria es entonces del orden del
+		  **mayor árbol raíz**, no del tamaño total del documento. Esto hace viable procesar ficheros muy
+		  grandes compuestos de muchas raíces (logs, *streams*) de forma segura; una única raíz gigante se
+		  retiene entera, y para acotarla también en ese caso están los límites de la [sección 11.2](#s11-2).
 		* **Schemas externos opcionales**: la validación semántica es una capa separada. 
 		  Un parser básico **PUEDE** operar sin cargar schemas externos, eliminando riesgos asociados a su resolución.
 		

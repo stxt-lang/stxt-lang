@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-29
+		Last modif: 2026-08-31
 		
 	Header: @STXT@ Core
 	
@@ -977,11 +977,13 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		  and the absence of circular references or anchors limit structural complexity.
 		  In addition, [section 11.2](#s11-2) recommends configurable limits —nesting depth,
 		  line length and input size—, which the official implementations enable by default.
-		* **Streaming parsing with bounded memory**: thanks to allowing multiple level 0 nodes 
-		  and the absence of backward references, a parser **MAY** emit each complete root tree as soon as 
-		  it detects the start of the next level 0 node, with memory usage on the order of the nesting 
-		  depth (`O(depth)`) instead of the total document size. This makes it feasible to process 
-		  very large files (logs, *streams*) safely.
+		* **Streaming parsing with bounded memory**: thanks to allowing multiple level 0 nodes
+		  and the absence of backward references, a parser **MAY** emit each complete root tree as soon as
+		  it detects the start of the next level 0 node, retaining only the tree of the root in progress —which
+		  it emits and discards before starting the next. Memory usage is then on the order of the
+		  **largest root tree**, not the total document size. This makes it feasible to process very large
+		  files made of many roots (logs, *streams*) safely; a single giant root is retained whole, and to
+		  bound that case too are the limits of [section 11.2](#s11-2).
 		* **Optional external schemas**: semantic validation is a separate layer. 
 		  A basic parser **MAY** operate without loading external schemas, eliminating risks associated with their resolution.
 		

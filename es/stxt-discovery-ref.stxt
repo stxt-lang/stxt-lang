@@ -67,11 +67,12 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		  documento cuyo nodo raíz pertenezca a `@stxt.schema` o `@stxt.template`. Cualquier
 		  otro contenido es un error de resolución ([sección 8](#s8)).
 		* El recorrido recursivo **DEBERÍA** protegerse frente a estructuras patológicas igual
-		  que el ascenso ([sección 4.1](#s4-1)): una herramienta **PUEDE** limitar la
-		  profundidad del descenso y **NO DEBERÍA** seguir enlaces simbólicos de directorio, para
-		  no entrar en bucles ni recorrer árboles ajenos ([sección 10](#s10)). Un subdirectorio
-		  que no pueda listarse simplemente no aporta ficheros; no detiene la resolución del
-		  resto del nivel.
+		  que el ascenso ([sección 4.1](#s4-1)): una herramienta **PUEDE** limitar la profundidad
+		  del descenso y **NO DEBERÍA** seguir enlaces simbólicos, ni descender por un enlace a
+		  directorio (para no entrar en bucles ni recorrer árboles ajenos) ni cargar como
+		  definición un enlace a fichero (para no leer ficheros de fuera del `.stxt/`,
+		  [sección 10](#s10)). Un subdirectorio que no pueda listarse simplemente no aporta
+		  ficheros; no detiene la resolución del resto del nivel.
 
 	Subheader: 4. La cadena de resolución
 
@@ -256,5 +257,10 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		  dentro de un directorio de resolución ([sección 3](#s3)) protegen frente a estructuras
 		  de directorios patológicas: enlaces simbólicos circulares o sistemas de ficheros
 		  virtuales. Una herramienta **DEBERÍA** acotar la profundidad del descenso y **NO
-		  DEBERÍA** seguir enlaces simbólicos de directorio al descender; un directorio que no
-		  pueda listarse no aporta definiciones y no detiene la resolución del resto.
+		  DEBERÍA** seguir enlaces simbólicos al descender —ni de directorio ni de fichero—, de
+		  modo que un directorio de resolución solo cargue las definiciones que contiene
+		  realmente y no ficheros ajenos a los que un enlace apunte: como los niveles de la cadena
+		  incluyen directorios que quien valida no controla, seguir un enlace a fichero permitiría
+		  leer un fichero de fuera del `.stxt/` (y filtrar su contenido a través de un error de
+		  resolución). Un directorio que no pueda listarse no aporta definiciones y no detiene la
+		  resolución del resto.
