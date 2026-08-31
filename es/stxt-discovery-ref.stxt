@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-30
+		Last modif: 2026-08-31
 
 	Header: @STXT@ Discovery
 
@@ -66,6 +66,12 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		* Todo fichero bajo un directorio de resolución **DEBE** ser una definición: un
 		  documento cuyo nodo raíz pertenezca a `@stxt.schema` o `@stxt.template`. Cualquier
 		  otro contenido es un error de resolución ([sección 8](#s8)).
+		* El recorrido recursivo **DEBERÍA** protegerse frente a estructuras patológicas igual
+		  que el ascenso ([sección 4.1](#s4-1)): una herramienta **PUEDE** limitar la
+		  profundidad del descenso y **NO DEBERÍA** seguir enlaces simbólicos de directorio, para
+		  no entrar en bucles ni recorrer árboles ajenos ([sección 10](#s10)). Un subdirectorio
+		  que no pueda listarse simplemente no aporta ficheros; no detiene la resolución del
+		  resto del nivel.
 
 	Subheader: 4. La cadena de resolución
 
@@ -246,5 +252,9 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		  dónde ha salido la definición activa de cada namespace, y **PUEDE** ofrecer
 		  restricciones de confianza análogas a las de otras herramientas con búsqueda
 		  ascendente (por ejemplo, limitar la búsqueda a un directorio raíz configurado).
-		* El límite de ascenso de la [sección 4.1](#s4-1) protege frente a estructuras de directorios
-		  patológicas: enlaces circulares o sistemas de ficheros virtuales.
+		* Tanto el límite de ascenso de la [sección 4.1](#s4-1) como el del descenso recursivo
+		  dentro de un directorio de resolución ([sección 3](#s3)) protegen frente a estructuras
+		  de directorios patológicas: enlaces simbólicos circulares o sistemas de ficheros
+		  virtuales. Una herramienta **DEBERÍA** acotar la profundidad del descenso y **NO
+		  DEBERÍA** seguir enlaces simbólicos de directorio al descender; un directorio que no
+		  pueda listarse no aporta definiciones y no detiene la resolución del resto.

@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-30
+		Last modif: 2026-08-31
 
 	Header: @STXT@ Discovery
 
@@ -66,6 +66,11 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		* Every file under a resolution directory **MUST** be a definition: a document whose
 		  root node belongs to `@stxt.schema` or `@stxt.template`. Any other content is a
 		  resolution error ([section 8](#s8)).
+		* The recursive walk **SHOULD** be guarded against pathological structures the same way
+		  the ascent is ([section 4.1](#s4-1)): a tool **MAY** limit the descent depth and
+		  **SHOULD NOT** follow directory symbolic links, so as not to enter loops or walk
+		  unrelated trees ([section 10](#s10)). A subdirectory that cannot be listed simply
+		  contributes no files; it does not stop the resolution of the rest of the level.
 
 	Subheader: 4. The resolution chain
 
@@ -244,5 +249,9 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		  the active definition of each namespace came from, and **MAY** offer trust
 		  restrictions analogous to those of other tools with upward searches (for example,
 		  limiting the search to a configured root directory).
-		* The ascent limit of [section 4.1](#s4-1) protects against pathological directory
-		  structures: circular links or virtual file systems.
+		* Both the ascent limit of [section 4.1](#s4-1) and the limit on the recursive descent
+		  within a resolution directory ([section 3](#s3)) protect against pathological
+		  directory structures: circular symbolic links or virtual file systems. A tool
+		  **SHOULD** bound the descent depth and **SHOULD NOT** follow directory symbolic links
+		  when descending; a directory that cannot be listed contributes no definitions and does
+		  not stop the resolution of the rest.
