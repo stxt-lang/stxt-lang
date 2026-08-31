@@ -31,7 +31,7 @@ Document (dev.stxt.website): The command line
 		npm install -g @stxt-lang/cli
 		stxt --version
 
-		stxt 0.11.0 (@stxt-lang/core 0.11.0, spec 1.0)
+		stxt 1.0.0 (@stxt-lang/core 1.0.0, spec 1.0)
 
 	Content >>
 		`--version` prints three versions: the command's, that of the parser it embeds, and that
