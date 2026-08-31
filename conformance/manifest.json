@@ -1,5 +1,5 @@
 {
-  "kit": "1.0",
+  "kit": "1.1",
   "specifications": {
     "STXT-SPEC": "1.0",
     "STXT-TREE-SPEC": "1.0",
@@ -1006,6 +1006,22 @@
         ]
       ],
       "input": "validate/type-enum.stxt",
+      "valid": true
+    },
+    {
+      "id": "validate/enum-nbsp-value",
+      "category": "validate",
+      "spec": "STXT-SCHEMA-SPEC §9.6, §13.9; STXT-SPEC §4",
+      "description": "NBSP is content, never a language blank: an ENUM may declare 'x' and 'x\u00A0' as two different values, and a document value carrying the NBSP matches exactly.",
+      "definitions": [
+        [
+          "definitions/com.example.nbspenum.schema.stxt"
+        ],
+        [
+          "definitions/com.example.nbspenum.template.stxt"
+        ]
+      ],
+      "input": "validate/enum-nbsp-value.stxt",
       "valid": true
     },
     {

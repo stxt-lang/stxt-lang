@@ -1,0 +1,11 @@
+Schema (@stxt.schema): com.example.nbspenum
+	Node: Doc
+		Children:
+			Child: Level
+				Min: 1
+				Max: 1
+	Node: Level
+		Type: ENUM
+		Values:
+			Value: x
+			Value: x 
