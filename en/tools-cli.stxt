@@ -83,7 +83,9 @@ Document (dev.stxt.website): The command line
 		* An unknown option —single-dash ones included— or a non-existent command are
 		  **usage errors**: they exit with code `2` without performing any action.
 		* Results (findings, JSON, formatted documents, listings) go to standard output;
-		  usage and read errors go to standard error.
+		  usage and read errors go to standard error, and so do the syntax errors of
+		  `format` and `describe` (the report of `validate` is the result, and goes to
+		  standard output).
 		* `-` denotes standard input in `validate`, `format` and `describe`, following the
 		  Unix convention: a document arriving through a pipe is processed like a file and
 		  reported as `<stdin>`. It can be given only once. Without an argument, no

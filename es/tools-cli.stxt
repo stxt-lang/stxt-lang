@@ -83,7 +83,9 @@ Document (dev.stxt.website): La línea de comandos
 		* Una opción desconocida —también las de un solo guion— o un comando inexistente
 		  son **errores de uso** y terminan con código `2` sin realizar ninguna acción.
 		* Los resultados (hallazgos, JSON, documentos formateados, listados) van por la
-		  salida estándar; los errores de uso y de lectura, por la salida de error.
+		  salida estándar; los errores de uso y de lectura, y los errores de sintaxis de
+		  `format` y `describe`, por la salida de error (el informe de `validate` es el
+		  resultado, y va por la estándar).
 		* `-` designa la entrada estándar en `validate`, `format` y `describe`, según la
 		  convención Unix: un documento que llega por un *pipe* se procesa igual que un
 		  fichero y se reporta como `<stdin>`. Se puede dar una sola vez. Sin argumento,
