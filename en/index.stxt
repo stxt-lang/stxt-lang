@@ -2,6 +2,7 @@ Document (dev.stxt.website): STXT
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
+		Last modif: 2026-09-01
 		Description: STXT is a human-first markup language for structured documents and data: no braces, no closing tags, just indentation. Readable by people, reliable for machines.
 
 	Header: @STXT@: Introduction 

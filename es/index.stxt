@@ -2,6 +2,7 @@ Document (dev.stxt.website): STXT
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
+		Last modif: 2026-09-01
 		Description: STXT es un lenguaje de marcado Human-First para documentos y datos: sin llaves ni etiquetas, solo indentación. Legible para personas, fiable para máquinas.
 
 	Header: @STXT@: Introducción 
