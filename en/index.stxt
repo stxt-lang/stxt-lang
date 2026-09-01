@@ -102,8 +102,8 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 		  serialization rather than for documents.
 		* **[JSON](stxt-vs-json)** is a machine format, not meant to be written by hand —
 		  and the one @STXT@ adopts as the representation of its tree.
-		* **[XML](stxt-vs-xml)** is the closest in ambition —named structure, namespaces,
-		  validation—, at the price of closing tags and escaping.
+		* **[XML](stxt-vs-xml)** has every @STXT@ feature and more, at the cost of the
+		  Human-First focus: more complex schemas, closing tags and escaping.
 		* **[TOML](stxt-vs-toml)** shares the goal but not the model: tables of typed
 		  keys and values, meant for flat configuration.
 		* **[Markdown](stxt-vs-markdown)** formats prose but does not structure data: the

@@ -104,8 +104,9 @@ Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para do
 		  la serialización de datos antes que para los documentos.
 		* **[JSON](stxt-vs-json)** es un formato para máquinas, no pensado para
 		  escribirse a mano — y el que @STXT@ adopta como representación de su árbol.
-		* **[XML](stxt-vs-xml)** es el más cercano en ambiciones —estructura con nombre,
-		  namespaces, validación—, al precio de etiquetas de cierre y escapes.
+		* **[XML](stxt-vs-xml)** tiene todas las características de @STXT@ y más, a
+		  cambio del enfoque Human-First: esquemas más complejos, etiquetas de cierre y
+		  escapes.
 		* **[TOML](stxt-vs-toml)** comparte el objetivo pero no el modelo: tablas de
 		  claves con valores tipados, pensadas para configuración plana.
 		* **[Markdown](stxt-vs-markdown)** da formato a la prosa pero no estructura los
