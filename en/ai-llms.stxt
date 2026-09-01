@@ -50,7 +50,7 @@ Document (dev.stxt.website): AI and LLMs — Generated, verifiable STXT document
 		* Types (`DATE`, `EMAIL`, `NUMBER`...) reject incorrect formats.
 
 		A valid @STXT@ document means the structure is correct.
-		Valid Markdown means nothing.
+		Valid Markdown says nothing about its structure.
 
 	Subheader: The loop: generate, validate, fix
 

@@ -56,9 +56,10 @@ Document (dev.stxt.website): Principios de diseño — STXT
 	Subheader: 4. No hay caracteres de escape
 
 	Content >>
-		Un carácter de escape es lo menos Human-First que existe: obliga a quien escribe a
-		pensar en el parser en lugar de en el texto, y a quien lee a descifrar lo que hay
-		detrás de una barra. Por eso @STXT@ no tiene secuencias de escape: un valor es lo que
+		Un carácter de escape contradice directamente el principio Human-First: obliga a
+		quien escribe a pensar en el parser en lugar de en el texto, y a quien lee a
+		descifrar lo que hay detrás de una barra. Por eso @STXT@ no tiene secuencias de
+		escape: un valor es lo que
 		hay tras los dos puntos, un bloque es lo que hay indentado debajo del `>>`, y
 		cualquier carácter vale dentro de ambos, incluidos `:`, `#` y `>>`.
 

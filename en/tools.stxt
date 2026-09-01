@@ -106,7 +106,8 @@ Document (dev.stxt.website): Tools — STXT
 
 	Content >>
 		This portal maintains three official implementations —TypeScript/JavaScript, Java
-		and Python—, and we hope many more will appear for other languages.
+		and Python—. A port to another language can prove its conformance with the same
+		kit as the three official ones ([Stability and versions](stability)).
 
 	Subsubheader: TypeScript / JavaScript
 

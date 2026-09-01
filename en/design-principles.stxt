@@ -54,9 +54,9 @@ Document (dev.stxt.website): Design principles — STXT
 	Subheader: 4. There are no escape characters
 
 	Content >>
-		An escape character is the least Human-First thing there is: it forces the writer to
-		think about the parser instead of the text, and the reader to decipher what lies
-		behind a backslash. That is why @STXT@ has no escape sequences: a value is whatever
+		An escape character directly contradicts the Human-First principle: it forces the
+		writer to think about the parser instead of the text, and the reader to decipher
+		what lies behind a backslash. That is why @STXT@ has no escape sequences: a value is whatever
 		follows the colon, a block is whatever is indented below the `>>`, and any character
 		is allowed inside both, including `:`, `#` and `>>`.
 

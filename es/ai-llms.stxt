@@ -50,7 +50,7 @@ Document (dev.stxt.website): IA y LLMs — Documentos STXT generados y verificab
 		* Los tipos (`DATE`, `EMAIL`, `NUMBER`...) rechazan los formatos incorrectos.
 
 		Un documento @STXT@ válido significa que la estructura es correcta.
-		Un Markdown válido no significa nada.
+		Un Markdown válido no dice nada de su estructura.
 
 	Subheader: El bucle: generar, validar, corregir
 
