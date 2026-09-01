@@ -1,0 +1,100 @@
+Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alternativas
+	Metadata:
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-09-01
+		Description: Markdown da formato a la prosa; STXT estructura los documentos. Cómo trabajan juntos, y por qué MARKDOWN es el único formato embebido de los esquemas STXT.
+
+	Header: @STXT@ frente a Markdown
+
+	Assert >>
+		Markdown da formato a la prosa; @STXT@ da estructura a los documentos.\\
+		Resuelven problemas distintos, y están diseñados para usarse juntos.
+
+	Content >>
+		Esta es la única comparación de la serie que no es una elección. Markdown responde
+		a "¿cómo escribo negritas, enlaces y listas dentro de un texto?"; @STXT@ responde
+		a "¿cuáles son las partes de este documento, y están todas?". Un README necesita
+		la primera pregunta; un contrato, un pipeline de artículos o un corpus de
+		registros estructurados necesita las dos.
+
+	Subheader: Dónde termina Markdown
+
+	Content >>
+		Markdown no tiene noción de campos. En cuanto un documento necesita datos — un
+		autor, una fecha, un estado —, el ecosistema recurre al **front matter**: un
+		bloque YAML colado entre vallas `---`, invisible para el propio Markdown y
+		parseado por un segundo lenguaje con [sus propias reglas](stxt-vs-yaml):
+
+	Listing >>
+		---
+		title: Style guide
+		author: Ana López
+		published: 2026-09-01
+		---
+
+		# Style guide
+
+		Write **short** sentences. Prefer [links](https://example.com) to footnotes.
+
+	Content >>
+		La estructura de ese fichero existe solo por convención: nada comprueba que
+		`published` sea una fecha, que `author` esté presente, o que el cuerpo siga las
+		secciones acordadas. No es un defecto de Markdown — nunca prometió otra cosa —,
+		pero marca la frontera donde el formato se acaba y la estructura tiene que
+		empezar.
+
+	Subheader: El mismo documento en @STXT@
+
+	Content >>
+		En @STXT@ la ficha son nodos, y la prosa es un bloque de texto cuyo tipo lo
+		declara como Markdown:
+
+	Code >>
+		Template (@stxt.template): com.example.article
+			Structure >>
+				Article (com.example.article):
+					Author: (+)
+					Published: (1) DATE
+					Body: (1) MARKDOWN
+
+	Code >>
+		Article (com.example.article): Style guide
+			Author: Ana López
+			Published: 2026-09-01
+			Body >>
+				Write **short** sentences. Prefer [links](https://example.com) to footnotes.
+
+	Content >>
+		`MARKDOWN` es el único formato embebido que define la capa de esquemas,
+		precisamente porque los dos lenguajes se reparten el trabajo: un nodo declarado
+		con ese tipo marca su texto como prosa con formato, a interpretar como CommonMark,
+		y la forma cruda sigue siendo legible
+		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)). El validador garantiza ahora lo
+		que el front matter solo podía sugerir: el autor está, la fecha es una fecha, el
+		cuerpo es exactamente un bloque.
+
+	Subheader: Una estructura que Markdown no puede comprobar
+
+	Content >>
+		El reparto escala más allá de un artículo. Este portal es el ejemplo en
+		funcionamiento: cada página de `stxt.dev` — esta incluida — es un documento @STXT@
+		cuyos bloques de prosa son Markdown, validado contra la plantilla del sitio antes
+		de que un generador lo renderice, como describe el caso de uso de
+		[CMS y publicaciones](use-cases-cms). Añade `.stxt` a la dirección de cualquier
+		página para leer la fuente.
+
+	Subheader: Cuándo usar cada uno
+
+	Content >>
+		Para un README, un comentario, un gist — prosa con formato ligero y sin contrato —,
+		Markdown solo es la herramienta correcta, y @STXT@ no añadiría nada.
+
+		Recurre a @STXT@ cuando el documento tiene partes que merecen nombre y
+		comprobación: [artículos en un pipeline](use-cases-cms),
+		[registros corporativos](use-cases-corporate-docs),
+		[propuestas técnicas](use-cases-rfcs). La prosa de dentro sigue siendo Markdown;
+		la estructura de alrededor se vuelve explícita y validada. El
+		[tutorial](tutorial) recorre el lenguaje en quince secciones breves, el
+		[playground](https://play.stxt.dev) ejecuta el ejemplo de arriba, y la versión
+		corta de esta página está en la [FAQ](faq#por-que-no-markdown).

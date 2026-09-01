@@ -1,34 +1,36 @@
-Document (dev.stxt.website): STXT
+Document (dev.stxt.website): STXT — A Human-First markup language for structured documents
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Last modif: 2026-09-01
 		Description: STXT is a human-first markup language for structured documents and data: no braces, no closing tags, just indentation. Readable by people, reliable for machines.
 
-	Header: @STXT@: Introduction 
+	Header: @STXT@: Introduction
 
 	Assert >>
-		@STXT@ is a **Human-First** language, where documents 
-		are readable and expressive,\\ 
-		and at the same time reliable for machines.
-		
+		@STXT@ is a **Human-First** markup language, where documents
+		are readable and expressive, and at the same time reliable for machines.
+
 	Content >>
 		> @STXT@ is pronounced "ESS-text" — first the letter `S`, then `text`, like _S-TEXT_.
 
 	Subheader: Documents
-	
+
 	Content >>
-		@STXT@ is a structured, indentation-based text language aimed at:
-		
+		@STXT@ is a human-readable markup language for structured documents and data: no
+		braces, no closing tags, no escape characters — just names, values and indentation.
+		It is aimed at:
+
 		* Representing documents and data clearly.
 		* Being simple to read and write.
 		* Being trivial to parse in any programming language.
 		* Allowing both structured content and free text.
 		* Applying content rules via `@stxt.schema` or `@stxt.template`.
-	
-		An @STXT@ document combines readability with an explicit semantic structure,
-		which makes it suitable for documents, wikis, and configurations:
-	
+
+		An @STXT@ document combines readability with an explicit semantic structure, which
+		makes it suitable for [corporate documents](use-cases-corporate-docs),
+		[CMS content](use-cases-cms) and [configuration files](use-cases-config-files):
+
 	Code >>
 		# A simple email, no validation
 		Email:
@@ -41,13 +43,20 @@ Document (dev.stxt.website): STXT
 				Hello Mery!
 				The book is finished!
 
+	Content >>
+		Two rules carry most of the language. **Indentation is the structure**: one tab or
+		four spaces per level, and the hierarchy on screen is the hierarchy of the document.
+		And **free text is literal**: everything indented under a `>>` node is text exactly
+		as written, with no escapes and no quotes. The [tutorial](tutorial) covers the rest
+		in fifteen short sections.
+
 	Subheader: Documents with namespace and schemas
-	
+
 	Content >>
 		@STXT@ allows the use of namespaces to group documents.
 		Schemas or templates can also be defined
 		to validate the content of a document.
-		
+
 		An `Email` document from the `com.example.docs` namespace, together with the template
 		that validates it:
 
@@ -73,3 +82,42 @@ Document (dev.stxt.website): STXT
 					Title: (?)
 					Body Content: (1) TEXT
 					Metadata (org.example.meta): (?)
+
+	Content >>
+		Validation is optional and belongs to the language itself: the template above is
+		@STXT@ too. A validating tool checks that every node is declared, that cardinalities
+		hold and that typed values — dates, numbers, email addresses — are well formed; the
+		closed content model rejects a misspelled field instead of accepting it silently.
+		How documents, definitions and tools fit together in a project is described in
+		[The working environment](working-environment).
+
+	Subheader: How it compares
+
+	Content >>
+		@STXT@ shares ground with the usual structured-text formats, and the comparison with
+		each one has its own page. [YAML](stxt-vs-yaml) is also indentation-based, but
+		optimizes for data serialization rather than for documents; [JSON](stxt-vs-json) is
+		a machine format, not meant to be written by hand; [XML](stxt-vs-xml) offers
+		validation at the price of verbosity; and [Markdown](stxt-vs-markdown) formats
+		prose but does not structure data — the two complement each other. The short
+		version of all four, plus TOML, is in the
+		[FAQ](faq#why-not-xml-yaml-or-toml), and the reasoning behind the design is in
+		[Design principles](design-principles).
+
+	Subheader: Where to start
+
+	Content >>
+		* **Read the [tutorial](tutorial)**: a complete document on the first screen, one
+		  rule per section after it.
+		* **Open the [playground](https://play.stxt.dev)**: editor, validation and examples
+		  in the browser, with nothing to install.
+		* **Browse the use cases**: [corporate documents](use-cases-corporate-docs),
+		  [AI and LLMs](ai-llms), [CMS and publishing](use-cases-cms),
+		  [configuration files](use-cases-config-files), [RFCs](use-cases-rfcs) and
+		  [contracts](use-cases-contracts).
+		* **Install the [tools](tools)**: the `stxt` command line, the VS Code extension and
+		  the TypeScript, Java and Python libraries.
+
+		The language is stable: version 1.0 froze the syntax, the canonical tree and the
+		error codes. The exact promise is spelled out in
+		[Stability and versions](stability), and the [FAQ](faq) answers the rest.

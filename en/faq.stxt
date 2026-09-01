@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Frequently asked questions
+Document (dev.stxt.website): Frequently asked questions — STXT
 
 	Metadata:
 		Author: Joan Costa Mombiela
@@ -92,7 +92,8 @@ Document (dev.stxt.website): Frequently asked questions
 		the `.stxt` link in the header opens the source of the current page, and appending
 		`.stxt` to any page's address returns its code as is — for example,
 		[faq.stxt](faq.stxt) is the source of this very page. The generator is public too:
-		[stxt-cms](https://github.com/stxt-lang/stxt-cms).
+		[stxt-cms](https://github.com/stxt-lang/stxt-cms). How a CMS exploits @STXT@ as
+		its source format is developed in [CMS and publishing](use-cases-cms).
 
 	Subheader: Why not...?
 
@@ -111,6 +112,9 @@ Document (dev.stxt.website): Frequently asked questions
 		| **Attack surface** | No entities, references, anchors or code execution ([STXT-SPEC §15](stxt-core-ref#s15)) | External entities (XXE) and entity expansion | Expandable anchors and tags that instantiate objects | Small |
 		| **Free text** | Literal `>>` blocks: any character, no escapes | Escape `<` and `&`, or CDATA | Block scalars with subtle indentation and chomping rules | Multi-line strings between triple quotes |
 
+		The comparison with each format is developed on its own page:
+		[STXT vs XML](stxt-vs-xml) and [STXT vs YAML](stxt-vs-yaml).
+
 
 	Subsubheader: Why not Markdown?
 
@@ -121,7 +125,8 @@ Document (dev.stxt.website): Frequently asked questions
 		that is why they work together. In fact, `MARKDOWN` is the only embedded format the
 		schemas define: a node declared with that type marks its text as formatted prose, to
 		be interpreted as CommonMark, and its raw form remains readable.
-		See [STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7).
+		See [STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7); the division of work between
+		the two is developed in [STXT vs Markdown](stxt-vs-markdown).
 
 	Code >>
 		Article: Style guide
@@ -136,7 +141,9 @@ Document (dev.stxt.website): Frequently asked questions
 		machines. Everything goes between quotes, braces and commas; line breaks are written
 		`\n`; there are no comments, and a long text ends up on a single line full of
 		escapes. None of that is a flaw —JSON promises nothing else—, but it rules it out as
-		a Human-First format.
+		a Human-First format. The [STXT vs JSON](stxt-vs-json) page develops the
+		comparison — and the reverse path: the canonical JSON tree every @STXT@ tool can
+		emit.
 
 	Subsubheader: Why are there no lists?
 
@@ -443,7 +450,8 @@ Document (dev.stxt.website): Frequently asked questions
 		CI job fails on its own. `--format json` produces machine-readable output. If the CI
 		environment must not depend on the contents of `~/.stxt` or `/etc/stxt`,
 		`STXT_PATH=./.stxt` pins the resolution chain. Details on the [Tools](tools)
-		page.
+		page; the [configuration files](use-cases-config-files) use case shows the same
+		check guarding a deployment.
 
 	Subsubheader: Is there a canonical representation of an STXT document?
 

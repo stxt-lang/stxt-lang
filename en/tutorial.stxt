@@ -578,6 +578,11 @@ Document (dev.stxt.website): STXT Tutorial
 		  validating from the terminal and in continuous integration.
 		* [Design principles](design-principles): why the language is the way it is.
 		* [FAQ](faq): short answers with a link to the rule.
+		* The use cases, each with its documents and its template:
+		  [corporate documents](use-cases-corporate-docs), [AI and LLMs](ai-llms),
+		  [CMS and publishing](use-cases-cms),
+		  [configuration files](use-cases-config-files), [RFCs](use-cases-rfcs) and
+		  [contracts](use-cases-contracts).
 		* The specifications: [STXT-SPEC](stxt-core-ref) for the syntax,
 		  [STXT-SCHEMA-SPEC](stxt-schema-ref) and [STXT-TEMPLATE-SPEC](stxt-template-ref) for
 		  validation, [STXT-DISCOVERY-SPEC](stxt-discovery-ref) for where definitions are

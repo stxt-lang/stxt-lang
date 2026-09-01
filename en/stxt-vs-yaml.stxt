@@ -1,0 +1,163 @@
+Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
+	Metadata:
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-09-01
+		Description: STXT and YAML compared: indentation rules, implicit typing, block scalars, attack surface and validation. When each format is the right choice.
+
+	Header: @STXT@ vs YAML
+
+	Assert >>
+		Both languages are built on indentation, but they optimize for different things:\\
+		YAML for serializing data structures, @STXT@ for documents written and read by people.
+
+	Content >>
+		YAML is not a mistake, and this page is not a takedown: it is the de facto standard
+		of a whole generation of infrastructure tooling, and where an ecosystem expects
+		YAML, YAML is the right answer. The comparison is about design: what each language
+		asks of the person writing it, and what it gives back.
+
+	Subheader: The same content, twice
+
+	Content >>
+		A small service descriptor in YAML:
+
+	Listing >>
+		service: billing
+		replicas: 2
+		ports:
+		  - 8080
+		  - 8443
+		maintainer: ana@example.com
+		notes: |
+		  Restarted after the 2026-08-31 incident.
+		  The TLS certificate expires on 2027-03-01.
+
+	Content >>
+		And in @STXT@:
+
+	Code >>
+		Service:
+			Name: billing
+			Replicas: 2
+			Port: 8080
+			Port: 8443
+			Maintainer: ana@example.com
+			Notes >>
+				Restarted after the 2026-08-31 incident.
+				The TLS certificate expires on 2027-03-01.
+
+	Content >>
+		The two documents look alike, and that resemblance is the point of the comparison:
+		the differences are in the rules behind the indentation, not in the surface.
+
+	Subheader: The rules a person must remember
+
+	Content >>
+		YAML is easy to read and hard to know. Its specification is one of the largest of
+		any text format, and the surface hides decisions that change the meaning of a value:
+
+		* **Implicit typing.** `no` is a boolean in YAML 1.1 and a string in 1.2; `1.20` is
+		  a number and loses its trailing zero; a version like `3.10` means something
+		  different from `"3.10"`. Whether quotes are needed depends on the content of the
+		  value.
+		* **Two syntaxes for collections.** Block style and flow style (`[a, b]`, `{k: v}`)
+		  coexist, and real documents mix them.
+		* **Anchors, aliases and tags.** References (`&a`, `*a`) and type tags (`!!`) are
+		  part of the language, although most documents never use them.
+		* **Indentation is flexible.** Any number of spaces per level, decided document by
+		  document; tabs are forbidden.
+
+		@STXT@ keeps the rules on one page, and none of them depends on the content:
+
+		* **A value is always text.** `no`, `1.20` and `3.10` are the characters written,
+		  with no quotes and no exceptions. Types exist, but they are declared in the
+		  [schema](stxt-schema-ref), not guessed by the parser.
+		* **One node form, two separators.** `Name: value` for structure, `Name >>` for
+		  literal text. There is no second syntax for the same thing: a list is a repeated
+		  child, as the [FAQ](faq#why-are-there-no-lists) develops.
+		* **Fixed indentation.** One tab or four spaces per level, the same in every
+		  document; mixing them in one line is a parse error, not a convention.
+
+	Subheader: Free text
+
+	Content >>
+		Both languages can embed multi-line text, and the difference in mechanism is
+		representative. YAML block scalars combine three decisions — literal `|` or folded
+		`>`, chomping `-`/`+`, and an optional indentation indicator — and the resulting
+		string depends on all of them. @STXT@ has one construct: everything indented under
+		a `>>` node is text exactly as written, with no variants, no escapes and no
+		interpretation. Trailing whitespace and trailing blank lines are trimmed, and the
+		rule is the same for a two-line note and for a twenty-page contract
+		([STXT-SPEC §10](stxt-core-ref#s10)).
+
+	Subheader: Parsing and the attack surface
+
+	Content >>
+		A conforming YAML parser is a large project, and in practice parsers disagree on
+		edge cases; loading a document with the wrong API has historically meant object
+		instantiation (tags) and memory exhaustion (anchor expansion, the "billion laughs"
+		attack). None of this makes YAML unusable — mature libraries have safe modes — but
+		it is surface a document format does not need.
+
+		@STXT@ removes the surface instead of mitigating it: no entities, no references, no
+		anchors, no inclusion, no code execution, and parsing is linear, line by line, in a
+		single pass. A conforming parser is written in days and behaves the same in every
+		implementation, which is what the [conformance corpus](stability) certifies.
+		The threat model is normative: [STXT-SPEC §15](stxt-core-ref#s15).
+
+	Subheader: Validation
+
+	Content >>
+		YAML has no native schema layer: validation is delegated to external tools and
+		conventions from other ecosystems. In @STXT@ the schema layer is part of the
+		language, optional and closed. The descriptor above, validated:
+
+	Code >>
+		Template (@stxt.template): com.example.deploy
+			Structure >>
+				Service (com.example.deploy):
+					Name: (1)
+					Replicas: (1) NATURAL
+					Port: (+) NATURAL
+					Maintainer: (1) EMAIL
+					Notes: (?) TEXT
+
+	Code >>
+		Service (com.example.deploy):
+			Name: billing
+			Replicas: 2
+			Port: 8080
+			Port: 8443
+			Maintainer: ana@example.com
+			Notes >>
+				The TLS certificate expires on 2027-03-01.
+
+	Content >>
+		A misspelled field, a missing port or `Replicas: two` fail with an explicit error
+		code instead of reaching production as a string:
+
+	Code >>
+		# ERROR: Replicas requires a NATURAL value
+		Service (com.example.deploy):
+			Name: billing
+			Replicas: two
+			Port: 8080
+			Maintainer: ana@example.com
+
+	Subheader: When to use which
+
+	Content >>
+		Use YAML where the ecosystem already speaks it: Kubernetes manifests, CI pipelines,
+		tool configuration read mostly by machines and templated by other machines.
+
+		@STXT@ is the better fit when people write and read the files: configuration with
+		long prose notes, [corporate documents](use-cases-corporate-docs),
+		[content for a CMS](use-cases-cms), and any document worth validating against an
+		agreed structure. The [configuration files](use-cases-config-files) use case
+		develops the closest scenario in detail.
+
+		To see the language itself, start with the [tutorial](tutorial) or paste the
+		examples above into the [playground](https://play.stxt.dev); the short version of
+		this comparison, next to XML and TOML, is in the
+		[FAQ](faq#why-not-xml-yaml-or-toml).

@@ -1,4 +1,4 @@
-Document (dev.stxt.website): RFCs and technical proposals
+Document (dev.stxt.website): RFCs and technical proposals — STXT
 
 	Metadata:
 		Author: Claude Fable 5
@@ -114,7 +114,7 @@ Document (dev.stxt.website): RFCs and technical proposals
 							Text: (1) TEXT
 
 	Content >>
-		The template fixes the minimum every proposal must have —identifier, title, status,
+		The [template](stxt-template-ref) fixes the minimum every proposal must have —identifier, title, status,
 		at least one author, context and proposal— and leaves the rest optional: a draft
 		may not have alternatives yet, and an accepted one will have a decision and
 		consequences. What it does not do is restrict the text: a `TEXT` block admits any
@@ -212,9 +212,10 @@ Document (dev.stxt.website): RFCs and technical proposals
 	Content >>
 		* Proposals live in a directory of the repository, one per file, with the template
 		  in `.stxt/`.
-		* Continuous integration runs `stxt validate rfcs/` on every change: a proposal
-		  without context or with a status outside the list does not get in.
-		* A script over the canonical tree generates the index of proposals by status,
+		* Continuous integration runs `stxt validate rfcs/`
+		  ([The command line](tools-cli)) on every change: a proposal without context or
+		  with a status outside the list does not get in.
+		* A script over the [canonical tree](stxt-tree-ref) generates the index of proposals by status,
 		  warns about those that have been in `Review` for more than a month, or lists the
 		  consequences of all the ones accepted in the quarter.
 		* The text of each section is published as is, in whatever format the organization
@@ -229,3 +230,7 @@ Document (dev.stxt.website): RFCs and technical proposals
 		discussion, not a threading system with notifications. And validation does not
 		check relations between documents —that `RFC-007` exists, that an accepted proposal
 		does not cite a rejected one—: that is done by the script that walks the directory.
+
+		Minutes and status reports, the neighbouring genre, are developed in
+		[Corporate documents](use-cases-corporate-docs); the [tutorial](tutorial) covers
+		the language behind the examples.

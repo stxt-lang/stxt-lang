@@ -1,0 +1,97 @@
+Document (dev.stxt.website): STXT frente a JSON — Documentos a mano frente a serialización
+	Metadata:
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-09-01
+		Description: STXT y JSON comparados: escritura a mano, comentarios, texto multilínea y validación — y cómo todo documento STXT tiene un árbol JSON canónico.
+
+	Header: @STXT@ frente a JSON
+
+	Assert >>
+		JSON es un formato de serialización para máquinas; @STXT@, un lenguaje de marcado para personas.\\
+		No son rivales: todo documento @STXT@ tiene un árbol JSON canónico.
+
+	Content >>
+		JSON hace su trabajo excepcionalmente bien: una gramática mínima, un solo modelo de
+		datos, parsers en todas partes, y la lengua franca de cualquier API. La comparación
+		solo tiene sentido en el punto donde los dos se solapan — un fichero que una
+		persona tiene que escribir y mantener a mano —, porque ese es el trabajo que JSON
+		nunca prometió hacer.
+
+	Subheader: El mismo contenido, dos veces
+
+	Content >>
+		La ficha de un artículo en JSON:
+
+	Json >>
+		{
+			"article": {
+				"title": "Modern Software Architecture",
+				"published": "2026-09-01",
+				"tags": ["software", "architecture"],
+				"summary": "A survey of monoliths and microservices.\nSecond line, with \"quotes\"."
+			}
+		}
+
+	Content >>
+		Y en @STXT@:
+
+	Code >>
+		Article: Modern Software Architecture
+			Published: 2026-09-01
+			Tag: software
+			Tag: architecture
+			Summary >>
+				A survey of monoliths and microservices.
+				Second line, with "quotes".
+
+	Subheader: Qué los separa al escribir a mano
+
+	Content >>
+		Cada diferencia de abajo es una decisión deliberada de JSON que sirve a la
+		serialización, y estorba a la autoría:
+
+		* **Todo va entrecomillado y delimitado.** Claves y cadenas entre comillas,
+		  objetos entre llaves, elementos entre comas — con la coma final como fuente
+		  permanente de fricción. En @STXT@ la estructura es la indentación y un nombre
+		  termina en `:`.
+		* **Sin comentarios.** La exclusión es intencionada en JSON; en un fichero
+		  mantenido a mano es lo primero que se echa de menos. @STXT@ tiene comentarios
+		  con `#`, y las herramientas los conservan al formatear.
+		* **Un texto es una línea.** Los saltos se escriben `\n`, las comillas se escapan,
+		  y un párrafo se convierte en una cadena ilegible. En @STXT@ un bloque `>>`
+		  contiene el texto literal, tan largo como haga falta.
+		* **Sin esquemas en el lenguaje.** JSON Schema existe, pero es una especificación
+		  aparte, escrita en el propio JSON y bastante más difícil que el formato que
+		  valida. La capa de [plantillas](stxt-template-ref) de @STXT@ forma parte del
+		  lenguaje y se lee como el documento que describe.
+
+	Subheader: De @STXT@ a JSON
+
+	Content >>
+		@STXT@ no compite con JSON como formato de intercambio: compila a él.
+		[STXT-TREE-SPEC](stxt-tree-ref) define la representación JSON canónica de todo
+		documento válido — un array de nodos raíz con `name`, `canonicalName`,
+		`namespace`, y `value` más `children`, o `lines` —, idéntica en todas las
+		implementaciones. El comando `stxt describe fichero.stxt` la imprime, y las tres
+		bibliotecas la exponen en su API, así que todo lo que venga detrás esperando JSON
+		sigue funcionando. La fuente queda legible; la serialización queda mecánica.
+
+	Subheader: Cuándo usar cada uno
+
+	Content >>
+		Usa JSON para lo que intercambian las máquinas: cargas de API, estado serializado,
+		artefactos generados que nadie edita. Su ubicuidad es la característica, y @STXT@
+		no intenta sustituirlo ahí.
+
+		Escribe @STXT@ cuando hay una persona en alguno de los dos extremos del fichero:
+		documentos, [configuración](use-cases-config-files),
+		[registros corporativos](use-cases-corporate-docs),
+		[contenido que alimenta un pipeline](use-cases-cms) — y deja que las herramientas
+		emitan el árbol canónico donde se espere JSON. El caso de uso de
+		[IA y LLMs](ai-llms) enseña esa ruta de punta a punta: documentos generados
+		legibles, validados, consumidos como JSON.
+
+		Para ver el lenguaje, empieza por el [tutorial](tutorial) o abre los ejemplos en
+		el [playground](https://play.stxt.dev); la versión de un párrafo de esta página
+		está en la [FAQ](faq#por-que-no-json).

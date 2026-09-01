@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Contracts and legal agreements
+Document (dev.stxt.website): Contracts and legal agreements — STXT
 
 	Metadata:
 		Author: Claude Fable 5
@@ -149,8 +149,8 @@ Document (dev.stxt.website): Contracts and legal agreements
 							Date: (1) DATE
 
 	Content >>
-		What the template guarantees is what a legal review checks first, and the editor
-		checks it while typing:
+		What the [template](stxt-template-ref) guarantees is what a legal review checks
+		first, and the editor checks it while typing:
 
 		* An agreement has **at least two parties** (`(2+)`), each with its role.
 		* Dates are valid dates and the amount is a number; `Fee: 12,000 €` does not pass.
@@ -237,10 +237,10 @@ Document (dev.stxt.website): Contracts and legal agreements
 		* **Standard clauses**: the legal department maintains its approved clauses as text
 		  fragments; a contract incorporates them by copying, and a script compares each
 		  clause with the approved version and flags the ones that differ.
-		* **Validation**: `stxt validate contracts/` in continuous integration rejects an
-		  agreement without parties, without a valid date or with a status outside the
-		  list.
-		* **Extraction**: from the canonical tree come the quarter's expiries, the amounts
+		* **Validation**: `stxt validate contracts/` ([The command line](tools-cli)) in
+		  continuous integration rejects an agreement without parties, without a valid
+		  date or with a status outside the list.
+		* **Extraction**: from the [canonical tree](stxt-tree-ref) come the quarter's expiries, the amounts
 		  per client or the SLAs with a target below 99.9 %, without reading a single
 		  contract.
 		* **Publishing**: the PDF or the signable document is generated from the file,
@@ -256,3 +256,8 @@ Document (dev.stxt.website): Contracts and legal agreements
 		application that models it as data, can evaluate it. And the template does not
 		check consistency between fields —that `End` is after `Start`, that the SLA cites a
 		contract that exists—: that is the job of the script that walks the repository.
+
+		The same data-inside-text approach, for lighter documents, is developed in
+		[Corporate documents](use-cases-corporate-docs); [STXT vs XML](stxt-vs-xml)
+		compares the closest format for this kind of normative source, and the
+		[tutorial](tutorial) covers the language itself.

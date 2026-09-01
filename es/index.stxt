@@ -1,34 +1,37 @@
-Document (dev.stxt.website): STXT
+Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para documentos
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Last modif: 2026-09-01
 		Description: STXT es un lenguaje de marcado Human-First para documentos y datos: sin llaves ni etiquetas, solo indentación. Legible para personas, fiable para máquinas.
 
-	Header: @STXT@: Introducción 
+	Header: @STXT@: Introducción
 
 	Assert >>
-		@STXT@ es un lenguaje **Human-First**, donde los documentos 
-		son legibles y expresivos,\\ 
-		y al mismo tiempo fiables para máquinas.
-		
+		@STXT@ es un lenguaje de marcado **Human-First**, donde los documentos
+		son legibles y expresivos, y al mismo tiempo fiables para máquinas.
+
 	Content >>
 		> @STXT@ se pronuncia "ESS-text o ESE-text" — primero la letra `S`, después `text`, como _S-TEXT_.
 
 	Subheader: Documentos
-	
+
 	Content >>
-		@STXT@ es un lenguaje de texto estructurado, basado en indentación, orientado a:
-		
+		@STXT@ es un lenguaje de marcado legible para personas, pensado para documentos y
+		datos estructurados: sin llaves, sin etiquetas de cierre, sin caracteres de escape —
+		solo nombres, valores e indentación. Está orientado a:
+
 		* Representar documentos y datos de manera clara.
 		* Ser sencillo de leer y escribir.
 		* Ser trivial de parsear en cualquier lenguaje de programación.
 		* Permitir tanto contenido estructurado como texto libre.
 		* Aplicar reglas de contenido mediante `@stxt.schema` o `@stxt.template`.
-	
+
 		Un documento @STXT@ combina la legibilidad con una estructura semántica explícita,
-		lo que lo hace adecuado para documentos, wikis y configuraciones:
-	
+		lo que lo hace adecuado para [documentos corporativos](use-cases-corporate-docs),
+		[contenido de un CMS](use-cases-cms) y
+		[ficheros de configuración](use-cases-config-files):
+
 	Code >>
 		# Un email sencillo, sin validación
 		Email:
@@ -41,13 +44,20 @@ Document (dev.stxt.website): STXT
 				Hello Mery!
 				The book is finished!
 
+	Content >>
+		Dos reglas sostienen casi todo el lenguaje. **La indentación es la estructura**: un
+		tabulador o cuatro espacios por nivel, y la jerarquía en pantalla es la jerarquía
+		del documento. Y **el texto libre es literal**: todo lo indentado bajo un nodo `>>`
+		es texto tal como se escribió, sin escapes ni comillas. El [tutorial](tutorial)
+		recorre el resto en quince secciones breves.
+
 	Subheader: Documentos con namespace y esquemas
-	
+
 	Content >>
 		@STXT@ permite el uso de namespaces para agrupar documentos.
 		Se pueden definir además esquemas o plantillas
 		para validar el contenido de un documento.
-		
+
 		Un documento `Email` del namespace `com.example.docs`, junto a la plantilla que lo
 		valida:
 
@@ -73,3 +83,43 @@ Document (dev.stxt.website): STXT
 					Title: (?)
 					Body Content: (1) TEXT
 					Metadata (org.example.meta): (?)
+
+	Content >>
+		La validación es opcional y forma parte del propio lenguaje: la plantilla de arriba
+		también es @STXT@. Una herramienta de validación comprueba que cada nodo está
+		declarado, que las cardinalidades se cumplen y que los valores con tipo — fechas,
+		números, direcciones de correo — están bien formados; el modelo de contenido cerrado
+		rechaza un campo mal escrito en lugar de aceptarlo en silencio. Cómo encajan
+		documentos, definiciones y herramientas en un proyecto se describe en
+		[El entorno de trabajo](working-environment).
+
+	Subheader: Comparado con otros formatos
+
+	Content >>
+		@STXT@ comparte terreno con los formatos de texto estructurado habituales, y la
+		comparación con cada uno tiene su propia página. [YAML](stxt-vs-yaml) también se
+		basa en la indentación, pero optimiza para la serialización de datos antes que para
+		los documentos; [JSON](stxt-vs-json) es un formato para máquinas, no pensado para
+		escribirse a mano; [XML](stxt-vs-xml) ofrece validación al precio de la verbosidad;
+		y [Markdown](stxt-vs-markdown) da formato a la prosa pero no estructura los datos —
+		ambos se complementan. La versión corta de los cuatro, más TOML, está en la
+		[FAQ](faq#por-que-no-xml-yaml-o-toml), y el razonamiento de fondo, en
+		[Principios de diseño](design-principles).
+
+	Subheader: Por dónde empezar
+
+	Content >>
+		* **Leer el [tutorial](tutorial)**: un documento completo en la primera pantalla, y
+		  una regla por sección después.
+		* **Abrir el [playground](https://play.stxt.dev)**: editor, validación y ejemplos en
+		  el navegador, sin instalar nada.
+		* **Recorrer los casos de uso**: [documentos corporativos](use-cases-corporate-docs),
+		  [IA y LLMs](ai-llms), [CMS y publicaciones](use-cases-cms),
+		  [ficheros de configuración](use-cases-config-files), [RFCs](use-cases-rfcs) y
+		  [contratos](use-cases-contracts).
+		* **Instalar las [herramientas](tools)**: la línea de comandos `stxt`, la extensión
+		  de VS Code y las bibliotecas TypeScript, Java y Python.
+
+		El lenguaje es estable: la versión 1.0 congeló la sintaxis, el árbol canónico y los
+		códigos de error. La promesa exacta está en
+		[Estabilidad y versiones](stability), y la [FAQ](faq) responde el resto.

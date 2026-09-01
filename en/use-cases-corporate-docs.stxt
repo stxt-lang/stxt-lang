@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Corporate documents
+Document (dev.stxt.website): Corporate documents — STXT
 
 	Metadata:
 		Author: Claude Fable 5
@@ -101,8 +101,8 @@ Document (dev.stxt.website): Corporate documents
 	Subheader: The template
 
 	Content >>
-		A template fixes what every set of minutes must have and what is optional, and
-		narrows the statuses:
+		A [template](stxt-template-ref) fixes what every set of minutes must have and what
+		is optional, and narrows the statuses:
 
 	Code >>
 		Template (@stxt.template): com.acme.corp.minutes
@@ -140,7 +140,7 @@ Document (dev.stxt.website): Corporate documents
 		  written any other way (`Approved.`, `open`) is an error, not a variant.
 		* Dates are dates: `2026-01-32` does not pass.
 		* A node that is not in the template —`Atendees` with a single `t`, a `Priority`
-		  someone added on their own— is rejected. That is the closed content model: the
+		  someone added on their own— is rejected. That is the [closed content model](stxt-schema-ref#s6): the
 		  template is the complete list of what may appear.
 		* `Id` and `Owner` are declared once and reused with `@Id` and `@Owner`: within a
 		  namespace, a node name identifies a single node. By the same rule, the status of a
@@ -225,7 +225,7 @@ Document (dev.stxt.website): Corporate documents
 		* **Continuous integration**: `stxt validate --recursive minutes/` rejects incomplete
 		  minutes or an invalid status before they reach the repository
 		  ([The command line](tools-cli)).
-		* **Exploitation**: the canonical tree (`stxt describe`, or the library of each
+		* **Exploitation**: the [canonical tree](stxt-tree-ref) (`stxt describe`, or the library of each
 		  language) feeds whatever is needed: the list of open actions per person, a weekly
 		  summary by email, a dashboard with every project's traffic light.
 
@@ -241,3 +241,9 @@ Document (dev.stxt.website): Corporate documents
 		validate rules between fields —that an action in `Done` status has no future date,
 		for instance—: that logic belongs to the application that exploits the data, not to
 		the template.
+
+		The neighbouring genres follow the same approach:
+		[RFCs and technical proposals](use-cases-rfcs) for documents with a life cycle,
+		and [contracts](use-cases-contracts) where the data lives inside normative text.
+		The language behind the examples is covered, rule by rule, in the
+		[tutorial](tutorial).

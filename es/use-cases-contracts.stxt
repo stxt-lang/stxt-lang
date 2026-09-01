@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Contratos y acuerdos legales
+Document (dev.stxt.website): Contratos y acuerdos legales — STXT
 
 	Metadata:
 		Author: Claude Fable 5
@@ -149,8 +149,8 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 							Date: (1) DATE
 
 	Content >>
-		Lo que la plantilla garantiza es lo que una revisión legal comprueba primero, y lo
-		comprueba el editor al escribir:
+		Lo que la [plantilla](stxt-template-ref) garantiza es lo que una revisión legal
+		comprueba primero, y lo comprueba el editor al escribir:
 
 		* Un acuerdo tiene **al menos dos partes** (`(2+)`), cada una con su papel.
 		* Las fechas son fechas válidas y el importe es un número; `Fee: 12.000 €` no pasa.
@@ -236,9 +236,10 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 		* **Cláusulas estándar**: el departamento legal mantiene sus cláusulas aprobadas
 		  como fragmentos de texto; un contrato las incorpora copiándolas, y un script
 		  compara cada cláusula con la versión aprobada y señala las que difieren.
-		* **Validación**: `stxt validate contracts/` en integración continua rechaza un
-		  acuerdo sin partes, sin fecha válida o con un estado fuera de la lista.
-		* **Extracción**: del árbol canónico salen los vencimientos del trimestre, los
+		* **Validación**: `stxt validate contracts/` ([La línea de comandos](tools-cli))
+		  en integración continua rechaza un acuerdo sin partes, sin fecha válida o con un
+		  estado fuera de la lista.
+		* **Extracción**: del [árbol canónico](stxt-tree-ref) salen los vencimientos del trimestre, los
 		  importes por cliente o los SLA con objetivo inferior al 99,9 %, sin leer un solo
 		  contrato.
 		* **Publicación**: el PDF o el documento firmable se genera a partir del fichero,
@@ -254,3 +255,8 @@ Document (dev.stxt.website): Contratos y acuerdos legales
 		que la modele como datos, puede evaluarla. Y la plantilla no comprueba coherencia
 		entre campos —que `End` sea posterior a `Start`, que el SLA cite un contrato que
 		exista—: eso es trabajo del script que recorre el repositorio.
+
+		El mismo enfoque de datos dentro del texto, para documentos más ligeros, se
+		desarrolla en [Documentos corporativos](use-cases-corporate-docs);
+		[STXT frente a XML](stxt-vs-xml) compara el formato más cercano para este tipo de
+		fuente normativa, y el [tutorial](tutorial) recorre el lenguaje en sí.

@@ -1,4 +1,4 @@
-Document (dev.stxt.website): IA y LLMs — Documentos generados y verificables
+Document (dev.stxt.website): IA y LLMs — Documentos STXT generados y verificables
 
 	Metadata:
 		Author: Claude Fable 5
@@ -42,10 +42,10 @@ Document (dev.stxt.website): IA y LLMs — Documentos generados y verificables
 
 	Content >>
 		Cuando un LLM genera Markdown, no hay nada contra lo que comprobar el resultado.
-		Cuando genera @STXT@ con una plantilla:
+		Cuando genera @STXT@ con una [plantilla](stxt-template-ref):
 
 		* El parser valida la salida inmediatamente.
-		* El **modelo de contenido cerrado** rechaza los nombres de nodo no declarados.
+		* El **[modelo de contenido cerrado](stxt-schema-ref#s6)** rechaza los nombres de nodo no declarados.
 		* Los `ENUM` y las cardinalidades rechazan los valores inventados.
 		* Los tipos (`DATE`, `EMAIL`, `NUMBER`...) rechazan los formatos incorrectos.
 
@@ -154,7 +154,7 @@ Document (dev.stxt.website): IA y LLMs — Documentos generados y verificables
 
 	Content >>
 		Para documentos con texto libre extenso, @STXT@ es una superficie
-		de salida más fiable que JSON o YAML.
+		de salida más fiable que [JSON](stxt-vs-json) o [YAML](stxt-vs-yaml).
 
 	Subheader: La normalización absorbe la varianza
 
@@ -184,9 +184,11 @@ Document (dev.stxt.website): IA y LLMs — Documentos generados y verificables
 
 	Content >>
 		* **CMS con contenido asistido por IA**: el build rechaza las páginas
-		  generadas incompletas o incoherentes antes de publicarlas.
+		  generadas incompletas o incoherentes antes de publicarlas
+		  ([CMS y publicaciones](use-cases-cms)).
 		* **Extracción de datos**: convertir texto libre (emails, informes,
-		  actas) en documentos @STXT@ validables contra una plantilla.
+		  actas) en documentos @STXT@ validables contra una plantilla
+		  ([Documentos corporativos](use-cases-corporate-docs)).
 		* **Informes y documentación generada**: estructura validada,
 		  prosa libre dentro de los bloques `>>`.
 		* **Agentes y pipelines**: @STXT@ como formato de intercambio entre

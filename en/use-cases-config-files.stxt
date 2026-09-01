@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Configuration files
+Document (dev.stxt.website): Configuration files — STXT
 
 	Metadata:
 		Author: Claude Fable 5
@@ -73,8 +73,8 @@ Document (dev.stxt.website): Configuration files
 	Subheader: The template
 
 	Content >>
-		The template makes explicit what the program loading the configuration takes for
-		granted:
+		The [template](stxt-template-ref) makes explicit what the program loading the
+		configuration takes for granted:
 
 	Code >>
 		Template (@stxt.template): com.acme.server
@@ -104,7 +104,8 @@ Document (dev.stxt.website): Configuration files
 					Notes: (?) TEXT
 
 	Content >>
-		With it, the typical configuration errors stop being silent:
+		With it, the typical configuration errors stop being silent
+		([closed content model](stxt-schema-ref#s6)):
 
 		* `Ports: 8080` (with an extra `s`) is `CHILD_NOT_DECLARED`, not an ignored key that
 		  leaves the service listening on the default port.
@@ -115,7 +116,7 @@ Document (dev.stxt.website): Configuration files
 
 		And all of that is visible in the editor, underlined, before the file is saved. In
 		continuous integration, `stxt validate config/` performs the same check and stops
-		the deployment of an invalid configuration.
+		the deployment of an invalid configuration ([The command line](tools-cli)).
 
 	Subheader: Several environments, one structure
 
@@ -190,3 +191,7 @@ Document (dev.stxt.website): Configuration files
 
 		Nor are there default values in the template: a field is mandatory or optional, and
 		if it is optional and missing, the program decides what it is worth.
+
+		How this use compares with the formats most often chosen for configuration is
+		developed in [STXT vs YAML](stxt-vs-yaml) and [STXT vs JSON](stxt-vs-json); the
+		[tutorial](tutorial) covers the language itself.

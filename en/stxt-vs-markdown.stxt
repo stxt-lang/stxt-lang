@@ -1,0 +1,96 @@
+Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternatives
+	Metadata:
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-09-01
+		Description: Markdown formats prose; STXT structures documents. How the two work together, and why MARKDOWN is the one embedded format STXT schemas define.
+
+	Header: @STXT@ vs Markdown
+
+	Assert >>
+		Markdown gives format to prose; @STXT@ gives structure to documents.\\
+		They solve different problems, and they are designed to be used together.
+
+	Content >>
+		This is the one comparison in the series that is not a choice. Markdown answers
+		"how do I write bold, links and lists inside a text?"; @STXT@ answers "what are the
+		parts of this document, and are they all there?". A README needs the first
+		question; a contract, an article pipeline or a corpus of structured records needs
+		both.
+
+	Subheader: Where Markdown ends
+
+	Content >>
+		Markdown has no notion of fields. The moment a document needs data — an author, a
+		date, a status — the ecosystem reaches for **front matter**: a YAML block smuggled
+		in between `---` fences, invisible to Markdown itself and parsed by a second
+		language with [its own rules](stxt-vs-yaml):
+
+	Listing >>
+		---
+		title: Style guide
+		author: Ana López
+		published: 2026-09-01
+		---
+
+		# Style guide
+
+		Write **short** sentences. Prefer [links](https://example.com) to footnotes.
+
+	Content >>
+		The structure of that file exists only by convention: nothing checks that
+		`published` is a date, that `author` is present, or that the body follows the
+		agreed sections. That is not a flaw of Markdown — it never claimed otherwise — but
+		it marks the boundary where formatting stops and structure has to begin.
+
+	Subheader: The same document in @STXT@
+
+	Content >>
+		In @STXT@ the record is nodes, and the prose is a text block whose type declares it
+		as Markdown:
+
+	Code >>
+		Template (@stxt.template): com.example.article
+			Structure >>
+				Article (com.example.article):
+					Author: (+)
+					Published: (1) DATE
+					Body: (1) MARKDOWN
+
+	Code >>
+		Article (com.example.article): Style guide
+			Author: Ana López
+			Published: 2026-09-01
+			Body >>
+				Write **short** sentences. Prefer [links](https://example.com) to footnotes.
+
+	Content >>
+		`MARKDOWN` is the only embedded format the schema layer defines, precisely because
+		the two languages divide the work: a node declared with that type marks its text as
+		formatted prose, to be interpreted as CommonMark, and the raw form stays readable
+		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)). The validator now guarantees what
+		front matter could only suggest: the author is there, the date is a date, the body
+		is exactly one block.
+
+	Subheader: A structure Markdown cannot check
+
+	Content >>
+		The division scales past one article. This portal is the working example: every
+		page of `stxt.dev` — this one included — is an @STXT@ document whose prose blocks
+		are Markdown, validated against the site template before a generator renders them,
+		as the [CMS and publishing](use-cases-cms) use case describes. Append `.stxt` to
+		any page address to read the source.
+
+	Subheader: When to use which
+
+	Content >>
+		For a README, a comment, a gist — prose with light formatting and no contract —
+		Markdown alone is the right tool, and @STXT@ would add nothing.
+
+		Reach for @STXT@ when the document has parts worth naming and checking:
+		[articles in a pipeline](use-cases-cms), [corporate records](use-cases-corporate-docs),
+		[technical proposals](use-cases-rfcs). The prose inside stays Markdown; the
+		structure around it becomes explicit and validated. The [tutorial](tutorial) covers
+		the language in fifteen short sections, the [playground](https://play.stxt.dev)
+		runs the example above, and the short version of this page is in the
+		[FAQ](faq#why-not-markdown).

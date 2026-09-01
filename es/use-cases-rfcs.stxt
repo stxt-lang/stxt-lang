@@ -1,4 +1,4 @@
-Document (dev.stxt.website): RFCs y propuestas técnicas
+Document (dev.stxt.website): RFCs y propuestas técnicas — STXT
 
 	Metadata:
 		Author: Claude Fable 5
@@ -114,7 +114,7 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 							Text: (1) TEXT
 
 	Content >>
-		La plantilla fija lo mínimo que toda propuesta debe tener —identificador, título,
+		La [plantilla](stxt-template-ref) fija lo mínimo que toda propuesta debe tener —identificador, título,
 		estado, al menos un autor, contexto y propuesta— y deja el resto opcional: una
 		propuesta en borrador puede no tener alternativas todavía, y una aceptada tendrá
 		decisión y consecuencias. Lo que no hace es restringir el texto: un bloque `TEXT`
@@ -211,9 +211,10 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 	Content >>
 		* Las propuestas viven en un directorio del repositorio, una por fichero, con la
 		  plantilla en `.stxt/`.
-		* Integración continua ejecuta `stxt validate rfcs/` en cada cambio: una propuesta
-		  sin contexto o con un estado fuera de la lista no entra.
-		* Un script sobre el árbol canónico genera el índice de propuestas por estado, avisa
+		* Integración continua ejecuta `stxt validate rfcs/`
+		  ([La línea de comandos](tools-cli)) en cada cambio: una propuesta sin contexto o
+		  con un estado fuera de la lista no entra.
+		* Un script sobre el [árbol canónico](stxt-tree-ref) genera el índice de propuestas por estado, avisa
 		  de las que llevan más de un mes en `Review` o lista las consecuencias de todas las
 		  aceptadas del trimestre.
 		* El texto de cada sección se publica tal cual, en el formato que la organización
@@ -229,3 +230,7 @@ Document (dev.stxt.website): RFCs y propuestas técnicas
 		validación no comprueba relaciones entre documentos —que `RFC-007` exista, que una
 		propuesta aceptada no cite una rechazada—: eso lo hace el script que recorre el
 		directorio.
+
+		Las actas y los informes de estado, el género vecino, se desarrollan en
+		[Documentos corporativos](use-cases-corporate-docs); el [tutorial](tutorial)
+		recorre el lenguaje que hay detrás de los ejemplos.

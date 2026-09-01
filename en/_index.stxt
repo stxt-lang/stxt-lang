@@ -21,7 +21,21 @@ Document (dev.stxt.website): STXT: The Book
 	
 	Link: FAQ
 		Page: faq
-	
+
+	Subheader: Comparisons
+
+	Link: @STXT@ vs YAML
+		Page: stxt-vs-yaml
+
+	Link: @STXT@ vs JSON
+		Page: stxt-vs-json
+
+	Link: @STXT@ vs XML
+		Page: stxt-vs-xml
+
+	Link: @STXT@ vs Markdown
+		Page: stxt-vs-markdown
+
 	Subheader: Language Reference
 	
 	Link: @STXT@ Core

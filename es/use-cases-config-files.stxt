@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Ficheros de configuración
+Document (dev.stxt.website): Ficheros de configuración — STXT
 
 	Metadata:
 		Author: Claude Fable 5
@@ -73,8 +73,8 @@ Document (dev.stxt.website): Ficheros de configuración
 	Subheader: La plantilla
 
 	Content >>
-		La plantilla hace explícito lo que el programa que carga la configuración da por
-		supuesto:
+		La [plantilla](stxt-template-ref) hace explícito lo que el programa que carga la
+		configuración da por supuesto:
 
 	Code >>
 		Template (@stxt.template): com.acme.server
@@ -104,7 +104,8 @@ Document (dev.stxt.website): Ficheros de configuración
 					Notes: (?) TEXT
 
 	Content >>
-		Con ella, los errores típicos de configuración dejan de ser silenciosos:
+		Con ella, los errores típicos de configuración dejan de ser silenciosos
+		([modelo de contenido cerrado](stxt-schema-ref#s6)):
 
 		* `Ports: 8080` (con una `s` de más) es `CHILD_NOT_DECLARED`, no una clave ignorada
 		  que deja al servicio escuchando en el puerto por defecto.
@@ -115,7 +116,7 @@ Document (dev.stxt.website): Ficheros de configuración
 
 		Y todo eso se ve en el editor, subrayado, antes de guardar el fichero. En
 		integración continua, `stxt validate config/` hace la misma comprobación y detiene
-		el despliegue de una configuración inválida.
+		el despliegue de una configuración inválida ([La línea de comandos](tools-cli)).
 
 	Subheader: Varios entornos, una estructura
 
@@ -189,3 +190,8 @@ Document (dev.stxt.website): Ficheros de configuración
 
 		Tampoco hay valores por defecto en la plantilla: un campo es obligatorio u opcional,
 		y si es opcional y falta, es el programa quien decide qué vale.
+
+		Cómo se compara este uso con los formatos que más se eligen para configuración se
+		desarrolla en [STXT frente a YAML](stxt-vs-yaml) y
+		[STXT frente a JSON](stxt-vs-json); el [tutorial](tutorial) recorre el lenguaje en
+		sí.

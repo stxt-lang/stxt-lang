@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Documentos corporativos
+Document (dev.stxt.website): Documentos corporativos — STXT
 
 	Metadata:
 		Author: Claude Fable 5
@@ -103,7 +103,8 @@ Document (dev.stxt.website): Documentos corporativos
 	Subheader: La plantilla
 
 	Content >>
-		Una plantilla fija qué debe tener toda acta y qué es opcional, y acota los estados:
+		Una [plantilla](stxt-template-ref) fija qué debe tener toda acta y qué es opcional,
+		y acota los estados:
 
 	Code >>
 		Template (@stxt.template): com.acme.corp.minutes
@@ -140,7 +141,7 @@ Document (dev.stxt.website): Documentos corporativos
 		  escrito de otra manera (`Aprobada`, `open`) es un error, no una variante.
 		* Las fechas son fechas: `2026-01-32` no pasa.
 		* Un nodo que no está en la plantilla —`Atendees` con una sola `t`, un `Priority`
-		  que alguien añadió por su cuenta— se rechaza. Es el modelo de contenido cerrado: la
+		  que alguien añadió por su cuenta— se rechaza. Es el [modelo de contenido cerrado](stxt-schema-ref#s6): la
 		  plantilla es la lista completa de lo que puede aparecer.
 		* `Id` y `Owner` se declaran una vez y se reutilizan con `@Id` y `@Owner`: dentro de un
 		  namespace, un nombre de nodo identifica un solo nodo. Por la misma regla, el estado
@@ -227,7 +228,7 @@ Document (dev.stxt.website): Documentos corporativos
 		* **Integración continua**: `stxt validate --recursive minutes/` rechaza la
 		  incorporación de un acta incompleta o con un estado inválido antes de que llegue
 		  al repositorio ([La línea de comandos](tools-cli)).
-		* **Explotación**: el árbol canónico (`stxt describe`, o la biblioteca de cada
+		* **Explotación**: el [árbol canónico](stxt-tree-ref) (`stxt describe`, o la biblioteca de cada
 		  lenguaje) alimenta lo que haga falta: la lista de acciones abiertas por persona,
 		  un resumen semanal por correo, un panel con los semáforos de todos los proyectos.
 
@@ -242,3 +243,9 @@ Document (dev.stxt.website): Documentos corporativos
 		valida reglas entre campos —que una acción en estado `Done` no tenga fecha futura,
 		por ejemplo—: esa lógica pertenece a la aplicación que explota los datos, no a la
 		plantilla.
+
+		Los géneros vecinos siguen el mismo enfoque:
+		[RFCs y propuestas técnicas](use-cases-rfcs) para documentos con ciclo de vida, y
+		[contratos](use-cases-contracts) donde los datos viven dentro de texto normativo.
+		El lenguaje que hay detrás de los ejemplos se recorre, regla a regla, en el
+		[tutorial](tutorial).

@@ -583,6 +583,11 @@ Document (dev.stxt.website): STXT Tutorial
 		  plantillas, validar desde el terminal y en integración continua.
 		* [Principios de diseño](design-principles): por qué el lenguaje es como es.
 		* [Preguntas frecuentes](faq): respuestas cortas con enlace a la regla.
+		* Los casos de uso, cada uno con sus documentos y su plantilla:
+		  [documentos corporativos](use-cases-corporate-docs), [IA y LLMs](ai-llms),
+		  [CMS y publicaciones](use-cases-cms),
+		  [ficheros de configuración](use-cases-config-files), [RFCs](use-cases-rfcs) y
+		  [contratos](use-cases-contracts).
 		* Las especificaciones: [STXT-SPEC](stxt-core-ref) para la sintaxis,
 		  [STXT-SCHEMA-SPEC](stxt-schema-ref) y [STXT-TEMPLATE-SPEC](stxt-template-ref) para
 		  la validación, [STXT-DISCOVERY-SPEC](stxt-discovery-ref) para dónde se buscan las

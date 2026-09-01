@@ -1,4 +1,4 @@
-Document (dev.stxt.website): AI and LLMs — Generated, verifiable documents
+Document (dev.stxt.website): AI and LLMs — Generated, verifiable STXT documents
 
 	Metadata:
 		Author: Claude Fable 5
@@ -42,10 +42,10 @@ Document (dev.stxt.website): AI and LLMs — Generated, verifiable documents
 
 	Content >>
 		When an LLM generates Markdown, there is nothing to check the result against.
-		When it generates @STXT@ with a template:
+		When it generates @STXT@ with a [template](stxt-template-ref):
 
 		* The parser validates the output immediately.
-		* The **closed content model** rejects undeclared node names.
+		* The **[closed content model](stxt-schema-ref#s6)** rejects undeclared node names.
 		* `ENUM` values and cardinalities reject invented values.
 		* Types (`DATE`, `EMAIL`, `NUMBER`...) reject incorrect formats.
 
@@ -155,7 +155,7 @@ Document (dev.stxt.website): AI and LLMs — Generated, verifiable documents
 
 	Content >>
 		For documents with long free text, @STXT@ is a more reliable
-		output surface than JSON or YAML.
+		output surface than [JSON](stxt-vs-json) or [YAML](stxt-vs-yaml).
 
 	Subheader: Normalization absorbs variance
 
@@ -185,9 +185,11 @@ Document (dev.stxt.website): AI and LLMs — Generated, verifiable documents
 
 	Content >>
 		* **AI-assisted CMS content**: the build rejects generated pages
-		  that are incomplete or inconsistent before publishing them.
+		  that are incomplete or inconsistent before publishing them
+		  ([CMS and publishing](use-cases-cms)).
 		* **Data extraction**: turning free text (emails, reports, minutes)
-		  into @STXT@ documents validated against a template.
+		  into @STXT@ documents validated against a template
+		  ([Corporate documents](use-cases-corporate-docs)).
 		* **Generated reports and documentation**: validated structure,
 		  free prose inside `>>` blocks.
 		* **Agents and pipelines**: @STXT@ as the interchange format between

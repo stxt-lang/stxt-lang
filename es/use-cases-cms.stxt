@@ -1,4 +1,4 @@
-Document (dev.stxt.website): CMS y publicaciones
+Document (dev.stxt.website): CMS y publicaciones — STXT
 
 	Metadata:
 		Author: Claude Fable 5
@@ -27,7 +27,9 @@ Document (dev.stxt.website): CMS y publicaciones
 		nodos y su cuerpo en bloques. El gestor de contenidos —sea un generador estático, un
 		CMS *headless* o un proceso de maquetación— lee el árbol y decide qué hacer con él.
 		Este mismo portal está construido así: cada página de `stxt.dev` es un documento
-		@STXT@ del namespace `dev.stxt.website`, y el generador lo convierte en HTML.
+		@STXT@ del namespace `dev.stxt.website`, y el generador lo convierte en HTML. La
+		[FAQ](faq#nos-ensenas-un-uso-real) enseña dos maneras de comprobarlo desde el
+		navegador.
 
 	Subheader: Una página
 
@@ -70,10 +72,13 @@ Document (dev.stxt.website): CMS y publicaciones
 
 	Content >>
 		Los metadatos editoriales —*slug*, idioma, estado, *layout*, SEO— son nodos que el
-		gestor lee directamente. El cuerpo va en bloques de tipo `MARKDOWN`: @STXT@ no
+		gestor lee directamente. El cuerpo va en bloques de tipo `MARKDOWN`
+		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)): @STXT@ no
 		interpreta ese Markdown, solo lo entrega tal cual al renderizador; el tipo es un
 		contrato para quien lo consume (y para el editor y el playground, que lo colorean
-		como Markdown). El pie es `TEXT`: se enseña literalmente.
+		como Markdown). El pie es `TEXT`: se enseña literalmente. El reparto de trabajo
+		entre los dos lenguajes se desarrolla en
+		[STXT frente a Markdown](stxt-vs-markdown).
 
 	Subheader: La plantilla
 
@@ -99,7 +104,7 @@ Document (dev.stxt.website): CMS y publicaciones
 					Footer: (?) TEXT
 
 	Content >>
-		La plantilla garantiza lo que el generador necesita para funcionar —título, *slug* y
+		La [plantilla](stxt-template-ref) garantiza lo que el generador necesita para funcionar —título, *slug* y
 		un estado de la lista— y deja el resto opcional. Una página sin `Slug` no valida, y
 		por tanto no se genera; un `Status: published` en minúsculas tampoco. Es la
 		diferencia entre un error que aparece en el editor y una página que desaparece del
@@ -218,10 +223,10 @@ Document (dev.stxt.website): CMS y publicaciones
 		   plantilla da autocompletado y errores en el acto.
 		2. Se versiona en un repositorio; la revisión editorial es un *diff*.
 		3. Se valida —en el editor, en la línea de comandos o en integración continua— con
-		   `stxt validate`, que rechaza una página sin *slug* o un artículo sin autor antes
-		   de que llegue al generador.
-		4. El generador lee el árbol canónico y produce HTML, PDF, EPUB, un *feed* o una
-		   API; el mismo documento sale por varios canales.
+		   `stxt validate` ([La línea de comandos](tools-cli)), que rechaza una página sin
+		   *slug* o un artículo sin autor antes de que llegue al generador.
+		4. El generador lee el [árbol canónico](stxt-tree-ref) y produce HTML, PDF, EPUB,
+		   un *feed* o una API; el mismo documento sale por varios canales.
 
 		El documento no contiene HTML, CSS ni *layout*: la presentación se decide en el
 		paso 4 y se puede cambiar entera sin tocar el contenido.
@@ -235,3 +240,7 @@ Document (dev.stxt.website): CMS y publicaciones
 		cómo se renderiza un bloque `MARKDOWN` ni qué dialecto de Markdown se admite: eso lo
 		fija el renderizador, y la plantilla solo declara que el bloque debe tratarse como
 		tal.
+
+		La variante generada de este flujo —páginas escritas por un modelo y rechazadas
+		por el *build* hasta que validan— se desarrolla en [IA y LLMs](ai-llms); el
+		[tutorial](tutorial) recorre el lenguaje que hay detrás de los ejemplos.

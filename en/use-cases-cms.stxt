@@ -1,4 +1,4 @@
-Document (dev.stxt.website): CMS and publishing
+Document (dev.stxt.website): CMS and publishing — STXT
 
 	Metadata:
 		Author: Claude Fable 5
@@ -26,7 +26,8 @@ Document (dev.stxt.website): CMS and publishing
 		and its body in blocks. The content manager —a static site generator, a headless
 		CMS or a typesetting process— reads the tree and decides what to do with it. This
 		very portal is built that way: each page of `stxt.dev` is an @STXT@ document of the
-		`dev.stxt.website` namespace, and the generator turns it into HTML.
+		`dev.stxt.website` namespace, and the generator turns it into HTML. The
+		[FAQ](faq#can-you-show-us-a-real-use) shows two ways to verify it from the browser.
 
 	Subheader: A page
 
@@ -69,10 +70,13 @@ Document (dev.stxt.website): CMS and publishing
 
 	Content >>
 		The editorial metadata —slug, language, status, layout, SEO— are nodes the manager
-		reads directly. The body goes in blocks of type `MARKDOWN`: @STXT@ does not
+		reads directly. The body goes in blocks of type `MARKDOWN`
+		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)): @STXT@ does not
 		interpret that Markdown, it only hands it over as is to the renderer; the type is a
 		contract for whoever consumes it (and for the editor and the playground, which
-		highlight it as Markdown). The footer is `TEXT`: it is shown literally.
+		highlight it as Markdown). The footer is `TEXT`: it is shown literally. How the
+		two languages divide the work is developed in
+		[STXT vs Markdown](stxt-vs-markdown).
 
 	Subheader: The template
 
@@ -98,7 +102,7 @@ Document (dev.stxt.website): CMS and publishing
 					Footer: (?) TEXT
 
 	Content >>
-		The template guarantees what the generator needs to work —title, slug and a status
+		The [template](stxt-template-ref) guarantees what the generator needs to work —title, slug and a status
 		from the list— and leaves the rest optional. A page without `Slug` does not
 		validate, and therefore is not generated; neither does a lowercase
 		`Status: published`. That is the difference between an error that shows up in the
@@ -216,10 +220,11 @@ Document (dev.stxt.website): CMS and publishing
 		   template provides completion and immediate errors.
 		2. It is versioned in a repository; editorial review is a diff.
 		3. It is validated —in the editor, on the command line or in continuous
-		   integration— with `stxt validate`, which rejects a page without a slug or an
-		   article without an author before it reaches the generator.
-		4. The generator reads the canonical tree and produces HTML, PDF, EPUB, a feed or an
-		   API; the same document goes out through several channels.
+		   integration— with `stxt validate` ([The command line](tools-cli)), which rejects
+		   a page without a slug or an article without an author before it reaches the
+		   generator.
+		4. The generator reads the [canonical tree](stxt-tree-ref) and produces HTML, PDF,
+		   EPUB, a feed or an API; the same document goes out through several channels.
 
 		The document contains no HTML, CSS or layout: presentation is decided in step 4
 		and can be changed entirely without touching the content.
@@ -232,3 +237,7 @@ Document (dev.stxt.website): CMS and publishing
 		guarantees is that the content outlives the CMS. Nor does it define how a
 		`MARKDOWN` block is rendered or which Markdown dialect is accepted: the renderer
 		fixes that, and the template only declares that the block must be treated as such.
+
+		The generated variant of this flow —pages written by a model and rejected by the
+		build until they validate— is developed in [AI and LLMs](ai-llms); the
+		[tutorial](tutorial) covers the language behind the examples.
