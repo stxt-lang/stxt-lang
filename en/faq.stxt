@@ -106,7 +106,7 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 
 		| | @STXT@ | XML | YAML | TOML |
 		|---|---|---|---|---|
-		| **Human-First** | Designed to be written by hand; the rules fit in one page | Verbose: closing tags, attributes, escapes | Readable, but with subtle rules: optional quotes, values that change type | Clear for flat configuration; nesting is awkward |
+		| **Human-First** | Designed to be written by hand; the rules fit in one page | Verbose: closing tags, attributes, escapes | Readable, but with subtle rules: optional quotes, values that change type | Clear for flat configuration; nesting goes in `[a.b.c]` headers |
 		| **Schemas and validation** | Built into the language, optional and closed | Three schema languages —DTD, XSD and RELAX NG—, each an ecosystem of its own | None; validated with tools from other ecosystems | None |
 		| **Ease of parsing** | Linear, in a single pass; a conforming parser is written in days | Requires an industrial parser | Huge specification; parsers disagree with each other | Approachable, with laborious edges: dates, tables, strings |
 		| **Attack surface** | No entities, references, anchors or code execution ([STXT-SPEC §15](stxt-core-ref#s15)) | External entities (XXE) and entity expansion | Expandable anchors and tags that instantiate objects | Small |

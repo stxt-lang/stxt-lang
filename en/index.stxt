@@ -98,11 +98,13 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 		@STXT@ shares ground with the usual structured-text formats, and the comparison with
 		each one has its own page. [YAML](stxt-vs-yaml) is also indentation-based, but
 		optimizes for data serialization rather than for documents; [JSON](stxt-vs-json) is
-		a machine format, not meant to be written by hand; [XML](stxt-vs-xml) offers
-		validation at the price of verbosity; [TOML](stxt-vs-toml) is clear for flat
-		configuration, but nesting is awkward; and [Markdown](stxt-vs-markdown) formats
-		prose but does not structure data — the two complement each other. The short
-		version of all five is in the
+		a machine format, not meant to be written by hand — and the one @STXT@ adopts as
+		the representation of its tree; [XML](stxt-vs-xml) is the closest in ambition
+		—named structure, namespaces, validation—, at the price of closing tags and
+		escaping; [TOML](stxt-vs-toml) shares the goal but not the model: tables of typed
+		keys and values, meant for flat configuration; and
+		[Markdown](stxt-vs-markdown) formats prose but does not structure data — the two
+		complement each other. The short version of all five is in the
 		[FAQ](faq#why-not-xml-yaml-or-toml), and the reasoning behind the design is in
 		[Design principles](design-principles).
 

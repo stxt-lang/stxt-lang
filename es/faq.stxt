@@ -108,7 +108,7 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 
 		| | @STXT@ | XML | YAML | TOML |
 		|---|---|---|---|---|
-		| **Human-First** | Diseñado para escribirse a mano; las reglas caben en una página | Verboso: etiquetas de cierre, atributos, escapes | Legible, pero con reglas sutiles: comillas opcionales, valores que cambian de tipo | Claro en configuración plana; anidar es incómodo |
+		| **Human-First** | Diseñado para escribirse a mano; las reglas caben en una página | Verboso: etiquetas de cierre, atributos, escapes | Legible, pero con reglas sutiles: comillas opcionales, valores que cambian de tipo | Claro en configuración plana; el anidamiento va en cabeceras `[a.b.c]` |
 		| **Esquemas y validación** | Integrados en el lenguaje, opcionales y cerrados | Tres lenguajes de esquema —DTD, XSD y RELAX NG—, cada uno un ecosistema propio | No tiene; se valida con herramientas de otros ecosistemas | No tiene |
 		| **Facilidad de parseo** | Lineal, en una sola pasada; un parser conforme se escribe en días | Exige un parser industrial | Especificación enorme; los parsers discrepan entre sí | Asequible, con bordes laboriosos: fechas, tablas, strings |
 		| **Superficie de ataque** | Sin entidades, referencias, anclas ni ejecución de código ([STXT-SPEC §15](stxt-core-ref#s15)) | Entidades externas (XXE) y expansión de entidades | Anclas expansibles y etiquetas que instancian objetos | Pequeña |
