@@ -378,16 +378,29 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 		`Min`/`Max` y `Type`; es la forma que se genera y la que procesan las herramientas.
 		Ver [STXT-TEMPLATE-SPEC](stxt-template-ref) y [STXT-SCHEMA-SPEC](stxt-schema-ref).
 
+	Subsubheader: ¿Cómo encuentra una herramienta los esquemas y plantillas?
+
+	Content >>
+		Depende de la herramienta, porque la resolución de definiciones no forma parte del
+		lenguaje base: es una capa opcional más, como los propios esquemas y plantillas.
+		Una aplicación sin sistema de ficheros la resuelve a su manera —el playground, por
+		ejemplo, asocia documentos y gramáticas por namespace dentro del workspace—. Para
+		cuando intervienen ficheros y proyectos,
+		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) define una resolución común, que una
+		herramienta puede implementar o no; es la que siguen la CLI, la extensión de
+		VS Code y las tres bibliotecas.
+
 	Subsubheader: ¿Dónde se colocan los esquemas y plantillas?
 
 	Content >>
-		En un directorio llamado **`.stxt/`** en el proyecto: se cargan todos los `.stxt` que
+		En las herramientas que siguen [STXT-DISCOVERY-SPEC](stxt-discovery-ref), en un
+		directorio llamado **`.stxt/`** en el proyecto: se cargan todos los `.stxt` que
 		haya dentro, recursivamente, con independencia de los nombres de fichero y de los
-		subdirectorios. La cadena de resolución de un documento son todos los `.stxt/` de sus
-		directorios ascendentes, luego `~/.stxt` y por último `/etc/stxt` (en Windows,
-		`%USERPROFILE%\.stxt` y `%ProgramData%\stxt`). Gana el nivel más cercano, namespace a
-		namespace. La variable `STXT_PATH` sustituye la cadena entera por una lista de
-		directorios, por ejemplo en CI.
+		subdirectorios. La cadena de resolución de un documento son todos los `.stxt/` de
+		sus directorios ascendentes, luego `~/.stxt` y por último `/etc/stxt` (en Windows,
+		`%USERPROFILE%\.stxt` y `%ProgramData%\stxt`). Gana el nivel más cercano,
+		namespace a namespace. La variable `STXT_PATH` sustituye la cadena entera por una
+		lista de directorios, por ejemplo en CI.
 
 		`stxt install fichero.stxt` coloca una definición en su sitio y `stxt schemas` muestra
 		qué definición aplica en un directorio y de dónde procede. El recorrido completo, con
@@ -466,10 +479,11 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Subsubheader: ¿En qué lenguajes hay parser?
 
 	Content >>
-		TypeScript/JavaScript (`@stxt-lang/core`), Java (`dev.stxt:stxt-core`) y Python
-		(`stxt`), con el mismo alcance, la misma versión y el mismo corpus de conformidad. Sobre
-		el primero se construyen la extensión de VS Code, la CLI y el playground. La lista
-		completa está en [Herramientas](tools); para probar sin instalar nada,
+		Desde este portal se mantienen tres: TypeScript/JavaScript (`@stxt-lang/core`),
+		Java (`dev.stxt:stxt-core`) y Python (`stxt`), con el mismo alcance, la misma
+		versión y el mismo corpus de conformidad. Sobre el primero se construyen la
+		extensión de VS Code, la CLI y el playground. La lista completa está en
+		[Herramientas](tools); para probar sin instalar nada,
 		[play.stxt.dev](https://play.stxt.dev).
 
 	Subsubheader: ¿Qué promete la 1.0?

@@ -378,15 +378,29 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 		process. See [STXT-TEMPLATE-SPEC](stxt-template-ref) and
 		[STXT-SCHEMA-SPEC](stxt-schema-ref).
 
+	Subsubheader: How does a tool find schemas and templates?
+
+	Content >>
+		It depends on the tool, because definition resolution is not part of the base
+		language: it is one more optional layer, like schemas and templates themselves. An
+		application without a file system resolves it its own way —the playground, for
+		instance, associates documents and grammars by namespace within the workspace—.
+		For when files and projects are involved,
+		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) defines a common resolution, which a
+		tool may or may not implement; it is the one the CLI, the VS Code extension and
+		the three libraries follow.
+
 	Subsubheader: Where are schemas and templates placed?
 
 	Content >>
-		In a directory called **`.stxt/`** in the project: every `.stxt` file inside it is
-		loaded, recursively, regardless of file names and subdirectories. The resolution chain
-		of a document is every `.stxt/` of its ancestor directories, then `~/.stxt`, and
-		finally `/etc/stxt` (on Windows, `%USERPROFILE%\.stxt` and `%ProgramData%\stxt`). The
-		closest level wins, namespace by namespace. The `STXT_PATH` variable replaces the
-		whole chain with a list of directories, for instance in CI.
+		In the tools that follow [STXT-DISCOVERY-SPEC](stxt-discovery-ref), in a
+		directory called **`.stxt/`** in the project: every `.stxt` file inside it is
+		loaded, recursively, regardless of file names and subdirectories. The resolution
+		chain of a document is every `.stxt/` of its ancestor directories, then
+		`~/.stxt`, and finally `/etc/stxt` (on Windows, `%USERPROFILE%\.stxt` and
+		`%ProgramData%\stxt`). The closest level wins, namespace by namespace. The
+		`STXT_PATH` variable replaces the whole chain with a list of directories, for
+		instance in CI.
 
 		`stxt install file.stxt` puts a definition in place and `stxt schemas` shows which
 		definition applies in a directory and where it comes from. The full walkthrough, with
@@ -466,10 +480,11 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Subsubheader: Which languages have a parser?
 
 	Content >>
-		TypeScript/JavaScript (`@stxt-lang/core`), Java (`dev.stxt:stxt-core`) and Python
-		(`stxt`), with the same scope, the same version and the same conformance corpus. The VS
-		Code extension, the CLI and the playground are built on the first one. The complete
-		list is on the [Tools](tools) page; to try it without installing anything,
+		Three are maintained from this portal: TypeScript/JavaScript (`@stxt-lang/core`),
+		Java (`dev.stxt:stxt-core`) and Python (`stxt`), with the same scope, the same
+		version and the same conformance corpus. The VS Code extension, the CLI and the
+		playground are built on the first one. The complete list is on the
+		[Tools](tools) page; to try it without installing anything,
 		[play.stxt.dev](https://play.stxt.dev).
 
 	Subsubheader: What does 1.0 promise?
