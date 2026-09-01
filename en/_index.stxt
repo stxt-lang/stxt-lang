@@ -9,18 +9,18 @@ Document (dev.stxt.website): STXT: The Book
 		
 	Link: Tutorial
 		Page: tutorial
-	
-	Link: Working environment
-		Page: working-environment
-	
-	Link: Tools
-		Page: tools
-	
-	Link: Stability and versions
-		Page: stability
-	
+
 	Link: FAQ
 		Page: faq
+
+	Link: Working environment
+		Page: working-environment
+
+	Link: Tools
+		Page: tools
+
+	Link: Stability and versions
+		Page: stability
 
 	Subheader: Comparisons
 
