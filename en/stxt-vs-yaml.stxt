@@ -121,16 +121,7 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 		language, optional and closed. The descriptor above, validated:
 
 	Code >>
-		Template (@stxt.template): com.example.deploy
-			Structure >>
-				Service (com.example.deploy):
-					Name: (1)
-					Replicas: (1) NATURAL
-					Port: (+) NATURAL
-					Maintainer: (1) EMAIL
-					Notes: (?) TEXT
-
-	Code >>
+		# The document
 		Service (com.example.deploy):
 			Name: billing
 			Replicas: 2
@@ -139,6 +130,16 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 			Maintainer: ana@example.com
 			Notes >>
 				The TLS certificate expires on 2027-03-01.
+
+		# Its template definition
+		Template (@stxt.template): com.example.deploy
+			Structure >>
+				Service (com.example.deploy):
+					Name: (1)
+					Replicas: (1) NATURAL
+					Port: (+) NATURAL
+					Maintainer: (1) EMAIL
+					Notes: (?) TEXT
 
 	Content >>
 		A misspelled field, a missing port or `Replicas: two` fail with an explicit error

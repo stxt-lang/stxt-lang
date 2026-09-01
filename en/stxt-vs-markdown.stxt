@@ -50,19 +50,20 @@ Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternative
 		as Markdown:
 
 	Code >>
+		# The document
+		Article (com.example.article): Style guide
+			Author: Ana López
+			Published: 2026-09-01
+			Body >>
+				Write **short** sentences. Prefer [links](https://example.com) to footnotes.
+
+		# Its template definition
 		Template (@stxt.template): com.example.article
 			Structure >>
 				Article (com.example.article):
 					Author: (+)
 					Published: (1) DATE
 					Body: (1) MARKDOWN
-
-	Code >>
-		Article (com.example.article): Style guide
-			Author: Ana López
-			Published: 2026-09-01
-			Body >>
-				Write **short** sentences. Prefer [links](https://example.com) to footnotes.
 
 	Content >>
 		`MARKDOWN` is the only embedded format the schema layer defines, precisely because

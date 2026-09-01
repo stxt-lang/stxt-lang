@@ -127,16 +127,7 @@ Document (dev.stxt.website): STXT frente a YAML — Legibilidad, seguridad y val
 		parte del lenguaje, opcional y cerrada. El descriptor de arriba, validado:
 
 	Code >>
-		Template (@stxt.template): com.example.deploy
-			Structure >>
-				Service (com.example.deploy):
-					Name: (1)
-					Replicas: (1) NATURAL
-					Port: (+) NATURAL
-					Maintainer: (1) EMAIL
-					Notes: (?) TEXT
-
-	Code >>
+		# El documento
 		Service (com.example.deploy):
 			Name: billing
 			Replicas: 2
@@ -145,6 +136,16 @@ Document (dev.stxt.website): STXT frente a YAML — Legibilidad, seguridad y val
 			Maintainer: ana@example.com
 			Notes >>
 				The TLS certificate expires on 2027-03-01.
+
+		# La definición de su plantilla
+		Template (@stxt.template): com.example.deploy
+			Structure >>
+				Service (com.example.deploy):
+					Name: (1)
+					Replicas: (1) NATURAL
+					Port: (+) NATURAL
+					Maintainer: (1) EMAIL
+					Notes: (?) TEXT
 
 	Content >>
 		Un campo mal escrito, un puerto ausente o `Replicas: two` fallan con un código de

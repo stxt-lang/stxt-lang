@@ -116,17 +116,7 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 		validated:
 
 	Code >>
-		Template (@stxt.template): com.example.backup
-			Structure >>
-				Backup (com.example.backup):
-					Storage: (1)
-						Kind: (1)
-						Bucket: (1)
-					Job: (+)
-						Schedule: (1)
-						Keep: (1) NATURAL
-
-	Code >>
+		# The document
 		Backup (com.example.backup): Nightly backup
 			Storage:
 				Kind: s3
@@ -137,6 +127,17 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 			Job: documents
 				Schedule: 03:00
 				Keep: 30
+
+		# Its template definition
+		Template (@stxt.template): com.example.backup
+			Structure >>
+				Backup (com.example.backup):
+					Storage: (1)
+						Kind: (1)
+						Bucket: (1)
+					Job: (+)
+						Schedule: (1)
+						Keep: (1) NATURAL
 
 	Content >>
 		A misspelled field, a missing `Storage` or a `Keep` that is not a number fail

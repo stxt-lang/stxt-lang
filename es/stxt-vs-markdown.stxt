@@ -51,19 +51,20 @@ Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alte
 		declara como Markdown:
 
 	Code >>
+		# El documento
+		Article (com.example.article): Style guide
+			Author: Ana López
+			Published: 2026-09-01
+			Body >>
+				Write **short** sentences. Prefer [links](https://example.com) to footnotes.
+
+		# La definición de su plantilla
 		Template (@stxt.template): com.example.article
 			Structure >>
 				Article (com.example.article):
 					Author: (+)
 					Published: (1) DATE
 					Body: (1) MARKDOWN
-
-	Code >>
-		Article (com.example.article): Style guide
-			Author: Ana López
-			Published: 2026-09-01
-			Body >>
-				Write **short** sentences. Prefer [links](https://example.com) to footnotes.
 
 	Content >>
 		`MARKDOWN` es el único formato embebido que define la capa de esquemas,
