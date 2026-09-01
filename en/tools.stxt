@@ -35,7 +35,7 @@ Document (dev.stxt.website): Tools
 		* It includes a seed of example documents.
 		* A document can be shared with a link that carries the content inside.
 
-		It allows following the [tutorial](lang-tutorial) without leaving the browser.
+		It allows following the [tutorial](tutorial) without leaving the browser.
 
 	Subheader: VS Code extension
 

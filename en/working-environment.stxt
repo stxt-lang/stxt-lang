@@ -9,7 +9,7 @@ Document (dev.stxt.website): The working environment
 	Header: The working environment
 
 	Assert >>
-		The [tutorial](lang-tutorial) describes the language; this page describes the working
+		The [tutorial](tutorial) describes the language; this page describes the working
 		environment: organising a project, placing its grammar where the tools resolve it,
 		and validating from the editor, from the command line and in continuous integration.
 		It follows the same example as the tutorial, the record of a book.
@@ -18,7 +18,7 @@ Document (dev.stxt.website): The working environment
 		The `stxt` command line is required (`npm install -g @stxt-lang/cli`, or `npx
 		@stxt-lang/cli` without installing) and, for section 4, Visual Studio Code with the
 		`stxt-lang.stxt` extension. Section 7 repeats the walkthrough in the playground, with
-		no installation. Everything used here is described in [Tools](lang-tools).
+		no installation. Everything used here is described in [Tools](tools).
 
 	Subheader: 1. The project and the `.stxt/` directory
 

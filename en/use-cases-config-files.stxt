@@ -183,7 +183,7 @@ Document (dev.stxt.website): Configuration files
 	Content >>
 		@STXT@ describes the configuration; it does not compute it. There are no variables,
 		no references to other values, no file inclusion, no expressions: a value is the
-		text that is written. It is a design decision ([Design principles](lang-principles)),
+		text that is written. It is a design decision ([Design principles](design-principles)),
 		in exchange for a configuration file never being able to execute anything or depend
 		on another. Composition —a base file plus one per environment— is done by the
 		application on load, explicitly.

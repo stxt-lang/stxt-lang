@@ -73,7 +73,7 @@ Document (dev.stxt.website): Frequently asked questions
 		  there is an optional, simple schema system, adequate for most cases.
 
 		The reasoning behind each of these decisions is in
-		[Design principles](lang-principles).
+		[Design principles](design-principles).
 
 	Subsubheader: Which file extension and media type are used?
 
@@ -162,7 +162,7 @@ Document (dev.stxt.website): Frequently asked questions
 		instance— needs nothing more than writing them in order.
 
 		It is a consequence of having few forms and none redundant; see
-		[Design principles](lang-principles) and [STXT-SPEC §8.5](stxt-core-ref#s8-5).
+		[Design principles](design-principles) and [STXT-SPEC §8.5](stxt-core-ref#s8-5).
 
 	Subsubheader: Why are there no escape characters?
 
@@ -186,7 +186,7 @@ Document (dev.stxt.website): Frequently asked questions
 		separators `-`, `_` and space (`INVALID_NODE_NAME` otherwise): this way a symbol
 		inside a name does not suggest a meaning that does not exist in @STXT@.
 
-		See [Design principles](lang-principles) and [STXT-SPEC §4.2](stxt-core-ref#s4-2).
+		See [Design principles](design-principles) and [STXT-SPEC §4.2](stxt-core-ref#s4-2).
 
 	Subsubheader: Why can a text block not have children?
 
@@ -307,7 +307,7 @@ Document (dev.stxt.website): Frequently asked questions
 		`Reviewer` and `Score` belong to `com.acme.reviews` without writing it: they
 		inherit it from `Review`, and each namespace is validated against its template.
 		The two templates accompany the document so that the block validates as a
-		whole; the [tutorial](lang-tutorial#s14) develops the full example.
+		whole; the [tutorial](tutorial#s14) develops the full example.
 		See [STXT-SPEC §7.2](stxt-core-ref#s7-2) and
 		[STXT-SCHEMA-SPEC §8](stxt-schema-ref#s8).
 
@@ -382,7 +382,7 @@ Document (dev.stxt.website): Frequently asked questions
 
 		`stxt install file.stxt` puts a definition in place and `stxt schemas` shows which
 		definition applies in a directory and where it comes from. The full walkthrough, with
-		an example, is in [The working environment](lang-workflow); the norm, in
+		an example, is in [The working environment](working-environment); the norm, in
 		[STXT-DISCOVERY-SPEC](stxt-discovery-ref).
 
 	Subsubheader: What if Titel is written instead of Title?
@@ -442,7 +442,7 @@ Document (dev.stxt.website): Frequently asked questions
 		The exit code is `1` if any document fails and `2` if the call itself is wrong, so the
 		CI job fails on its own. `--format json` produces machine-readable output. If the CI
 		environment must not depend on the contents of `~/.stxt` or `/etc/stxt`,
-		`STXT_PATH=./.stxt` pins the resolution chain. Details on the [Tools](lang-tools)
+		`STXT_PATH=./.stxt` pins the resolution chain. Details on the [Tools](tools)
 		page.
 
 	Subsubheader: Is there a canonical representation of an STXT document?
@@ -460,7 +460,7 @@ Document (dev.stxt.website): Frequently asked questions
 		TypeScript/JavaScript (`@stxt-lang/core`), Java (`dev.stxt:stxt-core`) and Python
 		(`stxt`), with the same scope, the same version and the same conformance corpus. The VS
 		Code extension, the CLI and the playground are built on the first one. The complete
-		list is on the [Tools](lang-tools) page; to try it without installing anything,
+		list is on the [Tools](tools) page; to try it without installing anything,
 		[play.stxt.dev](https://play.stxt.dev).
 
 	Subsubheader: What does 1.0 promise?
@@ -470,7 +470,7 @@ Document (dev.stxt.website): Frequently asked questions
 		canonical tree and the error codes are frozen, and each library's API within its own
 		1.x line. Message text and convenience facades are not frozen. Conformance is declared
 		against the specification version (`SPEC_VERSION`), not the package version. The full
-		statement is in [Stability and versions](lang-stability).
+		statement is in [Stability and versions](stability).
 
 	Subsubheader: Where do I ask, or give feedback?
 
@@ -478,5 +478,5 @@ Document (dev.stxt.website): Frequently asked questions
 		In the [discussions](https://github.com/orgs/stxt-lang/discussions) of the `stxt-lang`
 		organization on GitHub: questions, ideas, ambiguities in the specifications, and
 		anything you have built with STXT. Every change to the language starts there. Bugs in
-		a specific tool go to the issues of its repository, listed on the [Tools](lang-tools)
+		a specific tool go to the issues of its repository, listed on the [Tools](tools)
 		page.

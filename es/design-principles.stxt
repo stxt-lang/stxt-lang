@@ -30,7 +30,7 @@ Document (dev.stxt.website): Principios de diseño
 		sacrifica por los otros dos:
 
 		* **Sencillo de escribir y leer.** Las reglas que una persona necesita conocer caben en
-		  una página del [tutorial](lang-tutorial): un nodo, un bloque de texto, la
+		  una página del [tutorial](tutorial): un nodo, un bloque de texto, la
 		  indentación, un comentario.
 		* **Sencillo de implementar.** Un parser conforme es un recorrido línea a línea con
 		  una pila; la gramática completa cabe en un apéndice y el lenguaje se describe en

@@ -74,7 +74,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		  existe un sistema de esquemas opcional y sencillo, adecuado para la mayoría de casos.
 
 		El razonamiento que hay detrás de cada una de estas decisiones está en
-		[Principios de diseño](lang-principles).
+		[Principios de diseño](design-principles).
 
 	Subsubheader: ¿Qué extensión y qué media type se usan?
 
@@ -164,7 +164,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		intercalados, por ejemplo— no necesita nada más que escribirlos en orden.
 
 		Es una consecuencia de tener pocas formas y ninguna redundante; ver
-		[Principios de diseño](lang-principles) y [STXT-SPEC §8.5](stxt-core-ref#s8-5).
+		[Principios de diseño](design-principles) y [STXT-SPEC §8.5](stxt-core-ref#s8-5).
 
 	Subsubheader: ¿Por qué no hay caracteres de escape?
 
@@ -188,7 +188,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		espacio (`INVALID_NODE_NAME` en otro caso): así un signo dentro de un nombre no
 		sugiere un significado que en @STXT@ no existe.
 
-		Ver [Principios de diseño](lang-principles) y [STXT-SPEC §4.2](stxt-core-ref#s4-2).
+		Ver [Principios de diseño](design-principles) y [STXT-SPEC §4.2](stxt-core-ref#s4-2).
 
 	Subsubheader: ¿Por qué un bloque de texto no puede tener hijos?
 
@@ -308,7 +308,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		`Reviewer` y `Score` pertenecen a `com.acme.reviews` sin escribirlo: lo heredan
 		de `Review`, y cada namespace se valida contra su plantilla. Las dos plantillas
 		acompañan al documento para que el bloque se valide en conjunto; el
-		[tutorial](lang-tutorial#s14) desarrolla el ejemplo completo.
+		[tutorial](tutorial#s14) desarrolla el ejemplo completo.
 		Ver [STXT-SPEC §7.2](stxt-core-ref#s7-2) y
 		[STXT-SCHEMA-SPEC §8](stxt-schema-ref#s8).
 
@@ -383,7 +383,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 
 		`stxt install fichero.stxt` coloca una definición en su sitio y `stxt schemas` muestra
 		qué definición aplica en un directorio y de dónde procede. El recorrido completo, con
-		ejemplo, está en [El entorno de trabajo](lang-workflow); la norma, en
+		ejemplo, está en [El entorno de trabajo](working-environment); la norma, en
 		[STXT-DISCOVERY-SPEC](stxt-discovery-ref).
 
 	Subsubheader: ¿Qué pasa si se escribe Titel en vez de Title?
@@ -442,7 +442,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		incorrecta, de modo que el trabajo de CI falla por sí solo. `--format json` produce
 		salida para máquinas. Si el entorno de CI no debe depender del contenido de `~/.stxt`
 		o `/etc/stxt`, `STXT_PATH=./.stxt` fija la cadena de resolución. Los detalles, en
-		[Herramientas](lang-tools).
+		[Herramientas](tools).
 
 	Subsubheader: ¿Existe una representación canónica de un documento STXT?
 
@@ -459,7 +459,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		TypeScript/JavaScript (`@stxt-lang/core`), Java (`dev.stxt:stxt-core`) y Python
 		(`stxt`), con el mismo alcance, la misma versión y el mismo corpus de conformidad. Sobre
 		el primero se construyen la extensión de VS Code, la CLI y el playground. La lista
-		completa está en [Herramientas](lang-tools); para probar sin instalar nada,
+		completa está en [Herramientas](tools); para probar sin instalar nada,
 		[play.stxt.dev](https://play.stxt.dev).
 
 	Subsubheader: ¿Qué promete la 1.0?
@@ -470,7 +470,7 @@ Document (dev.stxt.website): Preguntas frecuentes
 		línea 1.x. No se congelan el texto de los mensajes ni las fachadas de comodidad. La
 		conformidad se declara contra la versión de la especificación (`SPEC_VERSION`), no
 		contra la del paquete. La declaración completa está en
-		[Estabilidad y versiones](lang-stability).
+		[Estabilidad y versiones](stability).
 
 	Subsubheader: ¿Dónde pregunto, o doy mi opinión?
 
@@ -479,4 +479,4 @@ Document (dev.stxt.website): Preguntas frecuentes
 		`stxt-lang` en GitHub: preguntas, ideas, ambigüedades de las especificaciones y lo que
 		hayas construido con STXT. Todo cambio del lenguaje empieza ahí. Los errores de una
 		herramienta concreta van a las incidencias de su repositorio, listados en la página de
-		[Herramientas](lang-tools).
+		[Herramientas](tools).

@@ -96,7 +96,7 @@ Document (dev.stxt.website): La biblioteca Python
 		tuplas (vistas de solo lectura); el árbol se modifica con `add_child`,
 		`remove_child` y `detach`, nunca mutando lo que devuelven.
 
-		Con el documento del [tutorial](lang-tutorial), la ficha de un libro:
+		Con el documento del [tutorial](tutorial), la ficha de un libro:
 
 	Code >>
 		Book (com.acme.book):
@@ -432,6 +432,6 @@ Document (dev.stxt.website): La biblioteca Python
 		lenguaje y el árbol canónico lo están en toda la línea 1.x de la especificación: un
 		documento que parsea y valida hoy parsea y valida igual mañana. Qué se congela
 		exactamente, qué no, y por qué la versión del paquete no es la de la especificación,
-		en [Estabilidad y versiones](lang-stability). Las novedades de cada versión están en el
+		en [Estabilidad y versiones](stability). Las novedades de cada versión están en el
 		[repositorio](https://github.com/stxt-lang/stxt-python), que es también donde se
 		reportan sus errores.

@@ -119,7 +119,7 @@ Document (dev.stxt.website): La biblioteca Java
 		hay ninguno y lanza `AMBIGUOUS_CHILD` si hay más de uno —para los repetidos está
 		`getChildren(name)`—; ambas admiten un segundo argumento con el namespace.
 
-		Con el documento del [tutorial](lang-tutorial), la ficha de un libro:
+		Con el documento del [tutorial](tutorial), la ficha de un libro:
 
 	Code >>
 		Book (com.acme.book):
@@ -511,6 +511,6 @@ Document (dev.stxt.website): La biblioteca Java
 		lenguaje y el árbol canónico lo están en toda la línea 1.x de la especificación: un
 		documento que parsea y valida hoy parsea y valida igual mañana. Qué se congela
 		exactamente, qué no, y por qué la versión del paquete no es la de la especificación,
-		en [Estabilidad y versiones](lang-stability). Las novedades de cada versión
+		en [Estabilidad y versiones](stability). Las novedades de cada versión
 		están en el `CHANGELOG.md` del [repositorio](https://github.com/stxt-lang/stxt-java),
 		que es también donde se reportan sus errores.

@@ -35,7 +35,7 @@ Document (dev.stxt.website): Herramientas
 		* Incluye una semilla de documentos de ejemplo.
 		* Un documento se puede compartir con un enlace que lleva el contenido dentro.
 
-		Permite seguir el [tutorial](lang-tutorial) sin salir del navegador.
+		Permite seguir el [tutorial](tutorial) sin salir del navegador.
 
 	Subheader: Extensión de VS Code
 

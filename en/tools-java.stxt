@@ -119,7 +119,7 @@ Document (dev.stxt.website): The Java library
 		are what `getChildren(name)` is for—; both accept a second argument with the
 		namespace.
 
-		With the document of the [tutorial](lang-tutorial), a book record:
+		With the document of the [tutorial](tutorial), a book record:
 
 	Code >>
 		Book (com.acme.book):
@@ -512,7 +512,7 @@ Document (dev.stxt.website): The Java library
 		and the canonical tree are frozen across the whole 1.x line of the specification: a
 		document that parses and validates today parses and validates the same tomorrow.
 		What exactly is frozen, what is not, and why the package version is not the
-		specification version, in [Stability and versions](lang-stability). The release notes of
+		specification version, in [Stability and versions](stability). The release notes of
 		each version are in the `CHANGELOG.md` of the
 		[repository](https://github.com/stxt-lang/stxt-java), which is also where its
 		errors are reported.

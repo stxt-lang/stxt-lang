@@ -64,9 +64,9 @@ Document (dev.stxt.website): STXT Tutorial
 		  (`code --install-extension stxt-lang.stxt`): coloreado, errores en el editor,
 		  autocompletado a partir de la plantilla e ir a la definición.
 
-		El ejemplo del libro se reutiliza en [El entorno de trabajo](lang-workflow), que
+		El ejemplo del libro se reutiliza en [El entorno de trabajo](working-environment), que
 		enseña a organizar un proyecto y validarlo desde el terminal; la lista completa de
-		herramientas está en [Herramientas](lang-tools).
+		herramientas está en [Herramientas](tools).
 
 	Subheader: 3. Nodos inline y bloques de texto
 
@@ -506,7 +506,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 		Cómo se hace en un proyecto real —la plantilla en un directorio `.stxt/`, el
 		documento al lado y `stxt validate` desde el terminal o los errores en el
-		editor— lo enseña [El entorno de trabajo](lang-workflow).
+		editor— lo enseña [El entorno de trabajo](working-environment).
 
 	Subheader: 14. Varios namespaces en un mismo documento
 
@@ -579,9 +579,9 @@ Document (dev.stxt.website): STXT Tutorial
 	Subheader: 15. Dónde seguir
 
 	Content >>
-		* [El entorno de trabajo](lang-workflow): organizar un proyecto, instalar
+		* [El entorno de trabajo](working-environment): organizar un proyecto, instalar
 		  plantillas, validar desde el terminal y en integración continua.
-		* [Principios de diseño](lang-principles): por qué el lenguaje es como es.
+		* [Principios de diseño](design-principles): por qué el lenguaje es como es.
 		* [Preguntas frecuentes](faq): respuestas cortas con enlace a la regla.
 		* Las especificaciones: [STXT-SPEC](stxt-core-ref) para la sintaxis,
 		  [STXT-SCHEMA-SPEC](stxt-schema-ref) y [STXT-TEMPLATE-SPEC](stxt-template-ref) para

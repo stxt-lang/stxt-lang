@@ -182,7 +182,7 @@ Document (dev.stxt.website): Ficheros de configuración
 	Content >>
 		@STXT@ describe la configuración; no la calcula. No hay variables, ni referencias a
 		otros valores, ni inclusión de ficheros, ni expresiones: un valor es el texto que
-		está escrito. Es una decisión de diseño ([Principios de diseño](lang-principles)),
+		está escrito. Es una decisión de diseño ([Principios de diseño](design-principles)),
 		a cambio de que un fichero de configuración no pueda ejecutar nada ni depender de
 		otro. La composición —un fichero base más uno por entorno— la hace la aplicación al
 		cargar, de forma explícita.

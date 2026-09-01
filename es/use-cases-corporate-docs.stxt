@@ -150,7 +150,7 @@ Document (dev.stxt.website): Documentos corporativos
 
 		La plantilla se guarda en el directorio `.stxt/` del repositorio donde viven las
 		actas, y a partir de ahí el editor y la línea de comandos la aplican sin configurar
-		nada ([El entorno de trabajo](lang-workflow)).
+		nada ([El entorno de trabajo](working-environment)).
 
 	Subheader: Un informe de estado
 

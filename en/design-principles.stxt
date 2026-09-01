@@ -30,7 +30,7 @@ Document (dev.stxt.website): Design principles
 		is sacrificed for the other two:
 
 		* **Simple to write and read.** The rules a person needs to know fit in one page of
-		  the [tutorial](lang-tutorial): a node, a text block, indentation, a comment.
+		  the [tutorial](tutorial): a node, a text block, indentation, a comment.
 		* **Simple to implement.** A conforming parser is a line-by-line pass with a stack;
 		  the complete grammar fits in an appendix, and the language is described in neutral
 		  pseudocode from which the existing ports were derived. Writing a new parser is a

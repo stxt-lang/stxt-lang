@@ -96,7 +96,7 @@ Document (dev.stxt.website): La biblioteca TypeScript
 		estrecha el tipo, igual que el árbol canónico de STXT-TREE-SPEC solo tiene
 		`children` en los inline y `lines` en los bloques.
 
-		Con el documento del [tutorial](lang-tutorial), la ficha de un libro:
+		Con el documento del [tutorial](tutorial), la ficha de un libro:
 
 	Code >>
 		Book (com.acme.book):
@@ -459,7 +459,7 @@ Document (dev.stxt.website): La biblioteca TypeScript
 		lenguaje y el árbol canónico lo están en toda la línea 1.x de la especificación: un
 		documento que parsea y valida hoy parsea y valida igual mañana. Qué se congela
 		exactamente, qué no, y por qué la versión del paquete no es la de la especificación,
-		en [Estabilidad y versiones](lang-stability). Las novedades de cada versión
+		en [Estabilidad y versiones](stability). Las novedades de cada versión
 		están en el [repositorio](https://github.com/stxt-lang/stxt-js), que es también
 		donde se reportan los errores del parser y de la validación —los que se ven a
 		través de la CLI, la extensión o el playground incluidos—.

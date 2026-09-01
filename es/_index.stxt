@@ -5,19 +5,19 @@ Document (dev.stxt.website): STXT: El Libro
 		Page: index
 		
 	Link: Principios de diseño
-		Page: lang-principles
+		Page: design-principles
 		
 	Link: Tutorial
-		Page: lang-tutorial
+		Page: tutorial
 	
 	Link: Entorno de trabajo
-		Page: lang-workflow
+		Page: working-environment
 	
 	Link: Herramientas
-		Page: lang-tools
+		Page: tools
 	
 	Link: Estabilidad y versiones
-		Page: lang-stability
+		Page: stability
 	
 	Link: FAQ
 		Page: faq
@@ -59,7 +59,7 @@ Document (dev.stxt.website): STXT: El Libro
 		Page: use-cases-corporate-docs
 		
 	Link: IA y LLMs
-		Page: ia-llms
+		Page: ai-llms
 		
 	Link: CMS y publicaciones
 		Page: use-cases-cms

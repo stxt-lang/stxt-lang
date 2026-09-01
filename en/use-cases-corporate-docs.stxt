@@ -150,7 +150,7 @@ Document (dev.stxt.website): Corporate documents
 
 		The template is stored in the `.stxt/` directory of the repository where the minutes
 		live, and from then on the editor and the command line apply it with no
-		configuration ([Working environment](lang-workflow)).
+		configuration ([Working environment](working-environment)).
 
 	Subheader: A status report
 

@@ -18,8 +18,8 @@ Document (dev.stxt.website): La línea de comandos
 
 	Content >>
 		El uso de los comandos sobre un proyecto completo, con su directorio `.stxt/` y
-		VS Code, se describe en [El entorno de trabajo](lang-workflow); el resto de
-		herramientas, en [Herramientas](lang-tools).
+		VS Code, se describe en [El entorno de trabajo](working-environment); el resto de
+		herramientas, en [Herramientas](tools).
 
 	Subheader: Instalación
 
@@ -48,7 +48,7 @@ Document (dev.stxt.website): La línea de comandos
 		Para actualizar, `npm update -g @stxt-lang/cli`; para desinstalarlo,
 		`npm uninstall -g @stxt-lang/cli`. Desde la 1.0, los comandos, sus opciones, los
 		códigos de salida y `--format json` son estables dentro de la línea 1.x; la salida
-		pensada para personas, no (ver [Estabilidad y versiones](lang-stability)). El
+		pensada para personas, no (ver [Estabilidad y versiones](stability)). El
 		número de versión y las novedades están en el
 		[repositorio](https://github.com/stxt-lang/stxt-cli).
 
@@ -162,7 +162,7 @@ Document (dev.stxt.website): La línea de comandos
 	Subsubheader: Los hallazgos
 
 	Content >>
-		Con el proyecto de [El entorno de trabajo](lang-workflow) —la plantilla
+		Con el proyecto de [El entorno de trabajo](working-environment) —la plantilla
 		`com.acme.book` en `.stxt/` y `docs/book.stxt`—, un documento con una fecha no
 		válida y sin el `ISBN` obligatorio produce:
 

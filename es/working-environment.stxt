@@ -9,7 +9,7 @@ Document (dev.stxt.website): El entorno de trabajo
 	Header: El entorno de trabajo
 
 	Assert >>
-		El [tutorial](lang-tutorial) describe el lenguaje; esta página describe el entorno de
+		El [tutorial](tutorial) describe el lenguaje; esta página describe el entorno de
 		trabajo: organizar un proyecto, colocar su gramática donde las herramientas la
 		resuelven, y validar desde el editor, desde la línea de comandos y en integración
 		continua. Sigue el mismo ejemplo del tutorial, la ficha de un libro.
@@ -18,7 +18,7 @@ Document (dev.stxt.website): El entorno de trabajo
 		Se requiere la línea de comandos `stxt` (`npm install -g @stxt-lang/cli`, o `npx
 		@stxt-lang/cli` sin instalar) y, para la sección 4, Visual Studio Code con la extensión
 		`stxt-lang.stxt`. La sección 7 repite el recorrido en el playground, sin instalación.
-		Todo lo que se usa aquí está descrito en [Herramientas](lang-tools).
+		Todo lo que se usa aquí está descrito en [Herramientas](tools).
 
 	Subheader: 1. El proyecto y el directorio `.stxt/`
 

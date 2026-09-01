@@ -18,8 +18,8 @@ Document (dev.stxt.website): The command line
 
 	Content >>
 		The use of the commands on a complete project, with its `.stxt/` directory and
-		VS Code, is described in [The working environment](lang-workflow); the other
-		tools, in [Tools](lang-tools).
+		VS Code, is described in [The working environment](working-environment); the other
+		tools, in [Tools](tools).
 
 	Subheader: Installation
 
@@ -48,7 +48,7 @@ Document (dev.stxt.website): The command line
 		To update, `npm update -g @stxt-lang/cli`; to remove it,
 		`npm uninstall -g @stxt-lang/cli`. From 1.0 on, the commands, their options, the
 		exit codes and `--format json` are stable within the 1.x line; the human-facing
-		output is not (see [Stability and versions](lang-stability)). The version number
+		output is not (see [Stability and versions](stability)). The version number
 		and the release notes are in the
 		[repository](https://github.com/stxt-lang/stxt-cli).
 
@@ -161,7 +161,7 @@ Document (dev.stxt.website): The command line
 	Subsubheader: The findings
 
 	Content >>
-		With the project of [The working environment](lang-workflow) —the `com.acme.book`
+		With the project of [The working environment](working-environment) —the `com.acme.book`
 		template in `.stxt/` and `docs/book.stxt`—, a document with an invalid date and
 		without the mandatory `ISBN` produces:
 

@@ -96,7 +96,7 @@ Document (dev.stxt.website): The Python library
 		(read-only views); the tree is modified with `add_child`, `remove_child` and
 		`detach`, never by mutating what they return.
 
-		With the document of the [tutorial](lang-tutorial), a book record:
+		With the document of the [tutorial](tutorial), a book record:
 
 	Code >>
 		Book (com.acme.book):
@@ -431,7 +431,7 @@ Document (dev.stxt.website): The Python library
 		and the canonical tree are frozen across the whole 1.x line of the specification: a
 		document that parses and validates today parses and validates the same tomorrow.
 		What exactly is frozen, what is not, and why the package version is not the
-		specification version, in [Stability and versions](lang-stability). The release
+		specification version, in [Stability and versions](stability). The release
 		notes of each version are in the
 		[repository](https://github.com/stxt-lang/stxt-python), which is also where its
 		errors are reported.
