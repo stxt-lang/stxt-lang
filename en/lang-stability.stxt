@@ -4,6 +4,7 @@ Document (dev.stxt.website): Stability and versions
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-29
+		Description: The STXT stability promise: a document valid in 1.0 stays valid across the whole 1.x line. What is frozen, what is not, and how specs and libraries are versioned.
 
 	Header: Stability and versions
 

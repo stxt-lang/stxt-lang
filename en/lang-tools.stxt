@@ -4,6 +4,7 @@ Document (dev.stxt.website): Tools
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-30
+		Description: STXT tools: browser playground, VS Code extension, command line and TypeScript, Java and Python libraries, all implementing the same five specifications.
 
 	Header: Tools
 

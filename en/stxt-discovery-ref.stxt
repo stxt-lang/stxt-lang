@@ -7,6 +7,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and Template Resolution
 		Revision: Claude Fable 5
 		Version: 1.0
 		Last modif: 2026-08-31
+		Description: STXT-DISCOVERY-SPEC: how tools locate the schemas and templates of an STXT document, with .stxt/ directories, user and system levels and STXT_PATH.
 
 	Header: @STXT@ Discovery
 

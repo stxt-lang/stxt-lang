@@ -4,6 +4,7 @@ Document (dev.stxt.website): La biblioteca Java
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-29
+		Description: dev.stxt:stxt-core, el parser de STXT para Java en Maven Central: sin dependencias, implementa las cinco especificaciones con los mismos códigos de error.
 
 	Header: La biblioteca Java
 

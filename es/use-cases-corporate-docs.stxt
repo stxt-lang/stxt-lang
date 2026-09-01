@@ -4,6 +4,7 @@ Document (dev.stxt.website): Documentos corporativos
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-23
+		Description: STXT para documentos corporativos: actas, informes y registros de decisiones donde el mismo fichero es el documento que se lee y la fuente de datos.
 
 	Header: Documentos corporativos
 

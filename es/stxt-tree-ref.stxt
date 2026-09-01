@@ -6,6 +6,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		Revision: Claude Fable 5
 		Version: 1.0
 		Last modif: 2026-08-31
+		Description: STXT-TREE-SPEC: la representación JSON canónica del árbol de un documento STXT y las dos operaciones de escritura, forma canónica y reformateado.
 
 	Header: @STXT@ Tree
 

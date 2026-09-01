@@ -4,6 +4,7 @@ Document (dev.stxt.website): Contracts and legal agreements
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-23
+		Description: STXT as the source format for contracts and agreements: normative text stays text while parties, dates and amounts are extractable, checkable data.
 
 	Header: Contracts and legal agreements
 

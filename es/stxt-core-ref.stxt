@@ -6,6 +6,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		Revision: Claude Fable 5
 		Version: 1.0
 		Last modif: 2026-08-31
+		Description: STXT-SPEC, la especificación base del lenguaje STXT: indentación como estructura, nodos y bloques de texto, namespaces, normalización, errores y seguridad.
 		
 	Header: @STXT@ Core
 	

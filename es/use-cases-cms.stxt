@@ -4,6 +4,7 @@ Document (dev.stxt.website): CMS y publicaciones
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-23
+		Description: STXT como formato fuente para CMS y publicaciones: el contenido vive en ficheros de texto, la estructura es visible y la validación es una plantilla.
 
 	Header: CMS y publicaciones
 

@@ -4,6 +4,7 @@ Document (dev.stxt.website): La línea de comandos
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-30
+		Description: stxt, la línea de comandos oficial de STXT: valida, formatea y describe documentos desde el terminal o CI, con los mismos códigos de error que las bibliotecas.
 
 	Header: La línea de comandos
 

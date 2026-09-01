@@ -4,6 +4,7 @@ Document (dev.stxt.website): CMS and publishing
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-23
+		Description: STXT as the source format for CMS and publishing: content lives in plain-text files, structure is visible and validation is a template, not a database.
 
 	Header: CMS and publishing
 

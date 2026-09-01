@@ -4,6 +4,7 @@ Document (dev.stxt.website): STXT Tutorial
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Last modif: 2026-08-29
+		Description: Tutorial de STXT desde cero: leer y escribir documentos, bloques de texto, namespaces y validación con plantillas. Sin conocimientos previos, solo un editor.
 
 	Header: @STXT@ Tutorial
 

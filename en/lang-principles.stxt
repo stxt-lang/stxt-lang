@@ -4,6 +4,7 @@ Document (dev.stxt.website): Design principles
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Last modif: 2026-08-25
+		Description: The design principles of STXT: a language designed for people first. Simplicity, indentation as structure and parsing safety all derive from that principle.
 
 	Header: Design principles
 

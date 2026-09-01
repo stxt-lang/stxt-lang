@@ -4,6 +4,7 @@ Document (dev.stxt.website): Estabilidad y versiones
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-29
+		Description: La promesa de estabilidad de STXT: un documento válido en 1.0 es válido en toda la línea 1.x. Qué se congela, qué no, y cómo se versionan specs y bibliotecas.
 
 	Header: Estabilidad y versiones
 

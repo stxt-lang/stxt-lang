@@ -7,6 +7,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		Revision: Claude Fable 5
 		Version: 1.0
 		Last modif: 2026-08-31
+		Description: STXT-SCHEMA-SPEC: el lenguaje de esquemas @stxt.schema para validar documentos STXT con nodos, tipos y cardinalidades, y el meta-esquema oficial.
 
 	Header: @STXT@ Schema
 

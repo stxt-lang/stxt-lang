@@ -4,6 +4,7 @@ Document (dev.stxt.website): Ficheros de configuración
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-23
+		Description: STXT para ficheros de configuración legibles y validables: jerarquía visible, comentarios junto al valor y una plantilla que detecta errores en el editor.
 
 	Header: Ficheros de configuración
 

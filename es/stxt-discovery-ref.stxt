@@ -7,6 +7,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		Revision: Claude Fable 5
 		Version: 1.0
 		Last modif: 2026-08-31
+		Description: STXT-DISCOVERY-SPEC: cómo localizan las herramientas los esquemas y plantillas de un documento STXT, con los directorios .stxt/ y STXT_PATH.
 
 	Header: @STXT@ Discovery
 

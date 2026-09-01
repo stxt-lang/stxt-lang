@@ -4,6 +4,7 @@ Document (dev.stxt.website): The command line
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-30
+		Description: stxt, the official STXT command line: validate, format and describe documents from the terminal or CI, with the same error codes as the libraries.
 
 	Header: The command line
 

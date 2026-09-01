@@ -4,6 +4,7 @@ Document (dev.stxt.website): La biblioteca TypeScript
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-29
+		Description: @stxt-lang/core, el parser de STXT para TypeScript y JavaScript en npm: el puerto de referencia del ecosistema, con las cinco especificaciones.
 
 	Header: La biblioteca TypeScript
 

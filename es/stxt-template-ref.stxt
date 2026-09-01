@@ -6,6 +6,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		Revision: Claude Fable 5
 		Version: 1.0
 		Last modif: 2026-08-31
+		Description: STXT-TEMPLATE-SPEC: plantillas @stxt.template, la forma simple de definir la estructura de un documento STXT; todo template compila a un esquema equivalente.
 		
 	Header: @STXT@ Template
 	

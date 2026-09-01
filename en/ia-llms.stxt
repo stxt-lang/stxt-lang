@@ -4,6 +4,7 @@ Document (dev.stxt.website): AI and LLMs — Generated, verifiable documents
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-23
+		Description: STXT for AI-generated documents: as easy for an LLM to write as Markdown, and verifiable against a template to catch hallucinated fields and missing sections.
 
 	Header: AI and LLMs
 

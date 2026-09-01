@@ -4,6 +4,7 @@ Document (dev.stxt.website): IA y LLMs — Documentos generados y verificables
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-23
+		Description: STXT para documentos generados por IA: tan fácil de escribir para un LLM como Markdown, y verificable contra una plantilla para detectar campos inventados.
 
 	Header: IA y LLMs
 

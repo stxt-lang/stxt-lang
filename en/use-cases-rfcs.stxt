@@ -4,6 +4,7 @@ Document (dev.stxt.website): RFCs and technical proposals
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-08-23
+		Description: STXT for RFCs and technical proposals: the usual plain-text review flow, with status, authors and relations between proposals as explicit, queryable data.
 
 	Header: RFCs and technical proposals
 
