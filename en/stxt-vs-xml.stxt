@@ -16,7 +16,8 @@ Document (dev.stxt.website): STXT vs XML — Structure and validation without ve
 		model a document as a tree of named nodes; both group vocabularies with namespaces;
 		both validate against a declared structure. XML proved that those ideas work at
 		industrial scale. @STXT@ pursues the same ambitions with a different constraint:
-		that the document stays pleasant to write and read by hand.
+		that the document can be written and read by hand with no closing tags and no
+		escaping.
 
 	Subheader: The same content, twice
 
@@ -75,11 +76,11 @@ Document (dev.stxt.website): STXT vs XML — Structure and validation without ve
 	Subheader: Validation
 
 	Content >>
-		XML validation is powerful and heavy: DTD, XSD and RELAX NG are ecosystems of their
-		own, and XSD in particular is famously harder than the documents it describes. The
-		@STXT@ schema layer is one page of concepts — nodes, types, cardinalities, a closed
-		content model — written in @STXT@ itself, in a [template](stxt-template-ref) form
-		that mirrors the document:
+		XML has three schema languages — DTD, XSD and RELAX NG — each an ecosystem of its
+		own; XSD in particular is a two-part specification with a type system of its own.
+		The @STXT@ schema layer is one page of concepts — nodes, types, cardinalities, a
+		closed content model — written in @STXT@ itself, in a
+		[template](stxt-template-ref) form that mirrors the document:
 
 	Code >>
 		Template (@stxt.template): com.example.articles
@@ -92,8 +93,9 @@ Document (dev.stxt.website): STXT vs XML — Structure and validation without ve
 
 	Content >>
 		It validates less than XSD — no regular expressions over content, no conditional
-		rules, no order constraints — and that is a stated non-goal: the cases it covers
-		are the ones documents actually need, with errors a person can act on
+		rules, no order constraints — and each of those absences is a stated non-goal of
+		the spec, which documents what is left out and why: keeping the model small and
+		predictable, with errors a person can act on
 		([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)).
 
 	Subheader: When to use which

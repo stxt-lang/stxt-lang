@@ -8,12 +8,11 @@ Document (dev.stxt.website): STXT vs JSON — Hand-written documents vs serializ
 	Header: @STXT@ vs JSON
 
 	Assert >>
-		JSON is a serialization format for machines; @STXT@ is a markup language for people.\\
-		They are not rivals: every @STXT@ document has a canonical JSON tree.
+		JSON is a serialization format for machines; @STXT@ is a markup language for people.
 
 	Content >>
-		JSON does its job exceptionally well: a minimal grammar, one data model, parsers
-		everywhere, and the lingua franca of every API. The comparison only makes sense at
+		JSON does its job with a minimal grammar, one data model and parsers everywhere;
+		it is the lingua franca of APIs. The comparison only makes sense at
 		the point where the two overlap — a file that a person has to write and maintain by
 		hand — because that is the job JSON never promised to do.
 
@@ -51,24 +50,26 @@ Document (dev.stxt.website): STXT vs JSON — Hand-written documents vs serializ
 		gets in the way of authoring:
 
 		* **Everything is quoted and delimited.** Keys and strings between quotes, objects
-		  between braces, elements between commas — with the trailing comma as a permanent
-		  source of friction. In @STXT@, structure is indentation and a name ends at `:`.
+		  between braces, elements between commas — and the comma after the last element
+		  is a syntax error. In @STXT@, structure is indentation and a name ends at `:`.
 		* **No comments.** The exclusion is intentional in JSON; in a hand-maintained file
 		  it is the first thing missed. @STXT@ has `#` comments, and tools preserve them
 		  when formatting.
 		* **A text is one line.** Line breaks are written `\n`, quotes are escaped, and a
-		  paragraph becomes an unreadable string. In @STXT@ a `>>` block holds the text
-		  literally, as long as it needs to be.
+		  paragraph becomes a single escaped string. In @STXT@ a `>>` block holds the
+		  text literally, as long as it needs to be.
 		* **No schema in the language.** JSON Schema exists, but it is a separate
-		  specification, written in JSON itself and considerably harder than the format it
-		  validates. The @STXT@ [template](stxt-template-ref) layer is part of the
+		  specification, written in JSON itself, with its own vocabulary of composition
+		  and references. The @STXT@ [template](stxt-template-ref) layer is part of the
 		  language and reads like the document it describes.
 
 	Subheader: From @STXT@ to JSON
 
 	Content >>
-		@STXT@ does not compete with JSON as an interchange format: it compiles to it.
-		[STXT-TREE-SPEC](stxt-tree-ref) defines the canonical JSON representation of every
+		@STXT@ does not compete with JSON as an interchange format: it adopts it. @STXT@
+		chose JSON as the representation of its logical tree, because representing a data
+		structure for programs to consume is exactly the job JSON is designed for.
+		[STXT-TREE-SPEC](stxt-tree-ref) defines that canonical representation for every
 		valid document — an array of root nodes with `name`, `canonicalName`, `namespace`,
 		and `value` plus `children`, or `lines` — identical in every implementation. The
 		command `stxt describe file.stxt` prints it, and the three libraries expose it

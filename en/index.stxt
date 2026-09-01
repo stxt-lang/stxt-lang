@@ -98,9 +98,10 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 		each one has its own page. [YAML](stxt-vs-yaml) is also indentation-based, but
 		optimizes for data serialization rather than for documents; [JSON](stxt-vs-json) is
 		a machine format, not meant to be written by hand; [XML](stxt-vs-xml) offers
-		validation at the price of verbosity; and [Markdown](stxt-vs-markdown) formats
+		validation at the price of verbosity; [TOML](stxt-vs-toml) is clear for flat
+		configuration, but nesting is awkward; and [Markdown](stxt-vs-markdown) formats
 		prose but does not structure data — the two complement each other. The short
-		version of all four, plus TOML, is in the
+		version of all five is in the
 		[FAQ](faq#why-not-xml-yaml-or-toml), and the reasoning behind the design is in
 		[Design principles](design-principles).
 

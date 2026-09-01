@@ -101,8 +101,9 @@ Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para do
 		basa en la indentación, pero optimiza para la serialización de datos antes que para
 		los documentos; [JSON](stxt-vs-json) es un formato para máquinas, no pensado para
 		escribirse a mano; [XML](stxt-vs-xml) ofrece validación al precio de la verbosidad;
+		[TOML](stxt-vs-toml) es claro en configuración plana, pero anidar es incómodo;
 		y [Markdown](stxt-vs-markdown) da formato a la prosa pero no estructura los datos —
-		ambos se complementan. La versión corta de los cuatro, más TOML, está en la
+		ambos se complementan. La versión corta de los cinco está en la
 		[FAQ](faq#por-que-no-xml-yaml-o-toml), y el razonamiento de fondo, en
 		[Principios de diseño](design-principles).
 

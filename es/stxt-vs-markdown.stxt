@@ -23,7 +23,7 @@ Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alte
 	Content >>
 		Markdown no tiene noción de campos. En cuanto un documento necesita datos — un
 		autor, una fecha, un estado —, el ecosistema recurre al **front matter**: un
-		bloque YAML colado entre vallas `---`, invisible para el propio Markdown y
+		bloque YAML entre vallas `---`, invisible para el propio Markdown y
 		parseado por un segundo lenguaje con [sus propias reglas](stxt-vs-yaml):
 
 	Listing >>

@@ -22,8 +22,8 @@ Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternative
 
 	Content >>
 		Markdown has no notion of fields. The moment a document needs data — an author, a
-		date, a status — the ecosystem reaches for **front matter**: a YAML block smuggled
-		in between `---` fences, invisible to Markdown itself and parsed by a second
+		date, a status — the ecosystem reaches for **front matter**: a YAML block between
+		`---` fences, invisible to Markdown itself and parsed by a second
 		language with [its own rules](stxt-vs-yaml):
 
 	Listing >>

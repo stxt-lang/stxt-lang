@@ -113,7 +113,8 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 		| **Free text** | Literal `>>` blocks: any character, no escapes | Escape `<` and `&`, or CDATA | Block scalars with subtle indentation and chomping rules | Multi-line strings between triple quotes |
 
 		The comparison with each format is developed on its own page:
-		[STXT vs XML](stxt-vs-xml) and [STXT vs YAML](stxt-vs-yaml).
+		[STXT vs XML](stxt-vs-xml), [STXT vs YAML](stxt-vs-yaml) and
+		[STXT vs TOML](stxt-vs-toml).
 
 
 	Subsubheader: Why not Markdown?

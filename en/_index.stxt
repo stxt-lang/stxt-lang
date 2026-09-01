@@ -33,6 +33,9 @@ Document (dev.stxt.website): STXT: The Book
 	Link: @STXT@ vs XML
 		Page: stxt-vs-xml
 
+	Link: @STXT@ vs TOML
+		Page: stxt-vs-toml
+
 	Link: @STXT@ vs Markdown
 		Page: stxt-vs-markdown
 

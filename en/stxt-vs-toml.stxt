@@ -1,0 +1,172 @@
+Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical documents
+	Metadata:
+		Author: Claude Fable 5
+		Revision: Joan Costa Mombiela
+		Last modif: 2026-09-01
+		Description: STXT and TOML compared: headers vs indentation, types in the syntax vs schema, multi-line text, namespaces and validation.
+
+	Header: @STXT@ vs TOML
+
+	Assert >>
+		TOML and @STXT@ share a goal: files a person writes and reads.\\
+		They differ in the model: tables of typed key-value pairs versus a tree of text nodes.
+
+	Content >>
+		TOML is the configuration format of entire ecosystems — `Cargo.toml` in Rust,
+		`pyproject.toml` in Python — and its specification states a goal close to that
+		of @STXT@: a minimal format, easy to read because of obvious semantics. This is
+		the comparison in this series between two formats that want the same thing, and
+		the difference is the data model: TOML describes tables of keys with typed
+		values; @STXT@, hierarchical documents whose values are text.
+
+	Subheader: The same content, twice
+
+	Content >>
+		A backup configuration in TOML:
+
+	Listing >>
+		title = "Nightly backup"
+
+		[storage]
+		kind = "s3"
+		bucket = "acme-backups"
+
+		[[job]]
+		name = "database"
+		schedule = "02:30"
+		keep = 14
+
+		[[job]]
+		name = "documents"
+		schedule = "03:00"
+		keep = 30
+
+	Content >>
+		And in @STXT@:
+
+	Code >>
+		Backup: Nightly backup
+			Storage:
+				Kind: s3
+				Bucket: acme-backups
+			Job: database
+				Schedule: 02:30
+				Keep: 14
+			Job: documents
+				Schedule: 03:00
+				Keep: 30
+
+	Content >>
+		The tree is the same; what changes is where the hierarchy lives: in TOML it is
+		in the headers — `[storage]`, `[[job]]` —, and in @STXT@, in the indentation.
+
+	Subheader: Where the hierarchy lives
+
+	Content >>
+		The structure of a TOML document is in its headers, and each header spells the
+		full path: `[storage]`, `[servers.alpha.network]`, `[[job]]` for each element
+		of an array of tables. Three properties follow:
+
+		* **Physical order is free.** Tables can be written in any order, so the
+		  visual shape of the file does not have to match the tree it describes.
+		* **Position decides the parent.** A key belongs to the last opened header:
+		  after `[storage]`, everything that follows belongs to `storage` until the
+		  next header, and a root-level key can no longer be written.
+		* **There are several spellings for the same tree.** Headers, dotted keys
+		  (`storage.kind = "s3"`) and inline tables (`storage = { kind = "s3" }`)
+		  produce the same structure, just as inline arrays (`[8080, 8443]`) and
+		  arrays of tables (`[[job]]`) coexist.
+
+		In @STXT@ the hierarchy is in the indentation and only there: each level is
+		written once, a child belongs to the node it is indented under, and a list is
+		a repeated child ([STXT-SPEC §8](stxt-core-ref#s8)). The visual shape of the
+		document is its structure.
+
+	Subheader: Types in the syntax
+
+	Content >>
+		In TOML the type of a value is in its spelling: `8080` is an integer and
+		`"8080"` a string; `true` is a boolean; dates and times are native types.
+		Strings are always quoted, and there are four forms — basic and literal,
+		single-line and multi-line — with escapes in the basic ones.
+
+		In @STXT@ a value is always text, unquoted: `8080` is four characters. Types
+		exist, but they are declared in the [schema](stxt-schema-ref) — `NATURAL`,
+		`DATE`, `EMAIL`… — and it is the validator, not the parser, that checks them.
+		The meaning of the document does not depend on how the value is spelled.
+
+	Subheader: Free text
+
+	Content >>
+		A TOML multi-line string keeps everything between the delimiters except the
+		initial line break: the indentation it is written with becomes part of the
+		value, so a long text cannot be indented along with the table it belongs to.
+		In an @STXT@ `>>` block the level's indentation is discounted and any
+		additional indentation is kept: the text is indented with the document and
+		arrives literally, with no escapes ([STXT-SPEC §10](stxt-core-ref#s10)).
+
+	Subheader: Namespaces and validation
+
+	Content >>
+		Like YAML, TOML has no concept of namespace and no schema layer: nothing in
+		the file declares which vocabulary it belongs to, and validation is delegated
+		to external tools. In @STXT@ both are part of the language: the namespace
+		connects the document to its definition, and the template fixes structure,
+		cardinalities and types. The configuration above, with a namespace and
+		validated:
+
+	Code >>
+		Template (@stxt.template): com.example.backup
+			Structure >>
+				Backup (com.example.backup):
+					Storage: (1)
+						Kind: (1)
+						Bucket: (1)
+					Job: (+)
+						Schedule: (1)
+						Keep: (1) NATURAL
+
+	Code >>
+		Backup (com.example.backup): Nightly backup
+			Storage:
+				Kind: s3
+				Bucket: acme-backups
+			Job: database
+				Schedule: 02:30
+				Keep: 14
+			Job: documents
+				Schedule: 03:00
+				Keep: 30
+
+	Content >>
+		A misspelled field, a missing `Storage` or a `Keep` that is not a number fail
+		with an explicit error code:
+
+	Code >>
+		# ERROR: Keep requires a NATURAL value
+		Backup (com.example.backup): Nightly backup
+			Storage:
+				Kind: s3
+				Bucket: acme-backups
+			Job: database
+				Schedule: 02:30
+				Keep: fourteen
+
+	Subheader: When to use which
+
+	Content >>
+		Use TOML where the ecosystem already speaks it — `Cargo.toml`,
+		`pyproject.toml`, the configuration of tools that expect that file — and in
+		general for flat configuration of typed keys and values, which is the goal its
+		specification states.
+
+		@STXT@ fits when the file grows into a document: hierarchy several levels
+		deep, prose next to the data, [corporate records](use-cases-corporate-docs)
+		and any structure worth validating against an agreed definition. The
+		[configuration files](use-cases-config-files) use case develops the closest
+		scenario.
+
+		To see the language, start with the [tutorial](tutorial) or paste the
+		examples above into the [playground](https://play.stxt.dev); the short
+		version of this comparison, next to XML and YAML, is in the
+		[FAQ](faq#why-not-xml-yaml-or-toml).

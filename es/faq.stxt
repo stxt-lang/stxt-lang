@@ -115,7 +115,8 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 		| **Texto libre** | Bloques `>>` literales: cualquier carácter, sin escapes | Escapar `<` y `&`, o CDATA | Escalares de bloque con reglas de indentación y recorte sutiles | Strings multilínea entre triples comillas |
 
 		La comparación con cada formato se desarrolla en su propia página:
-		[STXT frente a XML](stxt-vs-xml) y [STXT frente a YAML](stxt-vs-yaml).
+		[STXT frente a XML](stxt-vs-xml), [STXT frente a YAML](stxt-vs-yaml) y
+		[STXT frente a TOML](stxt-vs-toml).
 
 
 	Subsubheader: ¿Por qué no Markdown?

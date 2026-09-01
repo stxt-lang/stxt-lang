@@ -16,8 +16,8 @@ Document (dev.stxt.website): STXT frente a XML — Estructura y validación sin 
 		Ambos modelan un documento como un árbol de nodos con nombre; ambos agrupan
 		vocabularios con namespaces; ambos validan contra una estructura declarada. XML
 		demostró que esas ideas funcionan a escala industrial. @STXT@ persigue las mismas
-		ambiciones con una restricción distinta: que el documento siga siendo agradable de
-		escribir y leer a mano.
+		ambiciones con una restricción distinta: que el documento se pueda escribir y
+		leer a mano sin etiquetas de cierre ni escapes.
 
 	Subheader: El mismo contenido, dos veces
 
@@ -78,11 +78,12 @@ Document (dev.stxt.website): STXT frente a XML — Estructura y validación sin 
 	Subheader: La validación
 
 	Content >>
-		La validación XML es potente y pesada: DTD, XSD y RELAX NG son ecosistemas
-		propios, y XSD en particular es notoriamente más difícil que los documentos que
-		describe. La capa de esquemas de @STXT@ es una página de conceptos — nodos, tipos,
-		cardinalidades, un modelo de contenido cerrado — escrita en el propio @STXT@, en
-		una forma de [plantilla](stxt-template-ref) que refleja el documento:
+		XML tiene tres lenguajes de esquema — DTD, XSD y RELAX NG —, cada uno un
+		ecosistema propio; XSD en particular es una especificación en dos partes con un
+		sistema de tipos propio. La capa de esquemas de @STXT@ es una página de
+		conceptos — nodos, tipos, cardinalidades, un modelo de contenido cerrado —
+		escrita en el propio @STXT@, en una forma de
+		[plantilla](stxt-template-ref) que refleja el documento:
 
 	Code >>
 		Template (@stxt.template): com.example.articles
@@ -95,10 +96,10 @@ Document (dev.stxt.website): STXT frente a XML — Estructura y validación sin 
 
 	Content >>
 		Valida menos que XSD — sin expresiones regulares sobre el contenido, sin reglas
-		condicionales, sin restricciones de orden —, y es un no-objetivo declarado: los
-		casos que cubre son los que los documentos necesitan de verdad, con errores sobre
-		los que una persona puede actuar
-		([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)).
+		condicionales, sin restricciones de orden —, y cada una de esas ausencias es un
+		no-objetivo declarado de la spec, que documenta qué queda fuera y por qué:
+		mantener el modelo pequeño y predecible, con errores sobre los que una persona
+		puede actuar ([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)).
 
 	Subheader: Cuándo usar cada uno
 

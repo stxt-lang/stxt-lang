@@ -12,10 +12,17 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 		YAML for serializing data structures, @STXT@ for documents written and read by people.
 
 	Content >>
-		YAML is not a mistake, and this page is not a takedown: it is the de facto standard
-		of a whole generation of infrastructure tooling, and where an ecosystem expects
-		YAML, YAML is the right answer. The comparison is about design: what each language
-		asks of the person writing it, and what it gives back.
+		YAML is the de facto standard of a whole generation of infrastructure tooling,
+		and where an ecosystem expects YAML, YAML is the right answer. The comparison is
+		about design: what each language asks of the person writing it, and what it
+		gives back.
+
+		There is also a difference of model prior to any syntax: YAML has no concept of
+		namespace. Nothing in a YAML document declares which vocabulary it belongs to or
+		which structure it should be validated against; that information lives outside,
+		in the tool that reads it. In @STXT@ the namespace is part of the language
+		([STXT-SPEC §7](stxt-core-ref#s7)) and is what connects each document to its
+		definition.
 
 	Subheader: The same content, twice
 
@@ -51,11 +58,11 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 		The two documents look alike, and that resemblance is the point of the comparison:
 		the differences are in the rules behind the indentation, not in the surface.
 
-	Subheader: The rules a person must remember
+	Subheader: The rules behind the indentation
 
 	Content >>
-		YAML is easy to read and hard to know. Its specification is one of the largest of
-		any text format, and the surface hides decisions that change the meaning of a value:
+		The YAML specification is one of the largest of any text format, and the surface
+		hides decisions that change the meaning of a value:
 
 		* **Implicit typing.** `no` is a boolean in YAML 1.1 and a string in 1.2; `1.20` is
 		  a number and loses its trailing zero; a version like `3.10` means something
@@ -144,6 +151,20 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 			Replicas: two
 			Port: 8080
 			Maintainer: ana@example.com
+
+	Subheader: What about NestedText?
+
+	Content >>
+		NestedText starts from the same diagnosis of YAML and takes several of the
+		same decisions as @STXT@: every value is text, no implicit typing, no escapes,
+		and structure in the indentation. The difference is the model: NestedText
+		keeps YAML's data model — dictionaries, lists and strings, with no name and no
+		vocabulary — and leaves types and checking entirely to the application. @STXT@
+		models named documents: nodes, namespaces that connect each document to its
+		definition, and the [schema](stxt-schema-ref) and
+		[template](stxt-template-ref) layer inside the language. As a YAML
+		replacement for transporting data, NestedText reaches an equally predictable
+		syntax; @STXT@ adds the vocabulary and the validation.
 
 	Subheader: When to use which
 
