@@ -71,7 +71,7 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 				The book is finished!!
 
 	Content >>
-		And, in a separate file, the template that validates that namespace:
+		And the template that validates that namespace:
 
 	Code >>
 		Template (@stxt.template): com.example.docs

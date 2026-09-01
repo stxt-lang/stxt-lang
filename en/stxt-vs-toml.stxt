@@ -128,7 +128,7 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 				Keep: 30
 
 	Content >>
-		And the template of its namespace, apart:
+		And the template of its namespace:
 
 	Code >>
 		Template (@stxt.template): com.example.backup

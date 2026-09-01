@@ -130,7 +130,7 @@ Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente 
 				Keep: 30
 
 	Content >>
-		Y la plantilla de su namespace, aparte:
+		Y la plantilla de su namespace:
 
 	Code >>
 		Template (@stxt.template): com.example.backup

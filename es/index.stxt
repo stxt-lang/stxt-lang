@@ -72,7 +72,7 @@ Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para do
 				The book is finished!!
 
 	Content >>
-		Y, en un fichero aparte, la plantilla que valida ese namespace:
+		Y la plantilla que valida ese namespace:
 
 	Code >>
 		Template (@stxt.template): com.example.docs

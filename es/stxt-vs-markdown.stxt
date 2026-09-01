@@ -58,7 +58,7 @@ Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alte
 				Write **short** sentences. Prefer [links](https://example.com) to footnotes.
 
 	Content >>
-		Y la plantilla de su namespace, aparte:
+		Y la plantilla de su namespace:
 
 	Code >>
 		Template (@stxt.template): com.example.article

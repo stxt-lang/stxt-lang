@@ -131,7 +131,7 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 				The TLS certificate expires on 2027-03-01.
 
 	Content >>
-		And the template of its namespace, apart:
+		And the template of its namespace:
 
 	Code >>
 		Template (@stxt.template): com.example.deploy

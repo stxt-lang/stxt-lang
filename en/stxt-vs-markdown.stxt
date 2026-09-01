@@ -57,7 +57,7 @@ Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternative
 				Write **short** sentences. Prefer [links](https://example.com) to footnotes.
 
 	Content >>
-		And the template of its namespace, apart:
+		And the template of its namespace:
 
 	Code >>
 		Template (@stxt.template): com.example.article
