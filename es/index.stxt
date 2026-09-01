@@ -59,11 +59,9 @@ Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para do
 		Se pueden definir además esquemas o plantillas
 		para validar el contenido de un documento.
 
-		Un documento `Email` del namespace `com.example.docs`, junto a la plantilla que lo
-		valida:
+		Un documento `Email` del namespace `com.example.docs`:
 
 	Code >>
-		# El documento
 		Email (com.example.docs):
 			From: John Smith <john.smith@example.com>
 			To: Mery Adams <mery.adams@example.com>
@@ -73,7 +71,10 @@ Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para do
 				Hello Mery!!
 				The book is finished!!
 
-		# La definición de su plantilla
+	Content >>
+		Y, en un fichero aparte, la plantilla que valida ese namespace:
+
+	Code >>
 		Template (@stxt.template): com.example.docs
 			Structure >>
 				Email (com.example.docs):

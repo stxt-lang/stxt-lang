@@ -121,7 +121,6 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 		language, optional and closed. The descriptor above, validated:
 
 	Code >>
-		# The document
 		Service (com.example.deploy):
 			Name: billing
 			Replicas: 2
@@ -131,7 +130,10 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 			Notes >>
 				The TLS certificate expires on 2027-03-01.
 
-		# Its template definition
+	Content >>
+		And the template of its namespace, apart:
+
+	Code >>
 		Template (@stxt.template): com.example.deploy
 			Structure >>
 				Service (com.example.deploy):

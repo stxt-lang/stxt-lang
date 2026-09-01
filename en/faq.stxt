@@ -299,6 +299,10 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 				Reviewer: Ana López
 				Score: 9
 
+	Content >>
+		And the templates of the two namespaces:
+
+	Code >>
 		Template (@stxt.template): com.acme.book
 			Structure >>
 				Book:
@@ -313,9 +317,8 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 
 	Content >>
 		`Reviewer` and `Score` belong to `com.acme.reviews` without writing it: they
-		inherit it from `Review`, and each namespace is validated against its template.
-		The two templates accompany the document so that the block validates as a
-		whole; the [tutorial](tutorial#s14) develops the full example.
+		inherit it from `Review`, and each namespace is validated against its template;
+		the [tutorial](tutorial#s14) develops the full example.
 		See [STXT-SPEC §7.2](stxt-core-ref#s7-2) and
 		[STXT-SCHEMA-SPEC §8](stxt-schema-ref#s8).
 

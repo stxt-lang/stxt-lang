@@ -561,9 +561,9 @@ Document (dev.stxt.website): STXT Tutorial
 		the rest of the book against its own.
 
 		An @STXT@ document may have several root nodes, and this one has three: the book
-		and the two templates. They travel together on purpose: *Open in the
-		playground* loads the whole block, and the two templates validate the document
-		that accompanies them.
+		and the two templates. Fitting in one file is a possibility, not an
+		obligation: usually each template lives in its own file, and documents and
+		definitions find each other by namespace.
 
 		Reference: [STXT-SPEC §7.2](stxt-core-ref#s7-2) (namespace inheritance),
 		[§8.5](stxt-core-ref#s8-5) (several root nodes),

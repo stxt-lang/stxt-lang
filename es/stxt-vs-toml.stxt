@@ -118,7 +118,6 @@ Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente 
 		y validada:
 
 	Code >>
-		# El documento
 		Backup (com.example.backup): Nightly backup
 			Storage:
 				Kind: s3
@@ -130,7 +129,10 @@ Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente 
 				Schedule: 03:00
 				Keep: 30
 
-		# La definición de su plantilla
+	Content >>
+		Y la plantilla de su namespace, aparte:
+
+	Code >>
 		Template (@stxt.template): com.example.backup
 			Structure >>
 				Backup (com.example.backup):

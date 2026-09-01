@@ -50,14 +50,16 @@ Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternative
 		as Markdown:
 
 	Code >>
-		# The document
 		Article (com.example.article): Style guide
 			Author: Ana López
 			Published: 2026-09-01
 			Body >>
 				Write **short** sentences. Prefer [links](https://example.com) to footnotes.
 
-		# Its template definition
+	Content >>
+		And the template of its namespace, apart:
+
+	Code >>
 		Template (@stxt.template): com.example.article
 			Structure >>
 				Article (com.example.article):

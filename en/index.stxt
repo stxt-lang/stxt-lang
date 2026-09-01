@@ -58,11 +58,9 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 		Schemas or templates can also be defined
 		to validate the content of a document.
 
-		An `Email` document from the `com.example.docs` namespace, together with the template
-		that validates it:
+		An `Email` document from the `com.example.docs` namespace:
 
 	Code >>
-		# The document
 		Email (com.example.docs):
 			From: John Smith <john.smith@example.com>
 			To: Mery Adams <mery.adams@example.com>
@@ -72,7 +70,10 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 				Hello Mery!!
 				The book is finished!!
 
-		# Its template definition
+	Content >>
+		And, in a separate file, the template that validates that namespace:
+
+	Code >>
 		Template (@stxt.template): com.example.docs
 			Structure >>
 				Email (com.example.docs):

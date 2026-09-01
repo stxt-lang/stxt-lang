@@ -300,6 +300,10 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 				Reviewer: Ana López
 				Score: 9
 
+	Content >>
+		Y las plantillas de los dos namespaces:
+
+	Code >>
 		Template (@stxt.template): com.acme.book
 			Structure >>
 				Book:
@@ -314,8 +318,7 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 
 	Content >>
 		`Reviewer` y `Score` pertenecen a `com.acme.reviews` sin escribirlo: lo heredan
-		de `Review`, y cada namespace se valida contra su plantilla. Las dos plantillas
-		acompañan al documento para que el bloque se valide en conjunto; el
+		de `Review`, y cada namespace se valida contra su plantilla; el
 		[tutorial](tutorial#s14) desarrolla el ejemplo completo.
 		Ver [STXT-SPEC §7.2](stxt-core-ref#s7-2) y
 		[STXT-SCHEMA-SPEC §8](stxt-schema-ref#s8).

@@ -116,7 +116,6 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 		validated:
 
 	Code >>
-		# The document
 		Backup (com.example.backup): Nightly backup
 			Storage:
 				Kind: s3
@@ -128,7 +127,10 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 				Schedule: 03:00
 				Keep: 30
 
-		# Its template definition
+	Content >>
+		And the template of its namespace, apart:
+
+	Code >>
 		Template (@stxt.template): com.example.backup
 			Structure >>
 				Backup (com.example.backup):

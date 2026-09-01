@@ -567,8 +567,9 @@ Document (dev.stxt.website): STXT Tutorial
 		contra la suya.
 
 		Un documento @STXT@ puede tener varios nodos raíz, y este tiene tres: el libro y
-		las dos plantillas. Van juntos a propósito: *Abrir en el playground* carga el
-		bloque entero, y las dos plantillas validan el documento que las acompaña.
+		las dos plantillas. Que quepan en un solo fichero es una posibilidad, no una
+		obligación: lo habitual es que cada plantilla viva en el suyo, y que documento y
+		definiciones se encuentren por el namespace.
 
 		Referencia: [STXT-SPEC §7.2](stxt-core-ref#s7-2) (herencia de namespaces),
 		[§8.5](stxt-core-ref#s8-5) (varios nodos raíz),
