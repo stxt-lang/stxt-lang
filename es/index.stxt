@@ -45,11 +45,12 @@ Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para do
 				The book is finished!
 
 	Content >>
-		Dos reglas sostienen casi todo el lenguaje. **La indentación es la estructura**: un
-		tabulador o cuatro espacios por nivel, y la jerarquía en pantalla es la jerarquía
-		del documento. Y **el texto libre es literal**: todo lo indentado bajo un nodo `>>`
-		es texto tal como se escribió, sin escapes ni comillas. El [tutorial](tutorial)
-		recorre el resto en quince secciones breves.
+		Las reglas del lenguaje son pocas, y el ejemplo de arriba ya usa dos. **La
+		indentación es la estructura**: un tabulador o cuatro espacios por nivel, y la
+		jerarquía en pantalla es la jerarquía del documento. **El texto libre es
+		literal**: todo lo indentado bajo un nodo `>>` es texto tal como se escribió, sin
+		escapes ni comillas. El [tutorial](tutorial) recorre el resto en quince secciones
+		breves.
 
 	Subheader: Documentos con namespace y esquemas
 

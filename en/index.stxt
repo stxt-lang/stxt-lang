@@ -44,11 +44,12 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 				The book is finished!
 
 	Content >>
-		Two rules carry most of the language. **Indentation is the structure**: one tab or
-		four spaces per level, and the hierarchy on screen is the hierarchy of the document.
-		And **free text is literal**: everything indented under a `>>` node is text exactly
-		as written, with no escapes and no quotes. The [tutorial](tutorial) covers the rest
-		in fifteen short sections.
+		The language has few rules, and the example above already uses two.
+		**Indentation is the structure**: one tab or four spaces per level, and the
+		hierarchy on screen is the hierarchy of the document. **Free text is literal**:
+		everything indented under a `>>` node is text exactly as written, with no escapes
+		and no quotes. The [tutorial](tutorial) covers the rest in fifteen short
+		sections.
 
 	Subheader: Documents with namespace and schemas
 
