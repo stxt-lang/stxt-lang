@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-31
+		Last modif: 2026-09-06
 		Description: STXT-DISCOVERY-SPEC: how tools locate the schemas and templates of an STXT document, with .stxt/ directories, user and system levels and STXT_PATH.
 
 	Header: @STXT@ Discovery
@@ -176,6 +176,8 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		* Entries point **directly** to definition directories: they do not need to be
 		  named `.stxt`.
 		* A nonexistent entry is ignored; it is not an error.
+		* An empty entry — the one left by a leading, trailing or doubled separator, as in
+		  `:/opt/defs` — is ignored as well: it does not stand for the working directory.
 		* An `STXT_PATH` that is defined but empty leaves the chain empty: no namespace
 		  has an active definition, and validating a document with a namespace fails
 		  with `SCHEMA_NOT_FOUND` ([*STXT-SCHEMA-SPEC* §13](stxt-schema-ref#s13)). An

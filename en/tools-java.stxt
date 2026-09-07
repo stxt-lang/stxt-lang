@@ -176,7 +176,8 @@ Document (dev.stxt.website): The Java library — STXT
 	Content >>
 		Trees are mutable and keep their own integrity: every node knows its parent,
 		`addChild` links both ends and refuses a node that already has one
-		(`NODE_ALREADY_ATTACHED`) or that is an ancestor (`NODE_CYCLE`); `removeChild` and
+		(`NODE_ALREADY_ATTACHED`) or that is an ancestor (`NODE_CYCLE`), and `setValue` and
+		`addTextLine` refuse a line break (`LINE_BREAK_NOT_ALLOWED`); `removeChild` and
 		`detach()` undo it. Levels are derived from the chain of parents, and the line is
 		only set by the parser. In the factories with two `String`s, the second one is
 		always the **content** (value or text); the namespace only appears in the
@@ -487,7 +488,7 @@ Document (dev.stxt.website): The Java library — STXT
 		| `SchemaException`           | The schema or template itself is malformed                                                                 |
 		| `ResourceNotFoundException` | A `ResourcesLoader` has no such resource (providers turn it into a `SCHEMA_NOT_FOUND` finding)              |
 		| `STXTIOException`           | Reading a file failed                                                                                     |
-		| `STXTException` (base)      | Tree integrity (`NODE_ALREADY_ATTACHED`, `NODE_CYCLE`), an ambiguous lookup (`AMBIGUOUS_CHILD`) and other runtime failures |
+		| `STXTException` (base)      | Tree integrity (`NODE_ALREADY_ATTACHED`, `NODE_CYCLE`, `LINE_BREAK_NOT_ALLOWED`), an ambiguous lookup (`AMBIGUOUS_CHILD`) and other runtime failures |
 
 		The ones coming out of `parseResult` are not thrown: they are collected in
 		`getErrors()` as `ParseException` (syntax) or `ValidationException` (grammar).

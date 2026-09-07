@@ -148,7 +148,8 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 	Content >>
 		Los árboles son mutables y mantienen su propia integridad: cada nodo conoce a su
 		padre, `add_child` engancha los dos extremos y lanza `RuntimeException` si el nodo ya
-		tiene padre (`NODE_ALREADY_ATTACHED`) o es un ancestro (`NODE_CYCLE`); `remove_child`
+		tiene padre (`NODE_ALREADY_ATTACHED`) o es un ancestro (`NODE_CYCLE`), y `set_value` y
+		`add_text_line` rechazan un salto de línea (`LINE_BREAK_NOT_ALLOWED`); `remove_child`
 		y `detach()` lo deshacen. Los niveles se derivan de la cadena de padres, y la línea
 		solo la fija el parser. En los constructores y fábricas con dos cadenas, la segunda
 		es siempre el contenido (valor o texto); el namespace solo aparece en la forma

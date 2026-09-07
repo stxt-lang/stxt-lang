@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Version: 1.0
-		Last modif: 2026-08-31
+		Last modif: 2026-09-06
 		Description: STXT-DISCOVERY-SPEC: cómo localizan las herramientas los esquemas y plantillas de un documento STXT, con los directorios .stxt/ y STXT_PATH.
 
 	Header: @STXT@ Discovery
@@ -176,6 +176,8 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		* Las entradas apuntan **directamente** a directorios de definiciones: no es
 		  necesario que se llamen `.stxt`.
 		* Una entrada inexistente se ignora; no es un error.
+		* Una entrada vacía —la que deja un separador inicial, final o doble, como en
+		  `:/opt/defs`— se ignora igualmente: no designa el directorio de trabajo.
 		* Una `STXT_PATH` definida pero vacía deja la cadena vacía: ningún namespace
 		  tiene definición activa, y validar un documento con namespace falla con
 		  `SCHEMA_NOT_FOUND` ([*STXT-SCHEMA-SPEC* §13](stxt-schema-ref#s13)). La cadena

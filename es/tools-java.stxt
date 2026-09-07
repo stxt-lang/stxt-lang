@@ -176,7 +176,8 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 	Content >>
 		Los árboles son mutables y mantienen su propia integridad: cada nodo conoce a su
 		padre, `addChild` engancha los dos extremos y rechaza un nodo que ya tenga padre
-		(`NODE_ALREADY_ATTACHED`) o que sea un ancestro (`NODE_CYCLE`); `removeChild` y
+		(`NODE_ALREADY_ATTACHED`) o que sea un ancestro (`NODE_CYCLE`), y `setValue` y
+		`addTextLine` rechazan un salto de línea (`LINE_BREAK_NOT_ALLOWED`); `removeChild` y
 		`detach()` lo deshacen. Los niveles se derivan de la cadena de padres, y la línea
 		solo la fija el parser. En las fábricas con dos `String`, el segundo es siempre el
 		**contenido** (valor o texto); el namespace solo aparece en la forma de tres
@@ -487,7 +488,7 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 		| `SchemaException`           | El esquema o la plantilla están mal formados                                                              |
 		| `ResourceNotFoundException` | Un `ResourcesLoader` no tiene el recurso (los proveedores la convierten en un hallazgo `SCHEMA_NOT_FOUND`) |
 		| `STXTIOException`           | No se ha podido leer un fichero                                                                           |
-		| `STXTException` (base)      | Integridad del árbol (`NODE_ALREADY_ATTACHED`, `NODE_CYCLE`), búsqueda ambigua (`AMBIGUOUS_CHILD`) y demás fallos en tiempo de ejecución |
+		| `STXTException` (base)      | Integridad del árbol (`NODE_ALREADY_ATTACHED`, `NODE_CYCLE`, `LINE_BREAK_NOT_ALLOWED`), búsqueda ambigua (`AMBIGUOUS_CHILD`) y demás fallos en tiempo de ejecución |
 
 		Las que salen de `parseResult` no se lanzan: se acumulan en `getErrors()` como
 		`ParseException` (sintaxis) o `ValidationException` (gramática). Las de integridad

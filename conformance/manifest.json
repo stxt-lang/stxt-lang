@@ -1,5 +1,5 @@
 {
-  "kit": "1.0",
+  "kit": "1.0.1",
   "specifications": {
     "STXT-SPEC": "1.0",
     "STXT-TREE-SPEC": "1.0",
@@ -567,6 +567,17 @@
       "spec": "STXT-SPEC §7.1, §11 (9)",
       "description": "Namespaces are ASCII only.",
       "input": "parse/namespace-non-ascii.stxt",
+      "error": {
+        "code": "INVALID_NAMESPACE",
+        "line": 1
+      }
+    },
+    {
+      "id": "parse/namespace-kelvin-sign",
+      "category": "parse-error",
+      "spec": "STXT-SPEC §7.1, §11 (9)",
+      "description": "ASCII is checked on the source characters: U+212A KELVIN SIGN, whose Unicode lower case is the ASCII 'k', is not a 'k' (a homograph, §15).",
+      "input": "parse/namespace-kelvin-sign.stxt",
       "error": {
         "code": "INVALID_NAMESPACE",
         "line": 1

@@ -148,7 +148,8 @@ Document (dev.stxt.website): The Python library — STXT
 	Content >>
 		Trees are mutable and keep their own integrity: every node knows its parent,
 		`add_child` links both ends and raises `RuntimeException` if the node already has a
-		parent (`NODE_ALREADY_ATTACHED`) or is an ancestor (`NODE_CYCLE`); `remove_child`
+		parent (`NODE_ALREADY_ATTACHED`) or is an ancestor (`NODE_CYCLE`), and `set_value` and
+		`add_text_line` refuse a line break (`LINE_BREAK_NOT_ALLOWED`); `remove_child`
 		and `detach()` undo it. Levels are derived from the chain of parents, and the line
 		is only set by the parser. In the constructors and factories with two strings, the
 		second one is always the content (value or text); the namespace only appears in
