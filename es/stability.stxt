@@ -88,6 +88,9 @@ Document (dev.stxt.website): Estabilidad y versiones — STXT
 		el kit fija la fecha de cada especificación que certifica, y una implementación
 		conforme expone la de STXT-SPEC como `SPEC_VERSION`, con un valor `AAAA-MM-DD`. Dos
 		bibliotecas con versiones distintas que exponen la misma fecha leen el mismo @STXT@.
+		La fecha del kit identifica el paquete, nada más: si un kit nuevo solo mueve la fecha
+		de una especificación, las implementaciones que no la cubren siguen conformes con las
+		suyas, sin volver a certificarse.
 
 	Subheader: Cómo se anuncia un cambio
 

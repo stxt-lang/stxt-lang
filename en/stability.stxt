@@ -87,7 +87,9 @@ Document (dev.stxt.website): Stability and versions — STXT
 		the kit fixes the date of each specification it certifies, and a conforming
 		implementation exposes the STXT-SPEC one as `SPEC_VERSION`, with a `YYYY-MM-DD`
 		value. Two libraries with different versions that expose the same date read the same
-		@STXT@.
+		@STXT@. The kit date identifies the bundle, nothing more: if a new kit only moves the
+		date of one specification, the implementations that do not cover it stay conformant
+		to theirs, with no need to certify again.
 
 	Subheader: How a change is announced
 

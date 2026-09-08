@@ -25,7 +25,10 @@ The kit is identified by a **date** (`kit` in the manifest, currently **2026-09-
 of its current content, in the same way the specifications are (STXT-SPEC §1.1). `specifications`
 pins, for each specification the kit certifies, the date of the text the cases were written
 against. Adding cases moves the kit date; changing what an existing case expects only happens
-when a specification changes, and the pin of that specification moves with it.
+when a specification changes, and the pin of that specification moves with it. The kit date
+identifies the bundle, nothing more: conformance to a profile is read from the pins of the
+specifications that profile certifies, so a new kit whose pins moved only for specifications
+outside a profile does not require the implementations of that profile to certify again.
 
 ## The contract
 
