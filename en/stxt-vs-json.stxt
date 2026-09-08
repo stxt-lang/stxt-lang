@@ -2,8 +2,8 @@ Document (dev.stxt.website): STXT vs JSON — Hand-written documents vs serializ
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-01
-		Description: STXT and JSON compared: authoring by hand, comments, multi-line text and validation — and how every STXT document maps to a canonical JSON tree.
+		Last modif: 2026-09-08
+		Description: STXT and JSON compared with examples: hand-writing, comments, multi-line text, JSON Schema versus templates, and the canonical JSON tree of every STXT document.
 
 	Header: @STXT@ vs JSON
 
@@ -11,10 +11,10 @@ Document (dev.stxt.website): STXT vs JSON — Hand-written documents vs serializ
 		JSON is a serialization format for machines; @STXT@ is a markup language for people.
 
 	Content >>
-		JSON does its job with a minimal grammar, one data model and parsers everywhere;
-		it is the lingua franca of APIs. The comparison only makes sense at
-		the point where the two overlap — a file that a person has to write and maintain by
-		hand — because that is the job JSON never promised to do.
+		JSON has a minimal grammar, a single data model and parsers in every language. The
+		comparison is limited to the point where the two overlap —a file that a person
+		writes and maintains by hand— and ends where @STXT@ adopts JSON: as the
+		representation of its own tree.
 
 	Subheader: The same content, twice
 
@@ -43,52 +43,144 @@ Document (dev.stxt.website): STXT vs JSON — Hand-written documents vs serializ
 				A survey of monoliths and microservices.
 				Second line, with "quotes".
 
-	Subheader: What separates them when writing by hand
+	Content >>
+		The differences are those of the JSON grammar, designed for one program to emit
+		and another to read:
+
+		* **Delimiters.** Keys and strings in quotes, objects in braces, elements separated
+		  by commas, and a comma after the last element is a syntax error. In @STXT@ the
+		  structure is the indentation and a name ends in `:`.
+		* **No comments.** The JSON grammar does not admit them. @STXT@ has `#` comments,
+		  and the tools keep them when reformatting.
+		* **A text is one line.** Line breaks are written `\n` and quotes are escaped. In
+		  @STXT@ a `>>` block holds the literal text, with its line breaks and no escapes.
+		* **No schemas in the language.** JSON Schema is a separate specification, written
+		  in JSON, with its own vocabulary of composition and references.
+
+	Subheader: JSON Schema vs a template
 
 	Content >>
-		Each difference below is a deliberate JSON decision that serves serialization, and
-		gets in the way of authoring:
+		The structure of the article, described in JSON Schema:
 
-		* **Everything is quoted and delimited.** Keys and strings between quotes, objects
-		  between braces, elements between commas — and the comma after the last element
-		  is a syntax error. In @STXT@, structure is indentation and a name ends at `:`.
-		* **No comments.** The exclusion is intentional in JSON; in a hand-maintained file
-		  it is the first thing missed. @STXT@ has `#` comments, and tools preserve them
-		  when formatting.
-		* **A text is one line.** Line breaks are written `\n`, quotes are escaped, and a
-		  paragraph becomes a single escaped string. In @STXT@ a `>>` block holds the
-		  text literally, as long as it needs to be.
-		* **No schema in the language.** JSON Schema exists, but it is a separate
-		  specification, written in JSON itself, with its own vocabulary of composition
-		  and references. The @STXT@ [template](stxt-template-ref) layer is part of the
-		  language and reads like the document it describes.
+	Json >>
+		{
+			"$schema": "https://json-schema.org/draft/2020-12/schema",
+			"type": "object",
+			"properties": {
+				"article": {
+					"type": "object",
+					"properties": {
+						"title": { "type": "string" },
+						"published": { "type": "string", "format": "date" },
+						"tags": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+						"summary": { "type": "string" }
+					},
+					"required": ["title", "published", "tags"],
+					"additionalProperties": false
+				}
+			},
+			"required": ["article"],
+			"additionalProperties": false
+		}
+
+	Content >>
+		And the same structure as an @STXT@ template, which reads like the document it
+		describes:
+
+	Code >>
+		Template (@stxt.template): com.example.articles
+			Structure >>
+				Article (com.example.articles):
+					Published: (1) DATE
+					Tag: (+)
+					Summary: (?) TEXT
+
+	Content >>
+		Two underlying differences. The @STXT@ content model is closed by definition: an
+		undeclared child is an error, with no need for `additionalProperties: false` at
+		every level. And `DATE` is always checked, whereas in JSON Schema `format` is by
+		default an annotation, which a validator may not check unless asked to. In
+		return, JSON Schema expresses more: patterns, numeric ranges, conditionals and
+		composition (`oneOf`, `$ref`), which the @STXT@ schema layer leaves out on purpose
+		([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)). The article, with a namespace:
+
+	Code >>
+		Article (com.example.articles): Modern Software Architecture
+			Published: 2026-09-01
+			Tag: software
+			Tag: architecture
+			Summary >>
+				A survey of monoliths and microservices.
 
 	Subheader: From @STXT@ to JSON
 
 	Content >>
-		@STXT@ does not compete with JSON as an interchange format: it adopts it. @STXT@
-		chose JSON as the representation of its logical tree, because representing a data
-		structure for programs to consume is exactly the job JSON is designed for.
-		[STXT-TREE-SPEC](stxt-tree-ref) defines that canonical representation for every
-		valid document — an array of root nodes with `name`, `canonicalName`, `namespace`,
-		and `value` plus `children`, or `lines` — identical in every implementation. The
-		command `stxt describe file.stxt` prints it, and the three libraries expose it
-		from their API, so anything downstream that expects JSON keeps working. The source
-		stays readable; the serialization stays mechanical.
+		@STXT@ does not compete with JSON as an interchange format: it adopts it.
+		[STXT-TREE-SPEC](stxt-tree-ref) defines the canonical JSON representation of the
+		tree of every valid document, identical across implementations. The
+		`stxt describe` command prints it, and the three libraries expose it in their
+		API. The article above, in that form:
 
-	Subheader: When to use which
+	Json >>
+		[
+			{
+				"name": "Article",
+				"canonicalName": "article",
+				"namespace": "com.example.articles",
+				"form": "inline",
+				"value": "Modern Software Architecture",
+				"children": [
+					{
+						"name": "Published",
+						"canonicalName": "published",
+						"namespace": "com.example.articles",
+						"form": "inline",
+						"value": "2026-09-01",
+						"children": []
+					},
+					{
+						"name": "Tag",
+						"canonicalName": "tag",
+						"namespace": "com.example.articles",
+						"form": "inline",
+						"value": "software",
+						"children": []
+					},
+					{
+						"name": "Tag",
+						"canonicalName": "tag",
+						"namespace": "com.example.articles",
+						"form": "inline",
+						"value": "architecture",
+						"children": []
+					},
+					{
+						"name": "Summary",
+						"canonicalName": "summary",
+						"namespace": "com.example.articles",
+						"form": "block",
+						"lines": ["A survey of monoliths and microservices."]
+					}
+				]
+			}
+		]
 
 	Content >>
-		Use JSON for what machines exchange: API payloads, serialized state, generated
-		artifacts nobody edits. Its ubiquity is the feature, and @STXT@ does not try to
-		replace it there.
+		It is longer than the hand-written JSON because it is not the same data: it is the
+		complete tree, with the name as written, its canonical form and the namespace of
+		every node, which is why any program that reads JSON can consume it without an
+		@STXT@ parser. The source stays readable; the serialization is mechanical.
 
-		Write @STXT@ when a person is on either end of the file: documents,
-		[configuration](use-cases-config-files), [corporate records](use-cases-corporate-docs),
-		[content that feeds a pipeline](use-cases-cms) — and let the tools emit the
-		canonical tree where JSON is expected. The [AI and LLMs](ai-llms) use case shows
-		that route end to end: readable generated documents, validated, consumed as JSON.
+	Subheader: When to use each
 
-		To see the language, start with the [tutorial](tutorial) or open the examples in
-		the [playground](https://play.stxt.dev); the one-paragraph version of this page is
-		in the [FAQ](faq#why-not-json).
+	Content >>
+		JSON, for what machines exchange: API payloads, serialized state, generated
+		artifacts that nobody edits.
+
+		@STXT@, when there is a person at either end of the file: documents,
+		[configuration](use-cases-config-files),
+		[corporate records](use-cases-corporate-docs),
+		[content that feeds a pipeline](use-cases-cms), with the canonical tree wherever
+		JSON is expected. The [AI and LLMs](ai-llms) use case walks that route:
+		generated documents, validated and consumed as JSON. The short version of this
+		page is in the [FAQ](faq#why-not-json).

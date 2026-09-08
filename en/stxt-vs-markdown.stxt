@@ -2,29 +2,27 @@ Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternative
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-01
-		Description: Markdown formats prose; STXT structures documents. How the two work together, and why MARKDOWN is the one embedded format STXT schemas define.
+		Last modif: 2026-09-08
+		Description: Markdown formats prose; STXT structures documents and adopts Markdown for the prose of its nodes. Two examples, and why MARKDOWN is the only embedded format in STXT schemas.
 
 	Header: @STXT@ vs Markdown
 
 	Assert >>
 		Markdown gives format to prose; @STXT@ gives structure to documents.\\
-		They solve different problems, and they are designed to be used together.
+		They solve different problems, and @STXT@ adopts Markdown for the prose of its documents.
 
 	Content >>
-		This is the one comparison in the series that is not a choice. Markdown answers
-		"how do I write bold, links and lists inside a text?"; @STXT@ answers "what are the
-		parts of this document, and are they all there?". A README needs the first
-		question; a contract, an article pipeline or a corpus of structured records needs
-		both.
+		Markdown answers "how do I write bold, links and lists inside a text?"; @STXT@
+		answers "what are the parts of this document, and are they all there?". A README
+		needs the first; a contract, an article pipeline or a decision log needs both.
 
-	Subheader: Where Markdown ends
+	Subheader: The data of a Markdown document
 
 	Content >>
-		Markdown has no notion of fields. The moment a document needs data — an author, a
-		date, a status — the ecosystem reaches for **front matter**: a YAML block between
-		`---` fences, invisible to Markdown itself and parsed by a second
-		language with [its own rules](stxt-vs-yaml):
+		Markdown has no notion of fields. When a document needs data —author, date,
+		status—, the convention is **front matter**: a YAML block between `---` fences,
+		foreign to Markdown and parsed by a second language with
+		[its own rules](stxt-vs-yaml):
 
 	Listing >>
 		---
@@ -38,16 +36,9 @@ Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternative
 		Write **short** sentences. Prefer [links](https://example.com) to footnotes.
 
 	Content >>
-		The structure of that file exists only by convention: nothing checks that
-		`published` is a date, that `author` is present, or that the body follows the
-		agreed sections. That is not a flaw of Markdown — it never claimed otherwise — but
-		it marks the boundary where formatting stops and structure has to begin.
-
-	Subheader: The same document in @STXT@
-
-	Content >>
-		In @STXT@ the record is nodes, and the prose is a text block whose type declares it
-		as Markdown:
+		Nothing in that file checks that `published` is a date, that `author` is present
+		or that the body has the agreed sections. In @STXT@ the record is nodes and the
+		prose is a block whose type declares it as Markdown:
 
 	Code >>
 		Article (com.example.article): Style guide
@@ -57,7 +48,7 @@ Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternative
 				Write **short** sentences. Prefer [links](https://example.com) to footnotes.
 
 	Content >>
-		And the template of its namespace:
+		And the template for its namespace:
 
 	Code >>
 		Template (@stxt.template): com.example.article
@@ -68,32 +59,99 @@ Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternative
 					Body: (1) MARKDOWN
 
 	Content >>
-		`MARKDOWN` is the only embedded format the schema layer defines, precisely because
-		the two languages divide the work: a node declared with that type marks its text as
-		formatted prose, to be interpreted as CommonMark, and the raw form stays readable
-		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)). The validator now guarantees what
-		front matter could only suggest: the author is there, the date is a date, the body
-		is exactly one block.
+		`MARKDOWN` is the only embedded format the @STXT@ schema layer defines: it marks
+		the text of a node as formatted prose, to be interpreted as CommonMark, and its
+		raw form stays readable ([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)). The
+		validator checks what the front matter only suggested: the author is there, the
+		date is a date and the body is exactly one block.
 
-	Subheader: A structure Markdown cannot check
-
-	Content >>
-		The division scales past one article. This portal is the working example: every
-		page of `stxt.dev` — this one included — is an @STXT@ document whose prose blocks
-		are Markdown, validated against the site template before a generator renders them,
-		as the [CMS and publishing](use-cases-cms) use case describes. Append `.stxt` to
-		any page address to read the source.
-
-	Subheader: When to use which
+	Subheader: Structure by heading convention
 
 	Content >>
-		For a README, a comment, a gist — prose with light formatting and no contract —
-		Markdown alone is the right tool, and @STXT@ would add nothing.
+		When a Markdown document has fixed parts, the parts are headings, and the
+		agreement on which they are and what they contain lives outside the file. An
+		architecture decision record (ADR) in the usual layout:
 
-		Reach for @STXT@ when the document has parts worth naming and checking:
-		[articles in a pipeline](use-cases-cms), [corporate records](use-cases-corporate-docs),
-		[technical proposals](use-cases-rfcs). The prose inside stays Markdown; the
-		structure around it becomes explicit and validated. The [tutorial](tutorial) covers
-		the language in fifteen short sections, the [playground](https://play.stxt.dev)
-		runs the example above, and the short version of this page is in the
-		[FAQ](faq#why-not-markdown).
+	Listing >>
+		# ADR 12: Adopt PostgreSQL
+
+		## Status
+
+		Accepted
+
+		## Context
+
+		The current store has no transactions across collections, and the
+		billing module needs them.
+
+		## Decision
+
+		Migrate the billing data to PostgreSQL 16 during Q4.
+
+	Content >>
+		A reader knows that `Status` takes one of four values and that `Consequences`
+		should exist; no Markdown tool can check it, because to Markdown everything is
+		headings and paragraphs. In @STXT@ the parts are nodes, and the prose of each one
+		is still Markdown:
+
+	Code >>
+		ADR (com.example.adr): Adopt PostgreSQL
+			Number: 12
+			Status: Accepted
+			Context >>
+				The current store has no transactions across collections, and the
+				billing module needs them.
+			Decision >>
+				Migrate the billing data to PostgreSQL 16 during Q4.
+			Consequences >>
+				The two services share one database until the migration ends.
+
+	Content >>
+		And the template that fixes the agreement:
+
+	Code >>
+		Template (@stxt.template): com.example.adr
+			Structure >>
+				ADR (com.example.adr):
+					Number: (1) NATURAL
+					Status: (1) ENUM [Proposed, Accepted, Deprecated, Superseded]
+					Context: (1) MARKDOWN
+					Decision: (1) MARKDOWN
+					Consequences: (1) MARKDOWN
+
+	Content >>
+		A status outside the list or a missing section is a validation error, not a
+		pending review:
+
+	Code >>
+		# ERROR: Status must be one of Proposed, Accepted, Deprecated, Superseded
+		ADR (com.example.adr): Adopt PostgreSQL
+			Number: 12
+			Status: Approved
+			Context >>
+				The current store has no transactions across collections.
+			Decision >>
+				Migrate the billing data to PostgreSQL 16 during Q4.
+			Consequences >>
+				The two services share one database until the migration ends.
+
+	Subheader: This site
+
+	Content >>
+		Every page of `stxt.dev`, this one included, is an @STXT@ document whose prose
+		blocks are Markdown, validated against the site template before rendering
+		([CMS and publishing](use-cases-cms)). Add `.stxt` to the address of any page to
+		read the source.
+
+	Subheader: When to use each
+
+	Content >>
+		For a README, a comment or a gist —lightly formatted prose with no contract—,
+		Markdown alone.
+
+		@STXT@, when the document has named parts that must be checked:
+		[articles in a pipeline](use-cases-cms),
+		[corporate records](use-cases-corporate-docs),
+		[technical proposals](use-cases-rfcs). The prose inside is still Markdown; the
+		structure around it becomes explicit and validated. The short version of this
+		page is in the [FAQ](faq#why-not-markdown).

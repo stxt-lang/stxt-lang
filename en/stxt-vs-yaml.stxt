@@ -1,9 +1,9 @@
-Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
+Document (dev.stxt.website): STXT vs YAML — Values, free text and validation
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-01
-		Description: STXT and YAML compared: indentation rules, implicit typing, block scalars, attack surface and validation. When each format is the right choice.
+		Last modif: 2026-09-08
+		Description: STXT and YAML compared with examples: implicit typing versus text values, block scalars versus literal blocks, attack surface, and validation inside the language.
 
 	Header: @STXT@ vs YAML
 
@@ -12,22 +12,20 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 		YAML for serializing data structures, @STXT@ for documents written and read by people.
 
 	Content >>
-		YAML is the de facto standard of a whole generation of infrastructure tooling,
-		and where an ecosystem expects YAML, YAML is the right answer. The comparison is
-		about design: what each language asks of the person writing it, and what it
-		gives back.
+		YAML and @STXT@ both express hierarchy with indentation, and a simple document looks
+		alike in the two. The differences are underneath: what type a value has, how many
+		spellings the same structure admits, how multi-line text is written, and what the
+		language itself checks.
 
-		There is also a difference of model prior to any syntax: YAML has no concept of
-		namespace. Nothing in a YAML document declares which vocabulary it belongs to or
-		which structure it should be validated against; that information lives outside,
-		in the tool that reads it. In @STXT@ the namespace is part of the language
-		([STXT-SPEC §7](stxt-core-ref#s7)) and is what connects each document to its
-		definition.
+		There is also a difference of model: YAML has no namespaces and no schemas.
+		Nothing in the file declares which vocabulary it belongs to or which structure it
+		should be validated against. In @STXT@ the namespace is part of the language
+		([STXT-SPEC §7](stxt-core-ref#s7)) and connects each document with its definition.
 
 	Subheader: The same content, twice
 
 	Content >>
-		A small service descriptor in YAML:
+		A service descriptor in YAML:
 
 	Listing >>
 		service: billing
@@ -47,78 +45,110 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 		Service:
 			Name: billing
 			Replicas: 2
-			Port: 8080
-			Port: 8443
+			Ports:
+				Port: 8080
+				Port: 8443
 			Maintainer: ana@example.com
 			Notes >>
 				Restarted after the 2026-08-31 incident.
 				The TLS certificate expires on 2027-03-01.
 
 	Content >>
-		The two documents look alike, and that resemblance is the point of the comparison:
-		the differences are in the rules behind the indentation, not in the surface.
+		Three differences already visible in this example:
 
-	Subheader: The rules behind the indentation
+		* **Values.** In YAML `replicas: 2` is an integer and `replicas: "2"` a string:
+		  the spelling decides the type. In @STXT@ every value is text; the type, when
+		  needed, is declared by the definition and checked by the validator, not the
+		  parser.
+		* **Lists.** YAML has a block syntax for sequences (`- 8080`) and a flow syntax
+		  (`[8080, 8443]`), and both coexist in the same document. @STXT@ has no list
+		  syntax: a repeated child is the list, with a container node such as `Ports` or
+		  without one ([FAQ](faq#why-are-there-no-lists)).
+		* **Indentation.** YAML accepts any number of spaces per level, fixed per document,
+		  and forbids tabs. @STXT@ fixes one tab or four spaces per level, and mixing them
+		  on the same line is a parse error.
 
-	Content >>
-		The YAML specification is one of the largest of any text format, and the surface
-		hides decisions that change the meaning of a value:
-
-		* **Implicit typing.** `no` is a boolean in YAML 1.1 and a string in 1.2; `1.20` is
-		  a number and loses its trailing zero; a version like `3.10` means something
-		  different from `"3.10"`. Whether quotes are needed depends on the content of the
-		  value.
-		* **Two syntaxes for collections.** Block style and flow style (`[a, b]`, `{k: v}`)
-		  coexist, and real documents mix them.
-		* **Anchors, aliases and tags.** References (`&a`, `*a`) and type tags (`!!`) are
-		  part of the language, although most documents never use them.
-		* **Indentation is flexible.** Any number of spaces per level, decided document by
-		  document; tabs are forbidden.
-
-		@STXT@ keeps the rules on one page, and none of them depends on the content:
-
-		* **A value is always text.** `no`, `1.20` and `3.10` are the characters written,
-		  with no quotes and no exceptions. Types exist, but they are declared in the
-		  [schema](stxt-schema-ref), not guessed by the parser.
-		* **One node form, two separators.** `Name: value` for structure, `Name >>` for
-		  literal text. There is no second syntax for the same thing: a list is a repeated
-		  child, as the [FAQ](faq#why-are-there-no-lists) develops.
-		* **Fixed indentation.** One tab or four spaces per level, the same in every
-		  document; mixing them in one line is a parse error, not a convention.
-
-	Subheader: Free text
+	Subheader: When the spelling changes the meaning
 
 	Content >>
-		Both languages can embed multi-line text, and the difference in mechanism is
-		representative. YAML block scalars combine three decisions — literal `|` or folded
-		`>`, chomping `-`/`+`, and an optional indentation indicator — and the resulting
-		string depends on all of them. @STXT@ has one construct: everything indented under
-		a `>>` node is text exactly as written, with no variants, no escapes and no
-		interpretation. Trailing whitespace and trailing blank lines are trimmed, and the
-		rule is the same for a two-line note and for a twenty-page contract
+		In YAML an unquoted scalar resolves to a type according to its form, and the
+		resolution rules changed between versions 1.1 and 1.2 of the language:
+
+	Listing >>
+		country: NO         # false in YAML 1.1; the string "NO" in 1.2
+		version: 3.10       # the number 3.1 in both
+		window: 12:30       # the integer 750 in YAML 1.1 (sexagesimal); a string in 1.2
+		enabled: yes        # true in 1.1; the string "yes" in 1.2
+
+	Content >>
+		Keeping `NO`, `3.10` or `12:30` as text requires quoting them, and knowing when
+		requires knowing the resolution rules of the version the parser implements. In
+		@STXT@ the same document has no such ambiguity: a value is always the characters
+		written.
+
+	Code >>
+		Settings:
+			Country: NO
+			Version: 3.10
+			Window: 12:30
+			Enabled: yes
+
+	Content >>
+		If `Enabled` must be a boolean, the definition says so (`Enabled: (1) BOOLEAN`,
+		which accepts `true` and `false`) and the validator rejects `yes` with an error
+		code instead of converting it.
+
+	Subheader: Multi-line text
+
+	Content >>
+		A YAML block scalar combines three indicators: the style (`|` literal or `>`
+		folded), the handling of the final line break (`-`, `+` or none) and, when needed,
+		the indentation. Each combination produces a different string:
+
+	Listing >>
+		literal: |
+		  first line
+		  second line
+		folded: >
+		  first line
+		  second line
+		kept: |+
+		  first line
+
+		next: value
+
+	Content >>
+		`literal` is `"first line\nsecond line\n"`; `folded` is `"first line second line\n"`;
+		`kept` also keeps the empty line that follows it. @STXT@ has a single construct:
+		everything indented under a `>>` node is text as written, with no variants, no
+		escapes and no interpretation. Trailing whitespace on each line and trailing empty
+		lines are discarded; additional indentation and intermediate empty lines are kept
 		([STXT-SPEC §10](stxt-core-ref#s10)).
+
+	Code >>
+		Notes >>
+			first line
+			second line
 
 	Subheader: Parsing and the attack surface
 
 	Content >>
-		A conforming YAML parser is a large project, and in practice parsers disagree on
-		edge cases; loading a document with the wrong API has historically meant object
-		instantiation (tags) and memory exhaustion (anchor expansion, the "billion laughs"
-		attack). None of this makes YAML unusable — mature libraries have safe modes — but
-		it is surface a document format does not need.
-
-		@STXT@ removes the surface instead of mitigating it: no entities, no references, no
-		anchors, no inclusion, no code execution, and parsing is linear, line by line, in a
-		single pass. A conforming parser is written in days and behaves the same in every
-		implementation, which is what the [conformance corpus](stability) certifies.
-		The threat model is normative: [STXT-SPEC §15](stxt-core-ref#s15).
+		YAML includes anchors and aliases (`&a`, `*a`) and type tags (`!!str`,
+		`!!python/object`, `!ruby/object`). Aliases let a small document expand into a
+		huge structure in memory, and implementation-specific tags have allowed arbitrary
+		objects to be instantiated while loading a document; hence the `safe_load`
+		functions of the libraries. @STXT@ has no references, anchors, tags, inclusion or
+		entities, and parsing is linear, line by line, in a single pass. The threat model
+		is normative: [STXT-SPEC §15](stxt-core-ref#s15).
 
 	Subheader: Validation
 
 	Content >>
-		YAML has no native schema layer: validation is delegated to external tools and
-		conventions from other ecosystems. In @STXT@ the schema layer is part of the
-		language, optional and closed. The descriptor above, validated:
+		YAML has no schema layer: it is validated with external tools, usually JSON Schema
+		applied to the loaded structure. In @STXT@ the schema layer is part of the
+		language, optional, with a closed content model. The descriptor above, with a
+		namespace and without the `Ports` container: the `(+)` cardinality in the template
+		already says that `Port` repeats.
 
 	Code >>
 		Service (com.example.deploy):
@@ -131,7 +161,7 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 				The TLS certificate expires on 2027-03-01.
 
 	Content >>
-		And the template of its namespace:
+		And the template for its namespace:
 
 	Code >>
 		Template (@stxt.template): com.example.deploy
@@ -144,8 +174,8 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 					Notes: (?) TEXT
 
 	Content >>
-		A misspelled field, a missing port or `Replicas: two` fail with an explicit error
-		code instead of reaching production as a string:
+		An undeclared name, a missing `Port` or `Replicas: two` fail with an explicit
+		error code:
 
 	Code >>
 		# ERROR: Replicas requires a NATURAL value
@@ -158,30 +188,22 @@ Document (dev.stxt.website): STXT vs YAML — Readability, safety and validation
 	Subheader: What about NestedText?
 
 	Content >>
-		NestedText starts from the same diagnosis of YAML and takes several of the
-		same decisions as @STXT@: every value is text, no implicit typing, no escapes,
-		and structure in the indentation. The difference is the model: NestedText
-		keeps YAML's data model — dictionaries, lists and strings, with no name and no
-		vocabulary — and leaves types and checking entirely to the application. @STXT@
-		models named documents: nodes, namespaces that connect each document to its
-		definition, and the [schema](stxt-schema-ref) and
-		[template](stxt-template-ref) layer inside the language. As a YAML
-		replacement for transporting data, NestedText reaches an equally predictable
-		syntax; @STXT@ adds the vocabulary and the validation.
+		NestedText makes several of the same decisions as @STXT@: every value is text, no
+		implicit typing, no escapes, and structure lives in the indentation. It keeps the
+		YAML data model —dictionaries, lists and strings— and leaves types and validation
+		to the application; it has no namespaces and no schemas. For transporting data
+		with a predictable syntax, both arrive at the same place; @STXT@ adds the named
+		vocabulary and validation inside the language.
 
-	Subheader: When to use which
+	Subheader: When to use each
 
 	Content >>
-		Use YAML where the ecosystem already speaks it: Kubernetes manifests, CI pipelines,
-		tool configuration read mostly by machines and templated by other machines.
+		YAML, where the ecosystem expects it: Kubernetes manifests, CI pipelines, Docker
+		Compose, Ansible.
 
-		@STXT@ is the better fit when people write and read the files: configuration with
-		long prose notes, [corporate documents](use-cases-corporate-docs),
-		[content for a CMS](use-cases-cms), and any document worth validating against an
-		agreed structure. The [configuration files](use-cases-config-files) use case
-		develops the closest scenario in detail.
-
-		To see the language itself, start with the [tutorial](tutorial) or paste the
-		examples above into the [playground](https://play.stxt.dev); the short version of
-		this comparison, next to XML and TOML, is in the
-		[FAQ](faq#why-not-xml-yaml-or-toml).
+		@STXT@, when the file is a document that people write and read: configuration
+		with notes in prose, [corporate documents](use-cases-corporate-docs),
+		[CMS content](use-cases-cms), and any structure that must be validated without
+		external tools. The [configuration files](use-cases-config-files) use case
+		develops the closest scenario, and the short version of this comparison is in
+		the [FAQ](faq#why-not-xml-yaml-or-toml).

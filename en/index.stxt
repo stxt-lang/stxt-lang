@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Last modif: 2026-09-01
+		Last modif: 2026-09-08
 		Description: STXT is a human-first markup language for structured documents and data: no braces, no closing tags, just indentation. Readable by people, reliable for machines.
 
 	Header: @STXT@: Introduction
@@ -96,19 +96,20 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 	Subheader: How it compares
 
 	Content >>
-		@STXT@ shares ground with the usual structured-text formats, and the comparison with
-		each one has its own page:
+		The comparison with each format has its own page, with the same content written
+		in both:
 
-		* **[YAML](stxt-vs-yaml)** is also indentation-based, but optimizes for data
-		  serialization rather than for documents.
-		* **[JSON](stxt-vs-json)** is a machine format, not meant to be written by hand —
-		  and the one @STXT@ adopts as the representation of its tree.
-		* **[XML](stxt-vs-xml)** has every @STXT@ feature and more, at the cost of the
-		  Human-First focus: more complex schemas, closing tags and escaping.
-		* **[TOML](stxt-vs-toml)** shares the goal but not the model: tables of typed
-		  keys and values, meant for flat configuration.
-		* **[Markdown](stxt-vs-markdown)** formats prose but does not structure data: the
-		  two complement each other.
+		* **[YAML](stxt-vs-yaml)** also expresses hierarchy with indentation. It differs
+		  underneath: the spelling of a value decides its type, the same structure admits
+		  several syntaxes, and there are no namespaces or schemas.
+		* **[JSON](stxt-vs-json)** is a serialization format, with no comments or
+		  multi-line text, and the one @STXT@ adopts as the representation of its tree.
+		* **[XML](stxt-vs-xml)** is the closest: a named tree, namespaces and schemas.
+		  The price is closing tags, escapes and entities.
+		* **[TOML](stxt-vs-toml)** shares the goal but not the model: tables of keys with
+		  typed values, with the hierarchy in the headers.
+		* **[Markdown](stxt-vs-markdown)** formats prose and has no fields; @STXT@ adopts
+		  it, with the `MARKDOWN` type, for the prose of its nodes.
 
 		The short version of all five is in the
 		[FAQ](faq#why-not-xml-yaml-or-toml), and the reasoning behind the design is in

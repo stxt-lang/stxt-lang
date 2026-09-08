@@ -2,8 +2,8 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-01
-		Description: STXT and TOML compared: headers vs indentation, types in the syntax vs schema, multi-line text, namespaces and validation.
+		Last modif: 2026-09-08
+		Description: STXT and TOML compared with examples: headers versus indentation, nested tables, multi-line strings, types in the syntax versus types in the definition, and validation.
 
 	Header: @STXT@ vs TOML
 
@@ -12,12 +12,11 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 		They differ in the model: tables of typed key-value pairs versus a tree of text nodes.
 
 	Content >>
-		TOML is the configuration format of entire ecosystems — `Cargo.toml` in Rust,
-		`pyproject.toml` in Python — and its specification states a goal close to that
-		of @STXT@: a minimal format, easy to read because of obvious semantics. This is
-		the comparison in this series between two formats that want the same thing, and
-		the difference is the data model: TOML describes tables of keys with typed
-		values; @STXT@, hierarchical documents whose values are text.
+		TOML is the configuration format of `Cargo.toml` and `pyproject.toml`, and its
+		specification states a goal close to that of @STXT@: a minimal format, easy to
+		read due to obvious semantics. The difference lies in the data model: TOML
+		describes tables of keys with typed values; @STXT@, hierarchical documents whose
+		values are text.
 
 	Subheader: The same content, twice
 
@@ -57,63 +56,100 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 				Keep: 30
 
 	Content >>
-		The tree is the same; what changes is where the hierarchy lives: in TOML it is
-		in the headers — `[storage]`, `[[job]]` —, and in @STXT@, in the indentation.
+		The tree is the same. What changes is where the hierarchy lives: in TOML, in the
+		`[storage]` and `[[job]]` headers; in @STXT@, in the indentation.
 
 	Subheader: Where the hierarchy lives
 
 	Content >>
-		The structure of a TOML document is in its headers, and each header spells the
-		full path: `[storage]`, `[servers.alpha.network]`, `[[job]]` for each element
-		of an array of tables. Three properties follow:
+		Every TOML header writes the full path of its table, and an element of a nested
+		array of tables repeats it whole. Two jobs with their steps:
 
-		* **Physical order is free.** Tables can be written in any order, so the
-		  visual shape of the file does not have to match the tree it describes.
-		* **Position decides the parent.** A key belongs to the last opened header:
-		  after `[storage]`, everything that follows belongs to `storage` until the
-		  next header, and a root-level key can no longer be written.
-		* **There are several spellings for the same tree.** Headers, dotted keys
-		  (`storage.kind = "s3"`) and inline tables (`storage = { kind = "s3" }`)
-		  produce the same structure, just as inline arrays (`[8080, 8443]`) and
-		  arrays of tables (`[[job]]`) coexist.
+	Listing >>
+		[[job]]
+		name = "database"
 
-		In @STXT@ the hierarchy is in the indentation and only there: each level is
-		written once, a child belongs to the node it is indented under, and a list is
-		a repeated child ([STXT-SPEC §8](stxt-core-ref#s8)). The visual shape of the
-		document is its structure.
+		[[job.step]]
+		run = "pg_dump acme > acme.sql"
 
-	Subheader: Types in the syntax
+		[[job.step]]
+		run = "gzip acme.sql"
+
+		[[job]]
+		name = "documents"
+
+		[[job.step]]
+		run = "tar cf documents.tar /srv/docs"
 
 	Content >>
-		In TOML the type of a value is in its spelling: `8080` is an integer and
-		`"8080"` a string; `true` is a boolean; dates and times are native types.
-		Strings are always quoted, and there are four forms — basic and literal,
-		single-line and multi-line — with escapes in the basic ones.
+		Each `[[job.step]]` belongs to the last `[[job]]` opened: membership is decided by
+		position in the file, and the path is repeated in every header. In @STXT@ every
+		level is written once and a child belongs to the node it is indented under
+		([STXT-SPEC §8](stxt-core-ref#s8)):
 
-		In @STXT@ a value is always text, unquoted: `8080` is four characters. Types
-		exist, but they are declared in the [schema](stxt-schema-ref) — `NATURAL`,
-		`DATE`, `EMAIL`… — and it is the validator, not the parser, that checks them.
-		The meaning of the document does not depend on how the value is spelled.
+	Code >>
+		Backup:
+			Job: database
+				Step: pg_dump acme > acme.sql
+				Step: gzip acme.sql
+			Job: documents
+				Step: tar cf documents.tar /srv/docs
 
-	Subheader: Free text
+	Content >>
+		Two more properties of the TOML model: tables can be written in any order, so the
+		visual shape of the file need not match the tree; and the same structure admits
+		several spellings —headers, dotted keys (`storage.kind = "s3"`), inline tables
+		(`storage = { kind = "s3" }`), inline arrays and arrays of tables—. In @STXT@ the
+		visual shape of the document is its structure, and there is a single spelling.
+
+	Subheader: Multi-line text
 
 	Content >>
 		A TOML multi-line string keeps everything between the delimiters except the
-		initial line break: the indentation it is written with becomes part of the
-		value, so a long text cannot be indented along with the table it belongs to.
-		In an @STXT@ `>>` block the level's indentation is discounted and any
-		additional indentation is kept: the text is indented with the document and
-		arrives literally, with no escapes ([STXT-SPEC §10](stxt-core-ref#s10)).
+		initial line break, including the indentation of each line. For the value not to
+		contain it, the text cannot be indented along with the table it belongs to:
+
+	Listing >>
+		[storage]
+		kind = "s3"
+		notes = """
+		Restarted after the 2026-08-31 incident.
+		The TLS certificate expires on 2027-03-01.
+		"""
+
+	Content >>
+		In an @STXT@ `>>` block the indentation of the level is discounted and only the
+		additional indentation is part of the text: the block is indented with the
+		document and arrives literal, with no escapes ([STXT-SPEC §10](stxt-core-ref#s10)).
+
+	Code >>
+		Storage:
+			Kind: s3
+			Notes >>
+				Restarted after the 2026-08-31 incident.
+				The TLS certificate expires on 2027-03-01.
+
+	Subheader: Types
+
+	Content >>
+		In TOML the type is in the spelling of the value: `14` is an integer, `"14"` a
+		string, `true` a boolean, `2026-08-31T02:30:00Z` a date-time. A TOML parser
+		returns typed data with no external definition; in return, strings always go in
+		quotes, in four forms —basic and literal, single-line and multi-line—, with
+		escapes in the basic ones.
+
+		In @STXT@ a value is always text, without quotes. Types are declared in the
+		definition —`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`…— and checked by the
+		validator, not the parser: without a definition, `14` is two characters.
 
 	Subheader: Namespaces and validation
 
 	Content >>
-		Like YAML, TOML has no concept of namespace and no schema layer: nothing in
-		the file declares which vocabulary it belongs to, and validation is delegated
-		to external tools. In @STXT@ both are part of the language: the namespace
-		connects the document to its definition, and the template fixes structure,
-		cardinalities and types. The configuration above, with a namespace and
-		validated:
+		TOML has no namespaces and no schema layer: nothing in the file declares which
+		vocabulary it belongs to, and validation is left to the application or an
+		external tool. In @STXT@ the namespace connects the document with its definition,
+		and the template fixes structure, cardinalities and types. The initial
+		configuration, with a namespace:
 
 	Code >>
 		Backup (com.example.backup): Nightly backup
@@ -128,7 +164,7 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 				Keep: 30
 
 	Content >>
-		And the template of its namespace:
+		And the template for its namespace:
 
 	Code >>
 		Template (@stxt.template): com.example.backup
@@ -142,7 +178,7 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 						Keep: (1) NATURAL
 
 	Content >>
-		A misspelled field, a missing `Storage` or a `Keep` that is not a number fail
+		An undeclared name, a missing `Storage` or a `Keep` that is not a number fail
 		with an explicit error code:
 
 	Code >>
@@ -155,21 +191,16 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 				Schedule: 02:30
 				Keep: fourteen
 
-	Subheader: When to use which
+	Subheader: When to use each
 
 	Content >>
-		Use TOML where the ecosystem already speaks it — `Cargo.toml`,
-		`pyproject.toml`, the configuration of tools that expect that file — and in
-		general for flat configuration of typed keys and values, which is the goal its
-		specification states.
+		TOML, where the ecosystem expects it —`Cargo.toml`, `pyproject.toml`, the
+		configuration of tools that read that file— and for flat configuration of keys
+		with typed values, which is the goal its specification states.
 
-		@STXT@ fits when the file grows into a document: hierarchy several levels
-		deep, prose next to the data, [corporate records](use-cases-corporate-docs)
-		and any structure worth validating against an agreed definition. The
+		@STXT@, when the file grows into a document: several levels of hierarchy, prose
+		next to the data, [corporate records](use-cases-corporate-docs) and any structure
+		that must be validated against a definition. The
 		[configuration files](use-cases-config-files) use case develops the closest
-		scenario.
-
-		To see the language, start with the [tutorial](tutorial) or paste the
-		examples above into the [playground](https://play.stxt.dev); the short
-		version of this comparison, next to XML and YAML, is in the
+		scenario, and the short version of this comparison is in the
 		[FAQ](faq#why-not-xml-yaml-or-toml).

@@ -2,8 +2,8 @@ Document (dev.stxt.website): STXT vs XML — Structure and validation without ve
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-01
-		Description: STXT and XML share the same ambitions — named structure, namespaces, validation. STXT pursues them without closing tags, escaping or XXE-class risks.
+		Last modif: 2026-09-08
+		Description: STXT and XML compared with examples: the same tree with and without closing tags, escapes and entities, attributes versus children, and an XSD versus an STXT template.
 
 	Header: @STXT@ vs XML
 
@@ -12,17 +12,15 @@ Document (dev.stxt.website): STXT vs XML — Structure and validation without ve
 		The difference is the price a person pays to write it.
 
 	Content >>
-		Of all the formats in this series, XML shares the most ground with @STXT@. Both
-		model a document as a tree of named nodes; both group vocabularies with namespaces;
-		both validate against a declared structure. XML proved that those ideas work at
-		industrial scale. @STXT@ pursues the same ambitions with a different constraint:
-		that the document can be written and read by hand with no closing tags and no
-		escaping.
+		XML and @STXT@ both model a document as a tree of named nodes, group vocabularies
+		in namespaces and validate against a declared structure. @STXT@ pursues the same
+		with one added constraint: that the document be written and read by hand, without
+		closing tags or escapes.
 
 	Subheader: The same content, twice
 
 	Content >>
-		An article header in XML:
+		The header of an article in XML:
 
 	Xml >>
 		<article xmlns="http://example.com/articles">
@@ -48,39 +46,87 @@ Document (dev.stxt.website): STXT vs XML — Structure and validation without ve
 				<and everything in between>.
 
 	Content >>
-		Same tree, same namespace idea, and two costs gone: nothing is closed — the
-		indentation already says where `Article` ends — and nothing is escaped, because
-		`&`, `<` and `>` have no meaning in an @STXT@ value or text block.
+		The same tree and the same idea of namespace, with two things fewer: nothing is
+		closed, because the indentation says where each node ends, and nothing is escaped,
+		because `&`, `<` and `>` mean nothing in an @STXT@ value or text block.
 
-	Subheader: Escaping and entities
+	Subheader: Escapes and entities
 
 	Content >>
-		XML reserves `<` and `&` everywhere, so text must be escaped or wrapped in CDATA,
-		and correctness depends on doing it every time. Entities also open the classic
+		XML reserves `<` and `&` in content, so text is escaped or wrapped in a CDATA
+		section, which in turn cannot contain `]]>`. Entities also open the well-known
 		attack surface: external entities (XXE) that read files or reach the network, and
 		entity expansion that exhausts memory. Hardened parsers disable those features;
-		@STXT@ never had them. There are no entities, no references and no inclusion, and
-		any character is legal in a value or a block — the security model is normative in
+		@STXT@ does not have them. There are no entities, references or inclusion, and any
+		character is legal in a value or a block. The security model is normative in
 		[STXT-SPEC §15](stxt-core-ref#s15).
 
 	Subheader: Attributes and elements
 
 	Content >>
-		Every XML vocabulary re-decides what goes in attributes and what in child elements,
-		and consumers must handle both. @STXT@ has one construct: a node with a value and
-		children, or a node with literal text. `Author` above carries its value and an
-		`Email` child; there is no second axis to design or to parse. What XML gains from
-		attributes — compact inline metadata — @STXT@ deliberately trades for uniformity,
-		as [Design principles](design-principles) argues.
+		XML offers two places for a datum: attribute or child element. Each vocabulary
+		decides, and consumers have to read both. A configuration fragment:
+
+	Xml >>
+		<server name="db1" host="10.0.0.5" port="5432">
+			<timeout unit="s">30</timeout>
+			<replica host="10.0.0.6"/>
+			<replica host="10.0.0.7"/>
+		</server>
+
+	Content >>
+		@STXT@ has a single construct: a node with a value and children, or a node with
+		literal text. What was an attribute or an element in XML is here, in both cases, a
+		child:
+
+	Code >>
+		Server: db1
+			Host: 10.0.0.5
+			Port: 5432
+			Timeout: 30
+				Unit: s
+			Replica: 10.0.0.6
+			Replica: 10.0.0.7
+
+	Content >>
+		XML attributes are more compact inline; @STXT@ gives up that second axis in
+		exchange for a single form, which is what lets a document be read without knowing
+		the decisions of its vocabulary.
 
 	Subheader: Validation
 
 	Content >>
-		XML has three schema languages — DTD, XSD and RELAX NG — each an ecosystem of its
-		own; XSD in particular is a two-part specification with a type system of its own.
-		The @STXT@ schema layer is one page of concepts — nodes, types, cardinalities, a
-		closed content model — written in @STXT@ itself, in a
-		[template](stxt-template-ref) form that mirrors the document:
+		XML has several schema languages —DTD, XSD, RELAX NG, Schematron—, each with its
+		own syntax. An XSD for the article above:
+
+	Xml >>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		           targetNamespace="http://example.com/articles"
+		           xmlns="http://example.com/articles"
+		           elementFormDefault="qualified">
+			<xs:element name="article">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="title" type="xs:string"/>
+						<xs:element name="published" type="xs:date"/>
+						<xs:element name="author" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:string">
+										<xs:attribute name="email" type="xs:string" use="required"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="summary" type="xs:string" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+
+	Content >>
+		And the equivalent @STXT@ template, written in the language itself and shaped
+		like the document it describes:
 
 	Code >>
 		Template (@stxt.template): com.example.articles
@@ -92,22 +138,24 @@ Document (dev.stxt.website): STXT vs XML — Structure and validation without ve
 					Summary: (?) TEXT
 
 	Content >>
-		It validates less than XSD — no regular expressions over content, no conditional
-		rules, no order constraints — and each of those absences is a stated non-goal of
-		the spec, which documents what is left out and why: keeping the model small and
-		predictable, with errors a person can act on
-		([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)).
+		They are not fully equivalent, and the difference goes both ways. The XSD
+		enforces the order of the children (`xs:sequence`) and can add patterns, ranges
+		and derived types; the @STXT@ schema layer does not validate order and admits
+		neither regular expressions nor conditional rules, and declares that a non-goal
+		([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)). In return, the template checks that
+		`Email` is an email address (`xs:string` does not), and its content model is
+		closed: any undeclared child is an error.
 
-	Subheader: When to use which
+	Subheader: When to use each
 
 	Content >>
-		Use XML where its ecosystem is the value: established standards (DocBook, SVG, ODF,
-		RSS), toolchains built on XSLT and XPath, and vocabularies that need mixed content
-		— inline markup woven through prose — which @STXT@ deliberately does not model.
+		XML, where its ecosystem is the value: established vocabularies (DocBook, SVG,
+		ODF, RSS), toolchains built on XSLT and XPath, and **mixed content** —inline
+		markup within prose—, which @STXT@ does not model: formatted prose goes in a text
+		block, in [Markdown](stxt-vs-markdown).
 
-		@STXT@ fits the documents people author and organizations validate:
-		[corporate documents](use-cases-corporate-docs), [contracts](use-cases-contracts),
-		[RFCs and technical proposals](use-cases-rfcs), [CMS content](use-cases-cms). The
-		[tutorial](tutorial) shows the whole language in one sitting, the
-		[playground](https://play.stxt.dev) runs the examples above, and the short version
-		of this comparison is in the [FAQ](faq#why-not-xml-yaml-or-toml).
+		@STXT@, for the documents that people write and organizations validate:
+		[corporate documents](use-cases-corporate-docs),
+		[contracts](use-cases-contracts), [RFCs and technical proposals](use-cases-rfcs),
+		[CMS content](use-cases-cms). The short version of this comparison is in the
+		[FAQ](faq#why-not-xml-yaml-or-toml).
