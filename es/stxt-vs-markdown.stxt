@@ -3,13 +3,13 @@ Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alte
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-08
-		Description: Markdown da formato a la prosa; STXT estructura los documentos. Dos ejemplos de cómo trabajan juntos, y por qué MARKDOWN es el único formato embebido de los esquemas STXT.
+		Description: Markdown da formato a la prosa; STXT estructura los documentos y adopta Markdown para la prosa de sus nodos. Dos ejemplos, y por qué MARKDOWN es el único formato embebido de los esquemas STXT.
 
 	Header: @STXT@ frente a Markdown
 
 	Assert >>
 		Markdown da formato a la prosa; @STXT@ da estructura a los documentos.\\
-		Resuelven problemas distintos, y están diseñados para usarse juntos.
+		Resuelven problemas distintos, y @STXT@ adopta Markdown para la prosa de sus documentos.
 
 	Content >>
 		Markdown responde a «¿cómo escribo negritas, enlaces y listas dentro de un

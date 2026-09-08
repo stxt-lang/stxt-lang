@@ -45,8 +45,9 @@ Document (dev.stxt.website): STXT frente a YAML — Valores, texto libre y valid
 		Service:
 			Name: billing
 			Replicas: 2
-			Port: 8080
-			Port: 8443
+			Ports:
+				Port: 8080
+				Port: 8443
 			Maintainer: ana@example.com
 			Notes >>
 				Restarted after the 2026-08-31 incident.
@@ -60,8 +61,8 @@ Document (dev.stxt.website): STXT frente a YAML — Valores, texto libre y valid
 		  hace falta, lo declara la definición y lo comprueba el validador, no el parser.
 		* **Las listas.** YAML tiene una sintaxis de bloque para las secuencias (`- 8080`)
 		  y otra de flujo (`[8080, 8443]`), y las dos conviven en un mismo documento.
-		  @STXT@ no tiene sintaxis de lista: un hijo repetido es la lista
-		  ([FAQ](faq#por-que-no-hay-listas)).
+		  @STXT@ no tiene sintaxis de lista: un hijo repetido es la lista, con un nodo
+		  contenedor como `Ports` o sin él ([FAQ](faq#por-que-no-hay-listas)).
 		* **La indentación.** YAML admite cualquier número de espacios por nivel, fijado
 		  en cada documento, y prohíbe los tabuladores. @STXT@ fija un tabulador o cuatro
 		  espacios por nivel, y mezclarlos en una misma línea es un error de parseo.
@@ -146,7 +147,8 @@ Document (dev.stxt.website): STXT frente a YAML — Valores, texto libre y valid
 		YAML no tiene capa de esquemas: se valida con herramientas externas, normalmente
 		JSON Schema aplicado sobre la estructura ya cargada. En @STXT@ la capa de esquemas
 		forma parte del lenguaje, es opcional y usa un modelo de contenido cerrado. El
-		descriptor de arriba, con namespace:
+		descriptor de arriba, con namespace y sin el contenedor `Ports`: la cardinalidad
+		`(+)` de la plantilla ya dice que `Port` se repite.
 
 	Code >>
 		Service (com.example.deploy):

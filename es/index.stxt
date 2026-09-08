@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para do
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Last modif: 2026-09-01
+		Last modif: 2026-09-08
 		Description: STXT es un lenguaje de marcado Human-First para documentos y datos: sin llaves ni etiquetas, solo indentación. Legible para personas, fiable para máquinas.
 
 	Header: @STXT@: Introducción
@@ -98,20 +98,20 @@ Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para do
 	Subheader: Comparado con otros formatos
 
 	Content >>
-		@STXT@ comparte terreno con los formatos de texto estructurado habituales, y la
-		comparación con cada uno tiene su propia página:
+		La comparación con cada formato tiene su propia página, con el mismo contenido
+		escrito en los dos:
 
-		* **[YAML](stxt-vs-yaml)** también se basa en la indentación, pero optimiza para
-		  la serialización de datos antes que para los documentos.
-		* **[JSON](stxt-vs-json)** es un formato para máquinas, no pensado para
-		  escribirse a mano — y el que @STXT@ adopta como representación de su árbol.
-		* **[XML](stxt-vs-xml)** tiene todas las características de @STXT@ y más, a
-		  cambio del enfoque Human-First: esquemas más complejos, etiquetas de cierre y
-		  escapes.
+		* **[YAML](stxt-vs-yaml)** también expresa la jerarquía con indentación. Difiere
+		  en lo que hay debajo: el tipo de un valor lo decide su grafía, una misma
+		  estructura admite varias sintaxis, y no hay namespaces ni esquemas.
+		* **[JSON](stxt-vs-json)** es un formato de serialización, sin comentarios ni texto
+		  de varias líneas, y el que @STXT@ adopta como representación de su árbol.
+		* **[XML](stxt-vs-xml)** es el más cercano: árbol con nombre, namespaces y
+		  esquemas. El precio son las etiquetas de cierre, los escapes y las entidades.
 		* **[TOML](stxt-vs-toml)** comparte el objetivo pero no el modelo: tablas de
-		  claves con valores tipados, pensadas para configuración plana.
-		* **[Markdown](stxt-vs-markdown)** da formato a la prosa pero no estructura los
-		  datos: ambos se complementan.
+		  claves con valores tipados, con la jerarquía en las cabeceras.
+		* **[Markdown](stxt-vs-markdown)** da formato a la prosa y no tiene campos;
+		  @STXT@ lo adopta, con el tipo `MARKDOWN`, para la prosa de sus nodos.
 
 		La versión corta de los cinco está en la
 		[FAQ](faq#por-que-no-xml-yaml-o-toml), y el razonamiento de fondo, en
