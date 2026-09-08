@@ -2,8 +2,8 @@ Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente 
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-01
-		Description: STXT y TOML comparados: cabeceras frente a indentación, tipos en la sintaxis frente a esquema, texto multilínea, namespaces y validación.
+		Last modif: 2026-09-08
+		Description: STXT y TOML comparados con ejemplos: cabeceras frente a indentación, tablas anidadas, cadenas multilínea, tipos en la sintaxis frente a tipos en la definición, y validación.
 
 	Header: @STXT@ frente a TOML
 
@@ -12,12 +12,11 @@ Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente 
 		Difieren en el modelo: tablas de claves y valores tipados frente a un árbol de nodos de texto.
 
 	Content >>
-		TOML es el formato de configuración de ecosistemas enteros — `Cargo.toml` en
-		Rust, `pyproject.toml` en Python — y su especificación declara un objetivo afín
-		al de @STXT@: un formato mínimo, fácil de leer por su semántica obvia. Es la
-		comparación de esta serie entre dos formatos que quieren lo mismo, y la
-		diferencia está en el modelo de datos: TOML describe tablas de claves con
-		valores tipados; @STXT@, documentos jerárquicos cuyos valores son texto.
+		TOML es el formato de configuración de `Cargo.toml` y `pyproject.toml`, y su
+		especificación declara un objetivo afín al de @STXT@: un formato mínimo, fácil de
+		leer por su semántica obvia. La diferencia está en el modelo de datos: TOML
+		describe tablas de claves con valores tipados; @STXT@, documentos jerárquicos cuyos
+		valores son texto.
 
 	Subheader: El mismo contenido, dos veces
 
@@ -57,65 +56,102 @@ Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente 
 				Keep: 30
 
 	Content >>
-		El árbol es el mismo; lo que cambia es dónde vive la jerarquía: en TOML está en
-		las cabeceras — `[storage]`, `[[job]]` —, y en @STXT@, en la indentación.
+		El árbol es el mismo. Lo que cambia es dónde vive la jerarquía: en TOML, en las
+		cabeceras `[storage]` y `[[job]]`; en @STXT@, en la indentación.
 
 	Subheader: Dónde vive la jerarquía
 
 	Content >>
-		La estructura de un documento TOML está en sus cabeceras, y cada cabecera
-		escribe la ruta completa: `[storage]`, `[servers.alpha.network]`, `[[job]]`
-		para cada elemento de un array de tablas. De ahí se siguen tres propiedades:
+		Cada cabecera TOML escribe la ruta completa de su tabla, y un elemento de un
+		array de tablas anidado la repite entera. Dos trabajos con sus pasos:
 
-		* **El orden físico es libre.** Las tablas pueden escribirse en cualquier
-		  orden, así que la forma visual del fichero no tiene por qué coincidir con el
-		  árbol que describe.
-		* **La posición decide el padre.** Una clave pertenece a la última cabecera
-		  abierta: tras `[storage]`, todo lo que sigue es de `storage` hasta la
-		  siguiente cabecera, y una clave de la raíz ya no puede escribirse.
-		* **Hay varias grafías para el mismo árbol.** Cabeceras, claves con punto
-		  (`storage.kind = "s3"`) y tablas en línea (`storage = { kind = "s3" }`)
-		  producen la misma estructura, igual que conviven los arrays en línea
-		  (`[8080, 8443]`) y los arrays de tablas (`[[job]]`).
+	Listing >>
+		[[job]]
+		name = "database"
 
-		En @STXT@ la jerarquía está en la indentación y solo ahí: cada nivel se
-		escribe una vez, un hijo pertenece al nodo bajo el que está indentado, y una
-		lista es un hijo repetido ([STXT-SPEC §8](stxt-core-ref#s8)). La forma visual
-		del documento es su estructura.
+		[[job.step]]
+		run = "pg_dump acme > acme.sql"
 
-	Subheader: Los tipos en la sintaxis
+		[[job.step]]
+		run = "gzip acme.sql"
+
+		[[job]]
+		name = "documents"
+
+		[[job.step]]
+		run = "tar cf documents.tar /srv/docs"
 
 	Content >>
-		En TOML el tipo de un valor está en su grafía: `8080` es un entero y `"8080"`
-		una cadena; `true` es un booleano; las fechas y horas son tipos nativos. Las
-		cadenas van siempre entre comillas, y hay cuatro formas — básica y literal, en
-		una y en varias líneas —, con escapes en las básicas.
+		Cada `[[job.step]]` pertenece al último `[[job]]` abierto: la pertenencia la decide
+		la posición en el fichero, y la ruta se repite en cada cabecera. En @STXT@ cada
+		nivel se escribe una vez y un hijo pertenece al nodo bajo el que está indentado
+		([STXT-SPEC §8](stxt-core-ref#s8)):
 
-		En @STXT@ un valor es siempre texto, sin comillas: `8080` son cuatro
-		caracteres. Los tipos existen, pero se declaran en el
-		[esquema](stxt-schema-ref) — `NATURAL`, `DATE`, `EMAIL`… — y es el validador,
-		no el parser, quien los comprueba. El significado del documento no depende de
-		cómo esté escrito el valor.
+	Code >>
+		Backup:
+			Job: database
+				Step: pg_dump acme > acme.sql
+				Step: gzip acme.sql
+			Job: documents
+				Step: tar cf documents.tar /srv/docs
 
-	Subheader: El texto libre
+	Content >>
+		Otras dos propiedades del modelo de TOML: las tablas pueden escribirse en
+		cualquier orden, así que la forma visual del fichero no tiene por qué coincidir
+		con el árbol; y la misma estructura admite varias grafías —cabeceras, claves con
+		punto (`storage.kind = "s3"`), tablas en línea (`storage = { kind = "s3" }`),
+		arrays en línea y arrays de tablas—. En @STXT@ la forma visual del documento es su
+		estructura, y hay una sola grafía.
+
+	Subheader: El texto de varias líneas
 
 	Content >>
 		Una cadena multilínea de TOML conserva todo lo que hay entre los delimitadores
-		salvo el salto de línea inicial: la indentación con la que se escriba entra en
-		el valor, así que un texto largo no puede sangrarse con la tabla a la que
-		pertenece. En un bloque `>>` de @STXT@ la indentación del nivel se descuenta y
-		la adicional se conserva: el texto se sangra con el documento y llega literal,
-		sin escapes ([STXT-SPEC §10](stxt-core-ref#s10)).
+		salvo el salto de línea inicial, incluida la indentación de cada línea. Para que
+		el valor no la contenga, el texto no puede sangrarse con la tabla a la que
+		pertenece:
+
+	Listing >>
+		[storage]
+		kind = "s3"
+		notes = """
+		Restarted after the 2026-08-31 incident.
+		The TLS certificate expires on 2027-03-01.
+		"""
+
+	Content >>
+		En un bloque `>>` de @STXT@ la indentación del nivel se descuenta y solo la
+		adicional forma parte del texto: el bloque se sangra con el documento y llega
+		literal, sin escapes ([STXT-SPEC §10](stxt-core-ref#s10)).
+
+	Code >>
+		Storage:
+			Kind: s3
+			Notes >>
+				Restarted after the 2026-08-31 incident.
+				The TLS certificate expires on 2027-03-01.
+
+	Subheader: Los tipos
+
+	Content >>
+		En TOML el tipo está en la grafía del valor: `14` es un entero, `"14"` una cadena,
+		`true` un booleano, `2026-08-31T02:30:00Z` una fecha con hora. Un parser TOML
+		devuelve datos ya tipados sin ninguna definición externa; a cambio, las cadenas van
+		siempre entre comillas, en cuatro formas —básica y literal, de una y de varias
+		líneas—, con escapes en las básicas.
+
+		En @STXT@ un valor es siempre texto, sin comillas. Los tipos se declaran en la
+		definición —`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`…— y los comprueba el
+		validador, no el parser: sin definición, `14` son dos caracteres.
 
 	Subheader: Namespaces y validación
 
 	Content >>
-		Como YAML, TOML no tiene el concepto de namespace ni capa de esquemas: nada en
-		el fichero declara a qué vocabulario pertenece, y la validación se delega en
-		herramientas externas. En @STXT@ ambas cosas forman parte del lenguaje: el
-		namespace conecta el documento con su definición, y la plantilla fija
-		estructura, cardinalidades y tipos. La configuración de arriba, con namespace
-		y validada:
+		TOML no tiene namespaces ni capa de esquemas: nada en el fichero declara a qué
+		vocabulario pertenece, y la validación queda para la aplicación o para una
+		herramienta externa. En @STXT@ el namespace conecta el documento con su
+		definición, y la plantilla fija estructura, cardinalidades y tipos. La
+		configuración inicial, con namespace:
 
 	Code >>
 		Backup (com.example.backup): Nightly backup
@@ -144,7 +180,7 @@ Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente 
 						Keep: (1) NATURAL
 
 	Content >>
-		Un campo mal escrito, un `Storage` ausente o un `Keep` que no sea un número
+		Un nombre no declarado, un `Storage` ausente o un `Keep` que no sea un número
 		fallan con un código de error explícito:
 
 	Code >>
@@ -160,19 +196,13 @@ Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente 
 	Subheader: Cuándo usar cada uno
 
 	Content >>
-		Usa TOML donde el ecosistema ya lo habla — `Cargo.toml`, `pyproject.toml`, la
-		configuración de herramientas que esperan ese fichero — y en general para la
-		configuración plana de claves y valores tipados, que es el objetivo que su
-		especificación declara.
+		TOML, donde el ecosistema lo espera —`Cargo.toml`, `pyproject.toml`, la
+		configuración de herramientas que leen ese fichero— y para configuración plana de
+		claves con valores tipados, que es el objetivo que su especificación declara.
 
-		@STXT@ encaja cuando el fichero crece hacia documento: jerarquía de varios
-		niveles, texto en prosa junto a los datos,
-		[registros corporativos](use-cases-corporate-docs) y cualquier estructura que
-		merezca validarse contra una definición acordada. El caso de uso de
-		[ficheros de configuración](use-cases-config-files) desarrolla el escenario
-		más cercano.
-
-		Para ver el lenguaje, empieza por el [tutorial](tutorial) o pega los ejemplos
-		de arriba en el [playground](https://play.stxt.dev); la versión corta de esta
-		comparación, junto a XML y YAML, está en la
+		@STXT@, cuando el fichero crece hacia documento: jerarquía de varios niveles,
+		texto en prosa junto a los datos, [registros corporativos](use-cases-corporate-docs)
+		y cualquier estructura que deba validarse contra una definición. El caso de uso
+		de [ficheros de configuración](use-cases-config-files) desarrolla el escenario
+		más cercano, y la versión corta de esta comparación está en la
 		[FAQ](faq#por-que-no-xml-yaml-o-toml).

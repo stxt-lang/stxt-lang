@@ -2,8 +2,8 @@ Document (dev.stxt.website): STXT frente a XML — Estructura y validación sin 
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-01
-		Description: STXT y XML comparten ambiciones — estructura con nombre, namespaces, validación. STXT las persigue sin etiquetas de cierre, escapes ni riesgos tipo XXE.
+		Last modif: 2026-09-08
+		Description: STXT y XML comparados con ejemplos: el mismo árbol con y sin etiquetas de cierre, escapes y entidades, atributos frente a hijos, y un XSD frente a una plantilla STXT.
 
 	Header: @STXT@ frente a XML
 
@@ -12,12 +12,10 @@ Document (dev.stxt.website): STXT frente a XML — Estructura y validación sin 
 		La diferencia es el precio que paga una persona por escribirlo.
 
 	Content >>
-		De todos los formatos de esta serie, XML es el que más terreno comparte con @STXT@.
-		Ambos modelan un documento como un árbol de nodos con nombre; ambos agrupan
-		vocabularios con namespaces; ambos validan contra una estructura declarada. XML
-		demostró que esas ideas funcionan a escala industrial. @STXT@ persigue las mismas
-		ambiciones con una restricción distinta: que el documento se pueda escribir y
-		leer a mano sin etiquetas de cierre ni escapes.
+		XML y @STXT@ modelan un documento como un árbol de nodos con nombre, agrupan los
+		vocabularios en namespaces y validan contra una estructura declarada. @STXT@
+		persigue lo mismo con una restricción añadida: que el documento se escriba y se
+		lea a mano sin etiquetas de cierre ni escapes.
 
 	Subheader: El mismo contenido, dos veces
 
@@ -48,42 +46,87 @@ Document (dev.stxt.website): STXT frente a XML — Estructura y validación sin 
 				<and everything in between>.
 
 	Content >>
-		El mismo árbol, la misma idea de namespace, y dos costes que desaparecen: nada se
-		cierra — la indentación ya dice dónde termina `Article` — y nada se escapa, porque
-		`&`, `<` y `>` no significan nada en un valor o un bloque de texto @STXT@.
+		El mismo árbol y la misma idea de namespace, con dos cosas menos: nada se cierra,
+		porque la indentación dice dónde termina cada nodo, y nada se escapa, porque `&`,
+		`<` y `>` no significan nada en un valor ni en un bloque de texto @STXT@.
 
 	Subheader: Escapes y entidades
 
 	Content >>
-		XML reserva `<` y `&` en todas partes, así que el texto debe escaparse o envolverse
-		en CDATA, y la corrección depende de hacerlo cada vez. Las entidades abren además
-		la superficie de ataque clásica: entidades externas (XXE) que leen ficheros o
-		alcanzan la red, y expansión de entidades que agota la memoria. Los parsers
-		endurecidos desactivan esas características; @STXT@ nunca las tuvo. No hay
-		entidades, ni referencias, ni inclusión, y cualquier carácter es legal en un valor
-		o un bloque — el modelo de seguridad es normativo en
-		[STXT-SPEC §15](stxt-core-ref#s15).
+		XML reserva `<` y `&` en el contenido, así que el texto se escapa o se envuelve
+		en una sección CDATA, que a su vez no puede contener `]]>`. Las entidades abren
+		además la superficie de ataque conocida: entidades externas (XXE) que leen ficheros
+		o alcanzan la red, y expansión de entidades que agota la memoria. Los parsers
+		endurecidos desactivan esas características; @STXT@ no las tiene. No hay entidades,
+		referencias ni inclusión, y cualquier carácter es legal en un valor o en un bloque.
+		El modelo de seguridad es normativo en [STXT-SPEC §15](stxt-core-ref#s15).
 
 	Subheader: Atributos y elementos
 
 	Content >>
-		Cada vocabulario XML vuelve a decidir qué va en atributos y qué en elementos
-		hijos, y los consumidores deben manejar ambos. @STXT@ tiene una sola construcción:
-		un nodo con valor e hijos, o un nodo con texto literal. `Author`, arriba, lleva su
-		valor y un hijo `Email`; no hay un segundo eje que diseñar ni que parsear. Lo que
-		XML gana con los atributos — metadatos compactos en línea — @STXT@ lo cambia
-		deliberadamente por uniformidad, como argumenta
-		[Principios de diseño](design-principles).
+		XML ofrece dos sitios para un dato: atributo o elemento hijo. Cada vocabulario
+		decide, y los consumidores tienen que leer los dos. Un fragmento de configuración:
+
+	Xml >>
+		<server name="db1" host="10.0.0.5" port="5432">
+			<timeout unit="s">30</timeout>
+			<replica host="10.0.0.6"/>
+			<replica host="10.0.0.7"/>
+		</server>
+
+	Content >>
+		@STXT@ tiene una sola construcción: un nodo con valor e hijos, o un nodo con
+		texto literal. Lo que en XML era atributo o elemento es aquí, en los dos casos,
+		un hijo:
+
+	Code >>
+		Server: db1
+			Host: 10.0.0.5
+			Port: 5432
+			Timeout: 30
+				Unit: s
+			Replica: 10.0.0.6
+			Replica: 10.0.0.7
+
+	Content >>
+		Los atributos de XML son más compactos en línea; @STXT@ renuncia a ese segundo
+		eje a cambio de una forma única, que es lo que hace que un documento se lea sin
+		conocer las decisiones de su vocabulario.
 
 	Subheader: La validación
 
 	Content >>
-		XML tiene tres lenguajes de esquema — DTD, XSD y RELAX NG —, cada uno un
-		ecosistema propio; XSD en particular es una especificación en dos partes con un
-		sistema de tipos propio. La capa de esquemas de @STXT@ es una página de
-		conceptos — nodos, tipos, cardinalidades, un modelo de contenido cerrado —
-		escrita en el propio @STXT@, en una forma de
-		[plantilla](stxt-template-ref) que refleja el documento:
+		XML tiene varios lenguajes de esquema —DTD, XSD, RELAX NG, Schematron—, cada uno
+		con su sintaxis. Un XSD para el artículo de arriba:
+
+	Xml >>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		           targetNamespace="http://example.com/articles"
+		           xmlns="http://example.com/articles"
+		           elementFormDefault="qualified">
+			<xs:element name="article">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="title" type="xs:string"/>
+						<xs:element name="published" type="xs:date"/>
+						<xs:element name="author" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:string">
+										<xs:attribute name="email" type="xs:string" use="required"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="summary" type="xs:string" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+
+	Content >>
+		Y la plantilla @STXT@ equivalente, escrita en el propio lenguaje y con la forma
+		del documento que describe:
 
 	Code >>
 		Template (@stxt.template): com.example.articles
@@ -95,24 +138,24 @@ Document (dev.stxt.website): STXT frente a XML — Estructura y validación sin 
 					Summary: (?) TEXT
 
 	Content >>
-		Valida menos que XSD — sin expresiones regulares sobre el contenido, sin reglas
-		condicionales, sin restricciones de orden —, y cada una de esas ausencias es un
-		no-objetivo declarado de la spec, que documenta qué queda fuera y por qué:
-		mantener el modelo pequeño y predecible, con errores sobre los que una persona
-		puede actuar ([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)).
+		No son equivalentes del todo, y la diferencia va en las dos direcciones. El XSD
+		exige el orden de los hijos (`xs:sequence`) y puede añadir patrones, rangos y
+		tipos derivados; la capa de esquemas de @STXT@ no valida el orden ni admite
+		expresiones regulares ni reglas condicionales, y lo declara como no-objetivo
+		([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)). A cambio, la plantilla comprueba
+		que `Email` es una dirección de correo (`xs:string` no lo hace), y su modelo de
+		contenido es cerrado: cualquier hijo no declarado es un error.
 
 	Subheader: Cuándo usar cada uno
 
 	Content >>
-		Usa XML donde su ecosistema es el valor: estándares establecidos (DocBook, SVG,
-		ODF, RSS), cadenas de herramientas construidas sobre XSLT y XPath, y vocabularios
-		que necesitan contenido mixto — marcado en línea entretejido con la prosa —, que
-		@STXT@ deliberadamente no modela.
+		XML, donde su ecosistema es el valor: vocabularios establecidos (DocBook, SVG,
+		ODF, RSS), cadenas de herramientas sobre XSLT y XPath, y **contenido mixto**
+		—marcado en línea dentro de la prosa—, que @STXT@ no modela: la prosa con formato
+		va en un bloque de texto, en [Markdown](stxt-vs-markdown).
 
-		@STXT@ encaja en los documentos que las personas redactan y las organizaciones
+		@STXT@, en los documentos que las personas redactan y las organizaciones
 		validan: [documentos corporativos](use-cases-corporate-docs),
 		[contratos](use-cases-contracts), [RFCs y propuestas técnicas](use-cases-rfcs),
-		[contenido de un CMS](use-cases-cms). El [tutorial](tutorial) enseña el lenguaje
-		entero de una sentada, el [playground](https://play.stxt.dev) ejecuta los ejemplos
-		de arriba, y la versión corta de esta comparación está en la
-		[FAQ](faq#por-que-no-xml-yaml-o-toml).
+		[contenido de un CMS](use-cases-cms). La versión corta de esta comparación está
+		en la [FAQ](faq#por-que-no-xml-yaml-o-toml).

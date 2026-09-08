@@ -1,5 +1,5 @@
 Document (dev.stxt.website): STXT: El Libro
-	SubHeader: @STXT@
+	Subheader: @STXT@
 	
 	Link: Introducción
 		Page: index
@@ -70,7 +70,7 @@ Document (dev.stxt.website): STXT: El Libro
 	Link: Biblioteca Python
 		Page: tools-python
 
-	SubHeader: Casos de uso 
+	Subheader: Casos de uso
 	
 	Link: Documentos Corporativos
 		Page: use-cases-corporate-docs

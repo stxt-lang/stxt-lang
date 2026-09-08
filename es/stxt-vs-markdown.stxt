@@ -2,8 +2,8 @@ Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alte
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-01
-		Description: Markdown da formato a la prosa; STXT estructura los documentos. Cómo trabajan juntos, y por qué MARKDOWN es el único formato embebido de los esquemas STXT.
+		Last modif: 2026-09-08
+		Description: Markdown da formato a la prosa; STXT estructura los documentos. Dos ejemplos de cómo trabajan juntos, y por qué MARKDOWN es el único formato embebido de los esquemas STXT.
 
 	Header: @STXT@ frente a Markdown
 
@@ -12,19 +12,18 @@ Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alte
 		Resuelven problemas distintos, y están diseñados para usarse juntos.
 
 	Content >>
-		Esta es la única comparación de la serie que no es una elección. Markdown responde
-		a "¿cómo escribo negritas, enlaces y listas dentro de un texto?"; @STXT@ responde
-		a "¿cuáles son las partes de este documento, y están todas?". Un README necesita
-		la primera pregunta; un contrato, un pipeline de artículos o un corpus de
-		registros estructurados necesita las dos.
+		Markdown responde a «¿cómo escribo negritas, enlaces y listas dentro de un
+		texto?»; @STXT@ responde a «¿cuáles son las partes de este documento, y están
+		todas?». Un README necesita lo primero; un contrato, un pipeline de artículos o un
+		registro de decisiones necesita las dos cosas.
 
-	Subheader: Dónde termina Markdown
+	Subheader: Los datos de un documento Markdown
 
 	Content >>
-		Markdown no tiene noción de campos. En cuanto un documento necesita datos — un
-		autor, una fecha, un estado —, el ecosistema recurre al **front matter**: un
-		bloque YAML entre vallas `---`, invisible para el propio Markdown y
-		parseado por un segundo lenguaje con [sus propias reglas](stxt-vs-yaml):
+		Markdown no tiene noción de campos. Cuando un documento necesita datos —autor,
+		fecha, estado—, la convención es el **front matter**: un bloque YAML entre vallas
+		`---`, ajeno a Markdown y parseado por un segundo lenguaje con
+		[sus propias reglas](stxt-vs-yaml):
 
 	Listing >>
 		---
@@ -38,17 +37,9 @@ Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alte
 		Write **short** sentences. Prefer [links](https://example.com) to footnotes.
 
 	Content >>
-		La estructura de ese fichero existe solo por convención: nada comprueba que
-		`published` sea una fecha, que `author` esté presente, o que el cuerpo siga las
-		secciones acordadas. No es un defecto de Markdown — nunca prometió otra cosa —,
-		pero marca la frontera donde el formato se acaba y la estructura tiene que
-		empezar.
-
-	Subheader: El mismo documento en @STXT@
-
-	Content >>
-		En @STXT@ la ficha son nodos, y la prosa es un bloque de texto cuyo tipo lo
-		declara como Markdown:
+		Nada en ese fichero comprueba que `published` sea una fecha, que `author` esté
+		presente o que el cuerpo tenga las secciones acordadas. En @STXT@ la ficha son
+		nodos y la prosa es un bloque cuyo tipo lo declara como Markdown:
 
 	Code >>
 		Article (com.example.article): Style guide
@@ -69,35 +60,100 @@ Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alte
 					Body: (1) MARKDOWN
 
 	Content >>
-		`MARKDOWN` es el único formato embebido que define la capa de esquemas,
-		precisamente porque los dos lenguajes se reparten el trabajo: un nodo declarado
-		con ese tipo marca su texto como prosa con formato, a interpretar como CommonMark,
-		y la forma cruda sigue siendo legible
-		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)). El validador garantiza ahora lo
-		que el front matter solo podía sugerir: el autor está, la fecha es una fecha, el
-		cuerpo es exactamente un bloque.
+		`MARKDOWN` es el único formato embebido que define la capa de esquemas de @STXT@:
+		marca el texto de un nodo como prosa con formato, a interpretar como CommonMark,
+		y su forma cruda sigue siendo legible
+		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)). El validador comprueba lo que el
+		front matter solo sugería: el autor está, la fecha es una fecha y el cuerpo es
+		exactamente un bloque.
 
-	Subheader: Una estructura que Markdown no puede comprobar
+	Subheader: La estructura por convención de títulos
 
 	Content >>
-		El reparto escala más allá de un artículo. Este portal es el ejemplo en
-		funcionamiento: cada página de `stxt.dev` — esta incluida — es un documento @STXT@
-		cuyos bloques de prosa son Markdown, validado contra la plantilla del sitio antes
-		de que un generador lo renderice, como describe el caso de uso de
-		[CMS y publicaciones](use-cases-cms). Añade `.stxt` a la dirección de cualquier
+		Cuando un documento Markdown tiene partes fijas, las partes son títulos, y el
+		acuerdo sobre cuáles son y qué contienen vive fuera del fichero. Un registro de
+		decisión de arquitectura (ADR) con el esquema habitual:
+
+	Listing >>
+		# ADR 12: Adopt PostgreSQL
+
+		## Status
+
+		Accepted
+
+		## Context
+
+		The current store has no transactions across collections, and the
+		billing module needs them.
+
+		## Decision
+
+		Migrate the billing data to PostgreSQL 16 during Q4.
+
+	Content >>
+		Un lector sabe que `Status` toma uno de cuatro valores y que `Consequences`
+		debería existir; ninguna herramienta Markdown puede comprobarlo, porque para
+		Markdown todo son títulos y párrafos. En @STXT@ las partes son nodos, y la prosa
+		de cada una sigue siendo Markdown:
+
+	Code >>
+		ADR (com.example.adr): Adopt PostgreSQL
+			Number: 12
+			Status: Accepted
+			Context >>
+				The current store has no transactions across collections, and the
+				billing module needs them.
+			Decision >>
+				Migrate the billing data to PostgreSQL 16 during Q4.
+			Consequences >>
+				The two services share one database until the migration ends.
+
+	Content >>
+		Y la plantilla que fija el acuerdo:
+
+	Code >>
+		Template (@stxt.template): com.example.adr
+			Structure >>
+				ADR (com.example.adr):
+					Number: (1) NATURAL
+					Status: (1) ENUM [Proposed, Accepted, Deprecated, Superseded]
+					Context: (1) MARKDOWN
+					Decision: (1) MARKDOWN
+					Consequences: (1) MARKDOWN
+
+	Content >>
+		Un estado fuera de la lista o una sección ausente es un error de validación, no
+		una revisión pendiente:
+
+	Code >>
+		# ERROR: Status debe ser uno de Proposed, Accepted, Deprecated, Superseded
+		ADR (com.example.adr): Adopt PostgreSQL
+			Number: 12
+			Status: Approved
+			Context >>
+				The current store has no transactions across collections.
+			Decision >>
+				Migrate the billing data to PostgreSQL 16 during Q4.
+			Consequences >>
+				The two services share one database until the migration ends.
+
+	Subheader: Este portal
+
+	Content >>
+		Cada página de `stxt.dev`, esta incluida, es un documento @STXT@ cuyos bloques de
+		prosa son Markdown, validado contra la plantilla del sitio antes de renderizarse
+		([CMS y publicaciones](use-cases-cms)). Añade `.stxt` a la dirección de cualquier
 		página para leer la fuente.
 
 	Subheader: Cuándo usar cada uno
 
 	Content >>
-		Para un README, un comentario, un gist — prosa con formato ligero y sin contrato —,
-		Markdown solo es la herramienta correcta, y @STXT@ no añadiría nada.
+		Para un README, un comentario o un gist —prosa con formato ligero y sin
+		contrato—, Markdown solo.
 
-		Recurre a @STXT@ cuando el documento tiene partes que merecen nombre y
-		comprobación: [artículos en un pipeline](use-cases-cms),
+		@STXT@, cuando el documento tiene partes con nombre que deben comprobarse:
+		[artículos en un pipeline](use-cases-cms),
 		[registros corporativos](use-cases-corporate-docs),
 		[propuestas técnicas](use-cases-rfcs). La prosa de dentro sigue siendo Markdown;
-		la estructura de alrededor se vuelve explícita y validada. El
-		[tutorial](tutorial) recorre el lenguaje en quince secciones breves, el
-		[playground](https://play.stxt.dev) ejecuta el ejemplo de arriba, y la versión
-		corta de esta página está en la [FAQ](faq#por-que-no-markdown).
+		la estructura de alrededor pasa a ser explícita y validada. La versión corta de
+		esta página está en la [FAQ](faq#por-que-no-markdown).

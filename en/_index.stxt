@@ -1,5 +1,5 @@
 Document (dev.stxt.website): STXT: The Book
-	SubHeader: @STXT@
+	Subheader: @STXT@
 	
 	Link: Introduction
 		Page: index
@@ -56,31 +56,6 @@ Document (dev.stxt.website): STXT: The Book
 	Link: @STXT@ Tree
 		Page: stxt-tree-ref
 		
-#	Subheader: Transformations		
-	
-#	Link: STXT to XML
-#		Page: stxt2xml
-		
-#	Link: STXT to YAML
-#		Page: stxt2yaml
-		
-#	Link: STXT to JSON
-#		Page: stxt2json
-		
-#	Link: STXT to HTML
-#		Page: stxt2html
-		
-#	Link: STXT to PDF
-#		Page: stxt2pdf
-		
-#	Subheader: Migrations		
-	
-#	Link: XML to STXT
-#		Page: migrate-xml		
-		
-#	Link: YAML to STXT
-#		Page: migrate-yaml		
-		
 	Subheader: Tools reference
 
 	Link: Command line
@@ -95,7 +70,7 @@ Document (dev.stxt.website): STXT: The Book
 	Link: Python library
 		Page: tools-python
 
-	SubHeader: Use cases 
+	Subheader: Use cases
 	
 	Link: Corporate Documents
 		Page: use-cases-corporate-docs
