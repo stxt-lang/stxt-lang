@@ -6,7 +6,8 @@ that tree). The model is `text/markdown` (RFC 7763), an individual submission sp
 by an Area Director.
 
 - `draft-stxt-media-type-00.md` — the draft, in [kramdown-rfc](https://github.com/cabo/kramdown-rfc)
-  markdown. It summarizes the syntax, references STXT-SPEC 1.0 normatively, fixes the
+  markdown. It summarizes the syntax, references the dated edition of STXT-SPEC normatively
+  (the specifications carry a date and a status, not a version number), fixes the
   encoding conventions of the media type and carries the registration template.
 
 ## Building

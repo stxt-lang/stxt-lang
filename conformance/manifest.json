@@ -1,11 +1,11 @@
 {
-  "kit": "1.0.1",
+  "kit": "2026-09-07",
   "specifications": {
-    "STXT-SPEC": "1.0",
-    "STXT-TREE-SPEC": "1.0",
-    "STXT-SCHEMA-SPEC": "1.0",
-    "STXT-TEMPLATE-SPEC": "1.0",
-    "STXT-DISCOVERY-SPEC": "1.0"
+    "STXT-SPEC": "2026-09-07",
+    "STXT-TREE-SPEC": "2026-09-07",
+    "STXT-SCHEMA-SPEC": "2026-09-07",
+    "STXT-TEMPLATE-SPEC": "2026-09-07",
+    "STXT-DISCOVERY-SPEC": "2026-09-07"
   },
   "profiles": {
     "core": {

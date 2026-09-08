@@ -32,9 +32,14 @@ specifications (this repository)
 
 ## The specifications
 
-They live in `es/` (the canonical version, in Spanish) with an English mirror in `en/`. Each one
-carries its own `Version` in its `Metadata`; all five are at **1.0**. "STXT 1.0" on its own means
-the version of *STXT-SPEC*, which is what the implementations expose as `SPEC_VERSION`.
+They live in `es/` (the canonical version, in Spanish) with an English mirror in `en/`. They carry
+no version number: each one carries in its `Metadata` a **date** (`Last modif`, the date of its
+current text) and a **status** (`Status`), which says how much stability it promises and only
+moves forward: `Genesis` → `Aurora` → `Zenith` → `Twilight` (*STXT-SPEC* §1.1). Today *STXT-SPEC*
+and *STXT-TREE-SPEC* are in **Zenith** (what is valid stays valid forever) and the other three in
+**Aurora** (usable; an incompatible change is possible, rare, and announced). "STXT" on its own
+means *STXT-SPEC*; the implementations expose the date of the text they implement as
+`SPEC_VERSION`, pinned by the conformance kit.
 
 | File | Specification | What it defines |
 |---|---|---|

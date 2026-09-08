@@ -4,8 +4,8 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Version: 1.0
-		Last modif: 2026-08-31
+		Status: Aurora
+		Last modif: 2026-09-07
 		Description: STXT-TEMPLATE-SPEC: @stxt.template templates, the simple way to define the structure of an STXT document; every template compiles to an equivalent schema.
 		
 	Header: @STXT@ Template
@@ -40,12 +40,11 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 	Subsubheader: 1.1 Version of this specification
 
 	Content >>
-		This specification carries its own version number in the `Version` field of its `Metadata`,
-		**independent** of the other @STXT@ specifications, and follows the same change policy as
-		[*STXT-SPEC* §1.1](stxt-core-ref#s1-1): `major.minor`, major if something valid stops being
-		valid or changes meaning, minor if something is only added.
+		This specification carries its own **date** and its own **status** in the `Last modif` and
+		`Status` fields of its `Metadata`, **independent** of the other @STXT@ specifications' and with
+		the meaning fixed by [*STXT-SPEC* §1.1](stxt-core-ref#s1-1). It is in `Aurora`.
 		It depends on [*STXT-SCHEMA-SPEC*](stxt-schema-ref): every template compiles to an equivalent
-		schema, and requires *STXT-SCHEMA-SPEC* 1.0 or later.
+		schema.
 
 	Subheader: 2. Terminology
 	
@@ -515,7 +514,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		
 	Content >>
 		As in [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), every error carries a stable code, identical
-		in every implementation; **from 1.0 on they do not change**. The numbers point to the
+		in every implementation, and **is never renamed**. The numbers point to the
 		conditions of the list above. A template document is first validated **as a document**
 		against the meta-template of [section 16](#s16), so its form errors (a root that is not
 		`Template`, a missing or inline `Structure`) come with the codes of

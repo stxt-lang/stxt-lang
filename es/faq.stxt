@@ -483,20 +483,25 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 
 	Content >>
 		Desde este portal se mantienen tres: TypeScript/JavaScript (`@stxt-lang/core`),
-		Java (`dev.stxt:stxt-core`) y Python (`stxt`), con el mismo alcance, la misma
-		versión y el mismo corpus de conformidad. Sobre el primero se construyen la
+		Java (`dev.stxt:stxt-core`) y Python (`stxt`), con el mismo alcance, la misma fecha
+		de especificación y el mismo corpus de conformidad. Sobre el primero se construyen la
 		extensión de VS Code, la CLI y el playground. La lista completa está en
 		[Herramientas](tools); para probar sin instalar nada,
 		[play.stxt.dev](https://play.stxt.dev).
 
-	Subsubheader: ¿Qué promete la 1.0?
+	Subsubheader: ¿Qué estabilidad se promete?
 
 	Content >>
-		Que un documento válido hoy lo será en toda la línea 1.x: el lenguaje, el árbol canónico
-		y los códigos de error quedan congelados, y la API de cada biblioteca dentro de su propia
-		línea 1.x. No se congelan el texto de los mensajes ni las fachadas de comodidad. La
-		conformidad se declara contra la versión de la especificación (`SPEC_VERSION`), no
-		contra la del paquete. La declaración completa está en
+		Que un documento válido hoy lo será para siempre. Las especificaciones no llevan número
+		de versión: cada una lleva una **fecha** (la de su texto vigente) y un **estado**, que
+		solo avanza: *Genesis* (en construcción), *Aurora* (usable; un cambio incompatible es
+		posible, raro y se anuncia siempre), *Zenith* (lo válido lo es para siempre; solo se
+		añade) y *Twilight* (cerrada). La sintaxis y el árbol canónico —STXT-SPEC y
+		STXT-TREE-SPEC— están en Zenith; los esquemas, las plantillas y el descubrimiento, en
+		Aurora. Los códigos de error no se renombran, y la API de cada biblioteca queda
+		congelada dentro de su propia línea 1.x. No se congelan el texto de los mensajes ni las
+		fachadas de comodidad. La conformidad se declara contra la fecha de la especificación
+		(`SPEC_VERSION`), no contra la versión del paquete. La declaración completa está en
 		[Estabilidad y versiones](stability).
 
 	Subsubheader: ¿Dónde pregunto, o doy mi opinión?

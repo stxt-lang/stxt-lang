@@ -3,7 +3,7 @@ Template (@stxt.template): dev.stxt.website
 		Document (dev.stxt.website):
 			Metadata: (?)
 				Author: (*)
-				Version: (?)
+				Status: (?) ENUM [Genesis, Aurora, Zenith, Twilight]
 				Revision: (*)
 				Last modif: (?)
 				Description: (?)
@@ -32,9 +32,10 @@ Template (@stxt.template): dev.stxt.website
 		Description >>
 			Meta descripción de la página para buscadores (~150-160 caracteres, sin
 			comillas dobles). El CMS la emite como meta description y og:description.
-		Version >>
-			Versión de las especificaciones de STXT de la que forma parte el documento
-			(solo en las cinco specs; STXT-SPEC 1.1). El CMS la pinta bajo el título.
+		Status >>
+			Estado de estabilidad de una especificación (solo en las cinco specs): Genesis,
+			Aurora, Zenith o Twilight, con el significado de STXT-SPEC 1.1. Junto con
+			Last modif sustituye al número de versión. El CMS lo pinta bajo el título.
 		Content >>
 			Texto de la página, en formato Markdown (tipo MARKDOWN, STXT-SCHEMA-SPEC 9.7).
 		CODE >>

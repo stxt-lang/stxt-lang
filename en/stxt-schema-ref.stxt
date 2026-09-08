@@ -5,8 +5,8 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Version: 1.0
-		Last modif: 2026-08-31
+		Status: Aurora
+		Last modif: 2026-09-07
 		Description: STXT-SCHEMA-SPEC: the @stxt.schema language for validating STXT documents with nodes, types and cardinalities, plus the official meta-schema.
 
 	Header: @STXT@ Schema
@@ -30,12 +30,10 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 	Subsubheader: 1.1 Version of this specification
 
 	Content >>
-		This specification carries its own version number in the `Version` field of its `Metadata`,
-		**independent** of the other @STXT@ specifications, and follows the same change policy as
-		[*STXT-SPEC* §1.1](stxt-core-ref#s1-1): `major.minor`, major if something valid stops being
-		valid or changes meaning, minor if something is only added.
-		It depends on [*STXT-SPEC*](stxt-core-ref): a schema is an @STXT@ document, and requires *STXT-
-		SPEC* 1.0 or later.
+		This specification carries its own **date** and its own **status** in the `Last modif` and
+		`Status` fields of its `Metadata`, **independent** of the other @STXT@ specifications' and with
+		the meaning fixed by [*STXT-SPEC* §1.1](stxt-core-ref#s1-1). It is in `Aurora`.
+		It depends on [*STXT-SPEC*](stxt-core-ref): a schema is an @STXT@ document.
 
 	Subheader: 2. Terminology
 
@@ -650,7 +648,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		
 	Content >>
 		As in [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), every error carries a stable code, identical
-		in every implementation; **from 1.0 on they do not change**. A schema document is first
+		in every implementation, and **is never renamed**. A schema document is first
 		validated **as a document** against the meta-schema of [section 15](#s15), so its form errors
 		(a `Node` without a value, two `Type`, a `Min` that is not a `NATURAL`…) come with the codes
 		of the second table; the rules of the first are applied afterwards.

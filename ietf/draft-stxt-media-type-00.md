@@ -27,7 +27,7 @@ normative:
   RFC3629:
   RFC6838:
   STXT-SPEC:
-    title: "STXT Core — Base syntax of the language, version 1.0"
+    title: "STXT Core — Base syntax of the language, edition of 2026-09-07 (status: Zenith)"
     author:
       -
         ins: J. Costa Mombiela
@@ -53,7 +53,7 @@ informative:
   RFC7763:
   RFC8259:
   STXT-TREE-SPEC:
-    title: "STXT Tree — Canonical JSON representation of the logical tree, version 1.0"
+    title: "STXT Tree — Canonical JSON representation of the logical tree, edition of 2026-09-07 (status: Zenith)"
     author:
       -
         ins: J. Costa Mombiela
@@ -61,7 +61,7 @@ informative:
     date: 2026
     target: https://stxt.dev/stxt-tree-ref.html
   STXT-SCHEMA-SPEC:
-    title: "STXT Schema — Semantic validation, version 1.0"
+    title: "STXT Schema — Semantic validation, edition of 2026-09-07 (status: Aurora)"
     author:
       -
         ins: J. Costa Mombiela
@@ -105,8 +105,8 @@ This document registers the text/stxt media type for STXT, a plain-text,
 indentation-based format for hierarchical documents that mix structured fields and free
 text. It summarizes the syntax, specifies the encoding and line-ending conventions that
 apply to the media type, and records the security properties of the format. The normative
-definition of the syntax is the STXT Core specification, version 1.0, which this document
-references.
+definition of the syntax is the STXT Core specification, in its edition of 2026-09-07, which
+this document references.
 
 --- middle
 
@@ -244,11 +244,14 @@ any other value SHOULD treat the document as malformed rather than transcode it.
 
 # Interoperability Considerations {#interop}
 
-STXT 1.0 is the version of {{STXT-SPEC}} referenced by this registration. The
-specification commits that every document valid under version 1.0 remains valid, with the
-same meaning, under every later 1.x version; an incompatible change would raise the major
-version. There is therefore no version parameter on the media type: a recipient that
-implements any 1.x parser reads any 1.x document.
+The edition of {{STXT-SPEC}} referenced by this registration is the one dated 2026-09-07.
+The STXT specifications carry no version number: each one carries the date of its current
+text and a status that only moves forward. {{STXT-SPEC}} is in the "Zenith" status, which
+commits that every document valid under it remains valid, with the same meaning, under every
+later edition: the specification may only add, and an incompatible change is not made — if
+one were ever needed, it would be a new specification with a new name, and would not affect
+this media type. There is therefore no version parameter on the media type: a recipient that
+implements any edition of the parser reads any document.
 
 STXT has no escape mechanism and no quoting; a value that must contain a line break is
 written as a text block. A document that fails any rule of the syntax is rejected as a

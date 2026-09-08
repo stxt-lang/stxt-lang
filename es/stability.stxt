@@ -3,20 +3,75 @@ Document (dev.stxt.website): Estabilidad y versiones — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-29
-		Description: La promesa de estabilidad de STXT: un documento válido en 1.0 es válido en toda la línea 1.x. Qué se congela, qué no, y cómo se versionan specs y bibliotecas.
+		Last modif: 2026-09-08
+		Description: La promesa de estabilidad de STXT: un documento válido hoy lo es para siempre. Los cuatro estados de una especificación, el estado actual de cada una, y por qué las specs llevan fecha y estado y los paquetes, versión.
 
 	Header: Estabilidad y versiones
 
 	Assert >>
-		**Un documento válido en @STXT@ 1.0 es válido en toda la línea 1.x**.
+		**Un documento válido hoy en @STXT@ lo es para siempre**.
+
+	Subheader: Fecha y estado, no número de versión
+
+	Content >>
+		Las especificaciones de @STXT@ no llevan número de versión. Cada una lleva, en su
+		`Metadata`, dos cosas:
+
+		* **Una fecha** (`Last modif`): la de la última modificación de su texto, sea una errata
+		  o un cambio de regla. No hay otra versión que la vigente, y una fecha identifica un
+		  texto: «STXT-SPEC 2026-09-07» es esa especificación tal como estaba ese día.
+		* **Un estado** (`Status`): cuánta estabilidad se promete. Tiene cuatro valores posibles,
+		  en este orden, y **solo avanza**:
+
+		| Estado | Promesa |
+		|---|---|
+		| **Genesis** | En construcción. Cualquier cosa puede cambiar sin aviso. |
+		| **Aurora** | Usable. Un cambio incompatible es posible, se espera raro, y se anuncia siempre. |
+		| **Zenith** | Estable. Lo que es válido lo es para siempre y significa lo mismo: la especificación solo añade. Un cambio incompatible no se hace; si algún día hiciera falta, tomaría la forma de una especificación nueva, con nombre propio, que conviviría con esta. |
+		| **Twilight** | Cerrada. No cambia más, salvo erratas. Señala que hay una sucesora o que la especificación se retira. |
+
+		Un cambio **incompatible** es aquel por el que un documento que era válido deja de serlo
+		o cambia de significado: un cambio deliberado de intención, no una aclaración del texto.
+		La definición normativa de los cuatro estados está en
+		[STXT-SPEC §1.1](stxt-core-ref#s1-1).
+
+	Subheader: El estado de cada especificación
+
+	Content >>
+		| Especificación | Estado | Desde |
+		|---|---|---|
+		| [STXT-SPEC](stxt-core-ref) — la sintaxis base | **Zenith** | 2026-09-07 |
+		| [STXT-TREE-SPEC](stxt-tree-ref) — el árbol canónico y la escritura | **Zenith** | 2026-09-07 |
+		| [STXT-SCHEMA-SPEC](stxt-schema-ref) — los esquemas | **Aurora** | 2026-09-07 |
+		| [STXT-TEMPLATE-SPEC](stxt-template-ref) — las plantillas | **Aurora** | 2026-09-07 |
+		| [STXT-DISCOVERY-SPEC](stxt-discovery-ref) — la localización de definiciones | **Aurora** | 2026-09-07 |
+
+		**«@STXT@», dicho por sí solo, es STXT-SPEC**, y STXT-SPEC está en Zenith: qué es un
+		documento @STXT@, cómo se parsea y qué árbol produce no cambiarán. Es lo que respalda la
+		afirmación de arriba.
+
+		**Por qué Aurora en las otras tres.** Esquemas, plantillas y descubrimiento definen qué
+		significa que un documento sea *conforme a una definición* y dónde se busca esa
+		definición. Son más jóvenes que el núcleo y han tenido menos uso real, y no queremos
+		prometer que no se moverán ni un milímetro antes de saberlo. Aurora es una rebaja
+		consciente respecto a la promesa «válido en toda la línea 1.x» publicada el 2026-08-31
+		para las cinco, y preferimos decirlo así. Lo que Aurora significa en la práctica:
+
+		* Una definición Aurora **se apoya sobre un núcleo Zenith**: un esquema o una plantilla
+		  es un documento @STXT@ y nunca deja de parsear. Lo que podría cambiar es una regla de
+		  validación o de resolución, no el documento.
+		* Un cambio incompatible, si llega, **se anuncia siempre**, con la fecha en que se hace,
+		  qué documentos afecta y cómo se adaptan; nunca es una reinterpretación silenciosa.
+		* El paso a Zenith de cada una se anunciará con su fecha, y a partir de ahí regirá la
+		  misma promesa que para el núcleo.
 
 	Subheader: Qué se congela
 
 	Content >>
 		| Superficie | Promesa |
 		|---|---|
-		| **El lenguaje** —las cinco especificaciones: [STXT-SPEC](stxt-core-ref), [STXT-SCHEMA-SPEC](stxt-schema-ref), [STXT-TEMPLATE-SPEC](stxt-template-ref), [STXT-DISCOVERY-SPEC](stxt-discovery-ref) y [STXT-TREE-SPEC](stxt-tree-ref)— | Lo que es válido en 1.0 lo es en cualquier 1.x, y significa lo mismo. Una 1.x solo **añade**; nunca invalida ni reinterpreta. |
+		| **La sintaxis y el árbol** —[STXT-SPEC](stxt-core-ref) y [STXT-TREE-SPEC](stxt-tree-ref), en Zenith— | Lo que hoy es válido lo es para siempre, y significa lo mismo. Solo se **añade**; nunca se invalida ni se reinterpreta. |
+		| **Los esquemas, las plantillas y el descubrimiento** —[STXT-SCHEMA-SPEC](stxt-schema-ref), [STXT-TEMPLATE-SPEC](stxt-template-ref) y [STXT-DISCOVERY-SPEC](stxt-discovery-ref), en Aurora— | Usables hoy. Un cambio incompatible es posible, se espera raro y se anuncia siempre con fecha y camino de migración. |
 		| **El árbol canónico** (STXT-TREE-SPEC) | El JSON que produce `stxt describe` y que exponen las bibliotecas es un formato de intercambio estable: mismos campos, mismo significado, mismo resultado en todas las implementaciones. |
 		| **Los códigos de error** (`INDENTATION_MIXED`, `CHILD_NOT_DECLARED`, `SCHEMA_NOT_FOUND`…) | Son idénticos en todas las implementaciones y no se renombran ni se reutilizan. Un test que dependa de un código sigue valiendo. |
 		| **La API en memoria de cada biblioteca**, dentro de su línea 1.x | Lo que exporta `@stxt-lang/core`, `dev.stxt:stxt-core` o `stxt` en su 1.0 sigue ahí, con la misma firma, en todas sus 1.x. Cada biblioteca tiene su propia línea (ver más abajo). |
@@ -38,38 +93,40 @@ Document (dev.stxt.website): Estabilidad y versiones — STXT
 		  especificaciones): son recomendaciones y pueden afinarse sin que un documento deje de
 		  ser válido.
 
-	Subheader: La versión de la especificación y la del paquete
+	Subheader: La fecha de la especificación y la versión del paquete
 
 	Content >>
-		**Cada especificación lleva su propio número**, `mayor.menor`, en su `Metadata`, y las
-		cinco arrancan en `1.0`. Son independientes: el núcleo se espera muy estable, y el
-		esquema o la plantilla pueden evolucionar a otro ritmo, como XML Schema respecto a XML.
-		**«@STXT@ 1.0», dicho por sí solo, es la versión de [STXT-SPEC](stxt-core-ref)**.
+		**Las especificaciones llevan fecha y estado**, cada una los suyos, independientes de
+		los de las demás: el núcleo está en Zenith y el esquema, la plantilla o el descubrimiento
+		pueden evolucionar a otro ritmo, como XML Schema respecto a XML.
 
-		**Cada biblioteca lleva la versión de su paquete** —`@stxt-lang/core` en npm,
-		`dev.stxt:stxt-core` en Maven Central, `stxt` en PyPI—, que sube cuando cambia la
-		biblioteca, no cuando cambia el lenguaje.
+		**Las bibliotecas llevan la versión de su paquete** —`@stxt-lang/core` en npm,
+		`dev.stxt:stxt-core` en Maven Central, `stxt` en PyPI—, en versionado semántico, que sube
+		cuando cambia la biblioteca, no cuando cambia el lenguaje. Un cambio incompatible en la
+		API en memoria es un mayor del paquete, y se anuncia como tal.
 
-		La regla que une las dos: **la conformidad se declara contra la versión de la
-		especificación, no contra la del paquete**. Si `@stxt-lang/core` va por la 1.3 y
-		`dev.stxt:stxt-core` por la 1.1, siguen leyendo el mismo @STXT@: las dos implementan
-		STXT-SPEC 1.0. Cada biblioteca expone esa versión como constante (`SPEC_VERSION`) y
-		demuestra la conformidad ejecutando el
+		La regla que une las dos: **la conformidad se declara contra la especificación, no
+		contra el paquete**, y se demuestra con el
 		[kit de conformidad](https://github.com/stxt-lang/stxt-lang/tree/master/conformance)
-		del repositorio de la especificación. Un puerto de terceros hace lo mismo.
+		del repositorio de la especificación. El kit lleva su propia fecha y fija la fecha de
+		cada especificación que certifica; una implementación conforme expone la de STXT-SPEC
+		como constante, `SPEC_VERSION`, con un valor `AAAA-MM-DD`. Si `@stxt-lang/core` va por
+		la 1.3 y `dev.stxt:stxt-core` por la 1.1, siguen leyendo el mismo @STXT@: las dos
+		exponen la misma fecha y pasan el mismo kit. Un puerto de terceros hace lo mismo.
 
-	Subheader: Cómo suben los números
+	Subheader: Cómo avanza un estado y cómo se anuncia
 
 	Content >>
-		La regla está en [STXT-SPEC §1.1](stxt-core-ref#s1-1):
-
-		* El **mayor** de una especificación sube si algo que era válido **deja de serlo o cambia
-		  de significado**: un cambio deliberado de intención, no una aclaración del texto.
-		* El **menor** sube si **solo se añade** sin invalidar nada existente.
-
-		Las bibliotecas siguen versionado semántico dentro de su línea: un cambio incompatible
-		en la API en memoria es un mayor del paquete, y se anuncia como tal. Un mayor de la
-		especificación es distinto y mucho menos frecuente: no hay ninguno previsto, y si se
-		produjera, las implementaciones lo indicarían con `SPEC_VERSION` y vendría acompañado
-		de una explicación y de un camino de migración; **nunca de una reinterpretación
-		silenciosa**.
+		* Un estado **solo avanza**: Genesis → Aurora → Zenith → Twilight. Una especificación
+		  nunca vuelve a un estado anterior, y Twilight es terminal.
+		* Cada paso, y cada cambio incompatible en Aurora, **se anuncia con su fecha**: en la
+		  propia especificación (`Status` y `Last modif`), en las notas de la
+		  [publicación](https://github.com/stxt-lang/stxt-lang/releases) del repositorio de
+		  la especificación y en esta página. El kit de conformidad se regenera con la fecha
+		  nueva, y los puertos que lo pasen la exponen en `SPEC_VERSION`.
+		* Una especificación en Zenith **no sale de Zenith hacia atrás**. Si algún día hiciera
+		  falta un cambio incompatible en el núcleo, no habría un «STXT 2»: habría una
+		  especificación nueva, con nombre nuevo, conviviendo con esta, y los documentos de hoy
+		  seguirían siendo válidos y significando lo mismo.
+		* Las aclaraciones del texto que no cambian la intención de la especificación solo
+		  actualizan `Last modif`; no cambian el estado ni el significado de ningún documento.

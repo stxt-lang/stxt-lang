@@ -4,8 +4,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Version: 1.0
-		Last modif: 2026-08-31
+		Status: Zenith
+		Last modif: 2026-09-07
 		Description: STXT-SPEC, la especificación base del lenguaje STXT: indentación como estructura, nodos y bloques de texto, namespaces, normalización, errores y seguridad.
 		
 	Header: @STXT@ Core
@@ -29,27 +29,43 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* Extender su semántica mediante `@stxt.schema` o `@stxt.template`.
 		* Facilitar la creación de parsers intentando minimizar errores de seguridad.
 
-	Subsubheader: 1.1 Versión de esta especificación
+	Subsubheader: 1.1 Fecha y estado de esta especificación
 
 	Content >>
-		Esta especificación lleva su número de versión en el campo `Version` de su `Metadata`, con el
-		formato `mayor.menor`, sin parche. El campo `Last modif` indica la fecha de la última
-		modificación del documento, con independencia de si esa modificación afecta al número de
-		versión.
+		Esta especificación no lleva número de versión. Lleva, en su `Metadata`, una **fecha** y un
+		**estado**:
 
-		* El número **mayor** sube si un documento que era válido **deja de serlo o cambia de
-		  significado**: un cambio deliberado de la intención de la especificación. Es el único tipo
-		  de cambio que puede afectar a documentos e implementaciones existentes, y se hace constar.
-		  Una aclaración que precisa el texto sin cambiar esa intención no es un cambio mayor.
-		* El número **menor** sube si **solo se añade** —una aclaración, un caso normativo— sin
-		  invalidar nada existente. Todo lo válido en `1.0` lo es en cualquier `1.x`.
-		* La primera versión es la `1.0`. Los borradores anteriores no llevan número.
+		* `Last modif` es la fecha de la última modificación del texto, sea cual sea su alcance: una
+		  errata o un cambio de regla. El documento es el que es en esa fecha, y no hay otra versión
+		  que la vigente. Una fecha identifica un texto: «STXT-SPEC 2026-09-07» designa esta
+		  especificación tal como estaba ese día.
+		* `Status` dice qué estabilidad se promete. Tiene cuatro valores posibles, en este orden:
 
-		«STXT 1.0», sin más calificación, designa la versión de esta especificación: la sintaxis base es
-		lo que define qué es un documento @STXT@. Una implementación conforme **DEBERÍA** exponerla (por
-		ejemplo, como una constante `SPEC_VERSION`), distinta de la versión de su paquete: dos
-		implementaciones con paquetes distintos leen el mismo @STXT@ mientras coincida este número. La
-		conformidad se declara contra la versión de la especificación, no contra la del paquete.
+		| Estado | Promesa |
+		|---|---|
+		| `Genesis` | En construcción. Cualquier cosa **PUEDE** cambiar sin aviso. |
+		| `Aurora` | Usable. Un cambio incompatible es posible, se espera raro, y **DEBE** anunciarse. |
+		| `Zenith` | Estable. Un documento válido lo es para siempre y significa lo mismo: la especificación solo **PUEDE** añadir. Un cambio incompatible **NO DEBE** hacerse; si algún día hiciera falta, tomaría la forma de una especificación nueva, con nombre propio, que conviviría con esta. |
+		| `Twilight` | Cerrada. No cambia más, salvo erratas. Señala que existe una sucesora o que la especificación se retira. |
+
+		Un cambio **incompatible** es aquel por el que un documento que era válido deja de serlo o
+		cambia de significado: un cambio deliberado de la intención de la especificación. Una
+		aclaración que precisa el texto sin cambiar esa intención no lo es.
+
+		El estado **solo avanza**, y en ese orden: una especificación **NO DEBE** volver a un estado
+		anterior, y `Twilight` es terminal. Cada paso se anuncia con la fecha en que se da.
+
+		Cada especificación de @STXT@ lleva su propia fecha y su propio estado, independientes de
+		los de las demás. Esta especificación está en `Zenith`: la sintaxis base es lo que define qué
+		es un documento @STXT@, y lo que hoy es válido lo seguirá siendo. «STXT», sin más
+		calificación, designa esta especificación.
+
+		Una implementación conforme **DEBERÍA** exponer la fecha de la especificación que implementa
+		(por ejemplo, como una constante `SPEC_VERSION` con valor `AAAA-MM-DD`), distinta de la
+		versión de su paquete: dos implementaciones con paquetes distintos leen el mismo @STXT@. La
+		conformidad se declara contra la especificación y se demuestra con su kit de conformidad, que
+		lleva su propia fecha y fija la de cada especificación que certifica; nunca contra la versión
+		de un paquete.
 
 	Subheader: 2. Terminología
 
@@ -819,7 +835,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		las implementaciones conformes: un programa que filtra o cuenta errores lo hace por código, no
 		por el texto del mensaje, que cada implementación redacta (y traduce) a su criterio. Estos son
 		los códigos de los errores de sintaxis; cada uno remite a la condición de la lista anterior.
-		**Desde la 1.0 los códigos no cambian**; hasta entonces, una versión menor puede renombrarlos.
+		**Los códigos no cambian**: renombrar uno sería un cambio incompatible, que el estado de esta
+		especificación ([§1.1](#s1-1)) excluye.
 		
 		| Código | Condición |
 		|---|---|

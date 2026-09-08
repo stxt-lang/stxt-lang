@@ -485,19 +485,24 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Content >>
 		Three are maintained from this portal: TypeScript/JavaScript (`@stxt-lang/core`),
 		Java (`dev.stxt:stxt-core`) and Python (`stxt`), with the same scope, the same
-		version and the same conformance corpus. The VS Code extension, the CLI and the
+		specification date and the same conformance corpus. The VS Code extension, the CLI and the
 		playground are built on the first one. The complete list is on the
 		[Tools](tools) page; to try it without installing anything,
 		[play.stxt.dev](https://play.stxt.dev).
 
-	Subsubheader: What does 1.0 promise?
+	Subsubheader: What stability is promised?
 
 	Content >>
-		That a document valid today stays valid across the whole 1.x line: the language, the
-		canonical tree and the error codes are frozen, and each library's API within its own
-		1.x line. Message text and convenience facades are not frozen. Conformance is declared
-		against the specification version (`SPEC_VERSION`), not the package version. The full
-		statement is in [Stability and versions](stability).
+		That a document valid today stays valid forever. The specifications carry no version
+		number: each one carries a **date** (that of its current text) and a **status**, which
+		only moves forward: *Genesis* (under construction), *Aurora* (usable; an incompatible
+		change is possible, rare, and always announced), *Zenith* (what is valid stays valid
+		forever; things are only added) and *Twilight* (closed). The syntax and the canonical
+		tree —STXT-SPEC and STXT-TREE-SPEC— are in Zenith; schemas, templates and discovery are
+		in Aurora. Error codes are never renamed, and each library's API is frozen within its
+		own 1.x line. Message text and convenience facades are not frozen. Conformance is
+		declared against the specification date (`SPEC_VERSION`), not the package version. The
+		full statement is in [Stability and versions](stability).
 
 	Subsubheader: Where do I ask, or give feedback?
 

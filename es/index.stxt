@@ -131,6 +131,6 @@ Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para do
 		* **Instalar las [herramientas](tools)**: la línea de comandos `stxt`, la extensión
 		  de VS Code y las bibliotecas TypeScript, Java y Python.
 
-		El lenguaje es estable: la versión 1.0 congeló la sintaxis, el árbol canónico y los
-		códigos de error. La promesa exacta está en
+		El lenguaje es estable: la sintaxis y el árbol canónico están en estado *Zenith*, y un
+		documento válido hoy lo es para siempre. La promesa exacta está en
 		[Estabilidad y versiones](stability), y la [FAQ](faq) responde el resto.

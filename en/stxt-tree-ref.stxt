@@ -4,8 +4,8 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Version: 1.0
-		Last modif: 2026-08-31
+		Status: Zenith
+		Last modif: 2026-09-07
 		Description: STXT-TREE-SPEC: the canonical JSON representation of an STXT document tree and the two writing operations, canonical text form and reformatting.
 
 	Header: @STXT@ Tree
@@ -36,12 +36,10 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 	Subsubheader: 1.1 Version of this specification
 
 	Content >>
-		This specification carries its own version number in the `Version` field of its `Metadata`,
-		**independent** of the other @STXT@ specifications, and follows the same change policy as
-		[*STXT-SPEC* §1.1](stxt-core-ref#s1-1): `major.minor`, major if something valid stops being
-		valid or changes meaning, minor if something is only added.
-		It depends entirely on [*STXT-SPEC*](stxt-core-ref): it describes the tree its syntax produces,
-		and requires *STXT-SPEC* 1.0 or later.
+		This specification carries its own **date** and its own **status** in the `Last modif` and
+		`Status` fields of its `Metadata`, **independent** of the other @STXT@ specifications' and with
+		the meaning fixed by [*STXT-SPEC* §1.1](stxt-core-ref#s1-1). It is in `Zenith`.
+		It depends entirely on [*STXT-SPEC*](stxt-core-ref): it describes the tree its syntax produces.
 
 	Subheader: 2. Terminology
 

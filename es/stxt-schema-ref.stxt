@@ -5,8 +5,8 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Version: 1.0
-		Last modif: 2026-08-31
+		Status: Aurora
+		Last modif: 2026-09-07
 		Description: STXT-SCHEMA-SPEC: el lenguaje de esquemas @stxt.schema para validar documentos STXT con nodos, tipos y cardinalidades, y el meta-esquema oficial.
 
 	Header: @STXT@ Schema
@@ -31,12 +31,10 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 	Subsubheader: 1.1 Versión de esta especificación
 
 	Content >>
-		Esta especificación lleva su propio número de versión en el campo `Version` de su `Metadata`,
-		**independiente** del de las demás especificaciones de @STXT@, y sigue la misma política de
-		cambios que [*STXT-SPEC* §1.1](stxt-core-ref#s1-1): `mayor.menor`, mayor si algo válido deja
-		de serlo o cambia de significado, menor si solo se añade.
-		Depende de [*STXT-SPEC*](stxt-core-ref): un schema es un documento @STXT@, y requiere *STXT-
-		SPEC* 1.0 o posterior.
+		Esta especificación lleva su propia **fecha** y su propio **estado** en los campos `Last modif` y
+		`Status` de su `Metadata`, **independientes** de los de las demás especificaciones de @STXT@ y
+		con el significado que fija [*STXT-SPEC* §1.1](stxt-core-ref#s1-1). Está en `Aurora`.
+		Depende de [*STXT-SPEC*](stxt-core-ref): un schema es un documento @STXT@.
 
 	Subheader: 2. Terminología
 
@@ -653,7 +651,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		
 	Content >>
 		Como en [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), cada error lleva un código estable e idéntico
-		en todas las implementaciones; **desde la 1.0 no cambian**. Un documento schema se valida
+		en todas las implementaciones, y **no se renombra**. Un documento schema se valida
 		primero **como documento** contra el meta-esquema de la [sección 15](#s15), por lo que sus
 		errores de forma (un `Node` sin valor, dos `Type`, un `Min` que no es `NATURAL`…) llegan con
 		los códigos de la segunda tabla; después se aplican las reglas propias de la primera.

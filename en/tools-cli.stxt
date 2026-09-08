@@ -32,13 +32,14 @@ Document (dev.stxt.website): The command line — STXT
 		npm install -g @stxt-lang/cli
 		stxt --version
 
-		stxt 1.0.0 (@stxt-lang/core 1.0.0, spec 1.0)
+		stxt 1.0.2 (@stxt-lang/core 1.0.2, spec 2026-09-07)
 
 	Content >>
-		`--version` prints three versions: the command's, that of the parser it embeds, and that
-		of the STXT specifications the parser implements. The first two state what is installed;
-		the third, which specification it conforms to: two installations with different packages
-		read the same STXT as long as the spec version matches.
+		`--version` prints two versions and a date: the command's version, that of the parser it
+		embeds, and the date of the STXT specification the parser implements (the STXT-SPEC date
+		pinned by the conformance kit). The first two state what is installed; the date, which
+		specification it conforms to: two installations with different packages read the same
+		STXT as long as the spec date matches.
 		Without a permanent installation, every command works through `npx`:
 
 	Listing >>
@@ -46,9 +47,9 @@ Document (dev.stxt.website): The command line — STXT
 
 	Content >>
 		To update, `npm update -g @stxt-lang/cli`; to remove it,
-		`npm uninstall -g @stxt-lang/cli`. From 1.0 on, the commands, their options, the
-		exit codes and `--format json` are stable within the 1.x line; the human-facing
-		output is not (see [Stability and versions](stability)). The version number
+		`npm uninstall -g @stxt-lang/cli`. From the package's 1.0 on, the commands, their
+		options, the exit codes and `--format json` are stable within its 1.x line; the
+		human-facing output is not (see [Stability and versions](stability)). The version number
 		and the release notes are in the
 		[repository](https://github.com/stxt-lang/stxt-cli).
 

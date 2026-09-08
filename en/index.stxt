@@ -128,6 +128,6 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 		* **Install the [tools](tools)**: the `stxt` command line, the VS Code extension and
 		  the TypeScript, Java and Python libraries.
 
-		The language is stable: version 1.0 froze the syntax, the canonical tree and the
-		error codes. The exact promise is spelled out in
+		The language is stable: the syntax and the canonical tree are in *Zenith* status, and
+		a document valid today stays valid forever. The exact promise is spelled out in
 		[Stability and versions](stability), and the [FAQ](faq) answers the rest.

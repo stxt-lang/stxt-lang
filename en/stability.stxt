@@ -3,20 +3,75 @@ Document (dev.stxt.website): Stability and versions — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-29
-		Description: The STXT stability promise: a document valid in 1.0 stays valid across the whole 1.x line. What is frozen, what is not, and how specs and libraries are versioned.
+		Last modif: 2026-09-08
+		Description: The STXT stability promise: a document valid today stays valid forever. The four statuses of a specification, the current status of each one, and why specs carry a date and a status while packages carry a version.
 
 	Header: Stability and versions
 
 	Assert >>
-		**A document that is valid in @STXT@ 1.0 is valid across the whole 1.x line**.
+		**A document that is valid in @STXT@ today is valid forever**.
+
+	Subheader: A date and a status, not a version number
+
+	Content >>
+		The @STXT@ specifications carry no version number. Each one carries, in its `Metadata`,
+		two things:
+
+		* **A date** (`Last modif`): that of the last modification of its text, be it a typo or
+		  a change of rule. There is no version other than the current one, and a date identifies
+		  a text: "STXT-SPEC 2026-09-07" is that specification as it stood on that day.
+		* **A status** (`Status`): how much stability is promised. It has four possible values,
+		  in this order, and it **only moves forward**:
+
+		| Status | Promise |
+		|---|---|
+		| **Genesis** | Under construction. Anything may change without notice. |
+		| **Aurora** | Usable. An incompatible change is possible, expected to be rare, and always announced. |
+		| **Zenith** | Stable. What is valid stays valid forever and keeps its meaning: the specification only adds. An incompatible change is not made; if one were ever needed, it would take the form of a new specification, with its own name, living alongside this one. |
+		| **Twilight** | Closed. It changes no more, except for errata. It signals that a successor exists or that the specification is being retired. |
+
+		An **incompatible** change is one by which a document that was valid stops being valid
+		or changes meaning: a deliberate change of intent, not a clarification of the text. The
+		normative definition of the four statuses is in [STXT-SPEC §1.1](stxt-core-ref#s1-1).
+
+	Subheader: The status of each specification
+
+	Content >>
+		| Specification | Status | Since |
+		|---|---|---|
+		| [STXT-SPEC](stxt-core-ref) — the base syntax | **Zenith** | 2026-09-07 |
+		| [STXT-TREE-SPEC](stxt-tree-ref) — the canonical tree and writing | **Zenith** | 2026-09-07 |
+		| [STXT-SCHEMA-SPEC](stxt-schema-ref) — schemas | **Aurora** | 2026-09-07 |
+		| [STXT-TEMPLATE-SPEC](stxt-template-ref) — templates | **Aurora** | 2026-09-07 |
+		| [STXT-DISCOVERY-SPEC](stxt-discovery-ref) — locating definitions | **Aurora** | 2026-09-07 |
+
+		**"@STXT@", said on its own, is STXT-SPEC**, and STXT-SPEC is in Zenith: what an @STXT@
+		document is, how it is parsed and which tree it produces will not change. That is what
+		backs the statement at the top.
+
+		**Why Aurora for the other three.** Schemas, templates and discovery define what it
+		means for a document to *conform to a definition* and where that definition is looked
+		for. They are younger than the core and have seen less real use, and we do not want to
+		promise that they will not move an inch before we know it. Aurora is a deliberate step
+		down from the "valid across the whole 1.x line" promise published on 2026-08-31 for all
+		five, and we prefer to say it that way. What Aurora means in practice:
+
+		* An Aurora definition **rests on a Zenith core**: a schema or a template is an @STXT@
+		  document and never stops parsing. What could change is a validation or resolution
+		  rule, not the document.
+		* An incompatible change, should one come, **is always announced**, with the date on
+		  which it is made, which documents it affects and how they adapt; it is never a silent
+		  reinterpretation.
+		* The move of each one to Zenith will be announced with its date, and from then on the
+		  same promise as for the core applies.
 
 	Subheader: What is frozen
 
 	Content >>
 		| Surface | Promise |
 		|---|---|
-		| **The language** —the five specifications: [STXT-SPEC](stxt-core-ref), [STXT-SCHEMA-SPEC](stxt-schema-ref), [STXT-TEMPLATE-SPEC](stxt-template-ref), [STXT-DISCOVERY-SPEC](stxt-discovery-ref) and [STXT-TREE-SPEC](stxt-tree-ref)— | Whatever is valid in 1.0 is valid in any 1.x, and means the same. A 1.x only **adds**; it never invalidates or reinterprets. |
+		| **The syntax and the tree** —[STXT-SPEC](stxt-core-ref) and [STXT-TREE-SPEC](stxt-tree-ref), in Zenith— | Whatever is valid today is valid forever, and means the same. Things are only **added**; nothing is invalidated or reinterpreted. |
+		| **Schemas, templates and discovery** —[STXT-SCHEMA-SPEC](stxt-schema-ref), [STXT-TEMPLATE-SPEC](stxt-template-ref) and [STXT-DISCOVERY-SPEC](stxt-discovery-ref), in Aurora— | Usable today. An incompatible change is possible, expected to be rare, and always announced with a date and a migration path. |
 		| **The canonical tree** (STXT-TREE-SPEC) | The JSON produced by `stxt describe` and exposed by the libraries is a stable interchange format: same fields, same meaning, same result in every implementation. |
 		| **The error codes** (`INDENTATION_MIXED`, `CHILD_NOT_DECLARED`, `SCHEMA_NOT_FOUND`…) | They are identical in every implementation and are neither renamed nor reused. A test that depends on a code keeps working. |
 		| **The in-memory API of each library**, within its 1.x line | What `@stxt-lang/core`, `dev.stxt:stxt-core` or `stxt` exports in its 1.0 is still there, with the same signature, in all of its 1.x releases. Each library has its own line (see below). |
@@ -37,38 +92,40 @@ Document (dev.stxt.website): Stability and versions — STXT
 		* **The style rules** (the sections marked *SHOULD* in the specifications): they are
 		  recommendations and may be refined without any document becoming invalid.
 
-	Subheader: The specification version and the package version
+	Subheader: The specification date and the package version
 
 	Content >>
-		**Each specification carries its own number**, `major.minor`, in its `Metadata`, and all
-		five start at `1.0`. They are independent: the core is expected to be very stable, while
-		schema or template may evolve at their own pace, as XML Schema does with respect to XML.
-		**"@STXT@ 1.0", said on its own, is the version of [STXT-SPEC](stxt-core-ref)**.
+		**The specifications carry a date and a status**, each its own, independent of the
+		others': the core is in Zenith while schema, template or discovery may evolve at their
+		own pace, as XML Schema does with respect to XML.
 
-		**Each library carries its package version** —`@stxt-lang/core` on npm,
-		`dev.stxt:stxt-core` on Maven Central, `stxt` on PyPI—, which goes up when the library
-		changes, not when the language does.
+		**The libraries carry their package version** —`@stxt-lang/core` on npm,
+		`dev.stxt:stxt-core` on Maven Central, `stxt` on PyPI—, under semantic versioning, which
+		goes up when the library changes, not when the language does. An incompatible change in
+		the in-memory API is a package major, and is announced as such.
 
-		The rule that ties the two together: **conformance is declared against the version of
-		the specification, not of the package**. If `@stxt-lang/core` is at 1.3 and
-		`dev.stxt:stxt-core` at 1.1, they still read the same @STXT@: both implement
-		STXT-SPEC 1.0. Each library exposes that version as a constant (`SPEC_VERSION`) and
-		proves its conformance by running the
+		The rule that ties the two together: **conformance is declared against the
+		specification, not against the package**, and is proved with the
 		[conformance kit](https://github.com/stxt-lang/stxt-lang/tree/master/conformance)
-		of the specification repository. A third-party port does the same.
+		of the specification repository. The kit carries its own date and pins the date of every
+		specification it certifies; a conforming implementation exposes the STXT-SPEC one as a
+		constant, `SPEC_VERSION`, with a `YYYY-MM-DD` value. If `@stxt-lang/core` is at 1.3 and
+		`dev.stxt:stxt-core` at 1.1, they still read the same @STXT@: both expose the same date
+		and pass the same kit. A third-party port does the same.
 
-	Subheader: How the numbers go up
+	Subheader: How a status moves forward, and how it is announced
 
 	Content >>
-		The rule is in [STXT-SPEC §1.1](stxt-core-ref#s1-1):
-
-		* The **major** of a specification goes up if something that was valid **stops being
-		  valid or changes meaning**: a deliberate change of intent, not a clarification of
-		  the text.
-		* The **minor** goes up if something is **only added** without invalidating anything.
-
-		The libraries follow semantic versioning within their line: an incompatible change in
-		the in-memory API is a package major, and is announced as such. A specification major
-		is a different matter and far less frequent: none is planned, and should one occur, the
-		implementations would indicate it through `SPEC_VERSION` and it would come with an
-		explanation and a migration path; **never as a silent reinterpretation**.
+		* A status **only moves forward**: Genesis → Aurora → Zenith → Twilight. A specification
+		  never returns to an earlier status, and Twilight is terminal.
+		* Each step, and each incompatible change in Aurora, **is announced with its date**: in
+		  the specification itself (`Status` and `Last modif`), in the
+		  [release notes](https://github.com/stxt-lang/stxt-lang/releases) of the specification
+		  repository and on this page. The conformance kit is regenerated with the new date, and
+		  the ports that pass it expose it in `SPEC_VERSION`.
+		* A specification in Zenith **does not leave Zenith backwards**. Should the core ever
+		  need an incompatible change, there would be no "STXT 2": there would be a new
+		  specification, with a new name, living alongside this one, and today's documents
+		  would stay valid and keep their meaning.
+		* Clarifications of the text that do not change the specification's intent only update
+		  `Last modif`; they change neither the status nor the meaning of any document.
