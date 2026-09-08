@@ -3,8 +3,8 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Last modif: 2026-08-30
-		Description: Preguntas frecuentes sobre STXT: qué significa el nombre, en qué se diferencia de XML, YAML, JSON y Markdown, cómo se valida y cómo empezar a usarlo.
+		Last modif: 2026-09-08
+		Description: Preguntas frecuentes sobre STXT: qué significa el nombre, en qué se diferencia de XML, YAML, TOML, JSON y Markdown, cómo se valida y cómo empezar a usarlo.
 
 	Header: Preguntas frecuentes
 
@@ -14,41 +14,30 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 
 	Content >>
 		La primera versión del lenguaje se llamaba **STxT** (*Semantic Text*); de ahí vienen
-		el nombre y la pronunciación «s-text». @STXT@ es su evolución: conserva el espíritu y
-		la motivación originales, pero se ha transformado tanto desde entonces —la misma idea,
-		ejecutada desde otra perspectiva— que puede considerarse casi otro lenguaje. Las
-		referencias a *STxT* que puedan encontrarse corresponden al lenguaje antiguo; @STXT@,
-		escrito así, es siempre el actual. Para evitar confusiones —y porque puede llevar a
-		malentendidos— el término *Semantic Text* también se ha retirado: el nombre es,
-		simplemente, @STXT@.
+		el nombre y la pronunciación «s-text». @STXT@ es su evolución: conserva el espíritu,
+		la motivación y la sintaxis base, pero ha cambiado significativamente desde entonces,
+		con decisiones de diseño importantes que los dos no comparten. Las referencias a
+		*STxT* que puedan encontrarse corresponden al lenguaje antiguo; @STXT@,
+		escrito así, es siempre el actual. El término *Semantic Text* también se ha retirado:
+		el nombre es, simplemente, @STXT@.
 
 	Subsubheader: ¿Es un lenguaje o un formato?
 
 	Content >>
-		Las dos palabras son correctas: miran la misma cosa desde ángulos distintos.
-		«Lenguaje» pone el foco en la gramática y en quien escribe: unas reglas de sintaxis,
-		una especificación, algo que se aprende y se escribe a mano. «Formato» pone el foco en
-		el papel que esa sintaxis juega cuando un sistema guarda o intercambia algo con ella.
-		No son categorías excluyentes —XML significa literalmente *Extensible Markup
-		**Language*** y nadie duda al decir «un fichero en formato XML»—, sino dos maneras de
-		mirar.
-
-		@STXT@ **es un lenguaje**: así se define, y de ese punto de partida sale el diseño
-		Human-First entero —una gramática pensada para escribirse a mano, cinco
-		especificaciones normativas, esquemas, herramientas—. Y **actúa como formato** allí
-		donde un sistema lo emplea: como formato fuente de un CMS, de configuración, de
-		intercambio entre agentes. La primera palabra dice lo que es; la segunda, el papel que
-		hace en cada caso.
+		Las dos. @STXT@ se define como **lenguaje**: una gramática pensada para escribirse a
+		mano, cinco especificaciones normativas, esquemas y herramientas. Y **actúa como
+		formato** donde un sistema lo emplea para guardar o intercambiar algo: formato fuente
+		de un CMS, de configuración, de intercambio entre agentes. Las dos palabras no se
+		excluyen: XML es *Extensible Markup Language* y «un fichero en formato XML».
 
 	Subsubheader: ¿Es un formato de datos o de documentos?
 
 	Content >>
-		Ambas cosas, porque la línea entre ambas es artificial: un email tiene campos y un
-		cuerpo, un contrato tiene cláusulas y metadatos, una configuración tiene valores y
-		comentarios largos. @STXT@ es un árbol de nodos con nombre; cada nodo lleva o bien un
-		valor y unos hijos, o bien un bloque de texto. Con eso se describe tanto una ficha de
-		datos como un documento de veinte páginas. Los [casos de uso](use-cases-corporate-docs)
-		recorren ese abanico.
+		Las dos. Un email tiene campos y un cuerpo; un contrato, cláusulas y metadatos; una
+		configuración, valores y comentarios largos. @STXT@ es un árbol de nodos con nombre, y
+		cada nodo lleva un valor y unos hijos, o un bloque de texto: con eso se describe tanto
+		una ficha de datos como un documento de veinte páginas. Los
+		[casos de uso](use-cases-corporate-docs) recorren ese abanico.
 
 	Subsubheader: ¿Qué lo distingue de otros formatos?
 
@@ -56,22 +45,21 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 		@STXT@ está diseñado para las personas, y de ese principio salen las características
 		que lo definen:
 
-		* **La sencillez en los tres planos.** Las reglas que hay que conocer caben en una
-		  página; un parser conforme es un recorrido línea a línea con una pila y se escribe en
-		  días, sin bibliotecas. El coste de parsear es lineal, en una sola pasada, sin
-		  retroceso ni referencias.
-		* **La indentación es la estructura.** Un tabulador o cuatro espacios por nivel; el
-		  nivel de una línea se decide con esa sola línea. No hay llaves, corchetes, comillas
-		  obligatorias ni etiquetas de cierre.
+		* **Pocas reglas.** Un nodo es `Nombre: valor` o `Nombre >>`, y la jerarquía es la
+		  indentación: un tabulador o cuatro espacios por nivel. No hay llaves, corchetes,
+		  comillas, etiquetas de cierre ni sintaxis de lista.
+		* **Parseo lineal.** Línea a línea, en una sola pasada, sin retroceso ni referencias;
+		  el nivel de una línea se decide con esa sola línea.
 		* **El texto libre es literal.** Todo lo indentado bajo un nodo `>>` es texto tal cual,
 		  sin escapes ni comillas; `:`, `#` y `>>` no tienen significado dentro.
 		* **Sin caracteres de escape.** Cualquier carácter vale en un valor o en un bloque; a
-		  cambio, los nombres de nodo sí que tienen restricciones.
+		  cambio, los nombres de nodo sí tienen restricciones.
 		* **Seguridad del parseo por diseño.** Sin entidades, referencias, anclas, inclusión de
 		  ficheros ni ejecución de código; namespaces en ASCII, sin ambigüedad de
 		  identificadores. Ver [STXT-SPEC §15](stxt-core-ref#s15).
-		* **Validación aparte, opcional y cerrada.** El parser no necesita esquemas; pero sí que
-		  existe un sistema de esquemas opcional y sencillo, adecuado para la mayoría de casos.
+		* **Namespaces y validación en el lenguaje.** Un documento declara a qué vocabulario
+		  pertenece, y una capa de esquemas opcional, con modelo de contenido cerrado, lo
+		  valida contra su definición. El parser no la necesita.
 
 		El razonamiento que hay detrás de cada una de estas decisiones está en
 		[Principios de diseño](design-principles).
@@ -87,49 +75,43 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Subsubheader: ¿Nos enseñas un uso real?
 
 	Content >>
-		El que estás leyendo: este mismo portal. Todas las páginas de `stxt.dev` —el
-		tutorial, los casos de uso, las cinco especificaciones, esta FAQ— están escritas en
-		@STXT@, y un generador de sitios estáticos las convierte en el HTML que tienes
-		delante. Se puede comprobar de dos maneras: el enlace `.stxt` de la cabecera abre el
-		fuente de la página actual, y añadir `.stxt` a la dirección de cualquier página
-		devuelve su código tal cual — por ejemplo, [faq.stxt](faq.stxt) es el fuente de esta
-		misma página. El generador también es público:
-		[stxt-cms](https://github.com/stxt-lang/stxt-cms). Cómo explota un CMS a @STXT@
-		como formato fuente se desarrolla en [CMS y publicaciones](use-cases-cms).
+		Este portal. Todas las páginas de `stxt.dev` —el tutorial, los casos de uso, las
+		cinco especificaciones, esta FAQ— están escritas en @STXT@, y un generador de sitios
+		estáticos las convierte en HTML. El enlace `.stxt` de la cabecera abre el fuente de la
+		página actual, y añadir `.stxt` a la dirección de cualquier página devuelve su
+		código: [faq.stxt](faq.stxt) es el fuente de esta. El generador es público,
+		[stxt-cms](https://github.com/stxt-lang/stxt-cms), y cómo un CMS usa @STXT@ como
+		formato fuente se desarrolla en [CMS y publicaciones](use-cases-cms).
 
 	Subheader: ¿Por qué no...?
 
 	Subsubheader: ¿Por qué no XML, YAML o TOML?
 
 	Content >>
-		Ninguno de estos formatos es un error; cada uno optimiza otra cosa. La tabla compara,
-		criterio a criterio, las decisiones de diseño de @STXT@ con las de los formatos que
-		suelen aparecer en la misma conversación:
-
 		| | @STXT@ | XML | YAML | TOML |
 		|---|---|---|---|---|
-		| **Human-First** | Diseñado para escribirse a mano; las reglas caben en una página | Verboso: etiquetas de cierre, atributos, escapes | Legible, pero con reglas sutiles: comillas opcionales, valores que cambian de tipo | Claro en configuración plana; el anidamiento va en cabeceras `[a.b.c]` |
-		| **Esquemas y validación** | Integrados en el lenguaje, opcionales y cerrados | Tres lenguajes de esquema —DTD, XSD y RELAX NG—, cada uno un ecosistema propio | No tiene; se valida con herramientas de otros ecosistemas | No tiene |
-		| **Facilidad de parseo** | Lineal, en una sola pasada; un parser conforme se escribe en días | Exige un parser industrial | Especificación enorme; los parsers discrepan entre sí | Asequible, con bordes laboriosos: fechas, tablas, strings |
-		| **Superficie de ataque** | Sin entidades, referencias, anclas ni ejecución de código ([STXT-SPEC §15](stxt-core-ref#s15)) | Entidades externas (XXE) y expansión de entidades | Anclas expansibles y etiquetas que instancian objetos | Pequeña |
-		| **Texto libre** | Bloques `>>` literales: cualquier carácter, sin escapes | Escapar `<` y `&`, o CDATA | Escalares de bloque con reglas de indentación y recorte sutiles | Strings multilínea entre triples comillas |
+		| **Jerarquía** | Indentación, un tabulador o cuatro espacios por nivel; una sola grafía | Etiquetas de apertura y cierre | Indentación de ancho libre; sintaxis de bloque y de flujo para la misma estructura | Cabeceras `[a.b]` con la ruta completa; también claves con punto y tablas en línea |
+		| **Valores** | Siempre texto; el tipo lo declara la definición | Texto; el tipo lo declara el esquema | El tipo lo decide la grafía (`no`, `3.10`), con reglas distintas en 1.1 y 1.2 | El tipo lo decide la grafía; las cadenas, siempre entre comillas |
+		| **Texto libre** | Bloques `>>` literales: cualquier carácter, sin escapes | Escapar `<` y `&`, o CDATA | Escalares de bloque, literales o plegados, con indicadores de recorte | Cadenas multilínea entre triples comillas; la indentación entra en el valor |
+		| **Namespaces** | En el lenguaje | En el lenguaje | No | No |
+		| **Esquemas** | En el lenguaje, opcionales, modelo cerrado | DTD, XSD, RELAX NG, Schematron | No; herramientas externas | No; herramientas externas |
+		| **Parseo** | Lineal, línea a línea, en una sola pasada | Entidades, DTD interno y namespaces que el parser resuelve | Gramática extensa; dos versiones con resolución de tipos distinta | Gramática pequeña; fechas, horas y tablas en línea como tipos nativos |
+		| **Superficie de ataque** | Sin entidades, referencias, anclas ni ejecución de código ([STXT-SPEC §15](stxt-core-ref#s15)) | Entidades externas (XXE), expansión de entidades | Anclas expansibles; etiquetas que instancian objetos | Sin entidades ni referencias |
 
-		La comparación con cada formato se desarrolla en su propia página:
+		La comparación con cada formato, con ejemplos, se desarrolla en su propia página:
 		[STXT frente a XML](stxt-vs-xml), [STXT frente a YAML](stxt-vs-yaml) y
 		[STXT frente a TOML](stxt-vs-toml).
-
 
 	Subsubheader: ¿Por qué no Markdown?
 
 	Content >>
-		Markdown no es una alternativa a @STXT@: **es su complemento**. Cubren dominios distintos
-		—Markdown da **formato** a la prosa: negrita, enlaces, listas dentro del texto; @STXT@
-		da **estructura** al documento: nodos, jerarquía, validación— y por eso funcionan
-		juntos. De hecho, `MARKDOWN` es el único formato incrustado que los esquemas definen:
-		un nodo declarado de ese tipo marca su texto como prosa con formato, a interpretar
-		según CommonMark, y su forma cruda sigue siendo legible.
-		Ver [STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7); el reparto de trabajo entre
-		ambos se desarrolla en [STXT frente a Markdown](stxt-vs-markdown).
+		Markdown da **formato** a la prosa —negrita, enlaces, listas dentro del texto— y no
+		tiene campos; @STXT@ da **estructura** al documento —nodos, jerarquía, validación— y
+		adopta Markdown para la prosa de sus nodos: `MARKDOWN` es el único formato incrustado
+		que los esquemas definen. Un nodo declarado de ese tipo marca su texto como prosa con
+		formato, a interpretar según CommonMark, y su forma cruda sigue siendo legible.
+		Ver [STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7) y
+		[STXT frente a Markdown](stxt-vs-markdown).
 
 	Code >>
 		Article: Guía de estilo
@@ -140,13 +122,11 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Subsubheader: ¿Por qué no JSON?
 
 	Content >>
-		Porque JSON no está pensado para escribirse a mano: es un formato de serialización
-		para máquinas. Todo va entre comillas, llaves y comas; los saltos de línea se
-		escriben `\n`; no hay comentarios, y un texto largo acaba en una sola línea llena de
-		escapes. Nada de eso es un defecto —JSON no promete otra cosa—, pero lo descarta
-		como formato Human-First. La página [STXT frente a JSON](stxt-vs-json) desarrolla
-		la comparación — y el camino inverso: el árbol JSON canónico que toda herramienta
-		@STXT@ puede emitir.
+		Porque JSON es un formato de serialización, no pensado para escribirse a mano: todo
+		va entre comillas, llaves y comas; los saltos de línea se escriben `\n`; no hay
+		comentarios, y un texto largo es una sola línea con escapes. @STXT@ lo adopta en la
+		otra dirección: todo documento tiene un árbol JSON canónico, que las herramientas
+		emiten. [STXT frente a JSON](stxt-vs-json) desarrolla las dos cosas.
 
 	Subsubheader: ¿Por qué no hay listas?
 
@@ -201,8 +181,7 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Subsubheader: ¿Por qué un bloque de texto no puede tener hijos?
 
 	Content >>
-		No por una limitación técnica —podría hacerse—, sino por diseño: permitirlo iría en
-		contra del principio Human-First en tres frentes.
+		Por diseño, por tres razones:
 
 		* **Ruido visual.** Para saber dónde acaba el texto y empiezan los hijos haría falta
 		  una marca de fin de bloque, y un documento dejaría de leerse como un esquema de
@@ -364,7 +343,7 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Content >>
 		Son dos sintaxis para el mismo modelo, y **toda plantilla equivale a un esquema**. La
 		plantilla (`@stxt.template`) se escribe como el documento que describe, con la
-		cardinalidad y el tipo entre paréntesis, y es la forma recomendada para la escritura
+		cardinalidad y el tipo entre paréntesis, y es la forma pensada para la escritura
 		manual:
 
 	Code >>
@@ -482,7 +461,7 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Subsubheader: ¿En qué lenguajes hay parser?
 
 	Content >>
-		Desde este portal se mantienen tres: TypeScript/JavaScript (`@stxt-lang/core`),
+		La organización `stxt-lang` mantiene tres: TypeScript/JavaScript (`@stxt-lang/core`),
 		Java (`dev.stxt:stxt-core`) y Python (`stxt`), con el mismo alcance, la misma fecha
 		de especificación y el mismo corpus de conformidad. Sobre el primero se construyen la
 		extensión de VS Code, la CLI y el playground. La lista completa está en

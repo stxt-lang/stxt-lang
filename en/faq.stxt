@@ -3,8 +3,8 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Last modif: 2026-08-30
-		Description: Frequently asked questions about STXT: what the name means, how it differs from XML, YAML, JSON and Markdown, how validation works and how to get started.
+		Last modif: 2026-09-08
+		Description: Frequently asked questions about STXT: what the name means, how it differs from XML, YAML, TOML, JSON and Markdown, how validation works and how to get started.
 
 	Header: Frequently asked questions
 
@@ -15,39 +15,29 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Content >>
 		The first version of the language was called **STxT** (*Semantic Text*); that is
 		where the name and the "s-text" pronunciation come from. @STXT@ is its evolution: it
-		keeps the original spirit and motivation, but has been transformed so much since then
-		— the same idea, executed from another perspective — that it can be considered almost
-		another language. References to *STxT* that may still be found refer to the old
-		language; @STXT@, written like this, is always the current one. To avoid confusion —
-		and because it can be misleading — the term *Semantic Text* has also been retired:
-		the name is simply @STXT@.
+		keeps the original spirit, motivation and base syntax, but has changed significantly
+		since then, with important design decisions the two do not share. References to
+		*STxT* that may still be found refer to the old
+		language; @STXT@, written like this, is always the current one. The term *Semantic
+		Text* has also been retired: the name is simply @STXT@.
 
 	Subsubheader: Is it a language or a format?
 
 	Content >>
-		Both words are correct: they look at the same thing from different angles. "Language"
-		puts the focus on the grammar and on the person writing: syntax rules, a
-		specification, something that is learned and written by hand. "Format" puts the focus
-		on the role that syntax plays when a system stores or exchanges something with it.
-		They are not exclusive categories — XML literally stands for *Extensible Markup
-		**Language*** and nobody hesitates to say "a file in XML format" — but two ways of
-		looking.
-
-		@STXT@ **is a language**: that is how it defines itself, and the whole Human-First
-		design follows from that starting point — a grammar meant to be written by hand, five
-		normative specifications, schemas, tools. And it **acts as a format** wherever a
-		system employs it: as the source format of a CMS, as a configuration format, as an
-		interchange format between agents. The first word says what it is; the second, the
-		role it plays in each case.
+		Both. @STXT@ defines itself as a **language**: a grammar meant to be written by hand,
+		five normative specifications, schemas and tools. And it **acts as a format** wherever
+		a system employs it to store or exchange something: the source format of a CMS, a
+		configuration format, an interchange format between agents. The two words do not
+		exclude each other: XML is *Extensible Markup Language* and "a file in XML format".
 
 	Subsubheader: Is it a data format or a document format?
 
 	Content >>
-		Both, because the line between them is artificial: an email has fields and a body, a
-		contract has clauses and metadata, a configuration has values and long comments. @STXT@
-		is a tree of named nodes; each node carries either a value and children, or a block of
-		text. That describes a data record as well as a twenty-page document. The
-		[use cases](use-cases-corporate-docs) walk through that range.
+		Both. An email has fields and a body; a contract, clauses and metadata; a
+		configuration, values and long comments. @STXT@ is a tree of named nodes, and each
+		node carries a value and children, or a block of text: that describes a data record
+		as well as a twenty-page document. The [use cases](use-cases-corporate-docs) walk
+		through that range.
 
 	Subsubheader: What sets it apart from other formats?
 
@@ -55,13 +45,11 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 		@STXT@ is designed for people, and the characteristics that define it follow from
 		that principle:
 
-		* **Simplicity on three planes.** The rules to know fit in one page; a conforming
-		  parser is a line-by-line pass with a stack and is written in days, without
-		  libraries. The cost of parsing is linear, in a single pass, with no backtracking
-		  or references.
-		* **Indentation is the structure.** One tab or four spaces per level; the level of a
-		  line is decided from that line alone. No braces, brackets, mandatory quotes or
-		  closing tags.
+		* **Few rules.** A node is `Name: value` or `Name >>`, and the hierarchy is the
+		  indentation: one tab or four spaces per level. No braces, brackets, quotes,
+		  closing tags or list syntax.
+		* **Linear parsing.** Line by line, in a single pass, with no backtracking or
+		  references; the level of a line is decided from that line alone.
 		* **Free text is literal.** Everything indented under a `>>` node is text as written,
 		  with no escapes and no quotes; `:`, `#` and `>>` have no meaning inside it.
 		* **No escape characters.** Any character is allowed in a value or a block; in
@@ -69,8 +57,9 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 		* **Parsing safety by design.** No entities, references, anchors, file inclusion or
 		  code execution; ASCII namespaces, no ambiguous identifiers. See
 		  [STXT-SPEC §15](stxt-core-ref#s15).
-		* **Separate, optional and closed validation.** The parser needs no schemas; but
-		  there is an optional, simple schema system, adequate for most cases.
+		* **Namespaces and validation in the language.** A document declares which vocabulary
+		  it belongs to, and an optional schema layer, with a closed content model, validates
+		  it against its definition. The parser does not need it.
 
 		The reasoning behind each of these decisions is in
 		[Design principles](design-principles).
@@ -86,48 +75,43 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Subsubheader: Can you show us a real use?
 
 	Content >>
-		The one you are reading: this very portal. Every page of `stxt.dev` — the tutorial,
-		the use cases, the five specifications, this FAQ — is written in @STXT@, and a static
-		site generator turns them into the HTML in front of you. There are two ways to check:
-		the `.stxt` link in the header opens the source of the current page, and appending
-		`.stxt` to any page's address returns its code as is — for example,
-		[faq.stxt](faq.stxt) is the source of this very page. The generator is public too:
-		[stxt-cms](https://github.com/stxt-lang/stxt-cms). How a CMS exploits @STXT@ as
-		its source format is developed in [CMS and publishing](use-cases-cms).
+		This site. Every page of `stxt.dev` — the tutorial, the use cases, the five
+		specifications, this FAQ — is written in @STXT@, and a static site generator turns
+		them into HTML. The `.stxt` link in the header opens the source of the current page,
+		and appending `.stxt` to any page's address returns its code: [faq.stxt](faq.stxt) is
+		the source of this one. The generator is public,
+		[stxt-cms](https://github.com/stxt-lang/stxt-cms), and how a CMS uses @STXT@ as its
+		source format is developed in [CMS and publishing](use-cases-cms).
 
 	Subheader: Why not...?
 
 	Subsubheader: Why not XML, YAML or TOML?
 
 	Content >>
-		None of these formats is a mistake; each optimizes for something else. The table
-		compares, criterion by criterion, the design decisions of @STXT@ with those of the
-		formats that usually come up in the same conversation:
-
 		| | @STXT@ | XML | YAML | TOML |
 		|---|---|---|---|---|
-		| **Human-First** | Designed to be written by hand; the rules fit in one page | Verbose: closing tags, attributes, escapes | Readable, but with subtle rules: optional quotes, values that change type | Clear for flat configuration; nesting goes in `[a.b.c]` headers |
-		| **Schemas and validation** | Built into the language, optional and closed | Three schema languages —DTD, XSD and RELAX NG—, each an ecosystem of its own | None; validated with tools from other ecosystems | None |
-		| **Ease of parsing** | Linear, in a single pass; a conforming parser is written in days | Requires an industrial parser | Huge specification; parsers disagree with each other | Approachable, with laborious edges: dates, tables, strings |
-		| **Attack surface** | No entities, references, anchors or code execution ([STXT-SPEC §15](stxt-core-ref#s15)) | External entities (XXE) and entity expansion | Expandable anchors and tags that instantiate objects | Small |
-		| **Free text** | Literal `>>` blocks: any character, no escapes | Escape `<` and `&`, or CDATA | Block scalars with subtle indentation and chomping rules | Multi-line strings between triple quotes |
+		| **Hierarchy** | Indentation, one tab or four spaces per level; a single spelling | Opening and closing tags | Indentation of free width; block and flow syntax for the same structure | `[a.b]` headers with the full path; also dotted keys and inline tables |
+		| **Values** | Always text; the type is declared by the definition | Text; the type is declared by the schema | The spelling decides the type (`no`, `3.10`), with different rules in 1.1 and 1.2 | The spelling decides the type; strings always in quotes |
+		| **Free text** | Literal `>>` blocks: any character, no escapes | Escape `<` and `&`, or CDATA | Block scalars, literal or folded, with chomping indicators | Multi-line strings between triple quotes; the indentation goes into the value |
+		| **Namespaces** | In the language | In the language | No | No |
+		| **Schemas** | In the language, optional, closed content model | DTD, XSD, RELAX NG, Schematron | No; external tools | No; external tools |
+		| **Parsing** | Linear, line by line, in a single pass | Entities, internal DTD and namespaces the parser resolves | Extensive grammar; two versions with different type resolution | Small grammar; dates, times and inline tables as native types |
+		| **Attack surface** | No entities, references, anchors or code execution ([STXT-SPEC §15](stxt-core-ref#s15)) | External entities (XXE), entity expansion | Expandable anchors; tags that instantiate objects | No entities or references |
 
-		The comparison with each format is developed on its own page:
+		The comparison with each format, with examples, is developed on its own page:
 		[STXT vs XML](stxt-vs-xml), [STXT vs YAML](stxt-vs-yaml) and
 		[STXT vs TOML](stxt-vs-toml).
-
 
 	Subsubheader: Why not Markdown?
 
 	Content >>
-		Markdown is not an alternative to @STXT@: **it is its complement**. They cover
-		different domains —Markdown gives **format** to prose: bold, links, lists within the
-		text; @STXT@ gives **structure** to the document: nodes, hierarchy, validation— and
-		that is why they work together. In fact, `MARKDOWN` is the only embedded format the
-		schemas define: a node declared with that type marks its text as formatted prose, to
+		Markdown gives **format** to prose —bold, links, lists within the text— and has no
+		fields; @STXT@ gives **structure** to the document —nodes, hierarchy, validation— and
+		adopts Markdown for the prose of its nodes: `MARKDOWN` is the only embedded format the
+		schemas define. A node declared with that type marks its text as formatted prose, to
 		be interpreted as CommonMark, and its raw form remains readable.
-		See [STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7); the division of work between
-		the two is developed in [STXT vs Markdown](stxt-vs-markdown).
+		See [STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7) and
+		[STXT vs Markdown](stxt-vs-markdown).
 
 	Code >>
 		Article: Style guide
@@ -138,13 +122,11 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Subsubheader: Why not JSON?
 
 	Content >>
-		Because JSON is not meant to be written by hand: it is a serialization format for
-		machines. Everything goes between quotes, braces and commas; line breaks are written
-		`\n`; there are no comments, and a long text ends up on a single line full of
-		escapes. None of that is a flaw —JSON promises nothing else—, but it rules it out as
-		a Human-First format. The [STXT vs JSON](stxt-vs-json) page develops the
-		comparison — and the reverse path: the canonical JSON tree every @STXT@ tool can
-		emit.
+		Because JSON is a serialization format, not meant to be written by hand: everything
+		goes between quotes, braces and commas; line breaks are written `\n`; there are no
+		comments, and a long text is a single line with escapes. @STXT@ adopts it in the
+		other direction: every document has a canonical JSON tree, which the tools emit.
+		[STXT vs JSON](stxt-vs-json) develops both.
 
 	Subsubheader: Why are there no lists?
 
@@ -199,8 +181,7 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Subsubheader: Why can a text block not have children?
 
 	Content >>
-		Not because of a technical limitation —it could be done— but by design: allowing it
-		would go against the Human-First principle on three fronts.
+		By design, for three reasons:
 
 		* **Visual noise.** To know where the text ends and the children begin, an end-of-block
 		  marker would be needed, and a document would no longer read like an outline of
@@ -363,7 +344,7 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Content >>
 		Two syntaxes for the same model, and **every template is equivalent to a schema**. The
 		template (`@stxt.template`) is written like the document it describes, with the
-		cardinality and the type in parentheses, and it is the recommended form for manual
+		cardinality and the type in parentheses, and it is the form meant for manual
 		writing:
 
 	Code >>
@@ -483,7 +464,7 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Subsubheader: Which languages have a parser?
 
 	Content >>
-		Three are maintained from this portal: TypeScript/JavaScript (`@stxt-lang/core`),
+		The `stxt-lang` organization maintains three: TypeScript/JavaScript (`@stxt-lang/core`),
 		Java (`dev.stxt:stxt-core`) and Python (`stxt`), with the same scope, the same
 		specification date and the same conformance corpus. The VS Code extension, the CLI and the
 		playground are built on the first one. The complete list is on the
