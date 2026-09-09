@@ -1,123 +1,97 @@
-Document (dev.stxt.website): IA y LLMs — Documentos STXT generados y verificables
+Document (dev.stxt.website): IA y LLMs — STXT
 
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
-		Description: STXT para documentos generados por IA: tan fácil de escribir para un LLM como Markdown, y verificable contra una plantilla para detectar campos inventados.
+		Last modif: 2026-09-09
+		Description: STXT para documentos generados por un modelo de lenguaje: la salida se valida contra una plantilla y los errores vuelven al modelo con línea y código, en un bucle generar, validar y corregir.
 
 	Header: IA y LLMs
 
-	Content >>
-		Los modelos de lenguaje generan Markdown con facilidad: es el formato más presente
-		en sus datos de entrenamiento. Sin embargo, un Markdown "válido" no garantiza nada:
-		cualquier salida pasa, incluidos campos inventados, secciones que faltan y
-		metadatos incorrectos.
-
 	Assert >>
-		@STXT@ es un lenguaje adecuado para documentos generados por IA:\\
-		tan fácil de escribir como Markdown, y **verificable**.
-
-	Subheader: Por qué un LLM escribe bien @STXT@
+		Un documento @STXT@ generado por un modelo se valida contra una plantilla:\\
+		la salida es verificable, y cada error vuelve al modelo con su línea y su código.
 
 	Content >>
-		@STXT@ no aparece en los datos de entrenamiento de los modelos, pero con un ejemplo
-		y una plantilla en el contexto, seguir un formato regular es una tarea que los
-		modelos resuelven con fiabilidad.
+		Un modelo de lenguaje que genera un documento, o que extrae uno de un texto libre,
+		produce texto. Si ese texto es Markdown, no hay contra qué comprobarlo: cualquier
+		salida pasa, con campos inventados, secciones que faltan o fechas mal escritas. Si es
+		@STXT@ con una [plantilla](stxt-template-ref), la salida se valida como cualquier
+		otro documento, y lo que no cumple la plantilla es un error con línea y código.
 
-		@STXT@ es **más regular que Markdown**:
-
-		* Cada línea es `Nombre:`, `Nombre >>` o texto indentado.
-		* No hay sintaxis alternativas para un mismo elemento.
-		* La estructura es lineal: se genera de arriba abajo, sin referencias hacia atrás.
-
-		Los errores posibles son pocos y conocidos:
-
-		* Deriva de indentación en documentos muy largos.
-		* Omitir la indentación de una línea dentro de un bloque `>>`.
-
-		Ambos se detectan al validar.
-
-	Subheader: La diferencia: verificable
+	Subheader: Lo que el validador comprueba
 
 	Content >>
-		Cuando un LLM genera Markdown, no hay nada contra lo que comprobar el resultado.
-		Cuando genera @STXT@ con una [plantilla](stxt-template-ref):
+		* El [modelo de contenido cerrado](stxt-schema-ref#s6) rechaza los nombres de nodo no
+		  declarados (`CHILD_NOT_DECLARED`, `NODE_NOT_DEFINED_IN_SCHEMA`).
+		* Las cardinalidades rechazan los nodos que faltan o sobran (`TOO_FEW_CHILDREN`,
+		  `TOO_MANY_CHILDREN`).
+		* Los tipos (`DATE`, `EMAIL`, `NUMBER`…) rechazan los formatos incorrectos, y los `ENUM`
+		  los valores fuera de la lista (`INVALID_VALUE`).
 
-		* El parser valida la salida inmediatamente.
-		* El **[modelo de contenido cerrado](stxt-schema-ref#s6)** rechaza los nombres de nodo no declarados.
-		* Los `ENUM` y las cardinalidades rechazan los valores inventados.
-		* Los tipos (`DATE`, `EMAIL`, `NUMBER`...) rechazan los formatos incorrectos.
+		La plantilla del ejemplo ejecutable de esta página, tal cual está en su `.stxt/`:
 
-		Un documento @STXT@ válido significa que la estructura es correcta.
-		Un Markdown válido no dice nada de su estructura.
+	Code >>
+		Template (@stxt.template): com.acme.reports
+			Structure >>
+				Report (com.acme.reports):
+					Title: (1)
+					Date: (1) DATE
+					Author: (1)
+					Status: (1) ENUM [Draft, Final]
+					Summary: (1) TEXT
+					Section: (*)
+						Title: (1) @Title
+						Content: (1) TEXT
+					Action: (*)
+						Owner: (1)
+						Due: (?) DATE
+						Description: (1) TEXT
+			Description >>
+				Report: A short internal report extracted from free text (notes, emails, minutes)
+				Date: Date of the source material, YYYY-MM-DD
+				Status: Draft until a person has reviewed it
+				Summary: Three sentences at most
+				Section: One per topic discussed
+				Action: One per agreed follow-up
+
+	Content >>
+		Una salida con cuatro errores, todos detectados:
+
+	Code >>
+		Report (com.acme.reports): Análisis de mercado
+			Title: Análisis de mercado
+			# ERROR: DATE exige YYYY-MM-DD
+			Date: mañana
+			Author: Ana García
+			# ERROR: no es un valor del ENUM
+			Status: Pendiente
+			# ERROR: hijo no declarado (modelo cerrado)
+			Subtitle: Versión corta
+			# ERROR: falta Summary, que es obligatorio
 
 	Subheader: El bucle: generar, validar, corregir
 
 	Content >>
-		La validación convierte la generación en un proceso iterativo:
-
-		1. El LLM genera el documento @STXT@.
-		2. El parser lo valida contra la plantilla.
-		3. Si hay errores, se devuelven al modelo.
-		4. El modelo corrige y se repite.
-
-		Cada iteración reduce los errores a los que el validador señala; el proceso termina
-		cuando el documento valida. Este bucle no existe para Markdown: no hay nada contra
-		qué validar.
+		1. El modelo genera el documento @STXT@.
+		2. El validador lo comprueba contra la plantilla.
+		3. Si hay errores, se devuelven al modelo tal cual, con línea y código.
+		4. El modelo corrige y se repite, hasta que el documento valida o se agotan los intentos.
 
 		El paso 2 es `stxt validate -`: la CLI lee el documento por la entrada estándar, lo
 		valida contra las gramáticas del directorio actual y emite cada hallazgo como
-		`<stdin>:línea: [CÓDIGO] mensaje`, con código de salida `1` si hay errores. Está
-		pensada para *pipes* y CI, de modo que la salida del modelo se valida sin pasar por un
-		fichero. Ver [La CLI](tools-cli).
+		`<stdin>:línea: [CÓDIGO] mensaje (error)`, con código de salida `1` si hay errores
+		([La línea de comandos](tools-cli)). Con la biblioteca, es `UnifiedSchemaProvider`
+		para cargar la plantilla y `Parser` con `SchemaValidator` para obtener los mismos
+		errores.
 
-	Content >>
-		Ejemplo de plantilla incluida en el prompt:
-
-	Code >>
-		Template (@stxt.template): com.acme.informes
-			Structure >>
-				Informe (com.acme.informes):
-					Título: (1)
-					Fecha: (1) DATE
-					Estado: (1) ENUM [Borrador, Final]
-					Resumen: (1) TEXT
-					Sección: (*)
-						Título: (1) @Título
-						Contenido: (1) TEXT
-
-	Content >>
-		Salida generada con errores típicos de un LLM, todos detectados:
-
-	Code >>
-		Informe (com.acme.informes):
-			Título: Análisis de mercado
-			# ERROR: DATE requiere YYYY-MM-DD
-			Fecha: mañana
-			# ERROR: no es un valor del ENUM
-			Estado: Pendiente
-			# ERROR: hijo no declarado (modelo cerrado)
-			Subtítulo: Versión corta
-			# ERROR: falta Resumen, que es obligatorio
-
-	Subheader: Un ejemplo ejecutable
-
-	Content >>
 		El bucle completo está en
 		[`examples/llm/`](https://github.com/stxt-lang/stxt-lang/tree/master/examples/llm)
-		del repositorio de la especificación: un programa de Node de unas ochenta líneas
-		que convierte unas notas de reunión en texto libre en un `Report (com.acme.reports)`
-		válido. Lo acompañan la plantilla en `.stxt/`, un documento de ejemplo correcto, el
-		prompt con las reglas del lenguaje y las notas de partida.
-
-		* **Genera**: el prompt lleva las reglas de @STXT@ en diez líneas, la plantilla
-		  entera, el ejemplo válido y el texto a convertir; pide el documento y nada más.
-		* **Valida**: `UnifiedSchemaProvider` carga la plantilla y `Parser` con
-		  `SchemaValidator` devuelve los errores con línea y código, como haría
-		  `stxt validate -`.
-		* **Corrige**: los errores vuelven al modelo tal cual, a continuación de su propia
-		  respuesta, y se repite hasta que el documento valida o se agotan los intentos.
+		del repositorio de la especificación: un programa de Node que convierte unas notas de
+		reunión en texto libre en un `Report (com.acme.reports)` válido. Lo acompañan la
+		plantilla de arriba, un documento de ejemplo correcto, el prompt con las reglas del
+		lenguaje y las notas de partida. El prompt lleva las reglas de @STXT@, la plantilla
+		entera, el ejemplo válido y el texto a convertir, y pide el documento y nada más.
 
 	Listing >>
 		$ node generate.mjs > report.stxt
@@ -128,79 +102,44 @@ Document (dev.stxt.website): IA y LLMs — Documentos STXT generados y verificab
 		--- attempt 2: valid
 
 	Content >>
-		El documento sale por la salida estándar y el diálogo por la de error, con código
-		de salida `0` solo si la última versión valida: es un paso de *pipeline* más. El
-		ejemplo usa la API de Anthropic, pero nada del bucle depende del proveedor; la
-		llamada al modelo es una función que devuelve texto. El `README` del directorio
-		resume qué error del modelo produce qué código.
+		El documento sale por la salida estándar y el diálogo por la de error, con código de
+		salida `0` solo si la última versión valida. El ejemplo usa la API de Anthropic, pero
+		nada del bucle depende del proveedor: la llamada al modelo es una función que devuelve
+		texto. El `README` del directorio resume qué error del modelo produce qué código.
 
-	Subheader: Sin escapado: prosa larga dentro de estructura
+	Subheader: Lo que facilita la generación
 
 	Content >>
-		El punto débil de los LLMs al generar JSON es el escapado:
-		comillas, `\n`, saltos de línea dentro de strings.
+		* **Pocas formas de línea.** Cada línea es `Nombre: valor`, `Nombre:`, `Nombre >>` o
+		  texto de un bloque, y no hay sintaxis alternativas para un mismo elemento. El
+		  documento se genera de arriba abajo, sin referencias hacia atrás.
+		* **Sin escapado.** Un bloque `>>` es texto literal: el modelo solo tiene que
+		  indentarlo. En JSON, el mismo texto exige escapar comillas y saltos de línea:
 
 	Json >>
-		{"resumen": "Línea 1\nLínea 2 con \"comillas\" y más texto..."}
-
-	Content >>
-		En @STXT@, los bloques `>>` son texto literal: el modelo solo
-		tiene que indentar.
+		{"summary": "Línea 1\nLínea 2 con \"comillas\" y más texto..."}
 
 	Code >>
-		Resumen >>
+		Summary >>
 			Línea 1
 			Línea 2 con "comillas" y más texto...
 
 	Content >>
-		Para documentos con texto libre extenso, @STXT@ es una superficie
-		de salida más fiable que [JSON](stxt-vs-json) o [YAML](stxt-vs-yaml).
-
-	Subheader: La normalización absorbe la varianza
-
-	Content >>
-		El nombre canónico de los nodos absorbe las variaciones habituales
-		de un LLM: `TITLE:`, `Title:` y `title:` son el mismo nodo.
-		Donde otros formatos reportarían "campo desconocido", @STXT@
-		identifica el mismo elemento.
-
-		La validación estricta se reserva para donde importa:
-		los valores `ENUM` distinguen mayúsculas y son exactos.
+		* **Los nombres se comparan por su forma canónica.** `TITLE:`, `Title:` y `title:`
+		  son el mismo nodo ([STXT-SPEC §4.3](stxt-core-ref#s4-3)); los valores de un `ENUM`,
+		  en cambio, se comparan exactos, con mayúsculas y minúsculas.
 
 	Subheader: Prácticas de prompting
 
 	Content >>
-		* Incluir en el prompt la **plantilla completa** del namespace:
-		  es compacta y declara qué campos existen, sus cardinalidades
-		  y sus valores permitidos antes de generar.
-		* Añadir **un documento de ejemplo** completo y correcto.
-		* Pedir indentación consistente (tabuladores, o 4 espacios por nivel).
-		* Validar siempre la salida con el parser, no por inspección visual.
-		* Asegurar que los mensajes de error del validador incluyen línea,
-		  qué se esperaba y qué se encontró: es lo que el modelo necesita
-		  para corregir en la siguiente iteración.
+		* Incluir la **plantilla completa** del namespace: declara qué nodos existen, sus
+		  cardinalidades y sus valores permitidos.
+		* Añadir **un documento de ejemplo** completo y válido.
+		* Pedir una indentación fija: tabuladores, o cuatro espacios por nivel.
+		* Validar siempre la salida con el parser, nunca por inspección.
+		* Devolver al modelo los mensajes del validador tal cual, con línea y código.
 
-	Subheader: Casos de uso
-
-	Content >>
-		* **CMS con contenido asistido por IA**: el build rechaza las páginas
-		  generadas incompletas o incoherentes antes de publicarlas
-		  ([CMS y publicaciones](use-cases-cms)).
-		* **Extracción de datos**: convertir texto libre (emails, informes,
-		  actas) en documentos @STXT@ validables contra una plantilla
-		  ([Documentos corporativos](use-cases-corporate-docs)).
-		* **Informes y documentación generada**: estructura validada,
-		  prosa libre dentro de los bloques `>>`.
-		* **Agentes y pipelines**: @STXT@ como formato de intercambio entre
-		  pasos, con validación en cada frontera.
-
-	Subheader: Resumen
-
-	Content >>
-		* Con plantilla y ejemplo en contexto, un LLM genera @STXT@ con fiabilidad.
-		* La validación detecta campos no declarados, valores inventados y formatos incorrectos.
-		* El bucle generar → validar → corregir produce un resultado
-		  **verificable**, a diferencia de Markdown, que no tiene contra qué validarse.
-		* Los bloques literales eliminan el escapado, el punto débil de JSON.
-		* Estructura verificable y texto libre: los dos requisitos
-		  del contenido generado por IA.
+		Los casos donde este flujo encaja se desarrollan en
+		[CMS y publicaciones](use-cases-cms), donde el *build* rechaza las páginas generadas
+		que no validan, y en [Documentos corporativos](use-cases-corporate-docs), para la
+		extracción de datos de texto libre.

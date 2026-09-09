@@ -3,7 +3,7 @@ Document (dev.stxt.website): The Python library — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: stxt, the STXT parser for Python on PyPI: pure Python, no dependencies, 3.10+, implementing the five specifications with the same error codes.
 
 	Header: The Python library
@@ -37,7 +37,8 @@ Document (dev.stxt.website): The Python library — STXT
 	Subheader: Parsing
 
 	Content >>
-		`Parser` has two entry points. `parse_result(text)` collects every error and
+		`Parser` has two entry points for a text in memory (the third, `parse_stream`, is
+		described below). `parse_result(text)` collects every error and
 		also returns the nodes it managed to build; `parse(text)` raises a
 		`ParseException` on the first one and returns `list[Node]` when there is none. The
 		former suits an editor or a validator; the latter, a program that treats an
@@ -412,6 +413,47 @@ Document (dev.stxt.website): The Python library — STXT
 		parser.register_observer(LoggingObserver())
 		parser.parse_result(text)
 
+	Subheader: Streaming and parser limits
+
+	Content >>
+		`parse_stream(lines)` takes an iterable of lines —each without its line break; for
+		instance, an open file, read lazily— and retains nothing: no nodes, no errors. The
+		results reach the program only through a `StreamObserver`, a base class with two
+		callbacks: `on_root_node(node)` with each complete, already validated root node, which
+		the parser releases right after the call, and `on_error(error)` with each error,
+		syntactic or validation. The memory in use is one root tree at a time, and it is the
+		entry point for files that do not fit in memory. A registered `StreamObserver` receives
+		the same calls with `parse` and `parse_result` too.
+
+	Python >>
+		from stxt import Parser, StreamObserver, Node, ParseException
+
+		class Counter(StreamObserver):
+		    def __init__(self) -> None:
+		        self.roots = 0
+		    def on_root_node(self, node: Node) -> None:
+		        self.roots += 1
+		    def on_error(self, error: ParseException) -> None:
+		        print(error.line, error.code, error.message)
+
+		parser = Parser()
+		counter = Counter()
+		parser.register_stream_observer(counter)
+		with open("log.stxt", encoding="utf-8") as f:
+		    parser.parse_stream(line.rstrip("\n") for line in f)
+		counter.roots
+
+	Content >>
+		The parser applies the limits of [STXT-SPEC §11.2](stxt-core-ref#s11-2), configurable
+		in the constructor: `max_nesting` (100 levels), `max_line_length` (10,000 characters)
+		and `max_input_size` (10,000,000 characters); `-1` disables one. Exceeding a limit
+		produces a `LimitException` —a subclass of `ParseException` with the codes
+		`LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` and `LIMIT_INPUT_SIZE_EXCEEDED`—
+		and aborts the parse: it is always the last error.
+
+	Python >>
+		parser = Parser(max_nesting=50, max_input_size=-1)
+
 	Subheader: The API surface
 
 	Content >>
@@ -420,10 +462,10 @@ Document (dev.stxt.website): The Python library — STXT
 
 		| Group                | Names                                                                                                                  |
 		|----------------------|------------------------------------------------------------------------------------------------------------------------|
-		| Parsing              | `Parser`, `ParseResult`, `Node`, `InlineNode`, `TextNode`, `NO_LINE`, `LineIndent`, `parse_line`, `EMPTY_NAMESPACE`    |
-		| Errors               | `ParseException`, `ValidationException`, `RuntimeException`                                                            |
-		| Extension points     | `Observer`, `Validator`                                                                                                |
-		| Schemas              | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaProviderMemory`, `SchemaProviderMeta`, `SchemaValidator`, `transform_node_to_schema`, `SCHEMA_NAMESPACE` |
+		| Parsing              | `Parser`, `ParseResult`, `Node`, `InlineNode`, `TextNode`, `NO_LINE`, `LineIndent`, `parse_line`, `EMPTY_NAMESPACE`, `SPEC_VERSION` |
+		| Errors               | `ParseException`, `ValidationException`, `LimitException`, `RuntimeException`                                          |
+		| Extension points     | `Observer`, `StreamObserver`, `Validator`                                                                              |
+		| Schemas              | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaProviderMemory`, `SchemaProviderMeta`, `SchemaValidator`, `Type`, `TypeRegistry`, `transform_node_to_schema`, `SCHEMA_NAMESPACE` |
 		| Templates            | `MetaTemplateSchemaProvider`, `TemplateSchemaProviderMemory`, `transform_template_node_to_schema`, `TEMPLATE_NAMESPACE`  |
 		| Runtime              | `UnifiedSchemaProvider`, `NodeWriter`, `IndentStyle`, `Formatter`, `FormatResult`, `to_canonical_tree`, `to_canonical_json` |
 		| Resolution           | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryFileSystem`, `DiscoveryEntry`, `DiscoveryEnvironment`, `OsDiscoveryFileSystem`, `SystemDiscoveryEnvironment` and `stxt.discovery.resolve` |

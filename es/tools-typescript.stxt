@@ -3,7 +3,7 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: @stxt-lang/core, el parser de STXT para TypeScript y JavaScript en npm: el puerto de referencia del ecosistema, con las cinco especificaciones.
 
 	Header: La biblioteca TypeScript
@@ -39,7 +39,8 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 	Subheader: Parsear
 
 	Content >>
-		`Parser` tiene dos entradas. `parseResult(text)` acumula todos los errores y
+		`Parser` tiene dos entradas para un texto en memoria (la tercera, `parseStream`, se
+		describe más abajo). `parseResult(text)` acumula todos los errores y
 		devuelve además los nodos que ha podido construir; `parse(text)` lanza una
 		`ParseException` en el primero y devuelve `Node[]` si no hay ninguno. La primera es
 		la adecuada para un editor o un validador; la segunda, para un programa en el que
@@ -393,8 +394,8 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 		const all = NodeWriter.toSTXTDocs(result.getNodes(), IndentStyle.SPACES_4);   // un documento entero
 
 	Content >>
-		El reformateo que **conserva** comentarios y líneas en blanco es `Formatter` (desde
-		0.11.1; [STXT-TREE-SPEC §12](stxt-tree-ref#s12)): reescribe el texto original línea a línea —las líneas que abren un nodo en
+		El reformateo que **conserva** comentarios y líneas en blanco es `Formatter`
+		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)): reescribe el texto original línea a línea —las líneas que abren un nodo en
 		forma canónica, las de un bloque al nivel del bloque, el resto tal cual, con sus
 		unidades de indentación convertidas al estilo pedido— y devuelve, junto al texto, los
 		errores de sintaxis que haya encontrado, para que quien llama decida qué hacer con un
@@ -442,6 +443,43 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 		parser.registerObserver(new LoggingObserver());
 		parser.parseResult(text);
 
+	Subheader: Streaming y límites del parser
+
+	Content >>
+		`parseStream(lines)` recibe un iterable de líneas —cada una sin su salto de línea; por
+		ejemplo, un fichero leído de forma perezosa— y no retiene nada: ni nodos ni errores.
+		Los resultados llegan solo por un `StreamObserver`: `onRootNode(node)` con cada nodo
+		raíz completo y ya validado, que el parser libera tras la llamada, y `onError(error)`
+		con cada error, sintáctico o de validación. La memoria en uso es la de un árbol raíz
+		cada vez, y es la entrada para ficheros que no caben en memoria. Un `StreamObserver`
+		registrado recibe las mismas llamadas también con `parse` y `parseResult`.
+
+	TypeScript >>
+		import { Parser, StreamObserver, Node, ParseException } from '@stxt-lang/core';
+
+		class Counter implements StreamObserver {
+		    roots = 0;
+		    onRootNode(node: Node): void { this.roots++; }
+		    onError(error: ParseException): void { console.error(error.line, error.code, error.message); }
+		}
+
+		const parser = new Parser();
+		const counter = new Counter();
+		parser.registerStreamObserver(counter);
+		parser.parseStream(lines);   // Iterable<string>, una línea por elemento
+		counter.roots;
+
+	Content >>
+		El parser aplica los límites de [STXT-SPEC §11.2](stxt-core-ref#s11-2), configurables
+		en el constructor con `ParserOptions`: `maxNesting` (100 niveles), `maxLineLength`
+		(10 000 caracteres) y `maxInputSize` (10 000 000 caracteres); `-1` desactiva uno.
+		Superar un límite produce una `LimitException` —subclase de `ParseException` con los
+		códigos `LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` y
+		`LIMIT_INPUT_SIZE_EXCEEDED`— y aborta el parseo: es siempre el último error.
+
+	TypeScript >>
+		const parser = new Parser({ maxNesting: 50, maxInputSize: -1 });
+
 	Subheader: La superficie de la API
 
 	Content >>
@@ -449,10 +487,11 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 
 		| Grupo                | Exportaciones                                                                                                          |
 		|----------------------|------------------------------------------------------------------------------------------------------------------------|
-		| Parseo               | `Parser`, `ParseResult`, `Node`, `InlineNode`, `TextNode`, `Line`, `parseLine`, `Constants`, `StringUtils`             |
-		| Errores              | `ParseException`, `ValidationException`                                                                                |
-		| Puntos de extensión  | `Observer`                                                                                                             |
-		| Esquemas             | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaValidator`, `transformNodeToSchema`, `transformTemplateNodeToSchema` |
+		| Parseo               | `Parser`, `ParserOptions`, `ParseResult`, `Node`, `InlineNode`, `TextNode`, `Line`, `parseLine`, `Constants`, `SPEC_VERSION`, `StringUtils` |
+		| Errores              | `ParseException`, `ValidationException`, `LimitException`, `RuntimeException`                                          |
+		| Puntos de extensión  | `Observer`, `StreamObserver`, `Validator`                                                                              |
+		| Esquemas             | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaProviderMemory`, `SchemaProviderMeta`, `SchemaValidator`, `Type`, `TypeRegistry`, `transformNodeToSchema` |
+		| Plantillas           | `transformTemplateNodeToSchema`, `TemplateSchemaProviderMemory`, `MetaTemplateSchemaProvider`, `TEMPLATE_NAMESPACE`   |
 		| Runtime              | `UnifiedSchemaProvider`, `NodeWriter`, `IndentStyle`, `Formatter`, `FormatResult`, `toCanonicalTree`, `toCanonicalJson` y los tipos `Canonical*` |
 		| Resolución           | `DiscoveryResolver`, `DiscoveryOptions`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryFileSystem`, `DiscoveryEntry`, `DiscoveryEnvironment` |
 

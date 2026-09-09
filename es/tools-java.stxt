@@ -3,7 +3,7 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: dev.stxt:stxt-core, el parser de STXT para Java en Maven Central: sin dependencias, implementa las cinco especificaciones con los mismos códigos de error.
 
 	Header: La biblioteca Java
@@ -42,14 +42,13 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 
 	Content >>
 		El javadoc de cada versión está en
-		[javadoc.io](https://javadoc.io/doc/dev.stxt/stxt-core), y el `README` del
-		artefacto es la portada en Central: sus ejemplos se compilan y ejecutan contra el
-		parser real.
+		[javadoc.io](https://javadoc.io/doc/dev.stxt/stxt-core).
 
 	Subheader: Parsear
 
 	Content >>
-		`Parser` tiene dos entradas. `parseResult(text)` acumula todos los errores y
+		`Parser` tiene dos entradas para un texto en memoria (la tercera, `parseStream`, se
+		describe más abajo). `parseResult(text)` acumula todos los errores y
 		devuelve además los nodos que ha podido construir; `parse(text)` lanza una
 		`ParseException` en el primero y devuelve `List<Node>` si no hay ninguno. Las dos
 		tienen su pareja sobre fichero: `parseResultFile(File)` y `parseFile(File)`. La
@@ -484,6 +483,48 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 		parser.registerValidator(node -> List.<ValidationException>of());   // un validador que no se queja de nada
 		parser.parseResult(text);
 
+	Subheader: Streaming y límites del parser
+
+	Content >>
+		`parseStream(reader)` lee de un `Reader` y no retiene nada: ni nodos ni errores. Los
+		resultados llegan solo por un `StreamObserver`: `onRootNode(node)` con cada nodo raíz
+		completo y ya validado, que el parser libera tras la llamada, y `onError(error)` con
+		cada error, sintáctico o de validación. La memoria en uso es la de un árbol raíz cada
+		vez, y es la entrada para ficheros que no caben en memoria. Un `StreamObserver`
+		registrado recibe las mismas llamadas también con `parse` y `parseResult`.
+
+	Java >>
+		import java.io.Reader;
+		import java.nio.file.Files;
+		import java.nio.file.Path;
+
+		import dev.stxt.Node;
+		import dev.stxt.Parser;
+		import dev.stxt.exceptions.ParseException;
+		import dev.stxt.processors.StreamObserver;
+
+		Parser parser = new Parser();
+		parser.registerStreamObserver(new StreamObserver() {
+		    @Override public void onRootNode(Node node) { System.out.println(node.getQualifiedName()); }
+		    @Override public void onError(ParseException error) { System.err.println(error.getLine() + " " + error.getCode()); }
+		});
+		try (Reader reader = Files.newBufferedReader(Path.of("registro.stxt"))) {
+		    parser.parseStream(reader);
+		}
+
+	Content >>
+		El parser aplica los límites de [STXT-SPEC §11.2](stxt-core-ref#s11-2), configurables
+		con `setMaxNesting` (100 niveles), `setMaxLineLength` (10 000 caracteres) y
+		`setMaxInputSize` (10 000 000 caracteres); `-1` desactiva uno. Superar un límite
+		produce una `LimitException` —subclase de `ParseException` con los códigos
+		`LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` y `LIMIT_INPUT_SIZE_EXCEEDED`— y
+		aborta el parseo: es siempre el último error.
+
+	Java >>
+		Parser parser = new Parser();
+		parser.setMaxNesting(50);
+		parser.setMaxInputSize(-1);
+
 	Subheader: Errores
 
 	Content >>
@@ -494,6 +535,7 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 		|-----------------------------|-----------------------------------------------------------------------------------------------------------|
 		| `ParseException`            | La sintaxis está mal; añade `getLine()`                                                                    |
 		| `ValidationException`       | El documento incumple su gramática (tipo, cardinalidad, hijo no declarado); subclase de `ParseException`   |
+		| `LimitException`            | Se ha superado un límite del parser (`LIMIT_*`); subclase de `ParseException`                              |
 		| `SchemaException`           | El esquema o la plantilla están mal formados                                                              |
 		| `ResourceNotFoundException` | Un `ResourcesLoader` no tiene el recurso (los proveedores la convierten en un hallazgo `SCHEMA_NOT_FOUND`) |
 		| `STXTIOException`           | No se ha podido leer un fichero                                                                           |
@@ -508,13 +550,13 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 	Content >>
 		| Paquete               | Qué hay                                                                                                              |
 		|-----------------------|----------------------------------------------------------------------------------------------------------------------|
-		| `dev.stxt`            | `Parser`, `ParseResult`, `Node`, `InlineNode`, `TextNode`, `Constants`                                               |
-		| `dev.stxt.exceptions` | `STXTException`, `ParseException`, `ValidationException`, `SchemaException`, `ResourceNotFoundException`, `STXTIOException` |
-		| `dev.stxt.processors` | `Observer`, `Validator`                                                                                              |
-		| `dev.stxt.schema`     | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaValidator`, `SchemaProviderResources`, `SchemaProviderCache`, `SchemaProviderMeta`, `SchemaParser`, `Type`, `TypeRegistry`, y los tipos en `dev.stxt.schema.type` |
-		| `dev.stxt.template`   | `TemplateParser`, `TemplateSchemaProvider`, `MetaTemplateSchemaProvider`                                              |
+		| `dev.stxt`            | `Parser`, `ParseResult`, `Node`, `InlineNode`, `TextNode`, `Constants`, `LineIndent`, `LineIndentParser`, `NameNamespace`, `NameNamespaceParser`, `NamespaceValidator` |
+		| `dev.stxt.exceptions` | `STXTException`, `ParseException`, `ValidationException`, `LimitException`, `SchemaException`, `ResourceNotFoundException`, `STXTIOException` |
+		| `dev.stxt.processors` | `Observer`, `StreamObserver`, `Validator`                                                                            |
+		| `dev.stxt.schema`     | `Schema`, `NodeDefinition`, `ChildDefinition`, `SchemaProvider`, `SchemaValidator`, `SchemaProviderResources`, `SchemaProviderCache`, `SchemaProviderMemory`, `SchemaProviderMeta`, `SchemaParser`, `DefinitionCompiler`, `Type`, `TypeRegistry`, y los tipos en `dev.stxt.schema.type` |
+		| `dev.stxt.template`   | `TemplateParser`, `TemplateSchemaProvider`, `TemplateSchemaProviderMemory`, `MetaTemplateSchemaProvider`             |
 		| `dev.stxt.resources`  | `ResourcesLoader`, `ResourcesLoaderDirectory`                                                                        |
-		| `dev.stxt.runtime`    | `STXT` (la fachada), `NodeWriter` e `IndentStyle`, `Formatter` y `FormatResult`, `TreeJson` |
+		| `dev.stxt.runtime`    | `STXT` (la fachada), `UnifiedSchemaProvider`, `NodeWriter` e `IndentStyle`, `Formatter` y `FormatResult`, `TreeJson` |
 		| `dev.stxt.discovery`  | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryEnvironment`, `SystemDiscoveryEnvironment`, `DiscoveryFileSystem`, `NioDiscoveryFileSystem` |
 
 		Desde la 1.0 esta API queda congelada dentro de la línea 1.x del paquete, y el
