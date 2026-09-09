@@ -1,0 +1,7 @@
+# Outside a block the syntax is read only at the start of the line: the name ends at the first '(', ':' or '>>', and the value keeps ':', '>>', '#' and '(' as they are.
+Root (com.example.inline):
+	Time: 10:30
+	Tag: #not-a-comment
+	Arrow: a >> b
+	Note: (not a namespace)
+	Url: https://example.com/a:b

@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Root",
+    "canonicalName": "root",
+    "namespace": "com.example.inline",
+    "form": "inline",
+    "value": "",
+    "children": [
+      {
+        "name": "Time",
+        "canonicalName": "time",
+        "namespace": "com.example.inline",
+        "form": "inline",
+        "value": "10:30",
+        "children": []
+      },
+      {
+        "name": "Tag",
+        "canonicalName": "tag",
+        "namespace": "com.example.inline",
+        "form": "inline",
+        "value": "#not-a-comment",
+        "children": []
+      },
+      {
+        "name": "Arrow",
+        "canonicalName": "arrow",
+        "namespace": "com.example.inline",
+        "form": "inline",
+        "value": "a >> b",
+        "children": []
+      },
+      {
+        "name": "Note",
+        "canonicalName": "note",
+        "namespace": "com.example.inline",
+        "form": "inline",
+        "value": "(not a namespace)",
+        "children": []
+      },
+      {
+        "name": "Url",
+        "canonicalName": "url",
+        "namespace": "com.example.inline",
+        "form": "inline",
+        "value": "https://example.com/a:b",
+        "children": []
+      }
+    ]
+  }
+]

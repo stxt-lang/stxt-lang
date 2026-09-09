@@ -101,6 +101,14 @@
       "expected": "tree/block-literal.json"
     },
     {
+      "id": "tree/inline-value-syntax",
+      "category": "tree",
+      "spec": "STXT-SPEC §4.1, §5, §9, §10.1",
+      "description": "Outside a block the syntax is read only at the start of the line: the name ends at the first '(', ':' or '>>', and an inline value keeps ':', '>>', '#' and '(' as literal text.",
+      "input": "tree/inline-value-syntax.stxt",
+      "expected": "tree/inline-value-syntax.json"
+    },
+    {
       "id": "tree/block-root",
       "category": "tree",
       "spec": "STXT-SPEC §6, §8.5",
