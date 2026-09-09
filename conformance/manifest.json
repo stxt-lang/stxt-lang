@@ -1,5 +1,5 @@
 {
-  "kit": "2026-09-07",
+  "kit": "2026-09-09",
   "specifications": {
     "STXT-SPEC": "2026-09-07",
     "STXT-TREE-SPEC": "2026-09-07",
@@ -109,10 +109,19 @@
       "expected": "tree/block-root.json"
     },
     {
-      "id": "tree/bom-crlf",
+      "id": "tree/crlf",
       "category": "tree",
       "spec": "STXT-SPEC §3",
-      "description": "A BOM and CRLF line endings are accepted; the BOM and every trailing CR are discarded.",
+      "description": "CRLF line endings are accepted; every trailing CR is discarded.",
+      "input": "tree/crlf.stxt",
+      "expected": "tree/crlf.json"
+    },
+    {
+      "id": "tree/bom-crlf",
+      "category": "tree",
+      "requirement": "SHOULD",
+      "spec": "STXT-SPEC §3",
+      "description": "A BOM followed by CRLF line endings: the BOM is discarded (STXT-SPEC §3, SHOULD accept) and every trailing CR too. The CRLF part alone is tree/crlf.",
       "input": "tree/bom-crlf.stxt",
       "expected": "tree/bom-crlf.json"
     },
@@ -696,6 +705,7 @@
     {
       "id": "parse/limit-nesting",
       "category": "parse-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SPEC §11.2",
       "description": "101 nesting levels: the recommended default nesting limit (100 open levels, STXT-SPEC §11.2, enabled by default in the official implementations) aborts the parse when the node at level 100 opens.",
       "input": "parse/limit-nesting.stxt",
@@ -707,6 +717,7 @@
     {
       "id": "parse/limit-line-length",
       "category": "parse-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SPEC §11.2",
       "description": "A line of more than 10 000 characters: the recommended default line length limit (STXT-SPEC §11.2, enabled by default in the official implementations) aborts the parse.",
       "input": "parse/limit-line-length.stxt",
@@ -1339,6 +1350,7 @@
     {
       "id": "validate/type-integer-decimal",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "INTEGER: 'Integer: 1.0' is rejected.",
       "definitions": [
@@ -1358,6 +1370,7 @@
     {
       "id": "validate/type-integer-empty",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "INTEGER: 'Integer:' is rejected.",
       "definitions": [
@@ -1377,6 +1390,7 @@
     {
       "id": "validate/type-natural-sign",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "NATURAL: 'Natural: +1' is rejected.",
       "definitions": [
@@ -1396,6 +1410,7 @@
     {
       "id": "validate/type-natural-negative",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "NATURAL: 'Natural: -1' is rejected.",
       "definitions": [
@@ -1415,6 +1430,7 @@
     {
       "id": "validate/type-date-feb30",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "DATE: 'Date: 2026-02-30' is rejected.",
       "definitions": [
@@ -1434,6 +1450,7 @@
     {
       "id": "validate/type-date-month13",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "DATE: 'Date: 2026-13-01' is rejected.",
       "definitions": [
@@ -1453,6 +1470,7 @@
     {
       "id": "validate/type-date-apr31",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "DATE: 'Date: 2026-04-31' is rejected.",
       "definitions": [
@@ -1472,6 +1490,7 @@
     {
       "id": "validate/type-date-noleap",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "DATE: 'Date: 2023-02-29' is rejected.",
       "definitions": [
@@ -1491,6 +1510,7 @@
     {
       "id": "validate/type-date-format",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "DATE: 'Date: 23/08/2026' is rejected.",
       "definitions": [
@@ -1510,6 +1530,7 @@
     {
       "id": "validate/type-time-hour24",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "TIME: 'Time: 24:00:00' is rejected.",
       "definitions": [
@@ -1529,6 +1550,7 @@
     {
       "id": "validate/type-time-min60",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "TIME: 'Time: 10:60:00' is rejected.",
       "definitions": [
@@ -1548,6 +1570,7 @@
     {
       "id": "validate/type-time-sec60",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "TIME: 'Time: 10:00:60' is rejected.",
       "definitions": [
@@ -1567,6 +1590,7 @@
     {
       "id": "validate/type-time-noseconds",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "TIME: 'Time: 10:30' is rejected.",
       "definitions": [
@@ -1586,6 +1610,7 @@
     {
       "id": "validate/type-time-fraction",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "TIME: 'Time: 10:30:00.5' is rejected.",
       "definitions": [
@@ -1605,6 +1630,7 @@
     {
       "id": "validate/type-timestamp-space",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "TIMESTAMP: 'Timestamp: 2026-08-23 10:30:00' is rejected.",
       "definitions": [
@@ -1624,6 +1650,7 @@
     {
       "id": "validate/type-timestamp-hour",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "TIMESTAMP: 'Timestamp: 2026-08-23T24:00' is rejected.",
       "definitions": [
@@ -1643,6 +1670,7 @@
     {
       "id": "validate/type-timestamp-zone",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "TIMESTAMP: 'Timestamp: 2026-08-23T10:30:00+25:00' is rejected.",
       "definitions": [
@@ -1662,6 +1690,7 @@
     {
       "id": "validate/type-timestamp-date",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "TIMESTAMP: 'Timestamp: 2026-02-30T10:30' is rejected.",
       "definitions": [
@@ -1681,6 +1710,7 @@
     {
       "id": "validate/type-timestamp-dateonly",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "TIMESTAMP: 'Timestamp: 2026-08-23' is rejected.",
       "definitions": [
@@ -1700,6 +1730,7 @@
     {
       "id": "validate/type-uuid-short",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "UUID: 'Uuid: 123e4567-e89b-12d3-a456-42661417400' is rejected.",
       "definitions": [
@@ -1719,6 +1750,7 @@
     {
       "id": "validate/type-uuid-braces",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "UUID: 'Uuid: {123e4567-e89b-12d3-a456-426614174000}' is rejected.",
       "definitions": [
@@ -1738,6 +1770,7 @@
     {
       "id": "validate/type-uuid-nodash",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "UUID: 'Uuid: 123e4567e89b12d3a456426614174000' is rejected.",
       "definitions": [
@@ -1757,6 +1790,7 @@
     {
       "id": "validate/type-url-noscheme",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "URL: 'Url: stxt.dev' is rejected.",
       "definitions": [
@@ -1776,6 +1810,7 @@
     {
       "id": "validate/type-url-www",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "URL: 'Url: www.stxt.dev/x' is rejected.",
       "definitions": [
@@ -1795,6 +1830,7 @@
     {
       "id": "validate/type-url-mailto",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "URL: 'Url: mailto:ana@example.com' is rejected.",
       "definitions": [
@@ -1814,6 +1850,7 @@
     {
       "id": "validate/type-url-file",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "URL: 'Url: file:///etc/hosts' is rejected.",
       "definitions": [
@@ -1833,6 +1870,7 @@
     {
       "id": "validate/type-url-blank",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "URL: 'Url: https://stxt.dev/a b' is rejected.",
       "definitions": [
@@ -1852,6 +1890,7 @@
     {
       "id": "validate/type-url-port",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "URL: 'Url: https://stxt.dev:abc/' is rejected.",
       "definitions": [
@@ -1871,6 +1910,7 @@
     {
       "id": "validate/type-url-nohost",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "URL: 'Url: https:///path' is rejected.",
       "definitions": [
@@ -1890,6 +1930,7 @@
     {
       "id": "validate/type-email-noat",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "EMAIL: 'Email: joan.example.com' is rejected.",
       "definitions": [
@@ -1909,6 +1950,7 @@
     {
       "id": "validate/type-email-noname",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "EMAIL: 'Email: <joan@example.com>' is rejected.",
       "definitions": [
@@ -1928,6 +1970,7 @@
     {
       "id": "validate/type-email-unbalanced",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "EMAIL: 'Email: Joan <joan@example.com' is rejected.",
       "definitions": [
@@ -1947,6 +1990,7 @@
     {
       "id": "validate/type-email-trailing",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "EMAIL: 'Email: Joan <joan@example.com> x' is rejected.",
       "definitions": [
@@ -1966,6 +2010,7 @@
     {
       "id": "validate/type-email-blank",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "EMAIL: 'Email: joan costa@example.com' is rejected.",
       "definitions": [
@@ -1985,6 +2030,7 @@
     {
       "id": "validate/type-email-unicode",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9.4",
       "description": "EMAIL is ASCII only: 'Email: josé@example.com' is rejected.",
       "definitions": [
@@ -2004,6 +2050,7 @@
     {
       "id": "validate/type-email-locallong",
       "category": "validate-error",
+      "requirement": "SHOULD",
       "spec": "STXT-SCHEMA-SPEC §9.4",
       "description": "EMAIL: a local part of 65 characters is over the limit of 64.",
       "definitions": [
@@ -2023,6 +2070,7 @@
     {
       "id": "validate/type-hexadecimal-g",
       "category": "validate-error",
+      "requirement": "MAY",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "HEXADECIMAL: 'Hexadecimal: DEAG' is rejected.",
       "definitions": [
@@ -2042,6 +2090,7 @@
     {
       "id": "validate/type-hexadecimal-colon",
       "category": "validate-error",
+      "requirement": "MAY",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "HEXADECIMAL: 'Hexadecimal: DE:AD' is rejected.",
       "definitions": [
@@ -2061,6 +2110,7 @@
     {
       "id": "validate/type-hexadecimal-empty",
       "category": "validate-error",
+      "requirement": "MAY",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "HEXADECIMAL: 'Hexadecimal:' is rejected.",
       "definitions": [
@@ -2080,6 +2130,7 @@
     {
       "id": "validate/type-hexadecimal-prefix",
       "category": "validate-error",
+      "requirement": "MAY",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "HEXADECIMAL: 'Hexadecimal: 0xDEAD' is rejected.",
       "definitions": [
@@ -2099,6 +2150,7 @@
     {
       "id": "validate/type-binary-two",
       "category": "validate-error",
+      "requirement": "MAY",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "BINARY: 'Binary: 102' is rejected.",
       "definitions": [
@@ -2118,6 +2170,7 @@
     {
       "id": "validate/type-binary-empty",
       "category": "validate-error",
+      "requirement": "MAY",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "BINARY: 'Binary:' is rejected.",
       "definitions": [
@@ -2137,6 +2190,7 @@
     {
       "id": "validate/type-base64-urlsafe",
       "category": "validate-error",
+      "requirement": "MAY",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "BASE64: 'Base64: aGVs-G8_' is rejected.",
       "definitions": [
@@ -2156,6 +2210,7 @@
     {
       "id": "validate/type-base64-leftover",
       "category": "validate-error",
+      "requirement": "MAY",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "BASE64: 'Base64: aGVsbG8x=' is rejected.",
       "definitions": [
@@ -2175,6 +2230,7 @@
     {
       "id": "validate/type-base64-empty",
       "category": "validate-error",
+      "requirement": "MAY",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "BASE64: 'Base64:' is rejected.",
       "definitions": [
@@ -2194,6 +2250,7 @@
     {
       "id": "validate/type-base64-padding",
       "category": "validate-error",
+      "requirement": "MAY",
       "spec": "STXT-SCHEMA-SPEC §9",
       "description": "BASE64: 'Base64: aGVsbG8==' is rejected.",
       "definitions": [
@@ -4148,8 +4205,20 @@
       }
     },
     {
+      "id": "writer/crlf",
+      "category": "writer",
+      "spec": "STXT-TREE-SPEC §11.1",
+      "description": "Canonical text form of the tree of tree/crlf.",
+      "input": "tree/crlf.stxt",
+      "expected": {
+        "tabs": "writer/crlf.tabs.stxt",
+        "spaces": "writer/crlf.spaces.stxt"
+      }
+    },
+    {
       "id": "writer/bom-crlf",
       "category": "writer",
+      "requirement": "SHOULD",
       "spec": "STXT-TREE-SPEC §11.1",
       "description": "Canonical text form of the tree of tree/bom-crlf.",
       "input": "tree/bom-crlf.stxt",
@@ -4316,8 +4385,9 @@
     {
       "id": "format/bom",
       "category": "format",
+      "requirement": "SHOULD",
       "spec": "STXT-TREE-SPEC §12.1",
-      "description": "An initial BOM is not kept, whatever the first line is.",
+      "description": "An initial BOM is not kept, whatever the first line is (depends on accepting the BOM, STXT-SPEC §3, SHOULD).",
       "input": "format/bom.stxt",
       "expected": {
         "tabs": "format/bom.tabs.stxt",

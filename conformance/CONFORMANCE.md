@@ -5,8 +5,9 @@ exists so that anyone can verify an implementation in any language against the s
 **without reading the test suites of the existing ports**: the cases are data, the expected
 results are data, and the runner is a few dozen lines you write once.
 
-- `manifest.json` — the list of cases, with the category, the input file, the expected result
-  and the section of the specification each one exercises.
+- `manifest.json` — the list of cases, with the category, the input file, the expected result,
+  the section of the specification each one exercises and, when the rule behind it is a SHOULD
+  or a MAY, its requirement level (see *Requirement levels* below).
 - `tree/` — input documents and the canonical JSON tree each one must produce.
 - `parse/` — invalid documents and the error each one must be rejected with.
 - `definitions/` — the schemas and templates the validation cases use, named
@@ -21,7 +22,7 @@ results are data, and the runner is a few dozen lines you write once.
   `tree/`.
 - `format/` — documents to reformat, each with its reformatted text in both styles.
 
-The kit is identified by a **date** (`kit` in the manifest, currently **2026-09-07**), the date
+The kit is identified by a **date** (`kit` in the manifest, currently **2026-09-09**), the date
 of its current content, in the same way the specifications are (STXT-SPEC §1.1). `specifications`
 pins, for each specification the kit certifies, the date of the text the cases were written
 against. Adding cases moves the kit date; changing what an existing case expects only happens
@@ -40,27 +41,52 @@ cases— an implementation must pass:
 
 | Profile | Includes | Specifications it certifies | Cases |
 |---|---|---|---|
-| `core` | — | STXT-SPEC, STXT-TREE-SPEC | `tree`, `parse-error` (62) |
+| `core` | — | STXT-SPEC, STXT-TREE-SPEC | `tree`, `parse-error` (64) |
 | `schema` | `core` | + STXT-SCHEMA-SPEC | `validate`, `validate-error` with the definition sets that hold no template, `definition-error` with `kind` = `schema` (+129) |
 | `template` | `schema` | + STXT-TEMPLATE-SPEC | the same categories, every set and every case (+38) |
 | `discovery` | `template` | + STXT-DISCOVERY-SPEC | `discovery` (+23) |
-| `text` | `core` | STXT-TREE-SPEC §11–12 (the writing operations) | `writer`, `format` (+28) |
+| `text` | `core` | STXT-TREE-SPEC §11–12 (the writing operations) | `writer`, `format` (+29) |
 
 `text` is a side branch: it needs only `core`, and `discovery` does not include it. An
 implementation that offers the writer and the formatter certifies it on top of whichever
-other profile it claims: "kit 2026-09-07, `discovery` and `text` profiles".
+other profile it claims: "kit 2026-09-09, `discovery` and `text` profiles".
 
-An implementation **conforms to a profile of the kit** if it passes every case of that profile
-and of the ones it includes. Conformance is declared against the dates of the specifications
-the profile certifies (`specifications` in the manifest), never against the version of a
-package; an implementation exposes the pinned date of STXT-SPEC as its `SPEC_VERSION`:
+An implementation **conforms to a profile of the kit** if it passes every required case of
+that profile and of the ones it includes. Conformance is declared against the dates of the
+specifications the profile certifies (`specifications` in the manifest), never against the
+version of a package; an implementation exposes the pinned date of STXT-SPEC as its
+`SPEC_VERSION`, and says whether it passes all the cases of the profile or only the required
+ones (*Requirement levels*, below):
 
-> Conforms to STXT-SPEC 2026-09-07 and STXT-TREE-SPEC 2026-09-07 (conformance kit 2026-09-07,
-> `core` profile).
+> Conforms to STXT-SPEC 2026-09-07 and STXT-TREE-SPEC 2026-09-07 (conformance kit 2026-09-09,
+> `core` profile, all cases).
 
 > Conforms to STXT-SPEC 2026-09-07, STXT-TREE-SPEC 2026-09-07, STXT-SCHEMA-SPEC 2026-09-07,
-> STXT-TEMPLATE-SPEC 2026-09-07 and STXT-DISCOVERY-SPEC 2026-09-07 (conformance kit 2026-09-07,
-> `discovery` and `text` profiles).
+> STXT-TEMPLATE-SPEC 2026-09-07 and STXT-DISCOVERY-SPEC 2026-09-07 (conformance kit 2026-09-09,
+> `discovery` and `text` profiles, all cases).
+
+> Conforms to STXT-SPEC 2026-09-07 and STXT-TREE-SPEC 2026-09-07 (conformance kit 2026-09-09,
+> `core` profile, required cases).
+
+### Requirement levels
+
+The specifications use the RFC 2119 levels, and some of their rules are a SHOULD or a MAY: a
+parser SHOULD apply the limits of STXT-SPEC §11.2 and SHOULD accept a BOM (§3); an
+implementation SHOULD validate the extended types of STXT-SCHEMA-SPEC §9.4 and MAY validate the
+binary types of §9.5 (it MUST accept them in a definition either way). The cases that exercise
+those rules carry `requirement` in the manifest, `SHOULD` or `MAY`; a case without it is a
+`MUST`. Which ones: `parse/limit-*`, `tree/bom-crlf`, `writer/bom-crlf` and `format/bom`
+(the CRLF half of the BOM cases is `tree/crlf` and `writer/crlf`, required), and the
+`validate-error` cases of the extended and binary types (`validate/type-date-*`,
+`validate/type-url-*`, `validate/type-base64-*`…). The `validate` cases of those types stay
+required: an implementation that does not validate a type accepts its values.
+
+A runner runs every `MUST` case of its profile; it MAY skip the `SHOULD` and `MAY` cases, and
+the declaration says so: **all cases** when the implementation passes every case of the
+profile, **required cases** when it passes the `MUST` ones only. Two conforming
+implementations may then disagree on a document that a `SHOULD` case rejects — that is what
+the specifications allow — and the declaration is what tells them apart. The three official
+ports run and pass all cases.
 
 The `core` profile asks for the canonical tree even though STXT-TREE-SPEC calls emitting it an
 optional capability of a parser: the tree is how the kit checks *what* was parsed, and without

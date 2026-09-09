@@ -324,7 +324,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 
 		**Gramática de los tipos de [9.3](#s9-3) y 9.4.** Cada tipo acepta exactamente las cadenas de
 		su regla, sobre el valor inline tal como lo entrega el parser (ya recortado). Es la gramática
-		normativa: dos implementaciones conformes aceptan y rechazan los mismos valores.
+		normativa: dos implementaciones que validen el tipo aceptan y rechazan los mismos valores.
 
 	Grammar >>
 		BOOLEAN   = "true" | "false"                              ; exacto, sensible a mayúsculas

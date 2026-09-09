@@ -1,0 +1,37 @@
+[
+  {
+    "name": "First",
+    "canonicalName": "first",
+    "namespace": "com.example.crlf",
+    "form": "inline",
+    "value": "one",
+    "children": [
+      {
+        "name": "Child",
+        "canonicalName": "child",
+        "namespace": "com.example.crlf",
+        "form": "inline",
+        "value": "value",
+        "children": []
+      },
+      {
+        "name": "Body",
+        "canonicalName": "body",
+        "namespace": "com.example.crlf",
+        "form": "block",
+        "lines": [
+          "line 1",
+          "line 2"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Second",
+    "canonicalName": "second",
+    "namespace": "",
+    "form": "inline",
+    "value": "two",
+    "children": []
+  }
+]

@@ -86,7 +86,9 @@ Document (dev.stxt.website): Stability and versions — STXT
 		[conformance kit](https://github.com/stxt-lang/stxt-lang/tree/master/conformance):
 		the kit fixes the date of each specification it certifies, and a conforming
 		implementation exposes the STXT-SPEC one as `SPEC_VERSION`, with a `YYYY-MM-DD`
-		value. Two libraries with different versions that expose the same date read the same
+		value. The cases that exercise a SHOULD or MAY rule of the specifications are optional,
+		and the declaration says whether the implementation passes all the cases of the profile
+		or only the required ones; the three official ones pass all. Two libraries with different versions that expose the same date read the same
 		@STXT@. The kit date identifies the bundle, nothing more: if a new kit only moves the
 		date of one specification, the implementations that do not cover it stay conformant
 		to theirs, with no need to certify again.

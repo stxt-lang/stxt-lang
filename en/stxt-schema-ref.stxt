@@ -322,7 +322,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 
 		**Grammar of the types of [9.3](#s9-3) and 9.4.** Each type accepts exactly the strings of
 		its rule, applied to the inline value as the parser delivers it (already trimmed). This is the
-		normative grammar: two conforming implementations accept and reject the same values.
+		normative grammar: two implementations that validate the type accept and reject the same values.
 
 	Grammar >>
 		BOOLEAN   = "true" | "false"                              ; exact, case-sensitive
