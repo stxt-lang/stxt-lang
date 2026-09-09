@@ -3,7 +3,7 @@ Document (dev.stxt.website): RFCs y propuestas técnicas — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: STXT para RFCs y propuestas técnicas: el flujo de texto plano y revisión de siempre, con estado, autores y relaciones entre propuestas como datos explícitos.
 
 	Header: RFCs y propuestas técnicas
@@ -174,8 +174,7 @@ Document (dev.stxt.website): RFCs y propuestas técnicas — STXT
 		Entre las dos versiones, el *diff* muestra exactamente qué cambió: el estado, la
 		fecha de aceptación, la decisión, las consecuencias y dos comentarios. Los
 		comentarios de la revisión se guardan en el propio documento, con autor y fecha,
-		separados del texto principal; la discusión queda junto a la decisión, donde
-		alguien la buscará dentro de dos años.
+		separados del texto principal: la discusión queda junto a la decisión.
 
 	Subheader: Relaciones entre propuestas
 
@@ -232,5 +231,4 @@ Document (dev.stxt.website): RFCs y propuestas técnicas — STXT
 		directorio.
 
 		Las actas y los informes de estado, el género vecino, se desarrollan en
-		[Documentos corporativos](use-cases-corporate-docs); el [tutorial](tutorial)
-		recorre el lenguaje que hay detrás de los ejemplos.
+		[Documentos corporativos](use-cases-corporate-docs).

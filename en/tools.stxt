@@ -3,7 +3,7 @@ Document (dev.stxt.website): Tools — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: STXT tools: browser playground, VS Code extension, command line and TypeScript, Java and Python libraries, all implementing the same five specifications.
 
 	Header: Tools
@@ -26,10 +26,9 @@ Document (dev.stxt.website): Tools — STXT
 	Subheader: Playground
 
 	Content >>
-		[play.stxt.dev](https://play.stxt.dev) is an editor in the browser, designed as a
-		simplified VS Code: several documents at once, their schemas or templates next to
-		them, syntax and validation errors while editing, grammar-driven autocompletion and
-		hover with the definition of each node.
+		[play.stxt.dev](https://play.stxt.dev) is an editor in the browser: several documents
+		at once, their schemas or templates next to them, syntax and validation errors while
+		editing, grammar-driven autocompletion and hover with the definition of each node.
 
 		* No installation and no account; the work is kept in the browser itself.
 		* It includes a seed of example documents.
@@ -77,7 +76,7 @@ Document (dev.stxt.website): Tools — STXT
 		Without a permanent installation, through `npx`:
 
 	Listing >>
-		npx @stxt-lang/cli validate docs/
+		npx @stxt-lang/cli validate --recursive docs/
 
 	Content >>
 		The commands:
@@ -106,8 +105,7 @@ Document (dev.stxt.website): Tools — STXT
 	Subheader: Libraries
 
 	Content >>
-		This portal maintains three official implementations —TypeScript/JavaScript, Java
-		and Python—. A port to another language can prove its conformance with the same
+		There are three official implementations —TypeScript/JavaScript, Java and Python—. A port to another language can prove its conformance with the same
 		kit as the three official ones ([Stability and versions](stability)).
 
 	Subsubheader: TypeScript / JavaScript

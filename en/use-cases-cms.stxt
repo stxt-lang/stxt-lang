@@ -3,8 +3,8 @@ Document (dev.stxt.website): CMS and publishing — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-23
-		Description: STXT as the source format for CMS and publishing: content lives in plain-text files, structure is visible and validation is a template, not a database.
+		Last modif: 2026-09-09
+		Description: STXT as the source format for CMS and publishing: content lives in plain-text files, structure is visible and validation is a template.
 
 	Header: CMS and publishing
 
@@ -18,9 +18,8 @@ Document (dev.stxt.website): CMS and publishing — STXT
 		Published content always has three layers: the text someone writes, the structure
 		that organizes it —pages, sections, chapters— and the data that accompanies it
 		—title, author, date, editorial status, tags—. The tools that manage it tend to fuse
-		those layers with the editing interface and with the final presentation, and the
-		result is well known: the content ends up inside a database, in a shape only that
-		tool understands, and changing tools is a migration.
+		those layers with the editing interface and with the final presentation, and to
+		keep the content in a database of their own.
 
 		With @STXT@ as the source format, each page is a text file with its data as nodes
 		and its body in blocks. The content manager —a static site generator, a headless
@@ -105,8 +104,7 @@ Document (dev.stxt.website): CMS and publishing — STXT
 		The [template](stxt-template-ref) guarantees what the generator needs to work —title, slug and a status
 		from the list— and leaves the rest optional. A page without `Slug` does not
 		validate, and therefore is not generated; neither does a lowercase
-		`Status: published`. That is the difference between an error that shows up in the
-		editor and a page that disappears from the site without anyone knowing why.
+		`Status: published`.
 
 		`SEO/Title` reuses the definition of `Title` with `@Title`: it is the same node,
 		with the same definition, in another place of the tree.
@@ -134,12 +132,10 @@ Document (dev.stxt.website): CMS and publishing — STXT
 				human readability and machine reliability.
 
 			Content >>
-				## Why another format
+				## Data and text
 
-				Most existing formats force a choice:
-				either they are convenient for people or reliable for machines.
-
-				STXT removes that dichotomy.
+				The article's data are nodes with a name and a value; the body
+				goes in a literal block, with no escapes.
 
 	Code >>
 		Template (@stxt.template): com.acme.editorial.article
@@ -162,8 +158,8 @@ Document (dev.stxt.website): CMS and publishing — STXT
 	Content >>
 		The editorial workflow is the `ENUM` of `Status`: an article goes from `Draft` to
 		`Review` and to `Published`, and that change is one line in the review's diff. The
-		generator publishes only what is in `Published` and has a date; the rest exists in
-		the repository, but not on the site.
+		generator publishes what is in `Published`; the rest exists in the repository, but
+		not on the site.
 
 	Subheader: A book in chapters
 
@@ -239,5 +235,4 @@ Document (dev.stxt.website): CMS and publishing — STXT
 		fixes that, and the template only declares that the block must be treated as such.
 
 		The generated variant of this flow —pages written by a model and rejected by the
-		build until they validate— is developed in [AI and LLMs](ai-llms); the
-		[tutorial](tutorial) covers the language behind the examples.
+		build until they validate— is developed in [AI and LLMs](ai-llms).

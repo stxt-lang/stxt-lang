@@ -3,7 +3,7 @@ Document (dev.stxt.website): Ficheros de configuración — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: STXT para ficheros de configuración legibles y validables: jerarquía visible, comentarios junto al valor y una plantilla que detecta errores en el editor.
 
 	Header: Ficheros de configuración
@@ -18,8 +18,8 @@ Document (dev.stxt.website): Ficheros de configuración — STXT
 		se copian bloques entre entornos, se acumulan comentarios que explican por qué un
 		valor es el que es. Con el tiempo, las reglas que hacen válido el fichero —qué
 		claves existen, qué valores admiten, cuáles son obligatorias— solo están en la cabeza
-		de quien lo mantiene y en el código que lo lee. Un nombre mal escrito no falla al
-		cargar: simplemente se ignora, y el valor por defecto entra en silencio.
+		de quien lo mantiene y en el código que lo lee. Un nombre mal escrito puede no fallar
+		al cargar: muchos cargadores lo ignoran y aplican el valor por defecto.
 
 		@STXT@ aborda esto con tres cosas: una jerarquía visible, que no necesita llaves ni
 		sangrías ambiguas; bloques de texto donde la explicación larga vive junto al valor
@@ -114,7 +114,7 @@ Document (dev.stxt.website): Ficheros de configuración — STXT
 		* `Level: info` en minúsculas no es `INFO`: el `ENUM` compara el valor tal cual.
 		* Falta `Network`, o `Host` dentro de `Network`: `TOO_FEW_CHILDREN`.
 
-		Y todo eso se ve en el editor, subrayado, antes de guardar el fichero. En
+		La extensión de VS Code marca esos errores al escribir. En
 		integración continua, `stxt validate --recursive config/` hace la misma comprobación y detiene
 		el despliegue de una configuración inválida ([La línea de comandos](tools-cli)).
 
@@ -171,9 +171,9 @@ Document (dev.stxt.website): Ficheros de configuración — STXT
 	Content >>
 		El programa que carga la configuración no parsea texto: recibe un árbol. Con la
 		biblioteca de su lenguaje recorre los nodos por nombre canónico —`port`,
-		`max-connections`— y obtiene valores ya validados contra la plantilla, de modo que
-		el código de carga no necesita comprobar tipos ni valores permitidos: eso ya ha
-		pasado. Las guías de [TypeScript](tools-typescript), [Java](tools-java) y
+		`max-connections`— y obtiene valores ya validados contra la plantilla: el código de
+		carga convierte los valores, pero no comprueba rangos ni valores permitidos, porque
+		eso ya ha pasado. Las guías de [TypeScript](tools-typescript), [Java](tools-java) y
 		[Python](tools-python) muestran el recorrido; la resolución de la plantilla sigue la
 		cadena de directorios `.stxt/` de [STXT-DISCOVERY-SPEC](stxt-discovery-ref), igual que
 		en el editor, así que validador y programa aplican la misma definición.
@@ -193,5 +193,4 @@ Document (dev.stxt.website): Ficheros de configuración — STXT
 
 		Cómo se compara este uso con los formatos que más se eligen para configuración se
 		desarrolla en [STXT frente a YAML](stxt-vs-yaml) y
-		[STXT frente a JSON](stxt-vs-json); el [tutorial](tutorial) recorre el lenguaje en
-		sí.
+		[STXT frente a JSON](stxt-vs-json).

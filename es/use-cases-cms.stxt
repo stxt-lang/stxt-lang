@@ -3,7 +3,7 @@ Document (dev.stxt.website): CMS y publicaciones — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-23
+		Last modif: 2026-09-09
 		Description: STXT como formato fuente para CMS y publicaciones: el contenido vive en ficheros de texto, la estructura es visible y la validación es una plantilla.
 
 	Header: CMS y publicaciones
@@ -19,9 +19,7 @@ Document (dev.stxt.website): CMS y publicaciones — STXT
 		la estructura que lo organiza —páginas, secciones, capítulos— y los datos que lo
 		acompañan —título, autor, fecha, estado editorial, etiquetas—. Las herramientas que
 		lo gestionan tienden a fundir esas capas con la interfaz de edición y con la
-		presentación final, y el resultado es conocido: el contenido acaba dentro de una
-		base de datos, con una forma que solo esa herramienta entiende, y cambiar de
-		herramienta es una migración.
+		presentación final, y a guardar el contenido en una base de datos propia.
 
 		Con @STXT@ como formato fuente, cada página es un fichero de texto con sus datos como
 		nodos y su cuerpo en bloques. El gestor de contenidos —sea un generador estático, un
@@ -106,9 +104,7 @@ Document (dev.stxt.website): CMS y publicaciones — STXT
 	Content >>
 		La [plantilla](stxt-template-ref) garantiza lo que el generador necesita para funcionar —título, *slug* y
 		un estado de la lista— y deja el resto opcional. Una página sin `Slug` no valida, y
-		por tanto no se genera; un `Status: published` en minúsculas tampoco. Es la
-		diferencia entre un error que aparece en el editor y una página que desaparece del
-		sitio sin que nadie sepa por qué.
+		por tanto no se genera; un `Status: published` en minúsculas tampoco.
 
 		`SEO/Title` reutiliza la definición de `Title` con `@Title`: es el mismo nodo, con
 		la misma definición, en otro lugar del árbol.
@@ -136,12 +132,10 @@ Document (dev.stxt.website): CMS y publicaciones — STXT
 				legibilidad humana y fiabilidad para máquinas.
 
 			Content >>
-				## Por qué otro formato
+				## Datos y texto
 
-				La mayoría de formatos existentes fuerzan una elección:
-				o son cómodos para las personas o son fiables para las máquinas.
-
-				STXT elimina esa dicotomía.
+				Los datos del artículo son nodos con nombre y valor; el cuerpo
+				va en un bloque literal, sin escapes.
 
 	Code >>
 		Template (@stxt.template): com.acme.editorial.article
@@ -164,8 +158,8 @@ Document (dev.stxt.website): CMS y publicaciones — STXT
 	Content >>
 		El flujo editorial es el `ENUM` de `Status`: un artículo pasa de `Draft` a `Review` y
 		a `Published`, y ese cambio es una línea en el *diff* de la revisión. El generador
-		publica solo lo que está en `Published` y con fecha; el resto existe en el
-		repositorio, pero no en el sitio.
+		publica lo que está en `Published`; el resto existe en el repositorio, pero no en el
+		sitio.
 
 	Subheader: Un libro por capítulos
 
@@ -242,5 +236,4 @@ Document (dev.stxt.website): CMS y publicaciones — STXT
 		tal.
 
 		La variante generada de este flujo —páginas escritas por un modelo y rechazadas
-		por el *build* hasta que validan— se desarrolla en [IA y LLMs](ai-llms); el
-		[tutorial](tutorial) recorre el lenguaje que hay detrás de los ejemplos.
+		por el *build* hasta que validan— se desarrolla en [IA y LLMs](ai-llms).

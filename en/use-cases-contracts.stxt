@@ -3,7 +3,7 @@ Document (dev.stxt.website): Contracts and legal agreements — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: STXT as the source format for contracts and agreements: normative text stays text while parties, dates and amounts are extractable, checkable data.
 
 	Header: Contracts and legal agreements
@@ -25,8 +25,8 @@ Document (dev.stxt.website): Contracts and legal agreements — STXT
 		amount is invoiced or what response time was committed, the document has to be
 		read, and a system that needs those values receives them copied by hand. Versions
 		are compared by opening two binary files, and the standard clause the legal
-		department approved once is rewritten in every contract with small variations
-		nobody notices.
+		department approved once is copied into every contract, and the differences
+		between copies cannot be seen without comparing the texts.
 
 	Subheader: A services agreement
 
@@ -162,8 +162,7 @@ Document (dev.stxt.website): Contracts and legal agreements — STXT
 		  whether to admit it.
 
 		And what it deliberately does not restrict: the wording of the clauses, their
-		number and their order. The template does not impose the contract; it imposes that
-		the contract be complete.
+		number and their order.
 
 	Subheader: A service level agreement
 
@@ -259,5 +258,4 @@ Document (dev.stxt.website): Contracts and legal agreements — STXT
 
 		The same data-inside-text approach, for lighter documents, is developed in
 		[Corporate documents](use-cases-corporate-docs); [STXT vs XML](stxt-vs-xml)
-		compares the closest format for this kind of normative source, and the
-		[tutorial](tutorial) covers the language itself.
+		compares the closest format for this kind of normative source.

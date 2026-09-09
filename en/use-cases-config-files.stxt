@@ -3,7 +3,7 @@ Document (dev.stxt.website): Configuration files — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: STXT for human-readable, validatable configuration files: visible hierarchy, comments next to values and a template that catches errors in the editor.
 
 	Header: Configuration files
@@ -18,8 +18,8 @@ Document (dev.stxt.website): Configuration files — STXT
 		copied between environments, comments accumulate explaining why a value is what it
 		is. Over time, the rules that make the file valid —which keys exist, which values
 		they admit, which ones are mandatory— live only in the head of whoever maintains it
-		and in the code that reads it. A misspelled name does not fail on load: it is simply
-		ignored, and the default value comes in silently.
+		and in the code that reads it. A misspelled name may not fail on load: many loaders
+		ignore it and apply the default value.
 
 		@STXT@ addresses this with three things: a visible hierarchy, which needs neither
 		braces nor ambiguous indentation; text blocks where the long explanation lives next
@@ -114,7 +114,7 @@ Document (dev.stxt.website): Configuration files — STXT
 		* `Level: info` in lowercase is not `INFO`: the `ENUM` compares the value as written.
 		* `Network` is missing, or `Host` inside `Network`: `TOO_FEW_CHILDREN`.
 
-		And all of that is visible in the editor, underlined, before the file is saved. In
+		The VS Code extension flags those errors while writing. In
 		continuous integration, `stxt validate --recursive config/` performs the same check and stops
 		the deployment of an invalid configuration ([The command line](tools-cli)).
 
@@ -172,9 +172,9 @@ Document (dev.stxt.website): Configuration files — STXT
 	Content >>
 		The program that loads the configuration does not parse text: it receives a tree.
 		With the library of its language it walks the nodes by canonical name —`port`,
-		`max-connections`— and obtains values already validated against the template, so
-		the loading code does not need to check types or allowed values: that has already
-		happened. The [TypeScript](tools-typescript), [Java](tools-java) and
+		`max-connections`— and obtains values already validated against the template: the
+		loading code converts the values, but does not check ranges or allowed values,
+		because that has already happened. The [TypeScript](tools-typescript), [Java](tools-java) and
 		[Python](tools-python) guides show the traversal; template resolution follows the
 		chain of `.stxt/` directories of [STXT-DISCOVERY-SPEC](stxt-discovery-ref), the same
 		as in the editor, so validator and program apply the same definition.
@@ -193,5 +193,4 @@ Document (dev.stxt.website): Configuration files — STXT
 		if it is optional and missing, the program decides what it is worth.
 
 		How this use compares with the formats most often chosen for configuration is
-		developed in [STXT vs YAML](stxt-vs-yaml) and [STXT vs JSON](stxt-vs-json); the
-		[tutorial](tutorial) covers the language itself.
+		developed in [STXT vs YAML](stxt-vs-yaml) and [STXT vs JSON](stxt-vs-json).

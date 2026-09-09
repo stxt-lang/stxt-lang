@@ -3,7 +3,7 @@ Document (dev.stxt.website): Corporate documents — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-23
+		Last modif: 2026-09-09
 		Description: STXT for corporate documents: minutes, status reports and decision records where the same file is both the readable document and the data source.
 
 	Header: Corporate documents
@@ -137,7 +137,7 @@ Document (dev.stxt.website): Corporate documents — STXT
 		* Every set of minutes has a title, a date and at least one attendee; without that
 		  it does not validate.
 		* A decision is in one of three statuses, and an action in one of four. A status
-		  written any other way (`Approved.`, `open`) is an error, not a variant.
+		  written any other way (`approved`, `open`) is an error, not a variant.
 		* Dates are dates: `2026-01-32` does not pass.
 		* A node that is not in the template —`Atendees` with a single `t`, a `Priority`
 		  someone added on their own— is rejected. That is the [closed content model](stxt-schema-ref#s6): the
@@ -209,8 +209,8 @@ Document (dev.stxt.website): Corporate documents — STXT
 
 	Content >>
 		The `Status` traffic light is an `ENUM`, not an adjective in the summary. With twenty
-		reports in a directory, a ten-line script answers how many projects are red and
-		what their high risks are, without anyone having read them one by one.
+		reports in a directory, a script over the canonical tree answers how many projects
+		are red and what their high risks are.
 
 	Subheader: In the workflow
 
@@ -229,9 +229,9 @@ Document (dev.stxt.website): Corporate documents — STXT
 		  language) feeds whatever is needed: the list of open actions per person, a weekly
 		  summary by email, a dashboard with every project's traffic light.
 
-		None of this forces a change in how people write: minutes without a template are a
-		valid @STXT@ document, and validation is added when the team decides what it wants
-		to guarantee.
+		None of this forces a change in how people write: minutes without a namespace are a
+		valid @STXT@ document that is not validated; the namespace and the template are added
+		when the team decides what it wants to guarantee.
 
 	Subheader: Limits
 
@@ -245,5 +245,3 @@ Document (dev.stxt.website): Corporate documents — STXT
 		The neighbouring genres follow the same approach:
 		[RFCs and technical proposals](use-cases-rfcs) for documents with a life cycle,
 		and [contracts](use-cases-contracts) where the data lives inside normative text.
-		The language behind the examples is covered, rule by rule, in the
-		[tutorial](tutorial).

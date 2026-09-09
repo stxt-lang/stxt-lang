@@ -3,7 +3,7 @@ Document (dev.stxt.website): Documentos corporativos — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-23
+		Last modif: 2026-09-09
 		Description: STXT para documentos corporativos: actas, informes y registros de decisiones donde el mismo fichero es el documento que se lee y la fuente de datos.
 
 	Header: Documentos corporativos
@@ -212,8 +212,8 @@ Document (dev.stxt.website): Documentos corporativos — STXT
 
 	Content >>
 		El semáforo `Status` es un `ENUM`, no un adjetivo en el resumen. Con veinte informes
-		en un directorio, un script de diez líneas responde cuántos proyectos están en rojo
-		y cuáles son sus riesgos altos, sin que nadie los haya leído uno a uno.
+		en un directorio, un script sobre el árbol canónico responde cuántos proyectos están
+		en rojo y cuáles son sus riesgos altos.
 
 	Subheader: En el flujo de trabajo
 
@@ -232,8 +232,9 @@ Document (dev.stxt.website): Documentos corporativos — STXT
 		  lenguaje) alimenta lo que haga falta: la lista de acciones abiertas por persona,
 		  un resumen semanal por correo, un panel con los semáforos de todos los proyectos.
 
-		Nada de esto obliga a cambiar cómo se escribe: un acta sin plantilla es un documento
-		@STXT@ válido, y la validación se añade cuando el equipo decide qué quiere garantizar.
+		Nada de esto obliga a cambiar cómo se escribe: un acta sin namespace es un documento
+		@STXT@ válido que no se valida; el namespace y la plantilla se añaden cuando el equipo
+		decide qué quiere garantizar.
 
 	Subheader: Límites
 
@@ -247,5 +248,3 @@ Document (dev.stxt.website): Documentos corporativos — STXT
 		Los géneros vecinos siguen el mismo enfoque:
 		[RFCs y propuestas técnicas](use-cases-rfcs) para documentos con ciclo de vida, y
 		[contratos](use-cases-contracts) donde los datos viven dentro de texto normativo.
-		El lenguaje que hay detrás de los ejemplos se recorre, regla a regla, en el
-		[tutorial](tutorial).

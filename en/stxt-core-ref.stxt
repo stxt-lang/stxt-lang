@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Zenith
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: STXT-SPEC, the base specification of the STXT language: indentation as structure, nodes and text blocks, namespaces, normalization, errors and security.
 		
 	Header: @STXT@ Core
@@ -1108,27 +1108,25 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 		  - Inline values: left and right trim ([section 10.1](#s10-1)).
 		  - Block lines: strip the block level preserving any additional indentation + right trim + preserve the empty lines that precede more content and discard the final ones ([section 10.2](#s10-2)–[10.3](#s10-3)).
 
-	Subheader: 17. Appendix B — Interaction with `@stxt.schema`
-		
-	Content >>
-		The schema system allows adding semantic validation to @STXT@ documents **without modifying the base syntax** of the language.
-		
-		The @STXT@ core does not define how an implementation should react: the behavior belongs exclusively to the schema system ([*STXT-SCHEMA-SPEC*](stxt-schema-ref)).
-		
-		A schema is an @STXT@ document whose namespace is: `@stxt.schema`
-		
-		and whose purpose is to define the structural rules, value types, and cardinalities of the nodes belonging to a specific namespace.
-		
-		The @STXT@ core **does not interpret** these rules; it only defines how they are expressed and how they are combined through namespaces.
+	Subheader: 17. Appendix B — Interaction with `@stxt.schema` and `@stxt.template`
 
-		The location of schema documents on the file system (`.stxt` directories) is defined in [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
-
-	Subsubheader: 17.1 Associating a schema with a namespace
-		
 	Content >>
-		To associate a schema with the namespace `com.example.mail`, a document is written (it is the
-		same model the template of [appendix C](#s18-1) expresses):
-		
+		The schema and template systems add semantic validation to @STXT@ documents **without
+		modifying the base syntax** of the language. A definition is an @STXT@ document in the
+		`@stxt.schema` or `@stxt.template` namespace that fixes the structural rules, value
+		types and cardinalities of the nodes of a specific namespace. The @STXT@ core **does not
+		interpret** those rules: it defines how they are expressed and how they are combined
+		through namespaces. The behavior belongs to [*STXT-SCHEMA-SPEC*](stxt-schema-ref) and
+		[*STXT-TEMPLATE-SPEC*](stxt-template-ref), and the location of definitions on the file
+		system (`.stxt` directories) to [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
+
+	Subsubheader: 17.1 A schema and its equivalent template
+
+	Content >>
+		Every template compiles to an equivalent schema
+		([*STXT-TEMPLATE-SPEC* §13](stxt-template-ref#s13)). The two documents below describe
+		the same model of the `com.example.mail` namespace, as a schema:
+
 	Code >>
 		Schema (@stxt.schema): com.example.mail
 			Node: Email
@@ -1161,59 +1159,10 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 			Node: Title
 			Node: Body Content
 				Type: TEXT
-		
-	Subsubheader: 17.2 Application to @STXT@ documents
-		
-	Content >>
-		A document that declares the same namespace:
-		
-	Code >>
-		Email (com.example.mail):
-		    From: john.smith@example.com
-		    To: mery.adams@example.com
-		    Title: Project report
-		    Body Content >>
-		        Hello Mery!
-		        The book is finished!
-	
-	Content >>
-		
-		can be validated by an implementation that supports @STXT@ schemas:
-		
-		* Validating the presence of nodes according to `Node` in the schema.
-		* Validating value types (`TEXT`, `DATE`, `NUMBER`, etc.).
-		* Validating cardinalities defined in `Child`.
-		
-	Subsubheader: 17.3 Independence of the core
-		
-	Content >>
-		@STXT@ **MUST NOT** impose semantic rules coming from schemas.
-		The schema system is a separate and optional component that operates **on** the already parsed @STXT@.
-		
-		It **MAY** also act as part of the parsing process. In that case it **SHOULD** be weakly coupled to it. 
-		This would make it possible to detect errors without having to wait until the end of parsing.
-		
-	Subheader: 18. Appendix C — Interaction with `@stxt.template`
 
-	Content >>	
-		The template system allows adding semantic validation to @STXT@ documents **without modifying the base syntax** of the language.
-		
-		The @STXT@ core does not define how an implementation should react: the behavior belongs exclusively to the template system ([*STXT-TEMPLATE-SPEC*](stxt-template-ref)).
-		
-		A template is an @STXT@ document whose namespace is: `@stxt.template`
-		
-		and whose purpose is to define the structural rules, value types, and cardinalities of the nodes belonging to a specific namespace.
-		
-		The template system is analogous to the schema system, with a simplified syntax meant for manual
-		writing: every template compiles to an equivalent schema ([*STXT-TEMPLATE-SPEC* §13](stxt-template-ref#s13)).
-		
-		The template system **MAY** coexist alongside a system with schemas, since in the end a template defines the same information as a schema.
-	
-	Subsubheader: 18.1 Associating a template with a namespace
-		
 	Content >>
-		To associate a template with the namespace `com.example.mail`, a document is written:
-		
+		And as a template:
+
 	Code >>
 		Template (@stxt.template): com.example.mail
 			Structure >>
@@ -1225,10 +1174,37 @@ Document (dev.stxt.website): STXT Core — Base syntax of the language
 					Title: (?)
 					Body Content: (1) TEXT
 					Metadata (org.example.meta): (?)
-					
+
+	Subsubheader: 17.2 Application to @STXT@ documents
+
 	Content >>
-		Once defined, a template fulfills the same function as a schema.
-		If an implementation finds several schemas or templates applicable to the same namespace,
-		it **SHOULD** define a clear and deterministic priority policy.
-		For a specific validation, a single effective semantic source **MUST** be selected: either a schema or a template.
-		When definitions are discovered on the file system, that policy is fixed by [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
+		A document that declares the same namespace:
+
+	Code >>
+		Email (com.example.mail):
+		    From: john.smith@example.com
+		    To: mery.adams@example.com
+		    Title: Project report
+		    Body Content >>
+		        Hello Mery!
+		        The book is finished!
+
+	Content >>
+		can be validated by an implementation that supports @STXT@ definitions:
+
+		* Validating the presence of nodes according to the definition.
+		* Validating value types (`TEXT`, `DATE`, `NUMBER`, etc.).
+		* Validating the cardinalities defined.
+
+	Subsubheader: 17.3 Independence of the core
+
+	Content >>
+		@STXT@ **MUST NOT** impose semantic rules coming from schemas or templates. The
+		validation system is a separate and optional component that operates **on** the already
+		parsed @STXT@. It **MAY** also act as part of the parsing process; in that case it
+		**SHOULD** be weakly coupled to it, which makes it possible to detect errors without
+		waiting until the end of parsing.
+
+		For a specific validation, a single effective semantic source **MUST** be selected per
+		namespace: either a schema or a template. When definitions are discovered on the file
+		system, that choice is fixed by [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).

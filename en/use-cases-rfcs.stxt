@@ -3,7 +3,7 @@ Document (dev.stxt.website): RFCs and technical proposals — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: STXT for RFCs and technical proposals: the usual plain-text review flow, with status, authors and relations between proposals as explicit, queryable data.
 
 	Header: RFCs and technical proposals
@@ -174,8 +174,7 @@ Document (dev.stxt.website): RFCs and technical proposals — STXT
 		Between the two versions, the diff shows exactly what changed: the status, the
 		acceptance date, the decision, the consequences and two comments. The review
 		comments are stored in the document itself, with author and date, separate from
-		the main text; the discussion stays next to the decision, where someone will look
-		for it two years from now.
+		the main text: the discussion stays next to the decision.
 
 	Subheader: Relations between proposals
 
@@ -232,5 +231,4 @@ Document (dev.stxt.website): RFCs and technical proposals — STXT
 		does not cite a rejected one—: that is done by the script that walks the directory.
 
 		Minutes and status reports, the neighbouring genre, are developed in
-		[Corporate documents](use-cases-corporate-docs); the [tutorial](tutorial) covers
-		the language behind the examples.
+		[Corporate documents](use-cases-corporate-docs).

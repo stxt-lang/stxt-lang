@@ -3,7 +3,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: STXT como formato fuente de contratos y acuerdos: el texto normativo sigue siendo texto y las partes, fechas e importes son datos extraíbles y comprobables.
 
 	Header: Contratos y acuerdos legales
@@ -25,8 +25,8 @@ Document (dev.stxt.website): Contratos y acuerdos legales — STXT
 		importe se factura o qué tiempo de respuesta se comprometió hay que leer el
 		documento, y un sistema que necesite esos valores los recibe copiados a mano. Las
 		versiones se comparan abriendo dos ficheros binarios, y la cláusula estándar que el
-		departamento legal aprobó una vez se reescribe en cada contrato con pequeñas
-		variaciones que nadie detecta.
+		departamento legal aprobó una vez se copia en cada contrato, y las diferencias entre
+		copias no se ven sin comparar los textos.
 
 	Subheader: Un acuerdo de servicios
 
@@ -162,7 +162,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales — STXT
 		  admite.
 
 		Y lo que no restringe, a propósito: la redacción de las cláusulas, su número y su
-		orden. La plantilla no impone el contrato; impone que el contrato sea completo.
+		orden.
 
 	Subheader: Un acuerdo de nivel de servicio
 
@@ -259,4 +259,4 @@ Document (dev.stxt.website): Contratos y acuerdos legales — STXT
 		El mismo enfoque de datos dentro del texto, para documentos más ligeros, se
 		desarrolla en [Documentos corporativos](use-cases-corporate-docs);
 		[STXT frente a XML](stxt-vs-xml) compara el formato más cercano para este tipo de
-		fuente normativa, y el [tutorial](tutorial) recorre el lenguaje en sí.
+		fuente normativa.
