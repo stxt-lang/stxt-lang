@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT frente a YAML — Valores, texto libre y valid
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: STXT y YAML comparados con ejemplos: tipado implícito frente a valores de texto, escalares de bloque frente a bloques literales, superficie de ataque y validación dentro del lenguaje.
 
 	Header: @STXT@ frente a YAML
@@ -42,8 +42,7 @@ Document (dev.stxt.website): STXT frente a YAML — Valores, texto libre y valid
 		Y en @STXT@:
 
 	Code >>
-		Service:
-			Name: billing
+		Service: billing
 			Replicas: 2
 			Ports:
 				Port: 8080
@@ -151,8 +150,7 @@ Document (dev.stxt.website): STXT frente a YAML — Valores, texto libre y valid
 		`(+)` de la plantilla ya dice que `Port` se repite.
 
 	Code >>
-		Service (com.example.deploy):
-			Name: billing
+		Service (com.example.deploy): billing
 			Replicas: 2
 			Port: 8080
 			Port: 8443
@@ -167,7 +165,6 @@ Document (dev.stxt.website): STXT frente a YAML — Valores, texto libre y valid
 		Template (@stxt.template): com.example.deploy
 			Structure >>
 				Service (com.example.deploy):
-					Name: (1)
 					Replicas: (1) NATURAL
 					Port: (+) NATURAL
 					Maintainer: (1) EMAIL
@@ -179,8 +176,7 @@ Document (dev.stxt.website): STXT frente a YAML — Valores, texto libre y valid
 
 	Code >>
 		# ERROR: Replicas exige un valor NATURAL
-		Service (com.example.deploy):
-			Name: billing
+		Service (com.example.deploy): billing
 			Replicas: two
 			Port: 8080
 			Maintainer: ana@example.com

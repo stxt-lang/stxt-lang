@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT vs YAML — Values, free text and validation
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-09-08
+		Last modif: 2026-09-09
 		Description: STXT and YAML compared with examples: implicit typing versus text values, block scalars versus literal blocks, attack surface, and validation inside the language.
 
 	Header: @STXT@ vs YAML
@@ -42,8 +42,7 @@ Document (dev.stxt.website): STXT vs YAML — Values, free text and validation
 		And in @STXT@:
 
 	Code >>
-		Service:
-			Name: billing
+		Service: billing
 			Replicas: 2
 			Ports:
 				Port: 8080
@@ -151,8 +150,7 @@ Document (dev.stxt.website): STXT vs YAML — Values, free text and validation
 		already says that `Port` repeats.
 
 	Code >>
-		Service (com.example.deploy):
-			Name: billing
+		Service (com.example.deploy): billing
 			Replicas: 2
 			Port: 8080
 			Port: 8443
@@ -167,7 +165,6 @@ Document (dev.stxt.website): STXT vs YAML — Values, free text and validation
 		Template (@stxt.template): com.example.deploy
 			Structure >>
 				Service (com.example.deploy):
-					Name: (1)
 					Replicas: (1) NATURAL
 					Port: (+) NATURAL
 					Maintainer: (1) EMAIL
@@ -179,8 +176,7 @@ Document (dev.stxt.website): STXT vs YAML — Values, free text and validation
 
 	Code >>
 		# ERROR: Replicas requires a NATURAL value
-		Service (com.example.deploy):
-			Name: billing
+		Service (com.example.deploy): billing
 			Replicas: two
 			Port: 8080
 			Maintainer: ana@example.com
