@@ -3,7 +3,7 @@ Document (dev.stxt.website): Design principles — STXT
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Last modif: 2026-08-25
+		Last modif: 2026-09-09
 		Description: The design principles of STXT: a language designed for people first. Simplicity, indentation as structure and parsing safety all derive from that principle.
 
 	Header: Design principles
@@ -20,60 +20,71 @@ Document (dev.stxt.website): Design principles — STXT
 		writable without tools: the natural form of the text is the correct form, and the
 		machine adapts to that form, not the other way round. Hence there are no braces,
 		brackets, mandatory quotes or closing tags, and a document looks like an outline of
-		notes. Where the convenience of the person and that of the machine conflict, the
-		person wins.
+		notes.
 
 	Subheader: 2. Simplicity above all
 
 	Content >>
-		Simplicity is a requirement of the language on three planes at once, and none of them
-		is sacrificed for the other two:
+		Simplicity is a requirement of the language on three planes at once:
 
-		* **Simple to write and read.** The rules a person needs to know fit in one page of
-		  the [tutorial](tutorial): a node, a text block, indentation, a comment.
-		* **Simple to implement.** A conforming parser is a line-by-line pass with a stack;
-		  the complete grammar fits in an appendix, and the language is described in neutral
-		  pseudocode from which the existing ports were derived. Writing a new parser is a
-		  matter of days, not months, and requires no library.
-		* **Simple to process.** The cost of parsing is linear in the size of the document: a
-		  single pass, no backtracking, no reference resolution and no second traversal.
+		* **Simple to write and read.** The rules a person needs to know are sections 3 to 8
+		  of the [tutorial](tutorial): a node, a text block, indentation, a comment.
+		* **Simple to implement.** A conforming parser is a line-by-line pass with a stack.
+		  The informal grammar takes up one appendix of the specification, and the three
+		  official implementations derive from the same neutral pseudocode without using any
+		  library to parse.
+		* **Simple to process.** A single pass, line by line, with no backtracking, no
+		  backward references and no second traversal.
 
-	Subheader: 3. Less is more
+		Reference: [STXT-SPEC §15](stxt-core-ref#s15) and [§16](stxt-core-ref#s16).
+
+	Subheader: 3. The KISS principle
 
 	Content >>
-		@STXT@ is deliberately small, at every level. Hierarchy is expressed by indentation
-		alone: one level is one tab or four spaces. A node is `Name: value` or `Name >>`.
-		There is no list syntax, no quoted string syntax, no escaping, and no shorthand for
-		the frequent case. A list is a repeated node:
+		@STXT@ applies the KISS principle (*keep it simple*): it is deliberately small, at
+		every level. Hierarchy is expressed by indentation alone: one level is one tab or
+		four spaces. A node is `Name: value` or `Name >>`. There is no list syntax, no quoted
+		string syntax, no escaping, and no shorthand for the frequent case. A list is a
+		repeated node:
 
 	Code >>
 		Authors:
 			Author: María Pérez
 			Author: Juan García
 
+	Content >>
+		Reference: [STXT-SPEC §4](stxt-core-ref#s4) and [§8](stxt-core-ref#s8).
+
 	Subheader: 4. There are no escape characters
 
 	Content >>
 		An escape character directly contradicts the Human-First principle: it forces the
 		writer to think about the parser instead of the text, and the reader to decipher
-		what lies behind a backslash. That is why @STXT@ has no escape sequences: a value is whatever
-		follows the colon, a block is whatever is indented below the `>>`, and any character
-		is allowed inside both, including `:`, `#` and `>>`.
+		what lies behind a backslash. That is why @STXT@ has no escape sequences: a value is
+		whatever follows the colon, a block is whatever is indented below the `>>`, and any
+		character is allowed inside both, including `:`, `#` and `>>`.
 
 		Free text is thus literal: everything indented under a `>>` node is text as written,
 		and relative indentation is preserved. A paragraph, a code fragment or a block of
-		Markdown is pasted into the document without transformation, and is read and edited
-		directly, with no convention of the language standing between the person and what they
-		write.
+		Markdown is pasted into the document without transformation.
+
+		The price is paid in node names, the only part of the line the parser interprets:
+		they are limited to letters, digits and the separators `-`, `_` and space.
+
+		Reference: [STXT-SPEC §4.2](stxt-core-ref#s4-2), [§6](stxt-core-ref#s6) and
+		[§10](stxt-core-ref#s10).
 
 	Subheader: 5. Parsing safety, by design
 
 	Content >>
 		@STXT@ has no entities, references, anchors, file inclusion, tags that instantiate
 		objects, or any form of evaluation. Namespaces are restricted to ASCII to rule out
-		homograph attacks. The result of parsing is always a tree of nodes and text, and a
-		conforming parser can process a document from an untrusted source with bounded
-		memory.
+		homograph attacks. The result of parsing is always a tree of nodes and text. When
+		streaming, a parser retains only the tree of the current root, and the limits on
+		nesting depth, line length and input size bound the memory against an untrusted
+		source.
+
+		Reference: [STXT-SPEC §15](stxt-core-ref#s15) and [§11.2](stxt-core-ref#s11-2).
 
 	Subheader: 6. Validation is a separate, optional layer
 
@@ -86,6 +97,9 @@ Document (dev.stxt.website): Design principles — STXT
 
 		The same criterion governs the other specifications: the base specification alone
 		defines a complete, usable language, and each of the others describes an optional
-		feature that must itself be simple. That is why schemas and templates do not cover
-		every possible case: a simple validation system is preferable to one so complete
-		that hardly anyone uses it.
+		feature that must itself be simple. That is why schemas and templates have declared
+		non-goals: they do not validate the order of children, and admit no patterns, no
+		conditional rules between fields, no default values and no embedded data formats.
+
+		Reference: [STXT-SCHEMA-SPEC §5](stxt-schema-ref#s5), [§6](stxt-schema-ref#s6) and
+		[§11](stxt-schema-ref#s11).

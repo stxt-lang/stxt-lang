@@ -3,7 +3,7 @@ Document (dev.stxt.website): Principios de diseño — STXT
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Last modif: 2026-08-25
+		Last modif: 2026-09-09
 		Description: Los principios de diseño de STXT: un lenguaje pensado para las personas. La sencillez, la indentación como estructura y la seguridad del parseo derivan de ahí.
 
 	Header: Principios de diseño
@@ -20,38 +20,41 @@ Document (dev.stxt.website): Principios de diseño — STXT
 		escribirse sin herramientas: la forma natural del texto es la forma correcta, y la
 		máquina se adapta a esa forma, no al revés. De ahí que no haya llaves, corchetes,
 		comillas obligatorias ni etiquetas de cierre, y que un documento parezca un esquema de
-		notas. Donde la comodidad de la persona y la de la máquina entran en conflicto, gana
-		la persona.
+		notas.
 
 	Subheader: 2. La sencillez por encima de todo
 
 	Content >>
-		La sencillez es un requisito del lenguaje en tres planos a la vez, y ninguno se
-		sacrifica por los otros dos:
+		La sencillez es un requisito del lenguaje en tres planos a la vez:
 
-		* **Sencillo de escribir y leer.** Las reglas que una persona necesita conocer caben en
-		  una página del [tutorial](tutorial): un nodo, un bloque de texto, la
+		* **Sencillo de escribir y leer.** Las reglas que una persona necesita conocer son las
+		  secciones 3 a 8 del [tutorial](tutorial): un nodo, un bloque de texto, la
 		  indentación, un comentario.
 		* **Sencillo de implementar.** Un parser conforme es un recorrido línea a línea con
-		  una pila; la gramática completa cabe en un apéndice y el lenguaje se describe en
-		  pseudocódigo neutro del que se han derivado los puertos existentes. Escribir un
-		  parser nuevo es un trabajo de días, no de meses, y no requiere ninguna biblioteca.
-		* **Sencillo de procesar.** El coste de parsear es lineal en el tamaño del documento:
-		  una sola pasada, sin retroceso, sin resolver referencias y sin segundo recorrido.
+		  una pila. La gramática informal ocupa un apéndice de la especificación, y las tres
+		  implementaciones oficiales derivan del mismo pseudocódigo neutro sin usar ninguna
+		  biblioteca para parsear.
+		* **Sencillo de procesar.** Una sola pasada, línea a línea, sin retroceso, sin
+		  referencias hacia atrás y sin segundo recorrido.
 
-	Subheader: 3. Menos es más
+		Referencia: [STXT-SPEC §15](stxt-core-ref#s15) y [§16](stxt-core-ref#s16).
+
+	Subheader: 3. El principio KISS
 
 	Content >>
-		@STXT@ es deliberadamente pequeño, en todos sus niveles. La jerarquía se expresa
-		únicamente con la indentación: un nivel es un tabulador o cuatro espacios. Un nodo es
-		`Nombre: valor` o `Nombre >>`. No hay sintaxis de lista, ni de cadena entre comillas,
-		ni de escape, ni notación abreviada para el caso frecuente. Una lista es un nodo
-		repetido:
+		@STXT@ aplica el principio KISS (*keep it simple*): es deliberadamente pequeño, en
+		todos sus niveles. La jerarquía se expresa únicamente con la indentación: un nivel es
+		un tabulador o cuatro espacios. Un nodo es `Nombre: valor` o `Nombre >>`. No hay
+		sintaxis de lista, ni de cadena entre comillas, ni de escape, ni notación abreviada
+		para el caso frecuente. Una lista es un nodo repetido:
 
 	Code >>
 		Authors:
 			Author: María Pérez
 			Author: Juan García
+
+	Content >>
+		Referencia: [STXT-SPEC §4](stxt-core-ref#s4) y [§8](stxt-core-ref#s8).
 
 	Subheader: 4. No hay caracteres de escape
 
@@ -59,15 +62,18 @@ Document (dev.stxt.website): Principios de diseño — STXT
 		Un carácter de escape contradice directamente el principio Human-First: obliga a
 		quien escribe a pensar en el parser en lugar de en el texto, y a quien lee a
 		descifrar lo que hay detrás de una barra. Por eso @STXT@ no tiene secuencias de
-		escape: un valor es lo que
-		hay tras los dos puntos, un bloque es lo que hay indentado debajo del `>>`, y
-		cualquier carácter vale dentro de ambos, incluidos `:`, `#` y `>>`.
+		escape: un valor es lo que hay tras los dos puntos, un bloque es lo que hay indentado
+		debajo del `>>`, y cualquier carácter vale dentro de ambos, incluidos `:`, `#` y `>>`.
 
 		El texto libre es, así, literal: todo lo indentado bajo un nodo `>>` es texto tal
 		cual, y la indentación relativa se conserva. Un párrafo, un fragmento de código o un
-		bloque de Markdown se pegan en el documento sin transformarlos, y se leen y se editan
-		de forma directa, sin que ninguna convención del lenguaje se interponga entre la
-		persona y lo que escribe.
+		bloque de Markdown se pegan en el documento sin transformarlos.
+
+		El precio está en los nombres de nodo, que son la única parte de la línea que el
+		parser interpreta: se limitan a letras, dígitos y los separadores `-`, `_` y espacio.
+
+		Referencia: [STXT-SPEC §4.2](stxt-core-ref#s4-2), [§6](stxt-core-ref#s6) y
+		[§10](stxt-core-ref#s10).
 
 	Subheader: 5. La seguridad del parseo, por diseño
 
@@ -75,8 +81,11 @@ Document (dev.stxt.website): Principios de diseño — STXT
 		@STXT@ no tiene entidades, referencias, anclas, inclusión de ficheros, etiquetas que
 		instancien objetos ni ninguna forma de evaluación. Los namespaces se restringen a
 		ASCII para excluir los ataques homográficos. El resultado de parsear es siempre un
-		árbol de nodos y texto, y un parser conforme puede procesar un documento de una fuente
-		no confiable con memoria acotada.
+		árbol de nodos y texto. En streaming, un parser retiene solo el árbol de la raíz en
+		curso, y los límites de anidamiento, longitud de línea y tamaño de entrada acotan la
+		memoria frente a una fuente no confiable.
+
+		Referencia: [STXT-SPEC §15](stxt-core-ref#s15) y [§11.2](stxt-core-ref#s11-2).
 
 	Subheader: 6. La validación es una capa aparte y opcional
 
@@ -90,6 +99,9 @@ Document (dev.stxt.website): Principios de diseño — STXT
 		El mismo criterio ordena el resto de especificaciones: la especificación base define
 		por sí sola un lenguaje completo y usable, y cada una de las demás describe una
 		característica opcional que debe ser, a su vez, sencilla. Por eso los esquemas y las
-		plantillas no cubren todos los casos posibles: es preferible un sistema de validación
-		sencillo a uno tan completo que apenas nadie use.
+		plantillas tienen no-objetivos declarados: no validan el orden de los hijos ni admiten
+		patrones, reglas condicionales entre campos, valores por defecto ni formatos de datos
+		incrustados.
 
+		Referencia: [STXT-SCHEMA-SPEC §5](stxt-schema-ref#s5), [§6](stxt-schema-ref#s6) y
+		[§11](stxt-schema-ref#s11).
