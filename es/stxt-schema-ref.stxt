@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Aurora
-		Last modif: 2026-09-07
+		Last modif: 2026-09-08
 		Description: STXT-SCHEMA-SPEC: el lenguaje de esquemas @stxt.schema para validar documentos STXT con nodos, tipos y cardinalidades, y el meta-esquema oficial.
 
 	Header: @STXT@ Schema
@@ -28,7 +28,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		`.stxt`, niveles de usuario y sistema, `STXT_PATH`) se define en
 		[*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
 
-	Subsubheader: 1.1 Versión de esta especificación
+	Subsubheader: 1.1 Fecha y estado de esta especificación
 
 	Content >>
 		Esta especificación lleva su propia **fecha** y su propio **estado** en los campos `Last modif` y
@@ -55,7 +55,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		Una implementación **PUEDE** aplicar la validación **durante** el proceso de parseo, siempre que dicha validación permanezca débilmente acoplada al parser base.
 		Esto permite detectar errores antes de finalizar el parseo completo.
 
-	Subheader: 4. Estructura general de un Esquema
+	Subheader: 4. Estructura general de un Schema
 
 	Content >>
 		Un documento schema **DEBE** tener como nodo raíz:
@@ -99,7 +99,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 
 		* **NO DEBE** existir más de un schema efectivo simultáneamente.
 		* Si una implementación dispone de varios schemas candidatos para el mismo namespace, la elección la fija [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref): gana el nivel más cercano al documento, y dos definiciones del mismo namespace en el mismo nivel dejan a ese namespace sin definición activa.
-		* Para una validación concreta, sólo **DEBE** existir un único schema efectivo.
+		* Para una validación concreta, solo **DEBE** existir un único schema efectivo.
 
 	Content >>
 		**El namespace vacío no se valida.** Un nodo cuyo namespace efectivo es `""` (el de todo lo
@@ -107,21 +107,21 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		definición**: un validador **NO DEBE** buscar schema para él ni emitir `SCHEMA_NOT_FOUND` por
 		él. Como los hijos heredan el namespace, un documento sin namespace queda entero fuera de la
 		validación; un nodo que declare un namespace dentro de él **sí** se valida, contra el schema de
-		ese namespace. En consecuencia, ningún schema ni plantilla **PUEDE** tener `""` como namespace
+		ese namespace. En consecuencia, ningún schema ni template **PUEDE** tener `""` como namespace
 		objetivo: no hay nada que pueda resolverse contra él.
 
 	Subheader: 6. Modelo de contenido cerrado
 
 	Content >>
 		@STXT@ Schema usa un **modelo de contenido cerrado**. Esto significa que, para cada nodo del
-		documento, **sólo** se permiten los hijos directos declarados explícitamente en el schema.
+		documento, **solo** se permiten los hijos directos declarados explícitamente en el schema.
 
 		Reglas:
 
-		* Si un `Node` declara un bloque `Children`, sus instancias en el documento **sólo PUEDEN**
+		* Si un `Node` declara un bloque `Children`, sus instancias en el documento **solo PUEDEN**
 		  tener como hijos directos los nodos declarados mediante `Child` (cada uno identificado por
 		  su par lógico `nombre canónico + namespace efectivo`).
-		* Si un `Node` **no** declara `Children`, sus instancias en el documento **NO PUEDEN** tener
+		* Si un `Node` **no** declara `Children`, sus instancias en el documento **NO DEBEN** tener
 		  ningún hijo directo (cierre total).
 		* La aparición de un hijo directo **no declarado** **DEBE** provocar un error de validación.
 
@@ -176,7 +176,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		Reglas:
 
 		* El valor inline de `Node` **DEBE** ser un nombre de nodo válido según [*STXT-SPEC*](stxt-core-ref).
-		* El emparejamiento entre un `Node` y los nodos del documento se hace por **nombre canónico** ([*STXT-SPEC* §6](stxt-core-ref#s6)): `Node: Nombre Nodo` valida `nombre-nodo`, `NOMBRE_NODO` y `Nombre  Nodo`, y lo mismo vale para los `Child`.
+		* El emparejamiento entre un `Node` y los nodos del documento se hace por **nombre canónico** ([*STXT-SPEC* §4.3](stxt-core-ref#s4-3)): `Node: Nombre Nodo` valida `nombre-nodo`, `NOMBRE_NODO` y `Nombre  Nodo`, y lo mismo vale para los `Child`.
 		* Cada `Node` **DEBE** ser único dentro del schema a nivel de nombre canónico.
 		* Cada `Node` define la semántica del nodo en el namespace objetivo del schema.
 		* Si `Type` se omite, el tipo por defecto es `INLINE`.
@@ -196,7 +196,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		        Value: valor 3
 
 	Content >>
-		El tipo `ENUM`, y sólo `ENUM`, **PUEDE** especificar un nodo `Values` con los valores permitidos mediante nodos `Value`.
+		El tipo `ENUM`, y solo `ENUM`, **PUEDE** especificar un nodo `Values` con los valores permitidos mediante nodos `Value`.
 		Si existe `Values`, **DEBE** contener al menos un nodo `Value`.
 		Si un `Node` declara `Type: ENUM`, **DEBE** incluir `Values`.
 		Cada `Value` **DEBE** tener un valor inline no vacío tras el recorte: un `Value:` vacío **DEBE** provocar un error de schema (`VALUE_EMPTY`), porque una enumeración cuyo único valor válido es la cadena vacía no tiene sentido. Por la misma razón un `Child:` sin valor es un error (`INVALID_NODE_NAME`, [sección 13.1](#s13-1)).
@@ -275,11 +275,11 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		Razón: en cuanto un tipo declara que valida un dato concreto (`NUMBER`, `DATE`,
 		`BOOLEAN`, `ENUM`, etc.), ese nodo es un dato, y un dato es una hoja. Si se necesita
 		valor más estructura, se usa el tipo genérico `INLINE`, que existe precisamente para eso;
-		y si se necesita sólo estructura, se usa `GROUP`.
+		y si se necesita solo estructura, se usa `GROUP`.
 
 		Otras consideraciones:
 
-		* El tipo **NO controla obligatoriedad**; sólo forma y validez del valor.
+		* El tipo **NO controla obligatoriedad**; solo forma y validez del valor.
 		  La obligatoriedad de aparición se controla mediante cardinalidad.
 		* El valor de `Type` **DEBE** coincidir exactamente con uno de los tipos definidos en esta sección.
 		* Declarar `Children` en un `Node` cuyo tipo **no admite hijos** **DEBE** provocar un error de schema.
@@ -529,7 +529,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		* Si existen ambos, `Min` **NO DEBE** ser mayor que `Max`.
 		* `Max: 0` es legal y declara un hijo **prohibido**: el `Child` existe en el modelo pero ninguna aparición es válida. Sirve, por ejemplo, para retirar en una versión de un namespace un hijo que otra permitía. Una implementación **NO DEBE** tratarlo como error.
 		* La cardinalidad se aplica por instancia del nodo padre.
-		* La cardinalidad cuenta sólo hijos **directos** con el mismo nombre canónico y el mismo namespace efectivo.
+		* La cardinalidad cuenta solo hijos **directos** con el mismo nombre canónico y el mismo namespace efectivo.
 		* La validación de cardinalidad es **independiente del orden** de los hijos: cuenta apariciones, no posiciones (ver [sección 11](#s11)).
 		* Una implementación conforme **DEBE** comprobar las cardinalidades.
 
@@ -537,7 +537,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 
 	Content >>
 		@STXT@ Schema **no** valida el orden de los hijos. La validación de cardinalidad y de
-		presencia es **independiente de la posición** de cada hijo dentro de su padre: sólo cuenta
+		presencia es **independiente de la posición** de cada hijo dentro de su padre: solo cuenta
 		cuántas veces aparece cada hijo, no en qué orden.
 
 		Dos documentos con los mismos hijos en distinto orden validan exactamente igual. Esto es una
@@ -614,7 +614,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 
 	Content >>
 		Aquí `Section` puede contener más nodos `Section` anidados a cualquier profundidad (limitada
-		por el límite de profundidad recomendado en [*STXT-SPEC*](stxt-core-ref), [sección de seguridad](stxt-core-ref#s15)).
+		por el límite de profundidad recomendado en [*STXT-SPEC* §11.2](stxt-core-ref#s11-2)).
 
 	Subheader: 13. Errores de Schema
 
@@ -635,6 +635,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		12. El documento schema tiene más de un nodo raíz, o ninguno: un documento schema es **exactamente un** nodo `Schema`.
 		13. Un nodo del schema (`Node`, `Child`, `Type`, `Min`…) está escrito en forma `>>`; todos son inline salvo `Description`, que es `TEXT`.
 		14. Un `Value` de un `ENUM` está vacío ([sección 7.2](#s7-2)).
+		15. Un `Node` contiene más de un nodo `Values`.
 
 	Content >>
 		Un documento es inválido frente a un schema si:
@@ -652,7 +653,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 	Content >>
 		Como en [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), cada error lleva un código estable e idéntico
 		en todas las implementaciones, y **no se renombra**. Un documento schema se valida
-		primero **como documento** contra el meta-esquema de la [sección 15](#s15), por lo que sus
+		primero **como documento** contra el meta-schema de la [sección 15](#s15), por lo que sus
 		errores de forma (un `Node` sin valor, dos `Type`, un `Min` que no es `NATURAL`…) llegan con
 		los códigos de la segunda tabla; después se aplican las reglas propias de la primera.
 		
@@ -666,7 +667,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		| `SCHEMA_NODE_NOT_INLINE` | 13: un nodo del schema está escrito en forma `>>` |
 		| `NODE_DUPLICATED` | 3: dos `Node` con el mismo nombre canónico |
 		| `INVALID_NODE_NAME` | el valor de un `Node` o un `Child` no es un nombre válido ([sección 7.1](#s7-1)) |
-		| `TYPE_NOT_VALID` | 4: tipo desconocido (el meta-esquema lo detecta antes como `INVALID_VALUE` del `ENUM` `Type`; `TYPE_NOT_VALID` queda para una implementación cuyo registro de tipos no tenga el tipo) |
+		| `TYPE_NOT_VALID` | 4: tipo desconocido (el meta-schema lo detecta antes como `INVALID_VALUE` del `ENUM` `Type`; `TYPE_NOT_VALID` queda para una implementación cuyo registro de tipos no tenga el tipo) |
 		| `CHILDREN_NOT_ALLOWED_FOR_TYPE` | 5: `Children` en un tipo que no admite hijos |
 		| `VALUES_NOT_ALLOWED_FOR_TYPE` | 6: `Values` en un tipo distinto de `ENUM` |
 		| `CARDINALITY_NOT_VALID` | 7: `Min` o `Max` no es un entero no negativo, o supera `4294967295` |
@@ -674,7 +675,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		| `VALUES_REQUIRED` | 8: `ENUM` sin `Values`, o `Values` sin ningún `Value` |
 		| `VALUE_DUPLICATED` | 9: dos `Value` iguales tras el recorte |
 		| `VALUE_EMPTY` | 14: un `Value` de un `ENUM` sin valor |
-		| `VALUES_DUPLICATED` | dos nodos `Values` en el mismo `Node` |
+		| `VALUES_DUPLICATED` | 15: dos nodos `Values` en el mismo `Node` |
 		| `CHILD_DUPLICATED` | 10: dos `Child` con el mismo par nombre canónico + namespace |
 		| `CHILD_NOT_DEFINED` | 11: un `Child` del mismo namespace sin su `Node` |
 		
@@ -703,7 +704,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		* Implementa íntegramente este documento.
 		* Valida tipos, formas de valor, cardinalidades y valores permitidos (ENUM).
 		* Aplica el **modelo de contenido cerrado** ([sección 6](#s6)).
-		* Aplica la regla de compatibilidad de hijos por tipo (sólo `INLINE` y `GROUP` admiten hijos).
+		* Aplica la regla de compatibilidad de hijos por tipo (solo `INLINE` y `GROUP` admiten hijos).
 		* Aplica la regla estricta de definición obligatoria de todos los nodos referenciados en `Children` (en la carga del schema para hijos del mismo namespace; en la validación del documento para hijos cross-namespace, [sección 8.1](#s8-1)).
 		* Valida cardinalidades de forma **independiente del orden**.
 		* Selecciona, para cada validación, un único schema efectivo por namespace, y no valida los nodos de namespace vacío ([sección 5](#s5)).
@@ -716,7 +717,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 
 		**Nivel de garantía.** El meta-schema valida la **forma** de un documento schema (qué nodos
 		existen, sus tipos, sus cardinalidades). No puede expresar las reglas condicionales o
-		cruzadas de este documento (por ejemplo "`Values` sólo si `Type: ENUM`", o "`Min ≤ Max`"),
+		cruzadas de este documento (por ejemplo "`Values` solo si `Type: ENUM`", o "`Min ≤ Max`"),
 		que pertenecen al lenguaje pero no al meta-schema. Por tanto, "validar contra el meta-schema"
 		es condición **necesaria pero no suficiente** para ser un schema válido: además deben cumplirse
 		las reglas de la [sección 13](#s13).
@@ -828,7 +829,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		  * `Type`: tipo concreto (si falta ⇒ `INLINE`).
 		  * `Children`: Nodo con listado de `Child` permitidos.
 		  * `Description`: texto explicativo.
-		  * `Values`: Valores permitidos (sólo tipo ENUM).
+		  * `Values`: Valores permitidos (solo tipo ENUM).
 
 		* `Type`
 		  Inline (`ENUM`), con el nombre del tipo (`GROUP`, `INLINE`, `NUMBER`, etc.).

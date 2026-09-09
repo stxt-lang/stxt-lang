@@ -31,7 +31,7 @@ run:
 ```
 --- attempt 1: 3 error(s)
     line 3: [INVALID_VALUE] Date: Invalid date (12 March 2026) (schema)
-    line 5: [INVALID_VALUE] The value 'draft' not allowed. Only: Draft, Final (schema)
+    line 5: [INVALID_VALUE] The value 'draft' is not one of the allowed values of Status (schema)
     line 1: [TOO_FEW_CHILDREN] 0 nodes of 'com.acme.reports:summary' and min is 1 (schema)
 --- attempt 2: valid
 ```

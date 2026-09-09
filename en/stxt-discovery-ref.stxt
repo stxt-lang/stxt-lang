@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Aurora
-		Last modif: 2026-09-07
+		Last modif: 2026-09-08
 		Description: STXT-DISCOVERY-SPEC: how tools locate the schemas and templates of an STXT document, with .stxt/ directories, user and system levels and STXT_PATH.
 
 	Header: @STXT@ Discovery
@@ -30,7 +30,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		Resolution is **identical for schemas and templates**: both are discovered by the
 		same procedure and compete for the same namespaces.
 
-	Subsubheader: 1.1 Version of this specification
+	Subsubheader: 1.1 Date and status of this specification
 
 	Content >>
 		This specification carries its own **date** and its own **status** in the `Last modif` and
@@ -222,10 +222,10 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		* Upon error 1, the tool **MUST NOT** silently pick one of the conflicting
 		  definitions: the affected namespace has no active definition while the conflict
 		  exists.
-		* Reminder from [*STXT-SPEC*](stxt-core-ref) ([sections 15](stxt-core-ref#s15) and [17.2](stxt-core-ref#s17-2)): a document declaring a
-		  namespace for which the chain contributes no definition **is not an error** — the
-		  document simply cannot be validated. A tool **SHOULD** distinguish that case from
-		  a namespace with resolution errors.
+		* A document declaring a namespace for which the chain contributes no definition
+		  **is not a resolution error**: the document parses, and validating it produces
+		  `SCHEMA_NOT_FOUND` ([section 6](#s6), [*STXT-SCHEMA-SPEC* §13](stxt-schema-ref#s13)).
+		  A tool **SHOULD** distinguish that case from a namespace with resolution errors.
 
 	Subheader: 9. Conformance
 

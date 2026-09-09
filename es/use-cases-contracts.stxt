@@ -3,7 +3,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-23
+		Last modif: 2026-09-08
 		Description: STXT como formato fuente de contratos y acuerdos: el texto normativo sigue siendo texto y las partes, fechas e importes son datos extraíbles y comprobables.
 
 	Header: Contratos y acuerdos legales
@@ -236,7 +236,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales — STXT
 		* **Cláusulas estándar**: el departamento legal mantiene sus cláusulas aprobadas
 		  como fragmentos de texto; un contrato las incorpora copiándolas, y un script
 		  compara cada cláusula con la versión aprobada y señala las que difieren.
-		* **Validación**: `stxt validate contracts/` ([La línea de comandos](tools-cli))
+		* **Validación**: `stxt validate --recursive contracts/` ([La línea de comandos](tools-cli))
 		  en integración continua rechaza un acuerdo sin partes, sin fecha válida o con un
 		  estado fuera de la lista.
 		* **Extracción**: del [árbol canónico](stxt-tree-ref) salen los vencimientos del trimestre, los

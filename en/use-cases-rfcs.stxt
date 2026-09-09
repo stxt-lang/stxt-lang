@@ -3,7 +3,7 @@ Document (dev.stxt.website): RFCs and technical proposals — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-23
+		Last modif: 2026-09-08
 		Description: STXT for RFCs and technical proposals: the usual plain-text review flow, with status, authors and relations between proposals as explicit, queryable data.
 
 	Header: RFCs and technical proposals
@@ -212,7 +212,7 @@ Document (dev.stxt.website): RFCs and technical proposals — STXT
 	Content >>
 		* Proposals live in a directory of the repository, one per file, with the template
 		  in `.stxt/`.
-		* Continuous integration runs `stxt validate rfcs/`
+		* Continuous integration runs `stxt validate --recursive rfcs/`
 		  ([The command line](tools-cli)) on every change: a proposal without context or
 		  with a status outside the list does not get in.
 		* A script over the [canonical tree](stxt-tree-ref) generates the index of proposals by status,

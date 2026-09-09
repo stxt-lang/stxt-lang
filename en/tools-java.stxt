@@ -3,7 +3,7 @@ Document (dev.stxt.website): The Java library — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-29
+		Last modif: 2026-09-08
 		Description: dev.stxt:stxt-core, the STXT parser for Java on Maven Central: no runtime dependencies, implementing the five specifications with the same error codes.
 
 	Header: The Java library
@@ -30,14 +30,14 @@ Document (dev.stxt.website): The Java library — STXT
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>1.0.0</version>
+		    <version>1.0.2</version>
 		</dependency>
 
 	Content >>
 		Or with Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:1.0.0'
+		implementation 'dev.stxt:stxt-core:1.0.2'
 
 	Content >>
 		The javadoc of every version is on
@@ -263,7 +263,7 @@ Document (dev.stxt.website): The Java library — STXT
 		prints the same codes as `stxt validate`:
 
 	Listing >>
-		schema line 5 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
+		schema line 6 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
 		schema line 1 [TOO_FEW_CHILDREN]: 0 nodes of 'com.acme.book:isbn' and min is 1
 
 	Content >>
@@ -307,8 +307,7 @@ Document (dev.stxt.website): The Java library — STXT
 		* The available value types are those of STXT-SCHEMA-SPEC: `INLINE`, `BLOCK`,
 		  `TEXT`, `MARKDOWN`, `BOOLEAN`, `INTEGER`, `NATURAL`, `NUMBER`, `DATE`, `TIME`,
 		  `TIMESTAMP`, `UUID`, `EMAIL`, `URL`, `HEXADECIMAL`, `BINARY`, `BASE64`, `GROUP`
-		  and `ENUM`. To add a custom type, implement `dev.stxt.schema.Type` and register
-		  it in `TypeRegistry`.
+		  and `ENUM`.
 
 		The compiled schema can be inspected: `STXT.schemaProvider(loader)` is the
 		`SchemaProvider` the facade uses, and `getSchema(ns)` returns a `Schema` with
@@ -328,10 +327,10 @@ Document (dev.stxt.website): The Java library — STXT
 		the CLI and the extension, so all three agree by construction.
 
 		Unlike the TypeScript port, which has to run on several hosts, here disk access is
-		direct through `java.nio.file`; the only injectable piece is the
-		`DiscoveryEnvironment` (`STXT_PATH`, user and system directories), with
-		`SystemDiscoveryEnvironment` as the real implementation —the one the no-argument
-		constructor uses— and the option of injecting a custom one in a test. The chain is per
+		done by `NioDiscoveryFileSystem` over `java.nio.file`. The no-argument constructor
+		uses that implementation and `SystemDiscoveryEnvironment` (`STXT_PATH`, user and
+		system directories); both can be replaced in a test (`DiscoveryFileSystem`,
+		`DiscoveryEnvironment`). The chain is per
 		document: pass the directory it lives in (`null` for standard input or an unsaved
 		buffer, which starts the chain at the user level). Since `DiscoveryResult`
 		implements `SchemaProvider`, resolving and validating are two steps:
@@ -427,8 +426,12 @@ Document (dev.stxt.website): The Java library — STXT
 		the same rules, as the one behind `stxt format`, the extension and the playground.
 
 	Java >>
+		import java.util.List;
+
+		import dev.stxt.exceptions.ParseException;
 		import dev.stxt.runtime.Formatter;
 		import dev.stxt.runtime.FormatResult;
+		import dev.stxt.runtime.NodeWriter.IndentStyle;
 
 		FormatResult formatted = Formatter.format(source, IndentStyle.TABS);
 		String text = formatted.text();
@@ -452,8 +455,10 @@ Document (dev.stxt.website): The Java library — STXT
 	Content >>
 		The parser does not depend on schemas: validation is a decoupled layer connected
 		through two extension points. `Observer` receives streaming callbacks while the
-		document is parsed —`onCreate(node)` when a node is opened, already with its parent,
-		effective namespace and level, and `onFinish(node)` when it is closed—, and
+		document is parsed —`onCreate(node, line)` when a node is opened, already with its parent,
+		effective namespace and level, `onFinish(node)` when it is closed, `onComment(lineNumber, line)`
+		for each comment and `onTextLine(node, lineNumber, lineString, line)` for each line of a
+		block—, and
 		`Validator` runs on each node as it is closed and returns a list of
 		`ValidationException` (it does not throw), so a document is validated while it is
 		read, without waiting for the end. `SchemaValidator` is a built-in `Validator`;
@@ -462,15 +467,19 @@ Document (dev.stxt.website): The Java library — STXT
 	Java >>
 		import java.util.List;
 
+		import dev.stxt.LineIndent;
 		import dev.stxt.Node;
 		import dev.stxt.Parser;
+		import dev.stxt.TextNode;
 		import dev.stxt.exceptions.ValidationException;
 		import dev.stxt.processors.Observer;
 
 		Parser parser = new Parser();
 		parser.registerObserver(new Observer() {
-		    @Override public void onCreate(Node node) { System.out.println("open " + node.getQualifiedName()); }
+		    @Override public void onCreate(Node node, String line) { System.out.println("open " + node.getQualifiedName()); }
 		    @Override public void onFinish(Node node) { System.out.println("close " + node.getQualifiedName()); }
+		    @Override public void onComment(int lineNumber, String line) { }
+		    @Override public void onTextLine(TextNode node, int lineNumber, String lineString, LineIndent line) { }
 		});
 		parser.registerValidator(node -> List.<ValidationException>of());   // a validator that never complains
 		parser.parseResult(text);
@@ -507,7 +516,7 @@ Document (dev.stxt.website): The Java library — STXT
 		| `dev.stxt.template`   | `TemplateParser`, `TemplateSchemaProvider`, `MetaTemplateSchemaProvider`                                              |
 		| `dev.stxt.resources`  | `ResourcesLoader`, `ResourcesLoaderDirectory`                                                                        |
 		| `dev.stxt.runtime`    | `STXT` (the facade), `NodeWriter` and `IndentStyle`, `Formatter` and `FormatResult`, `TreeJson` |
-		| `dev.stxt.discovery`  | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryEnvironment`, `SystemDiscoveryEnvironment` |
+		| `dev.stxt.discovery`  | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryEnvironment`, `SystemDiscoveryEnvironment`, `DiscoveryFileSystem`, `NioDiscoveryFileSystem` |
 
 		From 1.0 on this API is frozen within the package's 1.x line, and the language
 		and the canonical tree are frozen for good: STXT-SPEC and STXT-TREE-SPEC are in

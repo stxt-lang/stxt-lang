@@ -3,7 +3,7 @@ Document (dev.stxt.website): The command line — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-30
+		Last modif: 2026-09-08
 		Description: stxt, the official STXT command line: validate, format and describe documents from the terminal or CI, with the same error codes as the libraries.
 
 	Header: The command line
@@ -104,7 +104,7 @@ Document (dev.stxt.website): The command line — STXT
 		| Code   | Meaning                                                                                                    |
 		|--------|------------------------------------------------------------------------------------------------------------|
 		| `0`    | Success: the documents parse and validate, nothing needs reformatting, the grammar was installed…           |
-		| `1`    | **Document failure**: syntax or grammar errors, files that `--check` would change, an unreadable file, a definition that cannot be installed |
+		| `1`    | **Document failure**: syntax or grammar errors, files that `--check` would change, an unreadable file, a definition that cannot be installed, a resolution chain with errors in `schemas` |
 		| `2`    | **Misuse**: unknown command or option, missing argument, incompatible options, a directory without `--recursive` |
 
 		`stxt validate docs/ && make deploy` runs the deployment only if the documents
@@ -494,8 +494,9 @@ Document (dev.stxt.website): The command line — STXT
 		    DISCOVERY_DUPLICATE_NAMESPACE /home/ana/libros/.stxt/otro/copia.stxt: Duplicate definition for namespace 'com.acme.book' at level /home/ana/libros/.stxt: already defined in /home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt
 
 	Content >>
-		`schemas` always exits with `0`, even with errors in the chain: it is an
-		informational command; `validate` is the one that fails.
+		`schemas` exits with `1` if the chain has errors (listed on standard error, in the
+		`Errors:` block) or if the path does not exist, and with `0` in every other case, also
+		with an empty chain.
 
 	Subheader: stxt install
 

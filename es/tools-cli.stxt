@@ -3,7 +3,7 @@ Document (dev.stxt.website): La línea de comandos — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-30
+		Last modif: 2026-09-08
 		Description: stxt, la línea de comandos oficial de STXT: valida, formatea y describe documentos desde el terminal o CI, con los mismos códigos de error que las bibliotecas.
 
 	Header: La línea de comandos
@@ -104,7 +104,7 @@ Document (dev.stxt.website): La línea de comandos — STXT
 		| Código | Significado                                                                                                |
 		|--------|------------------------------------------------------------------------------------------------------------|
 		| `0`    | Éxito: los documentos parsean y validan, no hay nada que reformatear, la gramática se ha instalado…        |
-		| `1`    | **Fallo de los documentos**: errores de sintaxis o de gramática, ficheros que `--check` cambiaría, un fichero ilegible, una definición que no se puede instalar |
+		| `1`    | **Fallo de los documentos**: errores de sintaxis o de gramática, ficheros que `--check` cambiaría, un fichero ilegible, una definición que no se puede instalar, una cadena de resolución con errores en `schemas` |
 		| `2`    | **Uso incorrecto**: comando u opción desconocidos, falta un argumento, opciones incompatibles, un directorio sin `--recursive` |
 
 		`stxt validate docs/ && make deploy` solo ejecuta el despliegue si los documentos
@@ -497,8 +497,9 @@ Document (dev.stxt.website): La línea de comandos — STXT
 		    DISCOVERY_DUPLICATE_NAMESPACE /home/ana/libros/.stxt/otro/copia.stxt: Duplicate definition for namespace 'com.acme.book' at level /home/ana/libros/.stxt: already defined in /home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt
 
 	Content >>
-		`schemas` termina siempre con `0`, también con errores en la cadena: es un comando
-		informativo; el que falla es `validate`.
+		`schemas` termina con `1` si la cadena tiene errores (los lista por la salida de error,
+		en el bloque `Errors:`) o si la ruta no existe, y con `0` en cualquier otro caso, también
+		con la cadena vacía.
 
 	Subheader: stxt install
 

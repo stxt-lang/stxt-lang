@@ -3,7 +3,7 @@ Document (dev.stxt.website): Tools — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-30
+		Last modif: 2026-09-08
 		Description: STXT tools: browser playground, VS Code extension, command line and TypeScript, Java and Python libraries, all implementing the same five specifications.
 
 	Header: Tools
@@ -33,7 +33,7 @@ Document (dev.stxt.website): Tools — STXT
 
 		* No installation and no account; the work is kept in the browser itself.
 		* It includes a seed of example documents.
-		* A document can be shared with a link that carries the content inside.
+		* The whole workspace can be shared with a link that carries the content inside.
 
 		It allows following the [tutorial](tutorial) without leaving the browser.
 
@@ -50,10 +50,11 @@ Document (dev.stxt.website): Tools — STXT
 	Content >>
 		Features:
 
-		* Syntax errors in real time, and schema errors when a grammar applies.
+		* Syntax errors in real time, and schema errors; a namespace no level defines is
+		  flagged with `SCHEMA_NOT_FOUND` as a warning.
 		* Semantic highlighting driven by the parser itself.
 		* Completion with the nodes the schema allows and the values of an `ENUM`.
-		* Hover information: node, canonical name, type, values and description.
+		* Hover information: the description given by the definition, the type and, in an `ENUM`, its values.
 		* Go to definition (F12): from a node to the `Node:` of its schema, or to its
 		  line inside the `Structure` of its template.
 		* Document formatting.
@@ -146,14 +147,14 @@ Document (dev.stxt.website): Tools — STXT
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>1.0.0</version>
+		    <version>1.0.2</version>
 		</dependency>
 
 	Content >>
 		Or with Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:1.0.0'
+		implementation 'dev.stxt:stxt-core:1.0.2'
 
 	Subsubheader: Python
 

@@ -3,7 +3,7 @@ Document (dev.stxt.website): RFCs y propuestas técnicas — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-23
+		Last modif: 2026-09-08
 		Description: STXT para RFCs y propuestas técnicas: el flujo de texto plano y revisión de siempre, con estado, autores y relaciones entre propuestas como datos explícitos.
 
 	Header: RFCs y propuestas técnicas
@@ -211,7 +211,7 @@ Document (dev.stxt.website): RFCs y propuestas técnicas — STXT
 	Content >>
 		* Las propuestas viven en un directorio del repositorio, una por fichero, con la
 		  plantilla en `.stxt/`.
-		* Integración continua ejecuta `stxt validate rfcs/`
+		* Integración continua ejecuta `stxt validate --recursive rfcs/`
 		  ([La línea de comandos](tools-cli)) en cada cambio: una propuesta sin contexto o
 		  con un estado fuera de la lista no entra.
 		* Un script sobre el [árbol canónico](stxt-tree-ref) genera el índice de propuestas por estado, avisa

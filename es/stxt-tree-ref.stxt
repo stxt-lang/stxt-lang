@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Zenith
-		Last modif: 2026-09-07
+		Last modif: 2026-09-08
 		Description: STXT-TREE-SPEC: la representación JSON canónica del árbol de un documento STXT y las dos operaciones de escritura, forma canónica y reformateado.
 
 	Header: @STXT@ Tree
@@ -35,7 +35,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		namespaces e indentación se definen en [*STXT-SPEC*](stxt-core-ref). Los schemas, templates y la
 		resolución de definiciones no cambian este árbol.
 
-	Subsubheader: 1.1 Versión de esta especificación
+	Subsubheader: 1.1 Fecha y estado de esta especificación
 
 	Content >>
 		Esta especificación lleva su propia **fecha** y su propio **estado** en los campos `Last modif` y
@@ -114,7 +114,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		unidad lógica del bloque y el array las conserva sin reconstrucción.
 
 		Los comentarios y las líneas vacías fuera de un bloque no producen nodos ni líneas.
-		Dentro de un bloque, una línea que empieza por `#` sólo aparece en `lines` si su
+		Dentro de un bloque, una línea que empieza por `#` solo aparece en `lines` si su
 		indentación la hace contenido literal, tal como define [*STXT-SPEC*](stxt-core-ref) [sección 9.1](stxt-core-ref#s9-1).
 
 	Subheader: 6. Identidad y datos excluidos
@@ -152,7 +152,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 	Subheader: 8. Errores y validación
 
 	Content >>
-		STXT-TREE-SPEC sólo representa documentos que han superado el parseo sintáctico. No
+		STXT-TREE-SPEC solo representa documentos que han superado el parseo sintáctico. No
 		define la serialización de excepciones, diagnósticos, advertencias, errores de
 		discovery ni árboles parciales después de un error. En especial, el modo de recuperar
 		un parser tras varios errores no es parte de este contrato.
@@ -171,7 +171,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		Un emisor de árbol @STXT@ es conforme si, para todo documento válido:
 
 		* Emite un array de todos los nodos raíz, preservando su orden.
-		* Emite todos y sólo los miembros exigidos por la [sección 4](#s4).
+		* Emite todos y solo los miembros exigidos por la [sección 4](#s4).
 		* Aplica las normalizaciones y la herencia de namespace de [*STXT-SPEC*](stxt-core-ref) antes de emitir.
 		* Conserva cada línea lógica de un bloque, incluidas las líneas vacías iniciales e
 		  intermedias; las finales no llegan al árbol: el parseo las descarta
@@ -254,7 +254,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		Esta sección define la operación inversa a la de las secciones anteriores: **del
 		árbol lógico al texto @STXT@**. Dos implementaciones que escriban el mismo árbol
 		**DEBEN** producir exactamente el mismo texto. Es lo que permite que una herramienta
-		reescriba un fichero sin ruido en los diffs, que `stxt export` y las bibliotecas
+		reescriba un fichero sin ruido en los diffs, que las herramientas y las bibliotecas
 		serialicen igual, y que el kit de conformidad compare el texto escrito y no solo el
 		árbol.
 
@@ -262,7 +262,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		indentación**, que es un parámetro de la operación: `TABS` (un tabulador por nivel) o
 		`SPACES_4` (cuatro espacios por nivel). Hay, por tanto, dos formas canónicas de cada
 		árbol, una por estilo; una herramienta **DEBE** ofrecer las dos y **DEBERÍA** usar
-		`TABS` cuando no se le indica otra cosa, de acuerdo con [*STXT-SPEC* §4.4](stxt-core-ref#s4-4).
+		`TABS` cuando no se le indica otra cosa.
 
 		La operación se define para árboles que cumplen los invariantes de las
 		[secciones 4](#s4) y [5](#s5) — los que produce un parseo: nombres válidos y ya
@@ -365,7 +365,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		terminador de línea (si el fuente usa `CRLF` en alguna línea, todas salen con `CRLF`;
 		si no, con `LF`) y con salto de línea final solo si el fuente lo tenía. Un BOM inicial
 		**NO DEBE** conservarse. Cada línea se transforma según lo que es en el parseo del
-		documento sin esquema alguno (el formateado no tiene que ver con la validación):
+		documento sin schema alguno (el formateado no tiene que ver con la validación):
 
 		1. Una línea que **abre un nodo** se escribe en forma canónica
 		   ([sección 11.1](#s11-1), reglas 1 a 4): la indentación de su nivel en el estilo

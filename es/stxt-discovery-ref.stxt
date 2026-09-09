@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Aurora
-		Last modif: 2026-09-07
+		Last modif: 2026-09-08
 		Description: STXT-DISCOVERY-SPEC: cómo localizan las herramientas los esquemas y plantillas de un documento STXT, con los directorios .stxt/ y STXT_PATH.
 
 	Header: @STXT@ Discovery
@@ -30,7 +30,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		La resolución es **idéntica para schemas y para templates**: ambos se descubren por
 		el mismo procedimiento y compiten por los mismos namespaces.
 
-	Subsubheader: 1.1 Versión de esta especificación
+	Subsubheader: 1.1 Fecha y estado de esta especificación
 
 	Content >>
 		Esta especificación lleva su propia **fecha** y su propio **estado** en los campos `Last modif` y
@@ -60,7 +60,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 
 		* Una herramienta **DEBE** cargar **todos** los ficheros con extensión `.stxt` que
 		  haya bajo el directorio, **recursivamente**.
-		* Los subdirectorios no tienen significado: son sólo organización. `.stxt/web/a.stxt`
+		* Los subdirectorios no tienen significado: son solo organización. `.stxt/web/a.stxt`
 		  y `.stxt/a.stxt` pertenecen al mismo nivel.
 		* Todo fichero bajo un directorio de resolución **DEBE** ser una definición: un
 		  documento cuyo nodo raíz pertenezca a `@stxt.schema` o `@stxt.template`. Cualquier
@@ -223,10 +223,11 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		* Ante el error 1, la herramienta **NO DEBE** elegir silenciosamente una de las
 		  definiciones en conflicto: el namespace afectado queda sin definición activa
 		  mientras el conflicto exista.
-		* Recordatorio de [*STXT-SPEC*](stxt-core-ref) ([secciones 15](stxt-core-ref#s15) y [17.2](stxt-core-ref#s17-2)): que un documento declare un
-		  namespace para el que la cadena no aporta ninguna definición **no es un error** —
-		  el documento simplemente no puede validarse. Una herramienta **DEBERÍA** distinguir
-		  ese caso del de un namespace con errores de resolución.
+		* Que un documento declare un namespace para el que la cadena no aporta ninguna
+		  definición **no es un error de resolución**: el documento parsea, y validarlo produce
+		  `SCHEMA_NOT_FOUND` ([sección 6](#s6), [*STXT-SCHEMA-SPEC* §13](stxt-schema-ref#s13)).
+		  Una herramienta **DEBERÍA** distinguir ese caso del de un namespace con errores de
+		  resolución.
 
 	Subheader: 9. Conformidad
 
@@ -235,7 +236,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		  **opcional** como ella ([*STXT-SPEC*](stxt-core-ref) [§17.3](stxt-core-ref#s17-3)): un parser conforme del núcleo no está
 		  obligado a implementarlo.
 		* Una herramienta que implemente descubrimiento en el sistema de ficheros **DEBE**
-		  seguir esta especificación completa: implementar sólo una parte de la cadena
+		  seguir esta especificación completa: implementar solo una parte de la cadena
 		  produce exactamente el desacuerdo entre herramientas que esta especificación
 		  existe para evitar.
 		* Esta especificación no define cuándo se recargan las definiciones (vigilancia
@@ -247,7 +248,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 	Content >>
 		* La búsqueda ascendente y los niveles de usuario y sistema cargan ficheros de
 		  directorios que quien valida no controla necesariamente (los ancestros de una ruta
-		  compartida, `/etc/stxt`). Una definición **sólo valida**: no ejecuta código ni
+		  compartida, `/etc/stxt`). Una definición **solo valida**: no ejecuta código ni
 		  altera el documento. El impacto de una definición hostil se limita a cambiar el
 		  resultado de la validación.
 		* Aun así, una herramienta **DEBERÍA** poder mostrar qué directorios ha cargado y de

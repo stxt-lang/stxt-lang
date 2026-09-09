@@ -3,7 +3,7 @@ Document (dev.stxt.website): El entorno de trabajo — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-30
+		Last modif: 2026-09-08
 		Description: Cómo organizar un proyecto STXT: el directorio .stxt/, la cadena de resolución de gramáticas y la validación desde el editor, la CLI y la integración continua.
 
 	Header: El entorno de trabajo
@@ -17,7 +17,7 @@ Document (dev.stxt.website): El entorno de trabajo — STXT
 	Content >>
 		Se requiere la línea de comandos `stxt` (`npm install -g @stxt-lang/cli`, o `npx
 		@stxt-lang/cli` sin instalar) y, para la sección 4, Visual Studio Code con la extensión
-		`stxt-lang.stxt`. La sección 7 repite el recorrido en el playground, sin instalación.
+		`stxt-lang.stxt`. La sección 7 usa el playground, sin instalación.
 		Todo lo que se usa aquí está descrito en [Herramientas](tools).
 
 	Subheader: 1. El proyecto y el directorio `.stxt/`
@@ -55,7 +55,7 @@ Document (dev.stxt.website): El entorno de trabajo — STXT
 	Subheader: 2. Escribir la gramática
 
 	Content >>
-		La plantilla del libro es la del tutorial (sección 8). Se puede escribir directamente
+		La plantilla del libro es la del tutorial (sección 10). Se puede escribir directamente
 		en `.stxt/` con cualquier nombre, o dejar que la CLI la coloque: `stxt install`
 		la parsea, comprueba que valida contra su meta-esquema y solo entonces la escribe, en
 		forma canónica, como `.stxt/@stxt.template/<namespace>.stxt`. Esa nomenclatura es una
@@ -180,17 +180,18 @@ Document (dev.stxt.website): El entorno de trabajo — STXT
 		  avisos, con el mismo código y mensaje que en la línea de comandos.
 		* **Autocompletado** (`Ctrl+Espacio`): dentro de `Book` propone solo los hijos que
 		  la plantilla permite; en un `ENUM`, sus valores.
-		* **Hover** sobre un nombre de nodo: su nombre canónico, su tipo, los valores
-		  permitidos si es un `ENUM` y la descripción que dé la plantilla.
+		* **Hover** sobre un nombre de nodo: la descripción que dé la plantilla, su tipo y,
+		  si es un `ENUM`, sus valores.
 		* **Ir a la definición** (`F12`) sobre `Published` abre `.stxt/@stxt.template/com.acme.book.stxt`
 		  en la línea `Published: (?) DATE`.
 		* **Formatear documento**, desde la paleta de comandos o el atajo del editor:
 		  reindenta y normaliza sin perder comentarios ni líneas en blanco.
 
 		Al editar la plantilla, la extensión vuelve a resolver y revalida los documentos
-		abiertos sin recargar nada. Si un documento tiene namespace pero no hay gramática en
-		ninguna parte, no se muestra ningún aviso: **los esquemas son opcionales**, y un
-		documento sin gramática no es incorrecto, solo no se puede validar.
+		abiertos sin recargar nada. Si un documento tiene namespace y ninguna gramática de la
+		cadena lo define, la extensión marca `SCHEMA_NOT_FOUND` como aviso, el mismo código con
+		el que falla `stxt validate`; el ajuste `stxt.schemaValidation` desactiva la capa de
+		gramáticas, como `--no-schema` en la CLI.
 
 	Subheader: 5. Más de un nivel: usuario y sistema
 
@@ -264,9 +265,9 @@ Document (dev.stxt.website): El entorno de trabajo — STXT
 		cuyo namespace le corresponde. Dos gramáticas con el mismo namespace en el workspace
 		son un error, exactamente como en la sección 5.
 
-		La semilla inicial incluye `book.stxt` y la gramática `com.acme.book`: al alterar la
-		fecha o eliminar el `ISBN` del libro, el panel de problemas del pie muestra los mismos
-		códigos que la CLI. El autocompletado, el hover y el interruptor de
+		El botón *Abrir en el playground* del documento de la sección 3 lo carga junto con su
+		plantilla: al alterar la fecha o eliminar el `ISBN` del libro, el panel de problemas del
+		pie muestra los mismos códigos que la CLI. El autocompletado, el hover y el interruptor de
 		tabuladores/espacios funcionan igual que en la extensión, y *Share* copia una URL que
 		contiene el workspace entero, para compartirlo sin instalación.
 

@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Aurora
-		Last modif: 2026-09-07
+		Last modif: 2026-09-08
 		Description: STXT-TEMPLATE-SPEC: @stxt.template templates, the simple way to define the structure of an STXT document; every template compiles to an equivalent schema.
 		
 	Header: @STXT@ Template
@@ -37,7 +37,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		* STXT core **MUST NOT** impose semantics: templates are an optional layer, after parsing the @STXT@ document.
 		
 
-	Subsubheader: 1.1 Version of this specification
+	Subsubheader: 1.1 Date and status of this specification
 
 	Content >>
 		This specification carries its own **date** and its own **status** in the `Last modif` and
@@ -331,7 +331,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		
 		* If a template node declares children in `Structure >>`, its effective type **MUST** be `INLINE` or `GROUP`. Otherwise, the template **MUST** be considered invalid.
 		* The default type `INLINE` allows children, so a node without an explicit type may have children.
-		* Any type with content validation (`BLOCK`, `TEXT`, `NUMBER`, `BOOLEAN`, `DATE`, `ENUM`, `BASE64`, etc.) **DOES NOT** allow children.
+		* Any type with content validation (`BLOCK`, `TEXT`, `NUMBER`, `BOOLEAN`, `DATE`, `ENUM`, `BASE64`, etc.) does not allow children.
 		
 	Subsubheader: 8.3 Type set
 	
@@ -359,7 +359,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		Rules:
 		
 		* If the type is `ENUM`, the value list **MUST** exist for it to have valid content.
-		* If the type is **NOT** `ENUM`, a `[...]` list **MUST** be considered a template error.
+		* If the type is not `ENUM`, a `[...]` list **MUST** be considered a template error.
 		* Values are separated by commas `,`.
 		* Trim is applied (spaces/tabs) around each value.
 		* Value comparison **MUST** be done on the inline value already normalized through left/right trim.
@@ -371,7 +371,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 	Subsubheader: 9.1 Limitation of list syntax
 		
 	Content >>
-		Because of the form of the syntax `[a, b, c]`, an `ENUM` value declared in a template **CANNOT**
+		Because of the form of the syntax `[a, b, c]`, an `ENUM` value declared in a template cannot
 		contain a comma `,` (value separator) or a closing bracket `]` (end of list).
 		It also does not preserve spaces at the beginning or end, which trim removes.
 		
@@ -405,10 +405,10 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		Rules:
 		
 		* Every local node defined in `Structure` becomes part of the template's set of nodes.
-		* If a template references cross-namespace nodes, a complete validation system **SHOULD**
-		  have the corresponding template or schema for that external namespace if it wishes to deeply validate those nodes.
-		* An implementation **MAY** validate only cardinality and structure of the target namespace, treating cross-namespace nodes
-		  as a "black box", depending on configuration.
+		* A cross-namespace node is validated against the active definition of its namespace, with
+		  the rules of [*STXT-SCHEMA-SPEC* §8.1](stxt-schema-ref#s8-1): if it appears in a document
+		  and there is no definition for its namespace, or that definition does not define it, the
+		  document is invalid (`SCHEMA_NOT_FOUND`, `NODE_NOT_DEFINED_IN_SCHEMA`).
 		
 	Subheader: 12. Per-node descriptions (`Description`)
 
@@ -504,6 +504,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		20. More than one `Description` entry for the same node.
 		21. A `@Node Name` reference declares children: the structure is fixed by the referenced definition.
 		22. A `@Node Name` reference declares `ENUM` values.
+		23. The template document has more than one root node, or none.
 
 	Content >>
 		The validation of a **document** against a template is, by definition, the validation
@@ -526,7 +527,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		| `INDENTATION_*` codes of *STXT-SPEC* | 1: indentation of `Structure >>` |
 		| `TEMPLATE_ROOT_NOT_VALID` | 2: the root is not `Template (@stxt.template): …`, or the target namespace is not valid |
 		| `TEMPLATE_NAMESPACE_EMPTY` | 2: the target namespace is empty |
-		| `TEMPLATE_MULTIPLE_ROOTS` | the template document has more than one root node, or none |
+		| `TEMPLATE_MULTIPLE_ROOTS` | 23: the template document has more than one root node, or none |
 		| `TEMPLATE_STRUCTURE_REQUIRED` | 3: `Structure >>` missing or not a block |
 		| `STRUCTURE_LINE_NOT_VALID` | 4: a `Structure` line written in `>>` form, or whose rule part does not follow [section 6.2](#s6-2) (for instance an unclosed parenthesis); a line with neither `:` nor `>>` is already rejected by the core with `INVALID_LINE` ([*STXT-SPEC* §11.1](stxt-core-ref#s11-1)), at the line of the template |
 		| `CARDINALITY_NOT_VALID` | 5: malformed cardinality or invalid numbers |
@@ -671,7 +672,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		In this case:
 		
 		* `Metadata` belongs to `org.example.meta`.
-		* Deep validation of `Metadata` will depend on whether a schema/template exists for `org.example.meta`.
+		* `Metadata` is validated against the definition of `org.example.meta`; if a document uses it and there is no definition, the document is invalid (`SCHEMA_NOT_FOUND`).
 		
 	Subheader: 18. Appendix A — Grammar (informal)
 

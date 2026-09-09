@@ -3,7 +3,7 @@ Document (dev.stxt.website): Configuration files — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-23
+		Last modif: 2026-09-08
 		Description: STXT for human-readable, validatable configuration files: visible hierarchy, comments next to values and a template that catches errors in the editor.
 
 	Header: Configuration files
@@ -115,7 +115,7 @@ Document (dev.stxt.website): Configuration files — STXT
 		* `Network` is missing, or `Host` inside `Network`: `TOO_FEW_CHILDREN`.
 
 		And all of that is visible in the editor, underlined, before the file is saved. In
-		continuous integration, `stxt validate config/` performs the same check and stops
+		continuous integration, `stxt validate --recursive config/` performs the same check and stops
 		the deployment of an invalid configuration ([The command line](tools-cli)).
 
 	Subheader: Several environments, one structure

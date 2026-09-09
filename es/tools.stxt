@@ -3,7 +3,7 @@ Document (dev.stxt.website): Herramientas — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-30
+		Last modif: 2026-09-08
 		Description: Herramientas de STXT: playground, extensión de VS Code, línea de comandos y bibliotecas TypeScript, Java y Python, todas con las mismas cinco especificaciones.
 
 	Header: Herramientas
@@ -33,7 +33,7 @@ Document (dev.stxt.website): Herramientas — STXT
 
 		* No requiere instalación ni cuenta; el trabajo se guarda en el propio navegador.
 		* Incluye una semilla de documentos de ejemplo.
-		* Un documento se puede compartir con un enlace que lleva el contenido dentro.
+		* El workspace entero se puede compartir con un enlace que lleva el contenido dentro.
 
 		Permite seguir el [tutorial](tutorial) sin salir del navegador.
 
@@ -50,11 +50,11 @@ Document (dev.stxt.website): Herramientas — STXT
 	Content >>
 		Funciones:
 
-		* Errores de sintaxis en tiempo real, y de esquema cuando hay una gramática que
-		  aplica.
+		* Errores de sintaxis en tiempo real, y de esquema; un namespace que ningún nivel define
+		  se marca con `SCHEMA_NOT_FOUND` como aviso.
 		* Coloreado semántico dirigido por el propio parser.
 		* Autocompletado con los nodos que permite el esquema y los valores de un `ENUM`.
-		* Información al pasar el ratón: nodo, nombre canónico, tipo, valores y descripción.
+		* Información al pasar el ratón: la descripción que dé la definición, el tipo y, en un `ENUM`, sus valores.
 		* Ir a la definición (F12): del nodo al `Node:` de su esquema o a su línea en la
 		  `Structure` de su plantilla.
 		* Formateo del documento.
@@ -147,14 +147,14 @@ Document (dev.stxt.website): Herramientas — STXT
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>1.0.0</version>
+		    <version>1.0.2</version>
 		</dependency>
 
 	Content >>
 		O con Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:1.0.0'
+		implementation 'dev.stxt:stxt-core:1.0.2'
 
 	Subsubheader: Python
 

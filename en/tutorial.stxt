@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Last modif: 2026-08-29
+		Last modif: 2026-09-08
 		Description: Learn STXT from scratch: read and write documents, text blocks, namespaces and template validation. No prior knowledge required, just a text editor.
 
 	Header: @STXT@ Tutorial
@@ -165,7 +165,8 @@ Document (dev.stxt.website): STXT Tutorial
 		of Markdown, text in another format— without transforming or escaping anything.
 
 		Reference: [STXT-SPEC §6.1](stxt-core-ref#s6-1) (block rules) and
-		[§10.2](stxt-core-ref#s10-2) (lines inside blocks).
+		[§10.2](stxt-core-ref#s10-2) (lines inside blocks) and [§10.3](stxt-core-ref#s10-3)
+		(empty lines).
 
 	Subheader: 6. Lists: everything is a list
 
@@ -195,7 +196,7 @@ Document (dev.stxt.website): STXT Tutorial
 		position if it needs to. When the document is validated later, the template will
 		say how many times each child may appear; until then, any number is fine.
 
-		Reference: [STXT-SPEC §8.5](stxt-core-ref#s8-5) and the [FAQ](faq).
+		Reference: [STXT-SPEC §8.4](stxt-core-ref#s8-4) and the [FAQ](faq#why-are-there-no-lists).
 
 	Subheader: 7. Node names
 
@@ -286,7 +287,7 @@ Document (dev.stxt.website): STXT Tutorial
 					Protocols, messaging and integration patterns are described.
 
 	Content >>
-		It is the same document as in section 1 (`tutorial/book-ns.stxt`), with a single
+		It is the complete document of section 1 (`tutorial/book-ns.stxt`), with a single
 		difference: `Book` declares the namespace `com.acme.book`. And that is enough,
 		because the namespace **is inherited**: `Title`, `Authors`, `Author`, `Chapter`,
 		`Content`… every descendant of `Book` belongs to `com.acme.book` without writing it.
@@ -426,7 +427,6 @@ Document (dev.stxt.website): STXT Tutorial
 	Code >>
 		Schema (@stxt.schema): com.acme.book
 			Node: Book
-				Type: GROUP
 				Children:
 					Child: Title
 						Min: 1
@@ -466,7 +466,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Content >>
 		The template is shorter and resembles the document; the schema is longer and more
-		explicit, and is the natural place for per-node descriptions. For a namespace there
+		explicit. For a namespace there
 		can be only **one** active definition, template or schema; when there are several at
 		different levels, the one closest to the document wins.
 

@@ -3,7 +3,7 @@ Document (dev.stxt.website): The TypeScript library — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-29
+		Last modif: 2026-09-08
 		Description: @stxt-lang/core, the STXT parser for TypeScript and JavaScript on npm: the reference port of the ecosystem, implementing all five specifications.
 
 	Header: The TypeScript library
@@ -230,7 +230,7 @@ Document (dev.stxt.website): The TypeScript library — STXT
 		prints exactly what `stxt validate` would print:
 
 	Listing >>
-		schema line 5 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
+		schema line 6 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
 		schema line 1 [TOO_FEW_CHILDREN]: 0 nodes of 'com.acme.book:isbn' and min is 1
 
 	Content >>
@@ -240,7 +240,7 @@ Document (dev.stxt.website): The TypeScript library — STXT
 		  with zero `ISBN`.
 		* If the document uses a namespace the provider does not know, each node produces
 		  a `SCHEMA_NOT_FOUND`; the provider never throws for a missing namespace
-		  (`getSchema()` returns `null`).
+		  (`getSchema()` returns `undefined`).
 		* Nodes without a namespace are not validated (a rule of `SchemaValidator` itself);
 		  a document that is itself a definition is always validated against its
 		  meta-schema.
@@ -425,7 +425,7 @@ Document (dev.stxt.website): The TypeScript library — STXT
 		namespace and level—, `onFinish(node)` when it is closed, `onComment(lineNumber,
 		line)` and `onTextLine(node, lineNumber, lineString, line)` for each line of a
 		block. It is the basis of the extension's semantic colouring and of the line→node
-		map of the CLI formatter.
+		map of `Formatter`.
 
 	TypeScript >>
 		import { Parser, Observer, Node, TextNode, Line } from '@stxt-lang/core';

@@ -3,7 +3,7 @@ Document (dev.stxt.website): Contracts and legal agreements — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-23
+		Last modif: 2026-09-08
 		Description: STXT as the source format for contracts and agreements: normative text stays text while parties, dates and amounts are extractable, checkable data.
 
 	Header: Contracts and legal agreements
@@ -237,7 +237,7 @@ Document (dev.stxt.website): Contracts and legal agreements — STXT
 		* **Standard clauses**: the legal department maintains its approved clauses as text
 		  fragments; a contract incorporates them by copying, and a script compares each
 		  clause with the approved version and flags the ones that differ.
-		* **Validation**: `stxt validate contracts/` ([The command line](tools-cli)) in
+		* **Validation**: `stxt validate --recursive contracts/` ([The command line](tools-cli)) in
 		  continuous integration rejects an agreement without parties, without a valid
 		  date or with a status outside the list.
 		* **Extraction**: from the [canonical tree](stxt-tree-ref) come the quarter's expiries, the amounts

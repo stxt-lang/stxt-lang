@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Metadata:
 		Author: Joan Costa Mombiela
 		Revision: Claude Fable 5
-		Last modif: 2026-08-29
+		Last modif: 2026-09-08
 		Description: Tutorial de STXT desde cero: leer y escribir documentos, bloques de texto, namespaces y validación con plantillas. Sin conocimientos previos, solo un editor.
 
 	Header: @STXT@ Tutorial
@@ -167,7 +167,8 @@ Document (dev.stxt.website): STXT Tutorial
 		nada.
 
 		Referencia: [STXT-SPEC §6.1](stxt-core-ref#s6-1) (reglas de los bloques) y
-		[§10.2](stxt-core-ref#s10-2) (líneas dentro de bloques).
+		[§10.2](stxt-core-ref#s10-2) (líneas dentro de bloques) y [§10.3](stxt-core-ref#s10-3)
+		(líneas vacías).
 
 	Subheader: 6. Listas: todo son listas
 
@@ -198,7 +199,7 @@ Document (dev.stxt.website): STXT Tutorial
 		documento, la plantilla dirá cuántas veces puede aparecer cada hijo; hasta
 		entonces, cualquier número vale.
 
-		Referencia: [STXT-SPEC §8.5](stxt-core-ref#s8-5) y la [FAQ](faq).
+		Referencia: [STXT-SPEC §8.4](stxt-core-ref#s8-4) y la [FAQ](faq#por-que-no-hay-listas).
 
 	Subheader: 7. Los nombres de los nodos
 
@@ -221,7 +222,7 @@ Document (dev.stxt.website): STXT Tutorial
 		Nombre 日本語: nombre-日本語
 
 	Assert >>
-		`Título`, `título` y `TITULO-` son el mismo nodo.\\
+		`Título`, `título` y `TÍTULO-` son el mismo nodo.\\
 		`Peña` y `Pena` son nodos distintos, como lo son dos palabras distintas.
 
 	Content >>
@@ -291,7 +292,7 @@ Document (dev.stxt.website): STXT Tutorial
 					Se describen protocolos, mensajería y patrones de integración.
 
 	Content >>
-		Es el mismo documento de la sección 1 (`tutorial/book-ns.stxt`), con una sola
+		Es el documento completo de la sección 1 (`tutorial/book-ns.stxt`), con una sola
 		diferencia: `Book` declara el namespace `com.acme.book`. Y con eso basta, porque el
 		namespace **se hereda**: `Title`, `Authors`, `Author`, `Chapter`, `Content`… todos los
 		descendientes de `Book` pertenecen a `com.acme.book` sin escribirlo. Un hijo puede
@@ -431,7 +432,6 @@ Document (dev.stxt.website): STXT Tutorial
 	Code >>
 		Schema (@stxt.schema): com.acme.book
 			Node: Book
-				Type: GROUP
 				Children:
 					Child: Title
 						Min: 1
@@ -471,7 +471,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Content >>
 		La plantilla es más corta y se parece al documento; el esquema es más largo y más
-		explícito, y es el lugar natural para las descripciones de cada nodo. Para un
+		explícito. Para un
 		namespace solo puede haber **una** definición activa, plantilla o esquema; cuando
 		hay varias en distintos niveles, gana la más cercana al documento.
 

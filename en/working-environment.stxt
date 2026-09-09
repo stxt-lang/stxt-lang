@@ -3,7 +3,7 @@ Document (dev.stxt.website): The working environment — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-30
+		Last modif: 2026-09-08
 		Description: How to organise an STXT project: the .stxt/ directory, the grammar resolution chain, and validation from the editor, the command line and CI.
 
 	Header: The working environment
@@ -17,8 +17,7 @@ Document (dev.stxt.website): The working environment — STXT
 	Content >>
 		The `stxt` command line is required (`npm install -g @stxt-lang/cli`, or `npx
 		@stxt-lang/cli` without installing) and, for section 4, Visual Studio Code with the
-		`stxt-lang.stxt` extension. Section 7 repeats the walkthrough in the playground, with
-		no installation. Everything used here is described in [Tools](tools).
+		`stxt-lang.stxt` extension. Section 7 uses the playground, with no installation. Everything used here is described in [Tools](tools).
 
 	Subheader: 1. The project and the `.stxt/` directory
 
@@ -54,7 +53,7 @@ Document (dev.stxt.website): The working environment — STXT
 	Subheader: 2. Writing the grammar
 
 	Content >>
-		The book template is the one from the tutorial (section 8). It can be written straight
+		The book template is the one from the tutorial (section 10). It can be written straight
 		into `.stxt/` under any name, or the CLI can place it: `stxt install` parses
 		it, checks that it validates against its meta-schema and only then writes it, in
 		canonical form, as `.stxt/@stxt.template/<namespace>.stxt`. That naming is a CLI
@@ -74,7 +73,7 @@ Document (dev.stxt.website): The working environment — STXT
 					Chapter: (+)
 						Content: (?) TEXT
 			Description >>
-				Book: Template for publishing book records
+				Book: Template for publisher book records
 
 	Listing >>
 		stxt install book-template.stxt
@@ -106,7 +105,7 @@ Document (dev.stxt.website): The working environment — STXT
 
 	Code >>
 		Book (com.acme.book):
-			Title: Modern software architecture
+			Title: Modern Software Architecture
 			Authors:
 				Author: María Pérez
 				Author: Juan García
@@ -128,7 +127,7 @@ Document (dev.stxt.website): The working environment — STXT
 
 	Code >>
 		Book (com.acme.book):
-			Title: Modern software architecture
+			Title: Modern Software Architecture
 			Authors:
 				Author: María Pérez
 				Author: Juan García
@@ -178,17 +177,18 @@ Document (dev.stxt.website): The working environment — STXT
 		  the same code and message as on the command line.
 		* **Completion** (`Ctrl+Space`): inside `Book` it proposes only the children the
 		  template allows; in an `ENUM`, its values.
-		* **Hover** over a node name: its canonical name, its type, the allowed values if it
-		  is an `ENUM`, and the description given by the template.
+		* **Hover** over a node name: the description given by the template, its type and,
+		  if it is an `ENUM`, its values.
 		* **Go to definition** (`F12`) on `Published` opens `.stxt/@stxt.template/com.acme.book.stxt`
 		  at the line `Published: (?) DATE`.
 		* **Format document**, from the command palette or the editor's shortcut: it
 		  reindents and normalises without losing comments or blank lines.
 
 		When the template is edited, the extension resolves again and revalidates the open
-		documents without reloading anything. If a document has a namespace but there is no
-		grammar for it anywhere, no warning is shown: **schemas are optional**, and a document
-		without a grammar is not wrong, it just cannot be validated.
+		documents without reloading anything. If a document has a namespace and no grammar in
+		the chain defines it, the extension flags `SCHEMA_NOT_FOUND` as a warning, the same code
+		`stxt validate` fails with; the `stxt.schemaValidation` setting disables the grammar
+		layer, like `--no-schema` in the CLI.
 
 	Subheader: 5. More than one level: user and system
 
@@ -261,9 +261,9 @@ Document (dev.stxt.website): The working environment — STXT
 		matches. Two grammars with the same namespace in the workspace are an error, exactly
 		as in section 5.
 
-		The initial seed includes `book.stxt` and the `com.acme.book` grammar: when the date
-		is altered or the `ISBN` removed from the book, the problems panel at the bottom shows
-		the same codes as the CLI. Completion, hover and the tabs/spaces switch work as in the
+		The *Open in the playground* button of the document in section 3 loads it together with
+		its template: when the date is altered or the `ISBN` removed from the book, the problems
+		panel at the bottom shows the same codes as the CLI. Completion, hover and the tabs/spaces switch work as in the
 		extension, and *Share* copies a URL that contains the whole workspace, to share it
 		with no installation.
 

@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Zenith
-		Last modif: 2026-09-07
+		Last modif: 2026-09-08
 		Description: STXT-SPEC, la especificación base del lenguaje STXT: indentación como estructura, nodos y bloques de texto, namespaces, normalización, errores y seguridad.
 		
 	Header: @STXT@ Core
@@ -124,7 +124,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		1. **Nodo contenedor inline (nodo INLINE)**: `Nombre nodo: Valor inline`
 		2. **Nodo bloque de texto (nodo BLOCK)**: `Nombre nodo >>`
 		
-		El nombre del nodo **NO puede estar vacío**. Una línea con sólo `:` o `>>` no es válida. 
+		El nombre del nodo **NO DEBE** estar vacío. Una línea con solo `:` o `>>` no es válida. 
 		
 		**Ejemplo con nodos INLINE:**
 	
@@ -145,10 +145,10 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 			  - Se hace trim a la derecha
 			  - NO se hace trim a la izquierda
 		
-	Content>>
+	Content >>
 		Un nodo puede incluir opcionalmente un namespace:
 		
-	Code>>
+	Code >>
 		Nombre (namespace.normal):
 		Nombre (@namespace.especial):
 		
@@ -175,7 +175,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		
 		Ejemplos equivalentes a nivel de `Nombre de nodo`:
 
-	Code>>
+	Code >>
 		Nombre de nodo:
 		Nombre de nodo: valor
 		Nombre  de   nodo   : valor
@@ -184,14 +184,14 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		Nombre  de nodo >>
 		Nombre de nodo>>
 		
-	Content>>
+	Content >>
 		La definición de un nodo siempre **DEBE** incluir o bien `:` (nodo contenedor INLINE) o bien `>>` (nodo de texto BLOCK),
 		**siempre precedido de un nombre no vacío**.
 		
 	Subsubheader: 4.2 Restricciones del nombre del nodo
 		
 	Content >>
-		El nombre del nodo sólo permitirá **letras, dígitos y marcas combinantes Unicode** (categorías
+		El nombre del nodo solo permitirá **letras, dígitos y marcas combinantes Unicode** (categorías
 		generales `L`, `Nd`, `Mn` y `Mc`, en cualquier alfabeto: latino, griego, cirílico, árabe,
 		devanagari, tailandés, CJK…) y los caracteres separadores `-`, `_`, ` `. Se permiten nombres con
 		diacríticos, mayúsculas y minúsculas. Las marcas combinantes (`Mn`, `Mc`) son las vocales y
@@ -200,7 +200,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		admiten. La comprobación se hace sobre la forma **NFC** del nombre ([sección 4.3](#s4-3)), de
 		modo que `e` + acento combinante se comprueba como `é`.
 
-		El nombre **DEBE** contener al menos una letra o un dígito: un nombre compuesto sólo por
+		El nombre **DEBE** contener al menos una letra o un dígito: un nombre compuesto solo por
 		separadores tendría nombre canónico vacío ([sección 4.3](#s4-3)).
 
 	Subsubheader: 4.3 Nombre canónico del nodo
@@ -254,7 +254,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		
 		Ejemplos de estilo correcto:
 		
-	Code>>
+	Code >>
 		Nombre con valor: El valor
 		Nombre sin valor:
 		Nombre con namespace (el.namespace):
@@ -285,8 +285,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 
 	Subsubheader: 5.1 Normalización del valor
 	
-	Content>>
-		Los valores son literales: la normalización fuerte se aplica sólo a los identificadores
+	Content >>
+		Los valores son literales: la normalización fuerte se aplica solo a los identificadores
 		estructurales. Al valor inline se le aplica únicamente un **trim a ambos lados**; la regla
 		completa y sus casos están en la [sección 10.1](#s10-1).
 
@@ -309,7 +309,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Subsubheader: 6.1 Reglas formales
 		
 	Content >>
-		* La línea del nodo `>>` **NO DEBE** contener contenido significativo tras `>>`, excepto espacios opcionales.
+		* La línea del nodo `>>` **NO DEBE** contener contenido significativo tras `>>`, excepto blancos opcionales ([sección 4](#s4)).
 		* Todas las líneas con indentación **estrictamente mayor** que la del nodo `>>` pertenecen al **contenido textual del bloque**.
 		* Dentro del contenido del bloque (indentación estrictamente mayor que la del nodo `>>`):
 		  * El parser **NO DEBE** interpretar ninguna línea como nodo estructurado, aunque contenga `:` u otra sintaxis de @STXT@.
@@ -362,7 +362,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* Un namespace **PUEDE** empezar por `@`.
 		* **DEBE** usar formato jerárquico (`a.b.c`), con al menos 2 elementos (`a.b`).
 		* El namespace efectivo de un nodo que no especifica namespace se hereda del padre, o es el namespace vacío `""` si es un nodo raíz: ver la [sección 7.2](#s7-2).
-		* El namespace vacío NO puede especificarse como `Nombre nodo ()`. 
+		* El namespace vacío no puede especificarse como `Nombre nodo ()`. 
 		* Entre los paréntesis **NO DEBE** haber espacios ni tabuladores: `Nodo ( a.b ):` y `Nodo (a. b):` son inválidos (`INVALID_NAMESPACE`). Sí puede haberlos entre el nombre y `(`, y entre `)` y `:` o `>>`.
 		* Un nodo hijo puede redefinir su namespace indicando `(otro.namespace)`, en cuyo caso usa ese namespace en lugar del heredado, y sus descendientes heredan el nuevo.
 		* En la entrada, un namespace **PUEDE** escribirse con letras mayúsculas o minúsculas ASCII; el parser **DEBE** normalizarlo a minúsculas. El comportamiento es análogo al de los nombres de dominio: `COM.DEMO.DOCS` y `com.demo.docs` son el mismo namespace.
@@ -725,7 +725,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		   usar un estilo distinto del de la línea del nodo `>>` o del resto del bloque. Una línea no
 		   vacía cuyo prefijo no alcanza el nivel de bloque con un número válido de espacios (p. ej.
 		   2 espacios bajo un `>>` de nivel 0) es el error de la [sección 8.3](#s8-3)
-		   (`INVALID_NUMBER_SPACES`): ni es texto del bloque ni lo cierra.
+		   (`INDENTATION_SPACES_NOT_VALID`): ni es texto del bloque ni lo cierra.
 		2. El parser elimina **solo** ese prefijo (el nivel de bloque), conservando cualquier
 		   indentación adicional como parte del texto. El resto de la línea es **texto libre**:
 		   una vez alcanzado el nivel de bloque, no se aplica ninguna regla adicional de
@@ -816,12 +816,12 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		1. Espacios que no sean múltiplos de 4 (cuando se usan espacios para indentación).
 		2. Mezcla de espacios y tabuladores en la indentación de una misma línea ([sección 8.1](#s8-1)).
 		3. Saltos en los niveles de indentación, incluida una primera línea indentada ([sección 8.3](#s8-3)).
-		4. Un nodo `>>` contiene contenido significativo inline en la misma línea que `>>`.
-		5. Un nodo no contiene ni `:` ni `>>`.
+		4. Un nodo `>>` contiene contenido significativo tras `>>` en la misma línea.
+		5. Un nodo no contiene ni `:` ni `>>`, o contiene `>>` antes que `:`.
 		6. El nombre lógico de un nodo es la cadena vacía.
 		7. El nombre canónico de un nodo es la cadena vacía ([sección 4.3](#s4-3)).
 		8. El nombre de un nodo contiene caracteres no permitidos ([sección 4.2](#s4-2)).
-		9. Un namespace no cumple las restricciones de la [sección 7](#s7) (formato `a.b`, sólo ASCII `[a-z0-9]` por elemento, `@` opcional inicial).
+		9. Un namespace no cumple las restricciones de la [sección 7](#s7) (formato `a.b`, solo ASCII `[a-z0-9]` por elemento, `@` opcional inicial).
 		
 		Las condiciones 1, 2 y 3 se aplican también a las líneas de comentario ([sección 9](#s9)).
 		Las líneas vacías **no** son causa de error (su indentación no se valida).
@@ -853,7 +853,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		([sección 9](#s9)). Los códigos de los límites del parser se definen en la
 		[sección 11.2](#s11-2). Los códigos de la validación semántica se definen en
 		[*STXT-SCHEMA-SPEC*](stxt-schema-ref#s13-1) y [*STXT-TEMPLATE-SPEC*](stxt-template-ref#s14-1); los
-		de la localización de esquemas, en [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
+		de la localización de schemas, en [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
 
 	Subsubheader: 11.2 Límites del parser
 
@@ -907,7 +907,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		Una implementación @STXT@ es conforme si:
 		
 		* Implementa la sintaxis descrita en este documento.
-		* Acepta UTF-8 con o sin BOM y los finales de línea LF y CRLF ([sección 3](#s3)).
+		* Acepta UTF-8 y los finales de línea LF y CRLF y, si acepta el BOM, lo descarta ([sección 3](#s3)).
 		* Aplica las reglas estrictas de indentación y jerarquía.
 		* Interpreta correctamente nodos con `:` y bloques `>>`.
 		* Interpreta comentarios fuera del contenido de bloques `>>`, valida su indentación como la de un nodo sin que alteren la jerarquía, y un comentario con indentación menor o igual que la del nodo `>>` cierra el bloque activo, según la [sección 9](#s9).
@@ -1111,7 +1111,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		
 		* **Normalización adicional:**
 		  - Nombres de nodo: según [sección 4.1](#s4-1)–[4.3](#s4-3).
-		  - Namespaces: normalizados a minúsculas durante el parseo ([sección 7](#s7)); sólo se conserva la forma minúscula.
+		  - Namespaces: normalizados a minúsculas durante el parseo ([sección 7](#s7)); solo se conserva la forma minúscula.
 		  - Valores inline: trim izquierdo y derecho ([sección 10.1](#s10-1)).
 		  - Líneas de bloque: recortar el nivel de bloque conservando la indentación adicional + trim derecha + preservar las líneas vacías que preceden a más contenido y descartar las finales ([sección 10.2](#s10-2)–[10.3](#s10-3)).
 
@@ -1130,13 +1130,13 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 
 		La localización de los documentos schema en el sistema de ficheros (directorios `.stxt`) se define en [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
 
-	Subsubheader: 17.1. Asociación de un schema a un namespace
+	Subsubheader: 17.1 Asociación de un schema a un namespace
 		
 	Content >>
 		Para asociar un schema al namespace `com.example.mail`, se escribe un documento (es el mismo
-		modelo que expresa la plantilla del [apéndice C](#s18-1)):
+		modelo que expresa el template del [apéndice C](#s18-1)):
 		
-	Code>>
+	Code >>
 		Schema (@stxt.schema): com.example.mail
 			Node: Email
 				Children:
@@ -1169,7 +1169,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 			Node: Body Content
 				Type: TEXT
 		
-	Subsubheader: 17.2. Aplicación a documentos @STXT@
+	Subsubheader: 17.2 Aplicación a documentos @STXT@
 		
 	Content >>
 		Un documento que declare el mismo namespace:
@@ -1191,7 +1191,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* Validando tipos de valor (`TEXT`, `DATE`, `NUMBER`, etc.).
 		* Validando cardinalidades definidas en `Child`.
 		
-	Subsubheader: 17.3. Independencia del núcleo
+	Subsubheader: 17.3 Independencia del núcleo
 		
 	Content >>
 		@STXT@ **NO DEBE** imponer reglas semánticas provenientes de schemas.
@@ -1202,7 +1202,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		
 	Subheader: 18. Apéndice C — Interacción con `@stxt.template`
 
-	Content>>	
+	Content >>	
 		El sistema de templates permite añadir validación semántica a documentos @STXT@ **sin modificar la sintaxis base** del lenguaje.
 		
 		El núcleo @STXT@ no define cómo debe reaccionar una implementación: el comportamiento pertenece exclusivamente al sistema de templates ([*STXT-TEMPLATE-SPEC*](stxt-template-ref)).
@@ -1211,18 +1211,17 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		
 		y cuyo objetivo es definir las reglas estructurales, tipos de valor y cardinalidades de los nodos pertenecientes a un namespace concreto.
 		
-		El sistema de templates es análogo a los schemas, pero con una sintaxis simplificada, orientada a prototipos rápidos. 
-		Aun así, es un sistema válido para todo tipo de documentos. Podría considerarse *azúcar sintáctico*, ya que internamente puede usar 
-		la misma representación que un schema.
+		El sistema de templates es análogo al de schemas, con una sintaxis simplificada pensada para la escritura
+		manual: todo template se compila a un schema equivalente ([*STXT-TEMPLATE-SPEC* §13](stxt-template-ref#s13)).
 		
 		El sistema de templates **PUEDE** convivir junto a un sistema con schemas, ya que al final un template define la misma información que un schema.
 	
-	Subsubheader: 18.1. Asociación de un template a un namespace
+	Subsubheader: 18.1 Asociación de un template a un namespace
 		
 	Content >>
 		Para asociar un template al namespace `com.example.mail`, se escribe un documento:
 		
-	Code>>
+	Code >>
 		Template (@stxt.template): com.example.mail
 			Structure >>
 				Email (com.example.mail):
@@ -1234,7 +1233,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 					Body Content: (1) TEXT
 					Metadata (org.example.meta): (?)
 					
-	Content>>
+	Content >>
 		Una vez definido, un template cumple la misma función que un schema.
 		Si una implementación encuentra varios schemas o templates aplicables al mismo namespace,
 		**DEBERÍA** definir una política de prioridad clara y determinista.

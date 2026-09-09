@@ -3,7 +3,7 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 	Metadata:
 		Author: Claude Fable 5
 		Revision: Joan Costa Mombiela
-		Last modif: 2026-08-29
+		Last modif: 2026-09-08
 		Description: stxt, el parser de STXT para Python en PyPI: Python puro, sin dependencias, 3.10+, con las cinco especificaciones y los mismos códigos de error.
 
 	Header: La biblioteca Python
@@ -227,7 +227,7 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 		imprime exactamente lo que imprimiría `stxt validate`:
 
 	Listing >>
-		schema line 5 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
+		schema line 6 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
 		schema line 1 [TOO_FEW_CHILDREN]: 0 nodes of 'com.acme.book:isbn' and min is 1
 
 	Content >>
