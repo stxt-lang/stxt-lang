@@ -17,12 +17,15 @@ results are data, and the runner is a few dozen lines you write once.
 - `definition-errors/` — invalid schemas and templates, and the error each one must be
   rejected with.
 - `discovery/` — the files the discovery cases mount in a virtual file system: definitions,
-  and a few files that are not.
+  and a few files that are not. What a virtual tree cannot express — symbolic links, which a
+  resolution directory never follows and which form no project level (STXT-DISCOVERY-SPEC §3,
+  §4.1), unreadable directories, the descent bound — is not in the kit: the hardening tests of
+  the official ports exercise it and `stxt-impl`'s `TRACEABILITY.md` records it.
 - `writer/` — the canonical text form, in both indentation styles, of the documents of
   `tree/`.
 - `format/` — documents to reformat, each with its reformatted text in both styles.
 
-The kit is identified by a **date** (`kit` in the manifest, currently **2026-09-09**), the date
+The kit is identified by a **date** (`kit` in the manifest, currently **2026-09-10**), the date
 of its current content, in the same way the specifications are (STXT-SPEC §1.1). `specifications`
 pins, for each specification the kit certifies, the date of the text the cases were written
 against. Adding cases moves the kit date; changing what an existing case expects only happens
@@ -49,7 +52,7 @@ cases— an implementation must pass:
 
 `text` is a side branch: it needs only `core`, and `discovery` does not include it. An
 implementation that offers the writer and the formatter certifies it on top of whichever
-other profile it claims: "kit 2026-09-09, `discovery` and `text` profiles".
+other profile it claims: "kit 2026-09-10, `discovery` and `text` profiles".
 
 An implementation **conforms to a profile of the kit** if it passes every required case of
 that profile and of the ones it includes. Conformance is declared against the dates of the
@@ -58,14 +61,14 @@ version of a package; an implementation exposes the pinned date of STXT-SPEC as 
 `SPEC_VERSION`, and says whether it passes all the cases of the profile or only the required
 ones (*Requirement levels*, below):
 
-> Conforms to STXT-SPEC 2026-09-07 and STXT-TREE-SPEC 2026-09-07 (conformance kit 2026-09-09,
+> Conforms to STXT-SPEC 2026-09-07 and STXT-TREE-SPEC 2026-09-07 (conformance kit 2026-09-10,
 > `core` profile, all cases).
 
 > Conforms to STXT-SPEC 2026-09-07, STXT-TREE-SPEC 2026-09-07, STXT-SCHEMA-SPEC 2026-09-07,
-> STXT-TEMPLATE-SPEC 2026-09-07 and STXT-DISCOVERY-SPEC 2026-09-07 (conformance kit 2026-09-09,
+> STXT-TEMPLATE-SPEC 2026-09-07 and STXT-DISCOVERY-SPEC 2026-09-10 (conformance kit 2026-09-10,
 > `discovery` and `text` profiles, all cases).
 
-> Conforms to STXT-SPEC 2026-09-07 and STXT-TREE-SPEC 2026-09-07 (conformance kit 2026-09-09,
+> Conforms to STXT-SPEC 2026-09-07 and STXT-TREE-SPEC 2026-09-07 (conformance kit 2026-09-10,
 > `core` profile, required cases).
 
 ### Requirement levels

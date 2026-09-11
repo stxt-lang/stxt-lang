@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Aurora
-		Last modif: 2026-09-08
+		Last modif: 2026-09-10
 		Description: STXT-DISCOVERY-SPEC: how tools locate the schemas and templates of an STXT document, with .stxt/ directories, user and system levels and STXT_PATH.
 
 	Header: @STXT@ Discovery
@@ -97,6 +97,15 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		* The search ends at the root of the file system. A tool **MAY** impose an ascent
 		  limit (for example, 32 levels) as a safeguard against pathological paths
 		  ([section 10](#s10)).
+		* The `.stxt` entry of an ancestor **MUST** be a real directory: if it is a symbolic
+		  link, the tool **MUST NOT** follow it and that ancestor contributes no level, even
+		  when the link points to a directory. The ancestors of a document are written by
+		  whoever created the project, who is not always the validating party — a cloned
+		  repository — and a `.stxt` linked to the home folder or to the root would take the
+		  resolution into a foreign tree ([section 10](#s10)). It is the same rule that
+		  applies inside the directory ([section 3](#s3)). The user and system levels
+		  ([section 4.2](#s4-2)) and the `STXT_PATH` entries ([section 6](#s6)), chosen by the
+		  user, may be links.
 		* A document with no location on the file system (standard input, an unsaved
 		  buffer) has no project level: its chain starts at the user level.
 
@@ -113,6 +122,13 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		  account on a machine.
 		* If any of the directories does not exist, that level simply contributes no
 		  definitions; it is not an error.
+		* Both directories are chosen by the user or by the machine's administrator, not by
+		  the author of a project. They **MAY** therefore be symbolic links and a tool **MUST**
+		  follow them: `$HOME/.stxt` linked to a personal configuration repository is an
+		  intended use. A linked `$HOME/.stxt` does not take part as a project level of a
+		  document located under the home folder ([section 4.1](#s4-1)), but it does as the
+		  user level. Inside them [section 3](#s3) applies: the links they contain are not
+		  followed.
 
 	Subheader: 5. Precedence
 
@@ -174,6 +190,8 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		* Entries point **directly** to definition directories: they do not need to be
 		  named `.stxt`.
 		* A nonexistent entry is ignored; it is not an error.
+		* An entry **MAY** be a symbolic link, and it is followed: whoever defines `STXT_PATH`
+		  chooses its directories ([section 10](#s10)). Inside it [section 3](#s3) applies.
 		* An empty entry — the one left by a leading, trailing or doubled separator, as in
 		  `:/opt/defs` — is ignored as well: it does not stand for the working directory.
 		* An `STXT_PATH` that is defined but empty leaves the chain empty: no namespace
@@ -262,3 +280,11 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		  link would allow reading a file from outside the `.stxt/` (and leaking its content through
 		  a resolution error). A directory that cannot be listed contributes no definitions and does
 		  not stop the resolution of the rest.
+		* For the same reason, the `.stxt` of an ancestor that is a symbolic link **forms no
+		  level** ([section 4.1](#s4-1)): the ancestors are the part of the chain written by
+		  whoever created the project, not by the validating party, and a `.stxt` linked to the
+		  home folder or to the root in a cloned repository would be enough for the tool to walk
+		  that whole tree, parsing every file as a definition and leaking the line that fails to
+		  parse. The user and system levels and the `STXT_PATH` entries are followed when they
+		  are links ([section 4.2](#s4-2), [section 6](#s6)): the user chooses them, and linking
+		  `$HOME/.stxt` to a personal configuration repository is an intended use.

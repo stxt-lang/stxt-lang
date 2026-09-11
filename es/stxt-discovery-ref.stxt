@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Aurora
-		Last modif: 2026-09-08
+		Last modif: 2026-09-10
 		Description: STXT-DISCOVERY-SPEC: cómo localizan las herramientas los esquemas y plantillas de un documento STXT, con los directorios .stxt/ y STXT_PATH.
 
 	Header: @STXT@ Discovery
@@ -98,6 +98,15 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		* La búsqueda termina en la raíz del sistema de ficheros. Una herramienta **PUEDE**
 		  imponer un límite de ascenso (por ejemplo, 32 niveles) como salvaguarda frente a
 		  rutas patológicas ([sección 10](#s10)).
+		* La entrada `.stxt` de un ancestro **DEBE** ser un directorio real: si es un enlace
+		  simbólico, la herramienta **NO DEBE** seguirlo y ese ancestro no aporta nivel, aunque
+		  el enlace apunte a un directorio. Los ancestros de un documento los escribe quien
+		  creó el proyecto, que no siempre es quien valida —un repositorio clonado—, y un
+		  `.stxt` enlazado a la carpeta personal o a la raíz llevaría la resolución a un árbol
+		  ajeno ([sección 10](#s10)). Es la misma regla que rige dentro del directorio
+		  ([sección 3](#s3)). Los niveles de usuario y de sistema ([sección 4.2](#s4-2)) y las
+		  entradas de `STXT_PATH` ([sección 6](#s6)), que elige el propio usuario, sí pueden
+		  ser enlaces.
 		* Un documento sin ubicación en el sistema de ficheros (entrada estándar, un buffer
 		  sin guardar) no tiene nivel de proyecto: su cadena empieza en el nivel de usuario.
 
@@ -114,6 +123,13 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		  cuentas de una máquina.
 		* Si alguno de los directorios no existe, ese nivel simplemente no aporta
 		  definiciones; no es un error.
+		* Ambos directorios los elige el propio usuario o el administrador de la máquina, no
+		  el autor de un proyecto. Por eso **PUEDEN** ser enlaces simbólicos y una herramienta
+		  **DEBE** seguirlos: `$HOME/.stxt` enlazado a un repositorio de configuración personal
+		  es un uso previsto. Un `$HOME/.stxt` enlazado no participa como nivel de proyecto de
+		  un documento situado bajo la carpeta personal ([sección 4.1](#s4-1)), pero sí como
+		  nivel de usuario. Dentro de ellos rige la [sección 3](#s3): los enlaces que
+		  contengan no se siguen.
 
 	Subheader: 5. Precedencia
 
@@ -174,6 +190,8 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		* Las entradas apuntan **directamente** a directorios de definiciones: no es
 		  necesario que se llamen `.stxt`.
 		* Una entrada inexistente se ignora; no es un error.
+		* Una entrada **PUEDE** ser un enlace simbólico, y se sigue: quien define `STXT_PATH`
+		  elige sus directorios ([sección 10](#s10)). Dentro de ella rige la [sección 3](#s3).
 		* Una entrada vacía —la que deja un separador inicial, final o doble, como en
 		  `:/opt/defs`— se ignora igualmente: no designa el directorio de trabajo.
 		* Una `STXT_PATH` definida pero vacía deja la cadena vacía: ningún namespace
@@ -266,3 +284,12 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		  leer un fichero de fuera del `.stxt/` (y filtrar su contenido a través de un error de
 		  resolución). Un directorio que no pueda listarse no aporta definiciones y no detiene la
 		  resolución del resto.
+		* Por la misma razón, el `.stxt` de un ancestro que sea un enlace simbólico **no forma
+		  nivel** ([sección 4.1](#s4-1)): los ancestros son la parte de la cadena que escribe
+		  quien creó el proyecto, no quien valida, y un `.stxt` enlazado a la carpeta personal o
+		  a la raíz en un repositorio clonado bastaría para que la herramienta recorriese ese
+		  árbol entero, parseando cada fichero como definición y filtrando la línea que no
+		  parsee. Los niveles de usuario y de sistema y las entradas de `STXT_PATH` sí se siguen
+		  cuando son enlaces ([sección 4.2](#s4-2), [sección 6](#s6)): los elige el propio
+		  usuario, y enlazar `$HOME/.stxt` a un repositorio de configuración personal es un uso
+		  previsto.
