@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Aurora
-		Last modif: 2026-09-08
+		Last modif: 2026-09-11
 		Description: STXT-TEMPLATE-SPEC: @stxt.template templates, the simple way to define the structure of an STXT document; every template compiles to an equivalent schema.
 		
 	Header: @STXT@ Template

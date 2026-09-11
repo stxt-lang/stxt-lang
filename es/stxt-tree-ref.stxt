@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Zenith
-		Last modif: 2026-09-08
+		Last modif: 2026-09-11
 		Description: STXT-TREE-SPEC: la representación JSON canónica del árbol de un documento STXT y las dos operaciones de escritura, forma canónica y reformateado.
 
 	Header: @STXT@ Tree
@@ -29,7 +29,7 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		pretende conservar comentarios, líneas vacías fuera de bloques, el estilo de
 		indentación, la posición exacta de los nodos ni otras decisiones de presentación.
 		Para reescribir un fichero conservando esos elementos hace falta una capa de
-		análisis de fuente distinta del árbol.
+		análisis de fuente distinta del árbol: el reformateado de la [sección 12](#s12).
 
 		La sintaxis de los documentos y el significado de sus nombres, valores, bloques,
 		namespaces e indentación se definen en [*STXT-SPEC*](stxt-core-ref). Los schemas, templates y la
@@ -84,9 +84,9 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		| `canonicalName` | string | Nombre canónico calculado según [*STXT-SPEC*](stxt-core-ref) [sección 4.3](stxt-core-ref#s4-3): NFC, minúsculas Unicode y separadores compactados en `-`. |
 		| `namespace` | string | Namespace **efectivo** del nodo, ya heredado y normalizado a minúsculas. Es `""` si no existe namespace efectivo. |
 		| `form` | string | Exactamente `"inline"` para un nodo `:` o `"block"` para un nodo `>>`. |
-		| `children` | array | Sólo en nodos `inline`: representaciones de sus hijos directos, en orden de aparición. Siempre existe para esa forma, incluso cuando está vacío. |
-		| `value` | string | Sólo en nodos `inline`: su valor inline ya normalizado con trim. Siempre existe para esa forma, incluso si es `""`. |
-		| `lines` | array de strings | Sólo en nodos `block`: las líneas lógicas del bloque, en orden. Siempre existe para esa forma, incluso si está vacío. |
+		| `children` | array | Solo en nodos `inline`: representaciones de sus hijos directos, en orden de aparición. Siempre existe para esa forma, incluso cuando está vacío. |
+		| `value` | string | Solo en nodos `inline`: su valor inline ya normalizado con trim. Siempre existe para esa forma, incluso si es `""`. |
+		| `lines` | array de strings | Solo en nodos `block`: las líneas lógicas del bloque, en orden. Siempre existe para esa forma, incluso si está vacío. |
 
 	Content >>
 		Un nodo `inline` **DEBE** tener exactamente los miembros `name`, `canonicalName`,
@@ -152,10 +152,11 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 	Subheader: 8. Errores y validación
 
 	Content >>
-		STXT-TREE-SPEC solo representa documentos que han superado el parseo sintáctico. No
-		define la serialización de excepciones, diagnósticos, advertencias, errores de
-		discovery ni árboles parciales después de un error. En especial, el modo de recuperar
-		un parser tras varios errores no es parte de este contrato.
+		STXT-TREE-SPEC solo representa documentos que han superado el parseo sintáctico; el
+		reformateado de la [sección 12](#s12) acepta un documento con errores, pero los devuelve
+		tal cual, sin representarlos. No define la serialización de excepciones, diagnósticos,
+		advertencias, errores de discovery ni árboles parciales después de un error. En especial,
+		el modo de recuperar un parser tras varios errores no es parte de este contrato.
 
 		Los tests de entradas inválidas siguen comprobando los códigos estables y las líneas
 		definidos por las especificaciones correspondientes. Una representación normalizada de
@@ -337,8 +338,8 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 
 	Content >>
 		Un escritor @STXT@ es conforme si, para todo árbol y en los dos estilos, produce
-		exactamente el texto de la [sección 11.1](#s11-1). El directorio `conformance/` de
-		la fuente de especificaciones contiene casos normativos de árbol y texto esperado; toda
+		exactamente el texto de la [sección 11.1](#s11-1). El directorio `conformance/writer/`
+		de la fuente de especificaciones contiene casos normativos de árbol y texto esperado; toda
 		implementación que sostenga esta sección **DEBE** producir el texto esperado de cada
 		uno, byte a byte.
 
@@ -441,5 +442,5 @@ Document (dev.stxt.website): STXT Tree — Representación canónica del documen
 		Un formateador @STXT@ es conforme si, para todo documento y en los dos estilos,
 		produce exactamente el texto de la [sección 12.1](#s12-1) y los mismos errores de
 		sintaxis que el parser. Los casos normativos de documento y texto reformateado
-		esperado viven también en el directorio `conformance/` de la fuente de
+		esperado viven también en el directorio `conformance/format/` de la fuente de
 		especificaciones.

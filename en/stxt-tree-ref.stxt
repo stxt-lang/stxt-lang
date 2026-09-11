@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Zenith
-		Last modif: 2026-09-08
+		Last modif: 2026-09-11
 		Description: STXT-TREE-SPEC: the canonical JSON representation of an STXT document tree and the two writing operations, canonical text form and reformatting.
 
 	Header: @STXT@ Tree
@@ -27,7 +27,8 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		This specification represents the **logical tree**, not the source file. It does not
 		attempt to retain comments, blank lines outside blocks, indentation style, the exact
 		position of nodes, or other presentation choices. Rewriting a file while retaining
-		those elements requires a source-analysis layer separate from the tree.
+		those elements requires a source-analysis layer separate from the tree: the
+		reformatting of [section 12](#s12).
 
 		[*STXT-SPEC*](stxt-core-ref) defines document syntax and the meaning of names, values, blocks,
 		namespaces and indentation. Schemas, templates and definition discovery do not alter
@@ -52,7 +53,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		*document* retain the meaning defined by [*STXT-SPEC*](stxt-core-ref).
 
 		In this document, a **tree representation** is a JSON value that meets [sections 3](#s3) to
-		6. An **emitter** is an implementation that transforms parsed @STXT@ nodes into that
+		[6](#s6). An **emitter** is an implementation that transforms parsed @STXT@ nodes into that
 		representation.
 
 	Subheader: 3. Document value
@@ -149,10 +150,11 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 	Subheader: 8. Errors and validation
 
 	Content >>
-		STXT-TREE-SPEC represents only documents that completed syntactic parsing. It does
-		not define serialization of exceptions, diagnostics, warnings, discovery errors or
-		partial trees after an error. In particular, a parser's recovery after multiple errors
-		is not part of this contract.
+		STXT-TREE-SPEC represents only documents that completed syntactic parsing; the
+		reformatting of [section 12](#s12) accepts a document with errors, but returns them as
+		they are, without representing them. It does not define serialization of exceptions,
+		diagnostics, warnings, discovery errors or partial trees after an error. In particular,
+		a parser's recovery after multiple errors is not part of this contract.
 
 		Tests for invalid input continue to check the stable codes and line numbers defined by
 		the relevant specifications. If a normalized diagnostic representation is needed, it
@@ -315,15 +317,15 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		indentation of the block:
 
 	Code >>
-		Documento (com.example.docs):
-			Título: Informe
-			Cuerpo >>
-				Primera línea
+		Document (com.example.docs):
+			Title: Report
+			Body >>
+				First line
 				
-				# Esto es texto
+				# This is text
 
-		Anexo:
-			Nota: sin namespace heredado lateralmente
+		Appendix:
+			Note: no lateral namespace inheritance
 
 	Content >>
 		With `SPACES_4` the text is the same with every tab replaced by four spaces.
@@ -332,7 +334,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 
 	Content >>
 		An @STXT@ writer is conforming if, for every tree and in both styles, it produces
-		exactly the text of [section 11.1](#s11-1). The `conformance/` directory of the
+		exactly the text of [section 11.1](#s11-1). The `conformance/writer/` directory of the
 		specification source holds normative cases of tree and expected text; every
 		implementation claiming this section **MUST** produce the expected text of each one,
 		byte for byte.
@@ -402,33 +404,33 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		spare blanks:
 
 	Code >>
-		# Proyecto de ejemplo
-		Documento (COM.EXAMPLE.DOCS):    
-		    Título:Informe
-		    Cuerpo  >>
-		          con dos espacios de más
-		        última línea
+		# Example project
+		Document (COM.EXAMPLE.DOCS):    
+		    Title:Report
+		    Body  >>
+		          with two extra spaces
+		        last line
 		
-		Anexo (com.example.docs):
-		    Nota: aquí no hay nada
+		Appendix (com.example.docs):
+		    Note: nothing here
 
 	Content >>
 		reformatted with `TABS` comes out as follows. The comment, the empty line —which,
 		being final in the block, is not content and comes out unindented (rule 3)— and the
-		redundant namespace of `Anexo` are kept; the spacing of `Título`, the `>>` of
-		`Cuerpo`, the trailing blanks and the indentation are normalized; and the first line
+		redundant namespace of `Appendix` are kept; the spacing of `Title`, the `>>` of
+		`Body`, the trailing blanks and the indentation are normalized; and the first line
 		of the block keeps its two extra spaces, which are content:
 
 	Code >>
-		# Proyecto de ejemplo
-		Documento (com.example.docs):
-			Título: Informe
-			Cuerpo >>
-				  con dos espacios de más
-				última línea
+		# Example project
+		Document (com.example.docs):
+			Title: Report
+			Body >>
+				  with two extra spaces
+				last line
 		
-		Anexo (com.example.docs):
-			Nota: aquí no hay nada
+		Appendix (com.example.docs):
+			Note: nothing here
 
 	Subsubheader: 12.3 Conformance
 
@@ -436,4 +438,4 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		An @STXT@ formatter is conforming if, for every document and in both styles, it
 		produces exactly the text of [section 12.1](#s12-1) and the same syntax errors as the
 		parser. The normative cases of document and expected reformatted text live in the
-		`conformance/` directory of the specification source as well.
+		`conformance/format/` directory of the specification source as well.

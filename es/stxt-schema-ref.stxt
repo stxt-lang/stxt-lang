@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Aurora
-		Last modif: 2026-09-08
+		Last modif: 2026-09-11
 		Description: STXT-SCHEMA-SPEC: el lenguaje de esquemas @stxt.schema para validar documentos STXT con nodos, tipos y cardinalidades, y el meta-esquema oficial.
 
 	Header: @STXT@ Schema
@@ -181,7 +181,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		* Cada `Node` define la semántica del nodo en el namespace objetivo del schema.
 		* Si `Type` se omite, el tipo por defecto es `INLINE`.
 		* Un `Node` **NO DEBE** contener más de un nodo `Description`, más de un nodo `Type`, más de un nodo `Children` ni más de un nodo `Values`.
-		* Sólo los tipos que admiten hijos (ver [sección 9](#s9)) **PUEDEN** declarar `Children`. Declarar `Children` en un tipo que no admite hijos **DEBE** provocar un error de schema.
+		* Solo los tipos que admiten hijos (ver [sección 9](#s9)) **PUEDEN** declarar `Children`. Declarar `Children` en un tipo que no admite hijos **DEBE** provocar un error de schema.
 		* El nombre de un `Child` **PUEDE** incluir un namespace cuando el hijo pertenece a otro namespace ([sección 8](#s8)).
 		* `Min` y `Max` son opcionales dentro de un `Child` ([sección 10](#s10)).
 
@@ -269,7 +269,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		Estas dos propiedades son **independientes entre sí**. En particular, "admite hijos" **no**
 		se deriva de la forma del valor. La regla de compatibilidad es la siguiente:
 
-		**Sólo los dos tipos estructurales genéricos — `INLINE` y `GROUP` — admiten hijos. Todos los
+		**Solo los dos tipos estructurales genéricos — `INLINE` y `GROUP` — admiten hijos. Todos los
 		tipos con validación de contenido específico son hojas (no admiten hijos).**
 
 		Razón: en cuanto un tipo declara que valida un dato concreto (`NUMBER`, `DATE`,
@@ -291,8 +291,8 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		| Tipo      | Forma del valor | Admite hijos | Descripción / Validación                              |
 		|-----------|-----------------|--------------|-------------------------------------------------------|
 		| INLINE    | INLINE          | **SÍ**       | Texto inline `:`. **Tipo por defecto.** Valor opcional sin validación específica. Admite hijos. |
-		| GROUP     | NONE            | **SÍ**       | No admite valor textual. Sólo hijos estructurados.    |
-		| BLOCK     | BLOCK           | NO           | Sólo bloque `>>` de texto. No admite hijos.           |
+		| GROUP     | NONE            | **SÍ**       | No admite valor textual. Solo hijos estructurados.    |
+		| BLOCK     | BLOCK           | NO           | Solo bloque `>>` de texto. No admite hijos.           |
 		| TEXT      | INLINE/BLOCK    | NO           | Texto genérico. Puede ser inline `:` o bloque `>>`. No admite hijos. |
 
 	Subsubheader: 9.3 Tipos básicos de contenido INLINE
@@ -304,7 +304,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		|-----------|-----------------|--------------|-----------------------------------------|
 		| BOOLEAN   | INLINE          | NO           | `true` o `false`.                      |
 		| NUMBER    | INLINE          | NO           | Número decimal, con signo y exponente opcionales (ver [9.4](#s9-4)). |
-		| ENUM      | INLINE          | NO           | Sólo valores especificados (ver [9.6](#s9-6)).  |
+		| ENUM      | INLINE          | NO           | Solo valores especificados (ver [9.6](#s9-6)).  |
 
 	Subsubheader: 9.4 Tipos ampliados de contenido INLINE
 
@@ -740,7 +740,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 			* `Min`: Número mínimo de nodos que deben aparecer. Si no existe el nodo no hay un mínimo establecido.
 			* `Max`: Número máximo de nodos que pueden aparecer. Si no existe el nodo no hay un máximo establecido.
 		* Cada `Values`:
-			* Sólo puede aparecer en nodos `Node` de tipo `ENUM`.
+			* Solo puede aparecer en nodos `Node` de tipo `ENUM`.
 			* Contiene uno o más nodos `Value`.
 		* Los nombres (`Schema`, `Node`, `Type`, `Children`, `Child`, `Description`, `Min`, `Max`, `Values`, `Value`) pertenecen al namespace `@stxt.schema`.
 

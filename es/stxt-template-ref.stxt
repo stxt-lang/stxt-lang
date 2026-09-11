@@ -5,7 +5,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		Revision: Joan Costa Mombiela
 		Revision: Claude Fable 5
 		Status: Aurora
-		Last modif: 2026-09-08
+		Last modif: 2026-09-11
 		Description: STXT-TEMPLATE-SPEC: plantillas @stxt.template, la forma simple de definir la estructura de un documento STXT; todo template compila a un esquema equivalente.
 		
 	Header: @STXT@ Template
@@ -96,7 +96,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		* El nodo raíz `Template` **DEBE** pertenecer al namespace `@stxt.template`.
 		* `<namespace_objetivo>` **DEBE** ser un namespace válido según [*STXT-SPEC*](stxt-core-ref) ([sección de namespaces](stxt-core-ref#s7)).
 		* El documento template **PUEDE** incluir como máximo un nodo `Description`, con descripciones por nodo ([sección 12](#s12)).
-		* Sólo puede existir **un template efectivo** por namespace objetivo en una validación concreta (ver [sección 5](#s5)).
+		* Solo puede existir **un template efectivo** por namespace objetivo en una validación concreta (ver [sección 5](#s5)).
 		
 	Subheader: 5. Un template por namespace objetivo
 	
@@ -325,7 +325,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 	Content >>
 		La regla de compatibilidad con hijos es la misma que en [*STXT-SCHEMA-SPEC*](stxt-schema-ref) ([sección 9](stxt-schema-ref#s9)):
 		
-		**Sólo los tipos `INLINE` y `GROUP` admiten hijos. Todos los demás tipos son hojas.**
+		**Solo los tipos `INLINE` y `GROUP` admiten hijos. Todos los demás tipos son hojas.**
 		
 		Por tanto:
 		
