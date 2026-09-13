@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Contratos y acuerdos legales — STXT
+Document (dev.stxt.website): Contratos y acuerdos legales | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -9,7 +9,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales — STXT
 	Assert >>
 		Un contrato es texto normativo con datos dentro: partes, fechas, importes, plazos,
 		niveles de servicio. @STXT@ permite escribirlo de modo que el texto siga siendo
-		texto —párrafo a párrafo, cláusula a cláusula— y los datos sean datos, extraíbles y
+		texto, párrafo a párrafo y cláusula a cláusula, y los datos sean datos, extraíbles y
 		comprobables, en el mismo documento.
 
 	Content >>
@@ -109,7 +109,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales — STXT
 		  muestra si alguien la alteró.
 		* **Las notas internas** van en un bloque aparte, dentro de la cláusula a la que se
 		  refieren, y no forman parte del texto contractual: el proceso que genera el PDF
-		  las omite, el que prepara la revisión las muestra.
+		  las omite y el que prepara la revisión las muestra.
 
 	Subheader: La plantilla
 
@@ -230,7 +230,7 @@ Document (dev.stxt.website): Contratos y acuerdos legales — STXT
 	Content >>
 		* **Versiones**: cada contrato es un fichero en un repositorio, y cada revisión es un
 		  *diff* legible: qué cláusula cambió, qué fecha se movió. El nodo `History` recoge
-		  el resumen; el repositorio, el detalle.
+		  el resumen y el repositorio guarda el detalle.
 		* **Cláusulas estándar**: el departamento legal mantiene sus cláusulas aprobadas
 		  como fragmentos de texto; un contrato las incorpora copiándolas, y un script
 		  compara cada cláusula con la versión aprobada y señala las que difieren.
@@ -251,8 +251,8 @@ Document (dev.stxt.website): Contratos y acuerdos legales — STXT
 		Tampoco interpreta el texto de las cláusulas: una condición escrita en prosa («salvo
 		en caso de dolo») es texto para el lenguaje, y solo una persona, o una aplicación
 		que la modele como datos, puede evaluarla. Y la plantilla no comprueba coherencia
-		entre campos —que `End` sea posterior a `Start`, que el SLA cite un contrato que
-		exista—: eso es trabajo del script que recorre el repositorio.
+		entre campos (que `End` sea posterior a `Start`, que el SLA cite un contrato que
+		exista): eso es trabajo del script que recorre el repositorio.
 
 		El mismo enfoque de datos dentro del texto, para documentos más ligeros, se
 		desarrolla en [Documentos corporativos](use-cases-corporate-docs);

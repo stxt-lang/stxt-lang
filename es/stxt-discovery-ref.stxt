@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y plantillas
+Document (dev.stxt.website): STXT Discovery: resolución de esquemas y plantillas
 
 	Metadata:
 		Status: Aurora
@@ -19,8 +19,8 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		Las especificaciones [*STXT-SCHEMA-SPEC*](stxt-schema-ref) y [*STXT-TEMPLATE-SPEC*](stxt-template-ref) definen cómo se
 		escriben las definiciones y cómo validan; deliberadamente no indican dónde se ubican.
 		Esta especificación cubre esa omisión con un único objetivo: que un mismo documento se
-		valide con las mismas definiciones en cualquier herramienta — un editor, una línea de
-		comandos, un proceso de integración continua. Si cada herramienta buscara las
+		valide con las mismas definiciones en cualquier herramienta, sea un editor, una línea de
+		comandos o un proceso de integración continua. Si cada herramienta buscara las
 		definiciones a su manera, el resultado de validar dependería de quién valida.
 
 		La resolución es **idéntica para schemas y para templates**: ambos se descubren por
@@ -66,7 +66,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		  del descenso y **NO DEBERÍA** seguir enlaces simbólicos, ni descender por un enlace a
 		  directorio (para no entrar en bucles ni recorrer árboles ajenos) ni cargar como
 		  definición un enlace a fichero (para no leer ficheros de fuera del `.stxt/`,
-		  [sección 10](#s10)). Un subdirectorio que no pueda listarse simplemente no aporta
+		  [sección 10](#s10)). Un subdirectorio que no pueda listarse no aporta
 		  ficheros; no detiene la resolución del resto del nivel.
 
 	Subheader: 4. La cadena de resolución
@@ -97,7 +97,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		* La entrada `.stxt` de un ancestro **DEBE** ser un directorio real: si es un enlace
 		  simbólico, la herramienta **NO DEBE** seguirlo y ese ancestro no aporta nivel, aunque
 		  el enlace apunte a un directorio. Los ancestros de un documento los escribe quien
-		  creó el proyecto, que no siempre es quien valida —un repositorio clonado—, y un
+		  creó el proyecto, que no siempre es quien valida (un repositorio clonado), y un
 		  `.stxt` enlazado a la carpeta personal o a la raíz llevaría la resolución a un árbol
 		  ajeno ([sección 10](#s10)). Es la misma regla que rige dentro del directorio
 		  ([sección 3](#s3)). Los niveles de usuario y de sistema ([sección 4.2](#s4-2)) y las
@@ -117,7 +117,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		* El nivel de usuario permite definiciones personales compartidas entre proyectos.
 		* El nivel de sistema permite a una organización distribuir definiciones a todas las
 		  cuentas de una máquina.
-		* Si alguno de los directorios no existe, ese nivel simplemente no aporta
+		* Si alguno de los directorios no existe, ese nivel no aporta
 		  definiciones; no es un error.
 		* Ambos directorios los elige el propio usuario o el administrador de la máquina, no
 		  el autor de un proyecto. Por eso **PUEDEN** ser enlaces simbólicos y una herramienta
@@ -188,8 +188,8 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		* Una entrada inexistente se ignora; no es un error.
 		* Una entrada **PUEDE** ser un enlace simbólico, y se sigue: quien define `STXT_PATH`
 		  elige sus directorios ([sección 10](#s10)). Dentro de ella rige la [sección 3](#s3).
-		* Una entrada vacía —la que deja un separador inicial, final o doble, como en
-		  `:/opt/defs`— se ignora igualmente: no designa el directorio de trabajo.
+		* Una entrada vacía (la que deja un separador inicial, final o doble, como en
+		  `:/opt/defs`) se ignora igualmente: no designa el directorio de trabajo.
 		* Una `STXT_PATH` definida pero vacía deja la cadena vacía: ningún namespace
 		  tiene definición activa, y validar un documento con namespace falla con
 		  `SCHEMA_NOT_FOUND` ([*STXT-SCHEMA-SPEC* §13](stxt-schema-ref#s13)). La cadena
@@ -273,7 +273,7 @@ Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y planti
 		  dentro de un directorio de resolución ([sección 3](#s3)) protegen frente a estructuras
 		  de directorios patológicas: enlaces simbólicos circulares o sistemas de ficheros
 		  virtuales. Una herramienta **DEBERÍA** acotar la profundidad del descenso y **NO
-		  DEBERÍA** seguir enlaces simbólicos al descender —ni de directorio ni de fichero—, de
+		  DEBERÍA** seguir enlaces simbólicos al descender, ni de directorio ni de fichero, de
 		  modo que un directorio de resolución solo cargue las definiciones que contiene
 		  realmente y no ficheros ajenos a los que un enlace apunte: como los niveles de la cadena
 		  incluyen directorios que quien valida no controla, seguir un enlace a fichero permitiría

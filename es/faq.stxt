@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Preguntas frecuentes — STXT
+Document (dev.stxt.website): Preguntas frecuentes | STXT
 
 	Metadata:
 		Last modif: 2026-09-08
@@ -17,7 +17,7 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 		con decisiones de diseño importantes que los dos no comparten. Las referencias a
 		*STxT* que puedan encontrarse corresponden al lenguaje antiguo; @STXT@,
 		escrito así, es siempre el actual. El término *Semantic Text* también se ha retirado:
-		el nombre es, simplemente, @STXT@.
+		el nombre es solo @STXT@.
 
 	Subsubheader: ¿Es un lenguaje o un formato?
 
@@ -73,8 +73,8 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Subsubheader: ¿Nos enseñas un uso real?
 
 	Content >>
-		Este portal. Todas las páginas de `stxt.dev` —el tutorial, los casos de uso, las
-		cinco especificaciones, esta FAQ— están escritas en @STXT@, y un generador de sitios
+		Este portal. Todas las páginas de `stxt.dev` (el tutorial, los casos de uso, las
+		cinco especificaciones, esta FAQ) están escritas en @STXT@, y un generador de sitios
 		estáticos las convierte en HTML. El enlace `.stxt` de la cabecera abre el fuente de la
 		página actual, y añadir `.stxt` a la dirección de cualquier página devuelve su
 		código: [faq.stxt](faq.stxt) es el fuente de esta. El generador es público,
@@ -103,8 +103,8 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Subsubheader: ¿Por qué no Markdown?
 
 	Content >>
-		Markdown da **formato** a la prosa —negrita, enlaces, listas dentro del texto— y no
-		tiene campos; @STXT@ da **estructura** al documento —nodos, jerarquía, validación— y
+		Markdown da **formato** a la prosa (negrita, enlaces, listas dentro del texto) y no
+		tiene campos; @STXT@ da **estructura** al documento (nodos, jerarquía, validación) y
 		adopta Markdown para la prosa de sus nodos: `MARKDOWN` es el único formato incrustado
 		que los esquemas definen. Un nodo declarado de ese tipo marca su texto como prosa con
 		formato, a interpretar según CommonMark, y su forma cruda sigue siendo legible.
@@ -146,8 +146,8 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Content >>
 		Con un esquema, la cardinalidad del hijo (`Min`/`Max`, o `(+)` y `(*)` en una
 		plantilla) fija cuántas veces puede aparecer. Y como los hijos de cualquier nodo
-		admiten nombres distintos, una secuencia heterogénea —capítulos y anexos
-		intercalados, por ejemplo— no necesita nada más que escribirlos en orden.
+		admiten nombres distintos, una secuencia heterogénea (capítulos y anexos
+		intercalados, por ejemplo) no necesita nada más que escribirlos en orden.
 
 		Es una consecuencia de tener pocas formas y ninguna redundante; ver
 		[Principios de diseño](design-principles) y [STXT-SPEC §8.5](stxt-core-ref#s8-5).
@@ -169,7 +169,7 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 
 	Content >>
 		El precio está en los nombres de nodo. Técnicamente bastaba con excluir de ellos
-		los caracteres que delimitan la sintaxis —`:`, `>` y los paréntesis—, pero por el
+		los caracteres que delimitan la sintaxis (`:`, `>` y los paréntesis), pero por el
 		principio Human-First se limitan a letras, dígitos y los separadores `-`, `_` y
 		espacio (`INVALID_NODE_NAME` en otro caso): así un signo dentro de un nombre no
 		sugiere un significado que en @STXT@ no existe.
@@ -202,7 +202,7 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 				El capítulo presenta...
 
 	Content >>
-		Así `Chapter` lleva la estructura —título, autor, resumen, contenido— y cada bloque
+		Así `Chapter` lleva la estructura (título, autor, resumen, contenido) y cada bloque
 		lleva solo texto. Con un esquema, `Summary` y `Content` se declaran de tipo `TEXT` (o
 		`MARKDOWN`), y un tipo con validación de contenido no admite hijos.
 
@@ -331,7 +331,7 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 		ascendentes, el de usuario, el del sistema) y, si ninguna cubre ese namespace, lo
 		señala con `SCHEMA_NOT_FOUND`: el documento no es incorrecto, pero no se ha podido
 		validar, y eso se informa en lugar de omitirse, también cuando la cadena está vacía.
-		Si se valida o no lo decide la herramienta, no la presencia de otras definiciones
+		Si se valida o no lo decide la herramienta y no la presencia de otras definiciones
 		instaladas: en la CLI, `--warn-schema` lo rebaja a aviso y `--no-schema` desactiva la
 		validación; en VS Code, el ajuste `stxt.schemaValidation`; en el playground, el
 		interruptor *Schema validation*.
@@ -363,8 +363,8 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Content >>
 		Depende de la herramienta, porque la resolución de definiciones no forma parte del
 		lenguaje base: es una capa opcional más, como los propios esquemas y plantillas.
-		Una aplicación sin sistema de ficheros la resuelve a su manera —el playground, por
-		ejemplo, asocia documentos y gramáticas por namespace dentro del workspace—. Para
+		Una aplicación sin sistema de ficheros la resuelve a su manera (el playground, por
+		ejemplo, asocia documentos y gramáticas por namespace dentro del workspace). Para
 		cuando intervienen ficheros y proyectos,
 		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) define una resolución común, que una
 		herramienta puede implementar o no; es la que siguen la CLI, la extensión de
@@ -398,9 +398,9 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 	Subsubheader: ¿Se valida el orden de los hijos?
 
 	Content >>
-		No. Se valida cuántas veces aparece cada hijo, no en qué posición: dos documentos con
+		No. Se valida cuántas veces aparece cada hijo y no en qué posición: dos documentos con
 		los mismos hijos en distinto orden validan igual. El orden se conserva en el árbol, de
-		modo que una aplicación que le dé significado lo obtiene del árbol, no del validador.
+		modo que una aplicación que le dé significado lo obtiene del árbol y no del validador.
 		Tampoco hay expresiones regulares, valores por defecto ni reglas condicionales entre
 		campos: son no-objetivos declarados. Ver [STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11).
 
@@ -408,7 +408,7 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 
 	Content >>
 		Ampliando la definición sin invalidar lo ya escrito: todo documento que validaba
-		sigue validando si el cambio permite más casos, no menos. No hace falta una versión
+		sigue validando si el cambio solo permite más casos. No hace falta una versión
 		nueva para:
 
 		* Añadir un nodo **opcional**: con cardinalidad `(?)`, `(*)` o cualquier otra de
@@ -419,11 +419,11 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 		Un matiz: la compatibilidad es respecto a la definición ampliada. Un documento que
 		use lo añadido no valida contra una copia anterior, así que si los consumidores del
 		namespace no actualizan la definición a la vez, conviene versionar también las
-		ampliaciones; con una definición única —el `.stxt/` del propio repositorio—, no
-		hace falta. Es una decisión del caso de uso, no del cambio.
+		ampliaciones; con una definición única (el `.stxt/` del propio repositorio), no
+		hace falta. Lo decide el caso de uso y no el cambio.
 
-		Lo que rompe es lo contrario —añadir un nodo obligatorio, retirar uno, estrechar
-		una cardinalidad—, porque el modelo es cerrado. Para esos cambios se recomienda
+		Lo que rompe es lo contrario (añadir un nodo obligatorio, retirar uno, estrechar
+		una cardinalidad), porque el modelo es cerrado. Para esos cambios se recomienda
 		**versionar el namespace** (`com.example.docs.v1` → `com.example.docs.v2`): cada
 		versión tiene su definición y cada documento declara la que usa.
 
@@ -473,12 +473,12 @@ Document (dev.stxt.website): Preguntas frecuentes — STXT
 		de versión: cada una lleva una **fecha** (la de su texto vigente) y un **estado**, que
 		solo avanza: *Genesis* (en construcción), *Aurora* (usable; un cambio incompatible es
 		posible, raro y se anuncia siempre), *Zenith* (lo válido lo es para siempre; solo se
-		añade) y *Twilight* (cerrada). La sintaxis y el árbol canónico —STXT-SPEC y
-		STXT-TREE-SPEC— están en Zenith; los esquemas, las plantillas y el descubrimiento, en
+		añade) y *Twilight* (cerrada). La sintaxis y el árbol canónico (STXT-SPEC y
+		STXT-TREE-SPEC) están en Zenith; los esquemas, las plantillas y el descubrimiento, en
 		Aurora. Los códigos de error no se renombran, y la API de cada biblioteca queda
 		congelada dentro de su propia línea 1.x. No se congelan el texto de los mensajes ni las
 		fachadas de comodidad. La conformidad se declara contra la fecha de la especificación
-		(`SPEC_VERSION`), no contra la versión del paquete. La declaración completa está en
+		(`SPEC_VERSION`) y no contra la versión del paquete. La declaración completa está en
 		[Estabilidad y versiones](stability).
 
 	Subsubheader: ¿Dónde pregunto, o doy mi opinión?

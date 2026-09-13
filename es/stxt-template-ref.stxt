@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
+Document (dev.stxt.website): STXT Template: plantillas (@stxt.template)
 	Metadata:
 		Status: Aurora
 		Last modif: 2026-09-11
@@ -415,8 +415,8 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		nodos raíz son **entradas de descripción**. Cada entrada asocia una descripción a un nodo
 		definido en `Structure`:
 
-		* `Nombre Nodo: descripción` — entrada inline, para descripciones de una línea.
-		* `Nombre Nodo >>` con la descripción en su bloque de texto — entrada de bloque, para descripciones de varias líneas.
+		* `Nombre Nodo: descripción`: entrada inline, para descripciones de una línea.
+		* `Nombre Nodo >>` con la descripción en su bloque de texto: entrada de bloque, para descripciones de varias líneas.
 
 		La correspondencia entre una entrada y su nodo de `Structure` se hace por **nombre canónico**
 		([*STXT-SPEC*](stxt-core-ref), [sección 4.3](stxt-core-ref#s4-3)). El orden de las entradas es libre: no tiene que seguir el orden de `Structure`.
@@ -670,7 +670,7 @@ Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 		* `Metadata` pertenece a `org.example.meta`.
 		* `Metadata` se valida contra la definición de `org.example.meta`; si un documento lo usa y no hay definición, el documento es inválido (`SCHEMA_NOT_FOUND`).
 		
-	Subheader: 18. Apéndice A — Gramática (informal)
+	Subheader: 18. Apéndice A: gramática (informal)
 
 	Grammar >>
 		TemplateDoc      = "Template" "(" "@stxt.template" ")" ":" NamespaceTarget { TemplateField }

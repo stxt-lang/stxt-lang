@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Documentos corporativos — STXT
+Document (dev.stxt.website): Documentos corporativos | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -13,8 +13,8 @@ Document (dev.stxt.website): Documentos corporativos — STXT
 		lee y la fuente de la que se extraen.
 
 	Content >>
-		Un acta de reunión tiene una parte que es texto —lo que se discutió, por qué se
-		decidió algo— y una parte que son datos: quién asistió, qué acciones quedaron
+		Un acta de reunión tiene una parte que es texto (lo que se discutió, por qué se
+		decidió algo) y una parte que son datos: quién asistió, qué acciones quedaron
 		abiertas, para cuándo y a cargo de quién. En la práctica las dos partes acaban en el
 		mismo documento de texto, y los datos se recuperan después leyendo: alguien repasa
 		las actas del trimestre para saber qué acciones siguen abiertas, o copia los estados
@@ -32,7 +32,7 @@ Document (dev.stxt.website): Documentos corporativos — STXT
 
 	Code >>
 		Minutes (com.acme.corp.minutes):
-			Title: Sincronización semanal — Plataforma
+			Title: Sincronización semanal de Plataforma
 			Date: 2026-01-09
 			Duration minutes: 45
 			Attendees:
@@ -76,27 +76,27 @@ Document (dev.stxt.website): Documentos corporativos — STXT
 					Action status: In Progress
 
 	Content >>
-		Se lee como un acta. Y a la vez, para un programa, es un árbol en el que cada acción
+		Se lee como un acta y, a la vez, para un programa es un árbol en el que cada acción
 		tiene un responsable, una fecha y un estado.
 
 	Subheader: Qué es dato y qué es texto
 
 	Content >>
 		La única decisión de modelado que hay que tomar es esa, y el criterio es práctico:
-		**es dato lo que alguien va a buscar, filtrar o contar; es texto lo demás**.
+		es dato lo que alguien va a buscar, filtrar o contar, y texto todo lo demás.
 
 		* Los asistentes, las decisiones y las acciones son datos: se listan, se cruzan con
 		  otras actas, se vencen. Van en nodos inline, uno por elemento.
-		* El resumen de la discusión y la justificación de cada decisión son texto: se leen,
-		  no se procesan. Van en bloques `>>`, donde se escriben párrafos sin ninguna
+		* El resumen de la discusión y la justificación de cada decisión son texto: se leen
+		  y no se procesan. Van en bloques `>>`, donde se escriben párrafos sin ninguna
 		  restricción.
 		* El título de cada decisión y de cada acción es el valor del propio nodo
 		  (`Decision: Mover la ventana…`), y sus atributos son hijos. Así la lista se lee de
 		  un vistazo.
 
-		Si más adelante hace falta procesar algo que hoy es texto —por ejemplo, los riesgos
-		mencionados en las notas—, se saca a un nodo propio. El documento no cambia de
-		formato; gana un nodo.
+		Si más adelante hace falta procesar algo que hoy es texto (por ejemplo, los riesgos
+		mencionados en las notas), se saca a un nodo propio. El documento no cambia de
+		formato: solo gana un nodo.
 
 	Subheader: La plantilla
 
@@ -136,15 +136,15 @@ Document (dev.stxt.website): Documentos corporativos — STXT
 
 		* Toda acta tiene título, fecha y al menos un asistente; sin eso no valida.
 		* Una decisión está en uno de tres estados, y una acción en uno de cuatro. Un estado
-		  escrito de otra manera (`Aprobada`, `open`) es un error, no una variante.
+		  escrito de otra manera (`Aprobada`, `open`) es un error y no una variante.
 		* Las fechas son fechas: `2026-01-32` no pasa.
-		* Un nodo que no está en la plantilla —`Atendees` con una sola `t`, un `Priority`
-		  que alguien añadió por su cuenta— se rechaza. Es el [modelo de contenido cerrado](stxt-schema-ref#s6): la
+		* Un nodo que no está en la plantilla (`Atendees` con una sola `t`, un `Priority`
+		  que alguien añadió por su cuenta) se rechaza. Es el [modelo de contenido cerrado](stxt-schema-ref#s6): la
 		  plantilla es la lista completa de lo que puede aparecer.
 		* `Id` y `Owner` se declaran una vez y se reutilizan con `@Id` y `@Owner`: dentro de un
 		  namespace, un nombre de nodo identifica un solo nodo. Por la misma regla, el estado
-		  de una decisión y el de una acción son nodos distintos —`Decision status` y
-		  `Action status`—: sus listas de valores no coinciden, y un mismo nombre no puede
+		  de una decisión y el de una acción son nodos distintos (`Decision status` y
+		  `Action status`): sus listas de valores no coinciden, y un mismo nombre no puede
 		  tener dos definiciones.
 
 		La plantilla se guarda en el directorio `.stxt/` del repositorio donde viven las
@@ -209,7 +209,7 @@ Document (dev.stxt.website): Documentos corporativos — STXT
 							Mitigation: (?) TEXT
 
 	Content >>
-		El semáforo `Status` es un `ENUM`, no un adjetivo en el resumen. Con veinte informes
+		El semáforo `Status` es un `ENUM` y no un adjetivo en el resumen. Con veinte informes
 		en un directorio, un script sobre el árbol canónico responde cuántos proyectos están
 		en rojo y cuáles son sus riesgos altos.
 
@@ -220,8 +220,8 @@ Document (dev.stxt.website): Documentos corporativos — STXT
 
 		* **Escritura**: cualquier editor de texto. Con la extensión de VS Code, la plantilla
 		  da autocompletado de nombres y estados, y marca los errores mientras se escribe.
-		* **Revisión**: una modificación es un *diff* de líneas concretas —una acción que
-		  pasa de `Open` a `Done`, una decisión nueva—, no un fichero binario que hay que
+		* **Revisión**: una modificación es un *diff* de líneas concretas (una acción que
+		  pasa de `Open` a `Done`, una decisión nueva) y no un fichero binario que hay que
 		  abrir para ver qué cambió.
 		* **Integración continua**: `stxt validate --recursive minutes/` rechaza la
 		  incorporación de un acta incompleta o con un estado inválido antes de que llegue
@@ -237,10 +237,10 @@ Document (dev.stxt.website): Documentos corporativos — STXT
 	Subheader: Límites
 
 	Content >>
-		@STXT@ estructura el documento; no aporta flujo de aprobación, control de acceso ni
+		@STXT@ estructura el documento y no aporta flujo de aprobación, control de acceso ni
 		notificaciones. Eso lo pone el repositorio y las herramientas de alrededor. Tampoco
-		valida reglas entre campos —que una acción en estado `Done` no tenga fecha futura,
-		por ejemplo—: esa lógica pertenece a la aplicación que explota los datos, no a la
+		valida reglas entre campos (que una acción en estado `Done` no tenga fecha futura,
+		por ejemplo): esa lógica pertenece a la aplicación que explota los datos y no a la
 		plantilla.
 
 		Los géneros vecinos siguen el mismo enfoque:

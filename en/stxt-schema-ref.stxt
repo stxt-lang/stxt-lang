@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
+Document (dev.stxt.website): STXT Schema: schema language (@stxt.schema)
 
 	Metadata:
 		Status: Aurora
@@ -132,16 +132,16 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		of being silently accepted.
 
 	Content >>
-		**Note on evolution.** A schema admits **compatible** extensions —adding a `Child` with a
+		**Note on evolution.** A schema admits **compatible** extensions (adding a `Child` with a
 		minimum cardinality of zero, lowering a `Min`, raising a `Max`: changes that allow more
-		cases, not fewer— without any existing document ceasing to validate. The nuance is that
+		cases and not fewer) without any existing document ceasing to validate. The nuance is that
 		compatibility is relative to the extended definition: a document that uses the addition
 		does not validate against an earlier copy of the schema, so if the consumers of the
 		namespace do not update their copy at the same time, the same document may validate in one
 		and fail in another. Whether an extension needs a new version therefore depends on the use
 		case: on how the definition is distributed, not only on the change. For those situations,
-		and always for incompatible changes —a new mandatory `Child`, removing one, narrowing a
-		cardinality—, the recommended practice is to **version the namespace in the namespace
+		and always for incompatible changes (a new mandatory `Child`, removing one, narrowing a
+		cardinality), the recommended practice is to **version the namespace in the namespace
 		itself** (for example `com.example.docs.v1` → `com.example.docs.v2`), so that each version
 		has its schema and documents declare the version they use.
 
@@ -263,7 +263,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		These two properties are **independent from each other**. In particular, "allows children" **is not**
 		derived from the value form. The compatibility rule is as follows:
 
-		**Only the two generic structural types — `INLINE` and `GROUP` — allow children. All
+		**Only the two generic structural types, `INLINE` and `GROUP`, allow children. All
 		types with specific content validation are leaves (they do not allow children).**
 
 		Rationale: as soon as a type declares that it validates a specific datum (`NUMBER`, `DATE`,
@@ -326,13 +326,13 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		INTEGER   = [ sign ] digits
 		NATURAL   = digits                                        ; no sign
 		DATE      = YYYY "-" MM "-" DD                            ; an existing date of the (proleptic)
-		                                                          ; Gregorian calendar, year 0000–9999
-		TIME      = hh ":" mm ":" ss                              ; 00–23, 00–59, 00–59; no fraction, no zone
+		                                                          ; Gregorian calendar, year 0000-9999
+		TIME      = hh ":" mm ":" ss                              ; 00-23, 00-59, 00-59; no fraction, no zone
 		TIMESTAMP = DATE "T" hh ":" mm [ ":" ss [ "." digits ] ] [ "Z" | sign hh ":" mm ]
 		                                                          ; same ranges; seconds, fraction and zone optional
 		UUID      = 8hex "-" 4hex "-" 4hex "-" 4hex "-" 12hex     ; hex = [0-9A-Fa-f]; version and variant not checked
 		sign      = "+" | "-"
-		digits    = digit { digit }                               ; ASCII 0–9 only; leading zeros allowed
+		digits    = digit { digit }                               ; ASCII 0-9 only; leading zeros allowed
 
 	Content >>
 		Details:
@@ -432,7 +432,7 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		|-------------|-----------------|-----------------|----------------------------------------|
 		| HEXADECIMAL | INLINE/BLOCK    | NO              | `[0-9A-Fa-f]+`. Hexadecimal string.   |
 		| BINARY      | INLINE/BLOCK    | NO              | `[01]+`. Binary string.               |
-		| BASE64      | INLINE/BLOCK    | NO              | Standard Base64: alphabet `A–Z a–z 0–9 + /`, optional trailing `=` padding, no leftover bits. |
+		| BASE64      | INLINE/BLOCK    | NO              | Standard Base64: alphabet `A-Z a-z 0-9 + /`, optional trailing `=` padding, no leftover bits. |
 
 		In all three types, and in both forms, the grammar is applied to the value **with no
 		blanks at all**: before validating, every space (U+0020) and tab (U+0009) is removed,
@@ -476,8 +476,8 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		**Interoperability note (non-normative).** The exact comparison is by code points. Values
 		are literal and are **not** normalized to NFC (unlike node names,
 		[*STXT-SPEC* §4.3](stxt-core-ref#s4-3)): `café` in precomposed form (NFC) and `café` in
-		decomposed form (NFD) look identical but do not match. Some input flows — historically,
-		macOS — produce NFD. Whoever defines `ENUM` values with diacritics should write them in
+		decomposed form (NFD) look identical but do not match. Some input flows (historically,
+		macOS) produce NFD. Whoever defines `ENUM` values with diacritics should write them in
 		NFC, which is what the usual editors produce.
 
 	Subsubheader: 9.7 MARKDOWN type
@@ -497,8 +497,8 @@ Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 		* Like every type with specific content, `MARKDOWN` **does not allow children** ([section 9.1](#s9-1)).
 
 		**Design note (non-normative):** `MARKDOWN` is the **only** embedded format that
-		@STXT@ Schema defines, because it covers the only domain that @STXT@ delegates by design —
-		the formatting of prose (bold, links, lists within text) — and because its raw form
+		@STXT@ Schema defines, because it covers the only domain that @STXT@ delegates by design,
+		the formatting of prose (bold, links, lists within text), and because its raw form
 		remains readable, consistent with the Human-First principle. Types for embedded **data
 		formats** (`JSON`, `XML`, `YAML`, `TOML`, …) are an explicit **non-goal**
 		([section 11](#s11)): @STXT@ is already the structure format, and such a type would bury structure

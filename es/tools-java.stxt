@@ -1,4 +1,4 @@
-Document (dev.stxt.website): La biblioteca Java — STXT
+Document (dev.stxt.website): La biblioteca Java | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -9,7 +9,7 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 	Assert >>
 		[`dev.stxt:stxt-core`](https://central.sonatype.com/artifact/dev.stxt/stxt-core) es el
 		parser de @STXT@ para Java, publicado en Maven Central. Implementa las cinco
-		especificaciones —sintaxis, árbol canónico, esquemas, plantillas y resolución— y
+		especificaciones (sintaxis, árbol canónico, esquemas, plantillas y resolución) y
 		devuelve los mismos códigos de error que la biblioteca
 		[TypeScript](tools-typescript), la [Python](tools-python) y la
 		[línea de comandos](tools-cli). Es una biblioteca sin CLI; el comando del
@@ -106,15 +106,15 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 		que el nodo escribe entre paréntesis, o `""`) y `getNamespace()` (el **efectivo**,
 		heredado por la cadena de padres), `getLine()`, `getLevel()` (derivado de la
 		profundidad), `getParent()` (siempre un `InlineNode`, o `null` en la raíz),
-		`detach()` y `getText()` —el valor de un inline o las líneas unidas de un bloque—.
+		`detach()` y `getText()`, que da el valor de un inline o las líneas unidas de un bloque.
 		Recorrer un árbol es preguntar la forma con `instanceof`, con el *pattern matching*
 		de Java 17, igual que el árbol canónico de STXT-TREE-SPEC solo tiene `children` en
 		los inline y `lines` en los bloques.
 
 		Las búsquedas de hijos son por **nombre canónico** (`getChild("Título")` y
 		`getChild("titulo")` encuentran el mismo nodo), `getChild` devuelve `null` si no
-		hay ninguno y lanza `AMBIGUOUS_CHILD` si hay más de uno —para los repetidos está
-		`getChildren(name)`—; ambas admiten un segundo argumento con el namespace.
+		hay ninguno y lanza `AMBIGUOUS_CHILD` si hay más de uno (para los repetidos está
+		`getChildren(name)`); ambas admiten un segundo argumento con el namespace.
 
 		Con el documento del [tutorial](tutorial), la ficha de un libro:
 
@@ -210,13 +210,13 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 		esquema al cargarla. En Java, un `ResourcesLoader` determina de dónde salen:
 		`ResourcesLoaderDirectory` las busca en disco con la disposición
 		`<dir>/@stxt.schema/<namespace>.stxt` y `<dir>/@stxt.template/<namespace>.stxt`
-		—la misma que deja `stxt install`, así que el `.stxt/` de un proyecto se puede
-		usar directamente—, y `STXT.parser(loader)` devuelve un parser que resuelve las dos formas,
+		(la misma que deja `stxt install`, así que el `.stxt/` de un proyecto se puede
+		usar directamente), y `STXT.parser(loader)` devuelve un parser que resuelve las dos formas,
 		valida cada gramática contra su meta-esquema al cargarla, la cachea y valida cada
 		nodo con namespace del documento al cerrarlo: por debajo registra un
 		`SchemaValidator`, que no valida los nodos sin namespace porque esa es la regla
-		del lenguaje (STXT-SCHEMA-SPEC §5) —un documento sin namespace no es inválido,
-		pero no se puede validar—.
+		del lenguaje (STXT-SCHEMA-SPEC §5): un documento sin namespace no es inválido,
+		pero no se puede validar.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -263,9 +263,9 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 		schema line 1 [TOO_FEW_CHILDREN]: 0 nodes of 'com.acme.book:isbn' and min is 1
 
 	Content >>
-		`ResourcesLoader` es una interfaz de un solo método, `retrieve(namespace, resource)`
-		—donde `namespace` es `@stxt.schema` o `@stxt.template` y `resource` el namespace
-		buscado—, así que una gramática en memoria o procedente del *classpath*, una base
+		`ResourcesLoader` es una interfaz de un solo método, `retrieve(namespace, resource)`,
+		donde `namespace` es `@stxt.schema` o `@stxt.template` y `resource` el namespace
+		buscado, así que una gramática en memoria o procedente del *classpath*, una base
 		de datos o una URL es una lambda que devuelve su texto, o lanza
 		`ResourceNotFoundException` cuando no la tiene:
 
@@ -287,7 +287,7 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 		  `SCHEMA_NOT_FOUND`; el proveedor nunca lanza por un namespace ausente
 		  (`getSchema()` devuelve `null`).
 		* Una gramática que no valida contra su meta-esquema se reporta como hallazgo del
-		  documento (por ejemplo `TYPE_NOT_VALID`), no como excepción.
+		  documento (por ejemplo `TYPE_NOT_VALID`) y no como excepción.
 		* Los nodos sin namespace no se validan (regla del propio `SchemaValidator`); un
 		  documento que es a su vez una definición se valida siempre contra su
 		  meta-esquema. Registrar un `SchemaValidator` explícitamente da el mismo
@@ -317,9 +317,9 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 	Content >>
 		`ResourcesLoaderDirectory` consulta un único directorio. La **resolución** responde
 		a la pregunta completa: dado un documento, qué definiciones le aplican.
-		`DiscoveryResolver` implementa [STXT-DISCOVERY-SPEC](stxt-discovery-ref) —los
+		`DiscoveryResolver` implementa [STXT-DISCOVERY-SPEC](stxt-discovery-ref) (los
 		`.stxt/` del documento y de todos sus ancestros, después `~/.stxt` y `/etc/stxt`,
-		precedencia por namespace, `STXT_PATH` sustituye la cadena—, igual que la CLI y la
+		precedencia por namespace, `STXT_PATH` sustituye la cadena), igual que la CLI y la
 		extensión, así que las tres coinciden por construcción.
 
 		A diferencia del puerto TypeScript, que tiene que correr en varios *hosts*, aquí el
@@ -375,18 +375,18 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 		ficheros de definición puedan haber cambiado. Los códigos de error de la resolución
 		son `DISCOVERY_DUPLICATE_NAMESPACE`, `DISCOVERY_NOT_A_DEFINITION`,
 		`DISCOVERY_NOT_PARSEABLE` y `DISCOVERY_INVALID_DEFINITION`; `DiscoveryError` es una
-		clase de datos (`getCode()`, `getFile()`, `getMessage()`, `getNamespace()`), no una
+		clase de datos (`getCode()`, `getFile()`, `getMessage()`, `getNamespace()`) y no una
 		excepción, porque la spec quiere informar de una definición mala sin detener la
 		carga del resto.
 
 	Subheader: El árbol canónico en JSON
 
 	Content >>
-		`TreeJson.toCanonicalJson(nodes)` —o `toCanonicalJson(node)` para un solo raíz—
+		`TreeJson.toCanonicalJson(nodes)`, o `toCanonicalJson(node)` para un solo raíz,
 		escribe el JSON de [STXT-TREE-SPEC](stxt-tree-ref), el mismo que emite
 		`stxt describe`, con dos espacios de sangría. Es una función explícita que emite
-		solo los campos normativos —`children` en los inline y `lines` en los bloques, sin
-		posiciones ni comentarios— y no depende de ninguna biblioteca JSON: devuelve el
+		solo los campos normativos (`children` en los inline y `lines` en los bloques, sin
+		posiciones ni comentarios) y no depende de ninguna biblioteca JSON: devuelve el
 		texto, que se puede pasar a Jackson, Gson o a cualquier otra biblioteca.
 
 	Java >>
@@ -404,7 +404,7 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 		donde cambia respecto al padre, esté donde esté en el fuente. Escribir un árbol y
 		volver a parsearlo da el mismo árbol, en los dos estilos. Como parte del árbol lógico,
 		un texto que pase por `parse` y `NodeWriter` sale sin comentarios ni líneas en blanco
-		fuera de los bloques —es lo que hace `stxt format --clean`—.
+		fuera de los bloques, que es lo que hace `stxt format --clean`.
 
 	Java >>
 		import dev.stxt.runtime.NodeWriter;
@@ -415,9 +415,9 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 
 	Content >>
 		El reformateo que **conserva** comentarios y líneas en blanco es `Formatter`
-		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)): reescribe el texto original línea a línea —las
+		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)): reescribe el texto original línea a línea (las
 		líneas que abren un nodo en forma canónica, las de un bloque al nivel del bloque, el
-		resto tal cual, con sus unidades de indentación convertidas al estilo pedido— y
+		resto tal cual, con sus unidades de indentación convertidas al estilo pedido) y
 		devuelve, junto al texto, los errores de sintaxis que haya encontrado, para que quien
 		llama decida qué hacer con un documento que no parsea. Es el mismo formateador, con las
 		mismas reglas, que el de `stxt format`, la extensión y el playground.
@@ -452,10 +452,10 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 	Content >>
 		El parser no depende de los esquemas: la validación es una capa desacoplada que se
 		conecta por dos puntos de extensión. `Observer` recibe llamadas en streaming
-		mientras se parsea —`onCreate(node, line)` al abrir un nodo, ya con padre, namespace
+		mientras se parsea (`onCreate(node, line)` al abrir un nodo, ya con padre, namespace
 		efectivo y nivel, `onFinish(node)` al cerrarlo, `onComment(lineNumber, line)` por cada
 		comentario y `onTextLine(node, lineNumber, lineString, line)` por cada línea de un
-		bloque—, y `Validator` corre sobre cada
+		bloque), y `Validator` corre sobre cada
 		nodo al cerrarlo y devuelve una lista de `ValidationException` (no lanza), de modo que un
 		documento se valida mientras se lee, sin esperar al final. `SchemaValidator` es un
 		`Validator` integrado; `Validator` es una interfaz funcional, por lo que admite una
@@ -514,8 +514,8 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 		El parser aplica los límites de [STXT-SPEC §11.2](stxt-core-ref#s11-2), configurables
 		con `setMaxNesting` (100 niveles), `setMaxLineLength` (10 000 caracteres) y
 		`setMaxInputSize` (10 000 000 caracteres); `-1` desactiva uno. Superar un límite
-		produce una `LimitException` —subclase de `ParseException` con los códigos
-		`LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` y `LIMIT_INPUT_SIZE_EXCEEDED`— y
+		produce una `LimitException` (subclase de `ParseException` con los códigos
+		`LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` y `LIMIT_INPUT_SIZE_EXCEEDED`) y
 		aborta el parseo: es siempre el último error.
 
 	Java >>
@@ -541,7 +541,7 @@ Document (dev.stxt.website): La biblioteca Java — STXT
 
 		Las que salen de `parseResult` no se lanzan: se acumulan en `getErrors()` como
 		`ParseException` (sintaxis) o `ValidationException` (gramática). Las de integridad
-		del árbol sí se lanzan, porque son errores del programa, no del documento.
+		del árbol sí se lanzan, porque son errores del programa y no del documento.
 
 	Subheader: La superficie de la API
 

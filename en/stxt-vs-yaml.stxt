@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT vs YAML — Values, free text and validation
+Document (dev.stxt.website): STXT vs YAML: values, free text and validation
 	Metadata:
 		Last modif: 2026-09-09
 		Description: STXT and YAML compared with examples: implicit typing versus text values, block scalars versus literal blocks, attack surface, and validation inside the language.
@@ -55,8 +55,8 @@ Document (dev.stxt.website): STXT vs YAML — Values, free text and validation
 
 		* **Values.** In YAML `replicas: 2` is an integer and `replicas: "2"` a string:
 		  the spelling decides the type. In @STXT@ every value is text; the type, when
-		  needed, is declared by the definition and checked by the validator, not the
-		  parser.
+		  needed, is declared by the definition and checked by the validator rather than
+		  the parser.
 		* **Lists.** YAML has a block syntax for sequences (`- 8080`) and a flow syntax
 		  (`[8080, 8443]`), and both coexist in the same document. @STXT@ has no list
 		  syntax: a repeated child is the list, with a container node such as `Ports` or
@@ -184,7 +184,7 @@ Document (dev.stxt.website): STXT vs YAML — Values, free text and validation
 	Content >>
 		NestedText makes several of the same decisions as @STXT@: every value is text, no
 		implicit typing, no escapes, and structure lives in the indentation. It keeps the
-		YAML data model —dictionaries, lists and strings— and leaves types and validation
+		YAML data model (dictionaries, lists and strings) and leaves types and validation
 		to the application; it has no namespaces and no schemas. For transporting data
 		with a predictable syntax, both arrive at the same place; @STXT@ adds the named
 		vocabulary and validation inside the language.

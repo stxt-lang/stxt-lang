@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Frequently asked questions — STXT
+Document (dev.stxt.website): Frequently asked questions | STXT
 
 	Metadata:
 		Last modif: 2026-09-08
@@ -17,7 +17,7 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 		since then, with important design decisions the two do not share. References to
 		*STxT* that may still be found refer to the old
 		language; @STXT@, written like this, is always the current one. The term *Semantic
-		Text* has also been retired: the name is simply @STXT@.
+		Text* has also been retired: the name is @STXT@ alone.
 
 	Subsubheader: Is it a language or a format?
 
@@ -73,8 +73,8 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Subsubheader: Can you show us a real use?
 
 	Content >>
-		This site. Every page of `stxt.dev` — the tutorial, the use cases, the five
-		specifications, this FAQ — is written in @STXT@, and a static site generator turns
+		This site. Every page of `stxt.dev` (the tutorial, the use cases, the five
+		specifications, this FAQ) is written in @STXT@, and a static site generator turns
 		them into HTML. The `.stxt` link in the header opens the source of the current page,
 		and appending `.stxt` to any page's address returns its code: [faq.stxt](faq.stxt) is
 		the source of this one. The generator is public,
@@ -103,8 +103,8 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Subsubheader: Why not Markdown?
 
 	Content >>
-		Markdown gives **format** to prose —bold, links, lists within the text— and has no
-		fields; @STXT@ gives **structure** to the document —nodes, hierarchy, validation— and
+		Markdown gives **format** to prose (bold, links, lists within the text) and has no
+		fields; @STXT@ gives **structure** to the document (nodes, hierarchy, validation) and
 		adopts Markdown for the prose of its nodes: `MARKDOWN` is the only embedded format the
 		schemas define. A node declared with that type marks its text as formatted prose, to
 		be interpreted as CommonMark, and its raw form remains readable.
@@ -146,8 +146,8 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Content >>
 		With a schema, the child's cardinality (`Min`/`Max`, or `(+)` and `(*)` in a
 		template) fixes how many times it may appear. And since the children of any node may
-		have different names, a heterogeneous sequence —chapters and annexes interleaved, for
-		instance— needs nothing more than writing them in order.
+		have different names, a heterogeneous sequence (chapters and annexes interleaved, for
+		instance) needs nothing more than writing them in order.
 
 		It is a consequence of having few forms and none redundant; see
 		[Design principles](design-principles) and [STXT-SPEC §8.5](stxt-core-ref#s8-5).
@@ -169,7 +169,7 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 
 	Content >>
 		The price is paid in node names. Technically it was enough to exclude from them
-		the characters that delimit the syntax —`:`, `>` and the parentheses—, but
+		the characters that delimit the syntax (`:`, `>` and the parentheses), but
 		following the Human-First principle they are limited to letters, digits and the
 		separators `-`, `_` and space (`INVALID_NODE_NAME` otherwise): this way a symbol
 		inside a name does not suggest a meaning that does not exist in @STXT@.
@@ -203,7 +203,7 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 				The chapter presents...
 
 	Content >>
-		This way `Chapter` carries the structure —title, author, summary, content— and each
+		This way `Chapter` carries the structure (title, author, summary, content) and each
 		block carries only text. With a schema, `Summary` and `Content` are declared of type
 		`TEXT` (or `MARKDOWN`), and a type with content validation admits no children.
 
@@ -332,7 +332,7 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 		`.stxt/` directories, the user one, the system one) and, if none covers that
 		namespace, flags it with `SCHEMA_NOT_FOUND`: the document is not wrong, but it could
 		not be validated, and that is reported rather than omitted, also when the chain is
-		empty. Whether a document is validated is decided by the tool, not by the presence of
+		empty. Whether a document is validated is decided by the tool and not by the presence of
 		other installed definitions: in the CLI, `--warn-schema` turns it into a warning and
 		`--no-schema` disables validation; in VS Code, the `stxt.schemaValidation` setting; in
 		the playground, the *Schema validation* switch.
@@ -365,8 +365,8 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Content >>
 		It depends on the tool, because definition resolution is not part of the base
 		language: it is one more optional layer, like schemas and templates themselves. An
-		application without a file system resolves it its own way —the playground, for
-		instance, associates documents and grammars by namespace within the workspace—.
+		application without a file system resolves it its own way (the playground, for
+		instance, associates documents and grammars by namespace within the workspace).
 		For when files and projects are involved,
 		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) defines a common resolution, which a
 		tool may or may not implement; it is the one the CLI, the VS Code extension and
@@ -400,10 +400,10 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 	Subsubheader: Is the order of children validated?
 
 	Content >>
-		No. What is validated is how many times each child appears, not in which position: two
+		No. What is validated is how many times each child appears and not in which position: two
 		documents with the same children in a different order validate the same. The order is
 		preserved in the tree, so an application that gives it meaning obtains it from the
-		tree, not from the validator. There are no regular expressions, default values or
+		tree and not from the validator. There are no regular expressions, default values or
 		conditional rules between fields either: they are declared non-goals.
 		See [STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11).
 
@@ -411,8 +411,8 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 
 	Content >>
 		By extending the definition without invalidating what is already written: every
-		document that validated keeps validating if the change allows more cases, not
-		fewer. No new version is needed to:
+		document that validated keeps validating if the change only allows more
+		cases. No new version is needed to:
 
 		* Add an **optional** node: with cardinality `(?)`, `(*)` or any other with a
 		  minimum of zero.
@@ -422,11 +422,11 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 		One nuance: compatibility is relative to the extended definition. A document that
 		uses the addition does not validate against an earlier copy, so if the consumers
 		of the namespace do not update the definition at the same time, extensions are
-		worth versioning too; with a single definition —the `.stxt/` of the repository
-		itself—, there is no need. It is a decision about the use case, not the change.
+		worth versioning too; with a single definition (the `.stxt/` of the repository
+		itself), there is no need. That is decided by the use case and not by the change.
 
-		What breaks is the opposite —adding a mandatory node, removing one, narrowing a
-		cardinality—, because the model is closed. For those changes the recommended
+		What breaks is the opposite (adding a mandatory node, removing one, narrowing a
+		cardinality), because the model is closed. For those changes the recommended
 		practice is to **version the namespace** (`com.example.docs.v1` →
 		`com.example.docs.v2`): each version has its definition and each document declares
 		the one it uses.
@@ -477,10 +477,10 @@ Document (dev.stxt.website): Frequently asked questions — STXT
 		only moves forward: *Genesis* (under construction), *Aurora* (usable; an incompatible
 		change is possible, rare, and always announced), *Zenith* (what is valid stays valid
 		forever; things are only added) and *Twilight* (closed). The syntax and the canonical
-		tree —STXT-SPEC and STXT-TREE-SPEC— are in Zenith; schemas, templates and discovery are
+		tree (STXT-SPEC and STXT-TREE-SPEC) are in Zenith; schemas, templates and discovery are
 		in Aurora. Error codes are never renamed, and each library's API is frozen within its
 		own 1.x line. Message text and convenience facades are not frozen. Conformance is
-		declared against the specification date (`SPEC_VERSION`), not the package version. The
+		declared against the specification date (`SPEC_VERSION`) and not the package version. The
 		full statement is in [Stability and versions](stability).
 
 	Subsubheader: Where do I ask, or give feedback?

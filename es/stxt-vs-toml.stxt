@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente a documentos jerárquicos
+Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a documentos jerárquicos
 	Metadata:
 		Last modif: 2026-09-08
 		Description: STXT y TOML comparados con ejemplos: cabeceras frente a indentación, tablas anidadas, cadenas multilínea, tipos en la sintaxis frente a tipos en la definición, y validación.
@@ -96,9 +96,9 @@ Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente 
 	Content >>
 		Otras dos propiedades del modelo de TOML: las tablas pueden escribirse en
 		cualquier orden, así que la forma visual del fichero no tiene por qué coincidir
-		con el árbol; y la misma estructura admite varias grafías —cabeceras, claves con
+		con el árbol; y la misma estructura admite varias grafías: cabeceras, claves con
 		punto (`storage.kind = "s3"`), tablas en línea (`storage = { kind = "s3" }`),
-		arrays en línea y arrays de tablas—. En @STXT@ la forma visual del documento es su
+		arrays en línea y arrays de tablas. En @STXT@ la forma visual del documento es su
 		estructura, y hay una sola grafía.
 
 	Subheader: El texto de varias líneas
@@ -135,12 +135,12 @@ Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente 
 		En TOML el tipo está en la grafía del valor: `14` es un entero, `"14"` una cadena,
 		`true` un booleano, `2026-08-31T02:30:00Z` una fecha con hora. Un parser TOML
 		devuelve datos ya tipados sin ninguna definición externa; a cambio, las cadenas van
-		siempre entre comillas, en cuatro formas —básica y literal, de una y de varias
-		líneas—, con escapes en las básicas.
+		siempre entre comillas, en cuatro formas (básica y literal, de una y de varias
+		líneas), con escapes en las básicas.
 
 		En @STXT@ un valor es siempre texto, sin comillas. Los tipos se declaran en la
-		definición —`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`…— y los comprueba el
-		validador, no el parser: sin definición, `14` son dos caracteres.
+		definición (`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`…) y los comprueba el
+		validador y no el parser: sin definición, `14` son dos caracteres.
 
 	Subheader: Namespaces y validación
 
@@ -194,8 +194,8 @@ Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente 
 	Subheader: Cuándo usar cada uno
 
 	Content >>
-		TOML, donde el ecosistema lo espera —`Cargo.toml`, `pyproject.toml`, la
-		configuración de herramientas que leen ese fichero— y para configuración plana de
+		TOML, donde el ecosistema lo espera (`Cargo.toml`, `pyproject.toml`, la
+		configuración de herramientas que leen ese fichero) y para configuración plana de
 		claves con valores tipados, que es el objetivo que su especificación declara.
 
 		@STXT@, cuando el fichero crece hacia documento: jerarquía de varios niveles,

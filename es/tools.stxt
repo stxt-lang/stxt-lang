@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Herramientas — STXT
+Document (dev.stxt.website): Herramientas | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -7,8 +7,8 @@ Document (dev.stxt.website): Herramientas — STXT
 	Header: Herramientas
 
 	Assert >>
-		Todas las herramientas de esta página —playground, extensión, línea de comandos y
-		bibliotecas— implementan las mismas cinco especificaciones y devuelven los mismos
+		Todas las herramientas de esta página (playground, extensión, línea de comandos y
+		bibliotecas) implementan las mismas cinco especificaciones y devuelven los mismos
 		códigos de error. La elección entre ellas no afecta a la compatibilidad.
 
 	Content >>
@@ -104,15 +104,15 @@ Document (dev.stxt.website): Herramientas — STXT
 	Subheader: Bibliotecas
 
 	Content >>
-		Hay tres implementaciones oficiales —TypeScript/JavaScript, Java y Python—. Un puerto a otro lenguaje puede demostrar su conformidad con el
-		mismo kit que las tres oficiales ([Estabilidad y versiones](stability)).
+		Hay tres implementaciones oficiales: TypeScript/JavaScript, Java y Python. Un puerto a
+		otro lenguaje puede demostrar su conformidad con el mismo kit que las tres oficiales ([Estabilidad y versiones](stability)).
 
 	Subsubheader: TypeScript / JavaScript
 
 	Content >>
 		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) en npm. Es el
 		parser sobre el que corren la extensión, la línea de comandos y el playground.
-		La guía completa —árbol, validación, resolución, JSON canónico, escritura— está
+		La guía completa (árbol, validación, resolución, JSON canónico y escritura) está
 		en [la biblioteca TypeScript](tools-typescript).
 
 	Listing >>

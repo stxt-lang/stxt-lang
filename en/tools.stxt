@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Tools — STXT
+Document (dev.stxt.website): Tools | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -7,7 +7,7 @@ Document (dev.stxt.website): Tools — STXT
 	Header: Tools
 
 	Assert >>
-		Every tool on this page —playground, extension, command line and libraries—
+		Every tool on this page (playground, extension, command line and libraries)
 		implements the same five specifications and reports the same error codes. The
 		choice between them does not affect compatibility.
 
@@ -103,15 +103,16 @@ Document (dev.stxt.website): Tools — STXT
 	Subheader: Libraries
 
 	Content >>
-		There are three official implementations —TypeScript/JavaScript, Java and Python—. A port to another language can prove its conformance with the same
-		kit as the three official ones ([Stability and versions](stability)).
+		There are three official implementations: TypeScript/JavaScript, Java and Python. A
+		port to another language can prove its conformance with the same kit as the three
+		official ones ([Stability and versions](stability)).
 
 	Subsubheader: TypeScript / JavaScript
 
 	Content >>
 		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) on npm. It is
 		the parser the extension, the command line and the playground run on. The full
-		guide —tree, validation, resolution, canonical JSON, writing— is in
+		guide (tree, validation, resolution, canonical JSON and writing) is in
 		[the TypeScript library](tools-typescript).
 
 	Listing >>

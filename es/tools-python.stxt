@@ -1,4 +1,4 @@
-Document (dev.stxt.website): La biblioteca Python — STXT
+Document (dev.stxt.website): La biblioteca Python | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -10,8 +10,8 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 		[`stxt`](https://pypi.org/project/stxt/) es el parser de @STXT@ para Python,
 		publicado en PyPI: Python puro, sin dependencias, 3.10 o superior. Es un puerto
 		módulo a módulo del pseudocódigo de referencia del lenguaje, así que implementa las
-		cinco especificaciones —sintaxis, árbol canónico, esquemas, plantillas y
-		resolución— y devuelve los mismos códigos de error que las bibliotecas
+		cinco especificaciones (sintaxis, árbol canónico, esquemas, plantillas y
+		resolución) y devuelve los mismos códigos de error que las bibliotecas
 		[TypeScript](tools-typescript) y [Java](tools-java) y la
 		[línea de comandos](tools-cli). Es una biblioteca y no incluye CLI; el comando del
 		ecosistema es `stxt`.
@@ -28,8 +28,8 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 
 	Content >>
 		El paquete lleva anotaciones de tipo (`py.typed`), no depende de nada y no toca por
-		sí mismo ni el sistema de ficheros ni el entorno —salvo en los adaptadores de host de
-		la resolución, que se pueden sustituir—. Todo lo público se importa del paquete raíz,
+		sí mismo ni el sistema de ficheros ni el entorno, salvo en los adaptadores de host de
+		la resolución, que se pueden sustituir. Todo lo público se importa del paquete raíz,
 		`from stxt import Parser, InlineNode, …`; la versión está en `stxt.__version__`.
 
 	Subheader: Parsear
@@ -62,8 +62,8 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 	Content >>
 		Cada error es una `ParseException` con tres atributos: **`line`** (la línea del
 		documento, empezando en 1), **`code`** (estable, en mayúsculas: `INVALID_LINE`,
-		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`…) y **`message`** —también como
-		`get_line()`, `get_code()` y `get_message()`—. Los errores de gramática son
+		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`…) y **`message`** (también como
+		`get_line()`, `get_code()` y `get_message()`). Los errores de gramática son
 		`ValidationException`, una subclase con los mismos atributos, así que un solo bucle
 		recorre los dos e `isinstance` distingue la severidad. Un documento con un error de
 		sintaxis puede seguir devolviendo nodos: el parser se recupera y continúa, de modo
@@ -85,7 +85,7 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 		que el nodo escribe entre paréntesis, o `""`) y `get_namespace()` (el **efectivo**,
 		heredado por la cadena de padres), `get_line()`, `get_level()` (derivado de la
 		profundidad), `get_parent()` (siempre un `InlineNode`, o `None` en la raíz),
-		`detach()` y `get_text()` —el valor de un inline o las líneas unidas de un bloque—.
+		`detach()` y `get_text()`, que da el valor de un inline o las líneas unidas de un bloque.
 		Recorrer un árbol es preguntar la forma con `isinstance`, igual que el árbol
 		canónico de STXT-TREE-SPEC solo tiene `children` en los inline y `lines` en los
 		bloques. La jerarquía es cerrada: no se puede heredar de `InlineNode` ni de
@@ -259,16 +259,16 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 		`UnifiedSchemaProvider` recibe el texto de la gramática. La **resolución**
 		determina qué definiciones aplican a un documento dado. `DiscoveryResolver`
 		implementa
-		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) —los `.stxt/` del documento y de todos
+		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) (los `.stxt/` del documento y de todos
 		sus ancestros, después `~/.stxt` y `/etc/stxt`, precedencia por namespace,
-		`STXT_PATH` sustituye la cadena—, igual que la CLI y la extensión, así que las tres
+		`STXT_PATH` sustituye la cadena), igual que la CLI y la extensión, así que las tres
 		coinciden por construcción.
 
 		Como en el puerto TypeScript, el resolutor no toca por sí mismo ni el sistema de
 		ficheros ni el entorno: recibe un `DiscoveryFileSystem` y un `DiscoveryEnvironment`.
-		La diferencia es que el paquete incluye los dos adaptadores de host
-		—`OsDiscoveryFileSystem` sobre `os` y `SystemDiscoveryEnvironment` sobre
-		`STXT_PATH`, `~/.stxt` y `/etc/stxt` (o `%ProgramData%\stxt`)— y el atajo
+		La diferencia es que el paquete incluye los dos adaptadores de host,
+		`OsDiscoveryFileSystem` sobre `os` y `SystemDiscoveryEnvironment` sobre
+		`STXT_PATH`, `~/.stxt` y `/etc/stxt` (o `%ProgramData%\stxt`), y el atajo
 		`stxt.discovery.resolve(document_dir)` sobre ellos; un test puede pasar un árbol en
 		memoria. La cadena es por documento: se pasa el directorio en el que vive (`None`
 		para la entrada estándar o un búfer sin guardar, que arranca la cadena en el nivel
@@ -321,15 +321,15 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 		Los códigos de error de la resolución son `DISCOVERY_DUPLICATE_NAMESPACE`,
 		`DISCOVERY_NOT_A_DEFINITION`, `DISCOVERY_NOT_PARSEABLE` y
 		`DISCOVERY_INVALID_DEFINITION`; `DiscoveryError` es una clase de datos (`code`,
-		`file`, `message`, `namespace`), no una excepción, porque la especificación exige
+		`file`, `message`, `namespace`) y no una excepción, porque la especificación exige
 		informar de una definición inválida sin detener la carga del resto.
 
 	Subheader: El árbol canónico en JSON
 
 	Content >>
 		`to_canonical_tree(nodes)` transforma los nodos raíz en el valor JSON de
-		[STXT-TREE-SPEC](stxt-tree-ref) —una lista de diccionarios, el mismo árbol que
-		emite `stxt describe`— y `to_canonical_json(nodes)` lo serializa con dos espacios
+		[STXT-TREE-SPEC](stxt-tree-ref), una lista de diccionarios con el mismo árbol que
+		emite `stxt describe`, y `to_canonical_json(nodes)` lo serializa con dos espacios
 		de sangría. Es una función explícita que emite solo los campos normativos,
 		`children` en los inline y `lines` en los bloques, sin posiciones ni comentarios.
 
@@ -351,8 +351,8 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 		[STXT-TREE-SPEC §11](stxt-tree-ref#s11), con `IndentStyle.TABS` (por defecto) o
 		`IndentStyle.SPACES_4`. Escribe el namespace solo donde cambia respecto al padre, esté
 		donde esté en el fuente. Como parte del árbol lógico, un texto que pase por `parse` y
-		`NodeWriter` sale sin comentarios ni líneas en blanco fuera de los bloques —es lo que
-		hace `stxt format --clean`—.
+		`NodeWriter` sale sin comentarios ni líneas en blanco fuera de los bloques, que es lo que
+		hace `stxt format --clean`.
 
 	Python >>
 		from stxt import NodeWriter, IndentStyle
@@ -362,9 +362,9 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 
 	Content >>
 		El reformateo que **conserva** comentarios y líneas en blanco es `Formatter`
-		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)): reescribe el texto original línea a línea —las
+		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)): reescribe el texto original línea a línea (las
 		líneas que abren un nodo en forma canónica, las de un bloque al nivel del bloque, el
-		resto tal cual, con sus unidades de indentación convertidas al estilo pedido— y
+		resto tal cual, con sus unidades de indentación convertidas al estilo pedido) y
 		devuelve, junto al texto, los errores de sintaxis que haya encontrado, para que quien
 		llama decida qué hacer con un documento que no parsea. Es el mismo formateador, con las
 		mismas reglas, que el de `stxt format`, la extensión y el playground.
@@ -393,7 +393,7 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 	Content >>
 		`Observer` es una clase base con cuatro *callbacks* vacíos, de los que se redefinen
 		los necesarios, y que el parser llama en streaming: `on_create(node, line_string)` al
-		abrir un nodo —ya con padre, namespace efectivo y nivel—, `on_finish(node)` al
+		abrir un nodo (ya con padre, namespace efectivo y nivel), `on_finish(node)` al
 		cerrarlo, `on_comment(line_number, line_string)` y `on_text_line(node,
 		line_number, line_string, line_indent)` por cada línea de un bloque. `Validator` es
 		el otro gancho: se ejecuta sobre cada nodo al cerrarlo y devuelve una lista de
@@ -415,8 +415,8 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 	Subheader: Streaming y límites del parser
 
 	Content >>
-		`parse_stream(lines)` recibe un iterable de líneas —cada una sin su salto de línea;
-		por ejemplo, un fichero abierto, que se lee de forma perezosa— y no retiene nada: ni
+		`parse_stream(lines)` recibe un iterable de líneas (cada una sin su salto de línea;
+		por ejemplo, un fichero abierto, que se lee de forma perezosa) y no retiene nada: ni
 		nodos ni errores. Los resultados llegan solo por un `StreamObserver`, una clase base
 		con dos *callbacks*: `on_root_node(node)` con cada nodo raíz completo y ya validado,
 		que el parser libera tras la llamada, y `on_error(error)` con cada error, sintáctico o
@@ -446,8 +446,8 @@ Document (dev.stxt.website): La biblioteca Python — STXT
 		El parser aplica los límites de [STXT-SPEC §11.2](stxt-core-ref#s11-2), configurables
 		en el constructor: `max_nesting` (100 niveles), `max_line_length` (10 000 caracteres) y
 		`max_input_size` (10 000 000 caracteres); `-1` desactiva uno. Superar un límite produce
-		una `LimitException` —subclase de `ParseException` con los códigos
-		`LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` y `LIMIT_INPUT_SIZE_EXCEEDED`— y
+		una `LimitException` (subclase de `ParseException` con los códigos
+		`LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` y `LIMIT_INPUT_SIZE_EXCEEDED`) y
 		aborta el parseo: es siempre el último error.
 
 	Python >>

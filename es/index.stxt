@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para documentos
+Document (dev.stxt.website): STXT: un lenguaje de marcado Human-First para documentos
 	Metadata:
 		Last modif: 2026-09-11
 		Description: STXT es un lenguaje de marcado Human-First para documentos y datos: sin llaves ni etiquetas, solo indentación. Legible para personas, fiable para máquinas.
@@ -10,7 +10,7 @@ Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para do
 		son legibles y expresivos, y al mismo tiempo fiables para máquinas.
 
 	Content >>
-		> @STXT@ se pronuncia "ESS-text o ESE-text" — primero la letra `S`, después `text`, como _S-TEXT_.
+		> @STXT@ se pronuncia "ESS-text" o "ESE-text": primero la letra `S` y después `text`, como _S-TEXT_.
 
 	Subheader: Documentos
 
@@ -87,8 +87,8 @@ Document (dev.stxt.website): STXT — Un lenguaje de marcado Human-First para do
 	Content >>
 		La validación es opcional y forma parte del propio lenguaje: la plantilla de arriba
 		también es @STXT@. Una herramienta de validación comprueba que cada nodo está
-		declarado, que las cardinalidades se cumplen y que los valores con tipo — fechas,
-		números, direcciones de correo — están bien formados; el modelo de contenido cerrado
+		declarado, que las cardinalidades se cumplen y que los valores con tipo (fechas,
+		números, direcciones de correo) están bien formados; el modelo de contenido cerrado
 		rechaza un campo mal escrito en lugar de aceptarlo en silencio. Cómo encajan
 		documentos, definiciones y herramientas en un proyecto se describe en
 		[El entorno de trabajo](working-environment).

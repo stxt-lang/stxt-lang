@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT Discovery — Schema and template resolution
+Document (dev.stxt.website): STXT Discovery: schema and template resolution
 
 	Metadata:
 		Status: Aurora
@@ -19,8 +19,8 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		The [*STXT-SCHEMA-SPEC*](stxt-schema-ref) and [*STXT-TEMPLATE-SPEC*](stxt-template-ref) specifications define how
 		definitions are written and how they validate; they deliberately do not state where
 		they are located. This specification covers that omission with a single goal: that the
-		same document validates against the same definitions in every tool — an editor, a
-		command line, a continuous integration process. If every tool searched for definitions its
+		same document validates against the same definitions in every tool, whether an editor, a
+		command line or a continuous integration process. If every tool searched for definitions its
 		own way, the outcome of validating would depend on who validates.
 
 		Resolution is **identical for schemas and templates**: both are discovered by the
@@ -63,10 +63,10 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		  resolution error ([section 8](#s8)).
 		* The recursive walk **SHOULD** be guarded against pathological structures the same way
 		  the ascent is ([section 4.1](#s4-1)): a tool **MAY** limit the descent depth and
-		  **SHOULD NOT** follow symbolic links — neither descend through a link to a directory (so
+		  **SHOULD NOT** follow symbolic links: neither descend through a link to a directory (so
 		  as not to enter loops or walk unrelated trees) nor load as a definition a link to a file
 		  (so as not to read files from outside the `.stxt/`, [section 10](#s10)). A subdirectory
-		  that cannot be listed simply contributes no files; it does not stop the resolution of the
+		  that cannot be listed contributes no files; it does not stop the resolution of the
 		  rest of the level.
 
 	Subheader: 4. The resolution chain
@@ -96,8 +96,8 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		* The `.stxt` entry of an ancestor **MUST** be a real directory: if it is a symbolic
 		  link, the tool **MUST NOT** follow it and that ancestor contributes no level, even
 		  when the link points to a directory. The ancestors of a document are written by
-		  whoever created the project, who is not always the validating party — a cloned
-		  repository — and a `.stxt` linked to the home folder or to the root would take the
+		  whoever created the project, who is not always the validating party (a cloned
+		  repository) and a `.stxt` linked to the home folder or to the root would take the
 		  resolution into a foreign tree ([section 10](#s10)). It is the same rule that
 		  applies inside the directory ([section 3](#s3)). The user and system levels
 		  ([section 4.2](#s4-2)) and the `STXT_PATH` entries ([section 6](#s6)), chosen by the
@@ -116,7 +116,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		* The user level allows personal definitions shared across projects.
 		* The system level allows an organization to distribute definitions to every
 		  account on a machine.
-		* If any of the directories does not exist, that level simply contributes no
+		* If any of the directories does not exist, that level contributes no
 		  definitions; it is not an error.
 		* Both directories are chosen by the user or by the machine's administrator, not by
 		  the author of a project. They **MAY** therefore be symbolic links and a tool **MUST**
@@ -188,8 +188,8 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		* A nonexistent entry is ignored; it is not an error.
 		* An entry **MAY** be a symbolic link, and it is followed: whoever defines `STXT_PATH`
 		  chooses its directories ([section 10](#s10)). Inside it [section 3](#s3) applies.
-		* An empty entry — the one left by a leading, trailing or doubled separator, as in
-		  `:/opt/defs` — is ignored as well: it does not stand for the working directory.
+		* An empty entry (the one left by a leading, trailing or doubled separator, as in
+		  `:/opt/defs`) is ignored as well: it does not stand for the working directory.
 		* An `STXT_PATH` that is defined but empty leaves the chain empty: no namespace
 		  has an active definition, and validating a document with a namespace fails
 		  with `SCHEMA_NOT_FOUND` ([*STXT-SCHEMA-SPEC* §13](stxt-schema-ref#s13)). An
@@ -270,7 +270,7 @@ Document (dev.stxt.website): STXT Discovery — Schema and template resolution
 		  within a resolution directory ([section 3](#s3)) protect against pathological
 		  directory structures: circular symbolic links or virtual file systems. A tool
 		  **SHOULD** bound the descent depth and **SHOULD NOT** follow symbolic links when
-		  descending — neither directory nor file links — so that a resolution directory loads only
+		  descending, neither directory nor file links, so that a resolution directory loads only
 		  the definitions it really contains, not files an outside link points to: since the levels
 		  of the chain include directories the validating party does not control, following a file
 		  link would allow reading a file from outside the `.stxt/` (and leaking its content through

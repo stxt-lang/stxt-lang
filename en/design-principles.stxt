@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Design principles — STXT
+Document (dev.stxt.website): Design principles | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -8,15 +8,15 @@ Document (dev.stxt.website): Design principles — STXT
 
 	Assert >>
 		@STXT@ is a language designed for people (**Human-First**). Everything else
-		—simplicity, indentation as structure, the absence of escapes, parsing safety,
-		validation as a separate layer— derives from that principle.
+		derives from that principle: simplicity, indentation as structure, the absence of
+		escapes, parsing safety and validation as a separate layer.
 
 	Subheader: 1. The document is written for people
 
 	Content >>
 		This is the principle the others follow from. An @STXT@ document must be readable and
-		writable without tools: the natural form of the text is the correct form, and the
-		machine adapts to that form, not the other way round. Hence there are no braces,
+		writable without tools: the natural form of the text is the correct form, and it is the
+		machine that adapts to that form. Hence there are no braces,
 		brackets, mandatory quotes or closing tags, and a document looks like an outline of
 		notes.
 
@@ -89,8 +89,8 @@ Document (dev.stxt.website): Design principles — STXT
 	Content >>
 		The parser needs no schemas. A document without a namespace, or with a namespace for
 		which there is no definition, is a valid document that cannot be validated. When
-		there is a schema, the content model is closed: an undeclared node is an error, not
-		extra data to be ignored. The order of children is preserved in the tree but not
+		there is a schema, the content model is closed: an undeclared node is an error, and not
+		surplus data to be passed over. The order of children is preserved in the tree but not
 		validated.
 
 		The same criterion governs the other specifications: the base specification alone

@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
+Document (dev.stxt.website): STXT Template: templates (@stxt.template)
 	Metadata:
 		Status: Aurora
 		Last modif: 2026-09-11
@@ -415,8 +415,8 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		root nodes are **description entries**. Each entry associates a description with a node
 		defined in `Structure`:
 
-		* `Node Name: description` — inline entry, for one-line descriptions.
-		* `Node Name >>` with the description in its text block — block entry, for multi-line descriptions.
+		* `Node Name: description`: inline entry, for one-line descriptions.
+		* `Node Name >>` with the description in its text block: block entry, for multi-line descriptions.
 
 		The correspondence between an entry and its `Structure` node is made by **canonical name**
 		([*STXT-SPEC*](stxt-core-ref), [section 4.3](stxt-core-ref#s4-3)). The order of the entries is free: it does not have to follow the order of `Structure`.
@@ -670,7 +670,7 @@ Document (dev.stxt.website): STXT Template — Templates (@stxt.template)
 		* `Metadata` belongs to `org.example.meta`.
 		* `Metadata` is validated against the definition of `org.example.meta`; if a document uses it and there is no definition, the document is invalid (`SCHEMA_NOT_FOUND`).
 		
-	Subheader: 18. Appendix A — Grammar (informal)
+	Subheader: 18. Appendix A: grammar (informal)
 
 	Grammar >>
 		TemplateDoc      = "Template" "(" "@stxt.template" ")" ":" NamespaceTarget { TemplateField }

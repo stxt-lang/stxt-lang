@@ -1,4 +1,4 @@
-Document (dev.stxt.website): AI and LLMs — STXT
+Document (dev.stxt.website): AI and LLMs | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -90,7 +90,7 @@ Document (dev.stxt.website): AI and LLMs — STXT
 		into a valid `Report (com.acme.reports)`. Alongside it are the template above, a
 		correct example document, the prompt with the rules of the language and the source
 		notes. The prompt carries the @STXT@ rules, the whole template, the valid example and
-		the text to convert, and asks for the document and nothing else.
+		the text to convert, and asks for the document alone.
 
 	Listing >>
 		$ node generate.mjs > report.stxt

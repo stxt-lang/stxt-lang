@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alternativas
+Document (dev.stxt.website): STXT frente a Markdown: complementarios
 	Metadata:
 		Last modif: 2026-09-08
 		Description: Markdown da formato a la prosa; STXT estructura los documentos y adopta Markdown para la prosa de sus nodos. Dos ejemplos, y por qué MARKDOWN es el único formato embebido de los esquemas STXT.
@@ -18,8 +18,8 @@ Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alte
 	Subheader: Los datos de un documento Markdown
 
 	Content >>
-		Markdown no tiene noción de campos. Cuando un documento necesita datos —autor,
-		fecha, estado—, la convención es el **front matter**: un bloque YAML entre vallas
+		Markdown no tiene noción de campos. Cuando un documento necesita datos (autor,
+		fecha, estado), la convención es el **front matter**: un bloque YAML entre vallas
 		`---`, ajeno a Markdown y parseado por un segundo lenguaje con
 		[sus propias reglas](stxt-vs-yaml):
 
@@ -120,8 +120,8 @@ Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alte
 					Consequences: (1) MARKDOWN
 
 	Content >>
-		Un estado fuera de la lista o una sección ausente es un error de validación, no
-		una revisión pendiente:
+		Un estado fuera de la lista o una sección ausente es un error de validación en lugar
+		de una revisión pendiente:
 
 	Code >>
 		# ERROR: Status debe ser uno de Proposed, Accepted, Deprecated, Superseded
@@ -146,8 +146,8 @@ Document (dev.stxt.website): STXT frente a Markdown — Complementarios, no alte
 	Subheader: Cuándo usar cada uno
 
 	Content >>
-		Para un README, un comentario o un gist —prosa con formato ligero y sin
-		contrato—, Markdown solo.
+		Markdown solo, para un README, un comentario o un gist: prosa con formato ligero y
+		sin contrato.
 
 		@STXT@, cuando el documento tiene partes con nombre que deben comprobarse:
 		[artículos en un pipeline](use-cases-cms),

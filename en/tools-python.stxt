@@ -1,4 +1,4 @@
-Document (dev.stxt.website): The Python library — STXT
+Document (dev.stxt.website): The Python library | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -10,7 +10,7 @@ Document (dev.stxt.website): The Python library — STXT
 		[`stxt`](https://pypi.org/project/stxt/) is the @STXT@ parser for Python,
 		published on PyPI: pure Python, no dependencies, 3.10 or later. It is a
 		module-by-module port of the language's reference pseudocode, so it implements the
-		five specifications —syntax, canonical tree, schemas, templates and resolution— and
+		five specifications (syntax, canonical tree, schemas, templates and resolution) and
 		reports the same error codes as the [TypeScript](tools-typescript) and
 		[Java](tools-java) libraries and the [command line](tools-cli). It is a library and
 		includes no CLI; the command of the ecosystem is `stxt`.
@@ -27,8 +27,8 @@ Document (dev.stxt.website): The Python library — STXT
 
 	Content >>
 		The package carries type annotations (`py.typed`), depends on nothing and touches
-		neither the file system nor the environment by itself —except in the host adapters
-		of resolution, which can be replaced—. Everything public is imported from the root
+		neither the file system nor the environment by itself, except in the host adapters
+		of resolution, which can be replaced. Everything public is imported from the root
 		package, `from stxt import Parser, InlineNode, …`; the version is in
 		`stxt.__version__`.
 
@@ -62,8 +62,8 @@ Document (dev.stxt.website): The Python library — STXT
 	Content >>
 		Every error is a `ParseException` with three attributes: **`line`** (the line of
 		the document, starting at 1), **`code`** (stable, upper-case: `INVALID_LINE`,
-		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`…) and **`message`** —also as
-		`get_line()`, `get_code()` and `get_message()`—. Grammar errors are
+		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`…) and **`message`** (also as
+		`get_line()`, `get_code()` and `get_message()`). Grammar errors are
 		`ValidationException`, a subclass with the same attributes, so a single loop walks
 		both and `isinstance` tells the severity apart. A document with a syntax error may
 		still return nodes: the parser recovers and continues, so that an editor can
@@ -85,8 +85,8 @@ Document (dev.stxt.website): The Python library — STXT
 		`get_declared_namespace()` (what the node writes between parentheses, or `""`) and
 		`get_namespace()` (the **effective** one, inherited through the chain of parents),
 		`get_line()`, `get_level()` (derived from the depth), `get_parent()` (always an
-		`InlineNode`, or `None` at the root), `detach()` and `get_text()` —the value of an
-		inline node or the joined lines of a block—. Walking a tree means asking for the
+		`InlineNode`, or `None` at the root), `detach()` and `get_text()`, which gives the value of an
+		inline node or the joined lines of a block. Walking a tree means asking for the
 		form with `isinstance`, the same way the canonical tree of STXT-TREE-SPEC has
 		`children` only for inline nodes and `lines` only for blocks. The hierarchy is
 		closed: `InlineNode` and `TextNode` cannot be subclassed.
@@ -258,16 +258,16 @@ Document (dev.stxt.website): The Python library — STXT
 	Content >>
 		`UnifiedSchemaProvider` receives the grammar text. **Resolution** determines which
 		definitions apply to a given document. `DiscoveryResolver` implements
-		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) —the
+		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) (the
 		`.stxt/` directories of the document and of all its ancestors, then `~/.stxt` and
-		`/etc/stxt`, per-namespace precedence, `STXT_PATH` replacing the chain—, just like
+		`/etc/stxt`, per-namespace precedence, `STXT_PATH` replacing the chain), just like
 		the CLI and the extension, so all three agree by construction.
 
 		As in the TypeScript port, the resolver touches neither the file system nor the
 		environment by itself: it receives a `DiscoveryFileSystem` and a
 		`DiscoveryEnvironment`. The difference is that the package includes the two host
-		adapters —`OsDiscoveryFileSystem` over `os` and `SystemDiscoveryEnvironment`
-		over `STXT_PATH`, `~/.stxt` and `/etc/stxt` (or `%ProgramData%\stxt`)— and the
+		adapters, `OsDiscoveryFileSystem` over `os` and `SystemDiscoveryEnvironment`
+		over `STXT_PATH`, `~/.stxt` and `/etc/stxt` (or `%ProgramData%\stxt`), and the
 		`stxt.discovery.resolve(document_dir)` shortcut over them; a test can pass an
 		in-memory tree instead. The chain is per document: pass the directory it lives in
 		(`None` for standard input or an unsaved buffer, which starts the chain at the user
@@ -319,15 +319,15 @@ Document (dev.stxt.website): The Python library — STXT
 		The resolution error codes are `DISCOVERY_DUPLICATE_NAMESPACE`,
 		`DISCOVERY_NOT_A_DEFINITION`, `DISCOVERY_NOT_PARSEABLE` and
 		`DISCOVERY_INVALID_DEFINITION`; `DiscoveryError` is a data class (`code`, `file`,
-		`message`, `namespace`), not an exception, because the specification requires an
+		`message`, `namespace`) and not an exception, because the specification requires an
 		invalid definition to be reported without stopping the load of the rest.
 
 	Subheader: The canonical tree as JSON
 
 	Content >>
 		`to_canonical_tree(nodes)` turns the root nodes into the JSON value of
-		[STXT-TREE-SPEC](stxt-tree-ref) —a list of dictionaries, the same tree `stxt
-		describe` emits— and `to_canonical_json(nodes)` serialises it with two-space
+		[STXT-TREE-SPEC](stxt-tree-ref), a list of dictionaries with the same tree `stxt
+		describe` emits, and `to_canonical_json(nodes)` serialises it with two-space
 		indentation. It is an explicit function that emits only the normative fields,
 		`children` for inline nodes and `lines` for blocks, with no positions or comments.
 
@@ -350,7 +350,7 @@ Document (dev.stxt.website): The Python library — STXT
 		`IndentStyle.SPACES_4`. It writes the namespace only where it changes from the
 		parent's, wherever the source declared it. Since it starts from the logical tree, a
 		text that goes through `parse` and `NodeWriter` comes out without comments or blank
-		lines outside blocks —that is what `stxt format --clean` does—.
+		lines outside blocks, which is what `stxt format --clean` does.
 
 	Python >>
 		from stxt import NodeWriter, IndentStyle
@@ -361,9 +361,9 @@ Document (dev.stxt.website): The Python library — STXT
 	Content >>
 		The reformatting that **keeps** comments and blank lines is `Formatter`
 		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)): it rewrites the original text line by line
-		—the lines that open a node in canonical form, those of a block at the level of the
+		(the lines that open a node in canonical form, those of a block at the level of the
 		block, the rest as they are, with their indentation units converted to the requested
-		style— and returns, along with the text, the syntax errors it met, so that the caller
+		style) and returns, along with the text, the syntax errors it met, so that the caller
 		decides what to do with a document that does not parse. It is the same formatter, with
 		the same rules, as the one behind `stxt format`, the extension and the playground.
 
@@ -391,7 +391,7 @@ Document (dev.stxt.website): The Python library — STXT
 	Content >>
 		`Observer` is a base class with four empty callbacks, of which the needed ones are
 		overridden, that the parser calls while streaming: `on_create(node, line_string)` when a
-		node is opened —already with its parent, effective namespace and level—,
+		node is opened (already with its parent, effective namespace and level),
 		`on_finish(node)` when it is closed, `on_comment(line_number, line_string)` and
 		`on_text_line(node, line_number, line_string, line_indent)` for each line of a
 		block. `Validator` is the other hook: it runs on each node as it is closed and
@@ -414,8 +414,8 @@ Document (dev.stxt.website): The Python library — STXT
 	Subheader: Streaming and parser limits
 
 	Content >>
-		`parse_stream(lines)` takes an iterable of lines —each without its line break; for
-		instance, an open file, read lazily— and retains nothing: no nodes, no errors. The
+		`parse_stream(lines)` takes an iterable of lines (each without its line break; for
+		instance, an open file, read lazily) and retains nothing: no nodes, no errors. The
 		results reach the program only through a `StreamObserver`, a base class with two
 		callbacks: `on_root_node(node)` with each complete, already validated root node, which
 		the parser releases right after the call, and `on_error(error)` with each error,
@@ -445,8 +445,8 @@ Document (dev.stxt.website): The Python library — STXT
 		The parser applies the limits of [STXT-SPEC §11.2](stxt-core-ref#s11-2), configurable
 		in the constructor: `max_nesting` (100 levels), `max_line_length` (10,000 characters)
 		and `max_input_size` (10,000,000 characters); `-1` disables one. Exceeding a limit
-		produces a `LimitException` —a subclass of `ParseException` with the codes
-		`LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` and `LIMIT_INPUT_SIZE_EXCEEDED`—
+		produces a `LimitException` (a subclass of `ParseException` with the codes
+		`LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` and `LIMIT_INPUT_SIZE_EXCEEDED`)
 		and aborts the parse: it is always the last error.
 
 	Python >>

@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternatives
+Document (dev.stxt.website): STXT vs Markdown: complementary
 	Metadata:
 		Last modif: 2026-09-08
 		Description: Markdown formats prose; STXT structures documents and adopts Markdown for the prose of its nodes. Two examples, and why MARKDOWN is the only embedded format in STXT schemas.
@@ -17,8 +17,8 @@ Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternative
 	Subheader: The data of a Markdown document
 
 	Content >>
-		Markdown has no notion of fields. When a document needs data —author, date,
-		status—, the convention is **front matter**: a YAML block between `---` fences,
+		Markdown has no notion of fields. When a document needs data (author, date,
+		status), the convention is **front matter**: a YAML block between `---` fences,
 		foreign to Markdown and parsed by a second language with
 		[its own rules](stxt-vs-yaml):
 
@@ -118,8 +118,8 @@ Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternative
 					Consequences: (1) MARKDOWN
 
 	Content >>
-		A status outside the list or a missing section is a validation error, not a
-		pending review:
+		A status outside the list or a missing section is a validation error rather than
+		a pending review:
 
 	Code >>
 		# ERROR: Status must be one of Proposed, Accepted, Deprecated, Superseded
@@ -144,8 +144,8 @@ Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternative
 	Subheader: When to use each
 
 	Content >>
-		For a README, a comment or a gist —lightly formatted prose with no contract—,
-		Markdown alone.
+		Markdown alone, for a README, a comment or a gist: lightly formatted prose with no
+		contract.
 
 		@STXT@, when the document has named parts that must be checked:
 		[articles in a pipeline](use-cases-cms),

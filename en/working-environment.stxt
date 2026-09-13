@@ -1,4 +1,4 @@
-Document (dev.stxt.website): The working environment — STXT
+Document (dev.stxt.website): The working environment | STXT
 
 	Metadata:
 		Last modif: 2026-09-08
@@ -21,8 +21,8 @@ Document (dev.stxt.website): The working environment — STXT
 
 	Content >>
 		An @STXT@ project is any directory with `.stxt` documents in it. The only thing @STXT@
-		adds is a directory called exactly **`.stxt/`** that contains the project's grammars
-		— schemas and templates. When a tool validates a document it looks for that directory
+		adds is a directory called exactly **`.stxt/`** that contains the project's grammars,
+		that is, its schemas and templates. When a tool validates a document it looks for that directory
 		in the document's directory and in all of its ancestor directories, then in `~/.stxt`
 		and in `/etc/stxt`. That list is the document's **resolution chain**, and it is the
 		same for the editor, the command line and any other tool: that is why a document
@@ -55,7 +55,7 @@ Document (dev.stxt.website): The working environment — STXT
 		into `.stxt/` under any name, or the CLI can place it: `stxt install` parses
 		it, checks that it validates against its meta-schema and only then writes it, in
 		canonical form, as `.stxt/@stxt.template/<namespace>.stxt`. That naming is a CLI
-		convention, not part of the language.
+		convention; the language does not impose it.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -159,15 +159,15 @@ Document (dev.stxt.website): The working environment — STXT
 		* `--format json`: the same findings as a JSON array, for machines.
 
 		With `--recursive` (`-r`) whole directories are validated; any `.stxt/` found on the
-		way is omitted, because it is the resolution chain, not documents to check.
+		way is omitted, because it forms the resolution chain and is not a document to check.
 
 	Subheader: 4. The same from VS Code
 
 	Content >>
 		With the `books/` folder open in Visual Studio Code and the extension installed
 		(`code --install-extension stxt-lang.stxt`) there is nothing to configure: the
-		extension follows the same resolution chain as the CLI — the `.stxt/` of the document
-		and of its ancestors, even above the workspace root, then `~/.stxt` and `/etc/stxt` —
+		extension follows the same resolution chain as the CLI (the `.stxt/` of the document
+		and of its ancestors, even above the workspace root, then `~/.stxt` and `/etc/stxt`),
 		so it resolves the same template and emits the same codes. With `docs/book.stxt`
 		open:
 
@@ -199,7 +199,7 @@ Document (dev.stxt.website): The working environment — STXT
 		| User    | `~/.stxt` (`%USERPROFILE%\.stxt`)          | `--user`         | Personal definitions, shared by all the user's projects         |
 		| System  | `/etc/stxt` (`%ProgramData%\stxt`)         | `--system`       | Definitions an organisation distributes to a whole machine      |
 
-		Precedence is **per namespace**, not per directory: for each namespace the closest
+		Precedence is **per namespace** and not per directory: for each namespace the closest
 		level that defines it wins, and the other levels keep contributing the namespaces
 		that one does not define. So a project can carry its `com.acme.book` while the user
 		keeps an `org.ana.notes` template for personal notes in `~/.stxt`, and both apply in

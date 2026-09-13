@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT frente a JSON — Documentos a mano frente a serialización
+Document (dev.stxt.website): STXT frente a JSON: documentos a mano frente a serialización
 	Metadata:
 		Last modif: 2026-09-08
 		Description: STXT y JSON comparados con ejemplos: escritura a mano, comentarios, texto multilínea, JSON Schema frente a plantillas, y el árbol JSON canónico de todo documento STXT.
@@ -10,8 +10,8 @@ Document (dev.stxt.website): STXT frente a JSON — Documentos a mano frente a s
 
 	Content >>
 		JSON tiene una gramática mínima, un solo modelo de datos y parsers en todos los
-		lenguajes. La comparación se limita al punto donde los dos se solapan —un fichero
-		que una persona escribe y mantiene a mano— y termina donde @STXT@ adopta JSON:
+		lenguajes. La comparación se limita al punto donde los dos se solapan, un fichero
+		que una persona escribe y mantiene a mano, y termina donde @STXT@ adopta JSON:
 		como representación de su propio árbol.
 
 	Subheader: El mismo contenido, dos veces
@@ -169,7 +169,8 @@ Document (dev.stxt.website): STXT frente a JSON — Documentos a mano frente a s
 		Es más largo que el JSON escrito a mano porque no es el mismo dato: es el árbol
 		completo, con el nombre tal como se escribió, su forma canónica y el namespace de
 		cada nodo, y por eso lo puede consumir cualquier programa que lea JSON sin un
-		parser de @STXT@. La fuente queda legible; la serialización, mecánica.
+		parser de @STXT@. La fuente sigue siendo legible y la serialización se obtiene
+		mecánicamente.
 
 	Subheader: Cuándo usar cada uno
 

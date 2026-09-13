@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
+Document (dev.stxt.website): STXT Core: sintaxis base del lenguaje
 	Metadata:
 		Status: Zenith
 		Last modif: 2026-09-09
@@ -77,8 +77,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		
 		* **DEBERÍA** aceptar documentos que comiencen con BOM y, si los acepta, **DEBE** descartar
 		  el `U+FEFF` inicial antes de procesar la primera línea: el BOM no forma parte del
-		  contenido. (Si no se descartara sería contenido — no es un blanco,
-		  [sección 4](#s4) — y haría inválido el nombre del primer nodo.)
+		  contenido. (Si no se descartara sería contenido, pues no es un blanco,
+		  [sección 4](#s4), y haría inválido el nombre del primer nodo.)
 		* **PUEDE** emitir una advertencia en documentos que comiencen con BOM.
 
 		**Entrada en bytes.** Esta especificación define el documento sobre caracteres; la
@@ -86,7 +86,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		entrada como bytes **DEBE** rechazarla si no es UTF-8 válido, en lugar de sustituir las
 		secuencias inválidas (por ejemplo por `U+FFFD`): la sustitución silenciosa hace que dos
 		herramientas vean documentos distintos a partir de los mismos bytes. Es un error de
-		lectura, previo al parseo — como un fichero inexistente — y no lleva código de error de
+		lectura, previo al parseo, como un fichero inexistente, y no lleva código de error de
 		sintaxis.
 
 		**Fin de línea:** un parser **DEBE** aceptar los terminadores `LF` (`\n`) y `CRLF` (`\r\n`).
@@ -103,8 +103,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		exclusivamente dos caracteres: el espacio `U+0020` y el tabulador `U+0009`. Son los únicos
 		que cuentan como indentación ([sección 8](#s8)), los únicos que se recortan al normalizar
 		nombres y valores ([sección 10](#s10)) y los únicos que hacen vacía una línea. Cualquier
-		otro carácter de espacio Unicode — el espacio de no separación `U+00A0`, el espacio
-		ideográfico `U+3000`, el separador de línea `U+2028`, etc. — y cualquier carácter de
+		otro carácter de espacio Unicode (el espacio de no separación `U+00A0`, el espacio
+		ideográfico `U+3000`, el separador de línea `U+2028`, etc.) y cualquier carácter de
 		control **es contenido**: forma parte del nombre o del valor, no se recorta y no hace vacía
 		una línea. Un parser **NO DEBE** usar para ello la noción de "espacio en blanco" de su
 		plataforma si esta es más amplia. El `\r` de un final `CRLF` se descarta antes, según la
@@ -191,8 +191,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		generales `L`, `Nd`, `Mn` y `Mc`, en cualquier alfabeto: latino, griego, cirílico, árabe,
 		devanagari, tailandés, CJK…) y los caracteres separadores `-`, `_`, ` `. Se permiten nombres con
 		diacríticos, mayúsculas y minúsculas. Las marcas combinantes (`Mn`, `Mc`) son las vocales y
-		signos que en muchas escrituras se escriben sobre la letra base —`हिंदी` no se puede escribir sin
-		ellas— y los acentos combinantes sin forma precompuesta; las marcas envolventes (`Me`) no se
+		signos que en muchas escrituras se escriben sobre la letra base (`हिंदी` no se puede escribir sin
+		ellas) y los acentos combinantes sin forma precompuesta; las marcas envolventes (`Me`) no se
 		admiten. La comprobación se hace sobre la forma **NFC** del nombre ([sección 4.3](#s4-3)), de
 		modo que `e` + acento combinante se comprueba como `é`.
 
@@ -494,7 +494,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Content >>
 		* Una primera línea indentada. Un nodo de nivel 0 no tiene padre, y antes del primer nodo
 		  no hay ningún nodo de referencia: el nivel de referencia es −1, de modo que el primer
-		  nodo —o el primer comentario— del documento **DEBE** estar en el nivel 0. Lo mismo vale
+		  nodo (o el primer comentario) del documento **DEBE** estar en el nivel 0. Lo mismo vale
 		  tras cerrar todos los nodos: un nodo de nivel 0 siempre puede seguir a cualquier otro.
 		
 	Listing >>
@@ -535,7 +535,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Content >>
 		* La indentación **DEBE** aumentar de forma consecutiva (no se permiten saltos).
 		* Los nodos hijos **DEBEN** tener mayor indentación que su padre.
-		* La indentación dentro de un bloque `>>` **no afecta a la jerarquía estructural**: es simplemente texto.
+		* La indentación dentro de un bloque `>>` **no afecta a la jerarquía estructural**: es solo texto.
 		* El árbol resultante del parseo **DEBE** preservar el **orden de aparición** de los nodos hermanos tal como aparecen en el documento. Una implementación conforme **NO DEBE** reordenar los hijos de un nodo.
 		
 	Subsubheader: 8.5 Múltiples nodos de nivel 0 y concatenación
@@ -725,7 +725,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		2. El parser elimina **solo** ese prefijo (el nivel de bloque), conservando cualquier
 		   indentación adicional como parte del texto. El resto de la línea es **texto libre**:
 		   una vez alcanzado el nivel de bloque, no se aplica ninguna regla adicional de
-		   indentación ni de caracteres — puede contener espacios y tabuladores en cualquier
+		   indentación ni de caracteres: puede contener espacios y tabuladores en cualquier
 		   combinación, y cualquier sintaxis @STXT@ sin interpretarse.
 		3. Sobre ese contenido, el parser **DEBE** eliminar todos los espacios y tabuladores finales (trim a la derecha).
 		4. Las líneas vacías que preceden a más contenido se conservan; las finales del bloque se
@@ -762,11 +762,11 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 	Subsubheader: 10.3 Líneas vacías en bloques >>
 
 	Content >>
-		* Las líneas vacías **iniciales e intermedias** — las que preceden a más contenido no vacío
-		  del bloque — **DEBEN** preservarse como líneas vacías (`""`) en la representación lógica
+		* Las líneas vacías **iniciales e intermedias** (las que preceden a más contenido no vacío
+		  del bloque) **DEBEN** preservarse como líneas vacías (`""`) en la representación lógica
 		  del texto.
-		* Las líneas vacías **finales** — la secuencia de líneas vacías posterior a la última línea
-		  no vacía del bloque — **DEBEN** descartarse al cerrarse el bloque: no forman parte de la
+		* Las líneas vacías **finales** (la secuencia de líneas vacías posterior a la última línea
+		  no vacía del bloque) **DEBEN** descartarse al cerrarse el bloque: no forman parte de la
 		  representación lógica. Un bloque compuesto únicamente por líneas vacías tiene como
 		  contenido la secuencia vacía de líneas, igual que un bloque sin líneas.
 		* La regla es semántica, no sintáctica: una línea vacía nunca cierra el bloque
@@ -868,8 +868,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		| Tamaño de la entrada | `10 000 000` caracteres | el total de la entrada consumida supera ese tamaño |
 
 		Lo importante no son los números sino el contrato, y ese sí es normativo. Un parser que
-		aplique límites **DEBE** dejarlos configurar al programa que lo usa —el valor `-1`
-		desactiva el límite correspondiente— y **DEBE** usar los códigos de error de la tabla
+		aplique límites **DEBE** dejarlos configurar al programa que lo usa (el valor `-1`
+		desactiva el límite correspondiente) y **DEBE** usar los códigos de error de la tabla
 		siguiente, los mismos en toda implementación. Las longitudes se miden en las unidades
 		naturales de la representación de cadenas de la plataforma (puntos de código o unidades
 		UTF-16); para contenido ASCII todas coinciden. El límite de tamaño de la entrada se
@@ -892,8 +892,8 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		el parser se ha detenido, no de que el documento infrinja la sintaxis.
 
 		**Nota (no normativa).** El límite de profundidad de anidamiento acota además las
-		operaciones que recorren el árbol de forma recursiva **después** del parseo —la validación
-		semántica y la escritura ([*STXT-TREE-SPEC*](stxt-tree-ref))—, que no tienen otra cota que
+		operaciones que recorren el árbol de forma recursiva **después** del parseo (la validación
+		semántica y la escritura, [*STXT-TREE-SPEC*](stxt-tree-ref)), que no tienen otra cota que
 		esta. Desactivarlo (`-1`) las deja sin protección de pila frente a un árbol muy profundo,
 		además de relajar el parseo.
 
@@ -908,7 +908,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		* Interpreta correctamente nodos con `:` y bloques `>>`.
 		* Interpreta comentarios fuera del contenido de bloques `>>`, valida su indentación como la de un nodo sin que alteren la jerarquía, y un comentario con indentación menor o igual que la del nodo `>>` cierra el bloque activo, según la [sección 9](#s9).
 		* Trata **todo** lo que esté dentro del contenido de un bloque `>>` (indentación estrictamente mayor) como texto literal.
-		* Acepta **múltiples nodos de nivel 0** —y también ninguno ([sección 8.5](#s8-5))— y preserva el orden de aparición de los nodos hermanos.
+		* Acepta **múltiples nodos de nivel 0**, y también ninguno ([sección 8.5](#s8-5)), y preserva el orden de aparición de los nodos hermanos.
 		* No aplica herencia lateral de namespace entre nodos de nivel 0.
 		* Normaliza los namespaces a minúsculas durante el parseo.
 		* Aplica las reglas de normalización de espacios en blanco de la [sección 10](#s10).
@@ -1017,13 +1017,13 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		  eliminando los ataques homográficos basados en caracteres Unicode visualmente equivalentes.
 		* **Bajo riesgo de denegación de servicio**: las reglas estrictas de indentación consecutiva
 		  y la ausencia de referencias circulares o anchors limitan la complejidad estructural.
-		  Además, la [sección 11.2](#s11-2) recomienda límites configurables —profundidad de
-		  anidamiento, longitud de línea y tamaño de la entrada—, que las implementaciones
+		  Además, la [sección 11.2](#s11-2) recomienda límites configurables (profundidad de
+		  anidamiento, longitud de línea y tamaño de la entrada), que las implementaciones
 		  oficiales activan por defecto.
 		* **Parseo en streaming con memoria acotada**: gracias a que se permiten múltiples nodos de nivel 0
 		  y a que no existen referencias hacia atrás, un parser **PUEDE** emitir cada árbol raíz completo en cuanto
-		  detecta el inicio del siguiente nodo de nivel 0, reteniendo solo el árbol de la raíz en curso —que
-		  emite y descarta antes de empezar la siguiente—. El uso de memoria es entonces del orden del
+		  detecta el inicio del siguiente nodo de nivel 0, reteniendo solo el árbol de la raíz en curso, que
+		  emite y descarta antes de empezar la siguiente. El uso de memoria es entonces del orden del
 		  **mayor árbol raíz**, no del tamaño total del documento. Esto hace viable procesar ficheros muy
 		  grandes compuestos de muchas raíces (logs, *streams*) de forma segura; una única raíz gigante se
 		  retiene entera, y para acotarla también en ese caso están los límites de la [sección 11.2](#s11-2).
@@ -1044,7 +1044,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		y **NO DEBEN** introducir extensiones que permitan carga externa 
 		o evaluación dinámica sin medidas de seguridad explícitas.
 		
-	Subheader: 16. Apéndice A — Gramática (Informal)
+	Subheader: 16. Apéndice A: gramática (informal)
 		
 	Grammar >>
 		Documento        = { Linea }
@@ -1093,7 +1093,7 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		     - Si la línea es vacía → añadir línea vacía (`""`) al bloque.
 		     - Si indentación > indentación del nodo `>>` → recortar el nivel de bloque (nivel del nodo `>>` + 1) y añadir el resto como texto literal (trim derecha).
 		     - Si indentación ≤ indentación del nodo `>>`, **sea o no un comentario** → cerrar bloque y procesar la línea fuera del bloque.
-		     - Al cerrar un bloque —también al llegar al final del documento— eliminar de su contenido las líneas vacías finales ([sección 10.3](#s10-3)).
+		     - Al cerrar un bloque (también al llegar al final del documento), eliminar de su contenido las líneas vacías finales ([sección 10.3](#s10-3)).
 		  3. Si no hay bloque activo:
 		     - Línea vacía → ignorar (no afecta jerarquía).
 		     - Empieza por `#` (tras indentación) → comentario; validar su indentación como la de un nodo (estilo homogéneo, múltiplo de 4, nivel ≤ último nodo + 1) y descartar sin tocar la jerarquía.
@@ -1106,12 +1106,12 @@ Document (dev.stxt.website): STXT Core — Sintaxis base del lenguaje
 		  - Si un nodo define su propio namespace entre `()`, este reemplaza al heredado para él y todos sus descendientes.
 		
 		* **Normalización adicional:**
-		  - Nombres de nodo: según [sección 4.1](#s4-1)–[4.3](#s4-3).
+		  - Nombres de nodo: según [sección 4.1](#s4-1) a [4.3](#s4-3).
 		  - Namespaces: normalizados a minúsculas durante el parseo ([sección 7](#s7)); solo se conserva la forma minúscula.
 		  - Valores inline: trim izquierdo y derecho ([sección 10.1](#s10-1)).
-		  - Líneas de bloque: recortar el nivel de bloque conservando la indentación adicional + trim derecha + preservar las líneas vacías que preceden a más contenido y descartar las finales ([sección 10.2](#s10-2)–[10.3](#s10-3)).
+		  - Líneas de bloque: recortar el nivel de bloque conservando la indentación adicional + trim derecha + preservar las líneas vacías que preceden a más contenido y descartar las finales ([sección 10.2](#s10-2) y [10.3](#s10-3)).
 
-	Subheader: 17. Apéndice B — Interacción con `@stxt.schema` y `@stxt.template`
+	Subheader: 17. Apéndice B: interacción con `@stxt.schema` y `@stxt.template`
 
 	Content >>
 		Los sistemas de schemas y de templates añaden validación semántica a los documentos

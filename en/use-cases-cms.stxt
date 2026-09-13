@@ -1,4 +1,4 @@
-Document (dev.stxt.website): CMS and publishing — STXT
+Document (dev.stxt.website): CMS and publishing | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -14,14 +14,14 @@ Document (dev.stxt.website): CMS and publishing — STXT
 
 	Content >>
 		Published content always has three layers: the text someone writes, the structure
-		that organizes it —pages, sections, chapters— and the data that accompanies it
-		—title, author, date, editorial status, tags—. The tools that manage it tend to fuse
+		that organizes it (pages, sections, chapters) and the data that accompanies it
+		(title, author, date, editorial status, tags). The tools that manage it tend to fuse
 		those layers with the editing interface and with the final presentation, and to
 		keep the content in a database of their own.
 
 		With @STXT@ as the source format, each page is a text file with its data as nodes
-		and its body in blocks. The content manager —a static site generator, a headless
-		CMS or a typesetting process— reads the tree and decides what to do with it. This
+		and its body in blocks. The content manager, whether a static site generator, a headless
+		CMS or a typesetting process, reads the tree and decides what to do with it. This
 		very portal is built that way: each page of `stxt.dev` is an @STXT@ document of the
 		`dev.stxt.website` namespace, and the generator turns it into HTML. The
 		[FAQ](faq#can-you-show-us-a-real-use) shows two ways to verify it from the browser.
@@ -37,7 +37,7 @@ Document (dev.stxt.website): CMS and publishing — STXT
 			Layout: default
 
 			SEO:
-				Title: STXT — A Human-First language
+				Title: STXT, a Human-First language
 				Description: A readable, validatable text language
 				Keywords:
 					Keyword: stxt
@@ -54,7 +54,7 @@ Document (dev.stxt.website): CMS and publishing — STXT
 				### What is STXT?
 
 				STXT is a language designed for writing documents
-				that can be read and processed without friction.
+				that people read and programs process.
 
 				### Principles
 
@@ -66,7 +66,7 @@ Document (dev.stxt.website): CMS and publishing — STXT
 				Last updated: January 2026
 
 	Content >>
-		The editorial metadata —slug, language, status, layout, SEO— are nodes the manager
+		The editorial metadata (slug, language, status, layout, SEO) are nodes the manager
 		reads directly. The body goes in blocks of type `MARKDOWN`
 		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)): @STXT@ does not
 		interpret that Markdown, it only hands it over as is to the renderer; the type is a
@@ -99,8 +99,8 @@ Document (dev.stxt.website): CMS and publishing — STXT
 					Footer: (?) TEXT
 
 	Content >>
-		The [template](stxt-template-ref) guarantees what the generator needs to work —title, slug and a status
-		from the list— and leaves the rest optional. A page without `Slug` does not
+		The [template](stxt-template-ref) guarantees what the generator needs to work (title, slug and a status
+		from the list) and leaves the rest optional. A page without `Slug` does not
 		validate, and therefore is not generated; neither does a lowercase
 		`Status: published`.
 
@@ -167,7 +167,7 @@ Document (dev.stxt.website): CMS and publishing — STXT
 
 	Code >>
 		Publication (com.acme.editorial.publication):
-			Title: STXT — The book
+			Title: STXT, the book
 			ISBN: 978-1-23456-789-0
 			Language: en
 			Status: In Progress
@@ -213,8 +213,8 @@ Document (dev.stxt.website): CMS and publishing — STXT
 		1. The document is written with any editor; with the VS Code extension, the
 		   template provides completion and immediate errors.
 		2. It is versioned in a repository; editorial review is a diff.
-		3. It is validated —in the editor, on the command line or in continuous
-		   integration— with `stxt validate` ([The command line](tools-cli)), which rejects
+		3. It is validated, in the editor, on the command line or in continuous
+		   integration, with `stxt validate` ([The command line](tools-cli)), which rejects
 		   a page without a slug or an article without an author before it reaches the
 		   generator.
 		4. The generator reads the [canonical tree](stxt-tree-ref) and produces HTML, PDF,
@@ -232,5 +232,5 @@ Document (dev.stxt.website): CMS and publishing — STXT
 		`MARKDOWN` block is rendered or which Markdown dialect is accepted: the renderer
 		fixes that, and the template only declares that the block must be treated as such.
 
-		The generated variant of this flow —pages written by a model and rejected by the
-		build until they validate— is developed in [AI and LLMs](ai-llms).
+		The generated variant of this flow (pages written by a model and rejected by the
+		build until they validate) is developed in [AI and LLMs](ai-llms).

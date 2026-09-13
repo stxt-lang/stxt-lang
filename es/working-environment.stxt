@@ -1,4 +1,4 @@
-Document (dev.stxt.website): El entorno de trabajo — STXT
+Document (dev.stxt.website): El entorno de trabajo | STXT
 
 	Metadata:
 		Last modif: 2026-09-08
@@ -23,7 +23,7 @@ Document (dev.stxt.website): El entorno de trabajo — STXT
 	Content >>
 		Un proyecto @STXT@ es un directorio cualquiera con documentos `.stxt`. Lo único que
 		añade @STXT@ es un directorio llamado exactamente **`.stxt/`** que contiene las
-		gramáticas —esquemas y plantillas— del proyecto. Cuando una herramienta valida un
+		gramáticas del proyecto, es decir, sus esquemas y plantillas. Cuando una herramienta valida un
 		documento busca ese directorio en el directorio del documento y en todos sus
 		directorios ascendentes, y después en `~/.stxt` y en `/etc/stxt`. Esa lista es la
 		**cadena de resolución** del documento, y es la misma para el editor, la línea de
@@ -57,7 +57,7 @@ Document (dev.stxt.website): El entorno de trabajo — STXT
 		en `.stxt/` con cualquier nombre, o dejar que la CLI la coloque: `stxt install`
 		la parsea, comprueba que valida contra su meta-esquema y solo entonces la escribe, en
 		forma canónica, como `.stxt/@stxt.template/<namespace>.stxt`. Esa nomenclatura es una
-		convención de la CLI, no del lenguaje.
+		convención de la CLI; el lenguaje no la impone.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -162,16 +162,16 @@ Document (dev.stxt.website): El entorno de trabajo — STXT
 		* `--format json`: los mismos hallazgos como array JSON, para máquinas.
 
 		Con `--recursive` (`-r`) se validan directorios enteros; los `.stxt/` encontrados por
-		el camino se omiten, porque son la cadena de resolución, no documentos que comprobar.
+		el camino se omiten, porque forman la cadena de resolución y no son documentos que comprobar.
 
 	Subheader: 4. Lo mismo desde VS Code
 
 	Content >>
 		Con la carpeta `libros/` abierta en Visual Studio Code y la extensión instalada
 		(`code --install-extension stxt-lang.stxt`) no hay nada que configurar: la extensión
-		sigue la misma cadena de resolución que la CLI —los `.stxt/` del documento y de sus
+		sigue la misma cadena de resolución que la CLI (los `.stxt/` del documento y de sus
 		ancestros, aunque estén por encima de la raíz del workspace, y después `~/.stxt` y
-		`/etc/stxt`—, de modo que resuelve la misma plantilla y emite los mismos códigos. Con
+		`/etc/stxt`), de modo que resuelve la misma plantilla y emite los mismos códigos. Con
 		`docs/book.stxt` abierto:
 
 		* Los **errores de sintaxis** aparecen subrayados en rojo, y los de gramática como
@@ -202,7 +202,7 @@ Document (dev.stxt.website): El entorno de trabajo — STXT
 		| Usuario  | `~/.stxt` (`%USERPROFILE%\.stxt`)         | `--user`         | Definiciones personales, comunes a todos los proyectos del usuario |
 		| Sistema  | `/etc/stxt` (`%ProgramData%\stxt`)        | `--system`       | Definiciones que una organización distribuye a toda una máquina |
 
-		La precedencia es **por namespace**, no por directorio: para cada namespace manda el
+		La precedencia es **por namespace** y no por directorio: para cada namespace manda el
 		nivel más cercano que lo defina, y los demás niveles siguen aportando los namespaces
 		que ese no define. Así, un proyecto puede llevar su `com.acme.book` y el usuario
 		tener en `~/.stxt` una plantilla `org.ana.notas` para sus apuntes, y las dos aplican

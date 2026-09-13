@@ -72,10 +72,10 @@ Document (dev.stxt.website): STXT Tutorial
 		Todo nodo empieza por su **nombre**, seguido de un separador. El separador decide
 		cuál de las dos formas tiene el nodo:
 
-		* **`Nombre: valor`** — nodo **inline**. El valor es lo que hay tras los dos puntos,
+		* **`Nombre: valor`**: nodo **inline**. El valor es lo que hay tras los dos puntos,
 		  hasta el final de la línea; puede estar vacío. Un nodo inline puede tener hijos:
 		  las líneas indentadas debajo.
-		* **`Nombre >>`** — **bloque de texto**. No lleva nada tras el `>>`; su contenido son
+		* **`Nombre >>`**: **bloque de texto**. No lleva nada tras el `>>`; su contenido son
 		  las líneas indentadas debajo, y es texto literal: `:`, `#` y `>>` no significan
 		  nada dentro, y no hay secuencias de escape.
 
@@ -90,7 +90,7 @@ Document (dev.stxt.website): STXT Tutorial
 		`Chapter` es inline con valor y con dos hijos; `Pages` es inline con valor y sin
 		hijos; `Content` es un bloque. Un bloque nunca tiene hijos: si un nodo necesita a la
 		vez estructura y un texto largo, el texto va en un hijo bloque, como `Content` dentro
-		de `Chapter`. Esa combinación —un nodo inline que agrupa valores cortos y bloques— es
+		de `Chapter`. Esa combinación, un nodo inline que agrupa valores cortos y bloques, es
 		la forma habitual de un documento @STXT@.
 
 		Un valor puede contener cualquier carácter, dos puntos incluidos: en
@@ -103,7 +103,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Subheader: 4. La indentación es la estructura
 
 	Assert >>
-		El nivel de una línea —cuántas unidades de indentación lleva— es lo único que
+		El nivel de una línea, es decir, cuántas unidades de indentación lleva, es lo único que
 		decide de qué nodo es hija. No hay otra marca de jerarquía.
 
 	Content >>
@@ -126,7 +126,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Content >>
 		Líneas distintas del mismo documento pueden usar estilos distintos, porque lo que
-		se compara es el nivel, no la columna. No es un error, pero por legibilidad conviene
+		se compara es el nivel y no la columna. No es un error, pero por legibilidad conviene
 		elegir un estilo y mantenerlo; `stxt format --tabs` o `--spaces` lo unifican.
 
 		Estas reglas son deliberadamente estrictas. Una línea que mezcla tabuladores y
@@ -158,10 +158,10 @@ Document (dev.stxt.website): STXT Tutorial
 		que la del nodo `>>`, sea un nodo o un comentario. Las líneas vacías no lo cierran:
 		las que preceden a más texto forman parte del bloque como líneas vacías, se escriban
 		sin nada o con la indentación del bloque; las que quedan al final se descartan al
-		cerrarse el bloque, porque son separación visual del documento, no contenido.
+		cerrarse el bloque, porque son separación visual del documento y no contenido.
 
-		Por eso un bloque sirve para cualquier contenido —un párrafo, un fragmento de
-		código, un trozo de Markdown, un texto en otro formato— sin transformarlo ni escapar
+		Por eso un bloque sirve para cualquier contenido (un párrafo, un fragmento de
+		código, un trozo de Markdown, un texto en otro formato) sin transformarlo ni escapar
 		nada.
 
 		Referencia: [STXT-SPEC §6.1](stxt-core-ref#s6-1) (reglas de los bloques) y
@@ -182,7 +182,7 @@ Document (dev.stxt.website): STXT Tutorial
 			Author: Ana López
 
 	Content >>
-		Y una secuencia de elementos distintos se escribe, sencillamente, en orden:
+		Y una secuencia de elementos distintos se escribe en orden:
 
 	Code >>
 		Book: Arquitectura de software moderna
@@ -202,8 +202,8 @@ Document (dev.stxt.website): STXT Tutorial
 	Subheader: 7. Los nombres de los nodos
 
 	Content >>
-		Un nombre admite letras, dígitos y marcas combinantes de cualquier alfabeto —latino,
-		griego, cirílico, árabe, devanagari, CJK…—, además de los separadores `-`, `_` y
+		Un nombre admite letras, dígitos y marcas combinantes de cualquier alfabeto (latino,
+		griego, cirílico, árabe, devanagari, CJK…), además de los separadores `-`, `_` y
 		espacio. No admite ningún otro signo: ni `:`, ni paréntesis, ni `#`. Debe contener
 		al menos una letra o un dígito.
 
@@ -307,7 +307,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 		El lenguaje base no valida nada con el namespace: solo define cómo se escribe y cómo
 		se hereda. Un documento con un namespace para el que no hay definición es un
-		documento válido que, simplemente, no se puede validar.
+		documento válido que no se puede validar.
 
 		Referencia: [STXT-SPEC §7](stxt-core-ref#s7) (namespaces), [§7.1](stxt-core-ref#s7-1)
 		(restricción a ASCII) y [§7.2](stxt-core-ref#s7-2) (herencia).
@@ -338,20 +338,20 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Content >>
 		Se lee casi como el documento del libro. Lo que hay entre paréntesis es la
-		**cardinalidad** —cuántas veces puede aparecer ese nodo dentro de su padre— y lo
+		**cardinalidad** (cuántas veces puede aparecer ese nodo dentro de su padre) y lo
 		que va después, si hay algo, el **tipo** del valor:
 
-		* `Title: (1)` — exactamente uno. `Authors` e `ISBN`, igual.
-		* `Author: (+)` — uno o más.
-		* `Publisher: (?)` — cero o uno.
-		* `Published: (?) DATE` — opcional y, si aparece, una fecha `AAAA-MM-DD`.
-		* `Summary: (?) TEXT` — opcional, y su valor es texto (inline o bloque).
-		* `Chapter: (+)` con `Content: (?) TEXT` dentro — al menos un capítulo, cada uno con
+		* `Title: (1)`: exactamente uno. `Authors` e `ISBN`, igual.
+		* `Author: (+)`: uno o más.
+		* `Publisher: (?)`: cero o uno.
+		* `Published: (?) DATE`: opcional y, si aparece, una fecha `AAAA-MM-DD`.
+		* `Summary: (?) TEXT`: opcional, y su valor es texto (inline o bloque).
+		* `Chapter: (+)` con `Content: (?) TEXT` dentro: al menos un capítulo, cada uno con
 		  su texto opcional.
 
 		Lo que la plantilla **no** dice también importa: `Book` no admite ningún hijo que no
 		esté en esta lista. Es el **modelo de contenido cerrado**: un nodo `Pages` dentro de
-		`Book` no es un dato extra que se ignora, es un error.
+		`Book` es un error y no un dato extra que se ignora.
 
 	Subsubheader: 10.1 Cardinalidades
 
@@ -382,8 +382,8 @@ Document (dev.stxt.website): STXT Tutorial
 		| `DATE`     | inline          | Fecha `AAAA-MM-DD`, con calendario.                   |
 		| `ENUM`     | inline          | Uno de los valores de una lista: `ENUM [a, b, c]`.    |
 
-		Solo `INLINE` y `GROUP` admiten hijos. En cuanto un tipo valida un dato concreto —un
-		número, una fecha, un texto—, ese nodo es un dato, y un dato es una hoja.
+		Solo `INLINE` y `GROUP` admiten hijos. En cuanto un tipo valida un dato concreto (un
+		número, una fecha, un texto), ese nodo es un dato, y un dato es una hoja.
 
 		Referencia: [STXT-TEMPLATE-SPEC §6](stxt-template-ref#s6) (el bloque `Structure`),
 		[§7](stxt-template-ref#s7) (cardinalidades), [§8](stxt-template-ref#s8) (tipos) y
@@ -410,7 +410,7 @@ Document (dev.stxt.website): STXT Tutorial
 		Un validador informa de tres cosas, cada una con su código y su línea: `Pages` no
 		está declarado en `Book` (`CHILD_NOT_DECLARED`), `2025-13-01` no es una fecha válida
 		(`INVALID_VALUE`) y falta `ISBN`, que era obligatorio (`TOO_FEW_CHILDREN`). Los
-		códigos son los mismos en todas las herramientas; el texto del mensaje, no.
+		códigos son los mismos en todas las herramientas; el texto del mensaje puede variar.
 
 		Esta es la diferencia entre un documento bien formado y un documento válido: el
 		primero lo lee cualquier parser; el segundo, además, cumple el contrato de su
@@ -502,9 +502,9 @@ Document (dev.stxt.website): STXT Tutorial
 		formas, y el valor es el mismo texto. `Publisher` no aparece, y no hace falta:
 		era `(?)`.
 
-		Cómo se hace en un proyecto real —la plantilla en un directorio `.stxt/`, el
+		Cómo se hace en un proyecto real (la plantilla en un directorio `.stxt/`, el
 		documento al lado y `stxt validate` desde el terminal o los errores en el
-		editor— lo enseña [El entorno de trabajo](working-environment).
+		editor) lo enseña [El entorno de trabajo](working-environment).
 
 	Subheader: 14. Varios namespaces en un mismo documento
 
@@ -518,8 +518,8 @@ Document (dev.stxt.website): STXT Tutorial
 
 		En la plantilla que incorpora el vocabulario ajeno, el nodo externo se declara
 		con su namespace y, como mucho, su cardinalidad: su forma no se describe ahí,
-		sino en la plantilla de su propio namespace. El conjunto completo —el documento
-		y las dos plantillas— cabe en un solo fichero:
+		sino en la plantilla de su propio namespace. El conjunto completo (el documento
+		y las dos plantillas) cabe en un solo fichero:
 
 	Code >>
 		Book (com.acme.book):
@@ -534,7 +534,7 @@ Document (dev.stxt.website): STXT Tutorial
 				Score: 9
 				Comment >>
 					Una guía clara y bien estructurada, con ejemplos
-					que se siguen sin esfuerzo.
+					fáciles de seguir.
 			Review (com.acme.reviews):
 				Reviewer: Luis Martín
 				Score: 8
@@ -557,7 +557,7 @@ Document (dev.stxt.website): STXT Tutorial
 					Comment: (?) TEXT
 
 	Content >>
-		La plantilla del libro —aquí reducida— añade una sola línea nueva,
+		La plantilla del libro, aquí reducida, añade una sola línea nueva,
 		`Review (com.acme.reviews): (*)`: un libro admite cualquier número de reseñas, y
 		qué es una reseña lo dice la plantilla de `com.acme.reviews`. En el documento,
 		cada `Review` declara su namespace, y `Reviewer`, `Score` y `Comment` lo heredan
@@ -565,7 +565,7 @@ Document (dev.stxt.website): STXT Tutorial
 		contra la suya.
 
 		Un documento @STXT@ puede tener varios nodos raíz, y este tiene tres: el libro y
-		las dos plantillas. Que quepan en un solo fichero es una posibilidad, no una
+		las dos plantillas. Que quepan en un solo fichero es una posibilidad y no una
 		obligación: lo habitual es que cada plantilla viva en el suyo, y que documento y
 		definiciones se encuentren por el namespace.
 
@@ -593,5 +593,5 @@ Document (dev.stxt.website): STXT Tutorial
 		  definiciones y [STXT-TREE-SPEC](stxt-tree-ref) para el árbol JSON que producen las
 		  herramientas.
 
-		Las normas de estilo del lenguaje —recomendaciones, no reglas— están en
+		Las normas de estilo del lenguaje (recomendaciones, no reglas) están en
 		[STXT-SPEC §4.4](stxt-core-ref#s4-4) y [§9.2](stxt-core-ref#s9-2).

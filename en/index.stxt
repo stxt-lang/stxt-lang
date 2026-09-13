@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT — A Human-First markup language for structured documents
+Document (dev.stxt.website): STXT: a Human-First markup language for structured documents
 	Metadata:
 		Last modif: 2026-09-11
 		Description: STXT is a human-first markup language for structured documents and data: no braces, no closing tags, just indentation. Readable by people, reliable for machines.
@@ -10,7 +10,7 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 		are readable and expressive, and at the same time reliable for machines.
 
 	Content >>
-		> @STXT@ is pronounced "ESS-text" — first the letter `S`, then `text`, like _S-TEXT_.
+		> @STXT@ is pronounced "ESS-text": first the letter `S`, then `text`, like _S-TEXT_.
 
 	Subheader: Documents
 
@@ -85,7 +85,7 @@ Document (dev.stxt.website): STXT — A Human-First markup language for structur
 	Content >>
 		Validation is optional and belongs to the language itself: the template above is
 		@STXT@ too. A validating tool checks that every node is declared, that cardinalities
-		hold and that typed values — dates, numbers, email addresses — are well formed; the
+		hold and that typed values (dates, numbers, email addresses) are well formed; the
 		closed content model rejects a misspelled field instead of accepting it silently.
 		How documents, definitions and tools fit together in a project is described in
 		[The working environment](working-environment).

@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
+Document (dev.stxt.website): STXT Schema: lenguaje de esquemas (@stxt.schema)
 
 	Metadata:
 		Status: Aurora
@@ -134,16 +134,16 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		de aceptarse silenciosamente.
 
 	Content >>
-		**Nota sobre evolución.** Un schema admite ampliaciones **compatibles** —añadir un `Child`
+		**Nota sobre evolución.** Un schema admite ampliaciones **compatibles** (añadir un `Child`
 		de cardinalidad mínima cero, rebajar un `Min`, ampliar un `Max`: cambios que permiten más
-		casos, no menos— sin que ningún documento existente deje de validar. El matiz es que la
+		casos y no menos) sin que ningún documento existente deje de validar. El matiz es que la
 		compatibilidad es respecto a la definición ampliada: un documento que use lo añadido no
 		valida contra una copia anterior del schema, de modo que si los consumidores del namespace
 		no actualizan su copia a la vez, el mismo documento puede validar en uno y fallar en otro.
 		Decidir si una ampliación necesita versión depende, por tanto, del caso de uso: de cómo se
 		distribuye la definición, no solo del cambio. Para esas situaciones, y siempre para los
-		cambios incompatibles —un `Child` obligatorio nuevo, retirar uno, estrechar una
-		cardinalidad—, la práctica recomendada es **versionar el namespace en el propio namespace**
+		cambios incompatibles (un `Child` obligatorio nuevo, retirar uno, estrechar una
+		cardinalidad), la práctica recomendada es **versionar el namespace en el propio namespace**
 		(por ejemplo `com.example.docs.v1` → `com.example.docs.v2`), de modo que cada versión tenga
 		su schema y los documentos declaren la versión que usan.
 
@@ -265,7 +265,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		Estas dos propiedades son **independientes entre sí**. En particular, "admite hijos" **no**
 		se deriva de la forma del valor. La regla de compatibilidad es la siguiente:
 
-		**Solo los dos tipos estructurales genéricos — `INLINE` y `GROUP` — admiten hijos. Todos los
+		**Solo los dos tipos estructurales genéricos, `INLINE` y `GROUP`, admiten hijos. Todos los
 		tipos con validación de contenido específico son hojas (no admiten hijos).**
 
 		Razón: en cuanto un tipo declara que valida un dato concreto (`NUMBER`, `DATE`,
@@ -328,13 +328,13 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		INTEGER   = [ signo ] dígitos
 		NATURAL   = dígitos                                       ; sin signo
 		DATE      = AAAA "-" MM "-" DD                            ; fecha existente del calendario gregoriano
-		                                                          ; (proléptico), año 0000–9999
-		TIME      = hh ":" mm ":" ss                              ; 00–23, 00–59, 00–59; sin fracción ni zona
+		                                                          ; (proléptico), año 0000-9999
+		TIME      = hh ":" mm ":" ss                              ; 00-23, 00-59, 00-59; sin fracción ni zona
 		TIMESTAMP = DATE "T" hh ":" mm [ ":" ss [ "." dígitos ] ] [ "Z" | signo hh ":" mm ]
 		                                                          ; mismos rangos; segundos, fracción y zona opcionales
 		UUID      = 8hex "-" 4hex "-" 4hex "-" 4hex "-" 12hex     ; hex = [0-9A-Fa-f]; no se comprueban versión ni variante
 		signo     = "+" | "-"
-		dígitos   = dígito { dígito }                             ; solo ASCII 0–9; se admiten ceros a la izquierda
+		dígitos   = dígito { dígito }                             ; solo ASCII 0-9; se admiten ceros a la izquierda
 
 	Content >>
 		Precisiones:
@@ -434,7 +434,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		|-------------|-----------------|--------------|----------------------------------------|
 		| HEXADECIMAL | INLINE/BLOCK    | NO           | `[0-9A-Fa-f]+`. Cadena hexadecimal.   |
 		| BINARY      | INLINE/BLOCK    | NO           | `[01]+`. Cadena binaria.              |
-		| BASE64      | INLINE/BLOCK    | NO           | Base64 estándar: alfabeto `A–Z a–z 0–9 + /`, relleno `=` final opcional, sin bits sobrantes. |
+		| BASE64      | INLINE/BLOCK    | NO           | Base64 estándar: alfabeto `A-Z a-z 0-9 + /`, relleno `=` final opcional, sin bits sobrantes. |
 
 		En los tres tipos, y en ambas formas, la gramática se aplica sobre el valor **sin ningún
 		blanco**: antes de validar se eliminan todos los espacios (U+0020) y tabuladores (U+0009),
@@ -479,7 +479,7 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		código. Los valores son literales y **no** se normalizan a NFC (a diferencia de los
 		nombres de nodo, [*STXT-SPEC* §4.3](stxt-core-ref#s4-3)): `café` en forma precompuesta
 		(NFC) y `café` en forma descompuesta (NFD) se ven idénticos pero no coinciden. Algunos
-		flujos de entrada — históricamente, macOS — producen NFD. Quien defina valores `ENUM` con
+		flujos de entrada (históricamente, macOS) producen NFD. Quien defina valores `ENUM` con
 		diacríticos debería escribirlos en NFC, que es lo que producen los editores habituales.
 
 	Subsubheader: 9.7 Tipo MARKDOWN
@@ -499,8 +499,8 @@ Document (dev.stxt.website): STXT Schema — Lenguaje de esquemas (@stxt.schema)
 		* Como todo tipo con contenido específico, `MARKDOWN` **no admite hijos** ([sección 9.1](#s9-1)).
 
 		**Nota de diseño (no normativa):** `MARKDOWN` es el **único** formato incrustado que
-		@STXT@ Schema define, porque cubre el único dominio que @STXT@ delega por diseño — el
-		formato de la prosa (negrita, enlaces, listas dentro del texto) — y porque su forma cruda
+		@STXT@ Schema define, porque cubre el único dominio que @STXT@ delega por diseño, el
+		formato de la prosa (negrita, enlaces, listas dentro del texto), y porque su forma cruda
 		sigue siendo legible, coherente con el principio Human-First. Los tipos para **formatos de
 		datos** incrustados (`JSON`, `XML`, `YAML`, `TOML`, …) son un **no-objetivo explícito**
 		([sección 11](#s11)): @STXT@ ya es el formato de estructura, y un tipo así enterraría estructura

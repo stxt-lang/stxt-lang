@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Estabilidad y versiones — STXT
+Document (dev.stxt.website): Estabilidad y versiones | STXT
 
 	Metadata:
 		Last modif: 2026-09-08
@@ -14,8 +14,8 @@ Document (dev.stxt.website): Estabilidad y versiones — STXT
 	Content >>
 		@STXT@ evoluciona. Las especificaciones no llevan número de versión: cada una lleva
 		en su `Metadata` la **fecha** de su texto vigente (`Last modif`) y un **estado**
-		(`Status`) que dice cuánta estabilidad promete. El núcleo —la sintaxis y el árbol
-		canónico— está en Zenith y no cambia de forma incompatible; las capas de esquemas,
+		(`Status`) que dice cuánta estabilidad promete. El núcleo (la sintaxis y el árbol
+		canónico) está en Zenith y no cambia de forma incompatible; las capas de esquemas,
 		plantillas y descubrimiento siguen evolucionando, cada una a su ritmo.
 
 	Subheader: Los cuatro estados
@@ -38,11 +38,11 @@ Document (dev.stxt.website): Estabilidad y versiones — STXT
 	Content >>
 		| Especificación | Estado | Desde |
 		|---|---|---|
-		| [STXT-SPEC](stxt-core-ref) — la sintaxis base | **Zenith** | 2026-09-07 |
-		| [STXT-TREE-SPEC](stxt-tree-ref) — el árbol canónico y la escritura | **Zenith** | 2026-09-07 |
-		| [STXT-SCHEMA-SPEC](stxt-schema-ref) — los esquemas | **Aurora** | 2026-09-07 |
-		| [STXT-TEMPLATE-SPEC](stxt-template-ref) — las plantillas | **Aurora** | 2026-09-07 |
-		| [STXT-DISCOVERY-SPEC](stxt-discovery-ref) — la localización de definiciones | **Aurora** | 2026-09-07 |
+		| [STXT-SPEC](stxt-core-ref), la sintaxis base | **Zenith** | 2026-09-07 |
+		| [STXT-TREE-SPEC](stxt-tree-ref), el árbol canónico y la escritura | **Zenith** | 2026-09-07 |
+		| [STXT-SCHEMA-SPEC](stxt-schema-ref), los esquemas | **Aurora** | 2026-09-07 |
+		| [STXT-TEMPLATE-SPEC](stxt-template-ref), las plantillas | **Aurora** | 2026-09-07 |
+		| [STXT-DISCOVERY-SPEC](stxt-discovery-ref), la localización de definiciones | **Aurora** | 2026-09-07 |
 
 		«@STXT@», dicho por sí solo, es STXT-SPEC, y está en Zenith: qué es un documento
 		@STXT@, cómo se parsea y qué árbol produce no cambiarán. Si algún día hiciera falta
@@ -66,7 +66,7 @@ Document (dev.stxt.website): Estabilidad y versiones — STXT
 
 		No estable:
 
-		* **El texto de los mensajes de error**: lo estable es el código, no la frase.
+		* **El texto de los mensajes de error**: el código es estable y la frase puede cambiar.
 		* **La salida de la línea de comandos pensada para personas**: el informe de
 		  `validate`, el texto de `--help`.
 		* **Las fachadas de comodidad y los adaptadores** de las bibliotecas, fuera de la API
@@ -77,8 +77,8 @@ Document (dev.stxt.website): Estabilidad y versiones — STXT
 	Subheader: Fecha de la especificación y versión del paquete
 
 	Content >>
-		Las especificaciones llevan fecha y estado; las bibliotecas —`@stxt-lang/core` en
-		npm, `dev.stxt:stxt-core` en Maven Central, `stxt` en PyPI— llevan la versión
+		Las especificaciones llevan fecha y estado; las bibliotecas (`@stxt-lang/core` en
+		npm, `dev.stxt:stxt-core` en Maven Central, `stxt` en PyPI) llevan la versión
 		semántica de su paquete, que sube cuando cambia la biblioteca, no cuando cambia el
 		lenguaje. La conformidad se declara contra la especificación, no contra el paquete,
 		y se demuestra con el
@@ -89,7 +89,7 @@ Document (dev.stxt.website): Estabilidad y versiones — STXT
 		la declaración dice si la implementación pasa todos los casos del perfil o solo los
 		obligatorios; las tres oficiales pasan todos. Dos
 		bibliotecas con versiones distintas que exponen la misma fecha leen el mismo @STXT@.
-		La fecha del kit identifica el paquete, nada más: si un kit nuevo solo mueve la fecha
+		La fecha del kit solo identifica el paquete: si un kit nuevo solo mueve la fecha
 		de una especificación, las implementaciones que no la cubren siguen conformes con las
 		suyas, sin volver a certificarse.
 

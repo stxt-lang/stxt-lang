@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT frente a XML — Estructura y validación sin verbosidad
+Document (dev.stxt.website): STXT frente a XML: estructura y validación sin verbosidad
 	Metadata:
 		Last modif: 2026-09-08
 		Description: STXT y XML comparados con ejemplos: el mismo árbol con y sin etiquetas de cierre, escapes y entidades, atributos frente a hijos, y un XSD frente a una plantilla STXT.
@@ -94,7 +94,7 @@ Document (dev.stxt.website): STXT frente a XML — Estructura y validación sin 
 	Subheader: La validación
 
 	Content >>
-		XML tiene varios lenguajes de esquema —DTD, XSD, RELAX NG, Schematron—, cada uno
+		XML tiene varios lenguajes de esquema (DTD, XSD, RELAX NG, Schematron), cada uno
 		con su sintaxis. Un XSD para el artículo de arriba:
 
 	Xml >>
@@ -148,8 +148,8 @@ Document (dev.stxt.website): STXT frente a XML — Estructura y validación sin 
 
 	Content >>
 		XML, donde su ecosistema es el valor: vocabularios establecidos (DocBook, SVG,
-		ODF, RSS), cadenas de herramientas sobre XSLT y XPath, y **contenido mixto**
-		—marcado en línea dentro de la prosa—, que @STXT@ no modela: la prosa con formato
+		ODF, RSS), cadenas de herramientas sobre XSLT y XPath, y **contenido mixto**,
+		el marcado en línea dentro de la prosa, que @STXT@ no modela: la prosa con formato
 		va en un bloque de texto, en [Markdown](stxt-vs-markdown).
 
 		@STXT@, en los documentos que las personas redactan y las organizaciones

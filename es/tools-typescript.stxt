@@ -1,4 +1,4 @@
-Document (dev.stxt.website): La biblioteca TypeScript — STXT
+Document (dev.stxt.website): La biblioteca TypeScript | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -11,8 +11,8 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 		@STXT@ para TypeScript y JavaScript, y el puerto de referencia del ecosistema:
 		sobre él corren la [línea de comandos](tools-cli), la extensión de VS Code y el
 		[playground](https://play.stxt.dev), que no tienen parser propio. Implementa las
-		cinco especificaciones —sintaxis, árbol canónico, esquemas, plantillas y
-		resolución— y devuelve los mismos códigos de error que las bibliotecas
+		cinco especificaciones (sintaxis, árbol canónico, esquemas, plantillas y
+		resolución) y devuelve los mismos códigos de error que las bibliotecas
 		[Java](tools-java) y [Python](tools-python).
 
 	Content >>
@@ -28,8 +28,8 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 		El paquete se distribuye como CommonJS con declaraciones de tipos, así que sirve
 		igual desde TypeScript, desde `require` y desde módulos ES (`import { Parser } from
 		'@stxt-lang/core'`). No tiene dependencias en tiempo de ejecución y no toca ni
-		el sistema de ficheros ni el entorno —eso se inyecta, como se ve en
-		*Resolución*—, por lo que corre igual en Node y en el navegador: el playground es
+		el sistema de ficheros ni el entorno (eso se inyecta, como se ve en
+		*Resolución*), por lo que corre igual en Node y en el navegador: el playground es
 		esta misma biblioteca empaquetada para el cliente. Su versión y la de la CLI que la
 		lleva se ven con `stxt --version`; el JSDoc viaja en el `.d.ts`, de modo que el
 		editor enseña la documentación de cada método al pasar el ratón.
@@ -90,7 +90,7 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 		que el nodo escribe entre paréntesis, o `""`) y `getNamespace()` (el **efectivo**,
 		heredado por la cadena de padres), `getLine()`, `getLevel()` (derivado de la
 		profundidad), `getParent()` (siempre un `InlineNode`, o `null` en la raíz),
-		`detach()` y `getText()` —el valor de un inline o las líneas unidas de un bloque—.
+		`detach()` y `getText()`, que da el valor de un inline o las líneas unidas de un bloque.
 		Recorrer un árbol es preguntar la forma con `instanceof`, que en TypeScript además
 		estrecha el tipo, igual que el árbol canónico de STXT-TREE-SPEC solo tiene
 		`children` en los inline y `lines` en los bloques.
@@ -263,9 +263,9 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 		`UnifiedSchemaProvider` recibe el texto de la gramática. La **resolución** responde
 		a la pregunta anterior: dado un documento, qué definiciones le aplican.
 		`DiscoveryResolver` es la implementación de referencia de
-		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) —los `.stxt/` del documento y de todos
+		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) (los `.stxt/` del documento y de todos
 		sus ancestros, después `~/.stxt` y `/etc/stxt`, precedencia por namespace,
-		`STXT_PATH` sustituye la cadena—, y es la misma que usan la CLI y la extensión,
+		`STXT_PATH` sustituye la cadena), y es la misma que usan la CLI y la extensión,
 		así que las tres coinciden por construcción.
 
 		El resolutor no accede por sí mismo ni al sistema de ficheros ni al entorno: se le
@@ -346,20 +346,20 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 	Content >>
 		Los niveles se cachean por directorio: resolver muchos documentos que comparten
 		ancestros lee cada `.stxt/` una sola vez. `resolver.clearCache()` cuando los
-		ficheros de definición puedan haber cambiado —desde un *file watcher*, por
-		ejemplo—. Los códigos de error de la resolución son `DISCOVERY_DUPLICATE_NAMESPACE`,
+		ficheros de definición puedan haber cambiado (desde un *file watcher*, por
+		ejemplo). Los códigos de error de la resolución son `DISCOVERY_DUPLICATE_NAMESPACE`,
 		`DISCOVERY_NOT_A_DEFINITION`, `DISCOVERY_NOT_PARSEABLE` y
 		`DISCOVERY_INVALID_DEFINITION`; `DiscoveryError` es una clase de datos (`code`,
-		`file`, `message`, `namespace`), no una excepción, porque la spec quiere informar
+		`file`, `message`, `namespace`) y no una excepción, porque la spec quiere informar
 		de una definición mala sin detener la carga del resto.
 
 	Subheader: El árbol canónico en JSON
 
 	Content >>
 		`toCanonicalTree(nodes)` transforma los nodos raíz en el valor JSON de
-		[STXT-TREE-SPEC](stxt-tree-ref) —el mismo que emite `stxt describe`— y
+		[STXT-TREE-SPEC](stxt-tree-ref), el mismo que emite `stxt describe`, y
 		`toCanonicalJson(nodes)` lo serializa con dos espacios de sangría. Es una función
-		explícita, no `JSON.stringify` sobre el nodo: emite solo los campos normativos,
+		explícita y no un `JSON.stringify` sobre el nodo: emite solo los campos normativos,
 		`children` en los inline y `lines` en los bloques, sin posiciones ni comentarios.
 		Los tipos `CanonicalDocument`, `CanonicalNode`, `CanonicalInlineNode` y
 		`CanonicalBlockNode` describen el resultado.
@@ -383,7 +383,7 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 		donde cambia respecto al padre, esté donde esté en el fuente. Como parte del árbol
 		lógico, un texto que pase
 		por `parse` y `NodeWriter` sale sin comentarios ni líneas en blanco fuera de los
-		bloques —es lo que hace `stxt format --clean`—.
+		bloques, que es lo que hace `stxt format --clean`.
 
 	TypeScript >>
 		import { NodeWriter, IndentStyle } from '@stxt-lang/core';
@@ -393,9 +393,9 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 
 	Content >>
 		El reformateo que **conserva** comentarios y líneas en blanco es `Formatter`
-		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)): reescribe el texto original línea a línea —las líneas que abren un nodo en
+		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)): reescribe el texto original línea a línea (las líneas que abren un nodo en
 		forma canónica, las de un bloque al nivel del bloque, el resto tal cual, con sus
-		unidades de indentación convertidas al estilo pedido— y devuelve, junto al texto, los
+		unidades de indentación convertidas al estilo pedido) y devuelve, junto al texto, los
 		errores de sintaxis que haya encontrado, para que quien llama decida qué hacer con un
 		documento que no parsea. Es el formateador de `stxt format`, de la extensión y del
 		playground.
@@ -422,7 +422,7 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 
 	Content >>
 		`Observer` recibe llamadas en streaming mientras se parsea: `onCreate(node,
-		line)` al abrir un nodo —ya con padre, namespace efectivo y nivel—, `onFinish(node)`
+		line)` al abrir un nodo (ya con padre, namespace efectivo y nivel), `onFinish(node)`
 		al cerrarlo, `onComment(lineNumber, line)` y `onTextLine(node, lineNumber,
 		lineString, line)` por cada línea de un bloque. Es la base del coloreado semántico
 		de la extensión y del mapa línea→nodo de `Formatter`.
@@ -444,8 +444,8 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 	Subheader: Streaming y límites del parser
 
 	Content >>
-		`parseStream(lines)` recibe un iterable de líneas —cada una sin su salto de línea; por
-		ejemplo, un fichero leído de forma perezosa— y no retiene nada: ni nodos ni errores.
+		`parseStream(lines)` recibe un iterable de líneas (cada una sin su salto de línea; por
+		ejemplo, un fichero leído de forma perezosa) y no retiene nada: ni nodos ni errores.
 		Los resultados llegan solo por un `StreamObserver`: `onRootNode(node)` con cada nodo
 		raíz completo y ya validado, que el parser libera tras la llamada, y `onError(error)`
 		con cada error, sintáctico o de validación. La memoria en uso es la de un árbol raíz
@@ -471,9 +471,9 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 		El parser aplica los límites de [STXT-SPEC §11.2](stxt-core-ref#s11-2), configurables
 		en el constructor con `ParserOptions`: `maxNesting` (100 niveles), `maxLineLength`
 		(10 000 caracteres) y `maxInputSize` (10 000 000 caracteres); `-1` desactiva uno.
-		Superar un límite produce una `LimitException` —subclase de `ParseException` con los
+		Superar un límite produce una `LimitException` (subclase de `ParseException` con los
 		códigos `LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` y
-		`LIMIT_INPUT_SIZE_EXCEEDED`— y aborta el parseo: es siempre el último error.
+		`LIMIT_INPUT_SIZE_EXCEEDED`) y aborta el parseo: es siempre el último error.
 
 	TypeScript >>
 		const parser = new Parser({ maxNesting: 50, maxInputSize: -1 });
@@ -499,5 +499,5 @@ Document (dev.stxt.website): La biblioteca TypeScript — STXT
 		exactamente, qué no, y por qué la versión del paquete no es la fecha de la
 		especificación, en [Estabilidad y versiones](stability). Las novedades de cada versión
 		están en el [repositorio](https://github.com/stxt-lang/stxt-js), que es también
-		donde se reportan los errores del parser y de la validación —los que se ven a
-		través de la CLI, la extensión o el playground incluidos—.
+		donde se reportan los errores del parser y de la validación, incluidos los que se ven a
+		través de la CLI, la extensión o el playground.

@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Principios de diseño — STXT
+Document (dev.stxt.website): Principios de diseño | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -7,16 +7,16 @@ Document (dev.stxt.website): Principios de diseño — STXT
 	Header: Principios de diseño
 
 	Assert >>
-		@STXT@ es un lenguaje pensado para las personas (**Human-First**). Todo lo demás
-		—la sencillez, la indentación como estructura, la ausencia de escapes, la seguridad
-		del parseo, la validación como capa aparte— se deriva de ese principio.
+		@STXT@ es un lenguaje pensado para las personas (**Human-First**). Todo lo demás se
+		deriva de ese principio: la sencillez, la indentación como estructura, la ausencia
+		de escapes, la seguridad del parseo y la validación como capa aparte.
 
 	Subheader: 1. El documento se escribe para personas
 
 	Content >>
 		Este es el principio del que salen los demás. Un documento @STXT@ debe poder leerse y
-		escribirse sin herramientas: la forma natural del texto es la forma correcta, y la
-		máquina se adapta a esa forma, no al revés. De ahí que no haya llaves, corchetes,
+		escribirse sin herramientas: la forma natural del texto es la forma correcta, y es la
+		máquina la que se adapta a esa forma. De ahí que no haya llaves, corchetes,
 		comillas obligatorias ni etiquetas de cierre, y que un documento parezca un esquema de
 		notas.
 
@@ -90,8 +90,8 @@ Document (dev.stxt.website): Principios de diseño — STXT
 	Content >>
 		El parser no necesita esquemas. Un documento sin namespace, o con un namespace para el
 		que no hay definición, es un documento válido que no se puede validar. Cuando hay
-		esquema, el modelo de contenido es cerrado: un nodo no declarado es un error, no un
-		dato extra que se ignora. El orden de los hijos se conserva en el árbol pero no se
+		esquema, el modelo de contenido es cerrado: un nodo no declarado es un error, y no un
+		dato de más que se pasa por alto. El orden de los hijos se conserva en el árbol pero no se
 		valida.
 
 		El mismo criterio ordena el resto de especificaciones: la especificación base define

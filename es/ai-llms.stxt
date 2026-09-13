@@ -1,4 +1,4 @@
-Document (dev.stxt.website): IA y LLMs — STXT
+Document (dev.stxt.website): IA y LLMs | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -89,7 +89,7 @@ Document (dev.stxt.website): IA y LLMs — STXT
 		reunión en texto libre en un `Report (com.acme.reports)` válido. Lo acompañan la
 		plantilla de arriba, un documento de ejemplo correcto, el prompt con las reglas del
 		lenguaje y las notas de partida. El prompt lleva las reglas de @STXT@, la plantilla
-		entera, el ejemplo válido y el texto a convertir, y pide el documento y nada más.
+		entera, el ejemplo válido y el texto a convertir, y pide solo el documento.
 
 	Listing >>
 		$ node generate.mjs > report.stxt

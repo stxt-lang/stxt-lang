@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT vs JSON — Hand-written documents vs serialization
+Document (dev.stxt.website): STXT vs JSON: hand-written documents vs serialization
 	Metadata:
 		Last modif: 2026-09-08
 		Description: STXT and JSON compared with examples: hand-writing, comments, multi-line text, JSON Schema versus templates, and the canonical JSON tree of every STXT document.
@@ -10,8 +10,8 @@ Document (dev.stxt.website): STXT vs JSON — Hand-written documents vs serializ
 
 	Content >>
 		JSON has a minimal grammar, a single data model and parsers in every language. The
-		comparison is limited to the point where the two overlap —a file that a person
-		writes and maintains by hand— and ends where @STXT@ adopts JSON: as the
+		comparison is limited to the point where the two overlap, a file that a person
+		writes and maintains by hand, and ends where @STXT@ adopts JSON: as the
 		representation of its own tree.
 
 	Subheader: The same content, twice
@@ -167,7 +167,8 @@ Document (dev.stxt.website): STXT vs JSON — Hand-written documents vs serializ
 		It is longer than the hand-written JSON because it is not the same data: it is the
 		complete tree, with the name as written, its canonical form and the namespace of
 		every node, which is why any program that reads JSON can consume it without an
-		@STXT@ parser. The source stays readable; the serialization is mechanical.
+		@STXT@ parser. The source stays readable and the serialization is obtained
+		mechanically.
 
 	Subheader: When to use each
 

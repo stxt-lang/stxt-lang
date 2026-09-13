@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical documents
+Document (dev.stxt.website): STXT vs TOML: flat configuration vs hierarchical documents
 	Metadata:
 		Last modif: 2026-09-08
 		Description: STXT and TOML compared with examples: headers versus indentation, nested tables, multi-line strings, types in the syntax versus types in the definition, and validation.
@@ -96,8 +96,8 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 	Content >>
 		Two more properties of the TOML model: tables can be written in any order, so the
 		visual shape of the file need not match the tree; and the same structure admits
-		several spellings —headers, dotted keys (`storage.kind = "s3"`), inline tables
-		(`storage = { kind = "s3" }`), inline arrays and arrays of tables—. In @STXT@ the
+		several spellings: headers, dotted keys (`storage.kind = "s3"`), inline tables
+		(`storage = { kind = "s3" }`), inline arrays and arrays of tables. In @STXT@ the
 		visual shape of the document is its structure, and there is a single spelling.
 
 	Subheader: Multi-line text
@@ -133,12 +133,12 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 		In TOML the type is in the spelling of the value: `14` is an integer, `"14"` a
 		string, `true` a boolean, `2026-08-31T02:30:00Z` a date-time. A TOML parser
 		returns typed data with no external definition; in return, strings always go in
-		quotes, in four forms —basic and literal, single-line and multi-line—, with
+		quotes, in four forms (basic and literal, single-line and multi-line), with
 		escapes in the basic ones.
 
 		In @STXT@ a value is always text, without quotes. Types are declared in the
-		definition —`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`…— and checked by the
-		validator, not the parser: without a definition, `14` is two characters.
+		definition (`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`…) and checked by the
+		validator rather than the parser: without a definition, `14` is two characters.
 
 	Subheader: Namespaces and validation
 
@@ -192,8 +192,8 @@ Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical
 	Subheader: When to use each
 
 	Content >>
-		TOML, where the ecosystem expects it —`Cargo.toml`, `pyproject.toml`, the
-		configuration of tools that read that file— and for flat configuration of keys
+		TOML, where the ecosystem expects it (`Cargo.toml`, `pyproject.toml`, the
+		configuration of tools that read that file) and for flat configuration of keys
 		with typed values, which is the goal its specification states.
 
 		@STXT@, when the file grows into a document: several levels of hierarchy, prose

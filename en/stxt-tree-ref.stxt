@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT Tree — Canonical document representation
+Document (dev.stxt.website): STXT Tree: canonical document representation
 	Metadata:
 		Status: Zenith
 		Last modif: 2026-09-11
@@ -20,7 +20,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		automatic serialization. It is, in particular, the reference format for conformance
 		corpora and tools such as `stxt describe`.
 
-		This specification represents the **logical tree**, not the source file. It does not
+		This specification represents the **logical tree** and not the source file. It does not
 		attempt to retain comments, blank lines outside blocks, indentation style, the exact
 		position of nodes, or other presentation choices. Rewriting a file while retaining
 		those elements requires a source-analysis layer separate from the tree: the
@@ -64,7 +64,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 
 		The representation does not wrap the array in an object and does not include a
 		document name, file path, implementation version or validation result. Those facts
-		belong to the application invoking the parser, not to the @STXT@ document.
+		belong to the application invoking the parser and not to the @STXT@ document.
 
 	Subheader: 4. Node representation
 
@@ -133,10 +133,10 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 	Content >>
 		The format uses standard JSON. An emitter **MUST** produce valid JSON and **SHOULD**
 		encode it as UTF-8 without a BOM. Canonicality is defined over the JSON value and its
-		members, not its bytes: object-member order, indentation, whitespace and equivalent
+		members and not its bytes: object-member order, indentation, whitespace and equivalent
 		choices of JSON escaping do not change the representation.
 
-		Conformance corpora **MUST** compare the JSON value after parsing it, not a character
+		Conformance corpora **MUST** compare the JSON value after parsing it and not a character
 		string. An application **MAY** choose a deterministic presentation for people, such
 		as JSON indented with two spaces and a final line break.
 
@@ -258,7 +258,7 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		nothing else.
 
 		The operation is defined for trees that satisfy the invariants of
-		[sections 4](#s4) and [5](#s5) — the ones parsing produces: valid, already normalized
+		[sections 4](#s4) and [5](#s5), that is, the ones parsing produces: valid, already normalized
 		names, inline values with no leading or trailing blanks, block lines with no trailing
 		blanks. For a programmatically built tree that does not satisfy them (a `value` with
 		leading or trailing blanks, a line with trailing blanks), the written text would not
@@ -293,8 +293,8 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		   same rule one level deeper; or the lines of a `block` node, each one with the
 		   indentation of *level* + 1 followed by the text of the line and `LF`. An empty line
 		   of the block (`""`) is written with that indentation and nothing else: the block
-		   reads as one piece. If a programmatically built tree ended `lines` in `""` —which
-		   parsing never produces ([section 5](#s5))— the writer **MUST NOT** emit those final
+		   reads as one piece. If a programmatically built tree ended `lines` in `""` (which
+		   parsing never produces, [section 5](#s5)), the writer **MUST NOT** emit those final
 		   empty lines: they would not survive re-parsing
 		   ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)) and would break the round-trip guarantee.
 
@@ -362,10 +362,10 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 
 		1. A line that **opens a node** is written in canonical form
 		   ([section 11.1](#s11-1), rules 1 to 4): the indentation of its level in the
-		   requested style, the logical name, `: value` with exactly one space —or a bare `:`
-		   with no value—, or ` >>` for a block. The **namespace** is written if, and only if,
+		   requested style, the logical name, `: value` with exactly one space (or a bare `:`
+		   with no value), or ` >>` for a block. The **namespace** is written if, and only if,
 		   the source wrote it on that line: a child repeating its parent's namespace is
-		   redundant but legal, and dropping it would be an edit, not a reformat. It is
+		   redundant but legal, and dropping it would be an edit and not a reformat. It is
 		   written in lowercase.
 		2. A **text line of a block** gets the indentation of the block (the level of the
 		   `>>` node plus one) in the requested style, followed by its content as it is: any
@@ -376,8 +376,8 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		   indentation of the block, as in the canonical form. The final empty lines of the
 		   block are not content ([*STXT-SPEC* §10.3](stxt-core-ref#s10-3)): they are kept
 		   under rule 3, like any empty line outside a block.
-		3. Every **other line** —a comment, an empty line outside a block, or a line the tree
-		   does not describe because of a syntax error— is kept as it is, with only two
+		3. Every **other line** (a comment, an empty line outside a block, or a line the tree
+		   does not describe because of a syntax error) is kept as it is, with only two
 		   touches: its trailing blanks are removed, and the **whole indentation units** at
 		   its start are converted one for one to the requested style. A unit is a tab or
 		   four spaces, in either style; whatever follows the last whole unit, including a
@@ -411,8 +411,8 @@ Document (dev.stxt.website): STXT Tree — Canonical document representation
 		    Note: nothing here
 
 	Content >>
-		reformatted with `TABS` comes out as follows. The comment, the empty line —which,
-		being final in the block, is not content and comes out unindented (rule 3)— and the
+		reformatted with `TABS` comes out as follows. The comment, the empty line (which,
+		being final in the block, is not content and comes out unindented, rule 3) and the
 		redundant namespace of `Appendix` are kept; the spacing of `Title`, the `>>` of
 		`Body`, the trailing blanks and the indentation are normalized; and the first line
 		of the block keeps its two extra spaces, which are content:

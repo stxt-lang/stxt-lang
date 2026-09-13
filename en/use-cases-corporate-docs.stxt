@@ -1,4 +1,4 @@
-Document (dev.stxt.website): Corporate documents — STXT
+Document (dev.stxt.website): Corporate documents | STXT
 
 	Metadata:
 		Last modif: 2026-09-09
@@ -13,8 +13,8 @@ Document (dev.stxt.website): Corporate documents — STXT
 		data is extracted from.
 
 	Content >>
-		Meeting minutes have a part that is text —what was discussed, why something was
-		decided— and a part that is data: who attended, which actions were left open, by
+		Meeting minutes have a part that is text (what was discussed, why something was
+		decided) and a part that is data: who attended, which actions were left open, by
 		when and by whom. In practice both parts end up in the same text document, and the
 		data is recovered later by reading: someone goes through the quarter's minutes to
 		find out which actions are still open, or copies the status of twenty reports into a
@@ -31,7 +31,7 @@ Document (dev.stxt.website): Corporate documents — STXT
 
 	Code >>
 		Minutes (com.acme.corp.minutes):
-			Title: Weekly sync — Platform
+			Title: Weekly Platform sync
 			Date: 2026-01-09
 			Duration minutes: 45
 			Attendees:
@@ -74,27 +74,27 @@ Document (dev.stxt.website): Corporate documents — STXT
 					Action status: In Progress
 
 	Content >>
-		It reads like minutes. And at the same time, for a program, it is a tree in which
+		It reads like minutes and, at the same time, for a program it is a tree in which
 		every action has an owner, a date and a status.
 
 	Subheader: What is data and what is text
 
 	Content >>
-		That is the only modelling decision to make, and the criterion is practical: **data
-		is what someone will search, filter or count; text is everything else**.
+		That is the only modelling decision to make, and the criterion is practical: data
+		is what someone will search, filter or count, and text is everything else.
 
 		* Attendees, decisions and actions are data: they are listed, cross-referenced with
 		  other minutes, they fall due. They go in inline nodes, one per element.
 		* The summary of the discussion and the rationale of each decision are text: they
-		  are read, not processed. They go in `>>` blocks, where paragraphs are written
+		  are read and not processed. They go in `>>` blocks, where paragraphs are written
 		  without any restriction.
 		* The title of each decision and each action is the value of the node itself
 		  (`Decision: Move the deployment…`), and its attributes are children. That way the
 		  list reads at a glance.
 
-		If later something that is text today needs processing —the risks mentioned in the
-		notes, for instance—, it is moved to a node of its own. The document does not change
-		format; it gains a node.
+		If later something that is text today needs processing (the risks mentioned in the
+		notes, for instance), it is moved to a node of its own. The document does not change
+		format: it only gains a node.
 
 	Subheader: The template
 
@@ -135,15 +135,15 @@ Document (dev.stxt.website): Corporate documents — STXT
 		* Every set of minutes has a title, a date and at least one attendee; without that
 		  it does not validate.
 		* A decision is in one of three statuses, and an action in one of four. A status
-		  written any other way (`approved`, `open`) is an error, not a variant.
+		  written any other way (`approved`, `open`) is an error and not a variant.
 		* Dates are dates: `2026-01-32` does not pass.
-		* A node that is not in the template —`Atendees` with a single `t`, a `Priority`
-		  someone added on their own— is rejected. That is the [closed content model](stxt-schema-ref#s6): the
+		* A node that is not in the template (`Atendees` with a single `t`, a `Priority`
+		  someone added on their own) is rejected. That is the [closed content model](stxt-schema-ref#s6): the
 		  template is the complete list of what may appear.
 		* `Id` and `Owner` are declared once and reused with `@Id` and `@Owner`: within a
 		  namespace, a node name identifies a single node. By the same rule, the status of a
-		  decision and that of an action are different nodes —`Decision status` and
-		  `Action status`—: their value lists differ, and one name cannot have two
+		  decision and that of an action are different nodes (`Decision status` and
+		  `Action status`): their value lists differ, and one name cannot have two
 		  definitions.
 
 		The template is stored in the `.stxt/` directory of the repository where the minutes
@@ -206,7 +206,7 @@ Document (dev.stxt.website): Corporate documents — STXT
 							Mitigation: (?) TEXT
 
 	Content >>
-		The `Status` traffic light is an `ENUM`, not an adjective in the summary. With twenty
+		The `Status` traffic light is an `ENUM` and not an adjective in the summary. With twenty
 		reports in a directory, a script over the canonical tree answers how many projects
 		are red and what their high risks are.
 
@@ -217,8 +217,8 @@ Document (dev.stxt.website): Corporate documents — STXT
 
 		* **Writing**: any text editor. With the VS Code extension, the template provides
 		  completion of names and statuses, and marks errors while typing.
-		* **Review**: a change is a diff of specific lines —an action going from `Open` to
-		  `Done`, a new decision—, not a binary file that has to be opened to see what
+		* **Review**: a change is a diff of specific lines (an action going from `Open` to
+		  `Done`, a new decision) and not a binary file that has to be opened to see what
 		  changed.
 		* **Continuous integration**: `stxt validate --recursive minutes/` rejects incomplete
 		  minutes or an invalid status before they reach the repository
@@ -234,11 +234,11 @@ Document (dev.stxt.website): Corporate documents — STXT
 	Subheader: Limits
 
 	Content >>
-		@STXT@ structures the document; it provides no approval workflow, access control or
+		@STXT@ structures the document and provides no approval workflow, access control or
 		notifications. Those come from the repository and the tools around it. Nor does it
-		validate rules between fields —that an action in `Done` status has no future date,
-		for instance—: that logic belongs to the application that exploits the data, not to
-		the template.
+		validate rules between fields (that an action in `Done` status has no future date,
+		for instance): that logic belongs to the application that exploits the data and not
+		to the template.
 
 		The neighbouring genres follow the same approach:
 		[RFCs and technical proposals](use-cases-rfcs) for documents with a life cycle,
