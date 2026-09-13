@@ -1,8 +1,6 @@
 Document (dev.stxt.website): Configuration files — STXT
 
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-09
 		Description: STXT for human-readable, validatable configuration files: visible hierarchy, comments next to values and a template that catches errors in the editor.
 

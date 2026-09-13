@@ -1,7 +1,5 @@
 Document (dev.stxt.website): STXT vs JSON — Hand-written documents vs serialization
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-08
 		Description: STXT and JSON compared with examples: hand-writing, comments, multi-line text, JSON Schema versus templates, and the canonical JSON tree of every STXT document.
 

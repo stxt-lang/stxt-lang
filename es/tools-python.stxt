@@ -1,8 +1,6 @@
 Document (dev.stxt.website): La biblioteca Python — STXT
 
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-09
 		Description: stxt, el parser de STXT para Python en PyPI: Python puro, sin dependencias, 3.10+, con las cinco especificaciones y los mismos códigos de error.
 

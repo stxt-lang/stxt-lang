@@ -1,8 +1,6 @@
 Document (dev.stxt.website): Stability and versions — STXT
 
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-08
 		Description: STXT is a living language with a stable core. Each specification carries a date and a status, Genesis, Aurora, Zenith or Twilight, instead of a version number; what each status promises and what else is stable.
 

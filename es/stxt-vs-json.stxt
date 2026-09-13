@@ -1,7 +1,5 @@
 Document (dev.stxt.website): STXT frente a JSON — Documentos a mano frente a serialización
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-08
 		Description: STXT y JSON comparados con ejemplos: escritura a mano, comentarios, texto multilínea, JSON Schema frente a plantillas, y el árbol JSON canónico de todo documento STXT.
 

@@ -1,8 +1,6 @@
 Document (dev.stxt.website): RFCs y propuestas técnicas — STXT
 
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-09
 		Description: STXT para RFCs y propuestas técnicas: el flujo de texto plano y revisión de siempre, con estado, autores y relaciones entre propuestas como datos explícitos.
 

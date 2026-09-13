@@ -1,7 +1,5 @@
 Document (dev.stxt.website): STXT frente a XML — Estructura y validación sin verbosidad
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-08
 		Description: STXT y XML comparados con ejemplos: el mismo árbol con y sin etiquetas de cierre, escapes y entidades, atributos frente a hijos, y un XSD frente a una plantilla STXT.
 

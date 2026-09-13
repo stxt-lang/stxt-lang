@@ -1,7 +1,5 @@
 Document (dev.stxt.website): STXT frente a TOML — Configuración plana frente a documentos jerárquicos
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-08
 		Description: STXT y TOML comparados con ejemplos: cabeceras frente a indentación, tablas anidadas, cadenas multilínea, tipos en la sintaxis frente a tipos en la definición, y validación.
 

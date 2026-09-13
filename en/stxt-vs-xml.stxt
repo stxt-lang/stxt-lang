@@ -1,7 +1,5 @@
 Document (dev.stxt.website): STXT vs XML — Structure and validation without verbosity
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-08
 		Description: STXT and XML compared with examples: the same tree with and without closing tags, escapes and entities, attributes versus children, and an XSD versus an STXT template.
 

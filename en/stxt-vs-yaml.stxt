@@ -1,7 +1,5 @@
 Document (dev.stxt.website): STXT vs YAML — Values, free text and validation
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-09
 		Description: STXT and YAML compared with examples: implicit typing versus text values, block scalars versus literal blocks, attack surface, and validation inside the language.
 

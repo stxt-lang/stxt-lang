@@ -1,8 +1,6 @@
 Document (dev.stxt.website): IA y LLMs — STXT
 
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-09
 		Description: STXT para documentos generados por un modelo de lenguaje: la salida se valida contra una plantilla y los errores vuelven al modelo con línea y código, en un bucle generar, validar y corregir.
 

@@ -1,8 +1,6 @@
 Document (dev.stxt.website): El entorno de trabajo — STXT
 
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-08
 		Description: Cómo organizar un proyecto STXT: el directorio .stxt/, la cadena de resolución de gramáticas y la validación desde el editor, la CLI y la integración continua.
 

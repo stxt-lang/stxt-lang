@@ -1,7 +1,5 @@
 Document (dev.stxt.website): STXT vs TOML — Flat configuration vs hierarchical documents
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-08
 		Description: STXT and TOML compared with examples: headers versus indentation, nested tables, multi-line strings, types in the syntax versus types in the definition, and validation.
 

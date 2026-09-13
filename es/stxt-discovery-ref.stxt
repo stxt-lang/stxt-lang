@@ -1,10 +1,6 @@
 Document (dev.stxt.website): STXT Discovery — Resolución de esquemas y plantillas
 
 	Metadata:
-		Author: Joan Costa Mombiela
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
-		Revision: Claude Fable 5
 		Status: Aurora
 		Last modif: 2026-09-10
 		Description: STXT-DISCOVERY-SPEC: cómo localizan las herramientas los esquemas y plantillas de un documento STXT, con los directorios .stxt/ y STXT_PATH.

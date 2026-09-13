@@ -1,7 +1,5 @@
 Document (dev.stxt.website): STXT vs Markdown — Complementary, not alternatives
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-08
 		Description: Markdown formats prose; STXT structures documents and adopts Markdown for the prose of its nodes. Two examples, and why MARKDOWN is the only embedded format in STXT schemas.
 

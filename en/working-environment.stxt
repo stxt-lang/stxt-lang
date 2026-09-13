@@ -1,8 +1,6 @@
 Document (dev.stxt.website): The working environment — STXT
 
 	Metadata:
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
 		Last modif: 2026-09-08
 		Description: How to organise an STXT project: the .stxt/ directory, the grammar resolution chain, and validation from the editor, the command line and CI.
 

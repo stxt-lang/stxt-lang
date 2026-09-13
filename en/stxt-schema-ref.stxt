@@ -1,10 +1,6 @@
 Document (dev.stxt.website): STXT Schema — Schema language (@stxt.schema)
 
 	Metadata:
-		Author: Joan Costa Mombiela
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
-		Revision: Claude Fable 5
 		Status: Aurora
 		Last modif: 2026-09-11
 		Description: STXT-SCHEMA-SPEC: the @stxt.schema language for validating STXT documents with nodes, types and cardinalities, plus the official meta-schema.

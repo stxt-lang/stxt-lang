@@ -2,9 +2,7 @@ Template (@stxt.template): dev.stxt.website
 	Structure >>
 		Document (dev.stxt.website):
 			Metadata: (?)
-				Author: (*)
 				Status: (?) ENUM [Genesis, Aurora, Zenith, Twilight]
-				Revision: (*)
 				Last modif: (?)
 				Description: (?)
 			Header: (?)

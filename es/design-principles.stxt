@@ -1,8 +1,6 @@
 Document (dev.stxt.website): Principios de diseño — STXT
 
 	Metadata:
-		Author: Joan Costa Mombiela
-		Revision: Claude Fable 5
 		Last modif: 2026-09-09
 		Description: Los principios de diseño de STXT: un lenguaje pensado para las personas. La sencillez, la indentación como estructura y la seguridad del parseo derivan de ahí.
 

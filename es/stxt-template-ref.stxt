@@ -1,9 +1,5 @@
 Document (dev.stxt.website): STXT Template — Plantillas (@stxt.template)
 	Metadata:
-		Author: Joan Costa Mombiela
-		Author: Claude Fable 5
-		Revision: Joan Costa Mombiela
-		Revision: Claude Fable 5
 		Status: Aurora
 		Last modif: 2026-09-11
 		Description: STXT-TEMPLATE-SPEC: plantillas @stxt.template, la forma simple de definir la estructura de un documento STXT; todo template compila a un esquema equivalente.
