@@ -6,7 +6,7 @@ Page (com.acme.cms.page):
 	Layout: default
 	
 	SEO:
-		Title: STXT — Lenguaje Human First
+		Title: STXT, un lenguaje Human First
 		Description: Formato textual legible y validable
 		Keywords:
 			Keyword: stxt

@@ -5,25 +5,25 @@ exists so that anyone can verify an implementation in any language against the s
 **without reading the test suites of the existing ports**: the cases are data, the expected
 results are data, and the runner is a few dozen lines you write once.
 
-- `manifest.json` — the list of cases, with the category, the input file, the expected result,
+- `manifest.json`: the list of cases, with the category, the input file, the expected result,
   the section of the specification each one exercises and, when the rule behind it is a SHOULD
   or a MAY, its requirement level (see *Requirement levels* below).
-- `tree/` — input documents and the canonical JSON tree each one must produce.
-- `parse/` — invalid documents and the error each one must be rejected with.
-- `definitions/` — the schemas and templates the validation cases use, named
+- `tree/`: input documents and the canonical JSON tree each one must produce.
+- `parse/`: invalid documents and the error each one must be rejected with.
+- `definitions/`: the schemas and templates the validation cases use, named
   `<namespace>.schema.stxt` or `<namespace>.template.stxt`; a namespace described both ways is
   a pair that must behave identically.
-- `validate/` — documents to validate against those definitions, valid and invalid.
-- `definition-errors/` — invalid schemas and templates, and the error each one must be
+- `validate/`: documents to validate against those definitions, valid and invalid.
+- `definition-errors/`: invalid schemas and templates, and the error each one must be
   rejected with.
-- `discovery/` — the files the discovery cases mount in a virtual file system: definitions,
-  and a few files that are not. What a virtual tree cannot express — symbolic links, which a
-  resolution directory never follows and which form no project level (STXT-DISCOVERY-SPEC §3,
-  §4.1), unreadable directories, the descent bound — is not in the kit: the hardening tests of
+- `discovery/`: the files the discovery cases mount in a virtual file system: definitions,
+  and a few files that are not. What a virtual tree cannot express (symbolic links, which a
+  resolution directory never follows and which form no project level per STXT-DISCOVERY-SPEC §3
+  and §4.1, unreadable directories, the descent bound) is not in the kit: the hardening tests of
   the official ports exercise it and `stxt-impl`'s `TRACEABILITY.md` records it.
-- `writer/` — the canonical text form, in both indentation styles, of the documents of
+- `writer/`: the canonical text form, in both indentation styles, of the documents of
   `tree/`.
-- `format/` — documents to reformat, each with its reformatted text in both styles.
+- `format/`: documents to reformat, each with its reformatted text in both styles.
 
 The kit is identified by a **date** (`kit` in the manifest, currently **2026-09-10**), the date
 of its current content, in the same way the specifications are (STXT-SPEC §1.1). `specifications`
@@ -39,16 +39,16 @@ outside a profile does not require the implementations of that profile to certif
 The specifications are layered: the syntax is mandatory, and schemas, templates and discovery
 are optional layers on top of it (STXT-SPEC §12, §17.3; STXT-DISCOVERY-SPEC §9). The kit
 follows the same structure with **profiles**, declared in `profiles` of the manifest. Each
-profile includes the previous one and names the categories —and, for `schema`, the subset of
-cases— an implementation must pass:
+profile includes the previous one and names the categories (and, for `schema`, the subset of
+cases) an implementation must pass:
 
 | Profile | Includes | Specifications it certifies | Cases |
 |---|---|---|---|
-| `core` | — | STXT-SPEC, STXT-TREE-SPEC | `tree`, `parse-error` (64) |
+| `core` | (none) | STXT-SPEC, STXT-TREE-SPEC | `tree`, `parse-error` (64) |
 | `schema` | `core` | + STXT-SCHEMA-SPEC | `validate`, `validate-error` with the definition sets that hold no template, `definition-error` with `kind` = `schema` (+129) |
 | `template` | `schema` | + STXT-TEMPLATE-SPEC | the same categories, every set and every case (+38) |
 | `discovery` | `template` | + STXT-DISCOVERY-SPEC | `discovery` (+23) |
-| `text` | `core` | STXT-TREE-SPEC §11–12 (the writing operations) | `writer`, `format` (+29) |
+| `text` | `core` | STXT-TREE-SPEC §11-12 (the writing operations) | `writer`, `format` (+29) |
 
 `text` is a side branch: it needs only `core`, and `discovery` does not include it. An
 implementation that offers the writer and the formatter certifies it on top of whichever
@@ -81,14 +81,14 @@ those rules carry `requirement` in the manifest, `SHOULD` or `MAY`; a case witho
 `MUST`. Which ones: `parse/limit-*`, `tree/bom-crlf`, `writer/bom-crlf` and `format/bom`
 (the CRLF half of the BOM cases is `tree/crlf` and `writer/crlf`, required), and the
 `validate-error` cases of the extended and binary types (`validate/type-date-*`,
-`validate/type-url-*`, `validate/type-base64-*`…). The `validate` cases of those types stay
+`validate/type-url-*`, `validate/type-base64-*`...). The `validate` cases of those types stay
 required: an implementation that does not validate a type accepts its values.
 
 A runner runs every `MUST` case of its profile; it MAY skip the `SHOULD` and `MAY` cases, and
 the declaration says so: **all cases** when the implementation passes every case of the
 profile, **required cases** when it passes the `MUST` ones only. Two conforming
-implementations may then disagree on a document that a `SHOULD` case rejects — that is what
-the specifications allow — and the declaration is what tells them apart. The three official
+implementations may then disagree on a document that a `SHOULD` case rejects (that is what
+the specifications allow), and the declaration is what tells them apart. The three official
 ports run and pass all cases.
 
 The `core` profile asks for the canonical tree even though STXT-TREE-SPEC calls emitting it an
@@ -126,7 +126,7 @@ validated.
 ### Category `validate-error`
 
 Same, but with every set the **first** error must carry `error.code` (a code of the document
-table of STXT-SCHEMA-SPEC §13.1) and `error.line`: the line of the node the error is about — the
+table of STXT-SCHEMA-SPEC §13.1) and `error.line`: the line of the node the error is about, the
 child for `CHILD_NOT_DECLARED`, the parent for `TOO_FEW_CHILDREN` / `TOO_MANY_CHILDREN`, the
 node itself for a value or form error.
 
@@ -179,7 +179,7 @@ the documents of `tree/`: the writer is a function of the tree, so the same tree
 Reformat `input` as STXT-TREE-SPEC §12.1 says, once per style; the text must equal
 `expected.tabs` / `expected.spaces` byte for byte (the expected file keeps `CRLF`, the missing
 final newline or the dropped BOM of its input), and the syntax errors reported must be exactly
-`errors` — code and line, in order — with both styles. A case with errors is there to check
+`errors` (code and line, in order) with both styles. A case with errors is there to check
 that the document is **not** repaired.
 
 ## Running it
@@ -213,7 +213,7 @@ declared.
 ## What the kit covers
 
 Every operation the five specifications define, plus the two writing operations of
-STXT-TREE-SPEC §11–12, which became normative on 2026-08-23 so that the `text` profile could
+STXT-TREE-SPEC §11-12, which became normative on 2026-08-23 so that the `text` profile could
 exist. The validation categories cover the 19 types, the cardinalities, the closed content model, the
 cross-namespace children and every error code of STXT-SCHEMA-SPEC §13.1 and
 STXT-TEMPLATE-SPEC §14.1 that an implementation can actually reach; the larger documents of

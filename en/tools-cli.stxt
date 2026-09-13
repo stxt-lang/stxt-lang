@@ -470,7 +470,7 @@ Document (dev.stxt.website): The command line | STXT
 		stxt schemas
 
 		Resolution chain for /home/ana/notas:
-		    (empty — no .stxt directory found)
+		    (empty: no .stxt directory found)
 
 		No namespaces resolved.
 
@@ -585,7 +585,7 @@ Document (dev.stxt.website): The command line | STXT
 		document that cannot be validated does not count as validated. Checking the
 		syntax alone in that case is requested explicitly with `--no-schema` (or the
 		error is downgraded to a warning with `--warn-schema`), and `schemas` shows
-		the chain as `(empty — STXT_PATH provides no directories)`. The CLI adds no
+		the chain as `(empty: STXT_PATH provides no directories)`. The CLI adds no
 		rule of its own to this chain; the whole policy lives in the library, which
 		is why it is identical in every tool.
 
