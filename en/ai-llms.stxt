@@ -25,7 +25,7 @@ Document (dev.stxt.website): AI and LLMs | STXT
 		  (`CHILD_NOT_DECLARED`, `NODE_NOT_DEFINED_IN_SCHEMA`).
 		* Cardinalities reject missing or surplus nodes (`TOO_FEW_CHILDREN`,
 		  `TOO_MANY_CHILDREN`).
-		* Types (`DATE`, `EMAIL`, `NUMBER`…) reject wrong formats, and `ENUM`s reject values
+		* Types (`DATE`, `EMAIL`, `NUMBER`...) reject wrong formats, and `ENUM`s reject values
 		  outside the list (`INVALID_VALUE`).
 
 		The template of this page's executable example, as it is in its `.stxt/`:

@@ -137,7 +137,7 @@ Document (dev.stxt.website): STXT vs TOML: flat configuration vs hierarchical do
 		escapes in the basic ones.
 
 		In @STXT@ a value is always text, without quotes. Types are declared in the
-		definition (`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`…) and checked by the
+		definition (`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`...) and checked by the
 		validator rather than the parser: without a definition, `14` is two characters.
 
 	Subheader: Namespaces and validation

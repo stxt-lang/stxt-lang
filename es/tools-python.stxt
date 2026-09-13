@@ -30,7 +30,7 @@ Document (dev.stxt.website): La biblioteca Python | STXT
 		El paquete lleva anotaciones de tipo (`py.typed`), no depende de nada y no toca por
 		sí mismo ni el sistema de ficheros ni el entorno, salvo en los adaptadores de host de
 		la resolución, que se pueden sustituir. Todo lo público se importa del paquete raíz,
-		`from stxt import Parser, InlineNode, …`; la versión está en `stxt.__version__`.
+		`from stxt import Parser, InlineNode, ...`; la versión está en `stxt.__version__`.
 
 	Subheader: Parsear
 
@@ -62,7 +62,7 @@ Document (dev.stxt.website): La biblioteca Python | STXT
 	Content >>
 		Cada error es una `ParseException` con tres atributos: **`line`** (la línea del
 		documento, empezando en 1), **`code`** (estable, en mayúsculas: `INVALID_LINE`,
-		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`…) y **`message`** (también como
+		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`...) y **`message`** (también como
 		`get_line()`, `get_code()` y `get_message()`). Los errores de gramática son
 		`ValidationException`, una subclase con los mismos atributos, así que un solo bucle
 		recorre los dos e `isinstance` distingue la severidad. Un documento con un error de
@@ -126,8 +126,8 @@ Document (dev.stxt.website): La biblioteca Python | STXT
 
 		    authors = book.get_child("Authors")
 		    [a.get_text() for a in authors.get_children_by_name("Author")]   # ['María Pérez', 'Juan García']
-		    authors.get_declared_namespace()                   # "": no lo declara…
-		    authors.get_namespace()                            # "com.acme.book": …lo hereda
+		    authors.get_declared_namespace()                   # "": no lo declara...
+		    authors.get_namespace()                            # "com.acme.book": ...lo hereda
 
 		    content = book.get_child("Chapter").get_child("Content")
 		    if isinstance(content, TextNode):
@@ -456,7 +456,7 @@ Document (dev.stxt.website): La biblioteca Python | STXT
 	Subheader: La superficie de la API
 
 	Content >>
-		Todo lo importable de `stxt`; los subpaquetes (`stxt.schema`, `stxt.discovery`…)
+		Todo lo importable de `stxt`; los subpaquetes (`stxt.schema`, `stxt.discovery`...)
 		también lo son:
 
 		| Grupo                | Nombres                                                                                                                |

@@ -189,7 +189,7 @@ Document (dev.stxt.website): STXT Core: sintaxis base del lenguaje
 	Content >>
 		El nombre del nodo solo permitirá **letras, dígitos y marcas combinantes Unicode** (categorías
 		generales `L`, `Nd`, `Mn` y `Mc`, en cualquier alfabeto: latino, griego, cirílico, árabe,
-		devanagari, tailandés, CJK…) y los caracteres separadores `-`, `_`, ` `. Se permiten nombres con
+		devanagari, tailandés, CJK...) y los caracteres separadores `-`, `_`, ` `. Se permiten nombres con
 		diacríticos, mayúsculas y minúsculas. Las marcas combinantes (`Mn`, `Mc`) son las vocales y
 		signos que en muchas escrituras se escriben sobre la letra base (`हिंदी` no se puede escribir sin
 		ellas) y los acentos combinantes sin forma precompuesta; las marcas envolventes (`Me`) no se
@@ -657,7 +657,7 @@ Document (dev.stxt.website): STXT Core: sintaxis base del lenguaje
 		* `# NO ES un comentario` está más indentado que `Nodo text >>`, así que es **texto** (y se
 		  conserva su `#`).
 		* `# Es un comentario` tiene la misma indentación que `Nodo text >>`: **cierra** el bloque, cuyo
-		  contenido queda en dos líneas (`# NO ES un comentario…` y `Texto 1`), y se descarta.
+		  contenido queda en dos líneas (`# NO ES un comentario...` y `Texto 1`), y se descarta.
 		* `Texto 2` ya no tiene bloque al que pertenecer: el parser la procesa como nodo y el documento
 		  es **inválido** (salto de nivel de indentación, [sección 11](#s11)). Es deliberado: una línea
 		  de texto que empieza por `#` y se des-indenta por error no desaparece en silencio, sino que
@@ -861,7 +861,7 @@ Document (dev.stxt.website): STXT Core: sintaxis base del lenguaje
 		valores por defecto de las implementaciones oficiales, son la configuración
 		**recomendada**:
 
-		| Límite | Valor por defecto recomendado | Se excede cuando… |
+		| Límite | Valor por defecto recomendado | Se excede cuando... |
 		|---|---|---|
 		| Profundidad de anidamiento | `100` niveles | una línea abre un nodo a nivel `100` o mayor (el nivel 0 es el primero: como máximo hay 100 niveles abiertos) |
 		| Longitud de línea | `10 000` caracteres | una línea de la entrada, con su indentación incluida, supera esa longitud |

@@ -101,7 +101,7 @@ Document (dev.stxt.website): La línea de comandos | STXT
 
 		| Código | Significado                                                                                                |
 		|--------|------------------------------------------------------------------------------------------------------------|
-		| `0`    | Éxito: los documentos parsean y validan, no hay nada que reformatear, la gramática se ha instalado…        |
+		| `0`    | Éxito: los documentos parsean y validan, no hay nada que reformatear, la gramática se ha instalado...        |
 		| `1`    | **Fallo de los documentos**: errores de sintaxis o de gramática, ficheros que `--check` cambiaría, un fichero ilegible, una definición que no se puede instalar, una cadena de resolución con errores en `schemas` |
 		| `2`    | **Uso incorrecto**: comando u opción desconocidos, falta un argumento, opciones incompatibles, un directorio sin `--recursive` |
 
@@ -265,7 +265,7 @@ Document (dev.stxt.website): La línea de comandos | STXT
 
 		Tres modos, mutuamente excluyentes:
 
-		| Modo             | Qué hace                                                                                     | Sale con `1` si…            |
+		| Modo             | Qué hace                                                                                     | Sale con `1` si...            |
 		|------------------|----------------------------------------------------------------------------------------------|-----------------------------|
 		| (por defecto)    | Imprime el resultado por la salida estándar; no escribe en disco                              | Algún documento no parsea   |
 		| `--check`        | Lista los ficheros que cambiarían (`<fichero>: would be reformatted`); no escribe nada         | Alguno cambiaría, o no parsea |

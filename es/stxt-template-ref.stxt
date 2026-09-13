@@ -521,7 +521,7 @@ Document (dev.stxt.website): STXT Template: plantillas (@stxt.template)
 		| Código | Condición |
 		|---|---|
 		| códigos `INDENTATION_*` de *STXT-SPEC* | 1: indentación de `Structure >>` |
-		| `TEMPLATE_ROOT_NOT_VALID` | 2: la raíz no es `Template (@stxt.template): …`, o el namespace objetivo no es válido |
+		| `TEMPLATE_ROOT_NOT_VALID` | 2: la raíz no es `Template (@stxt.template): ...`, o el namespace objetivo no es válido |
 		| `TEMPLATE_NAMESPACE_EMPTY` | 2: el namespace objetivo está vacío |
 		| `TEMPLATE_MULTIPLE_ROOTS` | 23: el documento template tiene más de un nodo raíz, o ninguno |
 		| `TEMPLATE_STRUCTURE_REQUIRED` | 3: falta `Structure >>` o no es bloque |

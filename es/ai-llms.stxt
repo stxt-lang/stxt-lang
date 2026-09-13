@@ -24,7 +24,7 @@ Document (dev.stxt.website): IA y LLMs | STXT
 		  declarados (`CHILD_NOT_DECLARED`, `NODE_NOT_DEFINED_IN_SCHEMA`).
 		* Las cardinalidades rechazan los nodos que faltan o sobran (`TOO_FEW_CHILDREN`,
 		  `TOO_MANY_CHILDREN`).
-		* Los tipos (`DATE`, `EMAIL`, `NUMBER`…) rechazan los formatos incorrectos, y los `ENUM`
+		* Los tipos (`DATE`, `EMAIL`, `NUMBER`...) rechazan los formatos incorrectos, y los `ENUM`
 		  los valores fuera de la lista (`INVALID_VALUE`).
 
 		La plantilla del ejemplo ejecutable de esta página, tal cual está en su `.stxt/`:

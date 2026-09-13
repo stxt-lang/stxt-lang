@@ -82,7 +82,7 @@ Document (dev.stxt.website): The Java library | STXT
 	Content >>
 		Every error is a `ParseException` with **`getLine()`** (the line of the document,
 		starting at 1), **`getCode()`** (stable, upper-case: `INVALID_LINE`,
-		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`…) and **`getMessage()`**.
+		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`...) and **`getMessage()`**.
 		Grammar errors are `ValidationException`, a subclass with the same fields, so a
 		single loop walks both and `instanceof` tells the severity apart. Every exception
 		is unchecked and extends `STXTException` (see *Errors*). A document with a syntax
@@ -150,8 +150,8 @@ Document (dev.stxt.website): The Java library | STXT
 
 		    InlineNode authors = (InlineNode) inline.getChild("Authors");
 		    authors.getChildren("Author").stream().map(Node::getText).toList();   // [María Pérez, Juan García]
-		    authors.getDeclaredNamespace();                    // "": it declares none…
-		    authors.getNamespace();                            // "com.acme.book": …it inherits it
+		    authors.getDeclaredNamespace();                    // "": it declares none...
+		    authors.getNamespace();                            // "com.acme.book": ...it inherits it
 
 		    InlineNode chapter = (InlineNode) inline.getChild("Chapter");
 		    if (chapter.getChild("Content") instanceof TextNode content) {

@@ -146,7 +146,7 @@ Document (dev.stxt.website): The working environment | STXT
 	Content >>
 		Each finding is `file:line: [CODE] message (severity)`. The **code** is stable and
 		identical in the CLI, the extension and the three libraries (`INVALID_VALUE`,
-		`TOO_FEW_CHILDREN`, `CHILD_NOT_DECLARED`, `INDENTATION_MIXED`…), so it can be looked
+		`TOO_FEW_CHILDREN`, `CHILD_NOT_DECLARED`, `INDENTATION_MIXED`...), so it can be looked
 		up in the documentation or filtered in a script. The failed cardinality is reported
 		on the parent's line (`Book`, line 1), because it is the parent that has zero `ISBN`.
 
@@ -193,7 +193,7 @@ Document (dev.stxt.website): The working environment | STXT
 	Content >>
 		The project's `.stxt/` is the first level of the chain; there are two more:
 
-		| Level   | Where                                     | `stxt install …` | What for                                                        |
+		| Level   | Where                                     | `stxt install ...` | What for                                                        |
 		|---------|-------------------------------------------|------------------|-----------------------------------------------------------------|
 		| Project | `.stxt/` of the document and its ancestors | `--local`        | The project's grammars, versioned with it                       |
 		| User    | `~/.stxt` (`%USERPROFILE%\.stxt`)          | `--user`         | Personal definitions, shared by all the user's projects         |

@@ -123,7 +123,7 @@ Document (dev.stxt.website): STXT Schema: schema language (@stxt.schema)
 		**Any `Node` can be the root of a document.** The schema does not distinguish between
 		"root" nodes and "child" nodes: a document whose root node is any `Node` of the namespace is
 		valid if that node satisfies its rules. So, against the schema of [section 15.5](#s15-5),
-		both `Document (com.example.docs): …` and `Title (com.example.docs): …` are valid roots.
+		both `Document (com.example.docs): ...` and `Title (com.example.docs): ...` are valid roots.
 		This allows partial documents (a fragment, one file per section) without extra schemas; a
 		schema that wants to restrict the root does so by convention, not by declaration.
 
@@ -311,7 +311,7 @@ Document (dev.stxt.website): STXT Schema: schema language (@stxt.schema)
 		| NATURAL   | INLINE          | NO              | Unsigned integer (≥ 0).                        |
 		| DATE      | INLINE          | NO              | `YYYY-MM-DD` date, valid in the calendar.      |
 		| TIME      | INLINE          | NO              | `hh:mm:ss` time, in range.                     |
-		| TIMESTAMP | INLINE          | NO              | ISO 8601 date and time, `YYYY-MM-DDThh:mm[:ss[.f…]][Z\|±hh:mm]`. |
+		| TIMESTAMP | INLINE          | NO              | ISO 8601 date and time, `YYYY-MM-DDThh:mm[:ss[.f...]][Z\|±hh:mm]`. |
 		| UUID      | INLINE          | NO              | `8-4-4-4-12` hexadecimal UUID, case-insensitive. |
 		| URL       | INLINE          | NO              | Absolute URL: scheme and host required (see below). |
 		| EMAIL     | INLINE          | NO              | Email address, bare or with a display name (see below). |
@@ -406,13 +406,13 @@ Document (dev.stxt.website): STXT Schema: schema language (@stxt.schema)
 		Rules:
 
 		* A conforming implementation **MUST** accept any scheme of that form (`https`, `ftp`,
-		  `git+ssh`, …): there is no list of allowed schemes.
+		  `git+ssh`, ...): there is no list of allowed schemes.
 		* The host **MUST** be non-empty; no top-level domain is required (`http://localhost` is
 		  valid) and nothing is resolved. Non-ASCII characters are accepted as they are, in the
 		  host and elsewhere (an IDN is not converted to *punycode*).
 		* An implementation **MUST NOT** accept a value without a scheme (`stxt.dev`,
 		  `www.stxt.dev/x`), with a scheme but no `//` and host (`mailto:ana@example.com`,
-		  `urn:isbn:…`, `tel:…`, `file:///etc/hosts`), with inner blanks, or with a non-numeric
+		  `urn:isbn:...`, `tel:...`, `file:///etc/hosts`), with inner blanks, or with a non-numeric
 		  port.
 		* The check is **syntactic**: nothing is normalised, `%xx` escapes are not decoded, and the
 		  resource is not checked to exist.
@@ -420,7 +420,7 @@ Document (dev.stxt.website): STXT Schema: schema language (@stxt.schema)
 		**Design note (non-normative):** there is deliberately no general `URI` type. A URI under
 		RFC 3986 is almost any string with a colon (`a:b` is one), so such a type would validate
 		little more than `TEXT`. The value of `URL` lies in catching the forgotten scheme or the
-		misspelled host. For identifiers that are not web addresses (`urn:isbn:…`, `tel:…`) use
+		misspelled host. For identifiers that are not web addresses (`urn:isbn:...`, `tel:...`) use
 		`TEXT` or an `ENUM`; for mail, `EMAIL`.
 
 	Subsubheader: 9.5 Extended INLINE/BLOCK binary content types
@@ -500,7 +500,7 @@ Document (dev.stxt.website): STXT Schema: schema language (@stxt.schema)
 		@STXT@ Schema defines, because it covers the only domain that @STXT@ delegates by design,
 		the formatting of prose (bold, links, lists within text), and because its raw form
 		remains readable, consistent with the Human-First principle. Types for embedded **data
-		formats** (`JSON`, `XML`, `YAML`, `TOML`, …) are an explicit **non-goal**
+		formats** (`JSON`, `XML`, `YAML`, `TOML`, ...) are an explicit **non-goal**
 		([section 11](#s11)): @STXT@ is already the structure format, and such a type would bury structure
 		in opaque blobs. Structure is expressed in @STXT@.
 
@@ -550,7 +550,7 @@ Document (dev.stxt.website): STXT Schema: schema language (@stxt.schema)
 
 		Other explicit **non-goals** of @STXT@ Schema are: patterns or regular expressions over
 		values, default values, conditional rules between fields ("if A appears, then B"), and
-		types for **embedded data formats** (`JSON`, `XML`, `YAML`, `TOML`, …; see the design
+		types for **embedded data formats** (`JSON`, `XML`, `YAML`, `TOML`, ...; see the design
 		note in [section 9.7](#s9-7)). Keeping the model small and predictable is a design goal: that
 		semantics belongs to the application.
 
@@ -626,7 +626,7 @@ Document (dev.stxt.website): STXT Schema: schema language (@stxt.schema)
 		10. Two equivalent `Child` nodes appear (same `canonical name + effective namespace`) within the same `Children`.
 		11. A child appears in `Children` **of the schema's own namespace** whose `Node` is not defined in the schema itself.
 		12. The schema document has more than one root node, or none: a schema document is **exactly one** `Schema` node.
-		13. A node of the schema (`Node`, `Child`, `Type`, `Min`…) is written in `>>` form; all of them are inline except `Description`, which is `TEXT`.
+		13. A node of the schema (`Node`, `Child`, `Type`, `Min`...) is written in `>>` form; all of them are inline except `Description`, which is `TEXT`.
 		14. A `Value` of an `ENUM` is empty ([section 7.2](#s7-2)).
 		15. A `Node` contains more than one `Values` node.
 
@@ -647,14 +647,14 @@ Document (dev.stxt.website): STXT Schema: schema language (@stxt.schema)
 		As in [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), every error carries a stable code, identical
 		in every implementation, and **is never renamed**. A schema document is first
 		validated **as a document** against the meta-schema of [section 15](#s15), so its form errors
-		(a `Node` without a value, two `Type`, a `Min` that is not a `NATURAL`…) come with the codes
+		(a `Node` without a value, two `Type`, a `Min` that is not a `NATURAL`...) come with the codes
 		of the second table; the rules of the first are applied afterwards.
 		
 		Errors of the **schema** (first list of this section):
 		
 		| Code | Condition |
 		|---|---|
-		| `SCHEMA_ROOT_NOT_VALID` | 1: the root is not `Schema (@stxt.schema): …`, or the target namespace is not valid |
+		| `SCHEMA_ROOT_NOT_VALID` | 1: the root is not `Schema (@stxt.schema): ...`, or the target namespace is not valid |
 		| `SCHEMA_NAMESPACE_EMPTY` | 1: the target namespace is empty |
 		| `SCHEMA_MULTIPLE_ROOTS` | 12: the schema document has more than one root node, or none |
 		| `SCHEMA_NODE_NOT_INLINE` | 13: a node of the schema is written in `>>` form |

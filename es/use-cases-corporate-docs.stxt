@@ -91,7 +91,7 @@ Document (dev.stxt.website): Documentos corporativos | STXT
 		  y no se procesan. Van en bloques `>>`, donde se escriben párrafos sin ninguna
 		  restricción.
 		* El título de cada decisión y de cada acción es el valor del propio nodo
-		  (`Decision: Mover la ventana…`), y sus atributos son hijos. Así la lista se lee de
+		  (`Decision: Mover la ventana...`), y sus atributos son hijos. Así la lista se lee de
 		  un vistazo.
 
 		Si más adelante hace falta procesar algo que hoy es texto (por ejemplo, los riesgos

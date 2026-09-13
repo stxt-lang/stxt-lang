@@ -29,7 +29,7 @@ Document (dev.stxt.website): The Python library | STXT
 		The package carries type annotations (`py.typed`), depends on nothing and touches
 		neither the file system nor the environment by itself, except in the host adapters
 		of resolution, which can be replaced. Everything public is imported from the root
-		package, `from stxt import Parser, InlineNode, …`; the version is in
+		package, `from stxt import Parser, InlineNode, ...`; the version is in
 		`stxt.__version__`.
 
 	Subheader: Parsing
@@ -62,7 +62,7 @@ Document (dev.stxt.website): The Python library | STXT
 	Content >>
 		Every error is a `ParseException` with three attributes: **`line`** (the line of
 		the document, starting at 1), **`code`** (stable, upper-case: `INVALID_LINE`,
-		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`…) and **`message`** (also as
+		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`...) and **`message`** (also as
 		`get_line()`, `get_code()` and `get_message()`). Grammar errors are
 		`ValidationException`, a subclass with the same attributes, so a single loop walks
 		both and `isinstance` tells the severity apart. A document with a syntax error may
@@ -126,8 +126,8 @@ Document (dev.stxt.website): The Python library | STXT
 
 		    authors = book.get_child("Authors")
 		    [a.get_text() for a in authors.get_children_by_name("Author")]   # ['María Pérez', 'Juan García']
-		    authors.get_declared_namespace()                   # "": it declares none…
-		    authors.get_namespace()                            # "com.acme.book": …it inherits it
+		    authors.get_declared_namespace()                   # "": it declares none...
+		    authors.get_namespace()                            # "com.acme.book": ...it inherits it
 
 		    content = book.get_child("Chapter").get_child("Content")
 		    if isinstance(content, TextNode):
@@ -456,7 +456,7 @@ Document (dev.stxt.website): The Python library | STXT
 
 	Content >>
 		Everything importable from `stxt`; the subpackages (`stxt.schema`,
-		`stxt.discovery`…) are importable too:
+		`stxt.discovery`...) are importable too:
 
 		| Group                | Names                                                                                                                  |
 		|----------------------|------------------------------------------------------------------------------------------------------------------------|

@@ -148,7 +148,7 @@ Document (dev.stxt.website): El entorno de trabajo | STXT
 	Content >>
 		Cada hallazgo es `fichero:línea: [CÓDIGO] mensaje (severidad)`. El **código** es
 		estable y es el mismo en la CLI, en la extensión y en las tres bibliotecas
-		(`INVALID_VALUE`, `TOO_FEW_CHILDREN`, `CHILD_NOT_DECLARED`, `INDENTATION_MIXED`…),
+		(`INVALID_VALUE`, `TOO_FEW_CHILDREN`, `CHILD_NOT_DECLARED`, `INDENTATION_MIXED`...),
 		de modo que sirve para buscar en la documentación o para filtrar en un script. La
 		cardinalidad que falla se señala en la línea del padre (`Book`, línea 1), porque es
 		el padre el que tiene cero `ISBN`.
@@ -196,7 +196,7 @@ Document (dev.stxt.website): El entorno de trabajo | STXT
 	Content >>
 		El `.stxt/` del proyecto es el primer nivel de la cadena; hay dos más:
 
-		| Nivel    | Dónde                                    | `stxt install …` | Para qué                                                    |
+		| Nivel    | Dónde                                    | `stxt install ...` | Para qué                                                    |
 		|----------|------------------------------------------|------------------|-------------------------------------------------------------|
 		| Proyecto | `.stxt/` del documento y de sus ancestros | `--local`        | Las gramáticas del proyecto, versionadas con él             |
 		| Usuario  | `~/.stxt` (`%USERPROFILE%\.stxt`)         | `--user`         | Definiciones personales, comunes a todos los proyectos del usuario |

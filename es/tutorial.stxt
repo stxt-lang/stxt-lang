@@ -32,7 +32,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		Con este ejemplo ya se ve casi todo el lenguaje:
 
-		* `Title: Arquitectura…` es un **nodo inline**: un nombre, dos puntos y un valor en la
+		* `Title: Arquitectura...` es un **nodo inline**: un nombre, dos puntos y un valor en la
 		  misma línea.
 		* `Authors:` es un nodo inline sin valor, que existe para agrupar a sus hijos.
 		* `Author` aparece dos veces: un nombre puede repetirse tantas veces como haga
@@ -203,7 +203,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Content >>
 		Un nombre admite letras, dígitos y marcas combinantes de cualquier alfabeto (latino,
-		griego, cirílico, árabe, devanagari, CJK…), además de los separadores `-`, `_` y
+		griego, cirílico, árabe, devanagari, CJK...), además de los separadores `-`, `_` y
 		espacio. No admite ningún otro signo: ni `:`, ni paréntesis, ni `#`. Debe contener
 		al menos una letra o un dígito.
 
@@ -292,7 +292,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		Es el documento completo de la sección 1 (`tutorial/book-ns.stxt`), con una sola
 		diferencia: `Book` declara el namespace `com.acme.book`. Y con eso basta, porque el
-		namespace **se hereda**: `Title`, `Authors`, `Author`, `Chapter`, `Content`… todos los
+		namespace **se hereda**: `Title`, `Authors`, `Author`, `Chapter`, `Content`... todos los
 		descendientes de `Book` pertenecen a `com.acme.book` sin escribirlo. Un hijo puede
 		declarar otro namespace, y entonces sus propios descendientes heredan el nuevo.
 

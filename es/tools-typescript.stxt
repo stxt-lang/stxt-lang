@@ -67,7 +67,7 @@ Document (dev.stxt.website): La biblioteca TypeScript | STXT
 	Content >>
 		Cada error es una `ParseException` con tres campos: **`line`** (la línea del
 		documento, empezando en 1), **`code`** (estable, en mayúsculas: `INVALID_LINE`,
-		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`…) y **`message`**. Los errores
+		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`...) y **`message`**. Los errores
 		de gramática son `ValidationException`, una subclase con los mismos campos, así
 		que un solo bucle recorre los dos y `instanceof` distingue la severidad. Un
 		documento con un error de sintaxis puede seguir devolviendo nodos: el parser se
@@ -126,8 +126,8 @@ Document (dev.stxt.website): La biblioteca TypeScript | STXT
 
 		    const authors = book.getChild('Authors') as InlineNode;
 		    authors.getChildrenByName('Author').map(a => a.getText());   // ["María Pérez", "Juan García"]
-		    authors.getDeclaredNamespace();                    // "": no lo declara…
-		    authors.getNamespace();                            // "com.acme.book": …lo hereda
+		    authors.getDeclaredNamespace();                    // "": no lo declara...
+		    authors.getNamespace();                            // "com.acme.book": ...lo hereda
 
 		    const chapter = book.getChild('Chapter') as InlineNode;
 		    const content = chapter.getChild('Content');
@@ -433,8 +433,8 @@ Document (dev.stxt.website): La biblioteca TypeScript | STXT
 		class LoggingObserver implements Observer {
 		    onCreate(node: Node, line: string): void { console.log('open', node.getQualifiedName()); }
 		    onFinish(node: Node): void { console.log('close', node.getQualifiedName()); }
-		    onComment(lineNumber: number, line: string): void { /* … */ }
-		    onTextLine(node: TextNode, lineNumber: number, lineString: string, line: Line): void { /* … */ }
+		    onComment(lineNumber: number, line: string): void { /* ... */ }
+		    onTextLine(node: TextNode, lineNumber: number, lineString: string, line: Line): void { /* ... */ }
 		}
 
 		const parser = new Parser();

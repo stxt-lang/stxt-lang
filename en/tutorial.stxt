@@ -32,7 +32,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		This example already shows almost the whole language:
 
-		* `Title: Modern…` is an **inline node**: a name, a colon and a value on the same
+		* `Title: Modern...` is an **inline node**: a name, a colon and a value on the same
 		  line.
 		* `Authors:` is an inline node with no value, which exists to group its children.
 		* `Author` appears twice: a name may be repeated as many times as needed. That is
@@ -200,7 +200,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Content >>
 		A name admits letters, digits and combining marks from any script (Latin, Greek,
-		Cyrillic, Arabic, Devanagari, CJK…), plus the separators `-`, `_` and space. It
+		Cyrillic, Arabic, Devanagari, CJK...), plus the separators `-`, `_` and space. It
 		admits no other symbol: no `:`, no parentheses, no `#`. It must contain at least
 		one letter or digit.
 
@@ -288,7 +288,7 @@ Document (dev.stxt.website): STXT Tutorial
 		It is the complete document of section 1 (`tutorial/book-ns.stxt`), with a single
 		difference: `Book` declares the namespace `com.acme.book`. And that is enough,
 		because the namespace **is inherited**: `Title`, `Authors`, `Author`, `Chapter`,
-		`Content`… every descendant of `Book` belongs to `com.acme.book` without writing it.
+		`Content`... every descendant of `Book` belongs to `com.acme.book` without writing it.
 		A child may declare another namespace, and then its own descendants inherit the new
 		one.
 

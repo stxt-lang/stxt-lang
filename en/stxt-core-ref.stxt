@@ -190,7 +190,7 @@ Document (dev.stxt.website): STXT Core: base syntax of the language
 	Content >>
 		The node name will only allow **Unicode letters, digits and combining marks** (general
 		categories `L`, `Nd`, `Mn` and `Mc`, in any script: Latin, Greek, Cyrillic, Arabic, Devanagari,
-		Thai, CJK…) and the separator characters `-`, `_`, ` `. Names with diacritics, uppercase, and
+		Thai, CJK...) and the separator characters `-`, `_`, ` `. Names with diacritics, uppercase, and
 		lowercase letters are allowed. Combining marks (`Mn`, `Mc`) are the vowels and signs that many
 		scripts write on the base letter (`हिंदी` cannot be written without them) and the combining
 		accents with no precomposed form; enclosing marks (`Me`) are not allowed. The check is made on
@@ -655,7 +655,7 @@ Document (dev.stxt.website): STXT Core: base syntax of the language
 		* `# It is NOT a comment` is more indented than `Text node >>`, so it is **text** (and its `#`
 		  is preserved).
 		* `# It is a comment` has the same indentation as `Text node >>`: it **closes** the block, whose
-		  content is left with two lines (`# It is NOT a comment…` and `Text 1`), and is discarded.
+		  content is left with two lines (`# It is NOT a comment...` and `Text 1`), and is discarded.
 		* `Text 2` no longer has a block to belong to: the parser processes it as a node and the document
 		  is **invalid** (indentation level jump, [section 11](#s11)). This is deliberate: a text line
 		  that begins with `#` and is de-indented by mistake does not vanish silently; it makes the
@@ -857,7 +857,7 @@ Document (dev.stxt.website): STXT Core: base syntax of the language
 		not impose them; the three limits below, with the default values of the official
 		implementations, are the **recommended** configuration:
 
-		| Limit | Recommended default | Exceeded when… |
+		| Limit | Recommended default | Exceeded when... |
 		|---|---|---|
 		| Nesting depth | `100` levels | a line opens a node at level `100` or deeper (level 0 is the first: at most 100 levels are open) |
 		| Line length | `10 000` characters | one input line, indentation included, exceeds that length |

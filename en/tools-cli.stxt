@@ -101,7 +101,7 @@ Document (dev.stxt.website): The command line | STXT
 
 		| Code   | Meaning                                                                                                    |
 		|--------|------------------------------------------------------------------------------------------------------------|
-		| `0`    | Success: the documents parse and validate, nothing needs reformatting, the grammar was installed…           |
+		| `0`    | Success: the documents parse and validate, nothing needs reformatting, the grammar was installed...           |
 		| `1`    | **Document failure**: syntax or grammar errors, files that `--check` would change, an unreadable file, a definition that cannot be installed, a resolution chain with errors in `schemas` |
 		| `2`    | **Misuse**: unknown command or option, missing argument, incompatible options, a directory without `--recursive` |
 
@@ -265,7 +265,7 @@ Document (dev.stxt.website): The command line | STXT
 
 		Three modes, mutually exclusive:
 
-		| Mode             | What it does                                                                                 | Exits with `1` if…          |
+		| Mode             | What it does                                                                                 | Exits with `1` if...          |
 		|------------------|----------------------------------------------------------------------------------------------|-----------------------------|
 		| (default)        | Prints the result to standard output; does not write to disk                                 | Some document does not parse |
 		| `--check`        | Lists the files that would change (`<file>: would be reformatted`); writes nothing            | Some would change, or does not parse |

@@ -521,7 +521,7 @@ Document (dev.stxt.website): STXT Template: templates (@stxt.template)
 		| Code | Condition |
 		|---|---|
 		| `INDENTATION_*` codes of *STXT-SPEC* | 1: indentation of `Structure >>` |
-		| `TEMPLATE_ROOT_NOT_VALID` | 2: the root is not `Template (@stxt.template): …`, or the target namespace is not valid |
+		| `TEMPLATE_ROOT_NOT_VALID` | 2: the root is not `Template (@stxt.template): ...`, or the target namespace is not valid |
 		| `TEMPLATE_NAMESPACE_EMPTY` | 2: the target namespace is empty |
 		| `TEMPLATE_MULTIPLE_ROOTS` | 23: the template document has more than one root node, or none |
 		| `TEMPLATE_STRUCTURE_REQUIRED` | 3: `Structure >>` missing or not a block |

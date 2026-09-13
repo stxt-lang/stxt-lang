@@ -89,7 +89,7 @@ Document (dev.stxt.website): Corporate documents | STXT
 		  are read and not processed. They go in `>>` blocks, where paragraphs are written
 		  without any restriction.
 		* The title of each decision and each action is the value of the node itself
-		  (`Decision: Move the deployment…`), and its attributes are children. That way the
+		  (`Decision: Move the deployment...`), and its attributes are children. That way the
 		  list reads at a glance.
 
 		If later something that is text today needs processing (the risks mentioned in the

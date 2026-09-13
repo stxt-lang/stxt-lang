@@ -59,7 +59,7 @@ Document (dev.stxt.website): Stability and versions | STXT
 		* **The canonical tree** of [STXT-TREE-SPEC](stxt-tree-ref): the JSON from
 		  `stxt describe` and from the libraries, with the same fields and the same result.
 		* **The error codes** (`INDENTATION_MIXED`, `CHILD_NOT_DECLARED`,
-		  `SCHEMA_NOT_FOUND`…): never renamed or reused.
+		  `SCHEMA_NOT_FOUND`...): never renamed or reused.
 		* **The API of each library** within its 1.x line, and in the
 		  [command line](tools-cli), what goes to machines: the exit codes `0`/`1`/`2` and
 		  `--format json`.

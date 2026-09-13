@@ -139,7 +139,7 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 		líneas), con escapes en las básicas.
 
 		En @STXT@ un valor es siempre texto, sin comillas. Los tipos se declaran en la
-		definición (`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`…) y los comprueba el
+		definición (`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`...) y los comprueba el
 		validador y no el parser: sin definición, `14` son dos caracteres.
 
 	Subheader: Namespaces y validación

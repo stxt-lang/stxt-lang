@@ -124,7 +124,7 @@ Document (dev.stxt.website): STXT Schema: lenguaje de esquemas (@stxt.schema)
 		**Cualquier `Node` puede ser raíz de un documento.** El schema no distingue entre nodos
 		"raíz" y nodos "hijo": un documento cuyo nodo raíz es cualquier `Node` del namespace es
 		válido si ese nodo cumple sus reglas. Así, contra el schema de la [sección 15.5](#s15-5),
-		tanto `Document (com.example.docs): …` como `Title (com.example.docs): …` son raíces
+		tanto `Document (com.example.docs): ...` como `Title (com.example.docs): ...` son raíces
 		válidas. Esto permite documentos parciales (un fragmento, un fichero por sección) sin
 		schemas adicionales; un schema que quiera restringir la raíz lo hace por convención, no por
 		declaración.
@@ -313,7 +313,7 @@ Document (dev.stxt.website): STXT Schema: lenguaje de esquemas (@stxt.schema)
 		| NATURAL   | INLINE          | NO           | Entero sin signo (≥ 0).                        |
 		| DATE      | INLINE          | NO           | Fecha `AAAA-MM-DD`, válida en el calendario.   |
 		| TIME      | INLINE          | NO           | Hora `hh:mm:ss`, en rango.                     |
-		| TIMESTAMP | INLINE          | NO           | Fecha y hora ISO 8601, `AAAA-MM-DDThh:mm[:ss[.f…]][Z\|±hh:mm]`. |
+		| TIMESTAMP | INLINE          | NO           | Fecha y hora ISO 8601, `AAAA-MM-DDThh:mm[:ss[.f...]][Z\|±hh:mm]`. |
 		| UUID      | INLINE          | NO           | UUID `8-4-4-4-12` hexadecimal, sin distinguir mayúsculas. |
 		| URL       | INLINE          | NO           | URL absoluta: esquema y host obligatorios (ver abajo). |
 		| EMAIL     | INLINE          | NO           | Dirección de correo, sola o con nombre (ver abajo). |
@@ -408,13 +408,13 @@ Document (dev.stxt.website): STXT Schema: lenguaje de esquemas (@stxt.schema)
 		Reglas:
 
 		* Una implementación conforme **DEBE** aceptar cualquier esquema con esa forma (`https`,
-		  `ftp`, `git+ssh`, …): no hay lista de esquemas permitidos.
+		  `ftp`, `git+ssh`, ...): no hay lista de esquemas permitidos.
 		* El host **DEBE** ser no vacío; no se exige dominio de primer nivel (`http://localhost`
 		  valida) ni se resuelve nada. Los caracteres no ASCII se aceptan tal cual, en el host y en
 		  el resto (un IDN no se convierte a *punycode*).
 		* Una implementación **NO DEBE** aceptar un valor sin esquema (`stxt.dev`,
 		  `www.stxt.dev/x`), con esquema pero sin `//` y host (`mailto:ana@example.com`,
-		  `urn:isbn:…`, `tel:…`, `file:///etc/hosts`), con blancos interiores, ni con puerto no
+		  `urn:isbn:...`, `tel:...`, `file:///etc/hosts`), con blancos interiores, ni con puerto no
 		  numérico.
 		* La comprobación es **sintáctica**: no se normaliza, no se decodifican los `%xx` ni se
 		  comprueba que el recurso exista.
@@ -422,7 +422,7 @@ Document (dev.stxt.website): STXT Schema: lenguaje de esquemas (@stxt.schema)
 		**Nota de diseño (no normativa):** no hay un tipo `URI` general a propósito. Una URI
 		según RFC 3986 es casi cualquier cadena con dos puntos (`a:b` lo es), así que un tipo así
 		apenas validaría más que `TEXT`. El valor de `URL` está en cazar el esquema olvidado o el
-		host mal escrito. Para identificadores que no son direcciones web (`urn:isbn:…`, `tel:…`)
+		host mal escrito. Para identificadores que no son direcciones web (`urn:isbn:...`, `tel:...`)
 		se usa `TEXT` o un `ENUM`; para correo, `EMAIL`.
 
 	Subsubheader: 9.5 Tipos ampliados de contenido binario INLINE/BLOCK
@@ -502,7 +502,7 @@ Document (dev.stxt.website): STXT Schema: lenguaje de esquemas (@stxt.schema)
 		@STXT@ Schema define, porque cubre el único dominio que @STXT@ delega por diseño, el
 		formato de la prosa (negrita, enlaces, listas dentro del texto), y porque su forma cruda
 		sigue siendo legible, coherente con el principio Human-First. Los tipos para **formatos de
-		datos** incrustados (`JSON`, `XML`, `YAML`, `TOML`, …) son un **no-objetivo explícito**
+		datos** incrustados (`JSON`, `XML`, `YAML`, `TOML`, ...) son un **no-objetivo explícito**
 		([sección 11](#s11)): @STXT@ ya es el formato de estructura, y un tipo así enterraría estructura
 		en blobs opacos. La estructura se expresa en @STXT@.
 
@@ -554,7 +554,7 @@ Document (dev.stxt.website): STXT Schema: lenguaje de esquemas (@stxt.schema)
 		Otros **no-objetivos** explícitos de @STXT@ Schema son: patrones o expresiones regulares
 		sobre valores, valores por defecto, reglas condicionales entre campos ("si aparece A,
 		entonces B"), y los tipos para **formatos de datos incrustados** (`JSON`, `XML`, `YAML`,
-		`TOML`, …; ver la nota de diseño de la [sección 9.7](#s9-7)). Mantener el modelo pequeño y
+		`TOML`, ...; ver la nota de diseño de la [sección 9.7](#s9-7)). Mantener el modelo pequeño y
 		predecible es un objetivo de diseño: esa semántica pertenece a la aplicación.
 
 	Subheader: 12. Ejemplos Normativos
@@ -629,7 +629,7 @@ Document (dev.stxt.website): STXT Schema: lenguaje de esquemas (@stxt.schema)
 		10. Aparecen dos nodos `Child` equivalentes (mismo `nombre canónico + namespace efectivo`) dentro del mismo `Children`.
 		11. Aparece un hijo en `Children` **del mismo namespace del schema** cuyo `Node` no está definido en el propio schema.
 		12. El documento schema tiene más de un nodo raíz, o ninguno: un documento schema es **exactamente un** nodo `Schema`.
-		13. Un nodo del schema (`Node`, `Child`, `Type`, `Min`…) está escrito en forma `>>`; todos son inline salvo `Description`, que es `TEXT`.
+		13. Un nodo del schema (`Node`, `Child`, `Type`, `Min`...) está escrito en forma `>>`; todos son inline salvo `Description`, que es `TEXT`.
 		14. Un `Value` de un `ENUM` está vacío ([sección 7.2](#s7-2)).
 		15. Un `Node` contiene más de un nodo `Values`.
 
@@ -650,14 +650,14 @@ Document (dev.stxt.website): STXT Schema: lenguaje de esquemas (@stxt.schema)
 		Como en [*STXT-SPEC* §11.1](stxt-core-ref#s11-1), cada error lleva un código estable e idéntico
 		en todas las implementaciones, y **no se renombra**. Un documento schema se valida
 		primero **como documento** contra el meta-schema de la [sección 15](#s15), por lo que sus
-		errores de forma (un `Node` sin valor, dos `Type`, un `Min` que no es `NATURAL`…) llegan con
+		errores de forma (un `Node` sin valor, dos `Type`, un `Min` que no es `NATURAL`...) llegan con
 		los códigos de la segunda tabla; después se aplican las reglas propias de la primera.
 		
 		Errores del **schema** (primera lista de esta sección):
 		
 		| Código | Condición |
 		|---|---|
-		| `SCHEMA_ROOT_NOT_VALID` | 1: la raíz no es `Schema (@stxt.schema): …`, o el namespace objetivo no es válido |
+		| `SCHEMA_ROOT_NOT_VALID` | 1: la raíz no es `Schema (@stxt.schema): ...`, o el namespace objetivo no es válido |
 		| `SCHEMA_NAMESPACE_EMPTY` | 1: el namespace objetivo está vacío |
 		| `SCHEMA_MULTIPLE_ROOTS` | 12: el documento schema tiene más de un nodo raíz, o ninguno |
 		| `SCHEMA_NODE_NOT_INLINE` | 13: un nodo del schema está escrito en forma `>>` |

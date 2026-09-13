@@ -83,7 +83,7 @@ Document (dev.stxt.website): La biblioteca Java | STXT
 	Content >>
 		Cada error es una `ParseException` con **`getLine()`** (la línea del documento,
 		empezando en 1), **`getCode()`** (estable, en mayúsculas: `INVALID_LINE`,
-		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`…) y **`getMessage()`**. Los
+		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`...) y **`getMessage()`**. Los
 		errores de gramática son `ValidationException`, una subclase con los mismos campos,
 		así que un solo bucle recorre los dos y `instanceof` distingue la severidad. Todas
 		las excepciones son *unchecked* y cuelgan de `STXTException` (ver *Errores*). Un
@@ -150,8 +150,8 @@ Document (dev.stxt.website): La biblioteca Java | STXT
 
 		    InlineNode authors = (InlineNode) inline.getChild("Authors");
 		    authors.getChildren("Author").stream().map(Node::getText).toList();   // [María Pérez, Juan García]
-		    authors.getDeclaredNamespace();                    // "": no lo declara…
-		    authors.getNamespace();                            // "com.acme.book": …lo hereda
+		    authors.getDeclaredNamespace();                    // "": no lo declara...
+		    authors.getNamespace();                            // "com.acme.book": ...lo hereda
 
 		    InlineNode chapter = (InlineNode) inline.getChild("Chapter");
 		    if (chapter.getChild("Content") instanceof TextNode content) {
