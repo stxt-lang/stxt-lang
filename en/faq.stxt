@@ -1,7 +1,7 @@
 Document (dev.stxt.website): Frequently asked questions | STXT
 
 	Metadata:
-		Last modif: 2026-09-08
+		Last modif: 2026-09-15
 		Description: Frequently asked questions about STXT: what the name means, how it differs from XML, YAML, TOML, JSON and Markdown, how validation works and how to get started.
 
 	Header: Frequently asked questions
@@ -18,6 +18,11 @@ Document (dev.stxt.website): Frequently asked questions | STXT
 		*STxT* that may still be found refer to the old
 		language; @STXT@, written like this, is always the current one. The term *Semantic
 		Text* has also been retired: the name is @STXT@ alone.
+
+	Subsubheader: How is STXT pronounced?
+
+	Content >>
+		"ESS-text": first the letter `S`, then `text`, like *S-TEXT*.
 
 	Subsubheader: Is it a language or a format?
 

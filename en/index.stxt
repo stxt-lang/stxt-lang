@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT: a Human-First markup language for structured documents
 	Metadata:
-		Last modif: 2026-09-11
+		Last modif: 2026-09-15
 		Description: STXT is a human-first markup language for structured documents and data: no braces, no closing tags, just indentation. Readable by people, reliable for machines.
 
 	Header: @STXT@: Introduction
@@ -8,9 +8,6 @@ Document (dev.stxt.website): STXT: a Human-First markup language for structured 
 	Assert >>
 		@STXT@ is a **Human-First** markup language, where documents
 		are readable and expressive, and at the same time reliable for machines.
-
-	Content >>
-		> @STXT@ is pronounced "ESS-text": first the letter `S`, then `text`, like _S-TEXT_.
 
 	Subheader: Documents
 

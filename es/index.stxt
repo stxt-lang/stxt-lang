@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT: un lenguaje de marcado Human-First para documentos
 	Metadata:
-		Last modif: 2026-09-11
+		Last modif: 2026-09-15
 		Description: STXT es un lenguaje de marcado Human-First para documentos y datos: sin llaves ni etiquetas, solo indentación. Legible para personas, fiable para máquinas.
 
 	Header: @STXT@: Introducción
@@ -8,9 +8,6 @@ Document (dev.stxt.website): STXT: un lenguaje de marcado Human-First para docum
 	Assert >>
 		@STXT@ es un lenguaje de marcado **Human-First**, donde los documentos
 		son legibles y expresivos, y al mismo tiempo fiables para máquinas.
-
-	Content >>
-		> @STXT@ se pronuncia "ESS-text" o "ESE-text": primero la letra `S` y después `text`, como _S-TEXT_.
 
 	Subheader: Documentos
 
