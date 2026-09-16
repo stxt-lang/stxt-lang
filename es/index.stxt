@@ -15,7 +15,7 @@ Document (dev.stxt.website): STXT: un lenguaje de marcado Human-First para docum
 
 		* **La indentación es la estructura**: sin llaves ni etiquetas de cierre
 		* **El texto libre es literal**: sin caracteres de escape
-		* **Esquemas con @stxt.template o @stxt.schema**: esquemas disponibles escritos en @STXT@
+		* **Esquemas con @stxt.template o @stxt.schema**: validación y estructura escritos en @STXT@
 
 		Un documento @STXT@ combina legibilidad y semántica,
 		haciéndolo adecuado en muchos ámbitos, como por ejemplo:
