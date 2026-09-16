@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT: un lenguaje de marcado Human-First para documentos
+Document (dev.stxt.website): STXT: un lenguaje para documentos basado en identación, con esquemas y namespaces
 	Metadata:
 		Last modif: 2026-09-16
 		Description: STXT es un lenguaje de texto basado en indentación, Human-First, para documentos y datos: sin caracteres de escape, sin llaves ni etiquetas, solo indentación.
@@ -6,7 +6,7 @@ Document (dev.stxt.website): STXT: un lenguaje de marcado Human-First para docum
 	Header: @STXT@: Introducción
 
 	Assert >>
-		@STXT@ es un lenguaje de marcado **Human-First**, pensado para documentos y datos estructurados.
+		@STXT@ es un lenguaje **Human-First**, pensado para documentos y datos estructurados.
 
 	Subheader: Documentos
 
@@ -16,6 +16,7 @@ Document (dev.stxt.website): STXT: un lenguaje de marcado Human-First para docum
 		* **La indentación es la estructura**: sin llaves ni etiquetas de cierre
 		* **El texto libre es literal**: sin caracteres de escape
 		* **Esquemas con @stxt.template o @stxt.schema**: validación y estructura escritos en @STXT@
+		* **Seguridad**: la seguridad no es un añadido, forma parte del diseño del lenguaje.
 
 		Un documento @STXT@ combina legibilidad y semántica,
 		haciéndolo adecuado en muchos ámbitos, como por ejemplo:
