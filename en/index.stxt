@@ -26,7 +26,7 @@ Document (dev.stxt.website): STXT: an indentation-based language for documents, 
 		* [Generation via LLMs](ai-llms)
 		* [Configuration files](use-cases-config-files)
 
-	Subheader: Documents without namespaces
+	Subheader: Documents without namespace
 
 	Code >>
 		# A simple document, with no validation and no namespace

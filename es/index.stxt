@@ -26,7 +26,7 @@ Document (dev.stxt.website): STXT: un lenguaje para documentos basado en indenta
 		* [Generación vía LLMs](ai-llms)
 		* [Ficheros de configuración](use-cases-config-files)
 
-	Subheader: Documentos sin namespaces
+	Subheader: Documentos sin namespace
 
 	Code >>
 		# Un documento sencillo, sin validación ni namespace
