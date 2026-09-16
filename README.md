@@ -1,9 +1,5 @@
 # stxt-lang
 
-The definition of **STXT**: the five normative specifications, the conformance
-corpus, and the source of the language portal at <https://stxt.dev>. Everything here is written
-in STXT itself.
-
 STXT is a plain-text language for structured documents: no braces, no closing tags, just
 indentation. It is designed to be equally readable by people and by machines, and it comes with an
 optional schema layer so documents can be validated.
@@ -19,27 +15,12 @@ Document (com.example.docs): Title
 		the #, : and >> inside are not interpreted.
 ```
 
-This repository contains no code, no build and no tests. It is the **first authority** of the
-ecosystem: the implementations derive from it, never the other way around.
-
-```
-specifications (this repository)
-  → stxt-impl  (neutral pseudocode)
-      ├→ stxt-js      @stxt-lang/core on npm
-      ├→ stxt-java    dev.stxt:stxt-core on Maven Central
-      └→ stxt-python  stxt on PyPI
-```
-
 ## The specifications
 
 They live in `es/` (the canonical version, in Spanish) with an English mirror in `en/`. They carry
 no version number: each one carries in its `Metadata` a **date** (`Last modif`, the date of its
 current text) and a **status** (`Status`), which says how much stability it promises and only
-moves forward: `Genesis` → `Aurora` → `Zenith` → `Twilight` (*STXT-SPEC* §1.1). Today *STXT-SPEC*
-and *STXT-TREE-SPEC* are in **Zenith** (what is valid stays valid forever) and the other three in
-**Aurora** (usable; an incompatible change is possible, rare, and announced). "STXT" on its own
-means *STXT-SPEC*; the implementations expose the date of the text they implement as
-`SPEC_VERSION`, pinned by the conformance kit.
+moves forward: `Genesis` → `Aurora` → `Zenith` → `Twilight` (*STXT-SPEC* §1.1).
 
 | File | Specification | What it defines |
 |---|---|---|
@@ -85,15 +66,6 @@ points), so a change here is exercised by every port. What they check:
 
 A new kit case is added only after checking that all the ports agree with its expected result.
 
-## Contributing
-
-`es/` is the canonical text and `en/` mirrors it file by file, so a change to a page or a
-specification is made in both in the same commit. When the text of a specification changes, its
-`Last modif` moves to that date; its `Status` only advances, with the promise *STXT-SPEC* §1.1
-attaches to each value. A behavioural change of the language goes **spec → `stxt-impl` → every
-port**, with a conformance case in each. The files are indented with tabs, and inside a `>>`
-block the relative indentation is part of the text.
-
 ## Ecosystem
 
 | Repository | Role |
@@ -105,8 +77,6 @@ block the relative indentation is part of the text.
 | [stxt-cli](https://github.com/stxt-lang/stxt-cli) | The `stxt` command, [`@stxt-lang/cli`](https://www.npmjs.com/package/@stxt-lang/cli) |
 | [stxt-vscode](https://github.com/stxt-lang/stxt-vscode) | VS Code extension, [`stxt-lang.stxt`](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt) |
 | [stxt-play](https://github.com/stxt-lang/stxt-play) | The playground, <https://play.stxt.dev> |
-
-Until 2026-08-22 this repository was named `stxt-web`; the old URL redirects.
 
 ## License
 

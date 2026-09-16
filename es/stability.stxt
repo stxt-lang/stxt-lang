@@ -1,39 +1,35 @@
 Document (dev.stxt.website): Estabilidad y versiones | STXT
 
 	Metadata:
-		Last modif: 2026-09-08
-		Description: STXT es un lenguaje vivo con un núcleo estable. Cada especificación lleva una fecha y un estado, Genesis, Aurora, Zenith o Twilight, en lugar de un número de versión; qué promete cada estado y qué más es estable.
+		Last modif: 2026-09-16
+		Description: STXT es un lenguaje vivo con un núcleo estable. Cada especificación lleva una fecha y un estado, Genesis, Aurora, Zenith o Twilight, en lugar de un número de versión; que define el estado y nivel de estabilidad.
 
 	Header: Estabilidad y versiones
 
 	Assert >>
-		**Un documento válido hoy en @STXT@ lo es para siempre**.
+		**La sintaxis de @STXT@ es estable, sin previsión de cambios**.
 
 	Subheader: Un lenguaje vivo, con un núcleo estable
 
 	Content >>
-		@STXT@ evoluciona. Las especificaciones no llevan número de versión: cada una lleva
-		en su `Metadata` la **fecha** de su texto vigente (`Last modif`) y un **estado**
-		(`Status`) que dice cuánta estabilidad promete. El núcleo (la sintaxis y el árbol
-		canónico) está en Zenith y no cambia de forma incompatible; las capas de esquemas,
-		plantillas y descubrimiento siguen evolucionando, cada una a su ritmo.
+		**@STXT@ ha evolucionado**. Actualmente el core es estable, y no se prevén modificaciones incompatibles.
+		Los esquemas y templates también son estables, pero no se descarta algún cambio incompatible.
 
-	Subheader: Los cuatro estados
+		Por esto, en vez de una numeración, se ha establecido un sistema descriptivo con dos variables:
+		
+		* **Fecha** de vigencia: última modificación del documento
+		* **Estado**: dice el nivel de estabilidad
 
-	Content >>
-		| Estado | Promesa |
+		| Estado | Nivel de estabilidad |
 		|---|---|
 		| **Genesis** | En construcción. Puede cambiar cualquier cosa. |
-		| **Aurora** | Usable. Se esperan pocos cambios; uno incompatible se anuncia siempre, con fecha y camino de migración. |
-		| **Zenith** | Estable. Lo válido lo es para siempre y significa lo mismo; solo se añade, y lo añadido es compatible. |
-		| **Twilight** | Camino a la retirada. No cambia más, salvo erratas. |
+		| **Aurora** | Usable. Se esperan pocos cambios. Un cambio incompatible se anuncia |
+		| **Zenith** | Estable. No debería haber ningún cambio incompatible. En caso de añadirse, siempre compatible con lo existente. |
+		| **Twilight** | Marcado como obsoleto, sin cambios excepto erratas. |
 
-		Un estado **solo avanza**, en ese orden. Un cambio **incompatible** es el que deja
-		inválido un documento válido o le cambia el significado; una aclaración del texto
-		que no cambia la intención solo actualiza `Last modif`. La definición normativa está
-		en [STXT-SPEC §1.1](stxt-core-ref#s1-1).
+		El estado **solo avanza** según el orden anterior.
 
-	Subheader: El estado de cada especificación
+	Subheader: Estado actual de las especificaciones
 
 	Content >>
 		| Especificación | Estado | Desde |
@@ -44,60 +40,3 @@ Document (dev.stxt.website): Estabilidad y versiones | STXT
 		| [STXT-TEMPLATE-SPEC](stxt-template-ref), las plantillas | **Aurora** | 2026-09-07 |
 		| [STXT-DISCOVERY-SPEC](stxt-discovery-ref), la localización de definiciones | **Aurora** | 2026-09-07 |
 
-		«@STXT@», dicho por sí solo, es STXT-SPEC, y está en Zenith: qué es un documento
-		@STXT@, cómo se parsea y qué árbol produce no cambiarán. Si algún día hiciera falta
-		un cambio incompatible en el núcleo, no habría un «STXT 2»: habría una especificación
-		nueva, con nombre nuevo, conviviendo con esta. Un esquema o una plantilla es un
-		documento @STXT@ y nunca deja de parsear; lo que puede cambiar en Aurora es una regla
-		de validación o de resolución.
-
-	Subheader: Qué más es estable, y qué no
-
-	Content >>
-		Estable, en todas las implementaciones:
-
-		* **El árbol canónico** de [STXT-TREE-SPEC](stxt-tree-ref): el JSON de
-		  `stxt describe` y de las bibliotecas, con los mismos campos y el mismo resultado.
-		* **Los códigos de error** (`INDENTATION_MIXED`, `CHILD_NOT_DECLARED`,
-		  `SCHEMA_NOT_FOUND`...): no se renombran ni se reutilizan.
-		* **La API de cada biblioteca** dentro de su línea 1.x, y en la
-		  [línea de comandos](tools-cli), lo que va a máquinas: los códigos de salida
-		  `0`/`1`/`2` y `--format json`.
-
-		No estable:
-
-		* **El texto de los mensajes de error**: el código es estable y la frase puede cambiar.
-		* **La salida de la línea de comandos pensada para personas**: el informe de
-		  `validate`, el texto de `--help`.
-		* **Las fachadas de comodidad y los adaptadores** de las bibliotecas, fuera de la API
-		  de núcleo.
-		* **Las recomendaciones** (*DEBERÍA* en las especificaciones): pueden afinarse sin que
-		  un documento deje de ser válido.
-
-	Subheader: Fecha de la especificación y versión del paquete
-
-	Content >>
-		Las especificaciones llevan fecha y estado; las bibliotecas (`@stxt-lang/core` en
-		npm, `dev.stxt:stxt-core` en Maven Central, `stxt` en PyPI) llevan la versión
-		semántica de su paquete, que sube cuando cambia la biblioteca, no cuando cambia el
-		lenguaje. La conformidad se declara contra la especificación, no contra el paquete,
-		y se demuestra con el
-		[kit de conformidad](https://github.com/stxt-lang/stxt-lang/tree/master/conformance):
-		el kit fija la fecha de cada especificación que certifica, y una implementación
-		conforme expone la de STXT-SPEC como `SPEC_VERSION`, con un valor `AAAA-MM-DD`. Los
-		casos que ejercitan una regla DEBERÍA o PUEDE de las especificaciones son opcionales, y
-		la declaración dice si la implementación pasa todos los casos del perfil o solo los
-		obligatorios; las tres oficiales pasan todos. Dos
-		bibliotecas con versiones distintas que exponen la misma fecha leen el mismo @STXT@.
-		La fecha del kit solo identifica el paquete: si un kit nuevo solo mueve la fecha
-		de una especificación, las implementaciones que no la cubren siguen conformes con las
-		suyas, sin volver a certificarse.
-
-	Subheader: Cómo se anuncia un cambio
-
-	Content >>
-		Cada avance de estado, y cada cambio incompatible en Aurora, se anuncia con su fecha:
-		en la propia especificación (`Status` y `Last modif`), en las notas de la
-		[publicación](https://github.com/stxt-lang/stxt-lang/releases) del repositorio de
-		la especificación y en esta página. El kit de conformidad se regenera con la fecha
-		nueva, y las implementaciones que lo pasan la exponen en `SPEC_VERSION`.
