@@ -7,99 +7,24 @@ Document (dev.stxt.website): Principios de diseño | STXT
 	Header: Principios de diseño
 
 	Assert >>
-		@STXT@ es un lenguaje pensado para las personas (**Human-First**). Todo lo demás se
-		deriva de ese principio: la sencillez, la indentación como estructura, la ausencia
-		de escapes, la seguridad del parseo y la validación como capa aparte.
+		@STXT@ es un lenguaje pensado para las personas (**Human-First**). Todas las decisiones
+		de diseño y construcción del lenguaje se derivan de ese principio.
 
 	Subheader: 1. El documento se escribe para personas
 
 	Content >>
 		Este es el principio del que salen los demás. Un documento @STXT@ debe poder leerse y
-		escribirse sin herramientas: la forma natural del texto es la forma correcta, y es la
-		máquina la que se adapta a esa forma. De ahí que no haya llaves, corchetes,
-		comillas obligatorias ni etiquetas de cierre, y que un documento parezca un esquema de
-		notas.
+		escribirse sin herramientas. De ahí que no haya caracteres de escape, llaves, corchetes,
+		comillas obligatorias ni etiquetas de cierre, y que un documento parezca un esquema.
 
-	Subheader: 2. La sencillez por encima de todo
+	Subheader: 2. KISS, la sencillez por encima de todo
 
 	Content >>
-		La sencillez es un requisito del lenguaje en tres planos a la vez:
+		@STXT@ aplica el principio KISS (*keep it simple*), en todos los planos a la vez:
 
-		* **Sencillo de escribir y leer.** Las reglas que una persona necesita conocer son las
-		  secciones 3 a 8 del [tutorial](tutorial): un nodo, un bloque de texto, la
-		  indentación, un comentario.
+		* **Sencillo de escribir y leer.** Existen pocas reglas: indentación,
+		  2 tipos de nodo `Nombre: valor` o `Nombre >>`, namespaces opcionales y comentarios.
+		  No existen caracteres de escape, ni listas, ni notación simplificada.
 		* **Sencillo de implementar.** Un parser conforme es un recorrido línea a línea con
-		  una pila. La gramática informal ocupa un apéndice de la especificación, y las tres
-		  implementaciones oficiales derivan del mismo pseudocódigo neutro sin usar ninguna
-		  biblioteca para parsear.
-		* **Sencillo de procesar.** Una sola pasada, línea a línea, sin retroceso, sin
-		  referencias hacia atrás y sin segundo recorrido.
+		  una pila. Los esquemas y validaciones son capas aparte opcionales.
 
-		Referencia: [STXT-SPEC §15](stxt-core-ref#s15) y [§16](stxt-core-ref#s16).
-
-	Subheader: 3. El principio KISS
-
-	Content >>
-		@STXT@ aplica el principio KISS (*keep it simple*): es deliberadamente pequeño, en
-		todos sus niveles. La jerarquía se expresa únicamente con la indentación: un nivel es
-		un tabulador o cuatro espacios. Un nodo es `Nombre: valor` o `Nombre >>`. No hay
-		sintaxis de lista, ni de cadena entre comillas, ni de escape, ni notación abreviada
-		para el caso frecuente. Una lista es un nodo repetido:
-
-	Code >>
-		Authors:
-			Author: María Pérez
-			Author: Juan García
-
-	Content >>
-		Referencia: [STXT-SPEC §4](stxt-core-ref#s4) y [§8](stxt-core-ref#s8).
-
-	Subheader: 4. No hay caracteres de escape
-
-	Content >>
-		Un carácter de escape contradice directamente el principio Human-First: obliga a
-		quien escribe a pensar en el parser en lugar de en el texto, y a quien lee a
-		descifrar lo que hay detrás de una barra. Por eso @STXT@ no tiene secuencias de
-		escape: un valor es lo que hay tras los dos puntos, un bloque es lo que hay indentado
-		debajo del `>>`, y cualquier carácter vale dentro de ambos, incluidos `:`, `#` y `>>`.
-
-		El texto libre es, así, literal: todo lo indentado bajo un nodo `>>` es texto tal
-		cual, y la indentación relativa se conserva. Un párrafo, un fragmento de código o un
-		bloque de Markdown se pegan en el documento sin transformarlos.
-
-		El precio está en los nombres de nodo, que son la única parte de la línea que el
-		parser interpreta: se limitan a letras, dígitos y los separadores `-`, `_` y espacio.
-
-		Referencia: [STXT-SPEC §4.2](stxt-core-ref#s4-2), [§6](stxt-core-ref#s6) y
-		[§10](stxt-core-ref#s10).
-
-	Subheader: 5. La seguridad del parseo, por diseño
-
-	Content >>
-		@STXT@ no tiene entidades, referencias, anclas, inclusión de ficheros, etiquetas que
-		instancien objetos ni ninguna forma de evaluación. Los namespaces se restringen a
-		ASCII para excluir los ataques homográficos. El resultado de parsear es siempre un
-		árbol de nodos y texto. En streaming, un parser retiene solo el árbol de la raíz en
-		curso, y los límites de anidamiento, longitud de línea y tamaño de entrada acotan la
-		memoria frente a una fuente no confiable.
-
-		Referencia: [STXT-SPEC §15](stxt-core-ref#s15) y [§11.2](stxt-core-ref#s11-2).
-
-	Subheader: 6. La validación es una capa aparte y opcional
-
-	Content >>
-		El parser no necesita esquemas. Un documento sin namespace, o con un namespace para el
-		que no hay definición, es un documento válido que no se puede validar. Cuando hay
-		esquema, el modelo de contenido es cerrado: un nodo no declarado es un error, y no un
-		dato de más que se pasa por alto. El orden de los hijos se conserva en el árbol pero no se
-		valida.
-
-		El mismo criterio ordena el resto de especificaciones: la especificación base define
-		por sí sola un lenguaje completo y usable, y cada una de las demás describe una
-		característica opcional que debe ser, a su vez, sencilla. Por eso los esquemas y las
-		plantillas tienen no-objetivos declarados: no validan el orden de los hijos ni admiten
-		patrones, reglas condicionales entre campos, valores por defecto ni formatos de datos
-		incrustados.
-
-		Referencia: [STXT-SCHEMA-SPEC §5](stxt-schema-ref#s5), [§6](stxt-schema-ref#s6) y
-		[§11](stxt-schema-ref#s11).
