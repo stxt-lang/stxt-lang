@@ -2,7 +2,7 @@ Document (dev.stxt.website): Estabilidad y versiones | STXT
 
 	Metadata:
 		Last modif: 2026-09-16
-		Description: STXT es un lenguaje vivo con un núcleo estable. Cada especificación lleva una fecha y un estado, Genesis, Aurora, Zenith o Twilight, en lugar de un número de versión; que define el estado y nivel de estabilidad.
+		Description: STXT es un lenguaje vivo con un núcleo estable. Cada especificación lleva una fecha y un estado (Genesis, Aurora, Zenith o Twilight) en lugar de un número de versión; el estado define el nivel de estabilidad.
 
 	Header: Estabilidad y versiones
 
@@ -12,20 +12,20 @@ Document (dev.stxt.website): Estabilidad y versiones | STXT
 	Subheader: Un lenguaje vivo, con un núcleo estable
 
 	Content >>
-		**@STXT@ ha evolucionado**. Actualmente el core es estable, y no se prevén modificaciones incompatibles.
-		Los esquemas y templates también son estables, pero no se descarta algún cambio incompatible.
+		**@STXT@ ha evolucionado**. Actualmente el núcleo es estable y no se prevén modificaciones incompatibles.
+		Los esquemas y plantillas también son estables, pero no se descarta algún cambio incompatible.
 
 		Por esto, en vez de una numeración, se ha establecido un sistema descriptivo con dos variables:
-		
+
 		* **Fecha** de vigencia: última modificación del documento
-		* **Estado**: dice el nivel de estabilidad
+		* **Estado**: indica el nivel de estabilidad
 
 		| Estado | Nivel de estabilidad |
 		|---|---|
 		| **Genesis** | En construcción. Puede cambiar cualquier cosa. |
-		| **Aurora** | Usable. Se esperan pocos cambios. Un cambio incompatible se anuncia |
-		| **Zenith** | Estable. No debería haber ningún cambio incompatible. En caso de añadirse, siempre compatible con lo existente. |
-		| **Twilight** | Marcado como obsoleto, sin cambios excepto erratas. |
+		| **Aurora** | Usable. Se esperan pocos cambios. Un cambio incompatible se anuncia. |
+		| **Zenith** | Estable. No debería haber ningún cambio incompatible. Lo que se añada es siempre compatible con lo existente. |
+		| **Twilight** | Marcada como obsoleta, sin cambios excepto erratas. |
 
 		El estado **solo avanza** según el orden anterior.
 
@@ -39,4 +39,3 @@ Document (dev.stxt.website): Estabilidad y versiones | STXT
 		| [STXT-SCHEMA-SPEC](stxt-schema-ref), los esquemas | **Aurora** | 2026-09-07 |
 		| [STXT-TEMPLATE-SPEC](stxt-template-ref), las plantillas | **Aurora** | 2026-09-07 |
 		| [STXT-DISCOVERY-SPEC](stxt-discovery-ref), la localización de definiciones | **Aurora** | 2026-09-07 |
-

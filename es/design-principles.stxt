@@ -1,7 +1,7 @@
 Document (dev.stxt.website): Principios de diseño | STXT
 
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-16
 		Description: Los principios de diseño de STXT: un lenguaje pensado para las personas. La sencillez, la indentación como estructura y la seguridad del parseo derivan de ahí.
 
 	Header: Principios de diseño
@@ -16,23 +16,23 @@ Document (dev.stxt.website): Principios de diseño | STXT
 		Este es el principio del que salen los demás. Un documento @STXT@ debe poder leerse y
 		escribirse sin herramientas. De ahí que no haya caracteres de escape, llaves, corchetes,
 		comillas obligatorias ni etiquetas de cierre, y que un documento parezca un esquema.
-		
+
 		Ante una duda de diseño, se aplica este principio para resolverla.
 
 	Subheader: 2. KISS, la sencillez por encima de todo
 
 	Content >>
-		@STXT@ aplica el principio KISS (*keep it simple*), en todos los planos a la vez:
+		@STXT@ aplica el principio KISS (*keep it simple*) en todos los planos a la vez:
 
 		* **Sencillo de escribir y leer.** Existen pocas reglas: indentación,
-		  2 tipos de nodo `Nombre: valor` o `Nombre >>`, namespaces opcionales y comentarios.
-		  No existen caracteres de escape, ni listas, ni notación simplificada.
+		  dos tipos de nodo (`Nombre: valor` o `Nombre >>`), namespaces opcionales y comentarios.
+		  No existen caracteres de escape, listas ni notación simplificada.
 		* **Sencillo de implementar.** Un parser conforme es un recorrido línea a línea con
-		  una pila. Los esquemas y validaciones son capas aparte opcionales.
+		  una pila. Los esquemas y validaciones son capas aparte y opcionales.
 
 	Subheader: 3. Seguridad desde el diseño
 
 	Content >>
-		@STXT@ aplica la seguridad en las propias decisiones de diseño, no como un
-		añadido posterior. De aquí, por ejemplo, la ausencia de características,
-		o la restricción de los caracteres de namespaces a ASCII alfanumérico.
+		@STXT@ aplica la seguridad en las propias decisiones de diseño y no como un
+		añadido posterior. De ahí, por ejemplo, la ausencia de características
+		o la restricción de los caracteres de los namespaces a ASCII alfanumérico.

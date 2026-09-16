@@ -1,39 +1,35 @@
 Document (dev.stxt.website): Stability and versions | STXT
 
 	Metadata:
-		Last modif: 2026-09-08
-		Description: STXT is a living language with a stable core. Each specification carries a date and a status, Genesis, Aurora, Zenith or Twilight, instead of a version number; what each status promises and what else is stable.
+		Last modif: 2026-09-16
+		Description: STXT is a living language with a stable core. Each specification carries a date and a status (Genesis, Aurora, Zenith or Twilight) instead of a version number; the status defines the level of stability.
 
 	Header: Stability and versions
 
 	Assert >>
-		**A document valid today in @STXT@ stays valid forever**.
+		**The syntax of @STXT@ is stable, with no changes planned**.
 
 	Subheader: A living language, with a stable core
 
 	Content >>
-		@STXT@ evolves. The specifications carry no version number: each one carries in its
-		`Metadata` the **date** of its current text (`Last modif`) and a **status**
-		(`Status`) that says how much stability it promises. The core (the syntax and the
-		canonical tree) is in Zenith and does not change incompatibly; the schema, template
-		and discovery layers keep evolving, each at its own pace.
+		**@STXT@ has evolved**. Today the core is stable and no incompatible changes are expected.
+		Schemas and templates are stable too, but an incompatible change is not ruled out.
 
-	Subheader: The four statuses
+		For this reason, instead of a numbering, a descriptive system with two variables has been established:
 
-	Content >>
-		| Status | Promise |
+		* **Date** in force: last modification of the document
+		* **Status**: indicates the level of stability
+
+		| Status | Level of stability |
 		|---|---|
 		| **Genesis** | Under construction. Anything may change. |
-		| **Aurora** | Usable. Few changes are expected; an incompatible one is always announced, with a date and a migration path. |
-		| **Zenith** | Stable. What is valid stays valid and means the same; things are only added, and what is added is compatible. |
-		| **Twilight** | On the way to retirement. No further changes, except errata. |
+		| **Aurora** | Usable. Few changes are expected. An incompatible change is announced. |
+		| **Zenith** | Stable. There should be no incompatible change. Whatever is added is always compatible with what exists. |
+		| **Twilight** | Marked as obsolete, with no changes except errata. |
 
-		A status **only moves forward**, in that order. An **incompatible** change is one
-		that makes a valid document invalid or changes its meaning; a clarification of the
-		text that does not change the intent only updates `Last modif`. The normative
-		definition is in [STXT-SPEC §1.1](stxt-core-ref#s1-1).
+		The status **only moves forward**, in the order above.
 
-	Subheader: The status of each specification
+	Subheader: Current status of the specifications
 
 	Content >>
 		| Specification | Status | Since |
@@ -43,59 +39,3 @@ Document (dev.stxt.website): Stability and versions | STXT
 		| [STXT-SCHEMA-SPEC](stxt-schema-ref), schemas | **Aurora** | 2026-09-07 |
 		| [STXT-TEMPLATE-SPEC](stxt-template-ref), templates | **Aurora** | 2026-09-07 |
 		| [STXT-DISCOVERY-SPEC](stxt-discovery-ref), locating definitions | **Aurora** | 2026-09-07 |
-
-		"@STXT@", said on its own, is STXT-SPEC, and it is in Zenith: what an @STXT@ document
-		is, how it is parsed and which tree it produces will not change. If an incompatible
-		change to the core were ever needed, there would be no "STXT 2": there would be a new
-		specification, with a new name, living alongside this one. A schema or a template is
-		an @STXT@ document and never stops parsing; what may change in Aurora is a validation
-		or resolution rule.
-
-	Subheader: What else is stable, and what is not
-
-	Content >>
-		Stable, across all implementations:
-
-		* **The canonical tree** of [STXT-TREE-SPEC](stxt-tree-ref): the JSON from
-		  `stxt describe` and from the libraries, with the same fields and the same result.
-		* **The error codes** (`INDENTATION_MIXED`, `CHILD_NOT_DECLARED`,
-		  `SCHEMA_NOT_FOUND`...): never renamed or reused.
-		* **The API of each library** within its 1.x line, and in the
-		  [command line](tools-cli), what goes to machines: the exit codes `0`/`1`/`2` and
-		  `--format json`.
-
-		Not stable:
-
-		* **The text of error messages**: the code is stable and the wording may change.
-		* **The command-line output meant for people**: the `validate` report, the `--help`
-		  text.
-		* **The convenience facades and adapters** of the libraries, outside the core API.
-		* **The recommendations** (*SHOULD* in the specifications): they may be refined
-		  without any document becoming invalid.
-
-	Subheader: Specification date and package version
-
-	Content >>
-		Specifications carry a date and a status; libraries (`@stxt-lang/core` on npm,
-		`dev.stxt:stxt-core` on Maven Central, `stxt` on PyPI) carry the semantic version of
-		their package, which rises when the library changes, not when the language changes.
-		Conformance is declared against the specification, not the package, and is
-		demonstrated with the
-		[conformance kit](https://github.com/stxt-lang/stxt-lang/tree/master/conformance):
-		the kit fixes the date of each specification it certifies, and a conforming
-		implementation exposes the STXT-SPEC one as `SPEC_VERSION`, with a `YYYY-MM-DD`
-		value. The cases that exercise a SHOULD or MAY rule of the specifications are optional,
-		and the declaration says whether the implementation passes all the cases of the profile
-		or only the required ones; the three official ones pass all. Two libraries with different versions that expose the same date read the same
-		@STXT@. The kit date only identifies the bundle: if a new kit only moves the
-		date of one specification, the implementations that do not cover it stay conformant
-		to theirs, with no need to certify again.
-
-	Subheader: How a change is announced
-
-	Content >>
-		Every status advance, and every incompatible change in Aurora, is announced with its
-		date: in the specification itself (`Status` and `Last modif`), in the release notes
-		of the [specification repository](https://github.com/stxt-lang/stxt-lang/releases)
-		and on this page. The conformance kit is regenerated with the new date, and the
-		implementations that pass it expose it in `SPEC_VERSION`.

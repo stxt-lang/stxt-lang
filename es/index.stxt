@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT: un lenguaje para documentos basado en identación, con esquemas y namespaces
+Document (dev.stxt.website): STXT: un lenguaje para documentos basado en indentación, con esquemas y namespaces
 	Metadata:
 		Last modif: 2026-09-16
 		Description: STXT es un lenguaje de texto basado en indentación, Human-First, para documentos y datos: sin caracteres de escape, sin llaves ni etiquetas, solo indentación.
@@ -16,14 +16,14 @@ Document (dev.stxt.website): STXT: un lenguaje para documentos basado en identac
 		* **La indentación es la estructura**: sin llaves ni etiquetas de cierre
 		* **El texto libre es literal**: sin caracteres de escape
 		* **Esquemas con @stxt.template o @stxt.schema**: validación y estructura escritos en @STXT@
-		* **Seguridad**: la seguridad no es un añadido, forma parte del diseño del lenguaje.
+		* **Seguridad**: la seguridad no es un añadido, forma parte del diseño del lenguaje
 
 		Un documento @STXT@ combina legibilidad y semántica,
-		haciéndolo adecuado en muchos ámbitos, como por ejemplo:
-		
+		lo que lo hace adecuado en muchos ámbitos, por ejemplo:
+
 		* [Wikis y documentos corporativos](use-cases-corporate-docs)
 		* [Gestores de contenido (CMS)](use-cases-cms)
-		* [Generación vía LLM's](ai-llms)
+		* [Generación vía LLMs](ai-llms)
 		* [Ficheros de configuración](use-cases-config-files)
 
 	Subheader: Documentos sin namespaces
@@ -80,10 +80,10 @@ Document (dev.stxt.website): STXT: un lenguaje para documentos basado en identac
 		más a XML en su diseño: conjuntos de nodos de texto anidados, ordenados, con namespaces y esquemas.
 		Se eliminan etiquetas de cierre, atributos, referencias y entidades.
 
-		Como YAML, la identación es la estructura, pero limita el número de construcciones
-		de texto a 2: Nodos inline `:` y Nodos bloque de texto `>>`; ambos **sin caracteres de escape**.
+		Como YAML, la indentación es la estructura, pero limita el número de construcciones
+		de texto a dos: nodos inline `:` y nodos bloque de texto `>>`; ambos **sin caracteres de escape**.
 
-		Como NestedText, todo es texto. Pero al tener namespaces, se pueden definir esquemas, 
+		Como NestedText, todo es texto. Pero al tener namespaces, se pueden definir esquemas,
 		lo que permite validación y semántica sin tener que recurrir a otros lenguajes.
 
 		Al preservar el orden de los nodos, no se necesita una nomenclatura adicional para listas,
@@ -94,6 +94,6 @@ Document (dev.stxt.website): STXT: un lenguaje para documentos basado en identac
 	Content >>
 		* Probar STXT en el [playground](https://play.stxt.dev)
 		* Leer el [tutorial](tutorial)
-		* Leer las FAQ [FAQ](faq)
+		* Leer las [FAQ](faq)
 		* Instalar las [herramientas](tools) que se necesiten: `stxt` en línea de comandos,
 		  la extensión de VS Code o alguna biblioteca (Java, TypeScript, Python).
