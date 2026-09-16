@@ -16,6 +16,8 @@ Document (dev.stxt.website): Principios de diseño | STXT
 		Este es el principio del que salen los demás. Un documento @STXT@ debe poder leerse y
 		escribirse sin herramientas. De ahí que no haya caracteres de escape, llaves, corchetes,
 		comillas obligatorias ni etiquetas de cierre, y que un documento parezca un esquema.
+		
+		Ante una duda de diseño, se aplica este principio para resolverla.
 
 	Subheader: 2. KISS, la sencillez por encima de todo
 
@@ -28,3 +30,9 @@ Document (dev.stxt.website): Principios de diseño | STXT
 		* **Sencillo de implementar.** Un parser conforme es un recorrido línea a línea con
 		  una pila. Los esquemas y validaciones son capas aparte opcionales.
 
+	Subheader: 3. Seguridad desde el diseño
+
+	Content >>
+		@STXT@ aplica la seguridad en las propias decisiones de diseño, no como un
+		añadido posterior. De aquí, por ejemplo, la ausencia de características,
+		o la restricción de los caracteres de namespaces a ASCII alfanumérico.
