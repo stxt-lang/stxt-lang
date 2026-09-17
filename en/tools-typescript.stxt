@@ -1,22 +1,20 @@
 Document (dev.stxt.website): The TypeScript library | STXT
 
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-17
 		Description: @stxt-lang/core, the STXT parser for TypeScript and JavaScript on npm: the reference port of the ecosystem, implementing all five specifications.
 
 	Header: The TypeScript library
 
 	Assert >>
 		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) is the @STXT@
-		parser for TypeScript and JavaScript, and the reference port of the ecosystem:
-		the [command line](tools-cli), the VS Code extension and the
-		[playground](https://play.stxt.dev) run on it and carry no parser of their own. It
-		implements the five specifications (syntax, canonical tree, schemas, templates and
-		resolution) and reports the same error codes as the [Java](tools-java) and
-		[Python](tools-python) libraries.
+		parser for TypeScript and JavaScript. It implements the five specifications and
+		reports the same error codes as the [Java](tools-java) and [Python](tools-python)
+		libraries.
 
 	Content >>
-		Everything shown here comes from a single entry point, with no internal sub-paths.
+		It is the library behind the [command line](tools-cli), the VS Code extension and
+		the [playground](https://play.stxt.dev).
 
 	Subheader: Installation
 
@@ -24,24 +22,19 @@ Document (dev.stxt.website): The TypeScript library | STXT
 		npm install @stxt-lang/core
 
 	Content >>
-		The package ships as CommonJS with type declarations, so it works the same from
-		TypeScript, from `require` and from ES modules (`import { Parser } from
-		'@stxt-lang/core'`). It has no runtime dependencies and touches neither the
-		file system nor the environment (those are injected, as shown under
-		*Resolution*), so it runs equally in Node and in the browser: the playground is
-		this very library bundled for the client. Its version, and that of the CLI that
-		carries it, show up in `stxt --version`; the JSDoc travels in the `.d.ts`, so the
-		editor shows the documentation of each method on hover.
+		It ships as CommonJS with type declarations, and works from TypeScript, from
+		`require` and from ES modules. Everything is imported from the package root. It has
+		no runtime dependencies and accesses neither the file system nor the environment
+		(resolution receives them injected), so it runs the same in Node and in the browser.
 
 	Subheader: Parsing
 
 	Content >>
-		`Parser` has two entry points for a text in memory (the third, `parseStream`, is
-		described below). `parseResult(text)` collects every error and
-		also returns the nodes it managed to build; `parse(text)` throws a
-		`ParseException` on the first one and returns `Node[]` when there is none. The
-		former suits an editor or a validator; the latter, a program in which an invalid
-		document is an exception.
+		| Entry point          | Behaviour                                                                                  |
+		|----------------------|--------------------------------------------------------------------------------------------|
+		| `parseResult(text)`  | Collects every error and also returns the nodes it managed to build                        |
+		| `parse(text)`        | Throws a `ParseException` on the first error; with no errors, returns `Node[]`             |
+		| `parseStream(lines)` | Retains no nodes or errors; see *Streaming and parser limits*                              |
 
 	TypeScript >>
 		import { Parser, ParseResult, ParseException } from '@stxt-lang/core';
@@ -64,37 +57,37 @@ Document (dev.stxt.website): The TypeScript library | STXT
 		}
 
 	Content >>
-		Every error is a `ParseException` with three fields: **`line`** (the line of the
-		document, starting at 1), **`code`** (stable, upper-case: `INVALID_LINE`,
-		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`...) and **`message`**. Grammar
-		errors are `ValidationException`, a subclass with the same fields, so a single loop
-		walks both and `instanceof` tells the severity apart. A document with a syntax
-		error may still return nodes: the parser recovers and carries on, so that an editor
-		can underline everything that is wrong at once.
+		Every error is a `ParseException` with `line` (from 1), `code` and `message`. Grammar
+		errors are `ValidationException`, a subclass: a single loop walks both kinds and
+		`instanceof` tells them apart. After a syntax error the parser recovers and carries
+		on, and the result may include nodes.
 
 	Subheader: The tree
 
 	Content >>
-		`Node` is an abstract class with exactly two forms, and each one exposes only what
-		is its own:
+		`Node` is an abstract class with two forms:
 
-		| Class        | Syntax        | What it owns                                                                                                 |
+		| Class        | Syntax        | Own methods                                                                                                  |
 		|--------------|---------------|--------------------------------------------------------------------------------------------------------------|
 		| `InlineNode` | `Name: value` | `getValue()`/`setValue()`, `getChildren()`, `getChild(name)`, `getChildrenByName(name)`, `addChild()`, `removeChild()`, `addInlineNode()`, `addTextNode()` |
 		| `TextNode`   | `Name >>`     | `getTextLines()`, `setText()`, `setTextLines()`, `addTextLine()`, `clearText()`                                |
 
-		What they share lives in `Node`: `getName()` and `getCanonicalName()` (the canonical
-		name of STXT-SPEC: lower-case, NFC, unified separators), `getDeclaredNamespace()`
-		(what the node writes between parentheses, or `""`) and `getNamespace()` (the
-		**effective** one, inherited through the chain of parents), `getLine()`,
-		`getLevel()` (derived from the depth), `getParent()` (always an `InlineNode`, or
-		`null` at the root), `detach()` and `getText()`, which gives the value of an inline node or the
-		joined lines of a block. Walking a tree means asking for the form with
-		`instanceof`, which in TypeScript also narrows the type, the same way the canonical
-		tree of STXT-TREE-SPEC has `children` only for inline nodes and `lines` only for
-		blocks.
+		Common methods, in `Node`:
 
-		With the document of the [tutorial](tutorial), a book record:
+		| Method                    | Description                                                                       |
+		|---------------------------|-----------------------------------------------------------------------------------|
+		| `getName()`               | The name as written                                                               |
+		| `getCanonicalName()`      | The canonical name ([STXT-SPEC §4.3](stxt-core-ref#s4-3))                         |
+		| `getDeclaredNamespace()`  | The namespace written between parentheses, or `""`                                |
+		| `getNamespace()`          | The effective namespace, inherited from the parents                               |
+		| `getLine()`               | The line of the document                                                          |
+		| `getLevel()`              | The level, derived from the depth                                                 |
+		| `getParent()`             | The parent `InlineNode`, or `null` at the root                                    |
+		| `getText()`               | The value of an inline node, or the joined lines of a block                       |
+		| `detach()`                | Detaches the node from its parent                                                 |
+
+		The form of a node is told apart with `instanceof`. With the document of the
+		[tutorial](tutorial):
 
 	Code >>
 		Book (com.acme.book):
@@ -148,14 +141,15 @@ Document (dev.stxt.website): The TypeScript library | STXT
 	Subsubheader: Building and editing
 
 	Content >>
-		Trees are mutable and keep their own integrity: every node knows its parent,
-		`addChild` links both ends and refuses a node that already has one
-		(`NODE_ALREADY_ATTACHED`) or that is an ancestor (`NODE_CYCLE`), and `setValue` and
-		`addTextLine` refuse a line break (`LINE_BREAK_NOT_ALLOWED`); `removeChild` and
-		`detach()` undo it. Levels are derived from the chain of parents, and the line is
-		only set by the parser. In the factories with two strings, the second one is always
-		the **content** (value or text); the namespace only appears in the three-argument
-		form.
+		Trees are mutable:
+
+		* `addChild` refuses a node that already has a parent (`NODE_ALREADY_ATTACHED`) or
+		  that is an ancestor (`NODE_CYCLE`); `removeChild` and `detach()` detach it.
+		* `setValue` and `addTextLine` refuse a line break (`LINE_BREAK_NOT_ALLOWED`).
+		* The level is derived from the chain of parents, and the line is only set by the
+		  parser.
+		* In the factories with two strings, the second one is the content (value or text);
+		  the namespace only appears in the three-argument form.
 
 	TypeScript >>
 		import { InlineNode, TextNode } from '@stxt-lang/core';
@@ -181,14 +175,10 @@ Document (dev.stxt.website): The TypeScript library | STXT
 	Subheader: Validating against a schema or a template
 
 	Content >>
-		Grammars are @STXT@ documents in the reserved namespaces `@stxt.schema` and
-		`@stxt.template`; the template is the short authoring form and compiles to a
-		schema when loaded. `UnifiedSchemaProvider` loads either kind with
-		`addFile(text)`: it parses, validates against the corresponding meta-schema and
-		registers the schema by namespace. Validation is a `Validator` registered on the
-		`Parser` that runs on each node as it is closed; it only validates nodes with a
-		namespace, which is the rule of the language (STXT-SCHEMA-SPEC §5): a document
-		without a namespace is not invalid, but it cannot be validated.
+		`UnifiedSchemaProvider` loads schemas and templates with `addFile(text)`: it parses
+		the definition, validates it against its meta-schema and registers the schema by
+		namespace. `SchemaValidator` is a `Validator` that is registered on the `Parser` and
+		validates each node with a namespace as it is closed.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -225,52 +215,40 @@ Document (dev.stxt.website): The TypeScript library | STXT
 		}
 
 	Content >>
-		With a book that lacks its `ISBN` and whose date is not `YYYY-MM-DD`, the loop
-		prints exactly what `stxt validate` would print:
+		With a book without `ISBN` and with a date that is not `YYYY-MM-DD`, the loop prints:
 
 	Listing >>
 		schema line 6 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
 		schema line 1 [TOO_FEW_CHILDREN]: 0 nodes of 'com.acme.book:isbn' and min is 1
 
 	Content >>
-		Behaviour rules:
-
-		* A cardinality error is reported on the line of the **parent**, which is the one
-		  with zero `ISBN`.
-		* If the document uses a namespace the provider does not know, each node produces
-		  a `SCHEMA_NOT_FOUND`; the provider never throws for a missing namespace
-		  (`getSchema()` returns `undefined`).
-		* Nodes without a namespace are not validated (a rule of `SchemaValidator` itself);
-		  a document that is itself a definition is always validated against its
-		  meta-schema.
-		* `addFile` accepts files with several definitions, and `getAllSchemas()` lists
-		  them; `clear()` empties the provider.
-		* The available value types are those of STXT-SCHEMA-SPEC: `INLINE`, `BLOCK`,
-		  `TEXT`, `MARKDOWN`, `BOOLEAN`, `INTEGER`, `NATURAL`, `NUMBER`, `DATE`, `TIME`,
-		  `TIMESTAMP`, `UUID`, `EMAIL`, `URL`, `HEXADECIMAL`, `BINARY`, `BASE64`, `GROUP`
-		  and `ENUM`.
+		* A cardinality error is reported on the line of the parent.
+		* A namespace the provider does not know produces a `SCHEMA_NOT_FOUND` per node; the
+		  provider does not throw (`getSchema()` returns `undefined`).
+		* Nodes without a namespace are not validated
+		  ([STXT-SCHEMA-SPEC §5](stxt-schema-ref#s5)). A definition is always validated
+		  against its meta-schema.
+		* `addFile` accepts files with several definitions; `getAllSchemas()` lists them and
+		  `clear()` empties the provider.
+		* All the types of [STXT-SCHEMA-SPEC §9](stxt-schema-ref#s9) are implemented.
 
 		The compiled schema can be inspected: `provider.getSchema(ns)` returns a `Schema`
 		with `getNamespace()` and `getNodeDefinition(name)`; each `NodeDefinition` has
 		`getType()`, `getChildren()` (a map of `ChildDefinition` with `getMin()` /
-		`getMax()`), `getValues()` for an `ENUM` and `getDescription()`. It is what the
-		extension uses for completion and hover.
+		`getMax()`), `getValues()` for an `ENUM` and `getDescription()`.
 
-	Subheader: Resolution: which grammar applies to a document
+	Subheader: Grammar resolution
 
 	Content >>
-		`UnifiedSchemaProvider` receives the grammar text. **Resolution** answers the
-		previous question: given a document, which definitions apply to it.
-		`DiscoveryResolver` is the reference implementation of
-		[STXT-DISCOVERY-SPEC](stxt-discovery-ref) (the `.stxt/` directories of the
-		document and of all its ancestors, then `~/.stxt` and `/etc/stxt`, per-namespace
-		precedence, `STXT_PATH` replacing the chain), and it is the same one the CLI and
-		the extension use, so all three agree by construction.
+		`DiscoveryResolver` implements [STXT-DISCOVERY-SPEC](stxt-discovery-ref): given the
+		directory of a document, it determines which definitions apply to it (the `.stxt/`
+		directories of the document and of its ancestors, then `~/.stxt` and `/etc/stxt`,
+		with per-namespace precedence; `STXT_PATH` replaces the chain). It is the resolver
+		of the CLI and of the extension.
 
-		The resolver accesses neither the file system nor the environment by itself: a
-		`DiscoveryFileSystem` and a `DiscoveryEnvironment` are injected. That is what lets
-		the same logic run over Node's `fs`, over an editor's virtual file system or over
-		an in-memory tree in a test. Adapters for Node:
+		It accesses neither the file system nor the environment: it receives a
+		`DiscoveryFileSystem` and a `DiscoveryEnvironment`, which may be Node's `fs`, an
+		editor's virtual file system or an in-memory tree in a test. Adapters for Node:
 
 	TypeScript >>
 		import * as fs from 'fs/promises';
@@ -305,11 +283,9 @@ Document (dev.stxt.website): The TypeScript library | STXT
 		}
 
 	Content >>
-		With those in place, resolving a document and validating it are two steps,
-		because `DiscoveryResult` implements `SchemaProvider` and is passed directly to
-		the validator. The chain is per document: pass the directory it lives in (`null`
-		for standard input or an unsaved buffer, which starts the chain at the user
-		level).
+		`resolve` takes the directory of the document, or `null` for standard input or an
+		unsaved buffer; in that case the chain starts at the user level. `DiscoveryResult`
+		implements `SchemaProvider` and is passed directly to the validator:
 
 	TypeScript >>
 		import { Parser, SchemaValidator, DiscoveryResolver } from '@stxt-lang/core';
@@ -319,7 +295,7 @@ Document (dev.stxt.website): The TypeScript library | STXT
 
 		discovery.getChain();        // ["/home/ana/libros/.stxt"]  (every ancestor, nearest first)
 
-		// Resolution errors are collected, never thrown: report them and carry on
+		// Resolution errors are collected, not thrown
 		for (const error of discovery.getErrors()) {
 		    console.error(`[${error.code}] ${error.file}: ${error.message}`);
 		}
@@ -329,9 +305,7 @@ Document (dev.stxt.website): The TypeScript library | STXT
 		const result = parser.parseResult(documentText);
 
 	Content >>
-		`DiscoveryResult` also records where each grammar came from, which is what an
-		editor needs for "go to definition" or a diagnostic that names the origin of the
-		applied definition:
+		`DiscoveryResult` also records the origin of each definition:
 
 	TypeScript >>
 		const definition = discovery.getDefinition('com.acme.book');
@@ -343,24 +317,20 @@ Document (dev.stxt.website): The TypeScript library | STXT
 		discovery.getAllSchemas();          // just the schemas of the above
 
 	Content >>
-		Levels are cached by directory: resolving many documents that share ancestors reads
-		each `.stxt/` once. Call `resolver.clearCache()` when the definition files may have
-		changed (from a file watcher, for instance). The resolution error codes are
-		`DISCOVERY_DUPLICATE_NAMESPACE`, `DISCOVERY_NOT_A_DEFINITION`,
-		`DISCOVERY_NOT_PARSEABLE` and `DISCOVERY_INVALID_DEFINITION`; `DiscoveryError` is a
-		data class (`code`, `file`, `message`, `namespace`) and not an exception, because the
-		spec wants a bad definition reported without stopping the load of the rest.
+		Levels are cached by directory; `resolver.clearCache()` invalidates them when the
+		definition files may have changed. Errors are `DiscoveryError` (`code`, `file`,
+		`message`, `namespace`), with the codes `DISCOVERY_DUPLICATE_NAMESPACE`,
+		`DISCOVERY_NOT_A_DEFINITION`, `DISCOVERY_NOT_PARSEABLE` and
+		`DISCOVERY_INVALID_DEFINITION`.
 
 	Subheader: The canonical tree as JSON
 
 	Content >>
-		`toCanonicalTree(nodes)` turns the root nodes into the JSON value of
-		[STXT-TREE-SPEC](stxt-tree-ref), the same one `stxt describe` emits, and
-		`toCanonicalJson(nodes)` serialises it with two-space indentation. It is an
-		explicit function and not a `JSON.stringify` over the node: it emits only the normative
-		fields, `children` for inline nodes and `lines` for blocks, with no positions or
-		comments. The types `CanonicalDocument`, `CanonicalNode`, `CanonicalInlineNode`
-		and `CanonicalBlockNode` describe the result.
+		`toCanonicalTree(nodes)` returns the JSON value of [STXT-TREE-SPEC](stxt-tree-ref),
+		the same one `stxt describe` emits, and `toCanonicalJson(nodes)` serialises it with
+		two-space indentation. They emit only the normative fields, with no positions or
+		comments. The types `CanonicalDocument`, `CanonicalNode`, `CanonicalInlineNode` and
+		`CanonicalBlockNode` describe the result.
 
 	TypeScript >>
 		import { Parser, toCanonicalTree, toCanonicalJson, CanonicalDocument } from '@stxt-lang/core';
@@ -375,12 +345,11 @@ Document (dev.stxt.website): The TypeScript library | STXT
 	Subheader: Writing STXT
 
 	Content >>
-		`NodeWriter` performs the inverse operation: it serialises a node, or a list of documents, to
-		@STXT@ text in the canonical form of [STXT-TREE-SPEC §11](stxt-tree-ref#s11), with
-		`IndentStyle.TABS` (default) or `IndentStyle.SPACES_4`. It writes the namespace only
-		where it changes from the parent's, wherever the source declared it. Since it starts from the
-		logical tree, a text that goes through `parse` and `NodeWriter` comes out without
-		comments or blank lines outside blocks, which is what `stxt format --clean` does.
+		`NodeWriter` serialises a node, or a list of root nodes, in the canonical form of
+		[STXT-TREE-SPEC §11](stxt-tree-ref#s11), with `IndentStyle.TABS` (default) or
+		`IndentStyle.SPACES_4`. It writes the namespace only where it changes from the
+		parent's. Since it starts from the tree, the output has no comments or blank lines
+		outside blocks; it is what `stxt format --clean` does.
 
 	TypeScript >>
 		import { NodeWriter, IndentStyle } from '@stxt-lang/core';
@@ -389,42 +358,36 @@ Document (dev.stxt.website): The TypeScript library | STXT
 		const all = NodeWriter.toSTXTDocs(result.getNodes(), IndentStyle.SPACES_4);   // a whole document
 
 	Content >>
-		The reformatting that **keeps** comments and blank lines is `Formatter`
-		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)):
-		it rewrites the original text line by line (the lines that open a node in canonical
-		form, those of a block at the level of the block, the rest as they are, with their
-		indentation units converted to the requested style) and returns, along with the text,
-		the syntax errors it met, so that the caller decides what to do with a document that
-		does not parse. It is the formatter behind `stxt format`, the extension and the
-		playground.
-
-	TypeScript >>
-		import { Formatter, IndentStyle } from '@stxt-lang/core';
-
-		const { text, errors } = Formatter.format(source, IndentStyle.TABS);
-
-	Content >>
 		The `email` built above, written with `toSTXT`:
 
 	Code >>
-		Email (com.example.mail): Weekly report
+		Email (com.example.docs): Weekly report
 			To:
 				Address: bob@example.com
 			From: Ana García <ana@example.com>
 			Body >>
 				Hi Bob,
 
-				See attached.
+				See the new attachment.
+
+	Content >>
+		`Formatter` ([STXT-TREE-SPEC §12](stxt-tree-ref#s12)) reformats while keeping
+		comments and blank lines: it rewrites the original text line by line and returns,
+		along with the text, the syntax errors it found. It is the formatter of
+		`stxt format`, the extension and the playground.
+
+	TypeScript >>
+		import { Formatter, IndentStyle } from '@stxt-lang/core';
+
+		const { text, errors } = Formatter.format(source, IndentStyle.TABS);
 
 	Subheader: Observing the parse
 
 	Content >>
-		`Observer` receives streaming callbacks while the document is parsed:
-		`onCreate(node, line)` when a node is opened (already with its parent, effective
-		namespace and level), `onFinish(node)` when it is closed, `onComment(lineNumber,
-		line)` and `onTextLine(node, lineNumber, lineString, line)` for each line of a
-		block. It is the basis of the extension's semantic colouring and of the line→node
-		map of `Formatter`.
+		A registered `Observer` receives calls during the parse: `onCreate(node, line)` when
+		a node is opened (already with its parent, effective namespace and level),
+		`onFinish(node)` when it is closed, `onComment(lineNumber, line)` for each comment
+		and `onTextLine(node, lineNumber, lineString, line)` for each line of a block.
 
 	TypeScript >>
 		import { Parser, Observer, Node, TextNode, Line } from '@stxt-lang/core';
@@ -443,13 +406,13 @@ Document (dev.stxt.website): The TypeScript library | STXT
 	Subheader: Streaming and parser limits
 
 	Content >>
-		`parseStream(lines)` takes an iterable of lines (each without its line break; for
-		instance, a file read lazily) and retains nothing: no nodes, no errors. The results
-		reach the program only through a `StreamObserver`: `onRootNode(node)` with each
-		complete, already validated root node, which the parser releases right after the call,
-		and `onError(error)` with each error, syntactic or validation. The memory in use is one
-		root tree at a time, and it is the entry point for files that do not fit in memory. A
-		registered `StreamObserver` receives the same calls with `parse` and `parseResult` too.
+		`parseStream(lines)` takes an iterable of lines, each without its line break, and
+		retains no nodes or errors. The results arrive through a `StreamObserver`:
+		`onRootNode(node)` with each complete, already validated root node, which the parser
+		releases after the call, and `onError(error)` with each error, syntax or validation.
+		The memory in use is that of one root tree, which allows processing files that do not
+		fit in memory. A registered `StreamObserver` receives the same calls with `parse` and
+		`parseResult`.
 
 	TypeScript >>
 		import { Parser, StreamObserver, Node, ParseException } from '@stxt-lang/core';
@@ -470,9 +433,9 @@ Document (dev.stxt.website): The TypeScript library | STXT
 		The parser applies the limits of [STXT-SPEC §11.2](stxt-core-ref#s11-2), configurable
 		in the constructor with `ParserOptions`: `maxNesting` (100 levels), `maxLineLength`
 		(10,000 characters) and `maxInputSize` (10,000,000 characters); `-1` disables one.
-		Exceeding a limit produces a `LimitException` (a subclass of `ParseException` with the
+		Exceeding a limit produces a `LimitException` (a subclass of `ParseException`, with the
 		codes `LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` and
-		`LIMIT_INPUT_SIZE_EXCEEDED`) and aborts the parse: it is always the last error.
+		`LIMIT_INPUT_SIZE_EXCEEDED`) and aborts the parse.
 
 	TypeScript >>
 		const parser = new Parser({ maxNesting: 50, maxInputSize: -1 });
@@ -480,7 +443,7 @@ Document (dev.stxt.website): The TypeScript library | STXT
 	Subheader: The API surface
 
 	Content >>
-		The package exports; nothing else is a contract:
+		The package exports; the rest is not public API:
 
 		| Group                | Exports                                                                                                                |
 		|----------------------|------------------------------------------------------------------------------------------------------------------------|
@@ -492,11 +455,8 @@ Document (dev.stxt.website): The TypeScript library | STXT
 		| Runtime              | `UnifiedSchemaProvider`, `NodeWriter`, `IndentStyle`, `Formatter`, `FormatResult`, `toCanonicalTree`, `toCanonicalJson` and the `Canonical*` types |
 		| Resolution           | `DiscoveryResolver`, `DiscoveryOptions`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryFileSystem`, `DiscoveryEntry`, `DiscoveryEnvironment` |
 
-		From 1.0 on this API is frozen within the package's 1.x line, and the language
-		and the canonical tree are frozen for good: STXT-SPEC and STXT-TREE-SPEC are in
-		*Zenith* status, and a document that parses today parses the same tomorrow. What
-		exactly is frozen, what is not, and why the package version is not the specification
-		date, in [Stability and versions](stability). The release notes of
-		each version are in the [repository](https://github.com/stxt-lang/stxt-js), which
-		is also where parser and validation errors are reported, including those seen
-		through the CLI, the extension or the playground.
+		The package follows semantic versioning: the API does not change incompatibly within
+		the 1.x line. The status of each specification is in
+		[Stability and versions](stability). The changes of each version are in the
+		[repository](https://github.com/stxt-lang/stxt-js), which is also where parsing and
+		validation errors seen through the CLI, the extension or the playground are reported.

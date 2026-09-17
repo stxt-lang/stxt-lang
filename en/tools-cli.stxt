@@ -1,23 +1,20 @@
 Document (dev.stxt.website): The command line | STXT
 
 	Metadata:
-		Last modif: 2026-09-08
+		Last modif: 2026-09-17
 		Description: stxt, the official STXT command line: validate, format and describe documents from the terminal or CI, with the same error codes as the libraries.
 
 	Header: The command line
 
 	Assert >>
-		`stxt` is the official @STXT@ command: it validates, formats and describes documents
-		from a terminal, a `Makefile` or a continuous-integration job. It is an interface
-		over the [TypeScript](tools-typescript) library `@stxt-lang/core` and carries no
-		parser of its own, so it reports the same errors, with the same codes, as the
-		VS Code extension, the playground and the Java and Python libraries. It is also
-		the only command line in the ecosystem: the libraries do not include one.
+		`stxt` validates, formats and describes @STXT@ documents from a terminal, a script or
+		a continuous-integration job.
 
 	Content >>
-		The use of the commands on a complete project, with its `.stxt/` directory and
-		VS Code, is described in [The working environment](working-environment); the other
-		tools, in [Tools](tools).
+		It uses the [TypeScript](tools-typescript) library `@stxt-lang/core` and carries no
+		parser of its own: the errors and their codes are the same as in the VS Code
+		extension, the playground and the libraries. Its use on a complete project, with its
+		`.stxt/` directory, is in [The working environment](working-environment).
 
 	Subheader: Installation
 
@@ -30,26 +27,18 @@ Document (dev.stxt.website): The command line | STXT
 		npm install -g @stxt-lang/cli
 		stxt --version
 
-		stxt 1.0.2 (@stxt-lang/core 1.0.2, spec 2026-09-07)
+		stxt 1.0.3 (@stxt-lang/core 1.0.3, spec 2026-09-07)
 
 	Content >>
-		`--version` prints two versions and a date: the command's version, that of the parser it
-		embeds, and the date of the STXT specification the parser implements (the STXT-SPEC date
-		pinned by the conformance kit). The first two state what is installed; the date, which
-		specification it conforms to: two installations with different packages read the same
-		STXT as long as the spec date matches.
-		Without a permanent installation, every command works through `npx`:
+		`--version` prints the version of the command, that of the library and the date of
+		the STXT-SPEC the library implements. Without installing, through `npx`:
 
 	Listing >>
 		npx @stxt-lang/cli validate --recursive docs/
 
 	Content >>
-		To update, `npm update -g @stxt-lang/cli`; to remove it,
-		`npm uninstall -g @stxt-lang/cli`. From the package's 1.0 on, the commands, their
-		options, the exit codes and `--format json` are stable within its 1.x line, and the
-		human-facing output is not (see [Stability and versions](stability)). The version number
-		and the release notes are in the
-		[repository](https://github.com/stxt-lang/stxt-cli).
+		Within the 1.x line of the package, the commands, their options, the exit codes and
+		`--format json` are stable. The text output may change.
 
 	Subheader: Synopsis
 
@@ -72,97 +61,66 @@ Document (dev.stxt.website): The command line | STXT
 		| `stxt schemas`                   | Shows the resolution chain and which grammar applies to each namespace              |
 		| `stxt install`                   | Validates a grammar and installs it into a level of the resolution chain            |
 
-		Interface conventions, common to every command:
+		Conventions common to every command:
 
-		* Every option has a single long form, with a double dash (`--recursive`). Only
-		  four have a short alias, the usual Unix conventions:
+		* Options are long, with a double dash. Four have a short alias:
 		  `-v` (`--version`), `-h` (`--help`), `-r` (`--recursive`) and `-w` (`--write`).
-		* `--version` and `--help` are honoured in any position and take precedence over
-		  the rest: `stxt validate --help` prints the general help (there is no
-		  per-command help).
-		* An unknown option (single-dash ones included) or a non-existent command are
-		  **usage errors**: they exit with code `2` without performing any action.
-		* Results (findings, JSON, formatted documents, listings) go to standard output;
-		  usage and read errors go to standard error, and so do the syntax errors of
-		  `format` and `describe` (the report of `validate` is the result, and goes to
-		  standard output).
-		* `-` denotes standard input in `validate`, `format` and `describe`, following the
-		  Unix convention: a document arriving through a pipe is processed like a file and
-		  reported as `<stdin>`. It can be given only once. Without an argument, no
-		  command reads standard input: that is a usage error.
-		* **No command rewrites files without an explicit option**: `format` only writes
-		  with `--write`, and `install` only overwrites with `--force`.
+		* `--version` and `--help` are accepted in any position and take precedence. There is
+		  no per-command help: `stxt validate --help` prints the general one.
+		* An unknown option or command is a usage error: code `2`, with no action performed.
+		* Results go to standard output, the report of `validate` included. Usage and read
+		  errors, and the syntax errors of `format` and `describe`, go to standard error.
+		* `-` denotes standard input in `validate`, `format` and `describe`, once per call,
+		  and the document is reported as `<stdin>`. Without arguments, no command reads
+		  standard input: that is a usage error.
+		* No command rewrites files without an explicit option: `format` only writes with
+		  `--write`, and `install` only overwrites with `--force`.
 
 	Subheader: Exit codes
 
 	Content >>
-		The contract is the same for every command: a CI job can tell a document failure
-		from a misuse of the command.
-
 		| Code   | Meaning                                                                                                    |
 		|--------|------------------------------------------------------------------------------------------------------------|
-		| `0`    | Success: the documents parse and validate, nothing needs reformatting, the grammar was installed...           |
+		| `0`    | Success: the documents validate, nothing needs reformatting, the definition was installed                  |
 		| `1`    | **Document failure**: syntax or grammar errors, files that `--check` would change, an unreadable file, a definition that cannot be installed, a resolution chain with errors in `schemas` |
 		| `2`    | **Misuse**: unknown command or option, missing argument, incompatible options, a directory without `--recursive` |
 
-		`stxt validate docs/ && make deploy` runs the deployment only if the documents
-		validate; a `2` in CI points at an error in the script and not in the documents.
-
 	Subheader: stxt validate
 
-	Listing >>
-		stxt validate <file|dir|->... [--recursive] [--format text|json] [--warn-schema | --no-schema]
-		              [--max-nesting N] [--max-line-length N] [--max-input-size N]
-
 	Content >>
-		For each document: it parses it, resolves its grammar chain (the `.stxt/`
-		directories of its folder and of all its ancestors, then `~/.stxt` and `/etc/stxt`,
-		or whatever `STXT_PATH` says; see *Grammar resolution*, below) and validates it
-		against the grammar of every namespace it uses. When everything passes it writes
-		nothing and exits with `0`.
+		Parses each document, resolves its grammar chain (see *Grammar resolution and
+		STXT_PATH*) and validates it against the grammar of every namespace it uses. When
+		everything passes it writes nothing and exits with `0`.
 
 		| Option              | Effect                                                                                          |
 		|---------------------|-------------------------------------------------------------------------------------------------|
 		| `--recursive`, `-r` | Descends into directories and validates all their `*.stxt`, sorted by name; `.stxt/` directories are skipped |
 		| `--format text`     | One finding per line, plus a summary (default)                                                  |
-		| `--format json`     | The same findings as a JSON array, for automated processing                                     |
+		| `--format json`     | The same findings as a JSON array                                                               |
 		| `--warn-schema`     | Grammar errors are reported as warnings and do not fail; syntax errors still do                 |
 		| `--no-schema`       | Syntax only: no grammar is resolved or applied                                                  |
 		| `--max-nesting N`, `--max-line-length N`, `--max-input-size N` | The parser limits ([STXT-SPEC §11.2](stxt-core-ref#s11-2)): nesting levels, line length and total input size; defaults `100`, `10000` and `10000000`; `-1` disables the limit |
 
-		The parser limits protect against runaway inputs, and sometimes they must be
-		raised knowingly: an event log in @STXT@ easily exceeds the default input size.
-		`stxt validate log.stxt --max-input-size -1` validates it whole. An exceeded
-		limit is reported like any other parse error and aborts the parse of that
-		document, so it is always its last finding. `validate` also parses in
-		**streaming**: it reads the file in chunks and releases each root node once
-		validated, so the memory it uses is on the order of one root node and not of the
-		document: validating a log larger than memory works.
+		A directory requires `--recursive`; without it, it is a usage error (`2`). Files,
+		directories and `-` can be mixed in the same call.
 
-		A directory as argument requires `--recursive`; without it, it is a usage error
-		(`2`), which prevents validating a directory tree by accident. Files, directories
-		and `-` can be mixed in the same call.
+		An exceeded limit is reported as one more parse error and aborts the parse of that
+		document. `validate` parses in streaming: the memory it uses is on the order of the
+		largest root node and not of the document. A document larger than the default input
+		size is validated with `--max-input-size -1`.
 
-		With `-` the document is read from standard input and called `<stdin>` in the
-		findings. Since it lives in no directory, its grammar chain is that of the current
-		directory, as if it were a file in that directory (the same chain `stxt schemas`
-		shows without an argument); run from the project root, it validates against the
-		same grammars as its files. The following example validates the version committed
-		in git of the document of the next section, with the same two findings:
+		With `-`, the grammar chain is that of the current directory, the one `stxt schemas`
+		shows without an argument:
 
 	Listing >>
 		git show HEAD:docs/book.stxt | stxt validate -
 
-		<stdin>:6: [INVALID_VALUE] Published: Invalid date (1 de octubre de 2025) (error)
-		<stdin>:1: [TOO_FEW_CHILDREN] 0 nodes of 'com.acme.book:isbn' and min is 1 (error)
-		2 error(s), 0 warning(s)
-
 	Subsubheader: The findings
 
 	Content >>
-		With the project of [The working environment](working-environment) (the `com.acme.book`
-		template in `.stxt/` and `docs/book.stxt`), a document with an invalid date and
-		without the mandatory `ISBN` produces:
+		With the project of [The working environment](working-environment) (the
+		`com.acme.book` template in `.stxt/`), a `docs/book.stxt` with an invalid date and
+		without the mandatory `ISBN`:
 
 	Listing >>
 		stxt validate docs/book.stxt
@@ -172,10 +130,9 @@ Document (dev.stxt.website): The command line | STXT
 		2 error(s), 0 warning(s)
 
 	Content >>
-		Each line is `file:line: [CODE] message (severity)`, with the absolute path of the
-		file, and a count at the end. The code is stable, upper-case and the same in every
-		tool of the ecosystem, so it can be used to filter in a script or to search the
-		specifications. The most common ones:
+		Each line is `file:line: [CODE] message (severity)`, with the absolute path, and the
+		count comes at the end. The codes are stable and the same in every tool. The most
+		common ones:
 
 		| Code                                               | Scope                                                              |
 		|----------------------------------------------------|--------------------------------------------------------------------|
@@ -185,12 +142,10 @@ Document (dev.stxt.website): The command line | STXT
 		| `DISCOVERY_DUPLICATE_NAMESPACE`, `DISCOVERY_NOT_A_DEFINITION` | The resolution chain itself ([STXT-DISCOVERY-SPEC](stxt-discovery-ref)) |
 		| `FILE_NOT_READABLE`                                | The file does not exist or cannot be read                          |
 
-		A cardinality error is reported on the line of the parent (`Book`, line 1), because
-		it is the parent that lacks the `ISBN`. Errors of the resolution chain itself (an
-		invalid grammar in `.stxt/`, two definitions of the same namespace at the same
-		level) are reported as findings on line `0` of the offending file and not of the
-		document, and they fail the validation: the tool does not pick one of the two
-		definitions.
+		A cardinality error is reported on the line of the parent (`Book`, line 1). Errors of
+		the resolution chain (an invalid grammar in `.stxt/`, two definitions of the same
+		namespace at the same level) are reported on line `0` of the offending file and fail
+		the validation:
 
 	Listing >>
 		stxt validate docs/book.stxt
@@ -201,19 +156,15 @@ Document (dev.stxt.website): The command line | STXT
 	Subsubheader: Without a grammar, or with the grammar as a warning
 
 	Content >>
-		Grammars are optional in the language, but `validate` requires being able to apply
-		them. A document without a namespace is not validated and passes
-		(STXT-SCHEMA-SPEC §5). One whose namespace no grammar of the chain defines produces
-		`SCHEMA_NOT_FOUND`, also when the chain is empty: a document that cannot be
-		validated does not count as validated. The result depends only on the document and
-		its chain and not on which other grammars are installed. To check the syntax alone,
-		use `--no-schema`. A document that is a definition (`@stxt.schema` or
-		`@stxt.template`) is always checked against its meta-schema, even when there is no
-		other grammar at all.
+		* A document without a namespace is not validated and passes
+		  ([STXT-SCHEMA-SPEC §5](stxt-schema-ref#s5)).
+		* One whose namespace the chain does not define produces `SCHEMA_NOT_FOUND`, also
+		  when the chain is empty.
+		* A definition (`@stxt.schema` or `@stxt.template`) is always checked against its
+		  meta-schema.
 
-		Two options change what counts as a failure. `--warn-schema` downgrades grammar
-		errors to warnings, intended for the introduction of a grammar into a project with
-		documents that predate it:
+		`--warn-schema` downgrades grammar errors to warnings, to introduce a grammar into a
+		project with documents that predate it:
 
 	Listing >>
 		stxt validate --warn-schema docs/book.stxt
@@ -223,17 +174,15 @@ Document (dev.stxt.website): The command line | STXT
 		0 error(s), 2 warning(s)
 
 	Content >>
-		It exits with `0`: there are warnings, but no errors. `--no-schema` checks the
-		syntax only, resolving and applying no grammar: the same document passes with no
-		output.
+		It exits with `0`. With `--no-schema` only the syntax is checked: the same document
+		passes with no output.
 
 	Subsubheader: JSON output
 
 	Content >>
 		With `--format json` the output is an array with one object per finding (`file`,
-		`line`, `code`, `message`, `severity`), and `[]` when everything passes. There is
-		no summary or extra text, so it can be piped straight into `jq` or read from
-		another program. The exit code is the same as in text mode.
+		`line`, `code`, `message`, `severity`), or `[]` when everything passes, with no
+		summary. The exit code is the same as in text mode.
 
 	Listing >>
 		stxt validate --format json docs/book.stxt
@@ -246,22 +195,19 @@ Document (dev.stxt.website): The command line | STXT
 
 	Subheader: stxt format
 
-	Listing >>
-		stxt format <file|dir|->... [--recursive] [--tabs | --spaces] [--write | --check] [--clean]
-		            [--max-nesting N] [--max-line-length N] [--max-input-size N]
-
 	Content >>
-		Rewrites documents in their **canonical form**: indentation normalised to tabs (or
-		to four spaces with `--spaces`), a single space after the colon, no trailing
-		whitespace. It works line by line: it re-renders the lines that open a node
-		and keeps everything the tree does not describe: comments, blank lines and the
-		content of `>>` blocks, which is only re-indented, its inner blank lines included
-		(the final blank lines of a block are not content and stay as plain, unindented
-		blank lines). It also keeps the original line ending (CRLF included) and the
-		absence of a final newline. Of a comment it
-		converts only the whole indentation units (tabs or groups of four spaces) to the chosen
-		style, one for one, and leaves whatever follows them untouched. The namespace is
-		written only where the source wrote it.
+		Rewrites documents line by line, following the reformatting of
+		[STXT-TREE-SPEC §12](stxt-tree-ref#s12):
+
+		* It normalises indentation to tabs (or to four spaces with `--spaces`), leaves a
+		  single space after the colon and removes trailing whitespace.
+		* It keeps comments, blank lines, the original line ending (CRLF included) and the
+		  absence of a final newline.
+		* The content of `>>` blocks is only re-indented. The final blank lines of a block
+		  are not content and are left unindented.
+		* Of the indentation of a comment it converts only the whole units (tabs or groups of
+		  four spaces).
+		* It writes the namespace only where the source wrote it.
 
 		Three modes, mutually exclusive:
 
@@ -277,16 +223,14 @@ Document (dev.stxt.website): The command line | STXT
 		|---------------------|-------------------------------------------------------------------------------------------------|
 		| `--tabs` / `--spaces` | Indent with tabs (default) or with four spaces                                                |
 		| `--recursive`, `-r` | As in `validate`: descends, sorts by name, skips the `.stxt/` directories                       |
-		| `--clean`           | Switches engine: re-serialises the logical tree, so comments and blank lines are lost            |
-		| `--max-nesting N`, `--max-line-length N`, `--max-input-size N` | The parser limits, as in `validate`; they reach both engines |
+		| `--clean`           | Re-serialises the logical tree ([STXT-TREE-SPEC §11](stxt-tree-ref#s11)): comments and blank lines are lost |
+		| `--max-nesting N`, `--max-line-length N`, `--max-input-size N` | The parser limits, as in `validate` |
 
-		`--check` is equivalent to `gofmt -l` or `prettier --check`, and it is the mode
-		suited to CI. `--clean` obtains the pure canonical document; since it loses
-		information, it is not the default. A document with syntax errors is reported and
-		not reformatted, in any mode. `format` has no grammar mode: reformatting a document
-		is independent of whether it validates.
+		`--check` is equivalent to `gofmt -l` or `prettier --check`. A document with syntax
+		errors is reported and not reformatted. `format` applies no grammar. Combining
+		`--write` with `--check`, or `--tabs` with `--spaces`, is a usage error (`2`).
 
-		A document written with spaces, a comment, a blank line and some extra spaces:
+		A document written with spaces, with a comment, a blank line and some extra spaces:
 
 	Listing >>
 		# Book record
@@ -309,8 +253,7 @@ Document (dev.stxt.website): The command line | STXT
 			ISBN: 978-84-123456-7-8
 
 	Content >>
-		The comment and the blank line are preserved; the indentation is now tabs and the
-		extra spaces have been removed. The other two modes on the same file:
+		The other two modes on the same file:
 
 	Listing >>
 		stxt format --check docs/book.stxt
@@ -324,13 +267,9 @@ Document (dev.stxt.website): The command line | STXT
 		# writes nothing any more: exit code 0
 
 	Content >>
-		Combining `--write` with `--check`, or `--tabs` with `--spaces`, is a usage error
-		(`2`): `stxt format: --write and --check cannot be combined`.
-
-		With `-` the document is read from standard input and the result goes to
-		standard output, which turns `format` into a filter any editor can apply to the
-		selection; `--check -` answers `<stdin>: would be reformatted` and `1` if it would
-		change. `--write` with `-` is a usage error: there is no file to write back to.
+		With `-`, `format` is a filter: it reads from standard input and writes to standard
+		output. `--check -` answers `<stdin>: would be reformatted` and `1` if it would
+		change. `--write -` is a usage error:
 
 	Listing >>
 		stxt format --spaces - < docs/book.stxt
@@ -340,32 +279,19 @@ Document (dev.stxt.website): The command line | STXT
 
 	Subheader: stxt describe
 
-	Listing >>
-		stxt describe <file|-> [--max-nesting N] [--max-line-length N] [--max-input-size N]
-
 	Content >>
-		Parses a single document and writes its logical tree to standard output in the
-		canonical JSON of [STXT-TREE-SPEC](stxt-tree-ref): an array with the root nodes,
-		and for each node `name`, `canonicalName`, the effective `namespace`, the form
-		(`"inline"` with `value` and `children`, or `"block"` with `lines`). It includes
-		no positions, comments or derived fields. It allows any program that reads JSON to
-		process an @STXT@ document without a parser of its own.
+		Writes the logical tree of a document to standard output in the canonical JSON of
+		[STXT-TREE-SPEC](stxt-tree-ref): an array of root nodes, each with `name`,
+		`canonicalName`, the effective `namespace` and the form (`"inline"` with `value` and
+		`children`, or `"block"` with `lines`). It includes no positions or comments.
 
-		`describe` resolves no grammar and validates nothing: those results are not
-		part of the logical tree. If the document has syntax errors it emits no partial
-		tree: it reports the errors on standard error and exits with `1`. With `-` it
-		reads the document from standard input (`stxt describe - < config.stxt`), and
-		calls it `<stdin>` in the errors. It takes the same parser limits as `validate`
-		(`--max-nesting`, `--max-line-length`, `--max-input-size`; `-1` disables):
-		`stxt describe log.stxt --max-input-size -1` emits the tree of a document
-		larger than the default input size.
+		It resolves no grammar and validates nothing. If the document has syntax errors it
+		emits no partial tree: it reports them on standard error and exits with `1`. It
+		accepts `-` and the same parser limits as `validate`.
 
 	Code >>
 		Book (com.acme.book):
 			Title: Arquitectura de software moderna
-			Authors:
-				Author: María Pérez
-			ISBN: 978-84-123456-7-8
 			Chapter: Introducción
 				Content >>
 					Conceptos básicos y objetivos del libro.
@@ -387,31 +313,6 @@ Document (dev.stxt.website): The command line | STXT
 		        "namespace": "com.acme.book",
 		        "form": "inline",
 		        "value": "Arquitectura de software moderna",
-		        "children": []
-		      },
-		      {
-		        "name": "Authors",
-		        "canonicalName": "authors",
-		        "namespace": "com.acme.book",
-		        "form": "inline",
-		        "value": "",
-		        "children": [
-		          {
-		            "name": "Author",
-		            "canonicalName": "author",
-		            "namespace": "com.acme.book",
-		            "form": "inline",
-		            "value": "María Pérez",
-		            "children": []
-		          }
-		        ]
-		      },
-		      {
-		        "name": "ISBN",
-		        "canonicalName": "isbn",
-		        "namespace": "com.acme.book",
-		        "form": "inline",
-		        "value": "978-84-123456-7-8",
 		        "children": []
 		      },
 		      {
@@ -442,13 +343,9 @@ Document (dev.stxt.website): The command line | STXT
 
 	Subheader: stxt schemas
 
-	Listing >>
-		stxt schemas [path]
-
 	Content >>
 		Shows the resolution chain of a document or a directory (by default, the current
-		directory) and, for each namespace, which definition is active and which file it
-		comes from. It answers which grammar applies to a document, and is the first
+		one) and, for each namespace, the active definition and its file. It is the first
 		diagnostic for a `SCHEMA_NOT_FOUND`.
 
 	Listing >>
@@ -461,10 +358,9 @@ Document (dev.stxt.website): The command line | STXT
 		    com.acme.book <- /home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt
 
 	Content >>
-		The chain lists the levels in order of precedence: the `.stxt/` directories of the
-		document and of its ancestors, then the user and system ones if they exist. If the
-		project sits inside another with its own `.stxt/` (a monorepo), both appear, and
-		for each namespace the closest one wins. When there is no level at all:
+		The chain lists the levels in order of precedence. If the project sits inside another
+		with its own `.stxt/`, both appear, and for each namespace the closest one wins.
+		With no level at all:
 
 	Listing >>
 		stxt schemas
@@ -475,10 +371,9 @@ Document (dev.stxt.website): The command line | STXT
 		No namespaces resolved.
 
 	Content >>
-		Errors of the chain are shown in an `Errors:` block at the end, with their code.
-		The usual case is a copy of the same grammar in two paths of the same level: the
-		namespace is left without an active definition until one is removed, and
-		`validate` fails with the same error.
+		Errors of the chain go to standard error, in an `Errors:` block at the end. With two
+		definitions of the same namespace at the same level, the namespace is left without an
+		active definition, and `validate` fails with the same error:
 
 	Listing >>
 		stxt schemas docs
@@ -492,31 +387,22 @@ Document (dev.stxt.website): The command line | STXT
 		    DISCOVERY_DUPLICATE_NAMESPACE /home/ana/libros/.stxt/otro/copia.stxt: Duplicate definition for namespace 'com.acme.book' at level /home/ana/libros/.stxt: already defined in /home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt
 
 	Content >>
-		`schemas` exits with `1` if the chain has errors (listed on standard error, in the
-		`Errors:` block) or if the path does not exist, and with `0` in every other case, also
-		with an empty chain.
+		It exits with `1` if the chain has errors or the path does not exist, and with `0` in
+		every other case, also with an empty chain.
 
 	Subheader: stxt install
 
-	Listing >>
-		stxt install <file> [--local | --user | --system | --root <dir>] [--force] [--ignore-non-definitions]
-
 	Content >>
-		Installs the definitions (schemas and templates) of a file into a level of the
-		resolution chain. It is not a copy of the file: it first checks that it has the
-		`.stxt` extension, that it parses and that each of its root nodes is a definition
-		that validates against its meta-schema (the same check the resolver performs when
-		loading a level), and only then it writes, all or nothing. Each definition is
-		written separately, in canonical form, as
-		`<level>/@stxt.schema/<namespace>.stxt` or `<level>/@stxt.template/<namespace>.stxt`,
-		named after the namespace it defines and not after the source file; a file with
-		several definitions is split into several.
+		Installs the definitions of a file into a level of the resolution chain. Before
+		writing, it checks that the file has the `.stxt` extension, that it parses and that
+		each root node is a definition that validates against its meta-schema; if anything
+		fails, it writes nothing. Each definition is written separately, in canonical form,
+		as `<level>/@stxt.schema/<namespace>.stxt` or
+		`<level>/@stxt.template/<namespace>.stxt`.
 
-		That naming is a convention of the CLI and not of the language:
-		[STXT-DISCOVERY-SPEC §3](stxt-discovery-ref#s3) gives no meaning to file names or to the
-		subdirectories of a level, so a grammar placed by hand may be at any path of the
-		level. The convention makes visible, with an `ls`, which namespaces each level
-		defines.
+		That layout is a convention of the CLI:
+		[STXT-DISCOVERY-SPEC §3](stxt-discovery-ref#s3) gives no meaning to file names or to
+		the subdirectories of a level, and a grammar placed by hand may be at any path.
 
 		| Level     | Option         | Where it writes                                                  |
 		|-----------|----------------|------------------------------------------------------------------|
@@ -536,7 +422,7 @@ Document (dev.stxt.website): The command line | STXT
 		Installed com.acme.book (@stxt.template) to /home/ana/libros/.stxt/@stxt.template/com.acme.book.stxt
 
 	Content >>
-		The cases that make the installation fail (code `1`) and their messages:
+		The cases that make the installation fail (code `1`):
 
 	Listing >>
 		stxt install book-template.stxt
@@ -551,88 +437,53 @@ Document (dev.stxt.website): The command line | STXT
 		stxt install notes.txt
 		stxt install: not an STXT document (.stxt expected): notes.txt
 
-	Content >>
-		A file that mixes a template with example documents is installed with
-		`--ignore-non-definitions`: the template is installed and the examples are skipped.
-		To share a grammar among every project on a machine,
-		`stxt install --user grammar.stxt`.
-
 	Subheader: Grammar resolution and STXT_PATH
 
 	Content >>
-		The three commands that apply grammars (`validate`, `schemas` and `install`) use
-		the same resolution chain as the VS Code extension and the libraries, the one
-		of [STXT-DISCOVERY-SPEC §4](stxt-discovery-ref#s4): for a document, every `.stxt/`
-		directory from its folder upwards, then `~/.stxt` and finally `/etc/stxt`. Inside
-		each level every `.stxt` file is loaded, recursively, and each must be a
-		definition. Precedence is per namespace: for each one the closest level that
-		defines it prevails, and the other levels keep contributing the ones it does not
-		define. Two definitions of the same namespace at the same level are an error, and
-		that namespace is left without a definition.
+		`validate`, `schemas` and `install` use the chain of
+		[STXT-DISCOVERY-SPEC §4](stxt-discovery-ref#s4), the same as the VS Code extension
+		and the libraries:
+
+		* The levels are every `.stxt/` directory from the document's folder upwards, then
+		  `~/.stxt` and finally `/etc/stxt`.
+		* Inside a level every `.stxt` file is loaded, recursively, and each must be a
+		  definition.
+		* Precedence is per namespace: the closest level that defines it prevails, and the
+		  other levels contribute the namespaces it does not define.
+		* Two definitions of the same namespace at the same level are an error, and that
+		  namespace is left without a definition.
 
 		The `STXT_PATH` environment variable replaces the whole chain with a list of
-		directories separated by `:` (`;` on Windows), in order of precedence; the entries
-		need not be called `.stxt`, and one that does not exist contributes nothing. It
-		allows a CI job to be independent of whatever the machine running it has in
-		`~/.stxt` or `/etc/stxt`:
+		directories separated by `:` (`;` on Windows), in order of precedence. The entries
+		need not be called `.stxt`, and one that does not exist contributes nothing. In CI
+		it avoids depending on the `~/.stxt` or the `/etc/stxt` of the machine:
 
 	Listing >>
 		STXT_PATH=./.stxt stxt validate --recursive docs/
 
 	Content >>
-		A `STXT_PATH` that is set but empty leaves the chain empty: no document with a
-		namespace finds a grammar, so `validate` fails with `SCHEMA_NOT_FOUND`: a
-		document that cannot be validated does not count as validated. Checking the
-		syntax alone in that case is requested explicitly with `--no-schema` (or the
-		error is downgraded to a warning with `--warn-schema`), and `schemas` shows
-		the chain as `(empty: STXT_PATH provides no directories)`. The CLI adds no
-		rule of its own to this chain; the whole policy lives in the library, which
-		is why it is identical in every tool.
+		A `STXT_PATH` that is set but empty leaves the chain empty: `validate` fails with
+		`SCHEMA_NOT_FOUND` on every document with a namespace, except with `--no-schema` or
+		`--warn-schema`, and `schemas` shows `(empty: STXT_PATH provides no directories)`.
 
 	Subheader: Common tasks
 
 	Content >>
-		**Continuous integration.** Two steps: the documents validate and are well
-		formatted. Fails with `1` if something does not pass, and with `2` if the
-		invocation is incorrect.
+		**Continuous integration**: the documents validate and are formatted.
 
 	Listing >>
 		npx @stxt-lang/cli validate --recursive docs/
 		npx @stxt-lang/cli format --check --recursive docs/
 
 	Content >>
-		**A `Makefile`.**
-
-	Listing >>
-		check:
-			stxt validate --recursive docs/
-			stxt format --check --recursive docs/
-
-		fmt:
-			stxt format --write --recursive docs/
-
-	Content >>
-		**Formatting a whole project for the first time**, switching it to spaces:
+		**Formatting a whole project for the first time**, switching it to spaces. The
+		`.stxt/` directories are skipped; the grammars are formatted in a separate call.
 
 	Listing >>
 		stxt format --write --spaces --recursive .
 
 	Content >>
-		The `.stxt/` directories are skipped; the grammars are formatted in a separate call.
-		**The findings as data**, for instance only the errors of one specific code:
-
-	Listing >>
-		stxt validate --format json --recursive docs/ | jq '.[] | select(.code == "SCHEMA_NOT_FOUND")'
-
-	Content >>
-		**A document as JSON for another program:**
-
-	Listing >>
-		stxt describe config.stxt > config.json
-
-	Content >>
-		**A document that is not on disk** (another program generates it, or it comes
-		from an HTTP request), with `-`:
+		**A document that is not on disk**, with `-`:
 
 	Listing >>
 		curl -s https://example.com/api/book.stxt | stxt validate -
@@ -641,17 +492,8 @@ Document (dev.stxt.website): The command line | STXT
 	Subheader: Limits
 
 	Content >>
-		What the command line does not do:
-
-		* It does not read from standard input by default: it is requested with `-`, and
-		  only `validate`, `format` and `describe` accept it; `schemas` and `install` work
-		  on paths.
-		* It does not convert to other formats: the only structured output is the JSON of
-		  `describe` (the STXT-TREE-SPEC tree) and that of `validate --format json`.
-		* There is no per-command help: `stxt --help` is all the help, and this page is
-		  the reference.
-		* There is no parser inside. A parsing or validation error belongs to the
-		  `@stxt-lang/core` library, and is therefore shared by every tool; the place to
-		  report it is [stxt-js](https://github.com/stxt-lang/stxt-js). Errors in options,
-		  messages or behaviour of the command go to
-		  [stxt-cli](https://github.com/stxt-lang/stxt-cli).
+		* It does not convert to other formats: the only structured outputs are the JSON of
+		  `describe` and that of `validate --format json`.
+		* It carries no parser. Parsing or validation errors are reported at
+		  [stxt-js](https://github.com/stxt-lang/stxt-js); errors in options, messages or
+		  behaviour of the command, at [stxt-cli](https://github.com/stxt-lang/stxt-cli).

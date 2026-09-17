@@ -1,18 +1,17 @@
 Document (dev.stxt.website): Herramientas | STXT
 
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-17
 		Description: Herramientas de STXT: playground, extensión de VS Code, línea de comandos y bibliotecas TypeScript, Java y Python, todas con las mismas cinco especificaciones.
 
 	Header: Herramientas
 
 	Assert >>
-		Todas las herramientas de esta página (playground, extensión, línea de comandos y
-		bibliotecas) implementan las mismas cinco especificaciones y devuelven los mismos
-		códigos de error. La elección entre ellas no afecta a la compatibilidad.
+		Todas las herramientas de esta página implementan las mismas cinco especificaciones
+		y devuelven los mismos códigos de error.
 
 	Content >>
-		@STXT@ no necesita instalación para empezar. Según el uso previsto:
+		Según el uso:
 
 		| Uso                                           | Herramienta                                                |
 		|-----------------------------------------------|------------------------------------------------------------|
@@ -33,14 +32,12 @@ Document (dev.stxt.website): Herramientas | STXT
 		* Incluye una semilla de documentos de ejemplo.
 		* El workspace entero se puede compartir con un enlace que lleva el contenido dentro.
 
-		Permite seguir el [tutorial](tutorial) sin salir del navegador.
-
 	Subheader: Extensión de VS Code
 
 	Content >>
 		La extensión oficial es
 		[STXT Language (`stxt-lang.stxt`)](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt).
-		Desde la paleta de extensiones, buscando `stxt`, o desde el terminal:
+		Se instala desde el panel de extensiones, buscando `stxt`, o desde el terminal:
 
 	Listing >>
 		code --install-extension stxt-lang.stxt
@@ -50,7 +47,7 @@ Document (dev.stxt.website): Herramientas | STXT
 
 		* Errores de sintaxis en tiempo real, y de esquema; un namespace que ningún nivel define
 		  se marca con `SCHEMA_NOT_FOUND` como aviso.
-		* Coloreado semántico dirigido por el propio parser.
+		* Coloreado semántico.
 		* Autocompletado con los nodos que permite el esquema y los valores de un `ENUM`.
 		* Información al pasar el ratón: la descripción que dé la definición, el tipo y, en un `ENUM`, sus valores.
 		* Ir a la definición (F12): del nodo al `Node:` de su esquema o a su línea en la
@@ -62,8 +59,7 @@ Document (dev.stxt.website): Herramientas | STXT
 	Subheader: Línea de comandos
 
 	Content >>
-		El comando `stxt` es la interfaz para scripts, `Makefile` y pipelines de integración
-		continua. Se publica en npm como
+		El comando `stxt` se publica en npm como
 		[`@stxt-lang/cli`](https://www.npmjs.com/package/@stxt-lang/cli) y necesita
 		Node 20 o superior.
 
@@ -72,7 +68,7 @@ Document (dev.stxt.website): Herramientas | STXT
 		stxt --version
 
 	Content >>
-		Sin instalación permanente, con `npx`:
+		Sin instalación, con `npx`:
 
 	Listing >>
 		npx @stxt-lang/cli validate --recursive docs/
@@ -88,32 +84,24 @@ Document (dev.stxt.website): Herramientas | STXT
 		| `stxt schemas`   | Muestra qué esquemas y plantillas aplican en un directorio, y de qué nivel   |
 		| `stxt install`   | Instala una definición en `./.stxt`, `~/.stxt` o el nivel del sistema        |
 
-		Un ejemplo de uso en CI, que falla si algún documento no valida o no está
-		bien formateado:
-
-	Listing >>
-		stxt validate --recursive docs/
-		stxt format --check --recursive docs/
-
-	Content >>
 		El código de salida distingue los errores de los documentos (`1`) del uso incorrecto
-		del comando (`2`), de modo que se puede usar directamente en un script. Ningún
-		comando reescribe ficheros sin `--write`. Todas las opciones, las salidas y los
-		códigos de salida están en la [referencia de la línea de comandos](tools-cli).
+		del comando (`2`). Ningún comando reescribe ficheros sin una opción explícita. Las
+		opciones, las salidas y los códigos de salida están en la
+		[referencia de la línea de comandos](tools-cli).
 
 	Subheader: Bibliotecas
 
 	Content >>
-		Hay tres implementaciones oficiales: TypeScript/JavaScript, Java y Python. Un puerto a
-		otro lenguaje puede demostrar su conformidad con el mismo kit que las tres oficiales ([Estabilidad y versiones](stability)).
+		Hay tres implementaciones oficiales: TypeScript/JavaScript, Java y Python. Las tres
+		pasan el [kit de conformidad](https://github.com/stxt-lang/stxt-lang/tree/master/conformance), que sirve también para
+		comprobar un puerto a otro lenguaje.
 
 	Subsubheader: TypeScript / JavaScript
 
 	Content >>
 		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) en npm. Es el
-		parser sobre el que corren la extensión, la línea de comandos y el playground.
-		La guía completa (árbol, validación, resolución, JSON canónico y escritura) está
-		en [la biblioteca TypeScript](tools-typescript).
+		parser que usan la extensión, la línea de comandos y el playground. La guía está en
+		[la biblioteca TypeScript](tools-typescript).
 
 	Listing >>
 		npm install @stxt-lang/core
@@ -137,27 +125,27 @@ Document (dev.stxt.website): Herramientas | STXT
 
 	Content >>
 		[`dev.stxt:stxt-core`](https://central.sonatype.com/artifact/dev.stxt/stxt-core)
-		en Maven Central. Java 17 o superior; módulo automático `dev.stxt`. La guía completa
-		está en [la biblioteca Java](tools-java).
+		en Maven Central. Java 17 o superior; módulo automático `dev.stxt`. La guía está en
+		[la biblioteca Java](tools-java).
 
 	Xml >>
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>1.0.2</version>
+		    <version>1.0.3</version>
 		</dependency>
 
 	Content >>
 		O con Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:1.0.2'
+		implementation 'dev.stxt:stxt-core:1.0.3'
 
 	Subsubheader: Python
 
 	Content >>
 		[`stxt`](https://pypi.org/project/stxt/) en PyPI. Python puro, 3.10 o superior. La
-		guía completa está en [la biblioteca Python](tools-python).
+		guía está en [la biblioteca Python](tools-python).
 
 	Listing >>
 		pip install stxt
@@ -191,6 +179,6 @@ Document (dev.stxt.website): Herramientas | STXT
 		| [stxt-vscode](https://github.com/stxt-lang/stxt-vscode)         | La extensión de VS Code                              |
 		| [stxt-play](https://github.com/stxt-lang/stxt-play)             | El playground                                        |
 
-		Las preguntas, las ideas y todo lo que sea del lenguaje en sí van a las
+		Las preguntas y las ideas sobre el lenguaje van a las
 		[discusiones](https://github.com/orgs/stxt-lang/discussions) de la organización; los
 		errores, a las incidencias del repositorio de la herramienta afectada.

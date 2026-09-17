@@ -1,18 +1,17 @@
 Document (dev.stxt.website): Tools | STXT
 
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-17
 		Description: STXT tools: browser playground, VS Code extension, command line and TypeScript, Java and Python libraries, all implementing the same five specifications.
 
 	Header: Tools
 
 	Assert >>
-		Every tool on this page (playground, extension, command line and libraries)
-		implements the same five specifications and reports the same error codes. The
-		choice between them does not affect compatibility.
+		Every tool on this page implements the same five specifications and reports the same
+		error codes.
 
 	Content >>
-		@STXT@ needs no installation to get started. Depending on the intended use:
+		Depending on the use:
 
 		| Use                                            | Tool                                                       |
 		|------------------------------------------------|------------------------------------------------------------|
@@ -32,14 +31,12 @@ Document (dev.stxt.website): Tools | STXT
 		* It includes a seed of example documents.
 		* The whole workspace can be shared with a link that carries the content inside.
 
-		It allows following the [tutorial](tutorial) without leaving the browser.
-
 	Subheader: VS Code extension
 
 	Content >>
 		The official extension is
 		[STXT Language (`stxt-lang.stxt`)](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt).
-		From the extensions view, searching for `stxt`, or from the terminal:
+		It is installed from the extensions view, searching for `stxt`, or from the terminal:
 
 	Listing >>
 		code --install-extension stxt-lang.stxt
@@ -49,7 +46,7 @@ Document (dev.stxt.website): Tools | STXT
 
 		* Syntax errors in real time, and schema errors; a namespace no level defines is
 		  flagged with `SCHEMA_NOT_FOUND` as a warning.
-		* Semantic highlighting driven by the parser itself.
+		* Semantic highlighting.
 		* Completion with the nodes the schema allows and the values of an `ENUM`.
 		* Hover information: the description given by the definition, the type and, in an `ENUM`, its values.
 		* Go to definition (F12): from a node to the `Node:` of its schema, or to its
@@ -61,8 +58,7 @@ Document (dev.stxt.website): Tools | STXT
 	Subheader: Command line
 
 	Content >>
-		The `stxt` command is the interface for scripts, `Makefile`s and continuous
-		integration pipelines. It is published on npm as
+		The `stxt` command is published on npm as
 		[`@stxt-lang/cli`](https://www.npmjs.com/package/@stxt-lang/cli) and requires
 		Node 20 or newer.
 
@@ -71,7 +67,7 @@ Document (dev.stxt.website): Tools | STXT
 		stxt --version
 
 	Content >>
-		Without a permanent installation, through `npx`:
+		Without installing, through `npx`:
 
 	Listing >>
 		npx @stxt-lang/cli validate --recursive docs/
@@ -87,32 +83,22 @@ Document (dev.stxt.website): Tools | STXT
 		| `stxt schemas`   | Shows which schemas and templates apply in a directory, and from which level  |
 		| `stxt install`   | Installs a definition into `./.stxt`, `~/.stxt` or the system level           |
 
-		A CI example, which fails if any document does not validate or is not
-		well formatted:
-
-	Listing >>
-		stxt validate --recursive docs/
-		stxt format --check --recursive docs/
-
-	Content >>
-		The exit code distinguishes document errors (`1`) from command misuse (`2`), so it
-		can be used directly from a script. No command rewrites files without `--write`.
-		Every option, output and exit code is in the
-		[command-line reference](tools-cli).
+		The exit code distinguishes document errors (`1`) from command misuse (`2`). No
+		command rewrites files without an explicit option. The options, outputs and exit
+		codes are in the [command-line reference](tools-cli).
 
 	Subheader: Libraries
 
 	Content >>
-		There are three official implementations: TypeScript/JavaScript, Java and Python. A
-		port to another language can prove its conformance with the same kit as the three
-		official ones ([Stability and versions](stability)).
+		There are three official implementations: TypeScript/JavaScript, Java and Python. All
+		three pass the [conformance kit](https://github.com/stxt-lang/stxt-lang/tree/master/conformance), which also serves
+		to check a port to another language.
 
 	Subsubheader: TypeScript / JavaScript
 
 	Content >>
 		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) on npm. It is
-		the parser the extension, the command line and the playground run on. The full
-		guide (tree, validation, resolution, canonical JSON and writing) is in
+		the parser the extension, the command line and the playground use. The guide is in
 		[the TypeScript library](tools-typescript).
 
 	Listing >>
@@ -137,26 +123,26 @@ Document (dev.stxt.website): Tools | STXT
 
 	Content >>
 		[`dev.stxt:stxt-core`](https://central.sonatype.com/artifact/dev.stxt/stxt-core)
-		on Maven Central. Java 17 or newer; automatic module `dev.stxt`. The full guide is
-		in [the Java library](tools-java).
+		on Maven Central. Java 17 or newer; automatic module `dev.stxt`. The guide is in
+		[the Java library](tools-java).
 
 	Xml >>
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>1.0.2</version>
+		    <version>1.0.3</version>
 		</dependency>
 
 	Content >>
 		Or with Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:1.0.2'
+		implementation 'dev.stxt:stxt-core:1.0.3'
 
 	Subsubheader: Python
 
 	Content >>
-		[`stxt`](https://pypi.org/project/stxt/) on PyPI. Pure Python, 3.10 or newer. The full
+		[`stxt`](https://pypi.org/project/stxt/) on PyPI. Pure Python, 3.10 or newer. The
 		guide is in [the Python library](tools-python).
 
 	Listing >>
@@ -192,6 +178,6 @@ Document (dev.stxt.website): Tools | STXT
 		| [stxt-vscode](https://github.com/stxt-lang/stxt-vscode)         | The VS Code extension                                 |
 		| [stxt-play](https://github.com/stxt-lang/stxt-play)             | The playground                                        |
 
-		Questions, ideas and anything about the language itself go to the
+		Questions and ideas about the language go to the
 		[discussions](https://github.com/orgs/stxt-lang/discussions) of the organization; bugs,
 		to the issues of the repository of the tool concerned.

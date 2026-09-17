@@ -1,7 +1,7 @@
 Document (dev.stxt.website): The Java library | STXT
 
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-17
 		Description: dev.stxt:stxt-core, the STXT parser for Java on Maven Central: no runtime dependencies, implementing the five specifications with the same error codes.
 
 	Header: The Java library
@@ -9,49 +9,47 @@ Document (dev.stxt.website): The Java library | STXT
 	Assert >>
 		[`dev.stxt:stxt-core`](https://central.sonatype.com/artifact/dev.stxt/stxt-core) is the
 		@STXT@ parser for Java, published on Maven Central. It implements the five
-		specifications (syntax, canonical tree, schemas, templates and resolution) and
-		reports the same error codes as the [TypeScript](tools-typescript) library, the
-		[Python](tools-python) one and the [command line](tools-cli). It is a library with
-		no CLI; the command of the ecosystem is `stxt`.
+		specifications and reports the same error codes as the
+		[TypeScript](tools-typescript) and [Python](tools-python) libraries.
 
 	Content >>
-		The guide has the same structure as the TypeScript library one; where the Java API
-		differs, it is noted.
+		It includes no command line; that of the ecosystem is [`stxt`](tools-cli).
 
 	Subheader: Installation
 
 	Content >>
-		Requires Java 17 or later. It has no runtime dependencies and under JPMS it
-		is an automatic module named `dev.stxt`.
+		Requires Java 17 or later and has no runtime dependencies. Under JPMS it is an
+		automatic module named `dev.stxt`.
 
 	Xml >>
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>1.0.2</version>
+		    <version>1.0.3</version>
 		</dependency>
 
 	Content >>
 		Or with Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:1.0.2'
+		implementation 'dev.stxt:stxt-core:1.0.3'
 
 	Content >>
-		The javadoc of every version is on
-		[javadoc.io](https://javadoc.io/doc/dev.stxt/stxt-core).
+		The javadoc is on [javadoc.io](https://javadoc.io/doc/dev.stxt/stxt-core).
 
 	Subheader: Parsing
 
 	Content >>
-		`Parser` has two entry points for a text in memory (the third, `parseStream`, is
-		described below). `parseResult(text)` collects every error and
-		also returns the nodes it managed to build; `parse(text)` throws a
-		`ParseException` on the first one and returns `List<Node>` when there is none.
-		Both have a file-based counterpart: `parseResultFile(File)` and `parseFile(File)`.
-		The `STXT` facade gives ready-made parsers: `STXT.rawParser()` is a parser with
-		no validation (syntax only) and `STXT.parser(loader)` one with schema and
-		template validation registered, as shown below.
+		| Entry point           | Behaviour                                                                                 |
+		|-----------------------|-------------------------------------------------------------------------------------------|
+		| `parseResult(text)`   | Collects every error and also returns the nodes it managed to build                       |
+		| `parse(text)`         | Throws a `ParseException` on the first error; with no errors, returns `List<Node>`        |
+		| `parseStream(reader)` | Retains no nodes or errors; see *Streaming and parser limits*                             |
+
+		The first two have a file-based counterpart: `parseResultFile(File)` and
+		`parseFile(File)`. The `STXT` facade gives ready-made parsers: `STXT.rawParser()`
+		with no validation and `STXT.parser(loader)` with schema and template validation
+		registered.
 
 	Java >>
 		import java.util.List;
@@ -80,43 +78,42 @@ Document (dev.stxt.website): The Java library | STXT
 		}
 
 	Content >>
-		Every error is a `ParseException` with **`getLine()`** (the line of the document,
-		starting at 1), **`getCode()`** (stable, upper-case: `INVALID_LINE`,
-		`INDENTATION_MIXED`, `INDENTATION_LEVEL_NOT_VALID`...) and **`getMessage()`**.
-		Grammar errors are `ValidationException`, a subclass with the same fields, so a
-		single loop walks both and `instanceof` tells the severity apart. Every exception
-		is unchecked and extends `STXTException` (see *Errors*). A document with a syntax
-		error may still return nodes: the parser recovers and carries on, so that an
-		editor can underline everything that is wrong at once.
+		Every error is a `ParseException` with `getLine()` (from 1), `getCode()` and
+		`getMessage()`. Grammar errors are `ValidationException`, a subclass: a single loop
+		walks both kinds and `instanceof` tells them apart. After a syntax error the parser
+		recovers and carries on, and the result may include nodes. The exception hierarchy
+		is in *Errors*.
 
 	Subheader: The tree
 
 	Content >>
-		`Node` is a `sealed` class with exactly two forms, and each one exposes only what
-		is its own:
+		`Node` is a `sealed` class with two forms:
 
-		| Class        | Syntax        | What it owns                                                                                                 |
+		| Class        | Syntax        | Own methods                                                                                                  |
 		|--------------|---------------|--------------------------------------------------------------------------------------------------------------|
 		| `InlineNode` | `Name: value` | `getValue()`/`setValue()`, `getChildren()`, `getChild(name)`, `getChildren(name)`, `addChild()`, `removeChild()`, `addInlineNode()`, `addTextNode()` |
 		| `TextNode`   | `Name >>`     | `getTextLines()`, `setText()`, `setTextLines()`, `addTextLine()`, `clearText()`                                |
 
-		What they share lives in `Node`: `getName()` and `getCanonicalName()` (the canonical
-		name of STXT-SPEC: lower-case, NFC, unified separators), `getDeclaredNamespace()`
-		(what the node writes between parentheses, or `""`) and `getNamespace()` (the
-		**effective** one, inherited through the chain of parents), `getLine()`,
-		`getLevel()` (derived from the depth), `getParent()` (always an `InlineNode`, or
-		`null` at the root), `detach()` and `getText()`, which gives the value of an inline node or the
-		joined lines of a block. Walking a tree means asking for the form with
-		`instanceof`, using Java 17 pattern matching, the same way the canonical tree of
-		STXT-TREE-SPEC has `children` only for inline nodes and `lines` only for blocks.
+		Common methods, in `Node`:
 
-		Child lookups go by **canonical name** (`getChild("Título")` and
-		`getChild("titulo")` find the same node), `getChild` returns `null` when there is
-		none and throws `AMBIGUOUS_CHILD` when there is more than one (repeated children
-		are what `getChildren(name)` is for); both accept a second argument with the
-		namespace.
+		| Method                    | Description                                                                       |
+		|---------------------------|-----------------------------------------------------------------------------------|
+		| `getName()`               | The name as written                                                               |
+		| `getCanonicalName()`      | The canonical name ([STXT-SPEC §4.3](stxt-core-ref#s4-3))                         |
+		| `getDeclaredNamespace()`  | The namespace written between parentheses, or `""`                                |
+		| `getNamespace()`          | The effective namespace, inherited from the parents                               |
+		| `getLine()`               | The line of the document                                                          |
+		| `getLevel()`              | The level, derived from the depth                                                 |
+		| `getParent()`             | The parent `InlineNode`, or `null` at the root                                    |
+		| `getText()`               | The value of an inline node, or the joined lines of a block                       |
+		| `detach()`                | Detaches the node from its parent                                                 |
 
-		With the document of the [tutorial](tutorial), a book record:
+		Child lookups go by canonical name. `getChild` returns `null` when there is none and
+		throws `AMBIGUOUS_CHILD` when there is more than one; repeated children are what
+		`getChildren(name)` is for. Both accept a second argument with the namespace.
+
+		The form of a node is told apart with `instanceof`. With the document of the
+		[tutorial](tutorial):
 
 	Code >>
 		Book (com.acme.book):
@@ -171,14 +168,16 @@ Document (dev.stxt.website): The Java library | STXT
 	Subsubheader: Building and editing
 
 	Content >>
-		Trees are mutable and keep their own integrity: every node knows its parent,
-		`addChild` links both ends and refuses a node that already has one
-		(`NODE_ALREADY_ATTACHED`) or that is an ancestor (`NODE_CYCLE`), and `setValue` and
-		`addTextLine` refuse a line break (`LINE_BREAK_NOT_ALLOWED`); `removeChild` and
-		`detach()` undo it. Levels are derived from the chain of parents, and the line is
-		only set by the parser. In the factories with two `String`s, the second one is
-		always the **content** (value or text); the namespace only appears in the
-		three-argument form. To insert at a position, `addChild(index, node)`.
+		Trees are mutable:
+
+		* `addChild` refuses a node that already has a parent (`NODE_ALREADY_ATTACHED`) or
+		  that is an ancestor (`NODE_CYCLE`); `removeChild` and `detach()` detach it. To
+		  insert at a position, `addChild(index, node)`.
+		* `setValue` and `addTextLine` refuse a line break (`LINE_BREAK_NOT_ALLOWED`).
+		* The level is derived from the chain of parents, and the line is only set by the
+		  parser.
+		* In the factories with two `String`s, the second one is the content (value or
+		  text); the namespace only appears in the three-argument form.
 
 	Java >>
 		import dev.stxt.InlineNode;
@@ -205,19 +204,12 @@ Document (dev.stxt.website): The Java library | STXT
 	Subheader: Validating against a schema or a template
 
 	Content >>
-		Grammars are @STXT@ documents in the reserved namespaces `@stxt.schema` and
-		`@stxt.template`; the template is the short authoring form and compiles to a
-		schema when loaded. In Java, a `ResourcesLoader` determines where they come from:
-		`ResourcesLoaderDirectory` looks them up on disk with the layout
-		`<dir>/@stxt.schema/<namespace>.stxt` and `<dir>/@stxt.template/<namespace>.stxt`
-		(the same one `stxt install` leaves, so a project's `.stxt/` can be used
-		directly), and
-		`STXT.parser(loader)` returns a parser that resolves both kinds, validates each
-		grammar against its meta-schema when loading it, caches it and validates every
-		node with a namespace as it is closed: underneath it registers a
-		`SchemaValidator`, which does not validate nodes without a namespace because that
-		is the rule of the language (STXT-SCHEMA-SPEC §5): a document without a namespace
-		is not invalid, but it cannot be validated.
+		A `ResourcesLoader` determines where schemas and templates come from.
+		`ResourcesLoaderDirectory` looks them up on disk as
+		`<dir>/@stxt.schema/<namespace>.stxt` and `<dir>/@stxt.template/<namespace>.stxt`,
+		the layout `stxt install` leaves. `STXT.parser(loader)` returns a parser that
+		validates each definition against its meta-schema when loading it, caches it and
+		validates every node with a namespace as it is closed.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -256,8 +248,7 @@ Document (dev.stxt.website): The Java library | STXT
 		}
 
 	Content >>
-		With a book that lacks its `ISBN` and whose date is not `YYYY-MM-DD`, the loop
-		prints the same codes as `stxt validate`:
+		With a book without `ISBN` and with a date that is not `YYYY-MM-DD`, the loop prints:
 
 	Listing >>
 		schema line 6 [INVALID_VALUE]: Published: Invalid date (1 de octubre de 2025)
@@ -266,9 +257,8 @@ Document (dev.stxt.website): The Java library | STXT
 	Content >>
 		`ResourcesLoader` is a single-method interface, `retrieve(namespace, resource)`,
 		where `namespace` is `@stxt.schema` or `@stxt.template` and `resource` the
-		namespace being looked up, so a grammar in memory, or taken from the
-		classpath, a database or a URL, is a lambda that returns its text, or throws
-		`ResourceNotFoundException` when it does not have it:
+		namespace being looked up. A definition in memory, on the classpath or in a database
+		is served with a lambda that returns its text, or throws `ResourceNotFoundException`:
 
 	Java >>
 		import dev.stxt.exceptions.ResourceNotFoundException;
@@ -280,19 +270,17 @@ Document (dev.stxt.website): The Java library | STXT
 		Parser parser = STXT.parser(loader);
 
 	Content >>
-		Behaviour rules:
-
-		* A cardinality error is reported on the line of the **parent**, which is the one
-		  with zero `ISBN`.
-		* If the document uses a namespace the loader does not know, each node produces a
-		  `SCHEMA_NOT_FOUND`; the provider never throws for a missing namespace
-		  (`getSchema()` returns `null`).
-		* A grammar that does not validate against its meta-schema is reported as a
+		* A cardinality error is reported on the line of the parent.
+		* A namespace the loader does not know produces a `SCHEMA_NOT_FOUND` per node; the
+		  provider does not throw (`getSchema()` returns `null`).
+		* A definition that does not validate against its meta-schema is reported as a
 		  finding of the document (for instance `TYPE_NOT_VALID`) and not as an exception.
-		* Nodes without a namespace are not validated (a rule of `SchemaValidator` itself);
-		  a document that is itself a definition is always validated against its
-		  meta-schema. Registering a `SchemaValidator` explicitly gives the same behaviour as
-		  the facade, the CLI and the extension.
+		* Nodes without a namespace are not validated
+		  ([STXT-SCHEMA-SPEC §5](stxt-schema-ref#s5)). A definition is always validated
+		  against its meta-schema.
+		* All the types of [STXT-SCHEMA-SPEC §9](stxt-schema-ref#s9) are implemented.
+
+		The facade is equivalent to registering a `SchemaValidator` over its provider:
 
 	Java >>
 		import dev.stxt.schema.SchemaValidator;
@@ -301,11 +289,6 @@ Document (dev.stxt.website): The Java library | STXT
 		parser.registerValidator(new SchemaValidator(STXT.schemaProvider(loader)));
 
 	Content >>
-		* The available value types are those of STXT-SCHEMA-SPEC: `INLINE`, `BLOCK`,
-		  `TEXT`, `MARKDOWN`, `BOOLEAN`, `INTEGER`, `NATURAL`, `NUMBER`, `DATE`, `TIME`,
-		  `TIMESTAMP`, `UUID`, `EMAIL`, `URL`, `HEXADECIMAL`, `BINARY`, `BASE64`, `GROUP`
-		  and `ENUM`.
-
 		The compiled schema can be inspected: `STXT.schemaProvider(loader)` is the
 		`SchemaProvider` the facade uses, and `getSchema(ns)` returns a `Schema` with
 		`getNamespace()`, `getNodes()` and `getNodeDefinition(name)`; each
@@ -313,24 +296,22 @@ Document (dev.stxt.website): The Java library | STXT
 		qualified name `namespace:name`, with `getMin()` / `getMax()`), `getValues()` for
 		an `ENUM` and `getDescription()`.
 
-	Subheader: Resolution: which grammar applies to a document
+	Subheader: Grammar resolution
 
 	Content >>
-		`ResourcesLoaderDirectory` looks in a single directory. **Resolution** answers the
-		full question: given a document, which definitions apply to it.
-		`DiscoveryResolver` implements [STXT-DISCOVERY-SPEC](stxt-discovery-ref) (the
-		`.stxt/` directories of the document and of all its ancestors, then `~/.stxt` and
-		`/etc/stxt`, per-namespace precedence, `STXT_PATH` replacing the chain), just like
-		the CLI and the extension, so all three agree by construction.
+		`ResourcesLoaderDirectory` looks in a single directory. `DiscoveryResolver`
+		implements [STXT-DISCOVERY-SPEC](stxt-discovery-ref): given the directory of a
+		document, it determines which definitions apply to it (the `.stxt/` directories of
+		the document and of its ancestors, then `~/.stxt` and `/etc/stxt`, with
+		per-namespace precedence; `STXT_PATH` replaces the chain), just like the CLI and the
+		extension.
 
-		Unlike the TypeScript port, which has to run on several hosts, here disk access is
-		done by `NioDiscoveryFileSystem` over `java.nio.file`. The no-argument constructor
-		uses that implementation and `SystemDiscoveryEnvironment` (`STXT_PATH`, user and
-		system directories); both can be replaced in a test (`DiscoveryFileSystem`,
-		`DiscoveryEnvironment`). The chain is per
-		document: pass the directory it lives in (`null` for standard input or an unsaved
-		buffer, which starts the chain at the user level). Since `DiscoveryResult`
-		implements `SchemaProvider`, resolving and validating are two steps:
+		The no-argument constructor uses `NioDiscoveryFileSystem` (over `java.nio.file`) and
+		`SystemDiscoveryEnvironment` (`STXT_PATH`, user and system directories); both can be
+		replaced in a test (`DiscoveryFileSystem`, `DiscoveryEnvironment`). `resolve` takes
+		the directory of the document, or `null` for standard input or an unsaved buffer; in
+		that case the chain starts at the user level. `DiscoveryResult` implements
+		`SchemaProvider` and is passed directly to the validator:
 
 	Java >>
 		import java.nio.file.Path;
@@ -347,7 +328,7 @@ Document (dev.stxt.website): The Java library | STXT
 
 		discovery.getChain();        // [/home/ana/libros/.stxt]  (every ancestor, nearest first)
 
-		// Resolution errors are collected, never thrown: report them and carry on
+		// Resolution errors are collected, not thrown
 		for (DiscoveryError error : discovery.getErrors()) {
 		    System.err.printf("[%s] %s: %s%n", error.getCode(), error.getFile(), error.getMessage());
 		}
@@ -357,9 +338,7 @@ Document (dev.stxt.website): The Java library | STXT
 		ParseResult result = parser.parseResult(documentText);
 
 	Content >>
-		`DiscoveryResult` also records where each grammar came from, which is what an
-		editor needs for "go to definition" or a diagnostic that names the origin of the
-		applied definition:
+		`DiscoveryResult` also records the origin of each definition:
 
 	Java >>
 		DiscoveryDefinition definition = discovery.getDefinition("com.acme.book");
@@ -371,23 +350,19 @@ Document (dev.stxt.website): The Java library | STXT
 		discovery.getAllSchemas();          // just the schemas of the above
 
 	Content >>
-		Levels are cached by directory: resolving many documents that share ancestors reads
-		each `.stxt/` once. Call `resolver.clearCache()` when the definition files may have
-		changed. The resolution error codes are `DISCOVERY_DUPLICATE_NAMESPACE`,
-		`DISCOVERY_NOT_A_DEFINITION`, `DISCOVERY_NOT_PARSEABLE` and
-		`DISCOVERY_INVALID_DEFINITION`; `DiscoveryError` is a data class (`getCode()`,
-		`getFile()`, `getMessage()`, `getNamespace()`) and not an exception, because the spec
-		wants a bad definition reported without stopping the load of the rest.
+		Levels are cached by directory; `resolver.clearCache()` invalidates them when the
+		definition files may have changed. Errors are `DiscoveryError` (`getCode()`,
+		`getFile()`, `getMessage()`, `getNamespace()`), with the codes
+		`DISCOVERY_DUPLICATE_NAMESPACE`, `DISCOVERY_NOT_A_DEFINITION`,
+		`DISCOVERY_NOT_PARSEABLE` and `DISCOVERY_INVALID_DEFINITION`.
 
 	Subheader: The canonical tree as JSON
 
 	Content >>
 		`TreeJson.toCanonicalJson(nodes)`, or `toCanonicalJson(node)` for a single root,
-		writes the JSON of [STXT-TREE-SPEC](stxt-tree-ref), the same one `stxt describe`
-		emits, with two-space indentation. It is an explicit function that emits only the
-		normative fields (`children` for inline nodes and `lines` for blocks, with no
-		positions or comments) and depends on no JSON library: it returns the text,
-		which can then be passed to Jackson, Gson or any other library.
+		returns as text the JSON of [STXT-TREE-SPEC](stxt-tree-ref), the same one
+		`stxt describe` emits, with two-space indentation. It emits only the normative
+		fields, with no positions or comments, and depends on no JSON library.
 
 	Java >>
 		import dev.stxt.runtime.TreeJson;
@@ -398,13 +373,11 @@ Document (dev.stxt.website): The Java library | STXT
 	Subheader: Writing STXT
 
 	Content >>
-		`NodeWriter` performs the inverse operation: it serialises a node, or a list of documents, to
-		@STXT@ text in the canonical form of [STXT-TREE-SPEC §11](stxt-tree-ref#s11), with
-		`IndentStyle.TABS` (default) or `IndentStyle.SPACES_4`. It writes the namespace only
-		where it changes from the parent's, wherever the source declared it. Writing a tree out
-		and parsing it back yields the same tree, in both styles. Since it starts from the
-		logical tree, a text that goes through `parse` and `NodeWriter` comes out without
-		comments or blank lines outside blocks, which is what `stxt format --clean` does.
+		`NodeWriter` serialises a node, or a list of root nodes, in the canonical form of
+		[STXT-TREE-SPEC §11](stxt-tree-ref#s11), with `IndentStyle.TABS` (default) or
+		`IndentStyle.SPACES_4`. It writes the namespace only where it changes from the
+		parent's. Since it starts from the tree, the output has no comments or blank lines
+		outside blocks; it is what `stxt format --clean` does.
 
 	Java >>
 		import dev.stxt.runtime.NodeWriter;
@@ -414,13 +387,23 @@ Document (dev.stxt.website): The Java library | STXT
 		String all = NodeWriter.toSTXT(result.getNodes(), IndentStyle.SPACES_4);   // a whole document
 
 	Content >>
-		The reformatting that **keeps** comments and blank lines is `Formatter`
-		([STXT-TREE-SPEC §12](stxt-tree-ref#s12)): it rewrites the original text line by line
-		(the lines that open a node in canonical form, those of a block at the level of the
-		block, the rest as they are, with their indentation units converted to the requested
-		style) and returns, along with the text, the syntax errors it met, so that the caller
-		decides what to do with a document that does not parse. It is the same formatter, with
-		the same rules, as the one behind `stxt format`, the extension and the playground.
+		The `email` built above, written with `toSTXT`:
+
+	Code >>
+		Email (com.example.docs): Weekly report
+			To:
+				Address: bob@example.com
+			From: Ana García <ana@example.com>
+			Body >>
+				Hi Bob,
+
+				See the new attachment.
+
+	Content >>
+		`Formatter` ([STXT-TREE-SPEC §12](stxt-tree-ref#s12)) reformats while keeping
+		comments and blank lines: it rewrites the original text line by line and returns,
+		along with the text, the syntax errors it found. It applies the same rules as
+		`stxt format`, the extension and the playground.
 
 	Java >>
 		import java.util.List;
@@ -434,32 +417,17 @@ Document (dev.stxt.website): The Java library | STXT
 		String text = formatted.text();
 		List<ParseException> errors = formatted.errors();
 
-	Content >>
-		The `email` built above, written with `toSTXT`:
-
-	Code >>
-		Email (com.example.mail): Weekly report
-			To:
-				Address: bob@example.com
-			From: Ana García <ana@example.com>
-			Body >>
-				Hi Bob,
-
-				See attached.
-
-	Subheader: Observing and validating while streaming
+	Subheader: Observing and validating during the parse
 
 	Content >>
-		The parser does not depend on schemas: validation is a decoupled layer connected
-		through two extension points. `Observer` receives streaming callbacks while the
-		document is parsed (`onCreate(node, line)` when a node is opened, already with its parent,
-		effective namespace and level, `onFinish(node)` when it is closed, `onComment(lineNumber, line)`
-		for each comment and `onTextLine(node, lineNumber, lineString, line)` for each line of a
-		block), and
-		`Validator` runs on each node as it is closed and returns a list of
-		`ValidationException` (it does not throw), so a document is validated while it is
-		read, without waiting for the end. `SchemaValidator` is a built-in `Validator`;
-		`Validator` is a functional interface, so it accepts a lambda.
+		A registered `Observer` receives calls during the parse: `onCreate(node, line)` when
+		a node is opened (already with its parent, effective namespace and level),
+		`onFinish(node)` when it is closed, `onComment(lineNumber, line)` for each comment
+		and `onTextLine(node, lineNumber, lineString, line)` for each line of a block.
+
+		A `Validator` runs on each node as it is closed and returns a list of
+		`ValidationException`, without throwing. `SchemaValidator` is the one the library
+		ships; `Validator` is a functional interface and accepts a lambda.
 
 	Java >>
 		import java.util.List;
@@ -484,13 +452,12 @@ Document (dev.stxt.website): The Java library | STXT
 	Subheader: Streaming and parser limits
 
 	Content >>
-		`parseStream(reader)` reads from a `Reader` and retains nothing: no nodes, no errors.
-		The results reach the program only through a `StreamObserver`: `onRootNode(node)` with
-		each complete, already validated root node, which the parser releases right after the
-		call, and `onError(error)` with each error, syntactic or validation. The memory in use
-		is one root tree at a time, and it is the entry point for files that do not fit in
-		memory. A registered `StreamObserver` receives the same calls with `parse` and
-		`parseResult` too.
+		`parseStream(reader)` reads from a `Reader` and retains no nodes or errors. The
+		results arrive through a `StreamObserver`: `onRootNode(node)` with each complete,
+		already validated root node, which the parser releases after the call, and
+		`onError(error)` with each error, syntax or validation. The memory in use is that of
+		one root tree, which allows processing files that do not fit in memory. A registered
+		`StreamObserver` receives the same calls with `parse` and `parseResult`.
 
 	Java >>
 		import java.io.Reader;
@@ -515,9 +482,9 @@ Document (dev.stxt.website): The Java library | STXT
 		The parser applies the limits of [STXT-SPEC §11.2](stxt-core-ref#s11-2), configurable
 		with `setMaxNesting` (100 levels), `setMaxLineLength` (10,000 characters) and
 		`setMaxInputSize` (10,000,000 characters); `-1` disables one. Exceeding a limit
-		produces a `LimitException` (a subclass of `ParseException` with the codes
+		produces a `LimitException` (a subclass of `ParseException`, with the codes
 		`LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED` and `LIMIT_INPUT_SIZE_EXCEEDED`)
-		and aborts the parse: it is always the last error.
+		and aborts the parse.
 
 	Java >>
 		Parser parser = new Parser();
@@ -528,7 +495,7 @@ Document (dev.stxt.website): The Java library | STXT
 
 	Content >>
 		Every exception is unchecked and extends `dev.stxt.exceptions.STXTException`, with
-		an upper-case code in `getCode()`:
+		its code in `getCode()`:
 
 		| Exception                   | When                                                                                                      |
 		|-----------------------------|-----------------------------------------------------------------------------------------------------------|
@@ -540,10 +507,8 @@ Document (dev.stxt.website): The Java library | STXT
 		| `STXTIOException`           | Reading a file failed                                                                                     |
 		| `STXTException` (base)      | Tree integrity (`NODE_ALREADY_ATTACHED`, `NODE_CYCLE`, `LINE_BREAK_NOT_ALLOWED`), an ambiguous lookup (`AMBIGUOUS_CHILD`) and other runtime failures |
 
-		The ones coming out of `parseResult` are not thrown: they are collected in
-		`getErrors()` as `ParseException` (syntax) or `ValidationException` (grammar).
-		Tree-integrity ones are thrown, because they are program errors and not document
-		errors.
+		Those of `parseResult` are not thrown: they are collected in `getErrors()`.
+		Tree-integrity ones are thrown.
 
 	Subheader: The API surface
 
@@ -559,11 +524,8 @@ Document (dev.stxt.website): The Java library | STXT
 		| `dev.stxt.runtime`    | `STXT` (the facade), `UnifiedSchemaProvider`, `NodeWriter` and `IndentStyle`, `Formatter` and `FormatResult`, `TreeJson` |
 		| `dev.stxt.discovery`  | `DiscoveryResolver`, `DiscoveryResult`, `DiscoveryDefinition`, `DiscoveryLevel`, `DiscoveryError`, `DiscoveryEnvironment`, `SystemDiscoveryEnvironment`, `DiscoveryFileSystem`, `NioDiscoveryFileSystem` |
 
-		From 1.0 on this API is frozen within the package's 1.x line, and the language
-		and the canonical tree are frozen for good: STXT-SPEC and STXT-TREE-SPEC are in
-		*Zenith* status, and a document that parses today parses the same tomorrow. What
-		exactly is frozen, what is not, and why the package version is not the specification
-		date, in [Stability and versions](stability). The release notes of
-		each version are in the `CHANGELOG.md` of the
-		[repository](https://github.com/stxt-lang/stxt-java), which is also where its
-		errors are reported.
+		The package follows semantic versioning: the API does not change incompatibly within
+		the 1.x line. The status of each specification is in
+		[Stability and versions](stability). The changes of each version are in the
+		`CHANGELOG.md` of the [repository](https://github.com/stxt-lang/stxt-java), which is
+		also where errors are reported.
