@@ -1,8 +1,8 @@
 # stxt-lang
 
-STXT is a plain-text language for structured documents: no braces, no closing tags, just
-indentation. It is designed to be equally readable by people and by machines, and it comes with an
-optional schema layer so documents can be validated.
+**STXT** is a **Human-First** language, designed for documents and structured data.
+This repository holds its five specifications, the conformance kit and the source of the
+portal, <https://stxt.dev>. Everything here is written in STXT.
 
 ```stxt
 # A comment
@@ -17,10 +17,7 @@ Document (com.example.docs): Title
 
 ## The specifications
 
-They live in `es/` (the canonical version, in Spanish) with an English mirror in `en/`. They carry
-no version number: each one carries in its `Metadata` a **date** (`Last modif`, the date of its
-current text) and a **status** (`Status`), which says how much stability it promises and only
-moves forward: `Genesis` → `Aurora` → `Zenith` → `Twilight` (*STXT-SPEC* §1.1).
+They live in `es/` (the canonical version, in Spanish), with an English mirror in `en/`.
 
 | File | Specification | What it defines |
 |---|---|---|
@@ -30,40 +27,62 @@ moves forward: `Genesis` → `Aurora` → `Zenith` → `Twilight` (*STXT-SPEC* �
 | `stxt-template-ref.stxt` | **STXT-TEMPLATE-SPEC** | `@stxt.template`: the simplified authoring form, compilable to an equivalent schema |
 | `stxt-discovery-ref.stxt` | **STXT-DISCOVERY-SPEC** | How tools locate schemas and templates (`.stxt/` directories, `$HOME/.stxt`, `/etc/stxt`, `STXT_PATH`) |
 
-The rest of `es/` and `en/` are the pages of the portal: tutorial, design principles, workflow,
-tools, stability and versions, use cases and FAQ. `_index.stxt` is the table of contents.
+They carry no version number. Each one carries two values in its `Metadata`:
+
+- **`Last modif`**: the date of its current text.
+- **`Status`**: how much stability it promises. It only moves forward:
+  `Genesis` → `Aurora` → `Zenith` → `Twilight` (*STXT-SPEC* §1.1).
+
+The rest of `es/` and `en/` are the pages of the portal: tutorial, design principles, working
+environment, tools, stability, comparisons, use cases and FAQ. `_index.stxt` is the table of contents.
 
 ## Layout
 
 | Directory | Contents |
 |---|---|
-| `es/`, `en/` | The specifications and the portal pages, one `.stxt` file per page. `es/` is canonical; `en/` mirrors it file by file |
-| `conformance/` | **The conformance kit**: `manifest.json` lists every case with its category, input, expected result and, for the rules the specifications leave in SHOULD or MAY, its requirement level; `tree/` holds documents with the canonical JSON tree each must produce (*STXT-TREE-SPEC*), `parse/` invalid documents with the error code and line each must be rejected with (*STXT-SPEC* §11.1), `definitions/` schemas and templates in pairs, `validate/` documents that must validate or fail against them (*STXT-SCHEMA-SPEC* §13.1), `definition-errors/` invalid schemas and templates (§13.1, *STXT-TEMPLATE-SPEC* §14.1), `discovery/` the files of the discovery cases, which describe a virtual file system in the manifest and the chain, active definitions and errors it must resolve to (*STXT-DISCOVERY-SPEC*), and `writer/` and `format/` the canonical and reformatted texts of *STXT-TREE-SPEC* §11 and §12. The contract and how to run it are in [`conformance/CONFORMANCE.md`](conformance/CONFORMANCE.md) |
-| `.stxt/` | The repository's own resolution directory, as described by STXT-DISCOVERY-SPEC: one definition per namespace. `website/` holds `dev.stxt.website`, the template every portal page validates against; `schemas/`, `templates/`, `examples/` and `tutorial/` hold the example definitions (`com.example.*`, `org.example.*`...) the documents below use |
-| `docs/` | Example STXT documents (emails, recipes, configuration files...) that instantiate the definitions in `.stxt/`. They must all parse and validate without errors or warnings |
-| `examples/` | More example documents, plus `definitions/`: the same model written twice, as a schema and as a template, kept outside `.stxt/` so the two do not collide as duplicates of one namespace |
+| `es/`, `en/` | The specifications and the portal pages, one `.stxt` file per page. `es/` is canonical, and `en/` mirrors it file by file |
+| `conformance/` | The conformance kit (see below) |
+| `.stxt/` | The repository's own resolution directory (STXT-DISCOVERY-SPEC), with one definition per namespace. `website/` holds `dev.stxt.website`, the template every portal page validates against. The other directories hold the example definitions (`com.example.*`, `org.example.*`...) |
+| `docs/` | Example documents (emails, recipes, configuration files...) that use the definitions in `.stxt/`. They all parse and validate without errors or warnings |
+| `examples/` | More example documents, plus `definitions/`: the same model written twice, as a schema and as a template. It is kept outside `.stxt/` so the two do not collide as duplicates of one namespace |
 
-## The conformance kit and the corpus
+## The conformance kit
 
-`conformance/` is the kit proper: data-only cases any implementation can run with a small
-runner, and the declaration an implementation makes when it passes them
-([`CONFORMANCE.md`](conformance/CONFORMANCE.md)). It covers the five specifications in cumulative
-profiles (`core`, `schema`, `template`, `discovery`, plus `text` for the writer and the
-formatter), so an implementation can certify just the layers it offers.
+`conformance/` holds data-only cases that any implementation can run with a small runner.
+The contract, and the declaration an implementation makes when it passes, are in
+[`conformance/CONFORMANCE.md`](conformance/CONFORMANCE.md).
 
-The rest of the repository is the corpus the existing ports also run over. They do not copy it:
-their test suites locate it as a sibling directory (`../stxt-lang`, or wherever `STXT_LANG`
-points), so a change here is exercised by every port. What they check:
+`manifest.json` lists every case: its category, its input, the expected result and, for the rules
+the specifications leave in SHOULD or MAY, its requirement level.
 
-- every definition in `.stxt/` and `examples/definitions/` loads as a schema or template, and a
-  schema and the template of the same namespace validate identically;
-- every document in `docs/`, `es/` and `en/` parses and validates against its definition;
-- every `Code` block of the portal pages parses and validates, and the ones marked with a
-  `# ERROR` comment fail, as the text says they do;
-- every case of the conformance kit passes;
+| Directory | Cases | Specification |
+|---|---|---|
+| `tree/` | Documents, and the canonical JSON tree each must produce | *STXT-TREE-SPEC* |
+| `parse/` | Invalid documents, with the error code and the line | *STXT-SPEC* §11.1 |
+| `definitions/` | Schemas and templates, in pairs | |
+| `validate/` | Documents that must validate, or fail, against those definitions | *STXT-SCHEMA-SPEC* §13.1 |
+| `definition-errors/` | Invalid schemas and templates | *STXT-SCHEMA-SPEC* §13.1, *STXT-TEMPLATE-SPEC* §14.1 |
+| `discovery/` | A virtual file system, and the chain, the active definitions and the errors it must resolve to | *STXT-DISCOVERY-SPEC* |
+| `writer/`, `format/` | The canonical and the reformatted texts | *STXT-TREE-SPEC* §11 and §12 |
+
+The cases are grouped in cumulative profiles (`core`, `schema`, `template`, `discovery`, plus
+`text` for the writer and the formatter), so an implementation can certify only the layers it offers.
+
+A new case is added only after checking that all the ports agree with its expected result.
+
+## The corpus
+
+The ports also run their test suites over the rest of the repository. They do not copy it:
+they locate it as a sibling directory (`../stxt-lang`, or wherever `STXT_LANG` points), so a
+change here is exercised by every port. What they check:
+
+- Every definition in `.stxt/` and `examples/definitions/` loads, and a schema and the template
+  of the same namespace validate identically.
+- Every document in `docs/`, `es/` and `en/` parses and validates against its definition.
+- Every `Code` block of the portal pages parses and validates. The ones marked with a
+  `# ERROR` comment must fail.
+- Every case of the conformance kit passes.
 - `SPEC_VERSION` equals the STXT-SPEC date that `conformance/manifest.json` pins.
-
-A new kit case is added only after checking that all the ports agree with its expected result.
 
 ## Ecosystem
 

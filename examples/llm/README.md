@@ -1,9 +1,10 @@
 # Generate → validate → fix
 
-An executable version of the loop described in the portal page *AI and LLMs*:
-a model converts free text into an STXT document, `@stxt-lang/core` validates it
-against a template, and the errors go back to the model until the document is
-valid.
+An executable version of the loop of the portal page [AI and LLMs](https://stxt.dev/ai-llms):
+
+1. A model converts free text into an STXT document.
+2. `@stxt-lang/core` validates it against a template.
+3. The errors go back to the model, until the document is valid.
 
 ```
 examples/llm/
@@ -24,9 +25,8 @@ node generate.mjs                     # converts source.txt
 node generate.mjs my-notes.txt > report.stxt
 ```
 
-The document goes to stdout; the attempts and the validator's findings, to
-stderr. Exit code `0` when the final document validates, `1` otherwise. A typical
-run:
+The document goes to stdout. The attempts and the findings of the validator go to stderr.
+The exit code is `0` when the final document validates, and `1` otherwise. A typical run:
 
 ```
 --- attempt 1: 3 error(s)
@@ -36,26 +36,28 @@ run:
 --- attempt 2: valid
 ```
 
-`generate.mjs` uses the Anthropic SDK, but nothing in the loop depends on the
-provider: replace the `client.messages.create` call with any model that returns
-text.
+`generate.mjs` uses the Anthropic SDK, but nothing in the loop depends on the provider. The
+`client.messages.create` call can be replaced with any model that returns text.
+
+The prompt asks for the document without code fences. `generate.mjs` strips them anyway,
+because models add them.
 
 ## The same check from the shell
 
-Step 2 of the loop is exactly what the CLI does on standard input. With
-`@stxt-lang/cli` installed and the same `.stxt/` directory alongside:
+Step 2 of the loop is what the CLI does on the standard input. With `@stxt-lang/cli` installed,
+and the same `.stxt/` directory alongside:
 
 ```sh
 node generate.mjs --max-attempts 1 2>/dev/null | stxt validate -
 ```
 
-The CLI resolves the template through the directory chain, as the editor and
-the playground do, and prints each finding as `<stdin>:line: [CODE] message`.
+The CLI finds the template through the directory chain, as the editor does, and prints each
+finding as `<stdin>:line: [CODE] message`.
 
 ## What the validator catches
 
-Every mistake an LLM typically makes with a structured format is an error with
-a stable code and a line number, which is what the model needs to fix it:
+Every mistake is an error with a stable code and a line number, which is what the model needs
+to fix it:
 
 | Mistake | Code |
 |---|---|
@@ -63,7 +65,4 @@ a stable code and a line number, which is what the model needs to fix it:
 | A mandatory node missing, or one repeated too often | `TOO_FEW_CHILDREN`, `TOO_MANY_CHILDREN` |
 | A date that is not `YYYY-MM-DD`, a value outside an `ENUM` | `INVALID_VALUE` |
 | A line that is not `Name:`, `Name >>` or indented text | `INVALID_LINE` |
-| Indentation that skips a level, uses an odd number of spaces or mixes tabs and spaces | `INDENTATION_LEVEL_NOT_VALID`, `INDENTATION_SPACES_NOT_VALID`, `INDENTATION_MIXED` |
-
-The prompt asks for the document without code fences; `generate.mjs` strips them
-anyway, because models add them.
+| Indentation that skips a level, uses a number of spaces that is not a multiple of four, or mixes tabs and spaces | `INDENTATION_LEVEL_NOT_VALID`, `INDENTATION_SPACES_NOT_VALID`, `INDENTATION_MIXED` |
