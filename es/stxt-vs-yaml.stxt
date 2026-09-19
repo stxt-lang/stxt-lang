@@ -1,24 +1,13 @@
 Document (dev.stxt.website): STXT frente a YAML: valores, texto libre y validación
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-19
 		Description: STXT y YAML comparados con ejemplos: tipado implícito frente a valores de texto, escalares de bloque frente a bloques literales, superficie de ataque y validación dentro del lenguaje.
 
 	Header: @STXT@ frente a YAML
 
 	Assert >>
-		Los dos lenguajes se construyen sobre la indentación, pero optimizan cosas distintas:\\
-		YAML, serializar estructuras de datos; @STXT@, documentos que escriben y leen personas.
-
-	Content >>
-		YAML y @STXT@ expresan la jerarquía con indentación, y un documento sencillo se
-		parece en los dos. Las diferencias están debajo: qué tipo tiene un valor, cuántas
-		grafías admite una misma estructura, cómo se escribe el texto de varias líneas y
-		qué comprueba el propio lenguaje.
-
-		Hay además una diferencia de modelo: YAML no tiene namespaces ni esquemas. Nada
-		en el fichero declara a qué vocabulario pertenece ni contra qué estructura
-		debería validarse. En @STXT@ el namespace forma parte del lenguaje
-		([STXT-SPEC §7](stxt-core-ref#s7)) y conecta cada documento con su definición.
+		YAML y @STXT@ usan la indentación para definir la jerarquía.
+		YAML está pensado para serializar datos, y @STXT@ para documentos que escriben y leen personas.
 
 	Subheader: El mismo contenido, dos veces
 
@@ -51,24 +40,22 @@ Document (dev.stxt.website): STXT frente a YAML: valores, texto libre y validaci
 				The TLS certificate expires on 2027-03-01.
 
 	Content >>
-		Tres diferencias ya visibles en este ejemplo:
+		Un documento sencillo se parece en los dos. Las diferencias son estas:
 
-		* **Los valores.** En YAML `replicas: 2` es un entero y `replicas: "2"` una
-		  cadena: el tipo lo decide la grafía. En @STXT@ todo valor es texto; el tipo, si
-		  hace falta, lo declara la definición y lo comprueba el validador en lugar del parser.
-		* **Las listas.** YAML tiene una sintaxis de bloque para las secuencias (`- 8080`)
-		  y otra de flujo (`[8080, 8443]`), y las dos conviven en un mismo documento.
-		  @STXT@ no tiene sintaxis de lista: un hijo repetido es la lista, con un nodo
-		  contenedor como `Ports` o sin él ([FAQ](faq#por-que-no-hay-listas)).
-		* **La indentación.** YAML admite cualquier número de espacios por nivel, fijado
-		  en cada documento, y prohíbe los tabuladores. @STXT@ fija un tabulador o cuatro
-		  espacios por nivel, y mezclarlos en una misma línea es un error de parseo.
+		|                        | YAML                                                             | @STXT@                                                                                    |
+		| ---------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+		| Valores                | El tipo lo decide la grafía: `2` es un entero y `"2"` una cadena | Todo valor es texto. El tipo, si hace falta, lo declara la plantilla                      |
+		| Listas                 | Dos sintaxis: de bloque (`- 8080`) y de flujo (`[8080, 8443]`)   | No hay sintaxis de lista: un hijo repetido es la lista ([FAQ](faq#por-que-no-hay-listas)) |
+		| Indentación            | Cualquier número de espacios por nivel, y sin tabuladores        | Un tabulador o cuatro espacios por nivel                                                  |
+		| Texto de varias líneas | Escalares de bloque, con varios indicadores                      | Un nodo block `>>`                                                                        |
+		| Namespaces             | No tiene                                                         | Forman parte del lenguaje ([STXT-SPEC §7](stxt-core-ref#s7))                              |
+		| Esquemas               | Herramientas externas                                            | Forman parte del lenguaje, y son opcionales                                               |
 
 	Subheader: Cuando la grafía cambia el significado
 
 	Content >>
-		En YAML un escalar sin comillas se resuelve a un tipo según su forma, y las
-		reglas de resolución cambiaron entre las versiones 1.1 y 1.2 del lenguaje:
+		En YAML, un valor sin comillas se convierte a un tipo según su forma.
+		Las reglas cambiaron entre las versiones 1.1 y 1.2 del lenguaje:
 
 	Listing >>
 		country: NO         # false en YAML 1.1; la cadena "NO" en 1.2
@@ -77,10 +64,8 @@ Document (dev.stxt.website): STXT frente a YAML: valores, texto libre y validaci
 		enabled: yes        # true en 1.1; la cadena "yes" en 1.2
 
 	Content >>
-		Para conservar `NO`, `3.10` o `12:30` como texto hay que entrecomillarlos, y saber
-		cuándo hace falta exige conocer las reglas de resolución de la versión que use el
-		parser. En @STXT@ el mismo documento no tiene esa ambigüedad: un valor es siempre
-		los caracteres escritos.
+		Para conservar `NO`, `3.10` o `12:30` como texto hay que ponerlos entre comillas.
+		En @STXT@ un valor es siempre los caracteres escritos:
 
 	Code >>
 		Settings:
@@ -90,16 +75,21 @@ Document (dev.stxt.website): STXT frente a YAML: valores, texto libre y validaci
 			Enabled: yes
 
 	Content >>
-		Si `Enabled` debe ser un booleano, lo dice la definición (`Enabled: (1) BOOLEAN`,
-		que admite `true` y `false`) y el validador rechaza `yes` con un código de error en
-		lugar de convertirlo.
+		| Nombre nodo | Valor del nodo |
+		| ----------- | -------------- |
+		| Country     | `NO`           |
+		| Version     | `3.10`         |
+		| Window      | `12:30`        |
+		| Enabled     | `yes`          |
+
+		Si `Enabled` debe ser un booleano, lo dice la plantilla (`Enabled: (1) BOOLEAN`).
+		En ese caso el validador rechaza `yes`, y no lo convierte.
 
 	Subheader: El texto de varias líneas
 
 	Content >>
-		Un escalar de bloque de YAML combina tres indicadores: el estilo (`|` literal o
-		`>` plegado), el tratamiento del salto final (`-`, `+` o ninguno) y, si hace
-		falta, la indentación. Cada combinación produce una cadena distinta:
+		Un escalar de bloque de YAML combina varios indicadores: el estilo (`|` literal o `>` plegado),
+		el salto de línea final (`-`, `+` o ninguno) y, si hace falta, la indentación:
 
 	Listing >>
 		literal: |
@@ -114,38 +104,42 @@ Document (dev.stxt.website): STXT frente a YAML: valores, texto libre y validaci
 		next: value
 
 	Content >>
-		`literal` vale `"first line\nsecond line\n"`; `folded`, `"first line second line\n"`;
-		`kept` conserva además la línea vacía que le sigue. @STXT@ tiene una sola
-		construcción: todo lo indentado bajo un nodo `>>` es texto tal como se escribió,
-		sin variantes, sin escapes y sin interpretación. Los blancos finales de cada línea
-		y las líneas vacías finales se descartan; la indentación adicional y las líneas
-		vacías intermedias se conservan ([STXT-SPEC §10](stxt-core-ref#s10)).
+		Cada combinación produce una cadena distinta:
+
+		| Clave     | Valor                                                     |
+		| --------- | --------------------------------------------------------- |
+		| `literal` | `"first line\nsecond line\n"`                             |
+		| `folded`  | `"first line second line\n"`                              |
+		| `kept`    | `"first line\n\n"` (conserva la línea vacía que le sigue) |
+
+		@STXT@ tiene una sola forma, el nodo block. El texto es literal, sin variantes y sin caracteres de escape:
 
 	Code >>
 		Notes >>
 			first line
 			second line
 
-	Subheader: El parseo y la superficie de ataque
+	Content >>
+		Se conservan la indentación adicional y las líneas vacías intermedias. Se descartan los blancos
+		al final de cada línea y las líneas vacías finales ([STXT-SPEC §10](stxt-core-ref#s10)).
+
+	Subheader: Seguridad
 
 	Content >>
-		YAML incluye anclas y alias (`&a`, `*a`) y etiquetas de tipo (`!!str`,
-		`!!python/object`, `!ruby/object`). Los alias permiten que un documento pequeño se
-		expanda a una estructura enorme en memoria, y las etiquetas específicas de una
-		implementación han permitido instanciar objetos arbitrarios al cargar un documento;
-		de ahí las funciones `safe_load` de las bibliotecas. @STXT@ no tiene referencias,
-		anclas, etiquetas, inclusión ni entidades, y el parseo es lineal, línea a línea, en
-		una sola pasada. El modelo de amenazas es normativo:
-		[STXT-SPEC §15](stxt-core-ref#s15).
+		YAML incluye dos características que @STXT@ no tiene:
+
+		* **Anclas y alias** (`&a`, `*a`): un documento pequeño puede expandirse a una estructura enorme en memoria.
+		* **Etiquetas de tipo** (`!!python/object`, `!ruby/object`): las específicas de una implementación han permitido
+		  instanciar objetos arbitrarios al cargar un documento. De ahí las funciones `safe_load` de las bibliotecas.
+
+		@STXT@ no tiene referencias, anclas, etiquetas, inclusión ni entidades. El parseo es lineal, línea a línea
+		y en una sola pasada ([STXT-SPEC §15](stxt-core-ref#s15)).
 
 	Subheader: La validación
 
 	Content >>
-		YAML no tiene capa de esquemas: se valida con herramientas externas, normalmente
-		JSON Schema aplicado sobre la estructura ya cargada. En @STXT@ la capa de esquemas
-		forma parte del lenguaje, es opcional y usa un modelo de contenido cerrado. El
-		descriptor de arriba, con namespace y sin el contenedor `Ports`: la cardinalidad
-		`(+)` de la plantilla ya dice que `Port` se repite.
+		YAML se valida con herramientas externas, normalmente JSON Schema sobre la estructura ya cargada.
+		En @STXT@ los esquemas forman parte del lenguaje. El descriptor del principio, con namespace:
 
 	Code >>
 		Service (com.example.deploy): billing
@@ -169,36 +163,35 @@ Document (dev.stxt.website): STXT frente a YAML: valores, texto libre y validaci
 					Notes: (?) TEXT
 
 	Content >>
-		Un nombre no declarado, un `Port` ausente o `Replicas: two` fallan con un código
-		de error explícito:
+		Aquí no hace falta el contenedor `Ports`: la cardinalidad `(+)` ya dice que `Port` se repite.
+		Un documento con errores no valida:
 
 	Code >>
-		# ERROR: Replicas exige un valor NATURAL
+		# ERROR: este documento no valida
 		Service (com.example.deploy): billing
+			# `two` no es un NATURAL
 			Replicas: two
-			Port: 8080
-			Maintainer: ana@example.com
+			# Falta al menos un `Port`
+			# `ana` no es un EMAIL
+			Maintainer: ana
+			# `Region` no está en la plantilla
+			Region: eu-west-1
 
 	Subheader: ¿Y NestedText?
 
 	Content >>
-		NestedText toma varias de las mismas decisiones que @STXT@: todo valor es texto,
-		sin tipado implícito ni escapes, y la estructura está en la indentación. Conserva
-		el modelo de datos de YAML (diccionarios, listas y cadenas) y deja los tipos y la
-		validación a la aplicación; no tiene namespaces ni esquemas. Para transportar
-		datos con una sintaxis predecible, los dos llegan al mismo sitio; @STXT@ añade el
-		vocabulario con nombre y la validación dentro del lenguaje.
+		NestedText toma varias de las decisiones de @STXT@: todo valor es texto, sin tipos implícitos
+		ni caracteres de escape, y la estructura está en la indentación.
+
+		Conserva el modelo de datos de YAML (diccionarios, listas y cadenas), y deja los tipos
+		y la validación a la aplicación. No tiene namespaces ni esquemas.
 
 	Subheader: Cuándo usar cada uno
 
 	Content >>
-		YAML, donde el ecosistema lo espera: manifiestos de Kubernetes, pipelines de CI,
-		Docker Compose, Ansible.
+		* **YAML**: donde el ecosistema lo espera. Manifiestos de Kubernetes, pipelines de CI, Docker Compose, Ansible.
+		* **@STXT@**: cuando el fichero es un documento que escriben y leen personas, o cuando
+		  debe validarse sin herramientas externas. Por ejemplo, [ficheros de configuración](use-cases-config-files),
+		  [documentos corporativos](use-cases-corporate-docs) o [contenido de un CMS](use-cases-cms).
 
-		@STXT@, cuando el fichero es un documento que escriben y leen personas:
-		configuración con notas en prosa, [documentos corporativos](use-cases-corporate-docs),
-		[contenido de un CMS](use-cases-cms), y cualquier estructura que deba validarse sin
-		herramientas externas. El caso de uso de
-		[ficheros de configuración](use-cases-config-files) desarrolla el escenario más
-		cercano, y la versión corta de esta comparación está en la
-		[FAQ](faq#por-que-no-xml-yaml-o-toml).
+		La versión corta de esta comparación está en la [FAQ](faq#por-que-no-xml-yaml-o-toml).

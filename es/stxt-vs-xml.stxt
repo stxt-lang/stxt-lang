@@ -1,19 +1,13 @@
 Document (dev.stxt.website): STXT frente a XML: estructura y validación sin verbosidad
 	Metadata:
-		Last modif: 2026-09-08
+		Last modif: 2026-09-19
 		Description: STXT y XML comparados con ejemplos: el mismo árbol con y sin etiquetas de cierre, escapes y entidades, atributos frente a hijos, y un XSD frente a una plantilla STXT.
 
 	Header: @STXT@ frente a XML
 
 	Assert >>
-		XML es el formato más cercano en espíritu a @STXT@: estructura con nombre, namespaces, esquemas.\\
-		La diferencia es el precio que paga una persona por escribirlo.
-
-	Content >>
-		XML y @STXT@ modelan un documento como un árbol de nodos con nombre, agrupan los
-		vocabularios en namespaces y validan contra una estructura declarada. @STXT@
-		persigue lo mismo con una restricción añadida: que el documento se escriba y se
-		lea a mano sin etiquetas de cierre ni escapes.
+		XML es el formato más cercano a @STXT@: un árbol de nodos con nombre, namespaces y esquemas.
+		@STXT@ busca lo mismo, en un documento que se pueda escribir y leer a mano.
 
 	Subheader: El mismo contenido, dos veces
 
@@ -44,26 +38,35 @@ Document (dev.stxt.website): STXT frente a XML: estructura y validación sin ver
 				<and everything in between>.
 
 	Content >>
-		El mismo árbol y la misma idea de namespace, con dos cosas menos: nada se cierra,
-		porque la indentación dice dónde termina cada nodo, y nada se escapa, porque `&`,
-		`<` y `>` no significan nada en un valor ni en un bloque de texto @STXT@.
+		Es el mismo árbol, con la misma idea de namespace. Las diferencias son estas:
+
+		|                      | XML                                         | @STXT@                                                |
+		| -------------------- | ------------------------------------------- | ----------------------------------------------------- |
+		| Fin de un nodo       | Etiqueta de cierre                          | La indentación                                        |
+		| Caracteres `<` y `&` | Se escapan (`&lt;`, `&amp;`) o van en CDATA | No significan nada, cualquier carácter es legal       |
+		| Dónde va un dato     | En un atributo o en un elemento hijo        | Siempre en un nodo hijo                               |
+		| Entidades            | Internas y externas                         | No tiene                                              |
+		| Esquemas             | DTD, XSD, RELAX NG, Schematron              | `@stxt.schema` y `@stxt.template`, escritos en @STXT@ |
 
 	Subheader: Escapes y entidades
 
 	Content >>
-		XML reserva `<` y `&` en el contenido, así que el texto se escapa o se envuelve
-		en una sección CDATA, que a su vez no puede contener `]]>`. Las entidades abren
-		además la superficie de ataque conocida: entidades externas (XXE) que leen ficheros
-		o alcanzan la red, y expansión de entidades que agota la memoria. Los parsers
-		endurecidos desactivan esas características; @STXT@ no las tiene. No hay entidades,
-		referencias ni inclusión, y cualquier carácter es legal en un valor o en un bloque.
-		El modelo de seguridad es normativo en [STXT-SPEC §15](stxt-core-ref#s15).
+		XML reserva `<` y `&` en el contenido. El texto se escapa, o se envuelve en una sección CDATA,
+		que a su vez no puede contener `]]>`.
+
+		Las entidades abren además dos ataques conocidos:
+
+		* **Entidades externas (XXE)**: leen ficheros o alcanzan la red.
+		* **Expansión de entidades**: agota la memoria.
+
+		Los parsers endurecidos desactivan esas características. @STXT@ no las tiene: no hay entidades,
+		referencias ni inclusión ([STXT-SPEC §15](stxt-core-ref#s15)).
 
 	Subheader: Atributos y elementos
 
 	Content >>
-		XML ofrece dos sitios para un dato: atributo o elemento hijo. Cada vocabulario
-		decide, y los consumidores tienen que leer los dos. Un fragmento de configuración:
+		XML ofrece dos sitios para un dato, atributo o elemento hijo. Cada vocabulario decide,
+		y quien lo lee tiene que mirar los dos:
 
 	Xml >>
 		<server name="db1" host="10.0.0.5" port="5432">
@@ -73,9 +76,7 @@ Document (dev.stxt.website): STXT frente a XML: estructura y validación sin ver
 		</server>
 
 	Content >>
-		@STXT@ tiene una sola construcción: un nodo con valor e hijos, o un nodo con
-		texto literal. Lo que en XML era atributo o elemento es aquí, en los dos casos,
-		un hijo:
+		En @STXT@ solo hay nodos. Lo que en XML era atributo o elemento es aquí, en los dos casos, un hijo:
 
 	Code >>
 		Server: db1
@@ -87,15 +88,12 @@ Document (dev.stxt.website): STXT frente a XML: estructura y validación sin ver
 			Replica: 10.0.0.7
 
 	Content >>
-		Los atributos de XML son más compactos en línea; @STXT@ renuncia a ese segundo
-		eje a cambio de una forma única, que es lo que hace que un documento se lea sin
-		conocer las decisiones de su vocabulario.
+		Los atributos de XML son más compactos en una línea. @STXT@ renuncia a eso a cambio de una forma única.
 
 	Subheader: La validación
 
 	Content >>
-		XML tiene varios lenguajes de esquema (DTD, XSD, RELAX NG, Schematron), cada uno
-		con su sintaxis. Un XSD para el artículo de arriba:
+		Un XSD para el artículo del principio:
 
 	Xml >>
 		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -123,8 +121,7 @@ Document (dev.stxt.website): STXT frente a XML: estructura y validación sin ver
 		</xs:schema>
 
 	Content >>
-		Y la plantilla @STXT@ equivalente, escrita en el propio lenguaje y con la forma
-		del documento que describe:
+		Y la plantilla @STXT@, escrita en el propio lenguaje y con la forma del documento que describe:
 
 	Code >>
 		Template (@stxt.template): com.example.articles
@@ -136,24 +133,33 @@ Document (dev.stxt.website): STXT frente a XML: estructura y validación sin ver
 					Summary: (?) TEXT
 
 	Content >>
-		No son equivalentes del todo, y la diferencia va en las dos direcciones. El XSD
-		exige el orden de los hijos (`xs:sequence`) y puede añadir patrones, rangos y
-		tipos derivados; la capa de esquemas de @STXT@ no valida el orden ni admite
-		expresiones regulares ni reglas condicionales, y lo declara como no-objetivo
-		([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)). A cambio, la plantilla comprueba
-		que `Email` es una dirección de correo (`xs:string` no lo hace), y su modelo de
-		contenido es cerrado: cualquier hijo no declarado es un error.
+		No son equivalentes del todo, y la diferencia va en las dos direcciones:
+
+		* **El XSD valida más**: el orden de los hijos (`xs:sequence`), patrones, rangos y tipos derivados.
+		  Los esquemas de @STXT@ no validan el orden, y no tienen expresiones regulares ni reglas condicionales
+		  ([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)).
+		* **La plantilla comprueba que `Email` es una dirección de correo**, y `xs:string` no lo hace.
+		* **El modelo de la plantilla es cerrado**: cualquier hijo no declarado es un error.
+
+	Code >>
+		# ERROR: este documento no valida
+		Article (com.example.articles): Modern Software & Architecture
+			# `1 de septiembre` no es un DATE
+			Published: 1 de septiembre
+			Author: Ana López
+				# `ana` no es un EMAIL
+				Email: ana
+			# `Editor` no está en la plantilla
+			Editor: Joan Costa
 
 	Subheader: Cuándo usar cada uno
 
 	Content >>
-		XML, donde su ecosistema es el valor: vocabularios establecidos (DocBook, SVG,
-		ODF, RSS), cadenas de herramientas sobre XSLT y XPath, y **contenido mixto**,
-		el marcado en línea dentro de la prosa, que @STXT@ no modela: la prosa con formato
-		va en un bloque de texto, en [Markdown](stxt-vs-markdown).
+		* **XML**: donde su ecosistema es el valor. Vocabularios establecidos (DocBook, SVG, ODF, RSS),
+		  herramientas sobre XSLT y XPath, y **contenido mixto**, el marcado en línea dentro de la prosa.
+		  @STXT@ no lo modela: la prosa con formato va en un nodo block, en [Markdown](stxt-vs-markdown).
+		* **@STXT@**: en los documentos que las personas redactan y las organizaciones validan. Por ejemplo,
+		  [documentos corporativos](use-cases-corporate-docs), [contratos](use-cases-contracts),
+		  [RFCs y propuestas técnicas](use-cases-rfcs) o [contenido de un CMS](use-cases-cms).
 
-		@STXT@, en los documentos que las personas redactan y las organizaciones
-		validan: [documentos corporativos](use-cases-corporate-docs),
-		[contratos](use-cases-contracts), [RFCs y propuestas técnicas](use-cases-rfcs),
-		[contenido de un CMS](use-cases-cms). La versión corta de esta comparación está
-		en la [FAQ](faq#por-que-no-xml-yaml-o-toml).
+		La versión corta de esta comparación está en la [FAQ](faq#por-que-no-xml-yaml-o-toml).

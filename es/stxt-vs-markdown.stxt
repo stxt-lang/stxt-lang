@@ -1,27 +1,20 @@
 Document (dev.stxt.website): STXT frente a Markdown: complementarios
 	Metadata:
-		Last modif: 2026-09-08
+		Last modif: 2026-09-19
 		Description: Markdown da formato a la prosa; STXT estructura los documentos y adopta Markdown para la prosa de sus nodos. Dos ejemplos, y por qué MARKDOWN es el único formato embebido de los esquemas STXT.
 
 	Header: @STXT@ frente a Markdown
 
 	Assert >>
-		Markdown da formato a la prosa; @STXT@ da estructura a los documentos.\\
+		Markdown da formato a la prosa, y @STXT@ da estructura a los documentos.
 		Resuelven problemas distintos, y @STXT@ adopta Markdown para la prosa de sus documentos.
-
-	Content >>
-		Markdown responde a «¿cómo escribo negritas, enlaces y listas dentro de un
-		texto?»; @STXT@ responde a «¿cuáles son las partes de este documento, y están
-		todas?». Un README necesita lo primero; un contrato, un pipeline de artículos o un
-		registro de decisiones necesita las dos cosas.
 
 	Subheader: Los datos de un documento Markdown
 
 	Content >>
-		Markdown no tiene noción de campos. Cuando un documento necesita datos (autor,
-		fecha, estado), la convención es el **front matter**: un bloque YAML entre vallas
-		`---`, ajeno a Markdown y parseado por un segundo lenguaje con
-		[sus propias reglas](stxt-vs-yaml):
+		Markdown no tiene campos. Cuando un documento necesita datos (autor, fecha, estado),
+		la convención es el **front matter**: un bloque entre líneas `---`, escrito en
+		[YAML](stxt-vs-yaml), un segundo lenguaje.
 
 	Listing >>
 		---
@@ -35,9 +28,7 @@ Document (dev.stxt.website): STXT frente a Markdown: complementarios
 		Write **short** sentences. Prefer [links](https://example.com) to footnotes.
 
 	Content >>
-		Nada en ese fichero comprueba que `published` sea una fecha, que `author` esté
-		presente o que el cuerpo tenga las secciones acordadas. En @STXT@ la ficha son
-		nodos y la prosa es un bloque cuyo tipo lo declara como Markdown:
+		En @STXT@ los datos son nodos, y la prosa es un nodo block:
 
 	Code >>
 		Article (com.example.article): Style guide
@@ -58,19 +49,18 @@ Document (dev.stxt.website): STXT frente a Markdown: complementarios
 					Body: (1) MARKDOWN
 
 	Content >>
-		`MARKDOWN` es el único formato embebido que define la capa de esquemas de @STXT@:
-		marca el texto de un nodo como prosa con formato, a interpretar como CommonMark,
-		y su forma cruda sigue siendo legible
-		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)). El validador comprueba lo que el
-		front matter solo sugería: el autor está, la fecha es una fecha y el cuerpo es
-		exactamente un bloque.
+		El validador comprueba lo que el front matter solo sugería: hay un autor, la fecha es una fecha
+		y hay un cuerpo.
+
+		`MARKDOWN` es el único formato embebido que definen los esquemas de @STXT@
+		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)). Indica que el texto del nodo es prosa con formato,
+		a interpretar como CommonMark. @STXT@ no lo interpreta, lo entrega tal cual.
 
 	Subheader: La estructura por convención de títulos
 
 	Content >>
-		Cuando un documento Markdown tiene partes fijas, las partes son títulos, y el
-		acuerdo sobre cuáles son y qué contienen vive fuera del fichero. Un registro de
-		decisión de arquitectura (ADR) con el esquema habitual:
+		Cuando un documento Markdown tiene partes fijas, las partes son títulos. El acuerdo sobre
+		cuáles son y qué contienen vive fuera del fichero. Un registro de decisión de arquitectura (ADR):
 
 	Listing >>
 		# ADR 12: Adopt PostgreSQL
@@ -89,10 +79,10 @@ Document (dev.stxt.website): STXT frente a Markdown: complementarios
 		Migrate the billing data to PostgreSQL 16 during Q4.
 
 	Content >>
-		Un lector sabe que `Status` toma uno de cuatro valores y que `Consequences`
-		debería existir; ninguna herramienta Markdown puede comprobarlo, porque para
-		Markdown todo son títulos y párrafos. En @STXT@ las partes son nodos, y la prosa
-		de cada una sigue siendo Markdown:
+		Quien lo lee sabe que `Status` tiene cuatro valores posibles, y que aquí falta `Consequences`.
+		Ninguna herramienta Markdown lo puede comprobar, porque para Markdown todo son títulos y párrafos.
+
+		En @STXT@ las partes son nodos, y la prosa de cada una sigue siendo Markdown:
 
 	Code >>
 		ADR (com.example.adr): Adopt PostgreSQL
@@ -120,38 +110,34 @@ Document (dev.stxt.website): STXT frente a Markdown: complementarios
 					Consequences: (1) MARKDOWN
 
 	Content >>
-		Un estado fuera de la lista o una sección ausente es un error de validación en lugar
-		de una revisión pendiente:
+		Un documento con errores no valida:
 
 	Code >>
-		# ERROR: Status debe ser uno de Proposed, Accepted, Deprecated, Superseded
+		# ERROR: este documento no valida
 		ADR (com.example.adr): Adopt PostgreSQL
 			Number: 12
+			# `Approved` no es un estado de la lista
 			Status: Approved
 			Context >>
 				The current store has no transactions across collections.
 			Decision >>
 				Migrate the billing data to PostgreSQL 16 during Q4.
-			Consequences >>
-				The two services share one database until the migration ends.
+			# Falta `Consequences`
 
 	Subheader: Este portal
 
 	Content >>
-		Cada página de `stxt.dev`, esta incluida, es un documento @STXT@ cuyos bloques de
-		prosa son Markdown, validado contra la plantilla del sitio antes de renderizarse
-		([CMS y publicaciones](use-cases-cms)). Se puede añadir `.stxt` a la dirección de
-		cualquier página para leer la fuente.
+		Cada página de `stxt.dev`, esta incluida, es un documento @STXT@ con la prosa en Markdown.
+		Se valida contra la plantilla del sitio antes de generarse ([CMS y publicaciones](use-cases-cms)).
+		Se puede añadir `.stxt` a la dirección de cualquier página para ver el código fuente,
+		por ejemplo [stxt-vs-markdown.stxt](stxt-vs-markdown.stxt).
 
 	Subheader: Cuándo usar cada uno
 
 	Content >>
-		Markdown solo, para un README, un comentario o un gist: prosa con formato ligero y
-		sin contrato.
+		* **Markdown solo**: un README, un comentario o un gist. Prosa con formato ligero y sin validación.
+		* **@STXT@**: cuando el documento tiene partes con nombre que se deben comprobar. Por ejemplo,
+		  [contenido de un CMS](use-cases-cms), [documentos corporativos](use-cases-corporate-docs)
+		  o [propuestas técnicas](use-cases-rfcs). La prosa de dentro sigue siendo Markdown.
 
-		@STXT@, cuando el documento tiene partes con nombre que deben comprobarse:
-		[artículos en un pipeline](use-cases-cms),
-		[registros corporativos](use-cases-corporate-docs),
-		[propuestas técnicas](use-cases-rfcs). La prosa de dentro sigue siendo Markdown;
-		la estructura de alrededor pasa a ser explícita y validada. La versión corta de
-		esta página está en la [FAQ](faq#por-que-no-markdown).
+		La versión corta de esta página está en la [FAQ](faq#por-que-no-markdown).

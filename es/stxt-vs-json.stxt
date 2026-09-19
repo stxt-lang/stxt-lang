@@ -1,18 +1,13 @@
 Document (dev.stxt.website): STXT frente a JSON: documentos a mano frente a serialización
 	Metadata:
-		Last modif: 2026-09-08
+		Last modif: 2026-09-19
 		Description: STXT y JSON comparados con ejemplos: escritura a mano, comentarios, texto multilínea, JSON Schema frente a plantillas, y el árbol JSON canónico de todo documento STXT.
 
 	Header: @STXT@ frente a JSON
 
 	Assert >>
-		JSON es un formato de serialización para máquinas; @STXT@, un lenguaje de marcado para personas.
-
-	Content >>
-		JSON tiene una gramática mínima, un solo modelo de datos y parsers en todos los
-		lenguajes. La comparación se limita al punto donde los dos se solapan, un fichero
-		que una persona escribe y mantiene a mano, y termina donde @STXT@ adopta JSON:
-		como representación de su propio árbol.
+		JSON es un formato de serialización para máquinas, y @STXT@ un lenguaje para personas.
+		Solo se solapan en un punto: un fichero que una persona escribe y mantiene a mano.
 
 	Subheader: El mismo contenido, dos veces
 
@@ -33,6 +28,7 @@ Document (dev.stxt.website): STXT frente a JSON: documentos a mano frente a seri
 		Y en @STXT@:
 
 	Code >>
+		# La ficha de un artículo
 		Article: Modern Software Architecture
 			Published: 2026-09-01
 			Tag: software
@@ -42,24 +38,19 @@ Document (dev.stxt.website): STXT frente a JSON: documentos a mano frente a seri
 				Second line, with "quotes".
 
 	Content >>
-		Las diferencias son las de la gramática de JSON, pensada para que un programa
-		la emita y otro la lea:
+		La gramática de JSON está pensada para que un programa la escriba y otro la lea:
 
-		* **Delimitadores.** Claves y cadenas entre comillas, objetos entre llaves,
-		  elementos separados por comas, y una coma tras el último elemento es un error de
-		  sintaxis. En @STXT@ la estructura es la indentación y un nombre termina en `:`.
-		* **Sin comentarios.** La gramática de JSON no los admite. @STXT@ tiene comentarios
-		  con `#`, y las herramientas los conservan al reformatear.
-		* **Un texto es una línea.** Los saltos se escriben `\n` y las comillas se escapan.
-		  En @STXT@ un bloque `>>` contiene el texto literal, con sus saltos de línea y
-		  sin escapes.
-		* **Sin esquemas en el lenguaje.** JSON Schema es una especificación aparte, escrita
-		  en JSON, con su propio vocabulario de composición y referencias.
+		|                        | JSON                                                                              | @STXT@                                         |
+		| ---------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------- |
+		| Estructura             | Llaves, corchetes, comillas y comas. Una coma tras el último elemento es un error | La indentación, y un nombre que termina en `:` |
+		| Comentarios            | No tiene                                                                          | Líneas que empiezan por `#`                    |
+		| Texto de varias líneas | Una sola línea, con `\n` y comillas escapadas                                     | Un nodo block `>>`, con el texto literal       |
+		| Esquemas               | JSON Schema, una especificación aparte                                            | Forman parte del lenguaje, y son opcionales    |
 
 	Subheader: JSON Schema frente a una plantilla
 
 	Content >>
-		La estructura del artículo, descrita en JSON Schema:
+		La estructura del artículo, en JSON Schema:
 
 	Json >>
 		{
@@ -83,8 +74,7 @@ Document (dev.stxt.website): STXT frente a JSON: documentos a mano frente a seri
 		}
 
 	Content >>
-		Y la misma estructura como plantilla @STXT@, que se lee como el documento que
-		describe:
+		Y la misma estructura como plantilla @STXT@. Se lee como el documento que describe:
 
 	Code >>
 		Template (@stxt.template): com.example.articles
@@ -95,14 +85,7 @@ Document (dev.stxt.website): STXT frente a JSON: documentos a mano frente a seri
 					Summary: (?) TEXT
 
 	Content >>
-		Dos diferencias de fondo. El modelo de contenido de @STXT@ es cerrado por
-		definición: un hijo no declarado es un error, sin necesidad de
-		`additionalProperties: false` en cada nivel. Y `DATE` se comprueba siempre,
-		mientras que en JSON Schema `format` es por defecto una anotación, que un
-		validador puede no comprobar salvo que se le pida. A cambio, JSON Schema expresa
-		más: patrones, rangos numéricos, condicionales y composición (`oneOf`, `$ref`),
-		que la capa de esquemas de @STXT@ deja fuera a propósito
-		([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)). El artículo, con namespace:
+		El artículo, con namespace:
 
 	Code >>
 		Article (com.example.articles): Modern Software Architecture
@@ -112,14 +95,24 @@ Document (dev.stxt.website): STXT frente a JSON: documentos a mano frente a seri
 			Summary >>
 				A survey of monoliths and microservices.
 
+	Content >>
+		Las diferencias van en las dos direcciones:
+
+		* **Modelo cerrado**: en @STXT@ un hijo no declarado es un error, sin necesidad
+		  de `additionalProperties: false` en cada nivel.
+		* **Tipos**: `DATE` se comprueba siempre. En JSON Schema, `format` es por defecto una anotación,
+		  y un validador puede no comprobarla.
+		* **JSON Schema expresa más**: patrones, rangos numéricos, condicionales y composición (`oneOf`, `$ref`).
+		  Los esquemas de @STXT@ lo dejan fuera a propósito ([STXT-SCHEMA-SPEC §11](stxt-schema-ref#s11)).
+
 	Subheader: De @STXT@ a JSON
 
 	Content >>
-		@STXT@ no compite con JSON como formato de intercambio: lo adopta.
-		[STXT-TREE-SPEC](stxt-tree-ref) define la representación JSON canónica del árbol
-		de todo documento válido, idéntica en todas las implementaciones. El comando
-		`stxt describe` la imprime, y las tres bibliotecas la exponen en su API. El
-		artículo de arriba, en esa forma:
+		@STXT@ adopta JSON como representación de su árbol. [STXT-TREE-SPEC](stxt-tree-ref) define
+		el JSON canónico de todo documento válido, idéntico en todas las implementaciones.
+		El comando `stxt describe` lo imprime, y las tres bibliotecas lo exponen en su API.
+
+		El artículo anterior, en esa forma:
 
 	Json >>
 		[
@@ -166,22 +159,17 @@ Document (dev.stxt.website): STXT frente a JSON: documentos a mano frente a seri
 		]
 
 	Content >>
-		Es más largo que el JSON escrito a mano porque no es el mismo dato: es el árbol
-		completo, con el nombre tal como se escribió, su forma canónica y el namespace de
-		cada nodo, y por eso lo puede consumir cualquier programa que lea JSON sin un
-		parser de @STXT@. La fuente sigue siendo legible y la serialización se obtiene
-		mecánicamente.
+		Es más largo que el JSON escrito a mano porque es el árbol completo: el nombre tal como se escribió,
+		su forma canónica y el namespace de cada nodo. Cualquier programa que lea JSON lo puede usar,
+		sin un parser de @STXT@.
 
 	Subheader: Cuándo usar cada uno
 
 	Content >>
-		JSON, para lo que intercambian las máquinas: cargas de API, estado serializado,
-		artefactos generados que nadie edita.
+		* **JSON**: lo que intercambian las máquinas. Cargas de API, estado serializado, artefactos generados que nadie edita.
+		* **@STXT@**: cuando hay una persona en uno de los dos extremos del fichero. Por ejemplo,
+		  [ficheros de configuración](use-cases-config-files), [documentos corporativos](use-cases-corporate-docs)
+		  o [contenido de un CMS](use-cases-cms), con el árbol canónico donde se espere JSON.
 
-		@STXT@, cuando hay una persona en uno de los dos extremos del fichero:
-		documentos, [configuración](use-cases-config-files),
-		[registros corporativos](use-cases-corporate-docs),
-		[contenido que alimenta un pipeline](use-cases-cms), con el árbol canónico allí
-		donde se espere JSON. El caso de uso de [IA y LLMs](ai-llms) recorre esa ruta:
-		documentos generados, validados y consumidos como JSON. La versión corta de esta
-		página está en la [FAQ](faq#por-que-no-json).
+		El caso de [IA y LLMs](ai-llms) recorre ese camino: documentos generados, validados y usados como JSON.
+		La versión corta de esta página está en la [FAQ](faq#por-que-no-json).

@@ -1,20 +1,13 @@
 Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a documentos jerárquicos
 	Metadata:
-		Last modif: 2026-09-08
+		Last modif: 2026-09-19
 		Description: STXT y TOML comparados con ejemplos: cabeceras frente a indentación, tablas anidadas, cadenas multilínea, tipos en la sintaxis frente a tipos en la definición, y validación.
 
 	Header: @STXT@ frente a TOML
 
 	Assert >>
-		TOML y @STXT@ comparten objetivo: ficheros que una persona escribe y lee.\\
-		Difieren en el modelo: tablas de claves y valores tipados frente a un árbol de nodos de texto.
-
-	Content >>
-		TOML es el formato de configuración de `Cargo.toml` y `pyproject.toml`, y su
-		especificación declara un objetivo afín al de @STXT@: un formato mínimo, fácil de
-		leer por su semántica obvia. La diferencia está en el modelo de datos: TOML
-		describe tablas de claves con valores tipados; @STXT@, documentos jerárquicos cuyos
-		valores son texto.
+		TOML y @STXT@ comparten objetivo: ficheros que una persona escribe y lee.
+		TOML describe tablas de claves con valores tipados, y @STXT@ un árbol de nodos de texto.
 
 	Subheader: El mismo contenido, dos veces
 
@@ -54,14 +47,21 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 				Keep: 30
 
 	Content >>
-		El árbol es el mismo. Lo que cambia es dónde vive la jerarquía: en TOML, en las
-		cabeceras `[storage]` y `[[job]]`; en @STXT@, en la indentación.
+		El árbol es el mismo. Las diferencias son estas:
+
+		|                        | TOML                                                           | @STXT@                                               |
+		| ---------------------- | -------------------------------------------------------------- | ---------------------------------------------------- |
+		| Jerarquía              | En las cabeceras `[storage]` y `[[job]]`                       | En la indentación                                    |
+		| Grafías                | Cabeceras, claves con punto, tablas en línea, arrays de tablas | Una sola                                             |
+		| Valores                | Tipados por su grafía: `14`, `"14"`, `true`                    | Todo valor es texto. El tipo lo declara la plantilla |
+		| Texto de varias líneas | Cadenas `"""`, sin sangrar                                     | Un nodo block `>>`, sangrado con el documento        |
+		| Namespaces             | No tiene                                                       | Forman parte del lenguaje                            |
+		| Esquemas               | Herramientas externas                                          | Forman parte del lenguaje, y son opcionales          |
 
 	Subheader: Dónde vive la jerarquía
 
 	Content >>
-		Cada cabecera TOML escribe la ruta completa de su tabla, y un elemento de un
-		array de tablas anidado la repite entera. Dos trabajos con sus pasos:
+		Cada cabecera TOML escribe la ruta completa de su tabla. Dos trabajos con sus pasos:
 
 	Listing >>
 		[[job]]
@@ -80,10 +80,11 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 		run = "tar cf documents.tar /srv/docs"
 
 	Content >>
-		Cada `[[job.step]]` pertenece al último `[[job]]` abierto: la pertenencia la decide
-		la posición en el fichero, y la ruta se repite en cada cabecera. En @STXT@ cada
-		nivel se escribe una vez y un hijo pertenece al nodo bajo el que está indentado
-		([STXT-SPEC §8](stxt-core-ref#s8)):
+		Cada `[[job.step]]` pertenece al último `[[job]]` abierto. La pertenencia la decide
+		la posición en el fichero, y la ruta se repite en cada cabecera.
+
+		En @STXT@ cada nivel se escribe una vez, y un hijo pertenece al nodo bajo el que
+		está indentado ([STXT-SPEC §8](stxt-core-ref#s8)):
 
 	Code >>
 		Backup:
@@ -94,20 +95,28 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 				Step: tar cf documents.tar /srv/docs
 
 	Content >>
-		Otras dos propiedades del modelo de TOML: las tablas pueden escribirse en
-		cualquier orden, así que la forma visual del fichero no tiene por qué coincidir
-		con el árbol; y la misma estructura admite varias grafías: cabeceras, claves con
-		punto (`storage.kind = "s3"`), tablas en línea (`storage = { kind = "s3" }`),
-		arrays en línea y arrays de tablas. En @STXT@ la forma visual del documento es su
-		estructura, y hay una sola grafía.
+		Además, la misma estructura se puede escribir en TOML de tres maneras:
+
+	Listing >>
+		# 1. Con una cabecera
+		[storage]
+		kind = "s3"
+
+		# 2. Con una clave con punto
+		storage.kind = "s3"
+
+		# 3. Con una tabla en línea
+		storage = { kind = "s3" }
+
+	Content >>
+		Las tablas también pueden ir en cualquier orden, así que la forma visual del fichero
+		puede no coincidir con el árbol. En @STXT@ la forma visual del documento es su estructura.
 
 	Subheader: El texto de varias líneas
 
 	Content >>
-		Una cadena multilínea de TOML conserva todo lo que hay entre los delimitadores
-		salvo el salto de línea inicial, incluida la indentación de cada línea. Para que
-		el valor no la contenga, el texto no puede sangrarse con la tabla a la que
-		pertenece:
+		Una cadena multilínea de TOML conserva la indentación de cada línea.
+		Para que el valor no la contenga, el texto no se puede sangrar con la tabla a la que pertenece:
 
 	Listing >>
 		[storage]
@@ -118,9 +127,8 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 		"""
 
 	Content >>
-		En un bloque `>>` de @STXT@ la indentación del nivel se descuenta y solo la
-		adicional forma parte del texto: el bloque se sangra con el documento y llega
-		literal, sin escapes ([STXT-SPEC §10](stxt-core-ref#s10)).
+		En un nodo block de @STXT@ la indentación del nivel no cuenta, y solo la adicional
+		forma parte del texto ([STXT-SPEC §10](stxt-core-ref#s10)):
 
 	Code >>
 		Storage:
@@ -132,24 +140,28 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 	Subheader: Los tipos
 
 	Content >>
-		En TOML el tipo está en la grafía del valor: `14` es un entero, `"14"` una cadena,
-		`true` un booleano, `2026-08-31T02:30:00Z` una fecha con hora. Un parser TOML
-		devuelve datos ya tipados sin ninguna definición externa; a cambio, las cadenas van
-		siempre entre comillas, en cuatro formas (básica y literal, de una y de varias
-		líneas), con escapes en las básicas.
+		En TOML el tipo está en la grafía del valor:
 
-		En @STXT@ un valor es siempre texto, sin comillas. Los tipos se declaran en la
-		definición (`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`...) y los comprueba el
-		validador y no el parser: sin definición, `14` son dos caracteres.
+		| Valor                  | Tipo           |
+		| ---------------------- | -------------- |
+		| `14`                   | Entero         |
+		| `"14"`                 | Cadena         |
+		| `true`                 | Booleano       |
+		| `2026-08-31T02:30:00Z` | Fecha con hora |
+
+		Un parser TOML devuelve datos ya tipados, sin ninguna definición externa. A cambio, las cadenas
+		van siempre entre comillas, en cuatro formas (básica y literal, de una y de varias líneas),
+		con caracteres de escape en las básicas.
+
+		En @STXT@ un valor es siempre texto, sin comillas. Los tipos (`NATURAL`, `DATE`, `TIMESTAMP`, `EMAIL`...)
+		se declaran en la plantilla y los comprueba el validador. Sin plantilla, `14` son dos caracteres.
 
 	Subheader: Namespaces y validación
 
 	Content >>
-		TOML no tiene namespaces ni capa de esquemas: nada en el fichero declara a qué
-		vocabulario pertenece, y la validación queda para la aplicación o para una
-		herramienta externa. En @STXT@ el namespace conecta el documento con su
-		definición, y la plantilla fija estructura, cardinalidades y tipos. La
-		configuración inicial, con namespace:
+		En TOML nada declara a qué vocabulario pertenece el fichero, y la validación queda para la aplicación
+		o para una herramienta externa. En @STXT@ el namespace conecta el documento con su plantilla.
+		La configuración del principio, con namespace:
 
 	Code >>
 		Backup (com.example.backup): Nightly backup
@@ -178,29 +190,26 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 						Keep: (1) NATURAL
 
 	Content >>
-		Un nombre no declarado, un `Storage` ausente o un `Keep` que no sea un número
-		fallan con un código de error explícito:
+		Un documento con errores no valida:
 
 	Code >>
-		# ERROR: Keep exige un valor NATURAL
+		# ERROR: este documento no valida
 		Backup (com.example.backup): Nightly backup
-			Storage:
-				Kind: s3
-				Bucket: acme-backups
+			# Falta `Storage`
 			Job: database
 				Schedule: 02:30
+				# `fourteen` no es un NATURAL
 				Keep: fourteen
+				# `Compress` no está en la plantilla
+				Compress: true
 
 	Subheader: Cuándo usar cada uno
 
 	Content >>
-		TOML, donde el ecosistema lo espera (`Cargo.toml`, `pyproject.toml`, la
-		configuración de herramientas que leen ese fichero) y para configuración plana de
-		claves con valores tipados, que es el objetivo que su especificación declara.
+		* **TOML**: donde el ecosistema lo espera (`Cargo.toml`, `pyproject.toml`), y para configuración plana
+		  de claves con valores tipados, que es el objetivo que declara su especificación.
+		* **@STXT@**: cuando el fichero crece hacia documento. Jerarquía de varios niveles, texto en prosa
+		  junto a los datos, o una estructura que debe validarse. Por ejemplo,
+		  [ficheros de configuración](use-cases-config-files) o [documentos corporativos](use-cases-corporate-docs).
 
-		@STXT@, cuando el fichero crece hacia documento: jerarquía de varios niveles,
-		texto en prosa junto a los datos, [registros corporativos](use-cases-corporate-docs)
-		y cualquier estructura que deba validarse contra una definición. El caso de uso
-		de [ficheros de configuración](use-cases-config-files) desarrolla el escenario
-		más cercano, y la versión corta de esta comparación está en la
-		[FAQ](faq#por-que-no-xml-yaml-o-toml).
+		La versión corta de esta comparación está en la [FAQ](faq#por-que-no-xml-yaml-o-toml).
