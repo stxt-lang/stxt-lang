@@ -140,8 +140,8 @@ Document (dev.stxt.website): STXT frente a Markdown: complementarios
 	Content >>
 		Cada página de `stxt.dev`, esta incluida, es un documento @STXT@ cuyos bloques de
 		prosa son Markdown, validado contra la plantilla del sitio antes de renderizarse
-		([CMS y publicaciones](use-cases-cms)). Añade `.stxt` a la dirección de cualquier
-		página para leer la fuente.
+		([CMS y publicaciones](use-cases-cms)). Se puede añadir `.stxt` a la dirección de
+		cualquier página para leer la fuente.
 
 	Subheader: Cuándo usar cada uno
 

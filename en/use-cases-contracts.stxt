@@ -1,30 +1,20 @@
 Document (dev.stxt.website): Contracts and legal agreements | STXT
 
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-19
 		Description: STXT as the source format for contracts and agreements: normative text stays text while parties, dates and amounts are extractable, checkable data.
 
 	Header: Contracts and legal agreements
 
 	Assert >>
-		A contract is normative text with data inside: parties, dates, amounts, deadlines,
-		service levels. @STXT@ allows writing it so that the text remains text, paragraph
-		by paragraph and clause by clause, and the data is data, extractable and checkable, in
-		the same document.
+		A contract is legal text with data inside: parties, dates, amounts, deadlines.
+		In @STXT@ the text remains text, clause by clause, and the data is data,
+		in the same document.
 
 	Content >>
-		This page is not about replacing the signed legal document or the legal process
-		around it. It is about the **source format** of contracts, framework agreements,
-		service level agreements, non-disclosure agreements and internal policies: the
-		file from which the PDF, the template for the next version and the data other
-		systems need all come.
-
-		Today that data is inside the paragraphs. To know when an agreement expires, what
-		amount is invoiced or what response time was committed, the document has to be
-		read, and a system that needs those values receives them copied by hand. Versions
-		are compared by opening two binary files, and the standard clause the legal
-		department approved once is copied into every contract, and the differences
-		between copies cannot be seen without comparing the texts.
+		This page is about the **source format** of a contract: the file from which the PDF,
+		the next version and the data other systems need all come. It does not replace the signed
+		document or the legal process.
 
 	Subheader: A services agreement
 
@@ -52,8 +42,6 @@ Document (dev.stxt.website): Contracts and legal agreements | STXT
 				Currency: EUR
 				Billing period: Monthly
 
-			Governing law: ES
-
 			Clauses:
 				Clause: Subject matter
 					Number: 1
@@ -61,64 +49,38 @@ Document (dev.stxt.website): Contracts and legal agreements | STXT
 						The Provider shall render to the Client the technical support
 						services described in Annex I, within the hours and at the service
 						levels established therein.
-				Clause: Confidentiality
+				Clause: Limitation of liability
 					Number: 2
 					Text >>
-						Each party shall treat as confidential all non-public information
-						received from the other under this agreement, and shall not disclose
-						it to third parties without prior written consent.
-
-						Information in the public domain, or whose disclosure is required by
-						law, shall not be considered confidential.
-				Clause: Limitation of liability
-					Number: 3
-					Text >>
 						The total liability of each party shall not exceed the annual amount
-						of the contract. This limitation shall not apply in case of wilful
-						misconduct or gross negligence.
+						of the contract.
+
+						This limitation shall not apply in case of wilful misconduct or gross
+						negligence.
 					Internal notes >>
 						Standard clause LEG-07, approved by the legal department on
 						2025-11-03. Do not modify without legal review.
 
-			History:
-				Revision: Initial version
-					Date: 2026-01-15
-				Revision: Update of the payment terms
-					Date: 2026-01-28
-
 	Content >>
-		The document reads top to bottom like a contract: identification, parties, term,
-		payment, clauses. What changes with respect to an ordinary text document is that
-		every datum has a name, and every clause is a node with its text inside.
+		In this example we have:
 
-	Subheader: What is data and what is text
+		* **Data**: the parties, the dates and the payment. It is what a billing system or an expiry alert needs.
+		* **Clauses**: each one is a node with its title as the value, its number and its text.
+		* **Text**: the legal wording of each clause, as is, in a block node that accepts several paragraphs.
+		* **Internal notes**: they go inside the clause they refer to, and whoever generates the PDF omits them.
 
-	Content >>
-		The criterion is the same as in any document: data is what someone will look up,
-		compare or check without reading the whole contract.
+		For example, a program can get these values without reading the contract:
 
-		* **The parties, the dates, the amount and the governing law** are data. They are
-		  what an invoicing system, an expiry alert or a risk report need, and with a node
-		  of their own they are obtained without interpreting prose.
-		* **The text of each clause** is text, in a `>>` block that admits several
-		  paragraphs. It is not fragmented into sentences or rewritten in a formal
-		  notation: it is the legal wording, as is.
-		* **Each clause is a node** with its title as value and its number as a child, which
-		  makes it possible to refer to it, order it and compare it between versions. Two
-		  contracts sharing a standard clause have it as the same block, and a diff shows
-		  whether someone altered it.
-		* **Internal notes** go in a separate block, inside the clause they refer to, and
-		  are not part of the contractual text: the process that generates the PDF omits
-		  them and the one that prepares the review shows them.
+		| Node                | Value        |
+		| ------------------- | ------------ |
+		| `Term/End`          | `2027-01-31` |
+		| `Payment/Fee`       | `12000`      |
+		| `Payment/Currency`  | `EUR`        |
 
 	Subheader: The template
 
 	Code >>
 		Template (@stxt.template): com.acme.legal.contract
-			Description >>
-				Agreement: Contract or agreement between two or more parties
-				Clauses: Numbered clauses; the text is the literal legal wording
-				Internal notes: Review notes; not part of the contract
 			Structure >>
 				Agreement:
 					Id: (1)
@@ -136,38 +98,42 @@ Document (dev.stxt.website): Contracts and legal agreements | STXT
 						Fee: (1) NUMBER
 						Currency: (1) ENUM [EUR, USD, GBP]
 						Billing period: (?) ENUM [Monthly, Quarterly, Yearly]
-					Governing law: (?)
 					Clauses: (?)
 						Clause: (*)
 							Number: (?) NATURAL
 							Text: (1) TEXT
 							Internal notes: (?) TEXT
-					History: (?)
-						Revision: (*)
-							Date: (1) DATE
 
 	Content >>
-		What the [template](stxt-template-ref) guarantees is what a legal review checks
-		first, and the editor checks it while typing:
+		The [template](stxt-template-ref) checks the data and does not restrict the wording
+		of the clauses, their number or their order.
 
-		* An agreement has **at least two parties** (`(2+)`), each with its role.
-		* Dates are valid dates and the amount is a number; `Fee: 12,000 €` does not pass.
-		* Currency and billing period are in a closed list: there are no `Euros`, `eur` and
-		  `EUR` coexisting in three contracts.
-		* Every clause has text. A title without wording is not a clause.
-		* The status is one of three; a `Signed` contract without `Effective date` is still
-		  valid for the template (the date is optional), and it is the process that decides
-		  whether to admit it.
+	Subsubheader: An agreement that does not validate
 
-		And what it deliberately does not restrict: the wording of the clauses, their
-		number and their order.
+	Code >>
+		# ERROR: this document does not validate
+		Agreement (com.acme.legal.contract):
+			Id: AGR-2026-002
+			Title: Non-disclosure agreement
+			Status: Draft
+			# An agreement has at least two parties: (2+)
+			Parties:
+				Party: ACME Corp
+					Role: Provider
+			Payment:
+				# A NUMBER has no thousands separator or symbol
+				Fee: 12,000 €
+				# `Euros` is not a value of the list
+				Currency: Euros
+			Clauses:
+				# A clause without `Text` is not a clause
+				Clause: Confidentiality
+					Number: 1
 
 	Subheader: A service level agreement
 
 	Content >>
-		An SLA is the case with the most data inside legal text: targets, times,
-		penalties. With nodes of their own, those values are the ones a monitoring system
-		compares with reality:
+		An SLA is the case with the most data inside legal text: targets, times and penalties.
 
 	Code >>
 		SLA (com.acme.legal.sla):
@@ -198,10 +164,11 @@ Document (dev.stxt.website): Contracts and legal agreements | STXT
 				Metrics shall be measured according to the procedures described in the
 				technical annex. The parties shall review the targets yearly.
 
+	Content >>
+		And its template:
+
 	Code >>
 		Template (@stxt.template): com.acme.legal.sla
-			Description >>
-				SLA: Service level agreement attached to a contract
 			Structure >>
 				SLA:
 					Service: (1)
@@ -220,40 +187,29 @@ Document (dev.stxt.website): Contracts and legal agreements | STXT
 					Legal text: (?) TEXT
 
 	Content >>
-		`Agreement: AGR-2026-001` links the SLA to the contract it belongs to, by its
-		identifier. The availability target and the response times are numbers: the
-		dashboard that measures the service reads them from the same file the parties
-		signed, not from a copy in its configuration.
+		`Agreement: AGR-2026-001` links the SLA to its contract. The dashboard that measures the service
+		can read the availability target and the response times from the same file
+		the parties signed.
 
-	Subheader: In the workflow
+	Subheader: How it is used
 
 	Content >>
-		* **Versions**: each contract is a file in a repository, and each revision is a
-		  readable diff: which clause changed, which date moved. The `History` node holds
-		  the summary and the repository keeps the detail.
-		* **Standard clauses**: the legal department maintains its approved clauses as text
-		  fragments; a contract incorporates them by copying, and a script compares each
-		  clause with the approved version and flags the ones that differ.
-		* **Validation**: `stxt validate --recursive contracts/` ([The command line](tools-cli)) in
-		  continuous integration rejects an agreement without parties, without a valid
-		  date or with a status outside the list.
-		* **Extraction**: from the [canonical tree](stxt-tree-ref) come the quarter's expiries, the amounts
-		  per client or the SLAs with a target below 99.9 %, without reading a single
-		  contract.
-		* **Publishing**: the PDF or the signable document is generated from the file,
-		  omitting the internal notes.
+		* **Versions**: each contract is a file in a repository, and each revision is a diff that shows which clause changed or which date moved.
+		* **Standard clauses**: a program compares each clause with the version approved by the legal department, and flags those that differ.
+		* **Validation**: `stxt validate --recursive contracts/` ([The command line](tools-cli)) in continuous integration.
+		* **Extraction**: the quarter's expiries or the amounts per client come out of the [tree](stxt-tree-ref).
+		* **Publishing**: the PDF is generated from the file, without the internal notes.
 
 	Subheader: Limits
 
 	Content >>
-		@STXT@ provides no legal validity, electronic signature or custody: the signed
-		document is still the one the legal process produces, and this file is its source.
-		Nor does it interpret the text of the clauses: a condition written in prose ("except
-		in case of wilful misconduct") is text to the language, and only a person, or an
-		application that models it as data, can evaluate it. And the template does not
-		check consistency between fields (that `End` is after `Start`, that the SLA cites a
-		contract that exists): that is the job of the script that walks the repository.
+		@STXT@ does not provide legal validity, electronic signature or custody.
 
-		The same data-inside-text approach, for lighter documents, is developed in
-		[Corporate documents](use-cases-corporate-docs); [STXT vs XML](stxt-vs-xml)
-		compares the closest format for this kind of normative source.
+		It does not interpret the text of the clauses either: "except in case of wilful misconduct" is text,
+		and only a person can evaluate it.
+
+		The template does not check consistency between fields (that `End` is later than `Start`,
+		or that the contract the SLA cites exists). That is done by the program that walks the repository.
+
+		See also [Corporate documents](use-cases-corporate-docs) and the comparison
+		[STXT vs XML](stxt-vs-xml).

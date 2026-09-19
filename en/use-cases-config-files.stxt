@@ -1,28 +1,14 @@
 Document (dev.stxt.website): Configuration files | STXT
 
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-19
 		Description: STXT for human-readable, validatable configuration files: visible hierarchy, comments next to values and a template that catches errors in the editor.
 
 	Header: Configuration files
 
 	Assert >>
-		A configuration is a document read by two audiences: the person who adjusts it and
-		the program that loads it. @STXT@ serves both with the same file, and with a template
-		it catches in the editor the error that would otherwise show up in production.
-
-	Content >>
-		Configuration files start small and grow without a plan: keys are added, blocks are
-		copied between environments, comments accumulate explaining why a value is what it
-		is. Over time, the rules that make the file valid (which keys exist, which values
-		they admit, which ones are mandatory) live only in the head of whoever maintains it
-		and in the code that reads it. A misspelled name may not fail on load: many loaders
-		ignore it and apply the default value.
-
-		@STXT@ addresses this with three things: a visible hierarchy, which needs neither
-		braces nor ambiguous indentation; text blocks where the long explanation lives next
-		to the value it explains; and a template that turns the implicit rules into a
-		contract the editor applies while typing.
+		A configuration is read by the person who adjusts it and by the program that loads it.
+		With a template, an error is caught in the editor and not in production.
 
 	Subheader: A service's configuration
 
@@ -36,10 +22,7 @@ Document (dev.stxt.website): Configuration files | STXT
 				Port: 8080
 				Public url: https://api.acme.com
 
-			Threads:
-				Min: 8
-				Max: 64
-
+			# The 5000 ms limit comes from the SLA with the payments provider
 			Timeouts:
 				Read ms: 5000
 				Write ms: 5000
@@ -58,27 +41,21 @@ Document (dev.stxt.website): Configuration files | STXT
 				Main configuration of the API gateway. Versioned with the application and
 				deployed with it.
 
-				Changes to Network and Timeouts go through Reliability review: the 5000 ms
-				limit comes from the SLA with the payments provider.
+				Changes to Network and Timeouts go through Reliability review.
 
 	Content >>
-		Each group (`Network`, `Threads`, `Logging`) is a node without a value that groups
-		its children; each setting is a node with a value; each feature flag is a node whose
-		value is its name and whose child is its state. The `Notes >>` block carries what in
-		other formats goes in scattered comments: here it is part of the document, with
-		paragraphs, and a program can display it or ignore it.
+		In this example we have:
+
+		* **Groups**: `Network`, `Timeouts`, `Logging` and `Features`. They are nodes without a value, which group their children.
+		* **Settings**: `Host`, `Port`, `Level`... They are nodes with a value.
+		* **Feature flags**: the value of the `Feature` node is the name, and its child `Enabled` is the state.
+		* **Explanations**: a comment for a short note, or a block node such as `Notes` for a long text.
+		  The difference is that `Notes` is part of the document, and a program can display it.
 
 	Subheader: The template
 
-	Content >>
-		The [template](stxt-template-ref) makes explicit what the program loading the
-		configuration takes for granted:
-
 	Code >>
 		Template (@stxt.template): com.acme.server
-			Description >>
-				Server Config: Configuration of a gateway service
-				Features: Feature switches, one per node
 			Structure >>
 				Server Config:
 					Name: (1)
@@ -87,9 +64,6 @@ Document (dev.stxt.website): Configuration files | STXT
 						Host: (1)
 						Port: (1) NATURAL
 						Public url: (?) URL
-					Threads: (?)
-						Min: (1) NATURAL
-						Max: (1) NATURAL
 					Timeouts: (?)
 						Read ms: (?) NATURAL
 						Write ms: (?) NATURAL
@@ -101,28 +75,50 @@ Document (dev.stxt.website): Configuration files | STXT
 							Enabled: (1) BOOLEAN
 					Notes: (?) TEXT
 
+	Subsubheader: A configuration that does not validate
+
 	Content >>
-		With it, the typical configuration errors stop being silent
-		([closed content model](stxt-schema-ref#s6)):
+		Many configuration loaders ignore a misspelled key and apply the default value.
+		With the [template](stxt-template-ref), these errors stop being silent:
 
-		* `Ports: 8080` (with an extra `s`) is `CHILD_NOT_DECLARED` rather than an ignored key
-		  that leaves the service listening on the default port.
-		* `Port: 80a` or `Enabled: yes` are `INVALID_VALUE`: a natural is a natural and a
-		  boolean is `true` or `false`.
-		* `Level: info` in lowercase is not `INFO`: the `ENUM` compares the value as written.
-		* `Network` is missing, or `Host` inside `Network`: `TOO_FEW_CHILDREN`.
+	Code >>
+		# ERROR: this document does not validate
+		Server Config (com.acme.server):
+			Name: api-gateway
+			Environment: production
+			Network:
+				Host: 0.0.0.0
+				# `Ports` does not exist, it is `Port`
+				Ports: 8080
+			Logging:
+				# Lowercase `info` is not `INFO`
+				Level: info
+			Features:
+				Feature: audit-logging
+					# A BOOLEAN is `true` or `false`
+					Enabled: yes
 
-		The VS Code extension flags those errors while writing. In
-		continuous integration, `stxt validate --recursive config/` performs the same check and stops
-		the deployment of an invalid configuration ([The command line](tools-cli)).
+	Content >>
+		And this is what `stxt validate` answers:
+
+	Listing >>
+		/home/ana/gateway/config/server.stxt:8: [NODE_NOT_DEFINED_IN_SCHEMA] NOT EXIST NODE ports for namespace com.acme.server (error)
+		/home/ana/gateway/config/server.stxt:8: [CHILD_NOT_DECLARED] Child 'com.acme.server:ports' not declared in node 'com.acme.server:network' (error)
+		/home/ana/gateway/config/server.stxt:5: [TOO_FEW_CHILDREN] 0 nodes of 'com.acme.server:port' and min is 1 (error)
+		/home/ana/gateway/config/server.stxt:11: [INVALID_VALUE] The value 'info' is not one of the allowed values of Level (error)
+		/home/ana/gateway/config/server.stxt:15: [INVALID_VALUE] Enabled: Invalid boolean (yes) (error)
+		5 error(s), 0 warning(s)
+
+	Content >>
+		The VS Code extension marks the same errors while typing. In continuous integration,
+		`stxt validate --recursive config/` stops the deployment of an invalid configuration
+		([The command line](tools-cli)).
 
 	Subheader: Several environments, one structure
 
 	Content >>
-		When the same application is configured for several environments, the temptation
-		is to copy the file and change values. With @STXT@ a single document can be kept
-		with one node per environment, and the template guarantees that all of them
-		declare the same things:
+		A single document can have one node per environment, and the template guarantees
+		that all of them declare the same things:
 
 	Code >>
 		Application Config (com.acme.app):
@@ -145,10 +141,11 @@ Document (dev.stxt.website): Configuration files | STXT
 						Max connections: 30
 					Debug: false
 
+	Content >>
+		And its template:
+
 	Code >>
 		Template (@stxt.template): com.acme.app
-			Description >>
-				Application Config: Configuration of an application across all its environments
 			Structure >>
 				Application Config:
 					App name: (1)
@@ -160,35 +157,33 @@ Document (dev.stxt.website): Configuration files | STXT
 							Debug: (1) BOOLEAN
 
 	Content >>
-		The difference between `staging` and `production` is a three-line diff, and an
-		environment missing `Database` does not validate. If the application prefers one
-		file per environment, the same document is split in three with the same namespace
-		and the same template; the guarantee does not change.
+		An environment missing `Database` does not validate. If one file per environment is preferred,
+		the document is split in three with the same namespace and the same template.
 
 	Subheader: How the program reads it
 
 	Content >>
-		The program that loads the configuration does not parse text: it receives a tree.
-		With the library of its language it walks the nodes by canonical name (`port`,
-		`max-connections`) and obtains values already validated against the template: the
-		loading code converts the values, but does not check ranges or allowed values,
-		because that has already happened. The [TypeScript](tools-typescript), [Java](tools-java) and
-		[Python](tools-python) guides show the traversal; template resolution follows the
-		chain of `.stxt/` directories of [STXT-DISCOVERY-SPEC](stxt-discovery-ref), the same
-		as in the editor, so validator and program apply the same definition.
+		The program receives an already validated tree. It walks the nodes by their canonical
+		name (`port`, `max-connections`) and converts the values. The
+		[TypeScript](tools-typescript), [Java](tools-java) and [Python](tools-python) guides show how.
+
+		The template is looked up in the `.stxt/` directories
+		([STXT-DISCOVERY-SPEC](stxt-discovery-ref)), the same as in the editor. That way, the editor and the program
+		apply the same definition.
 
 	Subheader: Limits
 
 	Content >>
-		@STXT@ describes the configuration and does not compute it. There are no variables,
-		no references to other values, no file inclusion, no expressions: a value is the
-		text that is written. It is a design decision ([Design principles](design-principles)),
-		in exchange for a configuration file never being able to execute anything or depend
-		on another. Composition (a base file plus one per environment) is done by the
-		application on load, explicitly.
+		In @STXT@ a value is the text that is written. There are no:
 
-		Nor are there default values in the template: a field is mandatory or optional, and
-		if it is optional and missing, the program decides what it is worth.
+		* Variables or references to other values
+		* Inclusion of other files
+		* Expressions
+		* Default values in the template: if an optional node is missing, the program decides its value
 
-		How this use compares with the formats most often chosen for configuration is
-		developed in [STXT vs YAML](stxt-vs-yaml) and [STXT vs JSON](stxt-vs-json).
+		It is a [design](design-principles) decision: a configuration file cannot execute
+		anything or depend on another. If a base file has to be composed with one per environment,
+		the application does it on load.
+
+		To compare with other configuration formats, see [STXT vs YAML](stxt-vs-yaml),
+		[STXT vs TOML](stxt-vs-toml) and [STXT vs JSON](stxt-vs-json).

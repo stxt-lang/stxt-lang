@@ -118,15 +118,15 @@ Document (dev.stxt.website): STXT Tutorial
 	Subsubheader: ¿Probamos el Playground?
 
 	Content >>
-		En este punto sabes ya lo básico para usar @STXT@. Puedes seguir profundizando
+		En este punto ya hemos visto lo básico para usar @STXT@. Se puede seguir profundizando
 		en los conceptos que ya hemos aprendido, o probar directamente en
 		el [Playground](https://play.stxt.dev).
 
 		Los ejemplos de este tutorial y del portal pueden probarse en el playground
 		pulsando en el icono de "Abrir en el Playground".
 
-		El playground también empieza con un minitutorial, que podéis mirar por encima
-		o experimentar directamente con otros documentos.
+		El playground también empieza con un minitutorial, que se puede mirar por encima,
+		o se puede experimentar directamente con otros documentos.
 
 	Subheader: Nodos en profundidad
 

@@ -1,30 +1,20 @@
 Document (dev.stxt.website): Contratos y acuerdos legales | STXT
 
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-19
 		Description: STXT como formato fuente de contratos y acuerdos: el texto normativo sigue siendo texto y las partes, fechas e importes son datos extraíbles y comprobables.
 
 	Header: Contratos y acuerdos legales
 
 	Assert >>
-		Un contrato es texto normativo con datos dentro: partes, fechas, importes, plazos,
-		niveles de servicio. @STXT@ permite escribirlo de modo que el texto siga siendo
-		texto, párrafo a párrafo y cláusula a cláusula, y los datos sean datos, extraíbles y
-		comprobables, en el mismo documento.
+		Un contrato es texto legal con datos dentro: partes, fechas, importes, plazos.
+		En @STXT@ el texto sigue siendo texto, cláusula a cláusula, y los datos son datos,
+		en el mismo documento.
 
 	Content >>
-		Esta página no trata de sustituir al documento legal firmado ni al proceso jurídico
-		que lo acompaña. Trata del **formato fuente** de contratos, acuerdos marco, acuerdos
-		de nivel de servicio, acuerdos de confidencialidad y políticas internas: el fichero
-		del que salen el PDF, la plantilla de la siguiente versión y los datos que otros
-		sistemas necesitan.
-
-		Hoy esos datos están dentro de los párrafos. Para saber cuándo vence un acuerdo, qué
-		importe se factura o qué tiempo de respuesta se comprometió hay que leer el
-		documento, y un sistema que necesite esos valores los recibe copiados a mano. Las
-		versiones se comparan abriendo dos ficheros binarios, y la cláusula estándar que el
-		departamento legal aprobó una vez se copia en cada contrato, y las diferencias entre
-		copias no se ven sin comparar los textos.
+		Esta página trata del **formato fuente** de un contrato: el fichero del que salen el PDF,
+		la siguiente versión y los datos que necesitan otros sistemas. No sustituye al documento
+		firmado ni al proceso jurídico.
 
 	Subheader: Un acuerdo de servicios
 
@@ -52,8 +42,6 @@ Document (dev.stxt.website): Contratos y acuerdos legales | STXT
 				Currency: EUR
 				Billing period: Monthly
 
-			Governing law: ES
-
 			Clauses:
 				Clause: Objeto
 					Number: 1
@@ -61,64 +49,37 @@ Document (dev.stxt.website): Contratos y acuerdos legales | STXT
 						El Proveedor prestará al Cliente los servicios de soporte técnico
 						descritos en el Anexo I, en el horario y con los niveles de servicio
 						que en él se establecen.
-				Clause: Confidencialidad
+				Clause: Limitación de responsabilidad
 					Number: 2
 					Text >>
-						Cada parte tratará como confidencial toda información no pública
-						recibida de la otra en el marco de este acuerdo, y no la divulgará a
-						terceros sin consentimiento previo y por escrito.
-
-						No se considerará confidencial la información que sea de dominio
-						público o cuya divulgación exija la ley.
-				Clause: Limitación de responsabilidad
-					Number: 3
-					Text >>
 						La responsabilidad total de cada parte no excederá el importe anual
-						del contrato. Esta limitación no se aplicará en caso de dolo o
-						negligencia grave.
+						del contrato.
+
+						Esta limitación no se aplicará en caso de dolo o negligencia grave.
 					Internal notes >>
 						Cláusula estándar LEG-07, aprobada por el departamento legal el
 						2025-11-03. No modificar sin revisión jurídica.
 
-			History:
-				Revision: Versión inicial
-					Date: 2026-01-15
-				Revision: Actualización de las condiciones de pago
-					Date: 2026-01-28
-
 	Content >>
-		El documento se lee de arriba abajo como un contrato: identificación, partes,
-		duración, pago, cláusulas. Lo que cambia respecto a un documento de texto corriente
-		es que cada dato tiene nombre, y que cada cláusula es un nodo con su texto dentro.
+		En este ejemplo tenemos:
 
-	Subheader: Qué es dato y qué es texto
+		* **Datos**: las partes, las fechas y el pago. Es lo que necesita un sistema de facturación o una alerta de vencimiento.
+		* **Cláusulas**: cada una es un nodo con su título como valor, su número y su texto.
+		* **Texto**: la redacción legal de cada cláusula, tal cual, en un nodo block que admite varios párrafos.
+		* **Notas internas**: van dentro de la cláusula a la que se refieren, y quien genera el PDF las omite.
 
-	Content >>
-		El criterio es el mismo que en cualquier documento: es dato lo que alguien va a
-		consultar, comparar o comprobar sin leer el contrato entero.
+		Por ejemplo, un programa puede obtener estos valores sin leer el contrato:
 
-		* **Las partes, las fechas, el importe y la ley aplicable** son datos. Son lo que un
-		  sistema de facturación, una alerta de vencimiento o un informe de riesgos
-		  necesitan, y con un nodo propio se obtienen sin interpretar prosa.
-		* **El texto de cada cláusula** es texto, en un bloque `>>` que admite varios
-		  párrafos. No se fragmenta en frases ni se reescribe en una notación formal: es la
-		  redacción legal, tal cual.
-		* **Cada cláusula es un nodo** con su título como valor y su número como hijo, lo
-		  que permite referirse a ella, ordenarla y compararla entre versiones. Dos contratos
-		  que comparten una cláusula estándar la tienen como el mismo bloque, y un *diff*
-		  muestra si alguien la alteró.
-		* **Las notas internas** van en un bloque aparte, dentro de la cláusula a la que se
-		  refieren, y no forman parte del texto contractual: el proceso que genera el PDF
-		  las omite y el que prepara la revisión las muestra.
+		| Nodo                | Valor        |
+		| ------------------- | ------------ |
+		| `Term/End`          | `2027-01-31` |
+		| `Payment/Fee`       | `12000`      |
+		| `Payment/Currency`  | `EUR`        |
 
 	Subheader: La plantilla
 
 	Code >>
 		Template (@stxt.template): com.acme.legal.contract
-			Description >>
-				Agreement: Contrato o acuerdo entre dos o más partes
-				Clauses: Cláusulas numeradas; el texto es la redacción legal literal
-				Internal notes: Notas de revisión; no forman parte del contrato
 			Structure >>
 				Agreement:
 					Id: (1)
@@ -136,38 +97,42 @@ Document (dev.stxt.website): Contratos y acuerdos legales | STXT
 						Fee: (1) NUMBER
 						Currency: (1) ENUM [EUR, USD, GBP]
 						Billing period: (?) ENUM [Monthly, Quarterly, Yearly]
-					Governing law: (?)
 					Clauses: (?)
 						Clause: (*)
 							Number: (?) NATURAL
 							Text: (1) TEXT
 							Internal notes: (?) TEXT
-					History: (?)
-						Revision: (*)
-							Date: (1) DATE
 
 	Content >>
-		Lo que la [plantilla](stxt-template-ref) garantiza es lo que una revisión legal
-		comprueba primero, y lo comprueba el editor al escribir:
+		La [plantilla](stxt-template-ref) comprueba los datos y no restringe la redacción
+		de las cláusulas, ni su número, ni su orden.
 
-		* Un acuerdo tiene **al menos dos partes** (`(2+)`), cada una con su papel.
-		* Las fechas son fechas válidas y el importe es un número; `Fee: 12.000 €` no pasa.
-		* La moneda y el periodo de facturación están en una lista cerrada: no hay
-		  `Euros`, `eur` y `EUR` conviviendo en tres contratos.
-		* Toda cláusula tiene texto. Un título sin redacción no es una cláusula.
-		* El estado es uno de tres; un contrato `Signed` sin `Effective date` sigue siendo
-		  válido para la plantilla (la fecha es opcional), y es el proceso quien decide si lo
-		  admite.
+	Subsubheader: Un acuerdo que no valida
 
-		Y lo que no restringe, a propósito: la redacción de las cláusulas, su número y su
-		orden.
+	Code >>
+		# ERROR: este documento no valida
+		Agreement (com.acme.legal.contract):
+			Id: AGR-2026-002
+			Title: Acuerdo de confidencialidad
+			Status: Draft
+			# Un acuerdo tiene al menos dos partes: (2+)
+			Parties:
+				Party: ACME Corp
+					Role: Proveedor
+			Payment:
+				# Un NUMBER no lleva separador de miles ni símbolo
+				Fee: 12.000 €
+				# `Euros` no es un valor de la lista
+				Currency: Euros
+			Clauses:
+				# Una cláusula sin `Text` no es una cláusula
+				Clause: Confidencialidad
+					Number: 1
 
 	Subheader: Un acuerdo de nivel de servicio
 
 	Content >>
-		Un SLA es el caso en el que más datos hay dentro del texto legal: objetivos,
-		tiempos, penalizaciones. Con nodos propios, esos valores son los que un sistema de
-		monitorización compara con la realidad:
+		Un SLA es el caso con más datos dentro del texto legal: objetivos, tiempos y penalizaciones.
 
 	Code >>
 		SLA (com.acme.legal.sla):
@@ -198,10 +163,11 @@ Document (dev.stxt.website): Contratos y acuerdos legales | STXT
 				Las métricas se medirán conforme a los procedimientos descritos en el
 				anexo técnico. Las partes revisarán los objetivos anualmente.
 
+	Content >>
+		Y su plantilla:
+
 	Code >>
 		Template (@stxt.template): com.acme.legal.sla
-			Description >>
-				SLA: Acuerdo de nivel de servicio asociado a un contrato
 			Structure >>
 				SLA:
 					Service: (1)
@@ -220,41 +186,29 @@ Document (dev.stxt.website): Contratos y acuerdos legales | STXT
 					Legal text: (?) TEXT
 
 	Content >>
-		`Agreement: AGR-2026-001` enlaza el SLA con el contrato al que pertenece, por su
-		identificador. El objetivo de disponibilidad y los tiempos de respuesta son números:
-		el panel que mide el servicio los lee del mismo fichero que firmaron las partes, y
-		no de una copia en su configuración.
+		`Agreement: AGR-2026-001` enlaza el SLA con su contrato. El panel que mide el servicio
+		puede leer el objetivo de disponibilidad y los tiempos de respuesta del mismo fichero
+		que firmaron las partes.
 
-	Subheader: En el flujo de trabajo
+	Subheader: Cómo se trabaja
 
 	Content >>
-		* **Versiones**: cada contrato es un fichero en un repositorio, y cada revisión es un
-		  *diff* legible: qué cláusula cambió, qué fecha se movió. El nodo `History` recoge
-		  el resumen y el repositorio guarda el detalle.
-		* **Cláusulas estándar**: el departamento legal mantiene sus cláusulas aprobadas
-		  como fragmentos de texto; un contrato las incorpora copiándolas, y un script
-		  compara cada cláusula con la versión aprobada y señala las que difieren.
-		* **Validación**: `stxt validate --recursive contracts/` ([La línea de comandos](tools-cli))
-		  en integración continua rechaza un acuerdo sin partes, sin fecha válida o con un
-		  estado fuera de la lista.
-		* **Extracción**: del [árbol canónico](stxt-tree-ref) salen los vencimientos del trimestre, los
-		  importes por cliente o los SLA con objetivo inferior al 99,9 %, sin leer un solo
-		  contrato.
-		* **Publicación**: el PDF o el documento firmable se genera a partir del fichero,
-		  omitiendo las notas internas.
+		* **Versiones**: cada contrato es un fichero en un repositorio, y cada revisión es un *diff* que muestra qué cláusula cambió o qué fecha se movió.
+		* **Cláusulas estándar**: un programa compara cada cláusula con la versión aprobada por el departamento legal, y señala las que difieren.
+		* **Validación**: `stxt validate --recursive contracts/` ([La línea de comandos](tools-cli)) en integración continua.
+		* **Extracción**: los vencimientos del trimestre o los importes por cliente salen del [árbol](stxt-tree-ref).
+		* **Publicación**: el PDF se genera a partir del fichero, sin las notas internas.
 
 	Subheader: Límites
 
 	Content >>
-		@STXT@ no aporta validez jurídica, firma electrónica ni custodia: el documento
-		firmado sigue siendo el que produce el proceso legal, y este fichero es su fuente.
-		Tampoco interpreta el texto de las cláusulas: una condición escrita en prosa («salvo
-		en caso de dolo») es texto para el lenguaje, y solo una persona, o una aplicación
-		que la modele como datos, puede evaluarla. Y la plantilla no comprueba coherencia
-		entre campos (que `End` sea posterior a `Start`, que el SLA cite un contrato que
-		exista): eso es trabajo del script que recorre el repositorio.
+		@STXT@ no aporta validez jurídica, firma electrónica ni custodia.
 
-		El mismo enfoque de datos dentro del texto, para documentos más ligeros, se
-		desarrolla en [Documentos corporativos](use-cases-corporate-docs);
-		[STXT frente a XML](stxt-vs-xml) compara el formato más cercano para este tipo de
-		fuente normativa.
+		Tampoco interpreta el texto de las cláusulas: «salvo en caso de dolo» es texto, y solo lo
+		puede evaluar una persona.
+
+		La plantilla no comprueba la coherencia entre campos (que `End` sea posterior a `Start`,
+		o que el contrato que cita el SLA exista). Eso lo hace el programa que recorre el repositorio.
+
+		Ver también [Documentos corporativos](use-cases-corporate-docs) y la comparación
+		[STXT frente a XML](stxt-vs-xml).

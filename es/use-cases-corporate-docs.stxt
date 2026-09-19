@@ -1,40 +1,21 @@
 Document (dev.stxt.website): Documentos corporativos | STXT
 
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-19
 		Description: STXT para documentos corporativos: actas, informes y registros de decisiones donde el mismo fichero es el documento que se lee y la fuente de datos.
 
 	Header: Documentos corporativos
 
 	Assert >>
-		Actas, informes de estado, *postmortems*, registros de decisiones: documentos que
-		escriben personas de perfiles distintos, que se revisan, y de los que alguien acaba
-		extrayendo datos a mano. @STXT@ permite que el mismo fichero sea el documento que se
-		lee y la fuente de la que se extraen.
-
-	Content >>
-		Un acta de reunión tiene una parte que es texto (lo que se discutió, por qué se
-		decidió algo) y una parte que son datos: quién asistió, qué acciones quedaron
-		abiertas, para cuándo y a cargo de quién. En la práctica las dos partes acaban en el
-		mismo documento de texto, y los datos se recuperan después leyendo: alguien repasa
-		las actas del trimestre para saber qué acciones siguen abiertas, o copia los estados
-		de veinte informes a una hoja de cálculo.
-
-		El problema no es el formato del texto sino que los datos no están marcados como
-		tales. @STXT@ resuelve exactamente eso: los datos son nodos con nombre y valor, el
-		texto va en bloques literales, y el documento sigue leyéndose de arriba abajo como
-		siempre.
+		Un acta o un informe en @STXT@ es a la vez el documento que leen las personas
+		y los datos que procesa un programa.
 
 	Subheader: Un acta de reunión
-
-	Content >>
-		El acta de una reunión semanal, tal como la escribiría quien la toma:
 
 	Code >>
 		Minutes (com.acme.corp.minutes):
 			Title: Sincronización semanal de Plataforma
 			Date: 2026-01-09
-			Duration minutes: 45
 			Attendees:
 				Attendee: Joan Costa
 				Attendee: Mery Adams
@@ -42,13 +23,10 @@ Document (dev.stxt.website): Documentos corporativos | STXT
 
 			Notes >>
 				El roadmap del trimestre va según lo previsto, pero falta cerrar la
-				capacidad del equipo para febrero. El riesgo principal sigue siendo la
-				dependencia del proveedor externo en el módulo X: los tiempos de respuesta
-				varían demasiado entre días.
+				capacidad del equipo para febrero.
 
 				Se acuerda mover la ventana de despliegue del viernes al lunes, para tener
-				soporte completo el día siguiente. Se revisará el coste de la opción B
-				antes de decidir sobre la caché.
+				soporte completo el día siguiente.
 
 			Decisions:
 				Decision: Mover la ventana de despliegue al lunes
@@ -56,8 +34,7 @@ Document (dev.stxt.website): Documentos corporativos | STXT
 					Decision status: Approved
 					Owner: Platform Team
 					Rationale >>
-						Reduce el riesgo operativo: el soporte del martes es completo y el del
-						sábado no.
+						El soporte del martes es completo y el del sábado no.
 				Decision: Congelar cambios no críticos en el módulo X
 					Id: DEC-0143
 					Decision status: Proposed
@@ -76,45 +53,31 @@ Document (dev.stxt.website): Documentos corporativos | STXT
 					Action status: In Progress
 
 	Content >>
-		Se lee como un acta y, a la vez, para un programa es un árbol en el que cada acción
-		tiene un responsable, una fecha y un estado.
+		En este ejemplo hay dos tipos de contenido:
 
-	Subheader: Qué es dato y qué es texto
+		* **Datos**: los asistentes, las decisiones y las acciones. Son nodos inline, uno por elemento.
+		* **Texto**: las notas de la reunión y el motivo de una decisión. Son nodos block, y se escriben sin ninguna restricción.
 
-	Content >>
-		La única decisión de modelado que hay que tomar es esa, y el criterio es práctico:
-		es dato lo que alguien va a buscar, filtrar o contar, y texto todo lo demás.
+		El criterio es práctico: es dato lo que alguien va a buscar, filtrar o contar.
+		Por ejemplo, un programa puede obtener las acciones del acta sin interpretar nada:
 
-		* Los asistentes, las decisiones y las acciones son datos: se listan, se cruzan con
-		  otras actas, se vencen. Van en nodos inline, uno por elemento.
-		* El resumen de la discusión y la justificación de cada decisión son texto: se leen
-		  y no se procesan. Van en bloques `>>`, donde se escriben párrafos sin ninguna
-		  restricción.
-		* El título de cada decisión y de cada acción es el valor del propio nodo
-		  (`Decision: Mover la ventana...`), y sus atributos son hijos. Así la lista se lee de
-		  un vistazo.
-
-		Si más adelante hace falta procesar algo que hoy es texto (por ejemplo, los riesgos
-		mencionados en las notas), se saca a un nodo propio. El documento no cambia de
-		formato: solo gana un nodo.
+		| Action                                             | Id       | Owner      | Due        | Action status |
+		| -------------------------------------------------- | -------- | ---------- | ---------- | ------------- |
+		| `Preparar la propuesta de capacidad del trimestre` | ACT-0991 | Mery Adams | 2026-01-16 | Open          |
+		| `Estimar el coste de la opción B`                  | ACT-0992 | Joan Costa | 2026-01-14 | In Progress   |
 
 	Subheader: La plantilla
 
 	Content >>
-		Una [plantilla](stxt-template-ref) fija qué debe tener toda acta y qué es opcional,
-		y acota los estados:
+		Una [plantilla](stxt-template-ref) define qué debe tener un acta, qué es opcional
+		y qué estados existen:
 
 	Code >>
 		Template (@stxt.template): com.acme.corp.minutes
-			Description >>
-				Minutes: Acta de reunión
-				Decisions: Decisiones tomadas o propuestas en la reunión
-				Actions: Acciones acordadas, con responsable y fecha límite
 			Structure >>
 				Minutes:
 					Title: (1)
 					Date: (1) DATE
-					Duration minutes: (?) NATURAL
 					Attendees: (1)
 						Attendee: (+)
 					Notes: (?) TEXT
@@ -132,30 +95,35 @@ Document (dev.stxt.website): Documentos corporativos | STXT
 							Action status: (1) ENUM [Open, In Progress, Done, Blocked]
 
 	Content >>
-		Lo que garantiza, acta a acta:
+		Dentro de un namespace, un nombre identifica un solo nodo. Por eso `Id` y `Owner`
+		se definen una vez y se reutilizan con `@Id` y `@Owner`. Y por eso hay un
+		`Decision status` y un `Action status`: tienen valores distintos, así que son nodos distintos.
 
-		* Toda acta tiene título, fecha y al menos un asistente; sin eso no valida.
-		* Una decisión está en uno de tres estados, y una acción en uno de cuatro. Un estado
-		  escrito de otra manera (`Aprobada`, `open`) es un error y no una variante.
-		* Las fechas son fechas: `2026-01-32` no pasa.
-		* Un nodo que no está en la plantilla (`Atendees` con una sola `t`, un `Priority`
-		  que alguien añadió por su cuenta) se rechaza. Es el [modelo de contenido cerrado](stxt-schema-ref#s6): la
-		  plantilla es la lista completa de lo que puede aparecer.
-		* `Id` y `Owner` se declaran una vez y se reutilizan con `@Id` y `@Owner`: dentro de un
-		  namespace, un nombre de nodo identifica un solo nodo. Por la misma regla, el estado
-		  de una decisión y el de una acción son nodos distintos (`Decision status` y
-		  `Action status`): sus listas de valores no coinciden, y un mismo nombre no puede
-		  tener dos definiciones.
+	Subsubheader: Un acta que no valida
 
-		La plantilla se guarda en el directorio `.stxt/` del repositorio donde viven las
-		actas, y a partir de ahí el editor y la línea de comandos la aplican sin configurar
-		nada ([El entorno de trabajo](working-environment)).
+	Code >>
+		# ERROR: este documento no valida
+		Minutes (com.acme.corp.minutes):
+			Title: Sincronización semanal de Plataforma
+			# El día 32 no existe
+			Date: 2026-01-32
+			# `Atendees` no está en la plantilla (le falta una `t`), y falta `Attendees`
+			Atendees:
+				Attendee: Joan Costa
+			Actions:
+				Action: Preparar la propuesta de capacidad del trimestre
+					Id: ACT-0991
+					# `Pendiente` no es un estado de la lista
+					Action status: Pendiente
+
+	Content >>
+		La plantilla es la lista completa de lo que puede aparecer: un nodo que no está
+		en ella se rechaza ([modelo de contenido cerrado](stxt-schema-ref#s6)).
 
 	Subheader: Un informe de estado
 
 	Content >>
-		El mismo enfoque sirve para cualquier documento periódico. Un informe de estado
-		semanal:
+		Lo mismo sirve para cualquier documento periódico:
 
 	Code >>
 		Status Report (com.acme.corp.status):
@@ -167,9 +135,8 @@ Document (dev.stxt.website): Documentos corporativos | STXT
 			Status: Green
 
 			Summary >>
-				Avance sostenido en la documentación base. Queda trabajo en las
-				herramientas de línea de comandos y en los casos de uso; ninguno bloquea
-				la entrega de febrero.
+				Avance sostenido en la documentación base. Queda trabajo en la
+				referencia de la línea de comandos, que no bloquea la entrega de febrero.
 
 			Progress:
 				Item: Página de introducción
@@ -186,10 +153,11 @@ Document (dev.stxt.website): Documentos corporativos | STXT
 					Mitigation >>
 						Preparar dos ejemplos de migración antes del cierre del trimestre.
 
+	Content >>
+		Y su plantilla:
+
 	Code >>
 		Template (@stxt.template): com.acme.corp.status
-			Description >>
-				Status Report: Informe de estado periódico de un proyecto
 			Structure >>
 				Status Report:
 					Project: (1)
@@ -209,40 +177,23 @@ Document (dev.stxt.website): Documentos corporativos | STXT
 							Mitigation: (?) TEXT
 
 	Content >>
-		El semáforo `Status` es un `ENUM` y no un adjetivo en el resumen. Con veinte informes
-		en un directorio, un script sobre el árbol canónico responde cuántos proyectos están
-		en rojo y cuáles son sus riesgos altos.
+		El semáforo `Status` es un `ENUM`. Con veinte informes en un directorio, un programa
+		puede responder cuántos proyectos están en `Red` y cuáles son sus riesgos `High`.
 
-	Subheader: En el flujo de trabajo
+	Subheader: Cómo se trabaja
 
 	Content >>
-		Los documentos viven en un repositorio, como el código:
+		* Los documentos viven en un repositorio, con la plantilla en el directorio `.stxt/`.
+		* Un cambio es un *diff* de líneas: una acción que pasa de `Open` a `Done`, una decisión nueva.
+		* La extensión de VS Code autocompleta nombres y estados, y marca los errores al escribir.
+		* `stxt validate --recursive minutes/` hace la misma validación en integración continua.
 
-		* **Escritura**: cualquier editor de texto. Con la extensión de VS Code, la plantilla
-		  da autocompletado de nombres y estados, y marca los errores mientras se escribe.
-		* **Revisión**: una modificación es un *diff* de líneas concretas (una acción que
-		  pasa de `Open` a `Done`, una decisión nueva) y no un fichero binario que hay que
-		  abrir para ver qué cambió.
-		* **Integración continua**: `stxt validate --recursive minutes/` rechaza la
-		  incorporación de un acta incompleta o con un estado inválido antes de que llegue
-		  al repositorio ([La línea de comandos](tools-cli)).
-		* **Explotación**: el [árbol canónico](stxt-tree-ref) (`stxt describe`, o la biblioteca de cada
-		  lenguaje) alimenta lo que haga falta: la lista de acciones abiertas por persona,
-		  un resumen semanal por correo, un panel con los semáforos de todos los proyectos.
-
-		Nada de esto obliga a cambiar cómo se escribe: un acta sin namespace es un documento
-		@STXT@ válido que no se valida; el namespace y la plantilla se añaden cuando el equipo
-		decide qué quiere garantizar.
+		Todo esto se explica en [El entorno de trabajo](working-environment).
 
 	Subheader: Límites
 
 	Content >>
-		@STXT@ estructura el documento y no aporta flujo de aprobación, control de acceso ni
-		notificaciones. Eso lo pone el repositorio y las herramientas de alrededor. Tampoco
-		valida reglas entre campos (que una acción en estado `Done` no tenga fecha futura,
-		por ejemplo): esa lógica pertenece a la aplicación que explota los datos y no a la
-		plantilla.
+		La plantilla no valida reglas entre campos (por ejemplo, que una acción `Done` no tenga
+		una fecha futura). Esa lógica es de la aplicación que usa los datos.
 
-		Los géneros vecinos siguen el mismo enfoque:
-		[RFCs y propuestas técnicas](use-cases-rfcs) para documentos con ciclo de vida, y
-		[contratos](use-cases-contracts) donde los datos viven dentro de texto normativo.
+		@STXT@ tampoco aporta flujo de aprobación, control de acceso ni notificaciones.

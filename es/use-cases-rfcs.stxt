@@ -1,30 +1,15 @@
 Document (dev.stxt.website): RFCs y propuestas técnicas | STXT
 
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-19
 		Description: STXT para RFCs y propuestas técnicas: el flujo de texto plano y revisión de siempre, con estado, autores y relaciones entre propuestas como datos explícitos.
 
 	Header: RFCs y propuestas técnicas
 
 	Assert >>
-		Una propuesta técnica es un documento argumentativo con un ciclo de vida: se
-		redacta, se discute, se acepta o se rechaza, y queda como registro de por qué se
-		decidió algo. @STXT@ conserva el flujo de texto plano y revisión que estos documentos
-		ya tienen, y hace explícitos el estado, los autores y las relaciones entre
-		propuestas.
-
-	Content >>
-		Los equipos que escriben propuestas técnicas (RFC internos, registros de decisiones
-		de arquitectura, documentos de diseño) suelen hacerlo ya en texto plano y en un
-		repositorio: el documento se revisa como el código, con un *diff* y comentarios. Lo
-		que falla no es el flujo sino la estructura: el estado de la propuesta es una palabra
-		en la cabecera que cada autor escribe a su manera, las relaciones entre documentos
-		son enlaces en el texto, y saber qué propuestas siguen abiertas o cuáles dependen de
-		una que se acaba de rechazar es un trabajo manual.
-
-		Con @STXT@ la propuesta sigue siendo un documento de texto con secciones largas, pero
-		su cabecera son datos. El estado es un `ENUM`, los autores son nodos, las referencias
-		a otras propuestas son valores que un programa puede seguir.
+		Una propuesta técnica (un RFC interno, un registro de decisión de arquitectura, un documento de diseño)
+		se redacta, se discute y se acepta o se rechaza. En @STXT@ sigue siendo un documento de texto,
+		pero su estado, sus autores y sus relaciones con otras propuestas son datos.
 
 	Subheader: Una propuesta
 
@@ -45,44 +30,31 @@ Document (dev.stxt.website): RFCs y propuestas técnicas | STXT
 
 			Proposal >>
 				Adoptar un único formato de configuración para los servicios internos, con
-				una plantilla por tipo de servicio mantenida por Plataforma. Los servicios
-				existentes migran cuando cambien de versión mayor; los nuevos arrancan ya con
-				el formato único.
+				una plantilla por tipo de servicio mantenida por Plataforma.
 
 			Alternatives:
 				Alternative: Mantener los formatos actuales
 					Pros >>
 						Sin coste inicial.
 					Cons >>
-						La fragmentación se mantiene y crece con cada servicio nuevo.
+						La fragmentación crece con cada servicio nuevo.
 				Alternative: Estandarizar en el formato más extendido hoy
 					Pros >>
 						Herramientas y conocimiento ya existentes en los equipos.
 					Cons >>
-						Su validación es externa y ambigua; no resuelve el problema de fondo.
-
-			Impact >>
-				Los equipos migran gradualmente. Plataforma mantiene las plantillas y un
-				validador en integración continua.
-
-			Decision >>
-				En revisión por el comité de arquitectura.
+						Su validación es externa.
 
 	Content >>
-		La cabecera es un bloque de datos: identificador, estado, autores y fechas. El
-		cuerpo son bloques de texto con los nombres que el proceso de la organización ya
-		usa: contexto, propuesta, alternativas, impacto y decisión. Las alternativas son la
-		parte más estructurada: cada una es un nodo con su título, y sus pros y contras son
-		bloques, porque son argumentos en prosa y no datos que contar.
+		En este ejemplo tenemos:
+
+		* **Cabecera**: `Id`, `Title`, `Status`, `Authors` y las fechas. Son datos.
+		* **Cuerpo**: `Context` y `Proposal`. Son nodos block, con los nombres que la organización ya usa en sus propuestas.
+		* **Alternativas**: cada una es un nodo con su título, y sus pros y contras son texto.
 
 	Subheader: La plantilla
 
 	Code >>
 		Template (@stxt.template): com.acme.rfc
-			Description >>
-				RFC: Propuesta técnica sujeta a revisión y decisión
-				Status: Ciclo de vida de la propuesta
-				Related: Identificadores de otras propuestas relacionadas
 			Structure >>
 				RFC:
 					Id: (1)
@@ -101,8 +73,6 @@ Document (dev.stxt.website): RFCs y propuestas técnicas | STXT
 						Alternative: (*)
 							Pros: (?) TEXT
 							Cons: (?) TEXT
-					Impact: (?) TEXT
-					Risks: (?) TEXT
 					Decision: (?) TEXT
 					Consequences: (?) TEXT
 					Comments: (?)
@@ -112,72 +82,65 @@ Document (dev.stxt.website): RFCs y propuestas técnicas | STXT
 							Text: (1) TEXT
 
 	Content >>
-		La [plantilla](stxt-template-ref) fija lo mínimo que toda propuesta debe tener (identificador, título,
-		estado, al menos un autor, contexto y propuesta) y deja el resto opcional: una
-		propuesta en borrador puede no tener alternativas todavía, y una aceptada tendrá
-		decisión y consecuencias. Lo que no hace es restringir el texto: un bloque `TEXT`
-		admite cualquier contenido y cualquier longitud.
+		La [plantilla](stxt-template-ref) exige lo mínimo de toda propuesta: identificador, título, estado,
+		un autor, contexto y propuesta. El resto es opcional, porque un borrador todavía no tiene
+		decisión ni consecuencias. El texto no se restringe: un `TEXT` admite cualquier contenido.
 
-		El `ENUM` de `Status` es el ciclo de vida del proceso. Una propuesta no está
-		«pendiente» ni «aprobada con matices»: está en uno de cinco estados, y cambiar de
-		estado es cambiar una línea.
+		El `ENUM` de `Status` es el ciclo de vida. Una propuesta está en uno de cinco estados.
 
-	Subheader: El ciclo de vida en el repositorio
-
-	Content >>
-		La misma propuesta, semanas después, aceptada:
+	Subsubheader: Una propuesta que no valida
 
 	Code >>
+		# ERROR: este documento no valida
 		RFC (com.acme.rfc):
-			Id: RFC-013
-			Title: Unificación del sistema de configuración
-			Status: Accepted
-			Authors:
-				Author: Platform Team
-			Created: 2026-01-05
-			Updated: 2026-01-18
-			Accepted date: 2026-01-18
-
-			Context >>
-				Hoy conviven varios formatos de configuración en los servicios internos,
-				cada uno con sus propias reglas de validación y sus propias herramientas.
-
+			Id: RFC-014
+			Title: Migración de los servicios de facturación
+			# `Pendiente` no es un estado de la lista
+			Status: Pendiente
+			# Falta `Authors`
+			# Falta `Context`
 			Proposal >>
-				Adoptar un único formato de configuración para los servicios internos, con
-				una plantilla por tipo de servicio mantenida por Plataforma.
+				Migrar los servicios de facturación al formato único.
 
-			Decision >>
-				Se aprueba la adopción progresiva. Plataforma publica las plantillas antes
-				del fin del trimestre.
-
-			Consequences >>
-				Los servicios nuevos usan el formato único desde su creación. Los existentes
-				migran en su siguiente versión mayor, sin fecha límite.
-
-			Comments:
-				Comment:
-					Author: Mery Adams
-					Date: 2026-01-12
-					Text >>
-						Preocupa el impacto en los equipos con herramientas propias. Propongo
-						que la migración de los servicios existentes no tenga fecha límite.
-				Comment:
-					Author: Keyla Brown
-					Date: 2026-01-13
-					Text >>
-						De acuerdo con la adopción progresiva si Plataforma mantiene las
-						plantillas.
+	Subheader: El ciclo de vida
 
 	Content >>
-		Entre las dos versiones, el *diff* muestra exactamente qué cambió: el estado, la
-		fecha de aceptación, la decisión, las consecuencias y dos comentarios. Los
-		comentarios de la revisión se guardan en el propio documento, con autor y fecha,
-		separados del texto principal: la discusión queda junto a la decisión.
+		Semanas después, la propuesta se acepta. Este es el *diff* entre las dos versiones:
+
+	Listing >>
+		 	Title: Unificación del sistema de configuración
+		-	Status: Review
+		+	Status: Accepted
+		 	Authors:
+		 		Author: Platform Team
+		 	Created: 2026-01-05
+		-	Updated: 2026-01-10
+		+	Updated: 2026-01-18
+		+	Accepted date: 2026-01-18
+
+		...
+
+		+	Decision >>
+		+		Se aprueba la adopción progresiva. Plataforma publica las plantillas antes
+		+		del fin del trimestre.
+		+
+		+	Consequences >>
+		+		Los servicios nuevos usan el formato único desde su creación. Los existentes
+		+		migran en su siguiente versión mayor, sin fecha límite.
+		+
+		+	Comments:
+		+		Comment:
+		+			Author: Mery Adams
+		+			Date: 2026-01-12
+		+			Text >>
+		+				Propongo que la migración de los servicios existentes no tenga
+		+				fecha límite.
+
+	Content >>
+		Cambiar de estado es cambiar una línea. Los comentarios de la revisión se guardan
+		en el propio documento, con autor y fecha, junto a la decisión.
 
 	Subheader: Relaciones entre propuestas
-
-	Content >>
-		Una propuesta que depende de otra lo declara como dato y no solo como una frase:
 
 	Code >>
 		RFC (com.acme.rfc):
@@ -198,35 +161,22 @@ Document (dev.stxt.website): RFCs y propuestas técnicas | STXT
 				Retirar el sistema anterior una vez migrados los servicios que aún lo usan.
 
 	Content >>
-		Con `Related` como nodo, un programa que recorra el directorio de propuestas puede
-		responder qué depende de qué, qué propuestas en borrador citan una rechazada, o
-		dibujar el grafo entero. Con la referencia solo en el texto del contexto, ninguna de
-		esas preguntas se puede responder sin leer.
+		`RFC-013` aparece dos veces: en `Related`, como dato, y en `Context`, como texto.
+		Con el dato, un programa que recorra el directorio de propuestas puede responder
+		qué depende de qué, o qué borradores citan una propuesta rechazada.
 
-	Subheader: En el flujo de trabajo
+	Subheader: Cómo se trabaja
 
 	Content >>
-		* Las propuestas viven en un directorio del repositorio, una por fichero, con la
-		  plantilla en `.stxt/`.
-		* Integración continua ejecuta `stxt validate --recursive rfcs/`
-		  ([La línea de comandos](tools-cli)) en cada cambio: una propuesta sin contexto o
-		  con un estado fuera de la lista no entra.
-		* Un script sobre el [árbol canónico](stxt-tree-ref) genera el índice de propuestas por estado, avisa
-		  de las que llevan más de un mes en `Review` o lista las consecuencias de todas las
-		  aceptadas del trimestre.
-		* El texto de cada sección se publica tal cual, en el formato que la organización
-		  use para su documentación.
+		* Las propuestas viven en un directorio del repositorio, una por fichero, con la plantilla en `.stxt/`.
+		* `stxt validate --recursive rfcs/` ([La línea de comandos](tools-cli)) se ejecuta en cada cambio.
+		* Un programa genera el índice de propuestas por estado, o avisa de las que llevan más de un mes en `Review`.
 
 	Subheader: Límites
 
 	Content >>
-		@STXT@ no impone un proceso: los nombres de las secciones, los estados y quién
-		puede cambiarlos son decisiones de cada organización, y la plantilla solo las
-		recoge. Tampoco sustituye a la herramienta de revisión: los comentarios del ejemplo
-		son el registro de la discusión y no un sistema de hilos con notificaciones. Y la
-		validación no comprueba relaciones entre documentos (que `RFC-007` exista, que una
-		propuesta aceptada no cite una rechazada): eso lo hace el script que recorre el
-		directorio.
+		La validación no comprueba relaciones entre documentos (que `RFC-007` exista, o que una
+		propuesta aceptada no cite una rechazada). Eso lo hace el programa que recorre el directorio.
 
-		Las actas y los informes de estado, el género vecino, se desarrollan en
-		[Documentos corporativos](use-cases-corporate-docs).
+		@STXT@ tampoco sustituye a la herramienta de revisión: los comentarios del ejemplo
+		son un registro de la discusión, sin hilos ni notificaciones.

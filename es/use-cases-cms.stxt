@@ -1,31 +1,20 @@
 Document (dev.stxt.website): CMS y publicaciones | STXT
 
 	Metadata:
-		Last modif: 2026-09-09
+		Last modif: 2026-09-19
 		Description: STXT como formato fuente para CMS y publicaciones: el contenido vive en ficheros de texto, la estructura es visible y la validación es una plantilla.
 
 	Header: CMS y publicaciones
 
 	Assert >>
-		Un sitio web, un blog, la documentación de un producto, un libro por capítulos: todo
-		lo que se escribe para publicarse. @STXT@ es el **formato fuente** de ese contenido:
-		el texto vive en ficheros, la estructura es visible, la validación es una plantilla y
-		la presentación se decide después.
+		@STXT@ como **formato fuente** de un sitio web, un blog o un libro: el contenido vive
+		en ficheros de texto y la presentación se decide después.
 
 	Content >>
-		El contenido que se publica tiene siempre tres capas: el texto que alguien escribe,
-		la estructura que lo organiza (páginas, secciones, capítulos) y los datos que lo
-		acompañan (título, autor, fecha, estado editorial, etiquetas). Las herramientas que
-		lo gestionan tienden a fundir esas capas con la interfaz de edición y con la
-		presentación final, y a guardar el contenido en una base de datos propia.
-
-		Con @STXT@ como formato fuente, cada página es un fichero de texto con sus datos como
-		nodos y su cuerpo en bloques. El gestor de contenidos, sea un generador estático, un
-		CMS *headless* o un proceso de maquetación, lee el árbol y decide qué hacer con él.
-		Este mismo portal está construido así: cada página de `stxt.dev` es un documento
-		@STXT@ del namespace `dev.stxt.website`, y el generador lo convierte en HTML. La
-		[FAQ](faq#nos-ensenas-un-uso-real) enseña dos maneras de comprobarlo desde el
-		navegador.
+		Este portal está hecho así. Cada página de `stxt.dev` es un documento @STXT@
+		del namespace `dev.stxt.website`, y un generador lo convierte en HTML.
+		Se puede comprobar añadiendo `.stxt` a la dirección de cualquier página,
+		por ejemplo [use-cases-cms.stxt](use-cases-cms.stxt).
 
 	Subheader: Una página
 
@@ -35,29 +24,20 @@ Document (dev.stxt.website): CMS y publicaciones | STXT
 			Slug: sobre-stxt
 			Language: es
 			Status: Published
-			Layout: default
 
 			SEO:
-				Title: STXT, un lenguaje Human First
 				Description: Lenguaje textual legible y validable
 				Keywords:
 					Keyword: stxt
 					Keyword: documentos
-					Keyword: formatos
-
-			Header >>
-				## STXT
-
-				Lenguaje de texto estructurado, legible por personas
-				y fiable para máquinas.
 
 			Content >>
-				### ¿Qué es STXT?
+				## ¿Qué es STXT?
 
 				STXT es un lenguaje diseñado para escribir documentos
 				que las personas leen y los programas procesan.
 
-				### Principios
+				## Principios
 
 				- Human First
 				- Sintaxis mínima
@@ -67,103 +47,59 @@ Document (dev.stxt.website): CMS y publicaciones | STXT
 				Última actualización: enero de 2026
 
 	Content >>
-		Los metadatos editoriales (*slug*, idioma, estado, *layout*, SEO) son nodos que el
-		gestor lee directamente. El cuerpo va en bloques de tipo `MARKDOWN`
-		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)): @STXT@ no
-		interpreta ese Markdown, solo lo entrega tal cual al renderizador; el tipo es un
-		contrato para quien lo consume (y para el editor y el playground, que lo colorean
-		como Markdown). El pie es `TEXT`: se enseña literalmente. El reparto de trabajo
-		entre los dos lenguajes se desarrolla en
-		[STXT frente a Markdown](stxt-vs-markdown).
+		En este ejemplo tenemos:
+
+		* **Metadatos**: `Title`, `Slug`, `Language`, `Status` y `SEO`. Son nodos que el generador lee directamente.
+		* **Contenido**: `Content` y `Footer`. Son nodos block, y el documento no contiene HTML, CSS ni *layout*.
 
 	Subheader: La plantilla
 
 	Code >>
 		Template (@stxt.template): com.acme.cms.page
-			Description >>
-				Page: Página de un sitio web
-				Status: Estado editorial; solo Published se publica
 			Structure >>
 				Page:
 					Title: (1)
 					Slug: (1)
 					Language: (?) ENUM [es, en, fr]
 					Status: (1) ENUM [Draft, Published, Archived]
-					Layout: (?)
 					SEO: (?)
-						Title: (?) @Title
 						Description: (?)
 						Keywords: (?)
 							Keyword: (+)
-					Header: (?) MARKDOWN
-					Content: (?) MARKDOWN
+					Content: (1) MARKDOWN
 					Footer: (?) TEXT
 
 	Content >>
-		La [plantilla](stxt-template-ref) garantiza lo que el generador necesita para funcionar (título, *slug* y
-		un estado de la lista) y deja el resto opcional. Una página sin `Slug` no valida, y
-		por tanto no se genera; un `Status: published` en minúsculas tampoco.
+		La [plantilla](stxt-template-ref) garantiza lo que el generador necesita para funcionar:
+		un título, un *slug*, un estado de la lista y un contenido.
 
-		`SEO/Title` reutiliza la definición de `Title` con `@Title`: es el mismo nodo, con
-		la misma definición, en otro lugar del árbol.
+		`Content` es de tipo `MARKDOWN` ([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)).
+		@STXT@ no interpreta ese Markdown: lo entrega tal cual, y el tipo indica a quien lo recibe
+		(el generador, el editor o el playground) cómo debe tratarlo. `Footer` es `TEXT`, y se muestra literalmente.
+		Hay más detalle en [STXT frente a Markdown](stxt-vs-markdown).
 
-	Subheader: Un artículo con autores y estado
-
-	Content >>
-		Un blog o una revista añade autoría, fecha y un flujo editorial:
+	Subsubheader: Una página que no valida
 
 	Code >>
-		Article (com.acme.editorial.article):
-			Title: Introducción a STXT
-			Slug: introduccion-a-stxt
-			Authors:
-				Author: Joan Costa
-					Role: Editor
-			Published date: 2026-01-10
-			Status: Draft
-			Tags:
-				Tag: stxt
-				Tag: formatos
-
-			Abstract >>
-				STXT es un lenguaje textual diseñado para equilibrar
-				legibilidad humana y fiabilidad para máquinas.
-
+		# ERROR: este documento no valida
+		Page (com.acme.cms.page):
+			Title: Sobre STXT
+			# Falta `Slug`
+			# `published` en minúsculas no es `Published`
+			Status: published
+			# `Author` no está en la plantilla
+			Author: Joan Costa
 			Content >>
-				## Datos y texto
-
-				Los datos del artículo son nodos con nombre y valor; el cuerpo
-				va en un bloque literal, sin escapes.
-
-	Code >>
-		Template (@stxt.template): com.acme.editorial.article
-			Description >>
-				Article: Artículo de un blog o de una publicación periódica
-			Structure >>
-				Article:
-					Title: (1)
-					Slug: (1)
-					Authors: (1)
-						Author: (+)
-							Role: (?)
-					Published date: (?) DATE
-					Status: (1) ENUM [Draft, Review, Published]
-					Tags: (?)
-						Tag: (+)
-					Abstract: (?) TEXT
-					Content: (1) MARKDOWN
+				## ¿Qué es STXT?
 
 	Content >>
-		El flujo editorial es el `ENUM` de `Status`: un artículo pasa de `Draft` a `Review` y
-		a `Published`, y ese cambio es una línea en el *diff* de la revisión. El generador
-		publica lo que está en `Published`; el resto existe en el repositorio, pero no en el
-		sitio.
+		Una página que no valida no se genera.
 
 	Subheader: Un libro por capítulos
 
 	Content >>
-		Una publicación larga sigue el mismo patrón, con la estructura a la vista y cada
-		capítulo como un nodo que agrupa sus datos y su texto:
+		Una publicación larga sigue el mismo patrón. Cada capítulo es un nodo con
+		su número y su texto:
 
 	Code >>
 		Publication (com.acme.editorial.publication):
@@ -185,10 +121,11 @@ Document (dev.stxt.website): CMS y publicaciones | STXT
 				Content >>
 					Plantillas y esquemas permiten añadir reglas semánticas.
 
+	Content >>
+		Y su plantilla:
+
 	Code >>
 		Template (@stxt.template): com.acme.editorial.publication
-			Description >>
-				Publication: Libro o documento largo dividido en capítulos
 			Structure >>
 				Publication:
 					Title: (1)
@@ -200,38 +137,27 @@ Document (dev.stxt.website): CMS y publicaciones | STXT
 						Content: (1) MARKDOWN
 
 	Content >>
-		Los capítulos se escriben en orden y el árbol lo conserva, así que el generador no
-		necesita ordenar nada; `Number` existe para que el número aparezca en la salida y
-		para referirse a un capítulo desde fuera. Un libro de cuarenta capítulos se puede
-		partir en cuarenta ficheros con el mismo namespace, y la plantilla sigue valiendo
-		para cada uno.
+		Un documento @STXT@ es un árbol ordenado, así que los capítulos salen en el orden
+		en que están escritos. Un libro de cuarenta capítulos se puede partir en cuarenta ficheros
+		con el mismo namespace, y la plantilla sirve para todos.
 
 	Subheader: El flujo de publicación
 
 	Content >>
-		Cada paso es independiente y sustituible:
+		1. Se escribe el documento con cualquier editor.
+		2. Se guarda en un repositorio. La revisión editorial es un *diff*.
+		3. Se valida con `stxt validate` ([La línea de comandos](tools-cli)), en local o en integración continua.
+		4. El generador lee el [árbol](stxt-tree-ref) y produce HTML, PDF, EPUB o un *feed*.
 
-		1. Se escribe el documento con cualquier editor; con la extensión de VS Code, la
-		   plantilla da autocompletado y errores en el acto.
-		2. Se versiona en un repositorio; la revisión editorial es un *diff*.
-		3. Se valida, en el editor, en la línea de comandos o en integración continua, con
-		   `stxt validate` ([La línea de comandos](tools-cli)), que rechaza una página sin
-		   *slug* o un artículo sin autor antes de que llegue al generador.
-		4. El generador lee el [árbol canónico](stxt-tree-ref) y produce HTML, PDF, EPUB,
-		   un *feed* o una API; el mismo documento sale por varios canales.
-
-		El documento no contiene HTML, CSS ni *layout*: la presentación se decide en el
-		paso 4 y se puede cambiar entera sin tocar el contenido.
+		La presentación se decide en el paso 4, y se puede cambiar entera sin tocar el contenido.
 
 	Subheader: Límites
 
 	Content >>
-		@STXT@ no es un CMS: no tiene interfaz de edición, ni usuarios, ni flujo de
-		aprobación, ni previsualización. Es el formato en el que ese CMS guarda el
-		contenido, y lo que garantiza es que el contenido sobreviva al CMS. Tampoco define
-		cómo se renderiza un bloque `MARKDOWN` ni qué dialecto de Markdown se admite: eso lo
-		fija el renderizador, y la plantilla solo declara que el bloque debe tratarse como
-		tal.
+		@STXT@ no es un CMS: no tiene interfaz de edición, usuarios, flujo de aprobación
+		ni previsualización. Es el formato en el que se guarda el contenido.
 
-		La variante generada de este flujo (páginas escritas por un modelo y rechazadas
-		por el *build* hasta que validan) se desarrolla en [IA y LLMs](ai-llms).
+		Tampoco define qué dialecto de Markdown se admite en un bloque `MARKDOWN`.
+		Eso lo decide quien lo renderiza.
+
+		Las páginas también las puede escribir un modelo, ver [IA y LLMs](ai-llms).
