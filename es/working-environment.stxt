@@ -43,11 +43,11 @@ Document (dev.stxt.website): El entorno de trabajo | STXT
 	Subheader: Escribir la gramática
 
 	Content >>
-		La plantilla del libro es la del tutorial. Se puede escribir directamente en `.stxt/`
-		con cualquier nombre, o instalarla con `stxt install`, que comprueba que valida
-		contra su meta-esquema y la escribe, en forma canónica, como
-		`.stxt/@stxt.template/<namespace>.stxt`. Esa disposición es una convención de la CLI;
-		el lenguaje no la impone.
+		La plantilla del libro es como la del tutorial, con el `ISBN` obligatorio y al menos
+		un capítulo. Se puede escribir directamente en `.stxt/` con cualquier nombre, o
+		instalarla con `stxt install`, que comprueba que valida contra su meta-esquema y la
+		escribe, en forma canónica, como `.stxt/@stxt.template/<namespace>.stxt`. Esa
+		disposición es una convención de la CLI; el lenguaje no la impone.
 
 	Code >>
 		Template (@stxt.template): com.acme.book

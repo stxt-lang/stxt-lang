@@ -42,11 +42,11 @@ Document (dev.stxt.website): The working environment | STXT
 	Subheader: Writing the grammar
 
 	Content >>
-		The book template is the one from the tutorial. It can be written straight into
-		`.stxt/` under any name, or installed with `stxt install`, which checks that it
-		validates against its meta-schema and writes it, in canonical form, as
-		`.stxt/@stxt.template/<namespace>.stxt`. That layout is a CLI convention; the
-		language does not impose it.
+		The book template is like the one from the tutorial, with a mandatory `ISBN` and at
+		least one chapter. It can be written straight into `.stxt/` under any name, or
+		installed with `stxt install`, which checks that it validates against its meta-schema
+		and writes it, in canonical form, as `.stxt/@stxt.template/<namespace>.stxt`. That
+		layout is a CLI convention; the language does not impose it.
 
 	Code >>
 		Template (@stxt.template): com.acme.book

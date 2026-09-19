@@ -42,7 +42,6 @@ tools, stability and versions, use cases and FAQ. `_index.stxt` is the table of 
 | `.stxt/` | The repository's own resolution directory, as described by STXT-DISCOVERY-SPEC: one definition per namespace. `website/` holds `dev.stxt.website`, the template every portal page validates against; `schemas/`, `templates/`, `examples/` and `tutorial/` hold the example definitions (`com.example.*`, `org.example.*`...) the documents below use |
 | `docs/` | Example STXT documents (emails, recipes, configuration files...) that instantiate the definitions in `.stxt/`. They must all parse and validate without errors or warnings |
 | `examples/` | More example documents, plus `definitions/`: the same model written twice, as a schema and as a template, kept outside `.stxt/` so the two do not collide as duplicates of one namespace |
-| `tutorial/` | The documents the tutorial page is built on |
 
 ## The conformance kit and the corpus
 

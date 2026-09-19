@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Tutorial
 
 	Metadata:
-		Last modif: 2026-09-08
+		Last modif: 2026-09-19
 		Description: Tutorial de STXT desde cero: leer y escribir documentos, bloques de texto, namespaces y validación con plantillas. Sin conocimientos previos, solo un editor.
 
 	Header: @STXT@ Tutorial
@@ -23,22 +23,23 @@ Document (dev.stxt.website): STXT Tutorial
 			Summary >>
 				Este libro ofrece una visión práctica de patrones y buenas prácticas
 				para diseñar sistemas distribuidos y escalables.
+
 	Subsubheader: La indentación define la estructura
 
 	Content >>
-		Un documento @STXT@ es un árbol **ordenado** de nodos anidados. **Cada nodo debe tener un nombre**, 
-		y dependiendo del tipo de nodo puede tener un valor o un texto asociado. 
+		Un documento @STXT@ es un árbol **ordenado** de nodos anidados. **Cada nodo debe tener un nombre**,
+		y dependiendo del tipo de nodo puede tener un valor o un texto asociado.
 
 		En este ejemplo tenemos un nodo principal `Book` (más adelante hablaremos de `com.acme.book`).
 		Este nodo tiene los siguientes hijos: `Title`, `Authors`, `Publisher` y `Summary`.
 		A su vez, `Authors` tiene 2 hijos `Author`.
 
-		Con este ejemplo ya se puede ver que **la identación define la estructura**:
+		Con este ejemplo ya se puede ver que **la indentación define la estructura**:
 
 	Listing >>
 		Book
 		├── Title
-		├── Autors
+		├── Authors
 			├── Author
 			├── Author
 		├── Publisher
@@ -54,31 +55,31 @@ Document (dev.stxt.website): STXT Tutorial
 
 		Los nodos inline pueden tener un valor asociado, por ejemplo, el primer `Author`
 		tiene como valor `María Pérez`, y `Publisher` tiene como valor `ACME Editorial`.
-		Además, los nodos inline pueden tener como hijos a otros nodos. 
+		Además, los nodos inline pueden tener como hijos a otros nodos.
 
-		Los nodos block no tienen un valor asociado, sólo pueden tener un
+		Los nodos block no tienen un valor asociado, solo pueden tener un
 		bloque de líneas de texto, justo a partir de la línea siguiente.
-		Las líneas de texto siempre deben tener una identación mayor a
-		la definición del bloque. Lo más importante a recordar es que
+		Las líneas de texto siempre deben tener una indentación mayor que
+		la de la definición del bloque. Lo más importante a recordar es que
 		**el texto del bloque no se interpreta, es texto literal**.
 
 		Así, el texto de `Summary` es:
 
 	Listing >>
 		Este libro ofrece una visión práctica de patrones y buenas prácticas
-		para diseñar sistemas distribuidos y escalables.		
+		para diseñar sistemas distribuidos y escalables.
 
 	Subsubheader: Comentarios
 
 	Content >>
 		La primera línea del ejemplo es un comentario. Los comentarios
-		son líneas que empiezan por `#` (los blancos de indentación no cuentan). 
+		son líneas que empiezan por `#` (los blancos de indentación no cuentan).
 
 	Subsubheader: Namespaces
 
 	Content >>
 		Los nodos pueden pertenecer a un **namespace**. Un namespace
-		sólamente es un agrupador. En nuestro ejemplo, `Book` pertenece al 
+		solamente es un agrupador. En nuestro ejemplo, `Book` pertenece al
 		namespace `com.acme.book`. Esto lo hace distinto a `Book` del namespace
 		`com.demo`.
 
@@ -94,57 +95,56 @@ Document (dev.stxt.website): STXT Tutorial
 	Subsubheader: Esquemas y validación
 
 	Content >>
-		@STXT@ permite validar directamente los documentos, 
+		@STXT@ permite validar directamente los documentos,
 		con esquemas escritos en el propio lenguaje. Esta validación
-		contempla que estructura es válida, el número de nodos hijos
-		y como deben ser los valores de los nodos; no define otro tipo
+		contempla qué estructura es válida, el número de nodos hijos
+		y cómo deben ser los valores de los nodos; no define otro tipo
 		de validaciones. Con esto es suficiente para que un
 		namespace se convierta en la definición de un vocabulario para
-		ese ámbito concreto.		
+		ese ámbito concreto.
 
-	Subsubheader: ¿Qué no es STXT?
+	Subsubheader: ¿Qué no es @STXT@?
 
 	Content >>
 		A simple vista, puede parecer que @STXT@ es una especie de YAML.
 		Esto no es así, ya que realmente es más parecido a XML. Por ejemplo,
 		@STXT@ tiene namespaces y esquemas, y representa un conjunto de nodos anidados con texto.
 
-		Como YAML, utiliza la indentación para representar jerarquía, pero sólo
-		tiene 2 tipos de texto, sin caracteres de escape. 
+		Como YAML, utiliza la indentación para representar jerarquía, pero solo
+		tiene 2 tipos de texto, sin caracteres de escape.
 
-		Además, @STXT@ dispone de una validación flexible escrita en el propio lenguaje,
-		y carece de caracteres de escape.
+		Además, @STXT@ dispone de una validación flexible escrita en el propio lenguaje.
 
 	Subsubheader: ¿Probamos el Playground?
 
 	Content >>
 		En este punto sabes ya lo básico para usar @STXT@. Puedes seguir profundizando
-		en los conceptos que ya hemos aprendido, o probar directamente en 
+		en los conceptos que ya hemos aprendido, o probar directamente en
 		el [Playground](https://play.stxt.dev).
 
 		Los ejemplos de este tutorial y del portal pueden probarse en el playground
 		pulsando en el icono de "Abrir en el Playground".
 
-		El playground también empieza con un mini-tutorial, que podeis mirar por encima
+		El playground también empieza con un minitutorial, que podéis mirar por encima
 		o experimentar directamente con otros documentos.
 
 	Subheader: Nodos en profundidad
 
 	Subsubheader: Jerarquía y niveles
-	
+
 	Assert: La **indentación** define la jerarquía
 
 	Content >>
-		Vamos a mostrar dos ejemplos, en los que la jerarquía cambia según el nivel
+		Vamos a mostrar dos ejemplos, en los que la jerarquía cambia según el nivel:
 
-	CODE >>
+	Code >>
 		# Ejemplo 1
 		Nodo 1:
 			Nodo 2:
 			Nodo 3:
 				Nodo 4:
 					Nodo 5:
-		
+
 		# Ejemplo 2
 		Nodo 1:
 			Nodo 2:
@@ -170,30 +170,32 @@ Document (dev.stxt.website): STXT Tutorial
 		├── Nodo 2
 		├── Nodo 3
 		├── Nodo 4
-			├── Nodo 5		
+			├── Nodo 5
 
 	Assert: Un nivel se especifica con `1 tab` o `4 espacios`.
 
 	Content >>
-		Reglas principales: 
+		Reglas principales:
 
 		* **Un tabulador es un nivel.**
-		* **Cuatro espacios son un nivel.** Deben ser múltiplos de cuatro. No se permite otro número de espacios
+		* **Cuatro espacios son un nivel.** Deben ser múltiplos de cuatro. No se permite otro número de espacios.
 		* **No se mezclan tabs y espacios en una misma línea.** O solo tabuladores, o solo espacios.
-		* **Los niveles deben son consecutivos.** Del nivel 1 no se puede saltar al 3.
+		* **Los niveles deben ser consecutivos.** Del nivel 1 no se puede saltar al 3.
 
 	Subsubheader: Nodos inline
+
 	Content >>
 		Los nodos inline son todos los nodos con la forma `Nombre nodo:`.
-		Es decir, usan como separador `:`. Estos nodos permiten tener hijos 
+		Es decir, usan como separador `:`. Estos nodos permiten tener hijos
 		y son los que definen la estructura principal de los documentos. Ejemplo:
 
-	CODE >>
+	Code >>
 		Nodo 1: valor 1, nodo principal
 			Nodo 2: valor 2, hijo de nodo 1
 			Nodo 3: valor 3, hijo de nodo 1
-				Nodo 4: valor 4 # Hijo de 3: Esto forma parte del valor!
+				Nodo 4: valor 4 # Hijo de 3: ¡Esto forma parte del valor!
 			Nodo 5: hijo de nodo 1
+
 	Content >>
 		En este ejemplo se puede ver directamente la estructura:
 
@@ -202,72 +204,80 @@ Document (dev.stxt.website): STXT Tutorial
 		├── Nodo 2
 		├── Nodo 3
 			├── Nodo 4
-		├── Nodo 5		
-		
-	Content >>
-		Y también los valores. 
+		├── Nodo 5
 
-		| Nombre nodo | Valor del nodo                                     |
-		| ----------- | ---------------------------------------------------|
-		| Nodo 1      | `valor 1, nodo principal`                          |
-		| Nodo 2      | `valor 2, hijo de nodo 1`                          |
-		| Nodo 3      | `valor 3, hijo de nodo 1`                          |
-		| Nodo 4      | `valor 4 # Hijo de 3: Esto forma parte del valor!` |
-		| Nodo 5      | `hijo de nodo 1`                                   |
-	
-		Especial mención es el valor de `Nodo 4`. El valor es todo lo que
+	Content >>
+		Y también los valores.
+
+		| Nombre nodo | Valor del nodo                                      |
+		| ----------- | ----------------------------------------------------|
+		| Nodo 1      | `valor 1, nodo principal`                           |
+		| Nodo 2      | `valor 2, hijo de nodo 1`                           |
+		| Nodo 3      | `valor 3, hijo de nodo 1`                           |
+		| Nodo 4      | `valor 4 # Hijo de 3: ¡Esto forma parte del valor!` |
+		| Nodo 5      | `hijo de nodo 1`                                    |
+
+		Mención especial merece el valor de `Nodo 4`. El valor es todo lo que
 		hay después del primer `:`. A partir de ahí no hay ninguna interpretación,
 		todo es texto, y no son necesarios caracteres de escape. Por este motivo
-		pueden haber caracteres `:`, `#` y otros que están reservados para el nombre del nodo.
+		puede haber caracteres `:`, `#` y otros que están reservados para el nombre del nodo.
 		Otro ejemplo:
 
-	CODE >>
+	Code >>
 		Rutas:
 			Ruta: C:\Users\ana
 			Ruta: C:\Windows\STXT\@stxt.template\
+
 	Listing >>
 		Rutas
-		├── Ruta:
-		├── Ruta: 
+		├── Ruta
+		├── Ruta
 
 	Content >>
 		| Nombre nodo | Valor del nodo                    |
 		| ----------- | ----------------------------------|
 		| Ruta        | `C:\Users\ana`                    |
-		| Ruta        | `C:\Windows\STXT\@stxt.template\` |	
+		| Ruta        | `C:\Windows\STXT\@stxt.template\` |
 
 	Subsubheader: Nodos block
 
 	Content >>
-		cuando termina un bloque...
-
-		* **`Nombre >>`**: **bloque de texto**. No lleva nada tras el `>>`; su contenido son
-		  las líneas indentadas debajo, y es texto literal: `:`, `#` y `>>` no significan
-		  nada dentro, y no hay secuencias de escape.
-
-	Content >>
-		Un bloque tiene un **nivel de bloque**: el del nodo `>>` más uno. Ese prefijo de
-		indentación es lo único que el parser quita; todo lo que hay después de él es texto,
-		y la sangría adicional forma parte del texto:
+		Los nodos block son todos los nodos con la forma `Nombre nodo >>`.
+		Es decir, usan como separador `>>`, y no llevan nada más en esa línea.
+		Estos nodos no tienen valor ni hijos: solo tienen las líneas de texto
+		que hay debajo, con más indentación. Ejemplo:
 
 	Code >>
 		Summary >>
-			Esta línea está en el nivel de bloque.
-				Esta otra va más indentada, y esa sangría forma parte del texto.
+			Esta línea está en el nivel del bloque.
+				Esta otra va más indentada, y esa indentación forma parte del texto.
 			# Esto no es un comentario: es texto.
 			Title: esto tampoco es un nodo.
 
 	Content >>
-		El bloque termina en la primera línea no vacía cuya indentación sea menor o igual
-		que la del nodo `>>`, sea un nodo o un comentario. Las líneas vacías no lo cierran:
-		las que preceden a más texto forman parte del bloque como líneas vacías, se escriban
-		sin nada o con la indentación del bloque; las que quedan al final se descartan al
-		cerrarse el bloque, porque son separación visual del documento y no contenido.
+		El texto de `Summary` es:
 
-		Por eso un bloque sirve para cualquier contenido (un párrafo, un fragmento de
-		código, un trozo de Markdown, un texto en otro formato) sin transformarlo ni escapar
-		nada.
+	Listing >>
+		Esta línea está en el nivel del bloque.
+			Esta otra va más indentada, y esa indentación forma parte del texto.
+		# Esto no es un comentario: es texto.
+		Title: esto tampoco es un nodo.
 
+	Content >>
+		El texto empieza un nivel por debajo del nodo `>>`. Esa indentación es lo único
+		que se quita: la indentación adicional forma parte del texto. Dentro del bloque
+		no hay ninguna interpretación: `:`, `#` y `>>` son texto, y no son necesarios
+		caracteres de escape. Por este motivo un bloque sirve para cualquier contenido:
+		un párrafo, un fragmento de código, un trozo de Markdown o un texto en otro formato.
+
+	Assert: Un bloque termina en la primera línea no vacía con indentación menor o igual que la del nodo `>>`.
+
+	Content >>
+		Esa línea puede ser un nodo o un comentario. Las líneas vacías no terminan el bloque:
+
+		* Las que están antes de más texto forman parte del bloque, como líneas vacías.
+		* Las que quedan al final se descartan: separan visualmente el documento,
+		  pero no son contenido.
 
 	Subsubheader: Nombres de los nodos
 
@@ -277,10 +287,10 @@ Document (dev.stxt.website): STXT Tutorial
 		espacio. No admite ningún otro signo: ni `:`, ni paréntesis, ni `#`. Debe contener
 		al menos una letra o un dígito.
 
-		Para decidir si dos nodos son el mismo, @STXT@ compara su **nombre canónico**, que se
-		obtiene pasando el nombre a minúsculas, reduciendo cada secuencia de separadores a un
-		solo `-` y quitando los guiones de los extremos. Los acentos y el alfabeto **se
-		conservan**:
+		Para decidir si dos nodos son el mismo se compara su **nombre canónico**: el nombre
+		en minúsculas, con cada secuencia de separadores reducida a un solo `-` y sin guiones
+		en los extremos. Los acentos y el alfabeto **se conservan**. En este ejemplo, el
+		valor de cada nodo es su nombre canónico:
 
 	Code >>
 		Un nombré con äcento: un-nombré-con-äcento
@@ -294,19 +304,16 @@ Document (dev.stxt.website): STXT Tutorial
 		`Peña` y `Pena` son nodos distintos, como lo son dos palabras distintas.
 
 	Content >>
-		Es el mismo criterio que aplican los nombres de dominio internacionalizados: se
-		puede escribir un documento en cualquier idioma sin que el lenguaje altere las
-		palabras ni unifique dos nombres que para quien lee son distintos. La única
+		Así se puede escribir un documento en cualquier idioma sin que el lenguaje altere
+		las palabras ni unifique dos nombres que para quien lee son distintos. La única
 		excepción son los namespaces, que se limitan a ASCII.
 
 	Subsubheader: Listas
 
-	Subheader: Listas: todo son listas
-
 	Content >>
-		@STXT@ no tiene una sintaxis de lista porque no la necesita: los hijos de un nodo son
-		una secuencia ordenada, y un mismo nombre puede repetirse. Una lista de elementos del
-		mismo tipo es un nodo contenedor con el mismo hijo repetido:
+		@STXT@ no tiene una sintaxis especial para listas. Los hijos de un nodo son
+		una secuencia ordenada, y un mismo nombre puede repetirse. Ya lo hemos visto
+		con `Authors`:
 
 	Code >>
 		Authors:
@@ -325,26 +332,49 @@ Document (dev.stxt.website): STXT Tutorial
 			Chapter: Despliegue
 
 	Content >>
-		El árbol conserva el orden de aparición, así que una aplicación puede dar
-		significado a la posición si lo necesita. Cuando más adelante se valide el
-		documento, la plantilla dirá cuántas veces puede aparecer cada hijo; hasta
-		entonces, cualquier número vale.
+		El orden de aparición se conserva. Cuántas veces puede aparecer cada hijo
+		lo dice la validación, que veremos más adelante.
 
 	Subsubheader: Trim de valores y texto
 
 	Content >>
-		Trim a dos lados para inline, trim derecha debajo para block
+		Los blancos (espacios y tabuladores) que rodean a un valor no forman parte de él:
+
+		* En un **nodo inline** se quitan los blancos del principio y del final del valor.
+		* En un **nodo block** se quitan los blancos del final de cada línea. Los del
+		  principio, a partir del nivel del bloque, se conservan.
+
+	Code >>
+		Nombre: Joan
+		Nombre:      Joan
+
+	Content >>
+		En los dos casos el valor de `Nombre` es `Joan`.
 
 	Subsubheader: Recomendaciones de estilo
-	Content >>
-		
-		Bla, bla, bla,...
-
-	Subheader: Comentarios
 
 	Content >>
-		Una línea cuyo primer carácter, tras la indentación, es `#` es un comentario. El
-		parser la descarta: no forma parte del árbol ni de los datos.
+		Son recomendaciones y no reglas:
+
+		* Un solo espacio entre el nombre y el namespace.
+		* `:` va justo después del nombre, o del namespace si lo hay.
+		* Un solo espacio entre `:` y el valor.
+		* Un espacio antes de `>>`.
+		* No más de un espacio seguido en los nombres.
+		* Un mismo estilo de indentación en todo el documento: o tabuladores, o espacios.
+
+	Code >>
+		Nombre con valor: El valor
+		Nombre sin valor:
+		Nombre con namespace (el.namespace):
+		Nodo de texto >>
+
+	Subheader: Comentarios en profundidad
+
+	Content >>
+		Ya hemos visto que un comentario es una línea que empieza por `#`, sin contar
+		los blancos de indentación. Los comentarios se descartan: no forman parte del
+		árbol ni de los datos.
 
 	Code >>
 		# Ficha de un libro
@@ -353,32 +383,46 @@ Document (dev.stxt.website): STXT Tutorial
 			Title: Arquitectura de software moderna
 			ISBN: 978-84-123456-7-8
 
-	Content >>
-		Tres cosas que conviene saber:
-
-		* Los comentarios son **de línea completa**. No hay comentarios a final de línea: en
-		  `Title: Mi libro # nota`, el `#` y lo que le sigue son parte del valor.
-		* La indentación de un comentario se valida como la de un nodo (estilo homogéneo y,
-		  como máximo, un nivel más que el último nodo), aunque no mueve la jerarquía. Lo
-		  natural es alinearlo con el nodo que describe.
-		* Dentro de un bloque `>>` no hay comentarios: un `#` ahí es texto. Un comentario al
-		  nivel del nodo `>>` o menor cierra el bloque.
-
-	Subsubheader: Identación
-	Subsubheader: Final de bloque text
-	Subsubheader: Recomendaciones de estilo
-
-	Subheader: Namespaces
-
-	Subheader: Namespaces
+	Assert: Los comentarios son de **línea completa**.
 
 	Content >>
-		Hasta aquí, el documento del libro es solo sintaxis: un árbol de nombres y textos
-		que cualquier parser lee, pero del que nadie sabe qué significa. Un **namespace** le
-		da identidad: dice a qué vocabulario pertenecen sus nodos, y es lo que permite
-		validarlo más adelante.
+		No hay comentarios a final de línea: en `Title: Mi libro # nota`, el `#` y lo que
+		le sigue son parte del valor, como hemos visto con `Nodo 4`.
 
-		El namespace se escribe entre paréntesis tras el nombre del nodo:
+	Subsubheader: Indentación de los comentarios
+
+	Content >>
+		La indentación de un comentario se valida como la de un nodo: las mismas reglas
+		de tabuladores y espacios y, como máximo, un nivel más que el último nodo.
+		Pero un comentario no cambia la jerarquía.
+
+	Subsubheader: Comentarios y final de un nodo block
+
+	Content >>
+		Dentro de un nodo block no hay comentarios: un `#` ahí es texto. Una línea `#` con
+		indentación menor o igual que la del nodo `>>` sí es un comentario, y termina el bloque:
+
+	Code >>
+		Book:
+			Summary >>
+				Texto del resumen.
+				# Esto es texto del bloque.
+			# Esto es un comentario, y termina el bloque.
+			Title: Arquitectura de software moderna
+
+	Subsubheader: Estilo de los comentarios
+
+	Content >>
+		Se recomienda poner cada comentario en el mismo nivel que el nodo siguiente,
+		que es el nodo que describe.
+
+	Subheader: Namespaces en profundidad
+
+	Content >>
+		Ya hemos visto que un nodo puede pertenecer a un **namespace**, que se escribe entre
+		paréntesis tras el nombre del nodo. El namespace dice a qué vocabulario pertenecen
+		los nodos, y es lo que permite validarlos. Este es el documento del principio, ahora
+		completo:
 
 	Code >>
 		Book (com.acme.book):
@@ -401,28 +445,41 @@ Document (dev.stxt.website): STXT Tutorial
 					Se describen protocolos, mensajería y patrones de integración.
 
 	Content >>
-		Es el documento completo de la sección 1 (`tutorial/book-ns.stxt`), con una sola
-		diferencia: `Book` declara el namespace `com.acme.book`. Y con eso basta, porque el
-		namespace **se hereda**: `Title`, `Authors`, `Author`, `Chapter`, `Content`... todos los
-		descendientes de `Book` pertenecen a `com.acme.book` sin escribirlo. Un hijo puede
-		declarar otro namespace, y entonces sus propios descendientes heredan el nuevo.
+		Las reglas para escribir un namespace son pocas:
 
-		Las reglas de forma son pocas: solo ASCII `[a-z0-9]` y puntos, al menos dos partes
-		(`a.b`), y las mayúsculas se pasan a minúsculas (`COM.ACME.BOOK` es el mismo). La
-		convención es usar un dominio propio al revés, como en Java, para que dos
-		organizaciones no choquen.
+		* Solo ASCII `[a-z0-9]` y puntos, con al menos dos partes (`a.b`).
+		* Las mayúsculas se pasan a minúsculas: `COM.ACME.BOOK` es el mismo namespace.
+		* La convención es usar un dominio propio al revés, como en Java, para que dos
+		  organizaciones no choquen.
+		* Los namespaces que empiezan por `@` son especiales: `@stxt.*` está reservado al
+		  propio lenguaje. Más adelante veremos dos: `@stxt.template` y `@stxt.schema`.
+		  Un namespace propio nunca empieza por `@`.
 
-		Los namespaces que empiezan por `@` son especiales: la rama `@stxt.*` está reservada
-		al propio lenguaje, y en la sección siguiente aparecen dos de ellos,
-		`@stxt.template` y `@stxt.schema`. Un namespace propio nunca empieza por `@`.
-
-		El lenguaje base no valida nada con el namespace: solo define cómo se escribe y cómo
-		se hereda. Un documento con un namespace para el que no hay definición es un
-		documento válido que no se puede validar.
-
+	Assert: Un documento con un namespace sin definición es un documento correcto, que no se puede validar.
 
 	Subsubheader: Herencia de namespaces
+
+	Content >>
+		En el ejemplo solo `Book` declara el namespace `com.acme.book`. Con eso es
+		suficiente, porque el namespace **se hereda**: `Title`, `Authors`, `Author`,
+		`Chapter`, `Content`... todos los descendientes de `Book` pertenecen a
+		`com.acme.book` sin escribirlo.
+
 	Subsubheader: Múltiples namespaces
+
+	Content >>
+		Un hijo puede declarar otro namespace, y entonces sus descendientes heredan el nuevo:
+
+	Code >>
+		Order (com.example.orders): 1234
+			Customer (com.example.customers): Ana López
+				Email: ana@example.com
+			Total: 120
+
+	Content >>
+		`Order` y `Total` pertenecen a `com.example.orders`. `Customer` y `Email`
+		pertenecen a `com.example.customers`. Al final del tutorial veremos cómo se
+		valida un documento con varios namespaces.
 
 	Subheader: Validación de documentos
 
@@ -453,19 +510,23 @@ Document (dev.stxt.website): STXT Tutorial
 		**cardinalidad** (cuántas veces puede aparecer ese nodo dentro de su padre) y lo
 		que va después, si hay algo, el **tipo** del valor:
 
-		* `Title: (1)`: exactamente uno. `Authors` e `ISBN`, igual.
+		* `Title: (1)`: exactamente uno. `Authors`, igual.
 		* `Author: (+)`: uno o más.
-		* `Publisher: (?)`: cero o uno.
+		* `ISBN: (?)`: cero o uno. `Publisher`, igual.
 		* `Published: (?) DATE`: opcional y, si aparece, una fecha `AAAA-MM-DD`.
-		* `Summary: (?) TEXT`: opcional, y su valor es texto (inline o bloque).
-		* `Chapter: (+)` con `Content: (?) TEXT` dentro: al menos un capítulo, cada uno con
-		  su texto opcional.
+		* `Summary: (?) TEXT`: opcional, y su valor es texto (inline o block).
+		* `Chapter: (*)` con `Content: (?) TEXT` dentro: cualquier número de capítulos,
+		  cada uno con su texto opcional.
 
-		Lo que la plantilla **no** dice también importa: `Book` no admite ningún hijo que no
-		esté en esta lista. Es el **modelo de contenido cerrado**: un nodo `Pages` dentro de
-		`Book` es un error y no un dato extra que se ignora.
+		Con esta plantilla validan los dos documentos del libro que hemos visto: el del
+		principio y el completo.
 
-	Subsubheader: 10.1 Cardinalidades
+	Assert: `Book` no admite ningún hijo que no esté en la plantilla.
+
+	Content >>
+		Un nodo `Pages` dentro de `Book` es un error, y no un dato extra que se ignora.
+
+	Subsubheader: Cardinalidades
 
 	Content >>
 		| Forma       | Significado                  |
@@ -479,7 +540,7 @@ Document (dev.stxt.website): STXT Tutorial
 		| `(n-)`      | Hasta `n`.                   |
 		| `(min,max)` | Entre `min` y `max`.         |
 
-	Subsubheader: 10.2 Tipos
+	Subsubheader: Tipos
 
 	Content >>
 		El tipo va tras la cardinalidad; si no se indica, es `INLINE`. Los más habituales:
@@ -494,16 +555,15 @@ Document (dev.stxt.website): STXT Tutorial
 		| `DATE`     | inline          | Fecha `AAAA-MM-DD`, con calendario.                   |
 		| `ENUM`     | inline          | Uno de los valores de una lista: `ENUM [a, b, c]`.    |
 
-		Solo `INLINE` y `GROUP` admiten hijos. En cuanto un tipo valida un dato concreto (un
-		número, una fecha, un texto), ese nodo es un dato, y un dato es una hoja.
+		Solo `INLINE` y `GROUP` admiten hijos.
 
 	Subheader: Lo mismo con un esquema
 
 	Content >>
-		Un **esquema** (`@stxt.schema`) describe exactamente lo mismo que una plantilla, pero
-		nodo a nodo y de forma explícita: cada `Node` con su tipo y la lista de sus `Child`
-		con cardinalidades `Min`/`Max`. Es la forma canónica; toda plantilla se compila a un
-		esquema equivalente, y validar con uno u otro da el mismo resultado.
+		Un **esquema** (`@stxt.schema`) describe lo mismo que una plantilla, pero nodo a
+		nodo: cada `Node` con su tipo y la lista de sus `Child`, con cardinalidades
+		`Min`/`Max`. Toda plantilla se compila a un esquema equivalente, y validar con
+		uno u otro da el mismo resultado.
 
 	Code >>
 		Schema (@stxt.schema): com.acme.book
@@ -516,7 +576,6 @@ Document (dev.stxt.website): STXT Tutorial
 						Min: 1
 						Max: 1
 					Child: ISBN
-						Min: 1
 						Max: 1
 					Child: Publisher
 						Max: 1
@@ -525,7 +584,6 @@ Document (dev.stxt.website): STXT Tutorial
 					Child: Summary
 						Max: 1
 					Child: Chapter
-						Min: 1
 			Node: Authors
 				Children:
 					Child: Author
@@ -546,10 +604,10 @@ Document (dev.stxt.website): STXT Tutorial
 				Type: TEXT
 
 	Content >>
-		La plantilla es más corta y se parece al documento; el esquema es más largo y más
+		La plantilla es más corta y se parece al documento. El esquema es más largo y más
 		explícito. Para un namespace solo puede haber **una** definición activa, plantilla o esquema.
 
-	Subheader: 13. El documento final
+	Subheader: El documento final
 
 	Content >>
 		Un documento completo que valida tanto con la plantilla como con el esquema:
@@ -568,27 +626,24 @@ Document (dev.stxt.website): STXT Tutorial
 					Conceptos básicos y objetivos del libro.
 
 	Content >>
-		`Summary` va aquí inline y en la sección 9 iba como bloque: `TEXT` admite las dos
-		formas, y el valor es el mismo texto. `Publisher` no aparece, y no hace falta:
-		era `(?)`.
+		`Summary` va aquí como nodo inline, y en los ejemplos anteriores iba como nodo block:
+		`TEXT` admite las dos formas. `Publisher` no aparece, y no hace falta: era `(?)`.
 
 		Cómo se hace en un proyecto real (la plantilla en un directorio `.stxt/`, el
-		documento al lado y `stxt validate` desde el terminal o los errores en el
+		documento al lado y `stxt validate` desde el terminal, o los errores en el
 		editor) lo enseña [El entorno de trabajo](working-environment).
 
 	Subheader: Varios namespaces en un mismo documento
 
 	Content >>
-		Nada obliga a que todo el documento pertenezca a un único namespace. Cualquier
-		nodo puede declarar el suyo entre paréntesis, igual que lo declaró `Book`, y sus
-		descendientes heredan el nuevo a partir de él. Cada namespace se valida contra su
-		propia definición, así que un vocabulario se define una vez y se incorpora desde
-		otros: unas reseñas, por ejemplo, que mañana podrían acompañar igual a cualquier
-		otro producto.
+		Ya hemos visto que cualquier nodo puede declarar su propio namespace, y que sus
+		descendientes lo heredan. Cada namespace se valida contra su propia definición,
+		así que un vocabulario se define una vez y se incorpora desde otros. Por ejemplo,
+		unas reseñas, que podrían acompañar igual a cualquier otro producto.
 
 		En la plantilla que incorpora el vocabulario ajeno, el nodo externo se declara
-		con su namespace y, como mucho, su cardinalidad: su forma no se describe ahí,
-		sino en la plantilla de su propio namespace. El conjunto completo (el documento
+		con su namespace y su cardinalidad. Su forma no se describe ahí, sino en la
+		plantilla de su propio namespace. El conjunto completo (el documento
 		y las dos plantillas) cabe en un solo fichero:
 
 	Code >>
@@ -615,7 +670,7 @@ Document (dev.stxt.website): STXT Tutorial
 					Title: (1)
 					Authors: (1)
 						Author: (+)
-					ISBN: (1)
+					ISBN: (?)
 					Published: (?) DATE
 					Review (com.acme.reviews): (*)
 
@@ -629,21 +684,18 @@ Document (dev.stxt.website): STXT Tutorial
 	Content >>
 		La plantilla del libro, aquí reducida, añade una sola línea nueva,
 		`Review (com.acme.reviews): (*)`: un libro admite cualquier número de reseñas, y
-		qué es una reseña lo dice la plantilla de `com.acme.reviews`. En el documento,
-		cada `Review` declara su namespace, y `Reviewer`, `Score` y `Comment` lo heredan
-		sin escribirlo: las reseñas se validan contra su plantilla, y el resto del libro
-		contra la suya.
+		qué es una reseña lo dice la plantilla de `com.acme.reviews`. Las reseñas se
+		validan contra su plantilla, y el resto del libro contra la suya.
 
 		Un documento @STXT@ puede tener varios nodos raíz, y este tiene tres: el libro y
 		las dos plantillas. Que quepan en un solo fichero es una posibilidad y no una
-		obligación: lo habitual es que cada plantilla viva en el suyo, y que documento y
+		obligación: lo habitual es que cada plantilla esté en su fichero, y que documento y
 		definiciones se encuentren por el namespace.
-
 
 	Subheader: Dónde seguir
 
 	Content >>
-		* [Preguntas frecuentes](faq): respuestas cortas con enlace a la regla.
+		* [Preguntas frecuentes](faq): respuestas cortas a las dudas habituales.
 		* [El entorno de trabajo](working-environment): organizar un proyecto, instalar
 		  plantillas, validar desde el terminal y en integración continua.
 		* [Principios de diseño](design-principles): por qué el lenguaje es como es.
@@ -657,34 +709,3 @@ Document (dev.stxt.website): STXT Tutorial
 		  la validación, [STXT-DISCOVERY-SPEC](stxt-discovery-ref) para dónde se buscan las
 		  definiciones y [STXT-TREE-SPEC](stxt-tree-ref) para el árbol JSON que producen las
 		  herramientas.
-
-		Las normas de estilo del lenguaje (recomendaciones, no reglas) están en
-		[STXT-SPEC §4.4](stxt-core-ref#s4-4) y [§9.2](stxt-core-ref#s9-2).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
