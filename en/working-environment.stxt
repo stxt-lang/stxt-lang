@@ -1,35 +1,31 @@
 Document (dev.stxt.website): The working environment | STXT
 
 	Metadata:
-		Last modif: 2026-09-08
+		Last modif: 2026-09-19
 		Description: How to organise an STXT project: the .stxt/ directory, the grammar resolution chain, and validation from the editor, the command line and CI.
 
 	Header: The working environment
 
 	Assert >>
-		The [tutorial](tutorial) describes the language; this page describes the working
-		environment: organising a project, placing its grammar where the tools resolve it,
-		and validating from the editor, from the command line and in continuous integration.
-		It follows the same example as the tutorial, the record of a book.
+		How to organise an @STXT@ project, where to place its grammar and how to validate
+		from the editor, from the command line and in continuous integration.
 
 	Content >>
-		The `stxt` command line is required (`npm install -g @stxt-lang/cli`, or `npx
-		@stxt-lang/cli` without installing) and, for section 4, Visual Studio Code with the
-		`stxt-lang.stxt` extension. Section 7 uses the playground, with no installation. Everything used here is described in [Tools](tools).
+		It follows the example of the [tutorial](tutorial), the record of a book. It uses the
+		`stxt` command line (`npm install -g @stxt-lang/cli`, or `npx @stxt-lang/cli` without
+		installing), Visual Studio Code with the `stxt-lang.stxt` extension and the
+		playground; all three are described in [Tools](tools).
 
-	Subheader: 1. The project and the `.stxt/` directory
+	Subheader: The project and the `.stxt/` directory
 
 	Content >>
-		An @STXT@ project is any directory with `.stxt` documents in it. The only thing @STXT@
-		adds is a directory called exactly **`.stxt/`** that contains the project's grammars,
-		that is, its schemas and templates. When a tool validates a document it looks for that directory
-		in the document's directory and in all of its ancestor directories, then in `~/.stxt`
-		and in `/etc/stxt`. That list is the document's **resolution chain**, and it is the
-		same for the editor, the command line and any other tool: that is why a document
-		validates the same everywhere.
+		An @STXT@ project is a directory with `.stxt` documents and a directory called
+		`.stxt/` with its grammars (schemas and templates). To validate a document, a tool
+		looks for `.stxt/` in the document's directory and in all of its ancestors, then in
+		`~/.stxt` and in `/etc/stxt`. That list is the document's **resolution chain**, and
+		it is the same in the editor, on the command line and in the libraries.
 
-		For the example, a `books` project with the grammar in `.stxt/` and the documents in
-		`docs/`:
+		For the example, a `books` project:
 
 	Listing >>
 		books/
@@ -37,25 +33,20 @@ Document (dev.stxt.website): The working environment | STXT
 		└── docs/
 		    └── book.stxt     the documents
 
-	Listing >>
-		mkdir -p books/.stxt books/docs
-		cd books
+	Content >>
+		Inside `.stxt/` every `.stxt` file is loaded, recursively. Neither file names nor
+		subdirectories have any meaning. Each file must be a definition (`@stxt.schema` or
+		`@stxt.template`); any other content is a resolution error. See
+		[STXT-DISCOVERY-SPEC §3](stxt-discovery-ref#s3) and [§4](stxt-discovery-ref#s4).
+
+	Subheader: Writing the grammar
 
 	Content >>
-		Inside `.stxt/` every `.stxt` file is loaded, recursively, and neither file names nor
-		subdirectories have any meaning: they are just organisation. Each file must be a
-		definition (`@stxt.schema` or `@stxt.template`); any other content inside `.stxt/` is
-		a resolution error. See [STXT-DISCOVERY-SPEC §3](stxt-discovery-ref#s3) and
-		[§4](stxt-discovery-ref#s4).
-
-	Subheader: 2. Writing the grammar
-
-	Content >>
-		The book template is the one from the tutorial (section 10). It can be written straight
-		into `.stxt/` under any name, or the CLI can place it: `stxt install` parses
-		it, checks that it validates against its meta-schema and only then writes it, in
-		canonical form, as `.stxt/@stxt.template/<namespace>.stxt`. That naming is a CLI
-		convention; the language does not impose it.
+		The book template is the one from the tutorial. It can be written straight into
+		`.stxt/` under any name, or installed with `stxt install`, which checks that it
+		validates against its meta-schema and writes it, in canonical form, as
+		`.stxt/@stxt.template/<namespace>.stxt`. That layout is a CLI convention; the
+		language does not impose it.
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -79,8 +70,8 @@ Document (dev.stxt.website): The working environment | STXT
 		Installed com.acme.book (@stxt.template) to /home/ana/books/.stxt/@stxt.template/com.acme.book.stxt
 
 	Content >>
-		`stxt schemas` shows the resolution chain of a directory, which definition is active
-		for each namespace and where it comes from:
+		`stxt schemas` shows the resolution chain of a directory and, for each namespace, the
+		active definition and its file:
 
 	Listing >>
 		stxt schemas docs
@@ -92,11 +83,10 @@ Document (dev.stxt.website): The working environment | STXT
 		    com.acme.book <- /home/ana/books/.stxt/@stxt.template/com.acme.book.stxt
 
 	Content >>
-		If the project lives inside another one that also has a `.stxt/` (a monorepo), the
-		chain includes both directories: both take part, and for each namespace the one
-		closest to the document wins.
+		If the project lives inside another one that also has a `.stxt/`, the chain includes
+		both directories, and for each namespace the one closest to the document wins.
 
-	Subheader: 3. Writing and validating the document
+	Subheader: Writing and validating the document
 
 	Content >>
 		The document, in `docs/book.stxt`, with the template's namespace:
@@ -118,10 +108,8 @@ Document (dev.stxt.website): The working environment | STXT
 		stxt validate docs/book.stxt
 
 	Content >>
-		It prints nothing and exits with code `0`: there is no output when everything passes.
-		To observe the findings, two typical mistakes: a date that is not `YYYY-MM-DD` and a
-		required node that is missing. With `Published` changed to free text and without the
-		`ISBN` line:
+		It prints nothing and exits with code `0`. With `Published` changed to free text and
+		without the `ISBN` line:
 
 	Code >>
 		Book (com.acme.book):
@@ -144,51 +132,47 @@ Document (dev.stxt.website): The working environment | STXT
 		2 error(s), 0 warning(s)
 
 	Content >>
-		Each finding is `file:line: [CODE] message (severity)`. The **code** is stable and
-		identical in the CLI, the extension and the three libraries (`INVALID_VALUE`,
-		`TOO_FEW_CHILDREN`, `CHILD_NOT_DECLARED`, `INDENTATION_MIXED`...), so it can be looked
-		up in the documentation or filtered in a script. The failed cardinality is reported
-		on the parent's line (`Book`, line 1), because it is the parent that has zero `ISBN`.
+		Each finding is `file:line: [CODE] message (severity)`. The code is stable and the
+		same in the CLI, the extension and the three libraries. A cardinality error is
+		reported on the line of the parent (`Book`, line 1).
 
-		The exit code tells *the documents have errors* (`1`) apart from *the command was
-		used wrongly* (`2`). Three options change what counts as a failure:
+		The exit code is `1` if the documents have errors and `2` if the command was misused.
+		Options of `validate`:
 
 		* `--warn-schema`: grammar errors are reported as warnings and do not fail; syntax
 		  errors still do.
 		* `--no-schema`: syntax only, without looking for or applying any grammar.
-		* `--format json`: the same findings as a JSON array, for machines.
+		* `--format json`: the same findings as a JSON array.
+		* `--recursive` (`-r`): validates whole directories; any `.stxt/` it finds is
+		  skipped, because those are not documents.
 
-		With `--recursive` (`-r`) whole directories are validated; any `.stxt/` found on the
-		way is omitted, because it forms the resolution chain and is not a document to check.
+		The rest is in the [command-line reference](tools-cli).
 
-	Subheader: 4. The same from VS Code
+	Subheader: The same from VS Code
 
 	Content >>
-		With the `books/` folder open in Visual Studio Code and the extension installed
-		(`code --install-extension stxt-lang.stxt`) there is nothing to configure: the
-		extension follows the same resolution chain as the CLI (the `.stxt/` of the document
-		and of its ancestors, even above the workspace root, then `~/.stxt` and `/etc/stxt`),
-		so it resolves the same template and emits the same codes. With `docs/book.stxt`
-		open:
+		With the `books/` folder open and the extension installed
+		(`code --install-extension stxt-lang.stxt`) there is nothing to configure. The
+		extension follows the same resolution chain as the CLI, also above the workspace
+		root, and emits the same codes. With `docs/book.stxt` open:
 
-		* **Syntax errors** are underlined in red, and grammar errors show as warnings, with
-		  the same code and message as on the command line.
-		* **Completion** (`Ctrl+Space`): inside `Book` it proposes only the children the
-		  template allows; in an `ENUM`, its values.
-		* **Hover** over a node name: the description given by the template, its type and,
-		  if it is an `ENUM`, its values.
-		* **Go to definition** (`F12`) on `Published` opens `.stxt/@stxt.template/com.acme.book.stxt`
-		  at the line `Published: (?) DATE`.
-		* **Format document**, from the command palette or the editor's shortcut: it
-		  reindents and normalises without losing comments or blank lines.
+		* Syntax errors show as errors and grammar errors as warnings, with the same code and
+		  message as on the command line.
+		* Completion (`Ctrl+Space`): inside `Book` it proposes only the children the template
+		  allows; in an `ENUM`, its values.
+		* Hover over a node name: the description given by the template, its type and, if it
+		  is an `ENUM`, its values.
+		* Go to definition (`F12`) on `Published` opens
+		  `.stxt/@stxt.template/com.acme.book.stxt` at the line `Published: (?) DATE`.
+		* Format document: it reindents and normalises without losing comments or blank
+		  lines.
 
 		When the template is edited, the extension resolves again and revalidates the open
-		documents without reloading anything. If a document has a namespace and no grammar in
-		the chain defines it, the extension flags `SCHEMA_NOT_FOUND` as a warning, the same code
-		`stxt validate` fails with; the `stxt.schemaValidation` setting disables the grammar
-		layer, like `--no-schema` in the CLI.
+		documents. A namespace that no grammar in the chain defines is flagged with
+		`SCHEMA_NOT_FOUND` as a warning. The `stxt.schemaValidation` setting disables
+		validation against grammars, like `--no-schema` in the CLI.
 
-	Subheader: 5. More than one level: user and system
+	Subheader: More than one level: user and system
 
 	Content >>
 		The project's `.stxt/` is the first level of the chain; there are two more:
@@ -199,15 +183,14 @@ Document (dev.stxt.website): The working environment | STXT
 		| User    | `~/.stxt` (`%USERPROFILE%\.stxt`)          | `--user`         | Personal definitions, shared by all the user's projects         |
 		| System  | `/etc/stxt` (`%ProgramData%\stxt`)         | `--system`       | Definitions an organisation distributes to a whole machine      |
 
-		Precedence is **per namespace** and not per directory: for each namespace the closest
-		level that defines it wins, and the other levels keep contributing the namespaces
-		that one does not define. So a project can carry its `com.acme.book` while the user
-		keeps an `org.ana.notes` template for personal notes in `~/.stxt`, and both apply in
-		the same validation.
+		Precedence is per namespace: for each one the closest level that defines it wins, and
+		the other levels contribute the namespaces that one does not define. A project can
+		carry its `com.acme.book` while the user keeps an `org.ana.notes` template in
+		`~/.stxt`, and both apply in the same validation.
 
-		**Two definitions of the same namespace at the same level** are not allowed. If the
-		book template is copied to `.stxt/other/copy.stxt`, `stxt schemas` reports it and the
-		namespace is left without an active definition until one of the two is removed:
+		Two definitions of the same namespace at the same level are not allowed. If the book
+		template is copied to `.stxt/other/copy.stxt`, the namespace is left without an
+		active definition until one of the two is removed:
 
 	Listing >>
 		stxt schemas docs
@@ -222,59 +205,39 @@ Document (dev.stxt.website): The working environment | STXT
 
 	Content >>
 		`stxt validate` reports that same error (line `0`, naming the offending file) and
-		fails: the tool never silently picks one of the two. See
-		[STXT-DISCOVERY-SPEC §5](stxt-discovery-ref#s5) and [§8](stxt-discovery-ref#s8).
+		fails. See [STXT-DISCOVERY-SPEC §5](stxt-discovery-ref#s5) and
+		[§8](stxt-discovery-ref#s8).
 
-	Subheader: 6. Continuous integration and `STXT_PATH`
+	Subheader: Continuous integration and `STXT_PATH`
 
 	Content >>
-		In a CI job the result should not depend on the contents of `~/.stxt` or `/etc/stxt`
-		on the machine running it. The **`STXT_PATH`** environment variable replaces the whole
-		resolution chain with a list of directories (separated by `:`, or `;` on Windows), in
-		order of precedence; the entries do not have to be called `.stxt`. With it, two steps
-		make the job fail if any document does not validate or is not well formatted:
+		The `STXT_PATH` environment variable replaces the whole resolution chain with a list
+		of directories (separated by `:`, or `;` on Windows), in order of precedence; the
+		entries do not have to be called `.stxt`. In a CI job it keeps the result from
+		depending on the `~/.stxt` or the `/etc/stxt` of the machine:
 
 	Listing >>
 		STXT_PATH=./.stxt npx @stxt-lang/cli validate --recursive docs/
 		npx @stxt-lang/cli format --check --recursive docs/
 
 	Content >>
-		`format --check` writes nothing: it only lists which files would change and fails if
-		there is any, like `gofmt -l` or `prettier --check`. Reformatting requires `--write`;
-		no command rewrites files without an explicit request.
+		`format --check` writes nothing: it lists the files that would change and fails if
+		there is any, like `gofmt -l` or `prettier --check`. Reformatting requires `--write`.
 
-		A `STXT_PATH` that is defined but empty leaves the chain empty: no document
-		with a namespace finds a grammar and `validate` fails with `SCHEMA_NOT_FOUND`;
-		checking the syntax alone must be requested explicitly with `--no-schema`. An
+		A `STXT_PATH` that is defined but empty leaves the chain empty: `validate` fails with
+		`SCHEMA_NOT_FOUND` on every document with a namespace, except with `--no-schema`. An
 		entry that does not exist contributes nothing and is not an error. See
 		[STXT-DISCOVERY-SPEC §6](stxt-discovery-ref#s6).
 
-	Subheader: 7. Without installing anything: the playground
+	Subheader: Without installing anything: the playground
 
 	Content >>
-		In the [playground](https://play.stxt.dev) there is no file system, so there is no
-		`.stxt/` and no directory chain: documents and grammars are associated **by namespace
-		within the workspace**. Every template or schema present in the document list feeds
-		validation, and each document is validated against the definition whose namespace
-		matches. Two grammars with the same namespace in the workspace are an error, exactly
-		as in section 5.
+		In the [playground](https://play.stxt.dev) there is no file system and no directory
+		chain: documents and grammars are associated by namespace within the workspace. Every
+		template or schema in the workspace takes part in validation, and two grammars with
+		the same namespace are an error, as in a level of the chain.
 
-		The *Open in the playground* button of the document in section 3 loads it together with
-		its template: when the date is altered or the `ISBN` removed from the book, the problems
-		panel at the bottom shows the same codes as the CLI. Completion, hover and the tabs/spaces switch work as in the
-		extension, and *Share* copies a URL that contains the whole workspace, to share it
-		with no installation.
-
-	Subheader: 8. Summary
-
-	Content >>
-		| Goal                                           | How                                                                    |
-		|------------------------------------------------|------------------------------------------------------------------------|
-		| Start a project                                | A `.stxt/` directory next to the documents                             |
-		| Put a grammar in its place                     | Write it into `.stxt/`, or `stxt install grammar.stxt`                 |
-		| See which grammar applies and where it is from | `stxt schemas [directory]`                                             |
-		| Validate from the terminal                     | `stxt validate --recursive docs/`                                      |
-		| Validate while writing                         | VS Code with the extension, or the playground                          |
-		| Share a grammar across projects                | `stxt install --user grammar.stxt` (`~/.stxt`)                         |
-		| Keep CI independent of the machine             | `STXT_PATH=./.stxt` in front of the command                            |
-		| Check formatting in CI                         | `stxt format --check --recursive docs/`                                |
+		The *Open in the playground* button of the document on this page loads it together
+		with its template: when the date is altered or the `ISBN` removed, the problems panel
+		shows the same codes as the CLI. Completion, hover and the tabs/spaces switch work as
+		in the extension, and *Share* copies a URL that contains the whole workspace.
