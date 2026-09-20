@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Core: sintaxis base del lenguaje
 	Metadata:
 		Status: Zenith
-		Last modif: 2026-09-09
+		Last modif: 2026-09-20
 		Description: STXT-SPEC, la especificación base del lenguaje STXT: indentación como estructura, nodos y bloques de texto, namespaces, normalización, errores y seguridad.
 		
 	Header: @STXT@ Core
@@ -22,7 +22,6 @@ Document (dev.stxt.website): STXT Core: sintaxis base del lenguaje
 		* Ser sencillo de leer y escribir.
 		* Ser trivial de parsear en cualquier lenguaje.
 		* Permitir tanto contenido estructurado como texto libre.
-		* Extender su semántica mediante `@stxt.schema` o `@stxt.template`.
 		* Facilitar la creación de parsers intentando minimizar errores de seguridad.
 
 	Subsubheader: 1.1 Fecha y estado de esta especificación

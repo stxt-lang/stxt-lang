@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Core: base syntax of the language
 
 	Metadata:
 		Status: Zenith
-		Last modif: 2026-09-09
+		Last modif: 2026-09-20
 		Description: STXT-SPEC, the base specification of the STXT language: indentation as structure, nodes and text blocks, namespaces, normalization, errors and security.
 		
 	Header: @STXT@ Core
@@ -23,7 +23,6 @@ Document (dev.stxt.website): STXT Core: base syntax of the language
 		* Being simple to read and write.
 		* Being trivial to parse in any language.
 		* Allowing both structured content and free text.
-		* Extending its semantics through `@stxt.schema` or `@stxt.template`.
 		* Facilitating the creation of parsers while trying to minimize security errors.
 
 	Subsubheader: 1.1 Date and status of this specification
