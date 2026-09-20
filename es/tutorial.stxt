@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Tutorial
 
 	Metadata:
-		Last modif: 2026-09-19
+		Last modif: 2026-09-20
 		Description: Tutorial de STXT desde cero: leer y escribir documentos, bloques de texto, namespaces y validación con plantillas. Sin conocimientos previos, solo un editor.
 
 	Header: @STXT@ Tutorial
@@ -100,11 +100,11 @@ Document (dev.stxt.website): STXT Tutorial
 		contempla qué estructura es válida, el número de nodos hijos
 		y cómo deben ser los valores de los nodos.
 
-		Con esto es suficiente para que un namespace se convierta en 
-		un vocabulario para	ese ámbito concreto.
+		Con esto es suficiente para que un namespace se convierta en
+		un vocabulario para ese ámbito concreto.
 
-		Los esquemas pueden definirse también como plantillas, que
-		en el ejemplo sería la siguiente:
+		Los esquemas pueden definirse también como plantillas. La del
+		ejemplo sería la siguiente:
 
 	Code >>
 		Template (@stxt.template): com.acme.book
@@ -140,8 +140,8 @@ Document (dev.stxt.website): STXT Tutorial
 	Subsubheader: Nodos con namespace y sin namespace
 
 	Content >>
-		Los nodos pueden definir un namespace. En caso de no definirlo y no 
-		heredarlo del padre se dice que es un documento sin namespace. Como
+		Los nodos pueden definir un namespace. En caso de no definirlo y no
+		heredarlo del padre, se dice que es un nodo sin namespace. Como
 		los namespaces se heredan, si un nodo tiene un namespace,
 		sus nodos hijos también lo tendrán, ya sea heredado o redefinido.
 		El primer ejemplo es un nodo con namespace,
@@ -181,8 +181,8 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Content >>
 		Al no tener namespace no podemos asociarlo a ningún esquema, por lo que
-		sólo puede validarse la estructura, no el contenido.
-	
+		solo puede validarse la estructura, no el contenido.
+
 	Subsubheader: Jerarquía y niveles
 
 	Assert: La **indentación** define la jerarquía
@@ -391,7 +391,7 @@ Document (dev.stxt.website): STXT Tutorial
 	Subsubheader: Trim de valores y texto
 
 	Content >>
-		* En un **nodo inline** se quitan los blancos del principio y del final del valor. Es decir trim() 
+		* En un **nodo inline** se quitan los blancos del principio y del final del valor. Es decir, trim()
 		  por la izquierda y la derecha.
 		* En un **nodo block** se quitan los blancos del final de cada línea y las líneas finales vacías.
 		  Se conservan los blancos del principio del bloque. Es decir, trim() por la derecha de las líneas
@@ -425,11 +425,11 @@ Document (dev.stxt.website): STXT Tutorial
 	Subsubheader: Múltiples nodos en un documento
 
 	Content >>
-		Los documentos pueden tener varios nodos raíz, independientes entre ellos. 
-		Esto permite usar STXT directamente en ficheros grandes, sin tener que definir
-		otro tipo de ficheros. Una aplicación podría ser en ficheros de logs, leídos en streaming:
+		Los documentos pueden tener varios nodos raíz, independientes entre sí.
+		Esto permite usar @STXT@ directamente en ficheros grandes, sin tener que definir
+		otro tipo de ficheros. Una aplicación podrían ser los ficheros de logs, leídos en streaming:
 
-	CODE >>
+	Code >>
 		Log: Inicio creación de usuario
 			Level: INFO
 			Request ID: 3e45bad6-3a82-4959-844e-9eefd4c418a3
@@ -535,8 +535,8 @@ Document (dev.stxt.website): STXT Tutorial
 		  Un namespace propio nunca empieza por `@`.
 
 	Assert >>
-		Un documento con un namespace sin definición es un documento correcto, 
-		que no se puede validar el contenido.
+		Un documento con un namespace sin definición es un documento correcto,
+		pero no se puede validar su contenido.
 
 	Subsubheader: Herencia de namespaces
 
@@ -546,9 +546,9 @@ Document (dev.stxt.website): STXT Tutorial
 		`Chapter`, `Content`... todos los descendientes de `Book` pertenecen a
 		`com.acme.book` sin escribirlo.
 
-		Una consecuencia de esto es que una vez se define un namespace,
+		Una consecuencia de esto es que, una vez que un nodo define un namespace,
 		sus hijos también tendrán namespace, ya que no hay una forma establecida
-		de eliminar el namespace. 
+		de eliminarlo.
 
 	Subsubheader: Múltiples namespaces
 
@@ -568,7 +568,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Subheader: Validación de documentos
 
-	Subsubheader: Validación con @stxt.template
+	Subsubheader: Validación con `@stxt.template`
 
 	Content >>
 		Una **plantilla** describe qué forma deben tener los documentos de un namespace: qué
@@ -644,7 +644,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 		Solo `INLINE` y `GROUP` admiten hijos.
 
-	Subsubheader: Validación con @stxt.schema
+	Subsubheader: Validación con `@stxt.schema`
 
 	Content >>
 		Un **esquema** (`@stxt.schema`) describe lo mismo que una plantilla, pero nodo a

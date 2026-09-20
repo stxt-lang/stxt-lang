@@ -1,7 +1,7 @@
 Document (dev.stxt.website): STXT Tutorial
 
 	Metadata:
-		Last modif: 2026-09-19
+		Last modif: 2026-09-20
 		Description: Learn STXT from scratch: read and write documents, text blocks, namespaces and template validation. No prior knowledge required, just a text editor.
 
 	Header: @STXT@ Tutorial
@@ -98,37 +98,90 @@ Document (dev.stxt.website): STXT Tutorial
 		@STXT@ allows documents to be validated directly,
 		with schemas written in the language itself. This validation
 		covers which structure is valid, the number of child nodes
-		and what the values of the nodes must look like; it defines no other kind
-		of validation. This is enough for a
-		namespace to become the definition of a vocabulary for
-		that specific domain.
+		and what the values of the nodes must look like.
 
-	Subsubheader: What is @STXT@ not?
+		This is enough for a namespace to become
+		a vocabulary for that specific domain.
 
-	Content >>
-		At first sight, @STXT@ may look like a kind of YAML.
-		It is not, since it is actually closer to XML. For example,
-		@STXT@ has namespaces and schemas, and represents a set of nested nodes with text.
+		Schemas can also be defined as templates. The one for the
+		example would be the following:
 
-		Like YAML, it uses indentation to represent hierarchy, but it only
-		has 2 types of text, with no escape characters.
-
-		In addition, @STXT@ has a flexible validation written in the language itself.
+	Code >>
+		Template (@stxt.template): com.acme.book
+			Description >>
+				Book: Template for publisher book records
+			Structure >>
+				Book:
+					Title: (1)
+					Authors: (1)
+						Author: (+)
+					ISBN: (?)
+					Publisher: (?)
+					Published: (?) DATE
+					Summary: (?) TEXT
+					Chapter: (*)
+						Content: (?) TEXT
 
 	Subsubheader: Shall we try the Playground?
 
 	Content >>
-		At this point you already know the basics of using @STXT@. You can go deeper
-		into the concepts we have already learned, or try it directly in
+		At this point we have already seen the basics of using @STXT@. The next step can be to go deeper
+		into the concepts we have already learned, or to try it directly in
 		the [Playground](https://play.stxt.dev).
 
 		The examples of this tutorial and of the portal can be tried in the playground
 		by clicking the "Open in the Playground" icon.
 
-		The playground also starts with a mini-tutorial, which you can skim through,
-		or you can experiment directly with other documents.
+		The playground also starts with a mini-tutorial, which can be skimmed through,
+		or other documents can be tried directly.
 
 	Subheader: Nodes in depth
+
+	Subsubheader: Nodes with a namespace and without a namespace
+
+	Content >>
+		Nodes may define a namespace. If a node does not define one and does not
+		inherit it from its parent, it is said to be a node without a namespace. Since
+		namespaces are inherited, if a node has a namespace,
+		its child nodes will have one too, either inherited or redefined.
+		The first example is a node with a namespace,
+		so it is inherited by all its child nodes:
+
+	Listing >>
+		Book (com.acme.book)
+		├── Title (com.acme.book)
+		├── Authors (com.acme.book)
+			├── Author (com.acme.book)
+			├── Author (com.acme.book)
+		├── Publisher (com.acme.book)
+		├── Summary (com.acme.book)
+
+	Content >>
+		This is the same example without a namespace:
+
+	Code >>
+		Book:
+			Title: Modern Software Architecture
+			Authors:
+				Author: María Pérez
+				Author: Juan García
+			Publisher: ACME Editorial
+			Summary >>
+				This book offers a practical view of patterns and best practices
+				for designing distributed, scalable systems.
+
+	Listing >>
+		Book
+		├── Title
+		├── Authors
+			├── Author
+			├── Author
+		├── Publisher
+		├── Summary
+
+	Content >>
+		As it has no namespace we cannot associate it with any schema, so
+		only the structure can be validated, not the content.
 
 	Subsubheader: Hierarchy and levels
 
@@ -338,12 +391,11 @@ Document (dev.stxt.website): STXT Tutorial
 	Subsubheader: Trimming of values and text
 
 	Content >>
-		The whitespace (spaces and tabs) around a value is not part of it:
-
-		* In an **inline node**, the whitespace at the start and at the end of the value
-		  is removed.
-		* In a **block node**, the whitespace at the end of each line is removed. The
-		  whitespace at the start, from the level of the block onwards, is kept.
+		* In an **inline node**, the whitespace at the start and at the end of the value is removed. That is, trim()
+		  on the left and on the right.
+		* In a **block node**, the whitespace at the end of each line and the trailing empty lines are removed.
+		  The whitespace at the start of the block is kept. That is, trim() on the right of the lines
+		  and removal of the trailing empty lines (not the leading ones).
 
 	Code >>
 		Name: Joan
@@ -369,6 +421,32 @@ Document (dev.stxt.website): STXT Tutorial
 		Name without value:
 		Name with namespace (the.namespace):
 		Text node >>
+
+	Subsubheader: Multiple nodes in a document
+
+	Content >>
+		Documents may have several root nodes, independent of each other.
+		This allows @STXT@ to be used directly in large files, without having to define
+		another kind of file. One application could be log files, read in streaming:
+
+	Code >>
+		Log: Start of user creation
+			Level: INFO
+			Request ID: 3e45bad6-3a82-4959-844e-9eefd4c418a3
+			Message >>
+				Creating the user:
+				- Name:
+				- Age: 19
+		Log: Error creating user
+			Level: ERROR
+			Request ID: 3e45bad6-3a82-4959-844e-9eefd4c418a3
+			Message: Cannot invoke "String.length()" because "name" is null
+			Stacktrace >>
+				Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String.length()" because "name" is null
+					at com.example.service.UserService.validateName(UserService.java:42)
+					at com.example.service.UserService.createUser(UserService.java:27)
+					at com.example.controller.UserController.register(UserController.java:58)
+					at com.example.App.main(App.java:15)
 
 	Subheader: Comments in depth
 
@@ -456,7 +534,9 @@ Document (dev.stxt.website): STXT Tutorial
 		  language itself. Later on we will see two: `@stxt.template` and `@stxt.schema`.
 		  A namespace of one's own never starts with `@`.
 
-	Assert: A document with a namespace that has no definition is a correct document, which cannot be validated.
+	Assert >>
+		A document with a namespace that has no definition is a correct document,
+		but its content cannot be validated.
 
 	Subsubheader: Namespace inheritance
 
@@ -465,6 +545,10 @@ Document (dev.stxt.website): STXT Tutorial
 		enough, because the namespace **is inherited**: `Title`, `Authors`, `Author`,
 		`Chapter`, `Content`... every descendant of `Book` belongs to
 		`com.acme.book` without writing it.
+
+		One consequence of this is that, once a node defines a namespace,
+		its children will have a namespace too, since there is no established way
+		of removing it.
 
 	Subsubheader: Multiple namespaces
 
@@ -483,6 +567,8 @@ Document (dev.stxt.website): STXT Tutorial
 		document with several namespaces is validated.
 
 	Subheader: Validating documents
+
+	Subsubheader: Validation with `@stxt.template`
 
 	Content >>
 		A **template** describes what shape the documents of a namespace must have: which
@@ -558,7 +644,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 		Only `INLINE` and `GROUP` admit children.
 
-	Subheader: The same with a schema
+	Subsubheader: Validation with `@stxt.schema`
 
 	Content >>
 		A **schema** (`@stxt.schema`) describes the same as a template, but node by
