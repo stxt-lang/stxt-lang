@@ -16,11 +16,11 @@ Document (dev.stxt.website): STXT: The Book
 	Link: Stability and versions
 		Page: stability
 
-	Link: Working environment
-		Page: working-environment
-
 	Link: Tools
 		Page: tools
+
+	Link: Working environment
+		Page: working-environment
 
 	Subheader: Comparisons
 

@@ -568,7 +568,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Subheader: Validación de documentos
 
-	Subsubheader: Validación con `@stxt.template`
+	Subsubheader: `@stxt.template`
 
 	Content >>
 		Una **plantilla** describe qué forma deben tener los documentos de un namespace: qué
@@ -644,7 +644,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 		Solo `INLINE` y `GROUP` admiten hijos.
 
-	Subsubheader: Validación con `@stxt.schema`
+	Subsubheader: `@stxt.schema`
 
 	Content >>
 		Un **esquema** (`@stxt.schema`) describe lo mismo que una plantilla, pero nodo a

@@ -568,7 +568,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 	Subheader: Validating documents
 
-	Subsubheader: Validation with `@stxt.template`
+	Subsubheader: `@stxt.template`
 
 	Content >>
 		A **template** describes what shape the documents of a namespace must have: which
@@ -644,7 +644,7 @@ Document (dev.stxt.website): STXT Tutorial
 
 		Only `INLINE` and `GROUP` admit children.
 
-	Subsubheader: Validation with `@stxt.schema`
+	Subsubheader: `@stxt.schema`
 
 	Content >>
 		A **schema** (`@stxt.schema`) describes the same as a template, but node by
