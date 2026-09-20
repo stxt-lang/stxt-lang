@@ -84,6 +84,9 @@ Document (dev.stxt.website): STXT: The Book
 	Link: Configuration files
 		Page: use-cases-config-files
 		
+	Link: Streaming logs
+		Page: use-cases-logs
+		
 	Link: RFCs and technical proposals
 		Page: use-cases-rfcs
 		

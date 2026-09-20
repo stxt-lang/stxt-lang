@@ -1,0 +1,172 @@
+Document (dev.stxt.website): Logs en streaming | STXT
+
+	Metadata:
+		Last modif: 2026-09-20
+		Description: STXT para ficheros de log: una entrada por nodo raíz, mensajes y trazas multilínea sin caracteres de escape, validación con plantilla y lectura en streaming, entrada a entrada.
+
+	Header: Logs en streaming
+
+	Assert >>
+		Un log se escribe por el final y se lee de principio a fin.
+		En @STXT@ cada entrada es un nodo raíz, y el fichero se procesa entrada a entrada, sin cargarlo entero.
+
+	Subheader: Un fichero de log
+
+	Code >>
+		Log (com.acme.log): Inicio creación de usuario
+			Time: 2026-09-20T10:15:02.120Z
+			Level: INFO
+			Request ID: 3e45bad6-3a82-4959-844e-9eefd4c418a3
+			Message >>
+				Creando el usuario:
+				- Nombre:
+				- Edad: 19
+
+		Log (com.acme.log): Error al crear usuario
+			Time: 2026-09-20T10:15:02.480Z
+			Level: ERROR
+			Request ID: 3e45bad6-3a82-4959-844e-9eefd4c418a3
+			Message: Cannot invoke "String.length()" because "nombre" is null
+			Stacktrace >>
+				Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String.length()" because "nombre" is null
+					at com.ejemplo.servicio.UsuarioService.validarNombre(UsuarioService.java:42)
+					at com.ejemplo.servicio.UsuarioService.crearUsuario(UsuarioService.java:27)
+					at com.ejemplo.controlador.UsuarioController.registrar(UsuarioController.java:58)
+					at com.ejemplo.App.main(App.java:15)
+
+		Log (com.acme.log): Petición rechazada
+			Time: 2026-09-20T10:15:02.495Z
+			Level: WARN
+			Request ID: 3e45bad6-3a82-4959-844e-9eefd4c418a3
+			Message: 400 Bad Request
+
+	Content >>
+		En este ejemplo tenemos:
+
+		* **Entradas**: cada `Log` es un nodo raíz, independiente de los demás. El namespace no se
+		  hereda entre nodos raíz, y por eso cada entrada declara el suyo.
+		* **Datos**: `Time`, `Level` y `Request ID`. Son nodos con valor, que un programa puede filtrar.
+		* **Texto**: `Message` y `Stacktrace`. En un nodo block las comillas, los `:` y los saltos de
+		  línea se escriben tal cual, sin caracteres de escape.
+		* **Escritura**: añadir una entrada es escribir al final del fichero. No hay un cierre que
+		  mantener, ni separadores entre entradas.
+
+	Subheader: La plantilla
+
+	Code >>
+		Template (@stxt.template): com.acme.log
+			Structure >>
+				Log:
+					Time: (1) TIMESTAMP
+					Level: (1) ENUM [DEBUG, INFO, WARN, ERROR]
+					Request ID: (?) UUID
+					Message: (1) TEXT
+					Stacktrace: (?) TEXT
+
+	Subsubheader: Una entrada que no valida
+
+	Code >>
+		# ERROR: este documento no valida
+		Log (com.acme.log): Error al crear usuario
+			# Un TIMESTAMP es ISO 8601: `2026-09-20T10:15:02Z`
+			Time: 20/09/2026 10:15
+			# `error` en minúsculas no es `ERROR`
+			Level: error
+			# No es un UUID
+			Request ID: 3e45bad6
+			# Falta `Message`, que es obligatorio
+
+	Subheader: Leer en streaming
+
+	Content >>
+		El parser entrega cada nodo raíz cuando está completo y ya validado, y después lo libera.
+		La memoria en uso es la de una entrada, no la del fichero.
+		Este programa muestra las entradas de nivel `ERROR`:
+
+	Python >>
+		from stxt import Parser, StreamObserver, UnifiedSchemaProvider, SchemaValidator
+
+		class Errors(StreamObserver):
+		    def on_root_node(self, log):
+		        if log.get_child("Level").get_text() == "ERROR":
+		            print(log.get_child("Time").get_text(), log.get_text())
+		    def on_error(self, error):
+		        print("line", error.line, error.code)
+
+		provider = UnifiedSchemaProvider()
+		with open(".stxt/log.stxt", encoding="utf-8") as f:
+		    provider.add_file(f.read())
+
+		parser = Parser(max_input_size=-1)
+		parser.register_validator(SchemaValidator(provider))
+		parser.register_stream_observer(Errors())
+		with open("app.stxt", encoding="utf-8", newline="\n") as f:
+		    parser.parse_stream(f)
+
+	Listing >>
+		2026-09-20T10:15:02.480Z Error al crear usuario
+
+	Content >>
+		* Una entrada inválida no detiene la lectura: sus errores llegan por `on_error`,
+		  y las demás entradas se siguen entregando.
+		* El tamaño de la entrada está limitado por defecto a 10 000 000 caracteres
+		  ([STXT-SPEC §11.2](stxt-core-ref#s11-2)). Un log puede superarlo, y por eso el ejemplo
+		  desactiva el límite con `max_input_size=-1`.
+		* [TypeScript](tools-typescript) y [Java](tools-java) tienen la misma API: `parseStream` y `StreamObserver`.
+		* `stxt validate` también lee en streaming: `stxt validate app.stxt --max-input-size -1`
+		  valida un fichero de cualquier tamaño ([La línea de comandos](tools-cli)).
+
+	Subsubheader: Un fichero cortado
+
+	Content >>
+		Si el proceso muere a media escritura, el fichero acaba en una entrada incompleta:
+
+	Listing >>
+		Log (com.acme.log): Petición rechazada
+			Time: 2026-09-20T10:15:02.495Z
+			Lev
+
+	Content >>
+		Los errores se quedan en esa entrada: un `INVALID_LINE` en la línea cortada, y un
+		`TOO_FEW_CHILDREN` por cada nodo obligatorio que falta. Las entradas anteriores se leen igual.
+
+	Subheader: Escribir entradas
+
+	Content >>
+		Una entrada se construye como un árbol, y `NodeWriter` la escribe.
+		En este ejemplo el mensaje viene de fuera, e intenta falsificar una entrada:
+
+	Python >>
+		from stxt import InlineNode, NodeWriter
+
+		log = InlineNode("Log", "com.acme.log", "Login fallido")
+		log.add_inline_node("Time", "2026-09-20T10:16:40Z")
+		log.add_inline_node("Level", "WARN")
+		log.add_text_node("Message", "Usuario: ana\nLog (com.acme.log): Login correcto\n\tLevel: INFO")
+
+		with open("app.stxt", "a", encoding="utf-8", newline="\n") as f:
+		    f.write(NodeWriter.to_stxt(log))
+
+	Content >>
+		Y esto es lo que queda en el fichero:
+
+	Code >>
+		Log (com.acme.log): Login fallido
+			Time: 2026-09-20T10:16:40Z
+			Level: WARN
+			Message >>
+				Usuario: ana
+				Log (com.acme.log): Login correcto
+					Level: INFO
+
+	Content >>
+		* El texto de un nodo block se escribe indentado bajo su nodo, y dentro de un bloque no
+		  se interpreta nada. La entrada falsa es texto de `Message`.
+		* Un valor inline con un salto de línea se rechaza con `LINE_BREAK_NOT_ALLOWED`.
+
+	Subheader: Límites
+
+	Content >>
+		* Una entrada ocupa varias líneas. `grep ERROR` encuentra la línea, no la entrada:
+		  para filtrar por entradas hace falta un programa como el anterior.
+		* Un fichero ocupa más que con un formato de una línea por entrada.

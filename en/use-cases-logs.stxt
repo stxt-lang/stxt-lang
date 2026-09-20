@@ -1,0 +1,172 @@
+Document (dev.stxt.website): Streaming logs | STXT
+
+	Metadata:
+		Last modif: 2026-09-20
+		Description: STXT for log files: one entry per root node, multi-line messages and stack traces with no escape characters, template validation and streaming reads, entry by entry.
+
+	Header: Streaming logs
+
+	Assert >>
+		A log is written at the end and read from start to finish.
+		In @STXT@ each entry is a root node, and the file is processed entry by entry, without loading it whole.
+
+	Subheader: A log file
+
+	Code >>
+		Log (com.acme.log): Start of user creation
+			Time: 2026-09-20T10:15:02.120Z
+			Level: INFO
+			Request ID: 3e45bad6-3a82-4959-844e-9eefd4c418a3
+			Message >>
+				Creating the user:
+				- Name:
+				- Age: 19
+
+		Log (com.acme.log): Error creating user
+			Time: 2026-09-20T10:15:02.480Z
+			Level: ERROR
+			Request ID: 3e45bad6-3a82-4959-844e-9eefd4c418a3
+			Message: Cannot invoke "String.length()" because "name" is null
+			Stacktrace >>
+				Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String.length()" because "name" is null
+					at com.example.service.UserService.validateName(UserService.java:42)
+					at com.example.service.UserService.createUser(UserService.java:27)
+					at com.example.controller.UserController.register(UserController.java:58)
+					at com.example.App.main(App.java:15)
+
+		Log (com.acme.log): Request rejected
+			Time: 2026-09-20T10:15:02.495Z
+			Level: WARN
+			Request ID: 3e45bad6-3a82-4959-844e-9eefd4c418a3
+			Message: 400 Bad Request
+
+	Content >>
+		In this example we have:
+
+		* **Entries**: each `Log` is a root node, independent of the others. The namespace is not
+		  inherited between root nodes, which is why each entry declares its own.
+		* **Data**: `Time`, `Level` and `Request ID`. They are nodes with a value, which a program can filter.
+		* **Text**: `Message` and `Stacktrace`. In a block node, quotes, `:` and line breaks
+		  are written as they are, with no escape characters.
+		* **Writing**: adding an entry is writing at the end of the file. There is no closing to
+		  maintain, and no separators between entries.
+
+	Subheader: The template
+
+	Code >>
+		Template (@stxt.template): com.acme.log
+			Structure >>
+				Log:
+					Time: (1) TIMESTAMP
+					Level: (1) ENUM [DEBUG, INFO, WARN, ERROR]
+					Request ID: (?) UUID
+					Message: (1) TEXT
+					Stacktrace: (?) TEXT
+
+	Subsubheader: An entry that does not validate
+
+	Code >>
+		# ERROR: this document does not validate
+		Log (com.acme.log): Error creating user
+			# A TIMESTAMP is ISO 8601: `2026-09-20T10:15:02Z`
+			Time: 20/09/2026 10:15
+			# Lowercase `error` is not `ERROR`
+			Level: error
+			# Not a UUID
+			Request ID: 3e45bad6
+			# `Message` is missing, and it is required
+
+	Subheader: Reading in streaming
+
+	Content >>
+		The parser delivers each root node when it is complete and already validated, and then releases it.
+		The memory in use is that of one entry, not that of the file.
+		This program shows the entries of level `ERROR`:
+
+	Python >>
+		from stxt import Parser, StreamObserver, UnifiedSchemaProvider, SchemaValidator
+
+		class Errors(StreamObserver):
+		    def on_root_node(self, log):
+		        if log.get_child("Level").get_text() == "ERROR":
+		            print(log.get_child("Time").get_text(), log.get_text())
+		    def on_error(self, error):
+		        print("line", error.line, error.code)
+
+		provider = UnifiedSchemaProvider()
+		with open(".stxt/log.stxt", encoding="utf-8") as f:
+		    provider.add_file(f.read())
+
+		parser = Parser(max_input_size=-1)
+		parser.register_validator(SchemaValidator(provider))
+		parser.register_stream_observer(Errors())
+		with open("app.stxt", encoding="utf-8", newline="\n") as f:
+		    parser.parse_stream(f)
+
+	Listing >>
+		2026-09-20T10:15:02.480Z Error creating user
+
+	Content >>
+		* An invalid entry does not stop the read: its errors arrive through `on_error`,
+		  and the other entries keep being delivered.
+		* The size of the input is limited by default to 10,000,000 characters
+		  ([STXT-SPEC §11.2](stxt-core-ref#s11-2)). A log may exceed it, which is why the example
+		  disables the limit with `max_input_size=-1`.
+		* [TypeScript](tools-typescript) and [Java](tools-java) have the same API: `parseStream` and `StreamObserver`.
+		* `stxt validate` also reads in streaming: `stxt validate app.stxt --max-input-size -1`
+		  validates a file of any size ([The command line](tools-cli)).
+
+	Subsubheader: A truncated file
+
+	Content >>
+		If the process dies halfway through a write, the file ends in an incomplete entry:
+
+	Listing >>
+		Log (com.acme.log): Request rejected
+			Time: 2026-09-20T10:15:02.495Z
+			Lev
+
+	Content >>
+		The errors stay in that entry: an `INVALID_LINE` on the truncated line, and a
+		`TOO_FEW_CHILDREN` for each required node that is missing. The previous entries are read all the same.
+
+	Subheader: Writing entries
+
+	Content >>
+		An entry is built as a tree, and `NodeWriter` writes it.
+		In this example the message comes from outside, and tries to forge an entry:
+
+	Python >>
+		from stxt import InlineNode, NodeWriter
+
+		log = InlineNode("Log", "com.acme.log", "Login failed")
+		log.add_inline_node("Time", "2026-09-20T10:16:40Z")
+		log.add_inline_node("Level", "WARN")
+		log.add_text_node("Message", "User: ana\nLog (com.acme.log): Login succeeded\n\tLevel: INFO")
+
+		with open("app.stxt", "a", encoding="utf-8", newline="\n") as f:
+		    f.write(NodeWriter.to_stxt(log))
+
+	Content >>
+		And this is what ends up in the file:
+
+	Code >>
+		Log (com.acme.log): Login failed
+			Time: 2026-09-20T10:16:40Z
+			Level: WARN
+			Message >>
+				User: ana
+				Log (com.acme.log): Login succeeded
+					Level: INFO
+
+	Content >>
+		* The text of a block node is written indented under its node, and inside a block nothing
+		  is interpreted. The forged entry is text of `Message`.
+		* An inline value with a line break is rejected with `LINE_BREAK_NOT_ALLOWED`.
+
+	Subheader: Limits
+
+	Content >>
+		* An entry takes several lines. `grep ERROR` finds the line, not the entry:
+		  filtering by entries takes a program like the one above.
+		* A file takes more space than with a one-line-per-entry format.

@@ -789,7 +789,8 @@ Document (dev.stxt.website): STXT Tutorial
 		* Los casos de uso, cada uno con sus documentos y su plantilla:
 		  [documentos corporativos](use-cases-corporate-docs), [IA y LLMs](ai-llms),
 		  [CMS y publicaciones](use-cases-cms),
-		  [ficheros de configuración](use-cases-config-files), [RFCs](use-cases-rfcs) y
+		  [ficheros de configuración](use-cases-config-files),
+		  [logs en streaming](use-cases-logs), [RFCs](use-cases-rfcs) y
 		  [contratos](use-cases-contracts).
 		* Las especificaciones: [STXT-SPEC](stxt-core-ref) para la sintaxis,
 		  [STXT-SCHEMA-SPEC](stxt-schema-ref) y [STXT-TEMPLATE-SPEC](stxt-template-ref) para
