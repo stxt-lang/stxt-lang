@@ -1,7 +1,7 @@
 Document (dev.stxt.website): Stability and versions | STXT
 
 	Metadata:
-		Last modif: 2026-09-16
+		Last modif: 2026-09-20
 		Description: STXT is a living language with a stable core. Each specification carries a date and a status (Genesis, Aurora, Zenith or Twilight) instead of a version number; the status defines the level of stability.
 
 	Header: Stability and versions
@@ -39,3 +39,18 @@ Document (dev.stxt.website): Stability and versions | STXT
 		| [STXT-SCHEMA-SPEC](stxt-schema-ref), schemas | **Aurora** | 2026-09-07 |
 		| [STXT-TEMPLATE-SPEC](stxt-template-ref), templates | **Aurora** | 2026-09-07 |
 		| [STXT-DISCOVERY-SPEC](stxt-discovery-ref), locating definitions | **Aurora** | 2026-09-07 |
+
+	Subheader: A bit of history
+
+	Content >>
+		> **STXT-SPEC** and **STXT-SCHEMA-SPEC** are born in the spring of 2013. Development is active
+		> until January 2014, and stays frozen almost until 2025.
+		>
+		> **STXT-TEMPLATE-SPEC** is born in mid-2025. By the end of 2025 the three are already usable.
+		>
+		> **STXT-DISCOVERY-SPEC** is born on 2 August 2026, and **STXT-TREE-SPEC** on 9 August 2026.
+		>
+		> On 31 August 2026 version 1.0 of the whole ecosystem is published, with the syntax
+		> and the tree already stable.
+		>
+		> On 7 September 2026 version numbers are replaced by date and status.
