@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT: un lenguaje para documentos basado en indentación, con esquemas y namespaces
 	Metadata:
-		Last modif: 2026-09-16
+		Last modif: 2026-09-20
 		Description: STXT es un lenguaje de texto basado en indentación, Human-First, para documentos y datos: sin caracteres de escape, sin llaves ni etiquetas, solo indentación.
 
 	Header: @STXT@: Introducción
@@ -25,6 +25,7 @@ Document (dev.stxt.website): STXT: un lenguaje para documentos basado en indenta
 		* [Gestores de contenido (CMS)](use-cases-cms)
 		* [Generación vía LLMs](ai-llms)
 		* [Ficheros de configuración](use-cases-config-files)
+		* [Logs en streaming](use-cases-logs)
 
 	Subheader: Documentos sin namespace
 
