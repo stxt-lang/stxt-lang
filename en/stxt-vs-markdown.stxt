@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT vs Markdown: complementary
 	Metadata:
-		Last modif: 2026-09-19
+		Last modif: 2026-09-20
 		Description: Markdown formats prose; STXT structures documents and adopts Markdown for the prose of its nodes. Two examples, and why MARKDOWN is the only embedded format in STXT schemas.
 
 	Header: @STXT@ vs Markdown
@@ -14,7 +14,8 @@ Document (dev.stxt.website): STXT vs Markdown: complementary
 	Content >>
 		Markdown has no fields. When a document needs data (author, date, status),
 		the convention is **front matter**: a block between `---` lines, written in
-		[YAML](stxt-vs-yaml), a second language.
+		[YAML](stxt-vs-yaml), a second language. Validating that data takes a third:
+		JSON Schema, or custom code.
 
 	Listing >>
 		---

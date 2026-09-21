@@ -1,7 +1,7 @@
 Document (dev.stxt.website): The command line | STXT
 
 	Metadata:
-		Last modif: 2026-09-17
+		Last modif: 2026-09-21
 		Description: stxt, the official STXT command line: validate, format and describe documents from the terminal or CI, with the same error codes as the libraries.
 
 	Header: The command line
@@ -27,7 +27,7 @@ Document (dev.stxt.website): The command line | STXT
 		npm install -g @stxt-lang/cli
 		stxt --version
 
-		stxt 1.0.3 (@stxt-lang/core 1.0.3, spec 2026-09-07)
+		stxt 1.0.4 (@stxt-lang/core 1.0.3, spec 2026-09-07)
 
 	Content >>
 		`--version` prints the version of the command, that of the library and the date of
@@ -45,9 +45,9 @@ Document (dev.stxt.website): The command line | STXT
 	Listing >>
 		stxt [--version | --help]
 		stxt validate <file|dir|->... [--recursive] [--format text|json] [--warn-schema | --no-schema]
-		              [--max-nesting N] [--max-line-length N] [--max-input-size N]
+		              [--verbose] [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt format   <file|dir|->... [--recursive] [--tabs | --spaces] [--write | --check] [--clean]
-		              [--max-nesting N] [--max-line-length N] [--max-input-size N]
+		              [--verbose] [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt describe <file|-> [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt schemas  [path]
 		stxt install  <file> [--local | --user | --system | --root <dir>] [--force] [--ignore-non-definitions]
@@ -69,7 +69,8 @@ Document (dev.stxt.website): The command line | STXT
 		  no per-command help: `stxt validate --help` prints the general one.
 		* An unknown option or command is a usage error: code `2`, with no action performed.
 		* Results go to standard output, the report of `validate` included. Usage and read
-		  errors, and the syntax errors of `format` and `describe`, go to standard error.
+		  errors, the syntax errors of `format` and `describe`, and the progress of
+		  `--verbose`, go to standard error.
 		* `-` denotes standard input in `validate`, `format` and `describe`, once per call,
 		  and the document is reported as `<stdin>`. Without arguments, no command reads
 		  standard input: that is a usage error.
@@ -99,6 +100,7 @@ Document (dev.stxt.website): The command line | STXT
 		| `--format json`     | The same findings as a JSON array                                                               |
 		| `--warn-schema`     | Grammar errors are reported as warnings and do not fail; syntax errors still do                 |
 		| `--no-schema`       | Syntax only: no grammar is resolved or applied                                                  |
+		| `--verbose`         | Writes `Validating <file>` to standard error before each document                               |
 		| `--max-nesting N`, `--max-line-length N`, `--max-input-size N` | The parser limits ([STXT-SPEC §11.2](stxt-core-ref#s11-2)): nesting levels, line length and total input size; defaults `100`, `10000` and `10000000`; `-1` disables the limit |
 
 		A directory requires `--recursive`; without it, it is a usage error (`2`). Files,
@@ -109,6 +111,16 @@ Document (dev.stxt.website): The command line | STXT
 		largest root node and not of the document. A document larger than the default input
 		size is validated with `--max-input-size -1`.
 
+		In text mode, the findings of each document are written when that document finishes,
+		and the count at the end. The array of `--format json` is written whole at the end.
+		`--verbose` shows the progress without touching standard output:
+
+	Listing >>
+		stxt validate --recursive --verbose docs/
+
+		Validating /home/ana/books/docs/book.stxt
+
+	Content >>
 		With `-`, the grammar chain is that of the current directory, the one `stxt schemas`
 		shows without an argument:
 
@@ -224,6 +236,7 @@ Document (dev.stxt.website): The command line | STXT
 		| `--tabs` / `--spaces` | Indent with tabs (default) or with four spaces                                                |
 		| `--recursive`, `-r` | As in `validate`: descends, sorts by name, skips the `.stxt/` directories                       |
 		| `--clean`           | Re-serialises the logical tree ([STXT-TREE-SPEC §11](stxt-tree-ref#s11)): comments and blank lines are lost |
+		| `--verbose`         | Writes `Formatting <file>` (`Checking <file>` with `--check`) to standard error before each document |
 		| `--max-nesting N`, `--max-line-length N`, `--max-input-size N` | The parser limits, as in `validate` |
 
 		`--check` is equivalent to `gofmt -l` or `prettier --check`. A document with syntax

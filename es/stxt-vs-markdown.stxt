@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT frente a Markdown: complementarios
 	Metadata:
-		Last modif: 2026-09-19
+		Last modif: 2026-09-20
 		Description: Markdown da formato a la prosa; STXT estructura los documentos y adopta Markdown para la prosa de sus nodos. Dos ejemplos, y por qué MARKDOWN es el único formato embebido de los esquemas STXT.
 
 	Header: @STXT@ frente a Markdown
@@ -14,7 +14,8 @@ Document (dev.stxt.website): STXT frente a Markdown: complementarios
 	Content >>
 		Markdown no tiene campos. Cuando un documento necesita datos (autor, fecha, estado),
 		la convención es el **front matter**: un bloque entre líneas `---`, escrito en
-		[YAML](stxt-vs-yaml), un segundo lenguaje.
+		[YAML](stxt-vs-yaml), un segundo lenguaje. Validar esos datos pide un tercero:
+		JSON Schema, o código propio.
 
 	Listing >>
 		---

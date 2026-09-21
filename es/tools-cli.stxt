@@ -1,7 +1,7 @@
 Document (dev.stxt.website): La línea de comandos | STXT
 
 	Metadata:
-		Last modif: 2026-09-17
+		Last modif: 2026-09-21
 		Description: stxt, la línea de comandos oficial de STXT: valida, formatea y describe documentos desde el terminal o CI, con los mismos códigos de error que las bibliotecas.
 
 	Header: La línea de comandos
@@ -27,7 +27,7 @@ Document (dev.stxt.website): La línea de comandos | STXT
 		npm install -g @stxt-lang/cli
 		stxt --version
 
-		stxt 1.0.3 (@stxt-lang/core 1.0.3, spec 2026-09-07)
+		stxt 1.0.4 (@stxt-lang/core 1.0.3, spec 2026-09-07)
 
 	Content >>
 		`--version` muestra la versión del comando, la de la biblioteca y la fecha de
@@ -45,9 +45,9 @@ Document (dev.stxt.website): La línea de comandos | STXT
 	Listing >>
 		stxt [--version | --help]
 		stxt validate <file|dir|->... [--recursive] [--format text|json] [--warn-schema | --no-schema]
-		              [--max-nesting N] [--max-line-length N] [--max-input-size N]
+		              [--verbose] [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt format   <file|dir|->... [--recursive] [--tabs | --spaces] [--write | --check] [--clean]
-		              [--max-nesting N] [--max-line-length N] [--max-input-size N]
+		              [--verbose] [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt describe <file|-> [--max-nesting N] [--max-line-length N] [--max-input-size N]
 		stxt schemas  [path]
 		stxt install  <file> [--local | --user | --system | --root <dir>] [--force] [--ignore-non-definitions]
@@ -70,8 +70,8 @@ Document (dev.stxt.website): La línea de comandos | STXT
 		* Una opción o un comando desconocidos son errores de uso: código `2`, sin realizar
 		  ninguna acción.
 		* Los resultados van por la salida estándar, incluido el informe de `validate`. Los
-		  errores de uso y de lectura, y los de sintaxis de `format` y `describe`, van por la
-		  salida de error.
+		  errores de uso y de lectura, los de sintaxis de `format` y `describe`, y el progreso
+		  de `--verbose`, van por la salida de error.
 		* `-` designa la entrada estándar en `validate`, `format` y `describe`, una sola vez
 		  por llamada, y el documento se reporta como `<stdin>`. Sin argumentos, ningún
 		  comando lee la entrada estándar: es un error de uso.
@@ -101,6 +101,7 @@ Document (dev.stxt.website): La línea de comandos | STXT
 		| `--format json`     | Los mismos hallazgos como array JSON                                                             |
 		| `--warn-schema`     | Los errores de gramática se reportan como avisos y no hacen fallar; los de sintaxis, sí          |
 		| `--no-schema`       | Solo sintaxis: no resuelve ni aplica ninguna gramática                                           |
+		| `--verbose`         | Escribe `Validating <fichero>` por la salida de error antes de cada documento                    |
 		| `--max-nesting N`, `--max-line-length N`, `--max-input-size N` | Los límites del parser ([STXT-SPEC §11.2](stxt-core-ref#s11-2)): niveles de anidamiento, longitud de línea y tamaño total de la entrada; por defecto `100`, `10000` y `10000000`; `-1` desactiva el límite |
 
 		Un directorio exige `--recursive`; sin él es un error de uso (`2`). Ficheros,
@@ -111,6 +112,16 @@ Document (dev.stxt.website): La línea de comandos | STXT
 		nodo raíz y no del documento. Un documento mayor que el tamaño por defecto se valida
 		con `--max-input-size -1`.
 
+		En modo texto, los hallazgos de cada documento se escriben al terminar ese documento,
+		y el recuento, al final. El array de `--format json` se escribe entero al final.
+		`--verbose` muestra el progreso sin tocar la salida estándar:
+
+	Listing >>
+		stxt validate --recursive --verbose docs/
+
+		Validating /home/ana/libros/docs/book.stxt
+
+	Content >>
 		Con `-`, la cadena de gramáticas es la del directorio actual, la que muestra
 		`stxt schemas` sin argumento:
 
@@ -226,6 +237,7 @@ Document (dev.stxt.website): La línea de comandos | STXT
 		| `--tabs` / `--spaces` | Indentar con tabuladores (por defecto) o con cuatro espacios                                   |
 		| `--recursive`, `-r` | Igual que en `validate`: desciende, ordena por nombre, salta los `.stxt/`                        |
 		| `--clean`           | Reserializa el árbol lógico ([STXT-TREE-SPEC §11](stxt-tree-ref#s11)): se pierden comentarios y líneas en blanco |
+		| `--verbose`         | Escribe `Formatting <fichero>` (`Checking <fichero>` con `--check`) por la salida de error antes de cada documento |
 		| `--max-nesting N`, `--max-line-length N`, `--max-input-size N` | Los límites del parser, como en `validate` |
 
 		`--check` equivale a `gofmt -l` o `prettier --check`. Un documento con errores de
