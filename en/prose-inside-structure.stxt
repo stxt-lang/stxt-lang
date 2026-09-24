@@ -9,28 +9,29 @@ Document (dev.stxt.website): STXT, prose inside structure
 		Frontmatter, MDX and Markdoc embed the structure in the prose.
 		@STXT@ embeds the prose in the structure, so **the whole document can be validated**.
 
-	Subheader: The problem
+	Subheader: CMS and structure validation
 
 	Content >>
-		Markdown is prose. A Markdown file has no fields.
+		Cuando un documento necesita prosa, habitualmente se usa Markdown. El problema aparece
+		cuando también necesita una estructura que debe validarse. La solución
+		habitual consiste en insertar la estructura **dentro** de markdown, usando otro lenguaje. Esto
+		permite una validación parcial la mayoría de ocasiones, 
+		pero con soluciones que se asemejan más a un hack que a un tema estructural.
+		El coste es el siguiente:
 
-		When a page needs data, the data go in a Frontmatter: a YAML block before the prose.
-		That covers a title, an author and a date.
+		* Más diversidad de lenguajes aplicados
+		* Más complejidad de escritura por personas no técnicas
+		* Menos legibilidad general
+		* Entornos menos uniformes
+		* Mezcla de texto con código
 
-		The problem starts when the structure is inside the prose. A question in the middle of a lesson.
-		A quiz at the end, with its questions and answers. Markdown has no syntax for that, so each tool
-		adds its own: components in MDX, tags in Markdoc. The structure is embedded in the prose,
-		and no single schema covers the whole file.
+		En este artículo mostramos como @STXT@ invierte la solución, insertando prosa dentro
+		de una estructura que puede validarse.
 
-		@STXT@ goes the other way. The structure is the document: named nodes, with cardinality and type.
-		The prose goes inside, as Markdown, in block nodes. One template validates the whole file.
-
-		The following lesson has several authors, a question within the content and a final quiz.
+		Mostramos un mismo documento, una `Lesson`, que tiene una estructura concreta, y como 
+		se valida con las distintas soluciones actuales.
 
 	Subheader: A `Lesson` in @STXT@
-
-	Content >>
-		The data are nodes, and the prose is Markdown inside block nodes:
 
 	Code >>
 		Lesson (com.example.school): What is STXT?
@@ -90,14 +91,11 @@ Document (dev.stxt.website): STXT, prose inside structure
 						Question: (+) @Question
 
 	Content >>
-		`Content` appears twice, with a `Question` between them, and the tree keeps that order.
-		The validator checks the rest: at least one author, a teacher, a difficulty from the list
-		and a quiz with one or more questions, each one with its answer.
+		All the document can be validated with the template: structure, cardinality and content.
+
+		In the prose, no escape characters are needed.
 
 	Subheader: Markdown with Frontmatter
-
-	Content >>
-		The metadata go in the Frontmatter, written in YAML. The rest is headings and paragraphs:
 
 	Listing >>
 		---
@@ -154,19 +152,13 @@ Document (dev.stxt.website): STXT, prose inside structure
 		It can be Markdown, code or any other text.
 
 	Content >>
-		The question, the answers and the quiz are a convention of bold text and headings.
-		To Markdown they are only paragraphs. Nothing checks that the quiz has questions or that each question has an answer.
+		The question, the answers and the quiz are a convention
+		and nothing checks that structure.
 
-		The Frontmatter can be validated with an external schema: JSON Schema, or a Zod schema in Astro content collections.
-		The body cannot.
-
-		The quiz can be moved to the Frontmatter. It is then validated, but the answers become strings,
-		and the site template has to render them as Markdown on its own.
+		The Frontmatter can be validated with an external schema: 
+		JSON Schema, or a Zod schema in Astro content collections.
 
 	Subheader: MDX
-
-	Content >>
-		MDX adds JSX to Markdown. The question and the quiz become components:
 
 	Listing >>
 		---
@@ -224,21 +216,12 @@ Document (dev.stxt.website): STXT, prose inside structure
 		</Quiz>
 
 	Content >>
-		`Question` and `Quiz` are JavaScript components defined in another file. The document compiles to a JavaScript module,
-		and the `import` runs. The document is code.
-
-		The Frontmatter is not part of MDX: the framework or a `remark` plugin processes it.
-
-		There is no schema. A missing component causes an error when the page is built.
-		A missing `text` attribute is detected only by the component itself, and only if it is written to do so.
-		Nothing counts the questions of a `Quiz`. The headings are still a convention.
+		`Question` and `Quiz` are JavaScript components defined in another file. 
+		The document compiles to a JavaScript module, mixing document with code.
 
 		In the prose, `<` and `{` open JSX and expressions, so they must be escaped.
 
 	Subheader: Markdoc
-
-	Content >>
-		Markdoc adds tags to Markdown and validates the document against a schema defined in the application:
 
 	Listing >>
 		---
@@ -316,17 +299,9 @@ Document (dev.stxt.website): STXT, prose inside structure
 		const errors = Markdoc.validate(ast, config);
 
 	Content >>
-		`Markdoc.validate` detects an unknown tag, a missing `text` and a child that the tag does not accept.
-		The allowed values of an attribute are declared with `matches`. The document does not run.
-
-		Cardinality is not declarative. "At least one question in the quiz" requires writing a `validate` function
-		for the `quiz` tag, in JavaScript. Markdoc hands over the Frontmatter as raw text: the application parses it
-		and validates it separately. The headings are still a convention.
+		Cardinality is not declarative and there is a mix beetwen the document and code in another language.
 
 	Subheader: YAML with Markdown inside
-
-	Content >>
-		The complete lesson in YAML, with the prose in block scalars:
 
 	Listing >>
 		type: lesson
@@ -369,27 +344,14 @@ Document (dev.stxt.website): STXT, prose inside structure
 		      It can be Markdown, code or any other text.
 
 	Content >>
-		Here the prose is inside the structure, as in @STXT@. There are two differences:
+		Here the prose is inside the structure, as in @STXT@, with some important diference:
 
-		* **Repetition and order**. The keys of a YAML mapping are unique. `content` cannot appear twice
-		  with a question in between, so the three items go into a list, `body`, with one key each.
-		  In @STXT@ a repeated child already is the list, and the tree keeps the order.
-		* **The prose is a string**. Nothing in the file says that `introduction` is Markdown:
-		  the renderer decides. In @STXT@ the template says so, with `Introduction: (?) MARKDOWN`.
+		**YAML** is a language where keys are unique, so the items has to go into a (ficticial) list.
 
-		A JSON Schema validates the structure, the cardinalities and the enumeration. It is a third language,
-		and it applies to the data once loaded. The block scalar indicators are explained in
-		[@STXT@ vs YAML](stxt-vs-yaml#multi-line-text).
+		**STXT** has more similities with XML, with a structure of text nodes. The repetition is
+		natural, and no lists needed for repetition.
 
-	Subheader: Summary
+	Assert >>
+		The **mental model** beetween YAML and @STXT@ is very different when writting content in a CMS.
+		With YAML there	are maps and lists, whereas in @STXT@ there are trees of text.
 
-	Content >>
-		|                          | Frontmatter                 | MDX                                  | Markdoc                                  | YAML                        | @STXT@                              |
-		| ------------------------ | --------------------------- | ------------------------------------ | ---------------------------------------- | --------------------------- | ----------------------------------- |
-		| Metadata                 | YAML block                  | YAML block, processed by the framework | YAML block, processed by the application | Keys                     | Nodes                               |
-		| Structure in the prose   | Headings, by convention     | JSX components                       | Tags                                     | Keys and lists              | Nodes, with the prose in block nodes |
-		| Structure validation     | Frontmatter only, external  | None: the components run             | Tags and attributes, with a JS schema    | External, with JSON Schema  | Template, in @STXT@                 |
-		| Cardinality              | No                          | No                                   | A `validate` function in JS              | JSON Schema                 | Template                            |
-		| Repeated parts, in order | Headings, by convention     | Components                           | Tags                                     | A list of one-key items     | Repeated children                   |
-		| Which text is Markdown   | The body                    | The body                             | The body                                 | The file does not say       | Nodes typed `MARKDOWN`              |
-		| The file is code         | No                          | Yes, a JavaScript module             | No                                       | No                          | No                                  |
