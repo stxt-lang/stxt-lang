@@ -347,10 +347,9 @@ Document (dev.stxt.website): STXT, prose inside structure
 
 		In **YAML** keys are unique, so repeated items have to go into an (artificial) list.
 
-		**@STXT@** is closer to XML: a structure of text nodes. Repetition is
-		natural, and no list is needed for it.
+		In **@STXT@** repetition is natural and no list is needed: everything is a structure of text nodes.
 
 	Assert >>
 		The **mental model** of YAML and @STXT@ is very different when writing content in a CMS.
-		In YAML there are maps and lists; in @STXT@ there are trees of text.
+		YAML is closer to JSON: there are maps and lists. @STXT@ is more like XML, with trees of text.
 
