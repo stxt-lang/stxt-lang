@@ -347,7 +347,7 @@ Document (dev.stxt.website): STXT, prose inside structure
 
 		In **YAML** keys are unique, so repeated items have to go into an (artificial) list.
 
-		In **@STXT@** repetition is natural and no list is needed: everything is a structure of text nodes.
+		In @STXT@ repetition is natural and no list is needed: everything is a structure of text nodes.
 
 	Assert >>
 		The **mental model** of YAML and @STXT@ is very different when writing content in a CMS.

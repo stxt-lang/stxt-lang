@@ -347,7 +347,7 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 
 		En **YAML** las claves son únicas, así que los elementos repetidos tienen que ir en una lista (artificial).
 
-		En **@STXT@** la repetición es natural y no hace falta ninguna lista: todo es una estructura de nodos de texto.
+		En @STXT@ la repetición es natural y no hace falta ninguna lista: todo es una estructura de nodos de texto.
 
 	Assert >>
 		El **modelo mental** de YAML y @STXT@ es muy distinto al escribir contenido en un CMS.
