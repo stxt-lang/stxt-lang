@@ -33,7 +33,9 @@ Document (dev.stxt.website): : STXT vs Frontmatter/MDX/Markdoc
 	Content >>
 		Markdown + frontmatter is perfect when you have content and simple metadata.
 
-	Subheader: Validating structure with a complex document
+		But what happens when you have a complex structure and validation?
+
+	Subheader: Validating with STXT
 
 	Content >>
 		With STXT you can have a **validated structure**, and continue using Markdown internally for the prose. 
@@ -94,7 +96,7 @@ Document (dev.stxt.website): : STXT vs Frontmatter/MDX/Markdoc
 					Conclusion: (?) MARKDOWN
 					Quiz: (?) GROUP
 						Question: (+) @Question
-	Subheader: Complex structure with Markdown + Frontmatter
+	Subheader: Markdown + Frontmatter
 
 	Content >>
 		The same example, written in markdown....
@@ -105,11 +107,11 @@ Document (dev.stxt.website): : STXT vs Frontmatter/MDX/Markdoc
 	Content >>
 		....
 
-	Subheader: Complex structure with Markdown + MDX
+	Subheader: Markdown + MDX
 
-	Subheader: Complex structure with Markdown + Markdoc
+	Subheader: Markdown + Markdoc
 
-	Subheader: Complex structure with YAML + Markdown
+	Subheader: YAML + Markdown
 
 
 
