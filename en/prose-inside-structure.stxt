@@ -9,33 +9,23 @@ Document (dev.stxt.website): STXT, prose inside structure
 		Frontmatter, MDX and Markdoc embed the structure in the prose.
 		@STXT@ embeds the prose in the structure, so **the whole document can be validated**.
 
-	Subheader: A document with metadata
+	Subheader: The problem
 
 	Content >>
-		A document in Markdown with Frontmatter looks like this:
+		Markdown is prose. A Markdown file has no fields.
 
-	Listing >>
-		---
-		type: lesson
-		title: What is STXT
-		author: Jane
-		published: 2026-09-17
-		---
+		When a page needs data, the data go in a Frontmatter: a YAML block before the prose.
+		That covers a title, an author and a date.
 
-		# Introduction
+		The problem starts when the structure is inside the prose. A question in the middle of a lesson.
+		A quiz at the end, with its questions and answers. Markdown has no syntax for that, so each tool
+		adds its own: components in MDX, tags in Markdoc. The structure is embedded in the prose,
+		and no single schema covers the whole file.
 
-		STXT is a **hierarchical text format**: easy for people to read
-		and trivial for machines to parse.
+		@STXT@ goes the other way. The structure is the document: named nodes, with cardinality and type.
+		The prose goes inside, as Markdown, in block nodes. One template validates the whole file.
 
-		# Content
-
-		A document is...
-
-	Content >>
-		For prose with simple metadata, Markdown with Frontmatter is enough.
-
-		The following lesson has more structure: several authors, a question within the content
-		and a final quiz.
+		The following lesson has several authors, a question within the content and a final quiz.
 
 	Subheader: A `Lesson` in @STXT@
 

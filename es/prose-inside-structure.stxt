@@ -9,33 +9,23 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 		Frontmatter, MDX y Markdoc insertan la estructura en la prosa.
 		@STXT@ inserta la prosa en la estructura, y así **se puede validar el documento completo**.
 
-	Subheader: Un documento con metadatos
+	Subheader: El problema
 
 	Content >>
-		Un documento en Markdown con Frontmatter tiene esta forma:
+		Markdown es prosa. Un fichero Markdown no tiene campos.
 
-	Listing >>
-		---
-		tipo: lección
-		título: Qué es STXT
-		autora: Ana
-		publicado: 2026-09-17
-		---
+		Cuando una página necesita datos, los datos van en un Frontmatter: un bloque YAML antes de la prosa.
+		Eso cubre un título, un autor y una fecha.
 
-		# Introducción
+		El problema empieza cuando la estructura está dentro de la prosa. Una pregunta en medio de una lección.
+		Un cuestionario al final, con sus preguntas y respuestas. Markdown no tiene sintaxis para eso, así que
+		cada herramienta añade la suya: componentes en MDX, etiquetas en Markdoc. La estructura queda incrustada
+		en la prosa, y ningún esquema cubre el fichero entero.
 
-		STXT es un **formato de texto jerárquico**: fácil de leer para las personas
-		y trivial de parsear para las máquinas.
+		@STXT@ va al revés. La estructura es el documento: nodos con nombre, cardinalidad y tipo.
+		La prosa va dentro, como Markdown, en nodos block. Una plantilla valida el fichero entero.
 
-		# Contenido
-
-		Un documento es...
-
-	Content >>
-		Para prosa con metadatos simples, Markdown con Frontmatter es suficiente.
-
-		La lección siguiente tiene más estructura: varios autores, una pregunta intercalada en el contenido
-		y un cuestionario final.
+		La lección siguiente tiene varios autores, una pregunta intercalada en el contenido y un cuestionario final.
 
 	Subheader: Una `Lección` en @STXT@
 
