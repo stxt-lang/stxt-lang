@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT vs TOML: flat configuration vs hierarchical documents
 	Metadata:
-		Last modif: 2026-09-19
+		Last modif: 2026-09-24
 		Description: STXT and TOML compared with examples: headers versus indentation, nested tables, multi-line strings, types in the syntax versus types in the definition, and validation.
 
 	Header: @STXT@ vs TOML
@@ -202,14 +202,3 @@ Document (dev.stxt.website): STXT vs TOML: flat configuration vs hierarchical do
 				Keep: fourteen
 				# `Compress` is not in the template
 				Compress: true
-
-	Subheader: When to use each
-
-	Content >>
-		* **TOML**: where the ecosystem expects it (`Cargo.toml`, `pyproject.toml`), and for flat configuration
-		  of keys with typed values, which is the goal its specification declares.
-		* **@STXT@**: when the file grows into a document. Several levels of hierarchy, prose
-		  next to the data, or a structure that must be validated. For example,
-		  [configuration files](use-cases-config-files) or [corporate documents](use-cases-corporate-docs).
-
-		The short version of this comparison is in the [FAQ](faq#why-not-xml-yaml-or-toml).

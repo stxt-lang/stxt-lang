@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a documentos jerárquicos
 	Metadata:
-		Last modif: 2026-09-19
+		Last modif: 2026-09-24
 		Description: STXT y TOML comparados con ejemplos: cabeceras frente a indentación, tablas anidadas, cadenas multilínea, tipos en la sintaxis frente a tipos en la definición, y validación.
 
 	Header: @STXT@ frente a TOML
@@ -202,14 +202,3 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 				Keep: fourteen
 				# `Compress` no está en la plantilla
 				Compress: true
-
-	Subheader: Cuándo usar cada uno
-
-	Content >>
-		* **TOML**: donde el ecosistema lo espera (`Cargo.toml`, `pyproject.toml`), y para configuración plana
-		  de claves con valores tipados, que es el objetivo que declara su especificación.
-		* **@STXT@**: cuando el fichero crece hacia documento. Jerarquía de varios niveles, texto en prosa
-		  junto a los datos, o una estructura que debe validarse. Por ejemplo,
-		  [ficheros de configuración](use-cases-config-files) o [documentos corporativos](use-cases-corporate-docs).
-
-		La versión corta de esta comparación está en la [FAQ](faq#por-que-no-xml-yaml-o-toml).

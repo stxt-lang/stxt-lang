@@ -1,0 +1,405 @@
+Document (dev.stxt.website): STXT, prosa dentro de la estructura
+	Metadata:
+		Last modif: 2026-09-24
+		Description: STXT inserta la prosa en la estructura. La misma lección en Markdown con Frontmatter, MDX, Markdoc, YAML y STXT: dónde va la estructura y qué valida cada uno.
+
+	Header: @STXT@, prosa dentro de la estructura
+
+	Assert >>
+		Frontmatter, MDX y Markdoc insertan la estructura en la prosa.
+		@STXT@ inserta la prosa en la estructura, y así **se puede validar el documento completo**.
+
+	Subheader: Un documento con metadatos
+
+	Content >>
+		Un documento en Markdown con Frontmatter tiene esta forma:
+
+	Listing >>
+		---
+		tipo: lección
+		título: Qué es STXT
+		autora: Ana
+		publicado: 2026-09-17
+		---
+
+		# Introducción
+
+		STXT es un **formato de texto jerárquico**: fácil de leer para las personas
+		y trivial de parsear para las máquinas.
+
+		# Contenido
+
+		Un documento es...
+
+	Content >>
+		Para prosa con metadatos simples, Markdown con Frontmatter es suficiente.
+
+		La lección siguiente tiene más estructura: varios autores, una pregunta intercalada en el contenido
+		y un cuestionario final.
+
+	Subheader: Una `Lección` en @STXT@
+
+	Content >>
+		Los datos son nodos, y la prosa es Markdown dentro de nodos block:
+
+	Code >>
+		Lección (com.example.school.es): ¿Qué es STXT?
+			Autores:
+				Autor: Joan Costa
+				Autor: James Smith
+			Docente: Sheila Jones
+			Dificultad: fácil
+			Introducción >>
+				STXT es un **formato de texto jerárquico**: fácil de leer
+				para las personas y trivial de parsear para las máquinas.
+			Contenido >>
+				Un documento es un árbol de nodos. Solo hay dos tipos:
+
+				- `Nombre: valor`, para valores cortos en línea.
+				- `Nombre >>`, para un bloque de texto literal, como este.
+
+				La indentación *es* la estructura: sin etiquetas de cierre,
+				sin comillas y sin caracteres de escape.
+			Pregunta: ¿Qué otro formato es parecido?
+				Respuesta: XML, por ejemplo
+			Contenido >>
+				Los comentarios son las líneas que empiezan por `#`.
+
+				Los documentos pueden tener namespaces. Se declaran
+				con `Nombre (namespace.nombre)`.
+			Conclusión >>
+				Con dos tipos de nodo y la indentación se puede describir cualquier documento.
+				Una plantilla añade **validación**, sin cambiar la sintaxis.
+			Cuestionario:
+				Pregunta: ¿Cómo se expresa la estructura de un documento?
+					Respuesta >>
+						Con la indentación: un nodo es hijo del nodo anterior
+						más cercano que tiene un nivel menos.
+				Pregunta: ¿Qué pasa con el texto de un bloque `>>`?
+					Respuesta >>
+						Se conserva literalmente. No se interpreta nada de su interior.
+						Puede ser Markdown, código o cualquier otro texto.
+
+	Content >>
+		Y la plantilla que valida estructura y cardinalidad:
+
+	Code >>
+		Template (@stxt.template): com.example.school.es
+			Structure >>
+				Lección:
+					Autores: (1)
+						Autor: (+)
+					Docente: (1)
+					Dificultad: (?) ENUM [fácil, media, difícil]
+					Introducción: (?) MARKDOWN
+					Contenido: (*) MARKDOWN
+					Pregunta: (*)
+						Respuesta: (1) MARKDOWN
+					Conclusión: (?) MARKDOWN
+					Cuestionario: (?) GROUP
+						Pregunta: (+) @Pregunta
+
+	Content >>
+		`Contenido` aparece dos veces, con una `Pregunta` entre ambos, y el árbol conserva ese orden.
+		El validador comprueba el resto: al menos un autor, un docente, una dificultad de la lista
+		y un cuestionario con una o más preguntas, cada una con su respuesta.
+
+	Subheader: Markdown con Frontmatter
+
+	Content >>
+		Los metadatos van en el Frontmatter, escrito en YAML. El resto son títulos y párrafos:
+
+	Listing >>
+		---
+		tipo: lección
+		título: ¿Qué es STXT?
+		autores:
+		  - Joan Costa
+		  - James Smith
+		docente: Sheila Jones
+		dificultad: fácil
+		---
+
+		# Introducción
+
+		STXT es un **formato de texto jerárquico**: fácil de leer
+		para las personas y trivial de parsear para las máquinas.
+
+		# Contenido
+
+		Un documento es un árbol de nodos. Solo hay dos tipos:
+
+		- `Nombre: valor`, para valores cortos en línea.
+		- `Nombre >>`, para un bloque de texto literal, como este.
+
+		La indentación *es* la estructura: sin etiquetas de cierre,
+		sin comillas y sin caracteres de escape.
+
+		**Pregunta**: ¿Qué otro formato es parecido?
+
+		**Respuesta**: XML, por ejemplo
+
+		# Contenido
+
+		Los comentarios son las líneas que empiezan por `#`.
+
+		Los documentos pueden tener namespaces. Se declaran
+		con `Nombre (namespace.nombre)`.
+
+		# Conclusión
+
+		Con dos tipos de nodo y la indentación se puede describir cualquier documento.
+		Una plantilla añade **validación**, sin cambiar la sintaxis.
+
+		# Cuestionario
+
+		## ¿Cómo se expresa la estructura de un documento?
+
+		Con la indentación: un nodo es hijo del nodo anterior
+		más cercano que tiene un nivel menos.
+
+		## ¿Qué pasa con el texto de un bloque `>>`?
+
+		Se conserva literalmente. No se interpreta nada de su interior.
+		Puede ser Markdown, código o cualquier otro texto.
+
+	Content >>
+		La pregunta, las respuestas y el cuestionario son una convención de negritas y títulos.
+		Para Markdown solo son párrafos. Nada comprueba que el cuestionario tenga preguntas ni que cada pregunta tenga respuesta.
+
+		El Frontmatter se puede validar con un esquema externo: JSON Schema, o un esquema Zod en las colecciones de contenido de Astro.
+		El cuerpo, no.
+
+		El cuestionario se puede trasladar al Frontmatter. Así queda validado, pero las respuestas pasan a ser cadenas,
+		y la plantilla del sitio tiene que convertirlas a HTML como Markdown por su cuenta.
+
+	Subheader: MDX
+
+	Content >>
+		MDX añade JSX a Markdown. La pregunta y el cuestionario se convierten en componentes:
+
+	Listing >>
+		---
+		tipo: lección
+		título: ¿Qué es STXT?
+		autores:
+		  - Joan Costa
+		  - James Smith
+		docente: Sheila Jones
+		dificultad: fácil
+		---
+
+		import { Pregunta, Cuestionario } from '../components/Leccion'
+
+		# Introducción
+
+		STXT es un **formato de texto jerárquico**: fácil de leer
+		para las personas y trivial de parsear para las máquinas.
+
+		# Contenido
+
+		Un documento es un árbol de nodos. Solo hay dos tipos:
+
+		- `Nombre: valor`, para valores cortos en línea.
+		- `Nombre >>`, para un bloque de texto literal, como este.
+
+		La indentación *es* la estructura: sin etiquetas de cierre,
+		sin comillas y sin caracteres de escape.
+
+		<Pregunta texto="¿Qué otro formato es parecido?">
+		  XML, por ejemplo
+		</Pregunta>
+
+		# Contenido
+
+		Los comentarios son las líneas que empiezan por `#`.
+
+		Los documentos pueden tener namespaces. Se declaran
+		con `Nombre (namespace.nombre)`.
+
+		# Conclusión
+
+		Con dos tipos de nodo y la indentación se puede describir cualquier documento.
+		Una plantilla añade **validación**, sin cambiar la sintaxis.
+
+		<Cuestionario>
+		  <Pregunta texto="¿Cómo se expresa la estructura de un documento?">
+		    Con la indentación: un nodo es hijo del nodo anterior
+		    más cercano que tiene un nivel menos.
+		  </Pregunta>
+		  <Pregunta texto="¿Qué pasa con el texto de un bloque `>>`?">
+		    Se conserva literalmente. No se interpreta nada de su interior.
+		    Puede ser Markdown, código o cualquier otro texto.
+		  </Pregunta>
+		</Cuestionario>
+
+	Content >>
+		`Pregunta` y `Cuestionario` son componentes JavaScript definidos en otro fichero. El documento se compila a un módulo JavaScript,
+		y el `import` se ejecuta. El documento es código.
+
+		El Frontmatter no forma parte de MDX: lo procesa el framework o un plugin de `remark`.
+
+		No hay esquema. Un componente inexistente provoca un error al generar la página.
+		Si falta el atributo `texto`, solo lo detecta el propio componente, y únicamente si está programado para ello.
+		Nada cuenta las preguntas de un `Cuestionario`. Los títulos siguen siendo una convención.
+
+		En la prosa, `<` y `{` abren JSX y expresiones, así que hay que escaparlos.
+
+	Subheader: Markdoc
+
+	Content >>
+		Markdoc añade etiquetas a Markdown y valida el documento contra un esquema definido en la aplicación:
+
+	Listing >>
+		---
+		tipo: lección
+		título: ¿Qué es STXT?
+		autores:
+		  - Joan Costa
+		  - James Smith
+		docente: Sheila Jones
+		dificultad: fácil
+		---
+
+		# Introducción
+
+		STXT es un **formato de texto jerárquico**: fácil de leer
+		para las personas y trivial de parsear para las máquinas.
+
+		# Contenido
+
+		Un documento es un árbol de nodos. Solo hay dos tipos:
+
+		- `Nombre: valor`, para valores cortos en línea.
+		- `Nombre >>`, para un bloque de texto literal, como este.
+
+		La indentación *es* la estructura: sin etiquetas de cierre,
+		sin comillas y sin caracteres de escape.
+
+		{% pregunta texto="¿Qué otro formato es parecido?" %}
+		XML, por ejemplo
+		{% /pregunta %}
+
+		# Contenido
+
+		Los comentarios son las líneas que empiezan por `#`.
+
+		Los documentos pueden tener namespaces. Se declaran
+		con `Nombre (namespace.nombre)`.
+
+		# Conclusión
+
+		Con dos tipos de nodo y la indentación se puede describir cualquier documento.
+		Una plantilla añade **validación**, sin cambiar la sintaxis.
+
+		{% cuestionario %}
+		{% pregunta texto="¿Cómo se expresa la estructura de un documento?" %}
+		Con la indentación: un nodo es hijo del nodo anterior
+		más cercano que tiene un nivel menos.
+		{% /pregunta %}
+		{% pregunta texto="¿Qué pasa con el texto de un bloque `>>`?" %}
+		Se conserva literalmente. No se interpreta nada de su interior.
+		Puede ser Markdown, código o cualquier otro texto.
+		{% /pregunta %}
+		{% /cuestionario %}
+
+	Content >>
+		El esquema es un objeto JavaScript. Declara las etiquetas, sus atributos y qué hijos aceptan:
+
+	TypeScript >>
+		const config = {
+		  tags: {
+		    pregunta: {
+		      render: 'Pregunta',
+		      attributes: {
+		        texto: { type: String, required: true },
+		      },
+		    },
+		    cuestionario: {
+		      render: 'Cuestionario',
+		      children: ['tag'],
+		    },
+		  },
+		};
+
+		const ast = Markdoc.parse(source);
+		const errors = Markdoc.validate(ast, config);
+
+	Content >>
+		`Markdoc.validate` detecta una etiqueta desconocida, un `texto` ausente y un hijo que la etiqueta no admite.
+		Los valores permitidos de un atributo se declaran con `matches`. El documento no se ejecuta.
+
+		La cardinalidad no es declarativa. «Al menos una pregunta en el cuestionario» exige escribir una función `validate`
+		para la etiqueta `cuestionario`, en JavaScript. Markdoc entrega el Frontmatter como texto sin procesar: la aplicación lo parsea
+		y lo valida por separado. Los títulos siguen siendo una convención.
+
+	Subheader: YAML con Markdown dentro
+
+	Content >>
+		La lección completa en YAML, con la prosa en escalares de bloque:
+
+	Listing >>
+		tipo: lección
+		título: ¿Qué es STXT?
+		autores:
+		  - Joan Costa
+		  - James Smith
+		docente: Sheila Jones
+		dificultad: fácil
+		introducción: |
+		  STXT es un **formato de texto jerárquico**: fácil de leer
+		  para las personas y trivial de parsear para las máquinas.
+		cuerpo:
+		  - contenido: |
+		      Un documento es un árbol de nodos. Solo hay dos tipos:
+
+		      - `Nombre: valor`, para valores cortos en línea.
+		      - `Nombre >>`, para un bloque de texto literal, como este.
+
+		      La indentación *es* la estructura: sin etiquetas de cierre,
+		      sin comillas y sin caracteres de escape.
+		  - pregunta: ¿Qué otro formato es parecido?
+		    respuesta: XML, por ejemplo
+		  - contenido: |
+		      Los comentarios son las líneas que empiezan por `#`.
+
+		      Los documentos pueden tener namespaces. Se declaran
+		      con `Nombre (namespace.nombre)`.
+		conclusión: |
+		  Con dos tipos de nodo y la indentación se puede describir cualquier documento.
+		  Una plantilla añade **validación**, sin cambiar la sintaxis.
+		cuestionario:
+		  - pregunta: ¿Cómo se expresa la estructura de un documento?
+		    respuesta: |
+		      Con la indentación: un nodo es hijo del nodo anterior
+		      más cercano que tiene un nivel menos.
+		  - pregunta: ¿Qué pasa con el texto de un bloque `>>`?
+		    respuesta: |
+		      Se conserva literalmente. No se interpreta nada de su interior.
+		      Puede ser Markdown, código o cualquier otro texto.
+
+	Content >>
+		Aquí la prosa está dentro de la estructura, como en @STXT@. Hay dos diferencias:
+
+		* **Repetición y orden**. Las claves de un mapa YAML son únicas. `contenido` no puede aparecer dos veces
+		  con una pregunta intercalada, así que los tres elementos pasan a una lista, `cuerpo`, con una clave cada uno.
+		  En @STXT@ un hijo repetido ya es la lista, y el árbol conserva el orden.
+		* **La prosa es una cadena**. Nada en el fichero indica que `introducción` sea Markdown:
+		  lo decide quien la muestra. En @STXT@ lo indica la plantilla, con `Introducción: (?) MARKDOWN`.
+
+		Un JSON Schema valida la estructura, las cardinalidades y la enumeración. Es un tercer lenguaje,
+		y se aplica a los datos ya cargados. Los indicadores de los escalares de bloque se explican en
+		[@STXT@ frente a YAML](stxt-vs-yaml#el-texto-de-varias-lineas).
+
+	Subheader: Resumen
+
+	Content >>
+		|                             | Frontmatter                   | MDX                                  | Markdoc                                    | YAML                             | @STXT@                          |
+		| --------------------------- | ----------------------------- | ------------------------------------ | ------------------------------------------ | -------------------------------- | ------------------------------- |
+		| Metadatos                   | Bloque YAML                   | Bloque YAML, lo procesa el framework | Bloque YAML, lo procesa la aplicación      | Claves                           | Nodos                           |
+		| Estructura en la prosa      | Títulos, por convención       | Componentes JSX                      | Etiquetas                                  | Claves y listas                  | Nodos, con la prosa en nodos block |
+		| Validación de la estructura | Solo el Frontmatter, externa  | Ninguna: los componentes se ejecutan | Etiquetas y atributos, con un esquema JS   | Externa, con JSON Schema         | Plantilla, en @STXT@            |
+		| Cardinalidad                | No                            | No                                   | Una función `validate` en JS               | JSON Schema                      | Plantilla                       |
+		| Partes repetidas, en orden  | Títulos, por convención       | Componentes                          | Etiquetas                                  | Lista de elementos de una clave  | Hijos repetidos                 |
+		| Qué texto es Markdown       | El cuerpo                     | El cuerpo                            | El cuerpo                                  | El fichero no lo indica          | Los nodos de tipo `MARKDOWN`    |
+		| El fichero es código        | No                            | Sí, un módulo JavaScript             | No                                         | No                               | No                              |

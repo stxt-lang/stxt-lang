@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT vs JSON: hand-written documents vs serialization
 	Metadata:
-		Last modif: 2026-09-19
+		Last modif: 2026-09-24
 		Description: STXT and JSON compared with examples: hand-writing, comments, multi-line text, JSON Schema versus templates, and the canonical JSON tree of every STXT document.
 
 	Header: @STXT@ vs JSON
@@ -162,14 +162,3 @@ Document (dev.stxt.website): STXT vs JSON: hand-written documents vs serializati
 		It is longer than the hand-written JSON because it is the complete tree: the name as written,
 		its canonical form and the namespace of every node. Any program that reads JSON can use it,
 		without an @STXT@ parser.
-
-	Subheader: When to use each
-
-	Content >>
-		* **JSON**: what machines exchange. API payloads, serialized state, generated artifacts nobody edits.
-		* **@STXT@**: when there is a person at one of the two ends of the file. For example,
-		  [configuration files](use-cases-config-files), [corporate documents](use-cases-corporate-docs)
-		  or [CMS content](use-cases-cms), with the canonical tree wherever JSON is expected.
-
-		The [AI and LLMs](ai-llms) use case walks that path: documents generated, validated and used as JSON.
-		The short version of this page is in the [FAQ](faq#why-not-json).

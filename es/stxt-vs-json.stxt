@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT frente a JSON: documentos a mano frente a serialización
 	Metadata:
-		Last modif: 2026-09-19
+		Last modif: 2026-09-24
 		Description: STXT y JSON comparados con ejemplos: escritura a mano, comentarios, texto multilínea, JSON Schema frente a plantillas, y el árbol JSON canónico de todo documento STXT.
 
 	Header: @STXT@ frente a JSON
@@ -162,14 +162,3 @@ Document (dev.stxt.website): STXT frente a JSON: documentos a mano frente a seri
 		Es más largo que el JSON escrito a mano porque es el árbol completo: el nombre tal como se escribió,
 		su forma canónica y el namespace de cada nodo. Cualquier programa que lea JSON lo puede usar,
 		sin un parser de @STXT@.
-
-	Subheader: Cuándo usar cada uno
-
-	Content >>
-		* **JSON**: lo que intercambian las máquinas. Cargas de API, estado serializado, artefactos generados que nadie edita.
-		* **@STXT@**: cuando hay una persona en uno de los dos extremos del fichero. Por ejemplo,
-		  [ficheros de configuración](use-cases-config-files), [documentos corporativos](use-cases-corporate-docs)
-		  o [contenido de un CMS](use-cases-cms), con el árbol canónico donde se espere JSON.
-
-		El caso de [IA y LLMs](ai-llms) recorre ese camino: documentos generados, validados y usados como JSON.
-		La versión corta de esta página está en la [FAQ](faq#por-que-no-json).

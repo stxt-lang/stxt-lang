@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT vs XML: structure and validation without verbosity
 	Metadata:
-		Last modif: 2026-09-19
+		Last modif: 2026-09-24
 		Description: STXT and XML compared with examples: the same tree with and without closing tags, escapes and entities, attributes versus children, and an XSD versus an STXT template.
 
 	Header: @STXT@ vs XML
@@ -151,15 +151,3 @@ Document (dev.stxt.website): STXT vs XML: structure and validation without verbo
 				Email: ana
 			# `Editor` is not in the template
 			Editor: Joan Costa
-
-	Subheader: When to use each
-
-	Content >>
-		* **XML**: where its ecosystem is the value. Established vocabularies (DocBook, SVG, ODF, RSS),
-		  tooling over XSLT and XPath, and **mixed content**, the inline markup within prose.
-		  @STXT@ does not model it: formatted prose goes in a block node, in [Markdown](stxt-vs-markdown).
-		* **@STXT@**: in the documents that people write and organizations validate. For example,
-		  [corporate documents](use-cases-corporate-docs), [contracts](use-cases-contracts),
-		  [RFCs and technical proposals](use-cases-rfcs) or [CMS content](use-cases-cms).
-
-		The short version of this comparison is in the [FAQ](faq#why-not-xml-yaml-or-toml).

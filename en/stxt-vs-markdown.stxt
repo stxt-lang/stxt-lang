@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT vs Markdown: complementary
 	Metadata:
-		Last modif: 2026-09-20
+		Last modif: 2026-09-24
 		Description: Markdown formats prose; STXT structures documents and adopts Markdown for the prose of its nodes. Two examples, and why MARKDOWN is the only embedded format in STXT schemas.
 
 	Header: @STXT@ vs Markdown
@@ -132,13 +132,3 @@ Document (dev.stxt.website): STXT vs Markdown: complementary
 		It is validated against the site template before being generated ([CMS and publishing](use-cases-cms)).
 		The source of any page can be seen by adding `.stxt` to its address,
 		for example [stxt-vs-markdown.stxt](stxt-vs-markdown.stxt).
-
-	Subheader: When to use each
-
-	Content >>
-		* **Markdown alone**: a README, a comment or a gist. Lightly formatted prose with no validation.
-		* **@STXT@**: when the document has named parts that must be checked. For example,
-		  [CMS content](use-cases-cms), [corporate documents](use-cases-corporate-docs)
-		  or [technical proposals](use-cases-rfcs). The prose inside is still Markdown.
-
-		The short version of this page is in the [FAQ](faq#why-not-markdown).

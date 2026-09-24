@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT frente a XML: estructura y validación sin verbosidad
 	Metadata:
-		Last modif: 2026-09-19
+		Last modif: 2026-09-24
 		Description: STXT y XML comparados con ejemplos: el mismo árbol con y sin etiquetas de cierre, escapes y entidades, atributos frente a hijos, y un XSD frente a una plantilla STXT.
 
 	Header: @STXT@ frente a XML
@@ -151,15 +151,3 @@ Document (dev.stxt.website): STXT frente a XML: estructura y validación sin ver
 				Email: ana
 			# `Editor` no está en la plantilla
 			Editor: Joan Costa
-
-	Subheader: Cuándo usar cada uno
-
-	Content >>
-		* **XML**: donde su ecosistema es el valor. Vocabularios establecidos (DocBook, SVG, ODF, RSS),
-		  herramientas sobre XSLT y XPath, y **contenido mixto**, el marcado en línea dentro de la prosa.
-		  @STXT@ no lo modela: la prosa con formato va en un nodo block, en [Markdown](stxt-vs-markdown).
-		* **@STXT@**: en los documentos que las personas redactan y las organizaciones validan. Por ejemplo,
-		  [documentos corporativos](use-cases-corporate-docs), [contratos](use-cases-contracts),
-		  [RFCs y propuestas técnicas](use-cases-rfcs) o [contenido de un CMS](use-cases-cms).
-
-		La versión corta de esta comparación está en la [FAQ](faq#por-que-no-xml-yaml-o-toml).

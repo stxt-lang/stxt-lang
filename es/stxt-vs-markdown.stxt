@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT frente a Markdown: complementarios
 	Metadata:
-		Last modif: 2026-09-20
+		Last modif: 2026-09-24
 		Description: Markdown da formato a la prosa; STXT estructura los documentos y adopta Markdown para la prosa de sus nodos. Dos ejemplos, y por qué MARKDOWN es el único formato embebido de los esquemas STXT.
 
 	Header: @STXT@ frente a Markdown
@@ -132,13 +132,3 @@ Document (dev.stxt.website): STXT frente a Markdown: complementarios
 		Se valida contra la plantilla del sitio antes de generarse ([CMS y publicaciones](use-cases-cms)).
 		Se puede añadir `.stxt` a la dirección de cualquier página para ver el código fuente,
 		por ejemplo [stxt-vs-markdown.stxt](stxt-vs-markdown.stxt).
-
-	Subheader: Cuándo usar cada uno
-
-	Content >>
-		* **Markdown solo**: un README, un comentario o un gist. Prosa con formato ligero y sin validación.
-		* **@STXT@**: cuando el documento tiene partes con nombre que se deben comprobar. Por ejemplo,
-		  [contenido de un CMS](use-cases-cms), [documentos corporativos](use-cases-corporate-docs)
-		  o [propuestas técnicas](use-cases-rfcs). La prosa de dentro sigue siendo Markdown.
-
-		La versión corta de esta página está en la [FAQ](faq#por-que-no-markdown).

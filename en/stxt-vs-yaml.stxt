@@ -1,6 +1,6 @@
 Document (dev.stxt.website): STXT vs YAML: values, free text and validation
 	Metadata:
-		Last modif: 2026-09-19
+		Last modif: 2026-09-24
 		Description: STXT and YAML compared with examples: implicit typing versus text values, block scalars versus literal blocks, attack surface, and validation inside the language.
 
 	Header: @STXT@ vs YAML
@@ -185,13 +185,3 @@ Document (dev.stxt.website): STXT vs YAML: values, free text and validation
 
 		It keeps the YAML data model (dictionaries, lists and strings), and leaves types
 		and validation to the application. It has no namespaces or schemas.
-
-	Subheader: When to use each
-
-	Content >>
-		* **YAML**: where the ecosystem expects it. Kubernetes manifests, CI pipelines, Docker Compose, Ansible.
-		* **@STXT@**: when the file is a document that people write and read, or when
-		  it must be validated without external tools. For example, [configuration files](use-cases-config-files),
-		  [corporate documents](use-cases-corporate-docs) or [CMS content](use-cases-cms).
-
-		The short version of this comparison is in the [FAQ](faq#why-not-xml-yaml-or-toml).
