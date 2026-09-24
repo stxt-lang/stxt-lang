@@ -3,7 +3,7 @@ Template (@stxt.template): dev.stxt.website
 		Document (dev.stxt.website):
 			Metadata: (?)
 				Status: (?) ENUM [Genesis, Aurora, Zenith, Twilight]
-				Last modif: (?)
+				Last modif: (?) DATE
 				Description: (?)
 			Header: (?)
 			Subheader:
