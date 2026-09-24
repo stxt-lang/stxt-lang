@@ -125,6 +125,10 @@ Document (dev.stxt.website): STXT frente a Markdown: complementarios
 				Migrate the billing data to PostgreSQL 16 during Q4.
 			# Falta `Consequences`
 
+	Content >>
+		Frontmatter, MDX y Markdoc añaden estructura a Markdown de otras formas. Una misma lección en cada uno
+		de ellos, en YAML y en @STXT@, y qué valida cada uno: [STXT, prosa dentro de la estructura](prose-inside-structure).
+
 	Subheader: Este portal
 
 	Content >>

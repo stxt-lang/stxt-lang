@@ -39,6 +39,9 @@ Document (dev.stxt.website): STXT: The Book
 	Link: @STXT@ vs Markdown
 		Page: stxt-vs-markdown
 
+	Link: @STXT@ vs MDX and Markdoc
+		Page: prose-inside-structure
+
 	Subheader: Language Reference
 	
 	Link: @STXT@ Core
