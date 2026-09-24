@@ -30,7 +30,7 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 		Mostramos un mismo documento, una `Lección` con una estructura concreta, y cómo se
 		valida con las distintas soluciones actuales.
 
-	Subheader: Una `Lección` en @STXT@
+	Subheader: @STXT@ con Markdown
 
 	Code >>
 		Lección (com.example.school.es): ¿Qué es STXT?
@@ -94,7 +94,7 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 
 		En la prosa no hace falta ningún carácter de escape.
 
-	Subheader: Markdown con Frontmatter
+	Subheader: Frontmatter
 
 	Listing >>
 		---
@@ -300,7 +300,7 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 	Content >>
 		La cardinalidad no es declarativa, y el documento se mezcla con código en otro lenguaje.
 
-	Subheader: YAML con Markdown dentro
+	Subheader: YAML con Markdown
 
 	Listing >>
 		tipo: lección

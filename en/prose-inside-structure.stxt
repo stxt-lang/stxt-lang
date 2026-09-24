@@ -30,7 +30,7 @@ Document (dev.stxt.website): STXT, prose inside structure
 		We show the same document, a `Lesson` with a specific structure, and how it is
 		validated with each of the current solutions.
 
-	Subheader: A `Lesson` in @STXT@
+	Subheader: @STXT@ with Markdown
 
 	Code >>
 		Lesson (com.example.school): What is STXT?
@@ -94,7 +94,7 @@ Document (dev.stxt.website): STXT, prose inside structure
 
 		In the prose, no escape characters are needed.
 
-	Subheader: Markdown with Frontmatter
+	Subheader: Frontmatter
 
 	Listing >>
 		---
@@ -300,7 +300,7 @@ Document (dev.stxt.website): STXT, prose inside structure
 	Content >>
 		Cardinality is not declarative, and the document is mixed with code in another language.
 
-	Subheader: YAML with Markdown inside
+	Subheader: YAML with Markdown
 
 	Listing >>
 		type: lesson
