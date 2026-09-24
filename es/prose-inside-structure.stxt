@@ -9,28 +9,28 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 		Frontmatter, MDX y Markdoc insertan la estructura en la prosa.
 		@STXT@ inserta la prosa en la estructura, y así **se puede validar el documento completo**.
 
-	Subheader: El problema
+	Subheader: CMS y validación de la estructura
 
 	Content >>
-		Markdown es prosa. Un fichero Markdown no tiene campos.
+		Cuando un documento necesita prosa, habitualmente se usa Markdown. El problema aparece
+		cuando también necesita una estructura que debe validarse. La solución habitual consiste
+		en insertar la estructura **dentro** de Markdown, usando otro lenguaje. La mayoría de las
+		veces esto permite una validación parcial, pero con soluciones que se parecen más a un
+		hack que a una respuesta estructural. El coste es el siguiente:
 
-		Cuando una página necesita datos, los datos van en un Frontmatter: un bloque YAML antes de la prosa.
-		Eso cubre un título, un autor y una fecha.
+		- Más lenguajes en juego
+		- Más complejidad de escritura para personas no técnicas
+		- Menos legibilidad general
+		- Entornos menos uniformes
+		- Mezcla de texto con código
 
-		El problema empieza cuando la estructura está dentro de la prosa. Una pregunta en medio de una lección.
-		Un cuestionario al final, con sus preguntas y respuestas. Markdown no tiene sintaxis para eso, así que
-		cada herramienta añade la suya: componentes en MDX, etiquetas en Markdoc. La estructura queda incrustada
-		en la prosa, y ningún esquema cubre el fichero entero.
+		En este artículo mostramos cómo @STXT@ invierte la solución: inserta la prosa dentro
+		de una estructura que puede validarse.
 
-		@STXT@ va al revés. La estructura es el documento: nodos con nombre, cardinalidad y tipo.
-		La prosa va dentro, como Markdown, en nodos block. Una plantilla valida el fichero entero.
-
-		La lección siguiente tiene varios autores, una pregunta intercalada en el contenido y un cuestionario final.
+		Mostramos un mismo documento, una `Lección` con una estructura concreta, y cómo se
+		valida con las distintas soluciones actuales.
 
 	Subheader: Una `Lección` en @STXT@
-
-	Content >>
-		Los datos son nodos, y la prosa es Markdown dentro de nodos block:
 
 	Code >>
 		Lección (com.example.school.es): ¿Qué es STXT?
@@ -90,14 +90,11 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 						Pregunta: (+) @Pregunta
 
 	Content >>
-		`Contenido` aparece dos veces, con una `Pregunta` entre ambos, y el árbol conserva ese orden.
-		El validador comprueba el resto: al menos un autor, un docente, una dificultad de la lista
-		y un cuestionario con una o más preguntas, cada una con su respuesta.
+		Todo el documento se puede validar con la plantilla: estructura, cardinalidad y contenido.
+
+		En la prosa no hace falta ningún carácter de escape.
 
 	Subheader: Markdown con Frontmatter
-
-	Content >>
-		Los metadatos van en el Frontmatter, escrito en YAML. El resto son títulos y párrafos:
 
 	Listing >>
 		---
@@ -154,19 +151,13 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 		Puede ser Markdown, código o cualquier otro texto.
 
 	Content >>
-		La pregunta, las respuestas y el cuestionario son una convención de negritas y títulos.
-		Para Markdown solo son párrafos. Nada comprueba que el cuestionario tenga preguntas ni que cada pregunta tenga respuesta.
+		La pregunta, la respuesta y el cuestionario son una convención,
+		y nada comprueba esa estructura.
 
-		El Frontmatter se puede validar con un esquema externo: JSON Schema, o un esquema Zod en las colecciones de contenido de Astro.
-		El cuerpo, no.
-
-		El cuestionario se puede trasladar al Frontmatter. Así queda validado, pero las respuestas pasan a ser cadenas,
-		y la plantilla del sitio tiene que convertirlas a HTML como Markdown por su cuenta.
+		El Frontmatter se puede validar con un esquema externo:
+		JSON Schema, o un esquema Zod en las colecciones de contenido de Astro.
 
 	Subheader: MDX
-
-	Content >>
-		MDX añade JSX a Markdown. La pregunta y el cuestionario se convierten en componentes:
 
 	Listing >>
 		---
@@ -224,21 +215,12 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 		</Cuestionario>
 
 	Content >>
-		`Pregunta` y `Cuestionario` son componentes JavaScript definidos en otro fichero. El documento se compila a un módulo JavaScript,
-		y el `import` se ejecuta. El documento es código.
-
-		El Frontmatter no forma parte de MDX: lo procesa el framework o un plugin de `remark`.
-
-		No hay esquema. Un componente inexistente provoca un error al generar la página.
-		Si falta el atributo `texto`, solo lo detecta el propio componente, y únicamente si está programado para ello.
-		Nada cuenta las preguntas de un `Cuestionario`. Los títulos siguen siendo una convención.
+		`Pregunta` y `Cuestionario` son componentes JavaScript definidos en otro fichero.
+		El documento se compila a un módulo JavaScript, mezclando el documento con código.
 
 		En la prosa, `<` y `{` abren JSX y expresiones, así que hay que escaparlos.
 
 	Subheader: Markdoc
-
-	Content >>
-		Markdoc añade etiquetas a Markdown y valida el documento contra un esquema definido en la aplicación:
 
 	Listing >>
 		---
@@ -316,17 +298,9 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 		const errors = Markdoc.validate(ast, config);
 
 	Content >>
-		`Markdoc.validate` detecta una etiqueta desconocida, un `texto` ausente y un hijo que la etiqueta no admite.
-		Los valores permitidos de un atributo se declaran con `matches`. El documento no se ejecuta.
-
-		La cardinalidad no es declarativa. «Al menos una pregunta en el cuestionario» exige escribir una función `validate`
-		para la etiqueta `cuestionario`, en JavaScript. Markdoc entrega el Frontmatter como texto sin procesar: la aplicación lo parsea
-		y lo valida por separado. Los títulos siguen siendo una convención.
+		La cardinalidad no es declarativa, y el documento se mezcla con código en otro lenguaje.
 
 	Subheader: YAML con Markdown dentro
-
-	Content >>
-		La lección completa en YAML, con la prosa en escalares de bloque:
 
 	Listing >>
 		tipo: lección
@@ -369,27 +343,13 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 		      Puede ser Markdown, código o cualquier otro texto.
 
 	Content >>
-		Aquí la prosa está dentro de la estructura, como en @STXT@. Hay dos diferencias:
+		Aquí la prosa está dentro de la estructura, como en @STXT@, con una diferencia importante:
 
-		* **Repetición y orden**. Las claves de un mapa YAML son únicas. `contenido` no puede aparecer dos veces
-		  con una pregunta intercalada, así que los tres elementos pasan a una lista, `cuerpo`, con una clave cada uno.
-		  En @STXT@ un hijo repetido ya es la lista, y el árbol conserva el orden.
-		* **La prosa es una cadena**. Nada en el fichero indica que `introducción` sea Markdown:
-		  lo decide quien la muestra. En @STXT@ lo indica la plantilla, con `Introducción: (?) MARKDOWN`.
+		En **YAML** las claves son únicas, así que los elementos repetidos tienen que ir en una lista (artificial).
 
-		Un JSON Schema valida la estructura, las cardinalidades y la enumeración. Es un tercer lenguaje,
-		y se aplica a los datos ya cargados. Los indicadores de los escalares de bloque se explican en
-		[@STXT@ frente a YAML](stxt-vs-yaml#el-texto-de-varias-lineas).
+		**STXT** se parece más a XML: una estructura de nodos de texto. La repetición es
+		natural, y no hace falta ninguna lista para ella.
 
-	Subheader: Resumen
-
-	Content >>
-		|                             | Frontmatter                   | MDX                                  | Markdoc                                    | YAML                             | @STXT@                          |
-		| --------------------------- | ----------------------------- | ------------------------------------ | ------------------------------------------ | -------------------------------- | ------------------------------- |
-		| Metadatos                   | Bloque YAML                   | Bloque YAML, lo procesa el framework | Bloque YAML, lo procesa la aplicación      | Claves                           | Nodos                           |
-		| Estructura en la prosa      | Títulos, por convención       | Componentes JSX                      | Etiquetas                                  | Claves y listas                  | Nodos, con la prosa en nodos block |
-		| Validación de la estructura | Solo el Frontmatter, externa  | Ninguna: los componentes se ejecutan | Etiquetas y atributos, con un esquema JS   | Externa, con JSON Schema         | Plantilla, en @STXT@            |
-		| Cardinalidad                | No                            | No                                   | Una función `validate` en JS               | JSON Schema                      | Plantilla                       |
-		| Partes repetidas, en orden  | Títulos, por convención       | Componentes                          | Etiquetas                                  | Lista de elementos de una clave  | Hijos repetidos                 |
-		| Qué texto es Markdown       | El cuerpo                     | El cuerpo                            | El cuerpo                                  | El fichero no lo indica          | Los nodos de tipo `MARKDOWN`    |
-		| El fichero es código        | No                            | Sí, un módulo JavaScript             | No                                         | No                               | No                              |
+	Assert >>
+		El **modelo mental** de YAML y @STXT@ es muy distinto al escribir contenido en un CMS.
+		En YAML hay mapas y listas; en @STXT@ hay árboles de texto.

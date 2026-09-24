@@ -12,24 +12,23 @@ Document (dev.stxt.website): STXT, prose inside structure
 	Subheader: CMS and structure validation
 
 	Content >>
-		Cuando un documento necesita prosa, habitualmente se usa Markdown. El problema aparece
-		cuando también necesita una estructura que debe validarse. La solución
-		habitual consiste en insertar la estructura **dentro** de markdown, usando otro lenguaje. Esto
-		permite una validación parcial la mayoría de ocasiones, 
-		pero con soluciones que se asemejan más a un hack que a un tema estructural.
-		El coste es el siguiente:
+		When a document needs prose, Markdown is the usual choice. The problem appears
+		when it also needs a structure that must be validated. The usual solution is to
+		insert the structure **inside** Markdown, using another language. Most of the time
+		this allows a partial validation, but with solutions that look more like a hack
+		than a structural answer. The cost is this:
 
-		* Más diversidad de lenguajes aplicados
-		* Más complejidad de escritura por personas no técnicas
-		* Menos legibilidad general
-		* Entornos menos uniformes
-		* Mezcla de texto con código
+		- More languages in play
+		- Harder writing for non-technical people
+		- Less readability overall
+		- Less uniform environments
+		- Text mixed with code
 
-		En este artículo mostramos como @STXT@ invierte la solución, insertando prosa dentro
-		de una estructura que puede validarse.
+		This article shows how @STXT@ inverts the solution: it inserts the prose inside
+		a structure that can be validated.
 
-		Mostramos un mismo documento, una `Lesson`, que tiene una estructura concreta, y como 
-		se valida con las distintas soluciones actuales.
+		We show the same document, a `Lesson` with a specific structure, and how it is
+		validated with each of the current solutions.
 
 	Subheader: A `Lesson` in @STXT@
 
@@ -91,7 +90,7 @@ Document (dev.stxt.website): STXT, prose inside structure
 						Question: (+) @Question
 
 	Content >>
-		All the document can be validated with the template: structure, cardinality and content.
+		The whole document can be validated with the template: structure, cardinality and content.
 
 		In the prose, no escape characters are needed.
 
@@ -152,10 +151,10 @@ Document (dev.stxt.website): STXT, prose inside structure
 		It can be Markdown, code or any other text.
 
 	Content >>
-		The question, the answers and the quiz are a convention
+		The question, the answer and the quiz are a convention,
 		and nothing checks that structure.
 
-		The Frontmatter can be validated with an external schema: 
+		The Frontmatter can be validated with an external schema:
 		JSON Schema, or a Zod schema in Astro content collections.
 
 	Subheader: MDX
@@ -216,8 +215,8 @@ Document (dev.stxt.website): STXT, prose inside structure
 		</Quiz>
 
 	Content >>
-		`Question` and `Quiz` are JavaScript components defined in another file. 
-		The document compiles to a JavaScript module, mixing document with code.
+		`Question` and `Quiz` are JavaScript components defined in another file.
+		The document compiles to a JavaScript module, mixing the document with code.
 
 		In the prose, `<` and `{` open JSX and expressions, so they must be escaped.
 
@@ -299,7 +298,7 @@ Document (dev.stxt.website): STXT, prose inside structure
 		const errors = Markdoc.validate(ast, config);
 
 	Content >>
-		Cardinality is not declarative and there is a mix beetwen the document and code in another language.
+		Cardinality is not declarative, and the document is mixed with code in another language.
 
 	Subheader: YAML with Markdown inside
 
@@ -344,14 +343,14 @@ Document (dev.stxt.website): STXT, prose inside structure
 		      It can be Markdown, code or any other text.
 
 	Content >>
-		Here the prose is inside the structure, as in @STXT@, with some important diference:
+		Here the prose is inside the structure, as in @STXT@, with one important difference:
 
-		**YAML** is a language where keys are unique, so the items has to go into a (ficticial) list.
+		In **YAML** keys are unique, so repeated items have to go into an (artificial) list.
 
-		**STXT** has more similities with XML, with a structure of text nodes. The repetition is
-		natural, and no lists needed for repetition.
+		**@STXT@** is closer to XML: a structure of text nodes. Repetition is
+		natural, and no list is needed for it.
 
 	Assert >>
-		The **mental model** beetween YAML and @STXT@ is very different when writting content in a CMS.
-		With YAML there	are maps and lists, whereas in @STXT@ there are trees of text.
+		The **mental model** of YAML and @STXT@ is very different when writing content in a CMS.
+		In YAML there are maps and lists; in @STXT@ there are trees of text.
 
