@@ -28,7 +28,9 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 		de una estructura que puede validarse.
 
 		Mostramos un mismo documento, una `Lección` con una estructura concreta, y cómo se
-		valida con las distintas soluciones actuales.
+		valida con las distintas soluciones actuales. También lo mostramos en YAML y en KDL,
+		dos formatos que sí admiten la prosa dentro de la estructura, aunque no es habitual
+		encontrarlos en un CMS.
 
 	Subheader: @STXT@ con Markdown
 

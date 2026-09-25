@@ -28,7 +28,9 @@ Document (dev.stxt.website): STXT, prose inside structure
 		a structure that can be validated.
 
 		We show the same document, a `Lesson` with a specific structure, and how it is
-		validated with each of the current solutions.
+		validated with each of the current solutions. We also show it in YAML and in KDL,
+		two formats that do allow prose inside the structure, although they are not
+		usual in a CMS.
 
 	Subheader: @STXT@ with Markdown
 
