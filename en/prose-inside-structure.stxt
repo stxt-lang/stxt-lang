@@ -346,6 +346,8 @@ Document (dev.stxt.website): STXT, prose inside structure
 		Here the prose is inside the structure, as in @STXT@, with one important difference:
 
 		In **YAML** keys are unique, so repeated items have to go into an (artificial) list.
+		This makes it visually harder to tell whether a `-` character belongs to
+		the structure nodes or is part of the prose.
 
 		In @STXT@ repetition is natural and no list is needed: everything is a structure of text nodes.
 

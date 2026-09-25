@@ -346,6 +346,8 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 		Aquí la prosa está dentro de la estructura, como en @STXT@, con una diferencia importante:
 
 		En **YAML** las claves son únicas, así que los elementos repetidos tienen que ir en una lista (artificial).
+		Esto hace que visualmente sea más difícil distinguir si el carácter `-` pertenece a
+		los nodos de la estructura o es contenido de la prosa.
 
 		En @STXT@ la repetición es natural y no hace falta ninguna lista: todo es una estructura de nodos de texto.
 
