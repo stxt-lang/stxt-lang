@@ -89,8 +89,7 @@ Document (dev.stxt.website): Frequently asked questions | STXT
 		The full comparison with each format can be seen on the following pages:
 
 		* [STXT vs XML](stxt-vs-xml)
-		* [STXT vs YAML](stxt-vs-yaml)
-		* [STXT vs TOML](stxt-vs-toml)
+		* [STXT vs YAML](stxt-vs-yaml), which includes TOML
 
 	Subsubheader: Why not Markdown?
 

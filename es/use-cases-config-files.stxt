@@ -186,4 +186,4 @@ Document (dev.stxt.website): Ficheros de configuración | STXT
 		lo hace la aplicación al cargar.
 
 		Para comparar con otros formatos de configuración, ver [STXT frente a YAML](stxt-vs-yaml),
-		[STXT frente a TOML](stxt-vs-toml) y [STXT frente a JSON](stxt-vs-json).
+		que incluye TOML, y [STXT frente a JSON](stxt-vs-json).

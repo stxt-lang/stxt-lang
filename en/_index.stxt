@@ -30,9 +30,6 @@ Document (dev.stxt.website): STXT: The Book
 	Link: @STXT@ vs YAML
 		Page: stxt-vs-yaml
 
-	Link: @STXT@ vs TOML
-		Page: stxt-vs-toml
-
 	Link: @STXT@ vs JSON
 		Page: stxt-vs-json
 

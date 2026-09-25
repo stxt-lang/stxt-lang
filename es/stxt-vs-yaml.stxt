@@ -177,6 +177,45 @@ Document (dev.stxt.website): STXT frente a YAML: valores, texto libre y validaci
 			# `Region` no está en la plantilla
 			Region: eu-west-1
 
+	Subheader: ¿Y TOML?
+
+	Content >>
+		TOML comparte objetivo con @STXT@: ficheros que una persona escribe y lee.
+		La jerarquía no está en la indentación, sino en cabeceras que repiten la ruta completa de su tabla:
+
+	Toml >>
+		[[job]]
+		name = "database"
+
+		[[job.step]]
+		run = "pg_dump acme > acme.sql"
+
+		[[job.step]]
+		run = "gzip acme.sql"
+
+		[[job]]
+		name = "documents"
+
+		[[job.step]]
+		run = "tar cf documents.tar /srv/docs"
+
+	Content >>
+		Cada `[[job.step]]` pertenece al último `[[job]]` abierto. En @STXT@ cada nivel se escribe una vez,
+		y un hijo pertenece al nodo bajo el que está indentado:
+
+	Code >>
+		Backup:
+			Job: database
+				Step: pg_dump acme > acme.sql
+				Step: gzip acme.sql
+			Job: documents
+				Step: tar cf documents.tar /srv/docs
+
+	Content >>
+		Como en YAML, el tipo de un valor lo decide su grafía: `14` es un entero y `"14"` una cadena.
+		Las cadenas van siempre entre comillas, y las de varias líneas no se pueden sangrar con su tabla.
+		No tiene namespaces ni esquemas.
+
 	Subheader: ¿Y NestedText?
 
 	Content >>

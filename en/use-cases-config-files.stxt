@@ -186,4 +186,4 @@ Document (dev.stxt.website): Configuration files | STXT
 		the application does it on load.
 
 		To compare with other configuration formats, see [STXT vs YAML](stxt-vs-yaml),
-		[STXT vs TOML](stxt-vs-toml) and [STXT vs JSON](stxt-vs-json).
+		which includes TOML, and [STXT vs JSON](stxt-vs-json).
