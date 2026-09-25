@@ -372,6 +372,91 @@ Document (dev.stxt.website): STXT, prose inside structure
 		The **mental model** of YAML and @STXT@ is very different when writing content in a CMS.
 		YAML is closer to JSON: there are maps and lists. @STXT@ is more like XML, with trees of text.
 
+	Subheader: KDL
+
+	Listing >>
+		lesson "What is STXT?" {
+		    authors {
+		        author "Joan Costa"
+		        author "James Smith"
+		    }
+		    teacher "Sheila Jones"
+		    difficulty "easy"
+		    introduction """
+		        STXT is a **hierarchical text format**: easy for
+		        people to read and trivial for machines to parse.
+		        """
+		    content """
+		        A document is a tree of nodes. There are only two kinds:
+
+		        - `Name: value`, for short inline values.
+		        - `Name >>`, for a block of literal text, like this one.
+
+		        Indentation *is* the structure: no closing tags, no quotes
+		        and no escape characters.
+		        """
+		    question "Do you know another similar format?" {
+		        answer "XML, for example"
+		    }
+		    content """
+		        Comments are all the lines that start with `#`.
+
+		        Documents may have namespaces. You define them
+		        with `Name (namespace.name)`.
+		        """
+		    conclusion """
+		        With two kinds of node and indentation you can describe any document.
+		        A template adds **validation** on top, without changing the syntax.
+		        """
+		    quiz {
+		        question "How is the structure of a document expressed?" {
+		            answer """
+		                With indentation: a node is a child of the closest
+		                previous node with one level less.
+		                """
+		        }
+		        question "What happens to the text inside a `>>` block?" {
+		            answer """
+		                It is kept literally. Nothing inside is interpreted.
+		                It can be Markdown, code or any other text.
+		                """
+		        }
+		    }
+		}
+
+	Content >>
+		An excerpt of the schema, also written in KDL:
+
+	Listing >>
+		document {
+		    node "lesson" {
+		        min 1
+		        max 1
+		        value { type "string" }
+		        children {
+		            node "teacher" { min 1; max 1; value { type "string" } }
+		            node "difficulty" { max 1; value { enum "easy" "medium" "hard" } }
+		            node "content" { value { type "string" } }
+		            node "question" {
+		                value { type "string" }
+		                children {
+		                    node "answer" { min 1; max 1; value { type "string" } }
+		                }
+		            }
+		        }
+		    }
+		}
+
+	Content >>
+		KDL is the closest format to @STXT@ on this page: named nodes, ordered,
+		repeatable and with children.
+
+		The differences are in the syntax. As with YAML, it is harder to tell
+		the different components apart visually. Values go between quotes, and in the prose
+		`\` is an escape character.
+
+		The schema is declarative, with cardinality in `min` and `max`.
+
 	Subheader: This site
 
 	Content >>

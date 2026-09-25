@@ -24,17 +24,17 @@ Document (dev.stxt.website): STXT: The Book
 
 	Subheader: Comparisons
 
-	Link: @STXT@ vs YAML
-		Page: stxt-vs-yaml
-
-	Link: @STXT@ vs JSON
-		Page: stxt-vs-json
-
 	Link: @STXT@ vs XML
 		Page: stxt-vs-xml
 
+	Link: @STXT@ vs YAML
+		Page: stxt-vs-yaml
+
 	Link: @STXT@ vs TOML
 		Page: stxt-vs-toml
+
+	Link: @STXT@ vs JSON
+		Page: stxt-vs-json
 
 	Link: @STXT@, prose inside structure
 		Page: prose-inside-structure
