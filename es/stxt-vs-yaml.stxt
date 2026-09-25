@@ -220,7 +220,36 @@ Document (dev.stxt.website): STXT frente a YAML: valores, texto libre y validaci
 
 	Content >>
 		NestedText toma varias de las decisiones de @STXT@: todo valor es texto, sin tipos implícitos
-		ni caracteres de escape, y la estructura está en la indentación.
+		ni caracteres de escape, y la estructura está en la indentación. El descriptor del principio:
 
-		Conserva el modelo de datos de YAML (diccionarios, listas y cadenas), y deja los tipos
+	Listing >>
+		service: billing
+		replicas: 2
+		ports:
+		    - 8080
+		    - 8443
+		maintainer: ana@example.com
+		notes:
+		    > Restarted after the 2026-08-31 incident.
+		    > The TLS certificate expires on 2027-03-01.
+
+	Content >>
+		Y en @STXT@:
+
+	Code >>
+		Service: billing
+			Replicas: 2
+			Ports:
+				Port: 8080
+				Port: 8443
+			Maintainer: ana@example.com
+			Notes >>
+				Restarted after the 2026-08-31 incident.
+				The TLS certificate expires on 2027-03-01.
+
+	Content >>
+		`2` y `8080` son cadenas en los dos, y el texto de varias líneas es literal: en NestedText
+		cada línea empieza por `>`, y en @STXT@ va bajo un nodo block.
+
+		NestedText conserva el modelo de datos de YAML (diccionarios, listas y cadenas), y deja los tipos
 		y la validación a la aplicación. No tiene namespaces ni esquemas.

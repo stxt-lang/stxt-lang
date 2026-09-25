@@ -220,7 +220,36 @@ Document (dev.stxt.website): STXT vs YAML: values, free text and validation
 
 	Content >>
 		NestedText makes several of the decisions of @STXT@: every value is text, with no implicit types
-		or escape characters, and the structure is in the indentation.
+		or escape characters, and the structure is in the indentation. The descriptor from the beginning:
 
-		It keeps the YAML data model (dictionaries, lists and strings), and leaves types
+	Listing >>
+		service: billing
+		replicas: 2
+		ports:
+		    - 8080
+		    - 8443
+		maintainer: ana@example.com
+		notes:
+		    > Restarted after the 2026-08-31 incident.
+		    > The TLS certificate expires on 2027-03-01.
+
+	Content >>
+		And in @STXT@:
+
+	Code >>
+		Service: billing
+			Replicas: 2
+			Ports:
+				Port: 8080
+				Port: 8443
+			Maintainer: ana@example.com
+			Notes >>
+				Restarted after the 2026-08-31 incident.
+				The TLS certificate expires on 2027-03-01.
+
+	Content >>
+		`2` and `8080` are strings in both, and multi-line text is literal: in NestedText
+		each line starts with `>`, and in @STXT@ it goes under a block node.
+
+		NestedText keeps the YAML data model (dictionaries, lists and strings), and leaves types
 		and validation to the application. It has no namespaces or schemas.
