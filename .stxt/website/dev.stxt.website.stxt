@@ -18,6 +18,9 @@ Template (@stxt.template): dev.stxt.website
 			Python: TEXT
 			Json: TEXT
 			Xml: TEXT
+			Yaml: TEXT
+			Toml: TEXT
+			Markdown: TEXT
 			Link:
 				Page: (?)
 				Url: (?) URL
@@ -56,3 +59,11 @@ Template (@stxt.template): dev.stxt.website
 		Xml >>
 			Un fragmento XML o HTML (por ejemplo, un pom.xml). Se colorea con la
 			gramática de marcado de Prism.
+		Yaml >>
+			Un documento YAML. Se colorea con la gramática YAML de Prism.
+		Toml >>
+			Un documento TOML. Se colorea con la gramática TOML de Prism.
+		Markdown >>
+			Texto Markdown, con o sin front matter YAML; también MDX y Markdoc,
+			cuyas etiquetas y directivas quedan sin colorear. Se colorea con la
+			gramática Markdown de Prism.

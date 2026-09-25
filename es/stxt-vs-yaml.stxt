@@ -14,7 +14,7 @@ Document (dev.stxt.website): STXT frente a YAML: valores, texto libre y validaci
 	Content >>
 		Un descriptor de servicio en YAML:
 
-	Listing >>
+	Yaml >>
 		service: billing
 		replicas: 2
 		ports:
@@ -57,7 +57,7 @@ Document (dev.stxt.website): STXT frente a YAML: valores, texto libre y validaci
 		En YAML, un valor sin comillas se convierte a un tipo según su forma.
 		Las reglas cambiaron entre las versiones 1.1 y 1.2 del lenguaje:
 
-	Listing >>
+	Yaml >>
 		country: NO         # false en YAML 1.1; la cadena "NO" en 1.2
 		version: 3.10       # el número 3.1 en las dos
 		window: 12:30       # el entero 750 en YAML 1.1 (sexagesimal); una cadena en 1.2
@@ -91,7 +91,7 @@ Document (dev.stxt.website): STXT frente a YAML: valores, texto libre y validaci
 		Un escalar de bloque de YAML combina varios indicadores: el estilo (`|` literal o `>` plegado),
 		el salto de línea final (`-`, `+` o ninguno) y, si hace falta, la indentación:
 
-	Listing >>
+	Yaml >>
 		literal: |
 		  first line
 		  second line

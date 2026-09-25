@@ -17,7 +17,7 @@ Document (dev.stxt.website): STXT frente a Markdown: complementarios
 		[YAML](stxt-vs-yaml), un segundo lenguaje. Validar esos datos pide un tercero:
 		JSON Schema, o código propio.
 
-	Listing >>
+	Markdown >>
 		---
 		title: Style guide
 		author: Ana López
@@ -63,7 +63,7 @@ Document (dev.stxt.website): STXT frente a Markdown: complementarios
 		Cuando un documento Markdown tiene partes fijas, las partes son títulos. El acuerdo sobre
 		cuáles son y qué contienen vive fuera del fichero. Un registro de decisión de arquitectura (ADR):
 
-	Listing >>
+	Markdown >>
 		# ADR 12: Adopt PostgreSQL
 
 		## Status

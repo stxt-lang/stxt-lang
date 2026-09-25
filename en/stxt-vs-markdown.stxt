@@ -17,7 +17,7 @@ Document (dev.stxt.website): STXT vs Markdown: complementary
 		[YAML](stxt-vs-yaml), a second language. Validating that data takes a third:
 		JSON Schema, or custom code.
 
-	Listing >>
+	Markdown >>
 		---
 		title: Style guide
 		author: Ana López
@@ -63,7 +63,7 @@ Document (dev.stxt.website): STXT vs Markdown: complementary
 		When a Markdown document has fixed parts, the parts are headings. The agreement on
 		which they are and what they contain lives outside the file. An architecture decision record (ADR):
 
-	Listing >>
+	Markdown >>
 		# ADR 12: Adopt PostgreSQL
 
 		## Status

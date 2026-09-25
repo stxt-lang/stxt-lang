@@ -14,7 +14,7 @@ Document (dev.stxt.website): STXT vs TOML: flat configuration vs hierarchical do
 	Content >>
 		The configuration of a backup in TOML:
 
-	Listing >>
+	Toml >>
 		title = "Nightly backup"
 
 		[storage]
@@ -63,7 +63,7 @@ Document (dev.stxt.website): STXT vs TOML: flat configuration vs hierarchical do
 	Content >>
 		Every TOML header writes the full path of its table. Two jobs with their steps:
 
-	Listing >>
+	Toml >>
 		[[job]]
 		name = "database"
 
@@ -97,7 +97,7 @@ Document (dev.stxt.website): STXT vs TOML: flat configuration vs hierarchical do
 	Content >>
 		In addition, the same structure can be written in TOML in three ways:
 
-	Listing >>
+	Toml >>
 		# 1. With a header
 		[storage]
 		kind = "s3"
@@ -118,7 +118,7 @@ Document (dev.stxt.website): STXT vs TOML: flat configuration vs hierarchical do
 		A TOML multi-line string keeps the indentation of each line.
 		For the value not to contain it, the text cannot be indented along with the table it belongs to:
 
-	Listing >>
+	Toml >>
 		[storage]
 		kind = "s3"
 		notes = """

@@ -14,7 +14,7 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 	Content >>
 		La configuración de una copia de seguridad en TOML:
 
-	Listing >>
+	Toml >>
 		title = "Nightly backup"
 
 		[storage]
@@ -63,7 +63,7 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 	Content >>
 		Cada cabecera TOML escribe la ruta completa de su tabla. Dos trabajos con sus pasos:
 
-	Listing >>
+	Toml >>
 		[[job]]
 		name = "database"
 
@@ -97,7 +97,7 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 	Content >>
 		Además, la misma estructura se puede escribir en TOML de tres maneras:
 
-	Listing >>
+	Toml >>
 		# 1. Con una cabecera
 		[storage]
 		kind = "s3"
@@ -118,7 +118,7 @@ Document (dev.stxt.website): STXT frente a TOML: configuración plana frente a d
 		Una cadena multilínea de TOML conserva la indentación de cada línea.
 		Para que el valor no la contenga, el texto no se puede sangrar con la tabla a la que pertenece:
 
-	Listing >>
+	Toml >>
 		[storage]
 		kind = "s3"
 		notes = """

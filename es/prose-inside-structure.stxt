@@ -96,7 +96,7 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 
 	Subheader: Frontmatter
 
-	Listing >>
+	Markdown >>
 		---
 		tipo: lección
 		título: ¿Qué es STXT?
@@ -159,7 +159,7 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 
 	Subheader: MDX
 
-	Listing >>
+	Markdown >>
 		---
 		tipo: lección
 		título: ¿Qué es STXT?
@@ -222,7 +222,7 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 
 	Subheader: Markdoc
 
-	Listing >>
+	Markdown >>
 		---
 		tipo: lección
 		título: ¿Qué es STXT?
@@ -302,7 +302,7 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 
 	Subheader: YAML con Markdown
 
-	Listing >>
+	Yaml >>
 		tipo: lección
 		título: ¿Qué es STXT?
 		autores:

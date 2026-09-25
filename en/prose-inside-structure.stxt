@@ -96,7 +96,7 @@ Document (dev.stxt.website): STXT, prose inside structure
 
 	Subheader: Frontmatter
 
-	Listing >>
+	Markdown >>
 		---
 		type: lesson
 		title: What is STXT?
@@ -159,7 +159,7 @@ Document (dev.stxt.website): STXT, prose inside structure
 
 	Subheader: MDX
 
-	Listing >>
+	Markdown >>
 		---
 		type: lesson
 		title: What is STXT?
@@ -222,7 +222,7 @@ Document (dev.stxt.website): STXT, prose inside structure
 
 	Subheader: Markdoc
 
-	Listing >>
+	Markdown >>
 		---
 		type: lesson
 		title: What is STXT?
@@ -302,7 +302,7 @@ Document (dev.stxt.website): STXT, prose inside structure
 
 	Subheader: YAML with Markdown
 
-	Listing >>
+	Yaml >>
 		type: lesson
 		title: What is STXT?
 		authors:
