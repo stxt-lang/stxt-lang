@@ -7,7 +7,7 @@ Document (dev.stxt.website): STXT vs YAML: values, free text and validation
 
 	Assert >>
 		YAML and @STXT@ use indentation to define the hierarchy.
-		YAML is designed for serializing data, and @STXT@ for documents written and read by people.
+		The mental model is different: YAML has **maps and lists**, like JSON, and @STXT@ has **trees of text nodes**, like XML.
 
 	Subheader: The same content, twice
 
