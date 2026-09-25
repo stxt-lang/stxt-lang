@@ -94,6 +94,23 @@ Document (dev.stxt.website): STXT, prose inside structure
 
 		In the prose, no escape characters are needed.
 
+		`MARKDOWN` is the only embedded format that @STXT@ schemas define
+		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)). It states that the node text is formatted prose,
+		to be interpreted as CommonMark. @STXT@ does not interpret it, it hands it over as is.
+
+		A document with errors does not validate:
+
+	Code >>
+		# ERROR: this document does not validate
+		Lesson (com.example.school): What is STXT?
+			Authors:
+				Author: Joan Costa
+			# `Teacher` is missing
+			# `trivial` is not a difficulty from the list
+			Difficulty: trivial
+			Introduction >>
+				STXT is a **hierarchical text format**.
+
 	Subheader: Frontmatter
 
 	Markdown >>
@@ -354,4 +371,12 @@ Document (dev.stxt.website): STXT, prose inside structure
 	Assert >>
 		The **mental model** of YAML and @STXT@ is very different when writing content in a CMS.
 		YAML is closer to JSON: there are maps and lists. @STXT@ is more like XML, with trees of text.
+
+	Subheader: This site
+
+	Content >>
+		Every page of `stxt.dev`, this one included, is an @STXT@ document with its prose in Markdown.
+		It is validated against the site template before being generated ([CMS and publishing](use-cases-cms)).
+		The source of any page can be seen by adding `.stxt` to its address,
+		for example [prose-inside-structure.stxt](prose-inside-structure.stxt).
 

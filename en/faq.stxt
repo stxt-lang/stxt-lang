@@ -116,6 +116,10 @@ Document (dev.stxt.website): Frequently asked questions | STXT
 					Introduction: (?) MARKDOWN
 					Summary: (?) MARKDOWN
 
+	Content >>
+		The same lesson in Markdown with Frontmatter, MDX and Markdoc, in YAML and in @STXT@,
+		and what each one validates: [STXT, prose inside structure](prose-inside-structure).
+
 	Subsubheader: Why not JSON?
 
 	Content >>

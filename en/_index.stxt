@@ -36,10 +36,7 @@ Document (dev.stxt.website): STXT: The Book
 	Link: @STXT@ vs TOML
 		Page: stxt-vs-toml
 
-	Link: @STXT@ vs Markdown
-		Page: stxt-vs-markdown
-
-	Link: @STXT@ vs MDX and Markdoc
+	Link: @STXT@, prose inside structure
 		Page: prose-inside-structure
 
 	Subheader: Language Reference

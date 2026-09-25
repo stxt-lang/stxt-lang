@@ -94,6 +94,23 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 
 		En la prosa no hace falta ningún carácter de escape.
 
+		`MARKDOWN` es el único formato embebido que definen los esquemas de @STXT@
+		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)). Indica que el texto del nodo es prosa con formato,
+		a interpretar como CommonMark. @STXT@ no lo interpreta, lo entrega tal cual.
+
+		Un documento con errores no valida:
+
+	Code >>
+		# ERROR: este documento no valida
+		Lección (com.example.school.es): ¿Qué es STXT?
+			Autores:
+				Autor: Joan Costa
+			# Falta `Docente`
+			# `trivial` no es una dificultad de la lista
+			Dificultad: trivial
+			Introducción >>
+				STXT es un **formato de texto jerárquico**.
+
 	Subheader: Frontmatter
 
 	Markdown >>
@@ -354,3 +371,11 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 	Assert >>
 		El **modelo mental** de YAML y @STXT@ es muy distinto al escribir contenido en un CMS.
 		YAML se parece más a JSON: hay mapas y listas. @STXT@ se parece más a XML, con árboles de texto.
+
+	Subheader: Este portal
+
+	Content >>
+		Cada página de `stxt.dev`, esta incluida, es un documento @STXT@ con la prosa en Markdown.
+		Se valida contra la plantilla del sitio antes de generarse ([CMS y publicaciones](use-cases-cms)).
+		Se puede añadir `.stxt` a la dirección de cualquier página para ver el código fuente,
+		por ejemplo [prose-inside-structure.stxt](prose-inside-structure.stxt).
