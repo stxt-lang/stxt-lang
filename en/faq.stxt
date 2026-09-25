@@ -76,47 +76,18 @@ Document (dev.stxt.website): Frequently asked questions | STXT
 	Subsubheader: Why not XML, YAML or TOML?
 
 	Content >>
-		| | @STXT@ | XML | YAML | TOML |
-		|---|---|---|---|---|
-		| **Hierarchy** | Indentation, one tab or four spaces per level; a single spelling | Opening and closing tags | Indentation of free width; block and flow syntax for the same structure | `[a.b]` headers with the full path; also dotted keys and inline tables |
-		| **Values** | Always text; the type is declared by the definition | Text; the type is declared by the schema | The spelling decides the type (`no`, `3.10`), with different rules in 1.1 and 1.2 | The spelling decides the type; strings always in quotes |
-		| **Free text** | Literal `>>` blocks: any character, no escapes | Escape `<` and `&`, or CDATA | Block scalars, literal or folded, with chomping indicators | Multi-line strings between triple quotes; the indentation goes into the value |
-		| **Namespaces** | In the language | In the language | No | No |
-		| **Schemas** | In the language, optional, closed content model | DTD, XSD, RELAX NG, Schematron | No; external tools | No; external tools |
-		| **Parsing** | Linear, line by line, in a single pass | Entities, internal DTD and namespaces the parser resolves | Extensive grammar; two versions with different type resolution | Small grammar; dates, times and inline tables as native types |
-		| **Attack surface** | No entities, references, anchors or code execution | External entities (XXE), entity expansion | Expandable anchors; tags that instantiate objects | No entities or references |
-
 		The full comparison with each format can be seen on the following pages:
 
 		* [STXT vs XML](stxt-vs-xml)
 		* [STXT vs YAML](stxt-vs-yaml), which includes TOML
 
-	Subsubheader: Why not Markdown?
+	Subsubheader: Why not Markdown or KDL?
 
 	Content >>
-		Markdown gives **format** to text (bold, links, lists),
-		while @STXT@ gives **structure** to the document: nodes, hierarchy and validation.
-		@STXT@ uses Markdown as one of the allowed text types, which yields
-		structured documents, with validation and with Markdown semantics for the text
-		blocks:
+		Markdown gives **format** to text, and @STXT@ gives **structure** to the document, with Markdown
+		as the text type of its nodes. KDL is a tree of nodes like @STXT@, with the prose between quotes.
 
-	Code >>
-		Article (example.article): Style guide
-			Introduction >>
-				An **STXT** document allows multiple ways of displaying the
-				content. Here we explain the recommended ones.
-			Summary >>
-				A MARKDOWN block admits **bold**, [links](https://stxt.dev)
-				or lists; the structure of the document comes from the nodes around it.
-
-		Template (@stxt.template): example.article
-			Structure >>
-				Article:
-					Introduction: (?) MARKDOWN
-					Summary: (?) MARKDOWN
-
-	Content >>
-		The same lesson in Markdown with Frontmatter, MDX and Markdoc, in YAML and in @STXT@,
+		The same lesson in Markdown with Frontmatter, MDX and Markdoc, in YAML, in KDL and in @STXT@,
 		and what each one validates: [STXT, prose inside structure](prose-inside-structure).
 
 	Subsubheader: Why not JSON?
