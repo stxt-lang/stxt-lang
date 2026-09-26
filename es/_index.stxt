@@ -33,7 +33,7 @@ Document (dev.stxt.website): STXT: El Libro
 	Link: @STXT@ frente a JSON
 		Page: stxt-vs-json
 
-	Link: @STXT@, prosa dentro de la estructura
+	Link: @STXT@ frente a Markdown
 		Page: prose-inside-structure
 
 	Subheader: Referencia del Lenguaje
