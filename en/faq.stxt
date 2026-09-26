@@ -15,7 +15,8 @@ Document (dev.stxt.website): Frequently asked questions | STXT
 		where the name and the "S-text" pronunciation come from. @STXT@ is its evolution: it
 		keeps the spirit, the motivation and the base syntax, but has changed significantly since then.
 		References to *STxT* that may still be found refer to the old language.
-		The term *Semantic Text* has also been retired. The current name is @STXT@.
+		The term *Semantic Text* can still be used without any problem, although officially
+		it has been retired. The current name is @STXT@.
 
 	Subsubheader: How is STXT pronounced?
 
