@@ -457,8 +457,6 @@ Document (dev.stxt.website): STXT frente a Markdown: prosa dentro de la estructu
 		visualmente los distintos componentes. Los valores van entre comillas, y en la prosa
 		`\` es un carácter de escape.
 
-		El esquema es declarativo, con la cardinalidad en `min` y `max`.
-
 	Subheader: Este portal
 
 	Content >>

@@ -457,8 +457,6 @@ Document (dev.stxt.website): STXT vs Markdown: prose inside structure
 		the different components apart visually. Values go between quotes, and in the prose
 		`\` is an escape character.
 
-		The schema is declarative, with cardinality in `min` and `max`.
-
 	Subheader: This site
 
 	Content >>
