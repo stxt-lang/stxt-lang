@@ -34,7 +34,7 @@ Document (dev.stxt.website): STXT: The Book
 		Page: stxt-vs-json
 
 	Link: @STXT@ vs Markdown
-		Page: prose-inside-structure
+		Page: stxt-vs-markdown
 
 	Subheader: Language Reference
 	

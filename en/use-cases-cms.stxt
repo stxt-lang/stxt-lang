@@ -77,7 +77,7 @@ Document (dev.stxt.website): CMS and publishing | STXT
 		@STXT@ does not interpret that Markdown: it hands it over as is, and the type tells whoever receives it
 		(the generator, the editor or the playground) how to treat it. `Footer` is `TEXT`, and it is shown literally.
 		One lesson written with Frontmatter, MDX, Markdoc, YAML and @STXT@, and what each one validates:
-		[STXT, prose inside structure](prose-inside-structure).
+		[STXT, prose inside structure](stxt-vs-markdown).
 
 	Subsubheader: A page that does not validate
 

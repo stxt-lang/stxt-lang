@@ -465,4 +465,4 @@ Document (dev.stxt.website): STXT, prosa dentro de la estructura
 		Cada página de `stxt.dev`, esta incluida, es un documento @STXT@ con la prosa en Markdown.
 		Se valida contra la plantilla del sitio antes de generarse ([CMS y publicaciones](use-cases-cms)).
 		Se puede añadir `.stxt` a la dirección de cualquier página para ver el código fuente,
-		por ejemplo [prose-inside-structure.stxt](prose-inside-structure.stxt).
+		por ejemplo [stxt-vs-markdown.stxt](stxt-vs-markdown.stxt).

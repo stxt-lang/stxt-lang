@@ -89,7 +89,7 @@ Document (dev.stxt.website): Frequently asked questions | STXT
 		as the text type of its nodes. KDL is a tree of nodes like @STXT@, with the prose between quotes.
 
 		The same lesson in Markdown with Frontmatter, MDX and Markdoc, in YAML, in KDL and in @STXT@,
-		and what each one validates: [STXT, prose inside structure](prose-inside-structure).
+		and what each one validates: [STXT, prose inside structure](stxt-vs-markdown).
 
 	Subsubheader: Why not JSON?
 

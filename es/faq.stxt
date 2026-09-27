@@ -90,7 +90,7 @@ Document (dev.stxt.website): Preguntas frecuentes | STXT
 		como tipo de texto de sus nodos. KDL es un árbol de nodos como @STXT@, con la prosa entre comillas.
 
 		La misma lección en Markdown con Frontmatter, MDX y Markdoc, en YAML, en KDL y en @STXT@,
-		y qué valida cada uno: [STXT, prosa dentro de la estructura](prose-inside-structure).
+		y qué valida cada uno: [STXT, prosa dentro de la estructura](stxt-vs-markdown).
 
 	Subsubheader: ¿Por qué no JSON?
 
