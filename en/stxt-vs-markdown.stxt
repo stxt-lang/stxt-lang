@@ -460,8 +460,7 @@ Document (dev.stxt.website): STXT vs Markdown: prose inside structure
 	Subheader: This site
 
 	Content >>
-		Every page of `stxt.dev`, this one included, is an @STXT@ document with its prose in Markdown.
-		It is validated against the site template before being generated ([CMS and publishing](use-cases-cms)).
+		Every page of `stxt.dev` is an @STXT@ document with its prose in Markdown.
 		The source of any page can be seen by adding `.stxt` to its address,
 		for example [stxt-vs-markdown.stxt](stxt-vs-markdown.stxt).
 
