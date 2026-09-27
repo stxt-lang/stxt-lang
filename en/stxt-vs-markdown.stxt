@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT vs Markdown: prose inside structure
+Document (dev.stxt.website): STXT: prose inside structure
 	Metadata:
 		Last modif: 2026-09-24
 		Description: STXT puts prose inside structure. The same lesson in Markdown with Frontmatter, MDX, Markdoc, YAML and STXT: where the structure goes and what each one validates.

@@ -1,4 +1,4 @@
-Document (dev.stxt.website): STXT frente a Markdown: prosa dentro de la estructura
+Document (dev.stxt.website): STXT: prosa dentro de la estructura
 	Metadata:
 		Last modif: 2026-09-24
 		Description: STXT inserta la prosa en la estructura. La misma lección en Markdown con Frontmatter, MDX, Markdoc, YAML y STXT: dónde va la estructura y qué valida cada uno.
