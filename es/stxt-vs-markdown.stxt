@@ -93,14 +93,7 @@ Document (dev.stxt.website): STXT: prosa dentro de la estructura
 
 	Content >>
 		Todo el documento se puede validar con la plantilla: estructura, cardinalidad y contenido.
-
-		En la prosa no hace falta ningún carácter de escape.
-
-		`MARKDOWN` es el único formato embebido que definen los esquemas de @STXT@
-		([STXT-SCHEMA-SPEC §9.7](stxt-schema-ref#s9-7)). Indica que el texto del nodo es prosa con formato,
-		a interpretar como CommonMark. @STXT@ no lo interpreta, lo entrega tal cual.
-
-		Un documento con errores no valida:
+		En la prosa no hace falta ningún carácter de escape. Un documento con errores no valida:
 
 	Code >>
 		# ERROR: este documento no valida
