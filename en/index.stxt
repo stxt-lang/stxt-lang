@@ -16,6 +16,7 @@ Document (dev.stxt.website): STXT: an indentation-based language for documents, 
 		* **Indentation is the structure**: no braces or closing tags
 		* **Free text is literal**: no escape characters
 		* **Schemas with @stxt.template or @stxt.schema**: validation and structure written in @STXT@
+		* **Built-in namespaces**: part of the core syntax, they give meaning to every node
 		* **Safety**: safety is not an add-on, it is part of the design of the language
 
 		An @STXT@ document combines readability and semantics,
