@@ -95,6 +95,7 @@ change here is exercised by every port. What they check:
 | [stxt-cli](https://github.com/stxt-lang/stxt-cli) | The `stxt` command, [`@stxt-lang/cli`](https://www.npmjs.com/package/@stxt-lang/cli) |
 | [stxt-vscode](https://github.com/stxt-lang/stxt-vscode) | VS Code extension, [`stxt-lang.stxt`](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt) |
 | [stxt-play](https://github.com/stxt-lang/stxt-play) | The playground, <https://play.stxt.dev> |
+| [stxt-editor](https://github.com/stxt-lang/stxt-editor) | The editor for any web page, [`@stxt-lang/editor`](https://www.npmjs.com/package/@stxt-lang/editor) |
 
 ## License
 
