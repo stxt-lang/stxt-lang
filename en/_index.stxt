@@ -67,6 +67,9 @@ Document (dev.stxt.website): STXT: The Book
 	Link: Python library
 		Page: tools-python
 
+	Link: Editor for web pages
+		Page: tools-editor
+
 	Subheader: Use cases
 	
 	Link: Corporate Documents

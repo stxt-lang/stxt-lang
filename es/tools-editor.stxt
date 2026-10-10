@@ -1,0 +1,233 @@
+Document (dev.stxt.website): El editor para páginas web | STXT
+
+	Metadata:
+		Last modif: 2026-10-10
+		Description: @stxt-lang/editor, el editor de STXT para cualquier página web: un textarea pasa a ser un editor con coloreado, errores al escribir y autocompletado guiado por la gramática.
+
+	Header: El editor para páginas web
+
+	Assert >>
+		[`@stxt-lang/editor`](https://www.npmjs.com/package/@stxt-lang/editor) convierte un
+		`<textarea>` en un editor de @STXT@, con coloreado, errores durante la edición, y
+		autocompletado y hover guiados por la gramática.
+
+	Xml >>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.js"></script>
+
+		<textarea id="doc" name="doc">
+		Receta (com.example.cocina): Tortitas
+			Raciones: cuatro
+			Dificultad: Fácil
+		</textarea>
+
+		<script>
+		    const plantilla = `
+		Template (@stxt.template): com.example.cocina
+			Structure >>
+				Receta (com.example.cocina):
+					Raciones: (1) NATURAL
+					Dificultad: (?) ENUM [Fácil, Media, Difícil]
+		`;
+
+		    const editor = StxtEditor.fromTextArea(document.getElementById('doc'), {
+		        grammars: [plantilla],
+		        onChange: (text, diagnostics) => console.log(diagnostics),
+		    });
+		</script>
+
+	Content >>
+		En este ejemplo tenemos:
+
+		* **El documento**: el texto del `<textarea>`.
+		* **La gramática**: una plantilla, pasada como texto en `grammars`.
+		* **Un error**: `Raciones: cuatro` queda subrayado, porque la plantilla pide un `NATURAL`.
+
+		Es el editor del [playground](https://play.stxt.dev), publicado como biblioteca. Usa
+		la biblioteca [TypeScript](tools-typescript) `@stxt-lang/core` y no lleva gramática
+		propia del lenguaje: los errores y sus códigos son los mismos que en la línea de
+		comandos, la extensión de VS Code y las bibliotecas.
+
+	Subheader: Qué hace
+
+	Content >>
+		* **Coloreado**: sale del parseo del documento. Los bloques que la gramática declara `MARKDOWN` se colorean como Markdown.
+		* **Errores durante la edición**: de sintaxis y de validación contra las gramáticas.
+		* **Autocompletado**: al escribir o con Ctrl+Espacio. Ofrece los nodos que la gramática permite en ese punto y los valores de un `ENUM`.
+		* **Hover**: sobre un nodo, lo que el parser y su gramática dicen de él.
+		* **Tabulador**: inserta un tabulador o cuatro espacios. Al cambiar de uno a otro se reindenta el documento.
+		* **Formularios**: el `<textarea>` queda oculto y sincronizado, y su formulario sigue enviando el texto.
+
+	Subheader: Instalación
+
+	Content >>
+		La versión actual es la 0.1.0. La API puede cambiar antes de la 1.0.
+
+		Con `<script>` no hay instalación. El paquete incluye los ficheros listos para una
+		página, minificados, y los sirve cualquier CDN de paquetes npm. Están en
+		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/`:
+
+		| Fichero                  | Global          | Tamaño (gzip)   | Contenido                                                                    |
+		|--------------------------|-----------------|-----------------|------------------------------------------------------------------------------|
+		| `dist/stxt-editor.js`    | `StxtEditor`    | 421 kB (133 kB) | El editor y el coloreado estático, con CodeMirror y `@stxt-lang/core` dentro |
+		| `dist/stxt-highlight.js` | `StxtHighlight` | 76 kB (21 kB)   | Solo el coloreado estático, sin CodeMirror                                   |
+		| `dist/stxt-editor.css`   |                 | 6 kB (2 kB)     | Los estilos de ambos                                                         |
+
+		Con un bundler:
+
+	Listing >>
+		npm install @stxt-lang/editor
+
+	TypeScript >>
+		import { fromTextArea } from '@stxt-lang/editor';
+		import '@stxt-lang/editor/stxt-editor.css';
+
+	Content >>
+		El paquete es un módulo ES con declaraciones de tipos. CodeMirror 6 y
+		`@stxt-lang/core` son dependencias y no van dentro: una página que ya usa CodeMirror
+		carga una sola copia.
+
+	Subheader: Crear un editor
+
+	Content >>
+		| Función                           | Qué hace                                                                                  |
+		|-----------------------------------|-------------------------------------------------------------------------------------------|
+		| `fromTextArea(textarea, options)` | Sustituye un `<textarea>` por un editor. El `<textarea>` queda oculto y conserva el texto |
+		| `mount(element, options)`         | Crea un editor dentro de un elemento                                                      |
+
+		Las dos devuelven un `Editor`. Ninguna opción es obligatoria:
+
+		| Opción       | Por defecto                       | Descripción                                                                   |
+		|--------------|-----------------------------------|-------------------------------------------------------------------------------|
+		| `value`      | El valor del `<textarea>`, o `""` | El texto inicial                                                              |
+		| `grammars`   | `[]`                              | Textos de documentos `@stxt.schema` o `@stxt.template`                        |
+		| `validation` | `true`                            | Valida contra las gramáticas. Los errores de sintaxis se muestran siempre     |
+		| `indent`     | `"tabs"`                          | Qué inserta el tabulador: `"tabs"` o `"spaces"`                               |
+		| `readOnly`   | `false`                           | El texto se puede leer y no editar                                            |
+		| `onChange`   |                                   | `(text, diagnostics) => void`. Se llama al crear el editor y tras cada cambio |
+
+		Una gramática escrita dentro del propio documento también vale.
+
+	Subheader: El editor
+
+	Content >>
+		Con el documento y la plantilla del principio:
+
+	TypeScript >>
+		import { mount } from '@stxt-lang/editor';
+
+		const editor = mount(document.getElementById('holder'), {
+		    value: text,
+		    grammars: [plantilla],
+		});
+
+		editor.getDiagnostics();
+		// [{ line: 1, code: "INVALID_VALUE", message: "Raciones: Invalid natural (cuatro)",
+		//    severity: "warning", source: "validation" }]
+
+		editor.setValidation(false);
+		editor.getDiagnostics();      // []
+
+		editor.setIndent('spaces');   // reindenta el documento con cuatro espacios
+		editor.getValue();            // "Receta (com.example.cocina): Tortitas\n    Raciones: cuatro\n..."
+
+	Content >>
+		| Método                          | Descripción                                                               |
+		|---------------------------------|---------------------------------------------------------------------------|
+		| `getValue()` / `setValue(text)` | El texto. `setValue` es una edición: se puede deshacer                    |
+		| `setGrammars(texts)`            | Sustituye las gramáticas y valida de nuevo                                |
+		| `setValidation(enabled)`        | Activa o desactiva la validación                                          |
+		| `setIndent(mode)`               | Cambia lo que inserta el tabulador y reindenta el documento               |
+		| `setReadOnly(readOnly)`         | Solo lectura o editable                                                   |
+		| `getDiagnostics()`              | Los problemas del documento                                               |
+		| `getGrammarDiagnostics()`       | Los problemas de cada gramática, en el orden de `grammars`                |
+		| `focus()`                       | Da el foco al editor                                                      |
+		| `destroy()`                     | Quita el editor y vuelve a mostrar el `<textarea>`                        |
+		| `view`                          | El `EditorView` de CodeMirror                                             |
+
+		Un diagnóstico tiene cinco campos:
+
+		| Campo      | Valor                                                                                         |
+		|------------|-----------------------------------------------------------------------------------------------|
+		| `line`     | La línea, desde 0. Las `ParseException` de la biblioteca cuentan desde 1                      |
+		| `code`     | El código de error: `INDENTATION_MIXED`, `INVALID_VALUE`, `SCHEMA_NOT_FOUND`...               |
+		| `message`  | El mensaje, en inglés                                                                         |
+		| `severity` | `"error"` en los errores de sintaxis y de gramática, `"warning"` en los de validación         |
+		| `source`   | `"syntax"` (el documento), `"grammar"` (una gramática que no carga) o `"validation"`          |
+
+		Para más de un documento por vista, o para otra disposición, el paquete exporta
+		también las piezas del editor:
+
+		* **`Analyzer`**: parsea y valida un conjunto de documentos. No usa el DOM ni CodeMirror.
+		* **`createStxtEditor`, `createStxtExtensions`**: las extensiones de CodeMirror.
+		* **`setTokensEffect`, `toCmDiagnostics`**: llevan un análisis a una vista.
+
+	Subheader: Coloreado estático
+
+	Content >>
+		Para las páginas que muestran @STXT@ y no lo editan hay un coloreado sin CodeMirror:
+
+	Xml >>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-highlight.js"></script>
+
+		<pre><code class="language-stxt">Receta (com.example.cocina): Tortitas
+			Raciones: 4</code></pre>
+
+		<script>
+		    StxtHighlight.highlightAll();
+		</script>
+
+	Content >>
+		| Función                           | Qué hace                                                                         |
+		|-----------------------------------|----------------------------------------------------------------------------------|
+		| `highlightAll(selector, options)` | Colorea los elementos del selector. Por defecto, `pre code.language-stxt`        |
+		| `highlight(element, options)`     | Colorea un elemento                                                              |
+		| `highlightText(text, options)`    | Devuelve el HTML sin tocar el DOM. Funciona también en Node                      |
+
+		La única opción es `grammars`: con ellas, los bloques `MARKDOWN` se colorean como
+		Markdown. Con un bundler se importa de `@stxt-lang/editor/highlight`:
+
+	TypeScript >>
+		import { highlightText } from '@stxt-lang/editor/highlight';
+
+		highlightText('Receta: Tortitas');
+		// <span class="stxt-tok-property">Receta</span><span class="stxt-tok-property">:</span><span class="stxt-tok-string"> Tortitas</span>
+
+	Subheader: Temas
+
+	Content >>
+		Los colores son propiedades CSS de `.stxt-editor` (el editor) y de `.stxt-highlight`
+		(el coloreado estático):
+
+	Listing >>
+		.stxt-editor,
+		.stxt-highlight {
+		    --stxt-node: #0d5cb6;
+		    --stxt-value: #d05a80;
+		    --stxt-comment: #008000;
+		    --stxt-background: #fff;
+		}
+
+		.stxt-editor {
+		    height: 22rem;
+		}
+
+	Content >>
+		Sin altura, el editor crece con el texto. Con altura, tiene scroll.
+
+		| Propiedad                                                                | Qué colorea                                                                   |
+		|--------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+		| `--stxt-node`                                                            | Los nombres de los nodos                                                      |
+		| `--stxt-block`                                                           | El `>>` de un bloque de texto                                                 |
+		| `--stxt-namespace`                                                       | Los namespaces                                                                |
+		| `--stxt-value`                                                           | Los valores                                                                   |
+		| `--stxt-comment`                                                         | Los comentarios                                                               |
+		| `--stxt-muted`                                                           | La puntuación, los números de línea y el texto secundario                     |
+		| `--stxt-background`, `--stxt-text`, `--stxt-border`                      | La caja del editor                                                            |
+		| `--stxt-gutter-background`, `--stxt-active-line`, `--stxt-active-gutter` | Los números de línea y la línea actual                                        |
+		| `--stxt-selected`, `--stxt-code-background`, `--stxt-separator`          | La opción elegida del autocompletado, el código de Markdown y la línea del hover |
+		| `--stxt-font-mono`, `--stxt-font-body`, `--stxt-font-size`               | Las fuentes                                                                   |
+
+		Los valores por defecto son la paleta de este sitio. El código y los cambios de cada
+		versión están en el [repositorio](https://github.com/stxt-lang/stxt-editor).

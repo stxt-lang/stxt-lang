@@ -1,7 +1,7 @@
 Document (dev.stxt.website): The TypeScript library | STXT
 
 	Metadata:
-		Last modif: 2026-09-17
+		Last modif: 2026-10-10
 		Description: @stxt-lang/core, the STXT parser for TypeScript and JavaScript on npm: the reference port of the ecosystem, implementing all five specifications.
 
 	Header: The TypeScript library
@@ -26,6 +26,38 @@ Document (dev.stxt.website): The TypeScript library | STXT
 		`require` and from ES modules. Everything is imported from the package root. It has
 		no runtime dependencies and accesses neither the file system nor the environment
 		(resolution receives them injected), so it runs the same in Node and in the browser.
+
+	Subheader: In the browser
+
+	Xml >>
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/core@1.0.4/dist/stxt-core.js"></script>
+		<script>
+		    const result = new StxtCore.Parser().parseResult('Article: Hello\n\tAuthor: Joan');
+		    console.log(StxtCore.toCanonicalJson(result.getNodes()));
+		</script>
+
+	Content >>
+		Since 1.0.4 the package carries the whole library in two files for the browser,
+		minified and with no dependencies (42 kB, 13 kB gzipped). Any CDN of npm packages
+		serves them:
+
+		| File                 | Format                                   | Use                                           |
+		|----------------------|------------------------------------------|-----------------------------------------------|
+		| `dist/stxt-core.js`  | Script that defines the global `StxtCore` | `<script src>`                               |
+		| `dist/stxt-core.mjs` | ES module                                | `<script type="module">`, `import` from a URL |
+
+		Both export the same as the package. As a module:
+
+	Xml >>
+		<script type="module">
+		    import { Parser } from 'https://cdn.jsdelivr.net/npm/@stxt-lang/core@1.0.4/dist/stxt-core.mjs';
+
+		    const result = new Parser().parseResult('Article: Hello\n\tAuthor: Joan');
+		</script>
+
+	Content >>
+		To edit or highlight @STXT@ in a page there is
+		[the editor for web pages](tools-editor).
 
 	Subheader: Parsing
 

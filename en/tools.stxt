@@ -1,7 +1,7 @@
 Document (dev.stxt.website): Tools | STXT
 
 	Metadata:
-		Last modif: 2026-09-17
+		Last modif: 2026-10-10
 		Description: STXT tools: browser playground, VS Code extension, command line and TypeScript, Java and Python libraries, all implementing the same five specifications.
 
 	Header: Tools
@@ -19,6 +19,7 @@ Document (dev.stxt.website): Tools | STXT
 		| Write documents regularly                      | The VS Code extension                                      |
 		| Validate from a script, a `Makefile` or CI     | The `stxt` command line                                    |
 		| Read or generate @STXT@ from a program         | A library: TypeScript, Java or Python                      |
+		| Edit or highlight @STXT@ in a web page         | The editor `@stxt-lang/editor`                             |
 
 	Subheader: Playground
 
@@ -99,7 +100,8 @@ Document (dev.stxt.website): Tools | STXT
 	Content >>
 		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) on npm. It is
 		the parser the extension, the command line and the playground use. The guide is in
-		[the TypeScript library](tools-typescript).
+		[the TypeScript library](tools-typescript). In the browser it also loads with a
+		`<script>` from a CDN.
 
 	Listing >>
 		npm install @stxt-lang/core
@@ -161,6 +163,25 @@ Document (dev.stxt.website): Tools | STXT
 		if isinstance(root, InlineNode):
 		    print(root.get_child("Title").get_text())
 
+	Subheader: Editor for web pages
+
+	Content >>
+		[`@stxt-lang/editor`](https://www.npmjs.com/package/@stxt-lang/editor) on npm. It is
+		the editor of the playground as a library: it turns a `<textarea>` into an editor
+		with highlighting, errors while editing and grammar-driven completion. It includes a
+		static highlighter for pages that only show @STXT@. The guide is in
+		[the editor for web pages](tools-editor).
+
+	Xml >>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.js"></script>
+
+		<textarea id="doc"></textarea>
+
+		<script>
+		    StxtEditor.fromTextArea(document.getElementById('doc'));
+		</script>
+
 	Subheader: Source code
 
 	Content >>
@@ -177,6 +198,7 @@ Document (dev.stxt.website): Tools | STXT
 		| [stxt-cli](https://github.com/stxt-lang/stxt-cli)               | `@stxt-lang/cli`, the command line                    |
 		| [stxt-vscode](https://github.com/stxt-lang/stxt-vscode)         | The VS Code extension                                 |
 		| [stxt-play](https://github.com/stxt-lang/stxt-play)             | The playground                                        |
+		| [stxt-editor](https://github.com/stxt-lang/stxt-editor)         | `@stxt-lang/editor`, the editor for web pages         |
 
 		Questions and ideas about the language go to the
 		[discussions](https://github.com/orgs/stxt-lang/discussions) of the organization; bugs,

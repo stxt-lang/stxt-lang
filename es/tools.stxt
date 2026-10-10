@@ -1,7 +1,7 @@
 Document (dev.stxt.website): Herramientas | STXT
 
 	Metadata:
-		Last modif: 2026-09-17
+		Last modif: 2026-10-10
 		Description: Herramientas de STXT: playground, extensión de VS Code, línea de comandos y bibliotecas TypeScript, Java y Python, todas con las mismas cinco especificaciones.
 
 	Header: Herramientas
@@ -19,6 +19,7 @@ Document (dev.stxt.website): Herramientas | STXT
 		| Escribir documentos habitualmente             | La extensión de VS Code                                    |
 		| Validar en un script, un `Makefile` o en CI   | La línea de comandos `stxt`                                |
 		| Leer o generar @STXT@ desde un programa       | Una biblioteca: TypeScript, Java o Python                  |
+		| Editar o colorear @STXT@ en una página web    | El editor `@stxt-lang/editor`                              |
 
 	Subheader: Playground
 
@@ -101,7 +102,8 @@ Document (dev.stxt.website): Herramientas | STXT
 	Content >>
 		[`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) en npm. Es el
 		parser que usan la extensión, la línea de comandos y el playground. La guía está en
-		[la biblioteca TypeScript](tools-typescript).
+		[la biblioteca TypeScript](tools-typescript). En el navegador se carga también con
+		un `<script>` desde un CDN.
 
 	Listing >>
 		npm install @stxt-lang/core
@@ -163,6 +165,25 @@ Document (dev.stxt.website): Herramientas | STXT
 		if isinstance(root, InlineNode):
 		    print(root.get_child("Title").get_text())
 
+	Subheader: Editor para páginas web
+
+	Content >>
+		[`@stxt-lang/editor`](https://www.npmjs.com/package/@stxt-lang/editor) en npm. Es el
+		editor del playground como biblioteca: convierte un `<textarea>` en un editor con
+		coloreado, errores durante la edición y autocompletado guiado por la gramática.
+		Incluye un coloreado estático para las páginas que solo muestran @STXT@. La guía
+		está en [el editor para páginas web](tools-editor).
+
+	Xml >>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.js"></script>
+
+		<textarea id="doc"></textarea>
+
+		<script>
+		    StxtEditor.fromTextArea(document.getElementById('doc'));
+		</script>
+
 	Subheader: Código fuente
 
 	Content >>
@@ -178,6 +199,7 @@ Document (dev.stxt.website): Herramientas | STXT
 		| [stxt-cli](https://github.com/stxt-lang/stxt-cli)               | `@stxt-lang/cli`, la línea de comandos               |
 		| [stxt-vscode](https://github.com/stxt-lang/stxt-vscode)         | La extensión de VS Code                              |
 		| [stxt-play](https://github.com/stxt-lang/stxt-play)             | El playground                                        |
+		| [stxt-editor](https://github.com/stxt-lang/stxt-editor)         | `@stxt-lang/editor`, el editor para páginas web      |
 
 		Las preguntas y las ideas sobre el lenguaje van a las
 		[discusiones](https://github.com/orgs/stxt-lang/discussions) de la organización; los

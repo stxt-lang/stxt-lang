@@ -1,7 +1,7 @@
 Document (dev.stxt.website): La biblioteca TypeScript | STXT
 
 	Metadata:
-		Last modif: 2026-09-17
+		Last modif: 2026-10-10
 		Description: @stxt-lang/core, el parser de STXT para TypeScript y JavaScript en npm: el puerto de referencia del ecosistema, con las cinco especificaciones.
 
 	Header: La biblioteca TypeScript
@@ -27,6 +27,38 @@ Document (dev.stxt.website): La biblioteca TypeScript | STXT
 		dependencias en tiempo de ejecución ni accede al sistema de ficheros o al entorno (la
 		resolución los recibe inyectados), por lo que funciona igual en Node y en el
 		navegador.
+
+	Subheader: En el navegador
+
+	Xml >>
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/core@1.0.4/dist/stxt-core.js"></script>
+		<script>
+		    const result = new StxtCore.Parser().parseResult('Article: Hello\n\tAuthor: Joan');
+		    console.log(StxtCore.toCanonicalJson(result.getNodes()));
+		</script>
+
+	Content >>
+		Desde la 1.0.4 el paquete incluye la biblioteca entera en dos ficheros para el
+		navegador, minificados y sin dependencias (42 kB, 13 kB con gzip). Los sirve
+		cualquier CDN de paquetes npm:
+
+		| Fichero              | Formato                                | Uso                                         |
+		|----------------------|----------------------------------------|---------------------------------------------|
+		| `dist/stxt-core.js`  | Script que define el global `StxtCore` | `<script src>`                              |
+		| `dist/stxt-core.mjs` | Módulo ES                              | `<script type="module">`, `import` de una URL |
+
+		Los dos exportan lo mismo que el paquete. Como módulo:
+
+	Xml >>
+		<script type="module">
+		    import { Parser } from 'https://cdn.jsdelivr.net/npm/@stxt-lang/core@1.0.4/dist/stxt-core.mjs';
+
+		    const result = new Parser().parseResult('Article: Hello\n\tAuthor: Joan');
+		</script>
+
+	Content >>
+		Para editar o colorear @STXT@ en una página está
+		[el editor para páginas web](tools-editor).
 
 	Subheader: Parsear
 

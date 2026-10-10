@@ -1,0 +1,233 @@
+Document (dev.stxt.website): The editor for web pages | STXT
+
+	Metadata:
+		Last modif: 2026-10-10
+		Description: @stxt-lang/editor, the STXT editor for any web page: a textarea becomes an editor with highlighting, errors while typing and grammar-driven completion.
+
+	Header: The editor for web pages
+
+	Assert >>
+		[`@stxt-lang/editor`](https://www.npmjs.com/package/@stxt-lang/editor) turns a
+		`<textarea>` into an @STXT@ editor, with highlighting, errors while editing, and
+		grammar-driven completion and hover.
+
+	Xml >>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.js"></script>
+
+		<textarea id="doc" name="doc">
+		Recipe (com.example.cooking): Pancakes
+			Serves: four
+			Difficulty: Easy
+		</textarea>
+
+		<script>
+		    const template = `
+		Template (@stxt.template): com.example.cooking
+			Structure >>
+				Recipe (com.example.cooking):
+					Serves: (1) NATURAL
+					Difficulty: (?) ENUM [Easy, Medium, Hard]
+		`;
+
+		    const editor = StxtEditor.fromTextArea(document.getElementById('doc'), {
+		        grammars: [template],
+		        onChange: (text, diagnostics) => console.log(diagnostics),
+		    });
+		</script>
+
+	Content >>
+		In this example we have:
+
+		* **The document**: the text of the `<textarea>`.
+		* **The grammar**: a template, passed as text in `grammars`.
+		* **An error**: `Serves: four` is underlined, because the template asks for a `NATURAL`.
+
+		It is the editor of the [playground](https://play.stxt.dev), published as a library.
+		It uses the [TypeScript](tools-typescript) library `@stxt-lang/core` and carries no
+		grammar of the language of its own: the errors and their codes are the same as in the
+		command line, the VS Code extension and the libraries.
+
+	Subheader: What it does
+
+	Content >>
+		* **Highlighting**: it comes from parsing the document. Blocks the grammar declares as `MARKDOWN` are highlighted as Markdown.
+		* **Errors while editing**: syntax errors, and validation errors against the grammars.
+		* **Completion**: while typing or with Ctrl+Space. It offers the nodes the grammar allows at that point and the values of an `ENUM`.
+		* **Hover**: over a node, what the parser and its grammar say about it.
+		* **Tab key**: it inserts a tab or four spaces. Switching from one to the other re-indents the document.
+		* **Forms**: the `<textarea>` stays hidden and in sync, and its form still submits the text.
+
+	Subheader: Installation
+
+	Content >>
+		The current version is 0.1.0. The API may change before 1.0.
+
+		With a `<script>` there is nothing to install. The package carries its files ready
+		for a page, minified, and any CDN of npm packages serves them. They are under
+		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/`:
+
+		| File                     | Global          | Size (gzip)     | Contents                                                                             |
+		|--------------------------|-----------------|-----------------|--------------------------------------------------------------------------------------|
+		| `dist/stxt-editor.js`    | `StxtEditor`    | 421 kB (133 kB) | The editor and the static highlighting, with CodeMirror and `@stxt-lang/core` inside |
+		| `dist/stxt-highlight.js` | `StxtHighlight` | 76 kB (21 kB)   | Only the static highlighting, without CodeMirror                                     |
+		| `dist/stxt-editor.css`   |                 | 6 kB (2 kB)     | The styles of both                                                                   |
+
+		With a bundler:
+
+	Listing >>
+		npm install @stxt-lang/editor
+
+	TypeScript >>
+		import { fromTextArea } from '@stxt-lang/editor';
+		import '@stxt-lang/editor/stxt-editor.css';
+
+	Content >>
+		The package is an ES module with type declarations. CodeMirror 6 and
+		`@stxt-lang/core` are dependencies and are not bundled: a page that already uses
+		CodeMirror loads a single copy.
+
+	Subheader: Creating an editor
+
+	Content >>
+		| Function                          | What it does                                                                         |
+		|-----------------------------------|--------------------------------------------------------------------------------------|
+		| `fromTextArea(textarea, options)` | Replaces a `<textarea>` with an editor. The `<textarea>` is hidden and keeps the text |
+		| `mount(element, options)`         | Creates an editor inside an element                                                  |
+
+		Both return an `Editor`. No option is required:
+
+		| Option       | Default                             | Description                                                                |
+		|--------------|-------------------------------------|----------------------------------------------------------------------------|
+		| `value`      | The value of the `<textarea>`, or `""` | The initial text                                                        |
+		| `grammars`   | `[]`                                | Texts of `@stxt.schema` or `@stxt.template` documents                      |
+		| `validation` | `true`                              | Validates against the grammars. Syntax errors are always shown             |
+		| `indent`     | `"tabs"`                            | What the Tab key inserts: `"tabs"` or `"spaces"`                           |
+		| `readOnly`   | `false`                             | The text can be read and not edited                                        |
+		| `onChange`   |                                     | `(text, diagnostics) => void`. Called on creation and after every change   |
+
+		A grammar written inside the document itself works too.
+
+	Subheader: The editor
+
+	Content >>
+		With the document and the template of the beginning:
+
+	TypeScript >>
+		import { mount } from '@stxt-lang/editor';
+
+		const editor = mount(document.getElementById('holder'), {
+		    value: text,
+		    grammars: [template],
+		});
+
+		editor.getDiagnostics();
+		// [{ line: 1, code: "INVALID_VALUE", message: "Serves: Invalid natural (four)",
+		//    severity: "warning", source: "validation" }]
+
+		editor.setValidation(false);
+		editor.getDiagnostics();      // []
+
+		editor.setIndent('spaces');   // re-indents the document with four spaces
+		editor.getValue();            // "Recipe (com.example.cooking): Pancakes\n    Serves: four\n..."
+
+	Content >>
+		| Method                          | Description                                                               |
+		|---------------------------------|---------------------------------------------------------------------------|
+		| `getValue()` / `setValue(text)` | The text. `setValue` is an edit: it can be undone                         |
+		| `setGrammars(texts)`            | Replaces the grammars and validates again                                 |
+		| `setValidation(enabled)`        | Turns validation on or off                                                |
+		| `setIndent(mode)`               | Changes what the Tab key inserts and re-indents the document              |
+		| `setReadOnly(readOnly)`         | Read-only or editable                                                     |
+		| `getDiagnostics()`              | The problems of the document                                              |
+		| `getGrammarDiagnostics()`       | The problems of each grammar, in the order of `grammars`                  |
+		| `focus()`                       | Gives the focus to the editor                                             |
+		| `destroy()`                     | Removes the editor and shows the `<textarea>` again                       |
+		| `view`                          | The CodeMirror `EditorView`                                               |
+
+		A diagnostic has five fields:
+
+		| Field      | Value                                                                                         |
+		|------------|-----------------------------------------------------------------------------------------------|
+		| `line`     | The line, from 0. The `ParseException`s of the library count from 1                           |
+		| `code`     | The error code: `INDENTATION_MIXED`, `INVALID_VALUE`, `SCHEMA_NOT_FOUND`...                   |
+		| `message`  | The message, in English                                                                       |
+		| `severity` | `"error"` for syntax and grammar errors, `"warning"` for validation errors                    |
+		| `source`   | `"syntax"` (the document), `"grammar"` (a grammar that does not load) or `"validation"`       |
+
+		For more than one document per view, or for another layout, the package also
+		exports the pieces of the editor:
+
+		* **`Analyzer`**: parses and validates a set of documents. It uses neither the DOM nor CodeMirror.
+		* **`createStxtEditor`, `createStxtExtensions`**: the CodeMirror extensions.
+		* **`setTokensEffect`, `toCmDiagnostics`**: they take an analysis to a view.
+
+	Subheader: Static highlighting
+
+	Content >>
+		For pages that show @STXT@ and do not edit it there is a highlighter without CodeMirror:
+
+	Xml >>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-highlight.js"></script>
+
+		<pre><code class="language-stxt">Recipe (com.example.cooking): Pancakes
+			Serves: 4</code></pre>
+
+		<script>
+		    StxtHighlight.highlightAll();
+		</script>
+
+	Content >>
+		| Function                          | What it does                                                                     |
+		|-----------------------------------|----------------------------------------------------------------------------------|
+		| `highlightAll(selector, options)` | Highlights the elements of the selector. By default, `pre code.language-stxt`    |
+		| `highlight(element, options)`     | Highlights one element                                                           |
+		| `highlightText(text, options)`    | Returns the HTML without touching the DOM. It also works in Node                 |
+
+		The only option is `grammars`: with them, `MARKDOWN` blocks are highlighted as
+		Markdown. With a bundler it is imported from `@stxt-lang/editor/highlight`:
+
+	TypeScript >>
+		import { highlightText } from '@stxt-lang/editor/highlight';
+
+		highlightText('Recipe: Pancakes');
+		// <span class="stxt-tok-property">Recipe</span><span class="stxt-tok-property">:</span><span class="stxt-tok-string"> Pancakes</span>
+
+	Subheader: Themes
+
+	Content >>
+		The colours are CSS properties of `.stxt-editor` (the editor) and of `.stxt-highlight`
+		(the static highlighting):
+
+	Listing >>
+		.stxt-editor,
+		.stxt-highlight {
+		    --stxt-node: #0d5cb6;
+		    --stxt-value: #d05a80;
+		    --stxt-comment: #008000;
+		    --stxt-background: #fff;
+		}
+
+		.stxt-editor {
+		    height: 22rem;
+		}
+
+	Content >>
+		Without a height, the editor grows with the text. With one, it scrolls.
+
+		| Property                                                                 | What it colours                                                               |
+		|--------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+		| `--stxt-node`                                                            | The names of the nodes                                                        |
+		| `--stxt-block`                                                           | The `>>` of a text block                                                      |
+		| `--stxt-namespace`                                                       | The namespaces                                                                |
+		| `--stxt-value`                                                           | The values                                                                    |
+		| `--stxt-comment`                                                         | The comments                                                                  |
+		| `--stxt-muted`                                                           | Punctuation, line numbers and secondary text                                  |
+		| `--stxt-background`, `--stxt-text`, `--stxt-border`                      | The box of the editor                                                         |
+		| `--stxt-gutter-background`, `--stxt-active-line`, `--stxt-active-gutter` | The line numbers and the current line                                         |
+		| `--stxt-selected`, `--stxt-code-background`, `--stxt-separator`          | The selected completion, Markdown code and the rule of the hover              |
+		| `--stxt-font-mono`, `--stxt-font-body`, `--stxt-font-size`               | The fonts                                                                     |
+
+		The defaults are the palette of this site. The code and the changes of each version
+		are in the [repository](https://github.com/stxt-lang/stxt-editor).
