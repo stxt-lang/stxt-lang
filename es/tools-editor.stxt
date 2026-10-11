@@ -1,7 +1,7 @@
 Document (dev.stxt.website): El editor para páginas web | STXT
 
 	Metadata:
-		Last modif: 2026-10-10
+		Last modif: 2026-10-11
 		Description: @stxt-lang/editor, el editor de STXT para cualquier página web: un textarea pasa a ser un editor con coloreado, errores al escribir y autocompletado guiado por la gramática.
 
 	Header: El editor para páginas web
@@ -12,8 +12,8 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		autocompletado y hover guiados por la gramática.
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.css">
-		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.js"></script>
 
 		<textarea id="doc" name="doc">
 		Receta (com.example.cocina): Tortitas
@@ -61,17 +61,18 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 	Subheader: Instalación
 
 	Content >>
-		La versión actual es la 0.1.0. La API puede cambiar antes de la 1.0.
+		La versión actual es la 0.2.0. La API puede cambiar antes de la 1.0.
 
 		Con `<script>` no hay instalación. El paquete incluye los ficheros listos para una
 		página, minificados, y los sirve cualquier CDN de paquetes npm. Están en
-		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/`:
+		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/`:
 
-		| Fichero                  | Global          | Tamaño (gzip)   | Contenido                                                                    |
-		|--------------------------|-----------------|-----------------|------------------------------------------------------------------------------|
-		| `dist/stxt-editor.js`    | `StxtEditor`    | 421 kB (133 kB) | El editor y el coloreado estático, con CodeMirror y `@stxt-lang/core` dentro |
-		| `dist/stxt-highlight.js` | `StxtHighlight` | 76 kB (21 kB)   | Solo el coloreado estático, sin CodeMirror                                   |
-		| `dist/stxt-editor.css`   |                 | 6 kB (2 kB)     | Los estilos de ambos                                                         |
+		| Fichero                     | Global          | Tamaño (gzip)   | Contenido                                                                    |
+		|-----------------------------|-----------------|-----------------|------------------------------------------------------------------------------|
+		| `dist/stxt-editor.js`       | `StxtEditor`    | 421 kB (133 kB) | El editor y el coloreado estático, con CodeMirror y `@stxt-lang/core` dentro |
+		| `dist/stxt-highlight.js`    | `StxtHighlight` | 76 kB (21 kB)   | Solo el coloreado estático, sin CodeMirror                                   |
+		| `dist/stxt-editor.css`      |                 | 6 kB (2 kB)     | Los estilos de ambos                                                         |
+		| `dist/stxt-editor-dark.css` |                 | 7 kB (2 kB)     | Los mismos estilos con el tema oscuro                                        |
 
 		Con un bundler:
 
@@ -168,8 +169,8 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		Para las páginas que muestran @STXT@ y no lo editan hay un coloreado sin CodeMirror:
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-editor.css">
-		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.1.0/dist/stxt-highlight.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-highlight.js"></script>
 
 		<pre><code class="language-stxt">Receta (com.example.cocina): Tortitas
 			Raciones: 4</code></pre>
@@ -229,5 +230,30 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		| `--stxt-selected`, `--stxt-code-background`, `--stxt-separator`          | La opción elegida del autocompletado, el código de Markdown y la línea del hover |
 		| `--stxt-font-mono`, `--stxt-font-body`, `--stxt-font-size`               | Las fuentes                                                                   |
 
-		Los valores por defecto son la paleta de este sitio. El código y los cambios de cada
-		versión están en el [repositorio](https://github.com/stxt-lang/stxt-editor).
+		Los valores por defecto son la paleta de este sitio.
+
+	Subheader: Tema oscuro
+
+	Content >>
+		`stxt-editor-dark.css` es la misma hoja de estilos con una paleta oscura. Se carga en
+		lugar de `stxt-editor.css`:
+
+	Xml >>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor-dark.css">
+
+	Content >>
+		Con un bundler se importa `@stxt-lang/editor/stxt-editor-dark.css`.
+
+		Para seguir el esquema de color del sistema se cargan las dos, cada una con su `media`:
+
+	Xml >>
+		<link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.css">
+		<link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor-dark.css">
+
+	Content >>
+		La paleta oscura son las mismas propiedades con otros valores, y se cambian igual. El
+		coloreado estático solo pone el color del texto: el fondo oscuro de un `<pre>` es de la
+		página.
+
+		El código y los cambios de cada versión están en el
+		[repositorio](https://github.com/stxt-lang/stxt-editor).
