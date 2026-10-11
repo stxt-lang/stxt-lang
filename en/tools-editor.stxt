@@ -12,8 +12,8 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		grammar-driven completion and hover.
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
-		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor.js"></script>
 
 		<textarea id="doc" name="doc">
 		Recipe (com.example.cooking): Pancakes
@@ -54,7 +54,7 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		* **Highlighting**: it comes from parsing the document. Blocks the grammar declares as `MARKDOWN` are highlighted as Markdown.
 		* **Errors while editing**: syntax errors, and validation errors against the grammars.
 		* **Completion**: while typing or with Ctrl+Space. It offers the nodes the grammar allows at that point and the values of an `ENUM`.
-		* **Hover**: over a node, what the parser and its grammar say about it.
+		* **Hover**: over a node, what the parser and its grammar say about it, or only what the grammar says.
 		* **Go to definition**: with Ctrl+Click or Ctrl+B on the name of a node, to the line of the grammar that declares it.
 		* **Tab key**: it inserts a tab or four spaces. Switching from one to the other re-indents the document.
 		* **Forms**: the `<textarea>` stays hidden and in sync, and its form still submits the text.
@@ -62,15 +62,15 @@ Document (dev.stxt.website): The editor for web pages | STXT
 	Subheader: Installation
 
 	Content >>
-		The current version is 0.3.0. The API may change before 1.0.
+		The current version is 0.4.0. The API may change before 1.0.
 
 		With a `<script>` there is nothing to install. The package carries its files ready
 		for a page, minified, and any CDN of npm packages serves them. They are under
-		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/`:
+		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/`:
 
 		| File                        | Global          | Size (gzip)     | Contents                                                                             |
 		|-----------------------------|-----------------|-----------------|--------------------------------------------------------------------------------------|
-		| `dist/stxt-editor.js`       | `StxtEditor`    | 421 kB (133 kB) | The editor and the static highlighting, with CodeMirror and `@stxt-lang/core` inside |
+		| `dist/stxt-editor.js`       | `StxtEditor`    | 422 kB (134 kB) | The editor and the static highlighting, with CodeMirror and `@stxt-lang/core` inside |
 		| `dist/stxt-highlight.js`    | `StxtHighlight` | 76 kB (21 kB)   | Only the static highlighting, without CodeMirror                                     |
 		| `dist/stxt-editor.css`      |                 | 6 kB (2 kB)     | The styles of both                                                                   |
 		| `dist/stxt-editor-dark.css` |                 | 7 kB (2 kB)     | The same styles with the dark theme                                                  |
@@ -106,6 +106,8 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		| `validation`       | `true`                                 | Validates against the grammars. Syntax errors are always shown                  |
 		| `indent`           | `"tabs"`                               | What the Tab key inserts: `"tabs"` or `"spaces"`                                |
 		| `readOnly`         | `false`                                | The text can be read and not edited                                             |
+		| `lineNumbers`      | `true`                                 | Shows the line numbers                                                          |
+		| `developerInfo`    | `true`                                 | The hover shows the technical card. With `false`, only what the grammar says    |
 		| `onChange`         |                                        | `(text, diagnostics) => void`. Called on creation and after every change        |
 		| `onGoToDefinition` |                                        | `(location) => void`. Called on going to the definition of a node of `grammars` |
 
@@ -142,6 +144,8 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		| `setValidation(enabled)`        | Turns validation on or off                                                |
 		| `setIndent(mode)`               | Changes what the Tab key inserts and re-indents the document              |
 		| `setReadOnly(readOnly)`         | Read-only or editable                                                     |
+		| `setLineNumbers(show)`          | Shows or hides the line numbers                                           |
+		| `setDeveloperInfo(show)`        | Changes what the hover shows                                              |
 		| `getDiagnostics()`              | The problems of the document                                              |
 		| `getGrammarDiagnostics()`       | The problems of each grammar, in the order of `grammars`                  |
 		| `focus()`                       | Gives the focus to the editor                                             |
@@ -164,6 +168,31 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		* **`Analyzer`**: parses and validates a set of documents. It uses neither the DOM nor CodeMirror.
 		* **`createStxtEditor`, `createStxtExtensions`**: the CodeMirror extensions.
 		* **`setTokensEffect`, `toCmDiagnostics`**: they take an analysis to a view.
+
+	Subheader: Hover
+
+	Content >>
+		With the pointer over a node, the editor shows a card. The `developerInfo` option
+		decides which one:
+
+		| `developerInfo` | What it shows                                                                                            | A node no grammar declares    |
+		|-----------------|----------------------------------------------------------------------------------------------------------|-------------------------------|
+		| `true`          | The technical card: from the parser, form, level, value and canonical name; from the grammar, everything | The card, without the grammar |
+		| `false`         | What the grammar says about the node: the description, the type and, in an `ENUM`, the values            | No hover                      |
+
+	TypeScript >>
+		const editor = mount(document.getElementById('holder'), {
+		    value: text,
+		    grammars: [template],
+		    developerInfo: false,
+		});
+
+	Content >>
+		The description is the `Description` of the node in a schema, or its entry in the
+		`Description` of a template.
+
+		Without line numbers (`lineNumbers: false`), the marks of the lines with problems
+		are still shown.
 
 	Subheader: Go to definition
 
@@ -201,8 +230,8 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		For pages that show @STXT@ and do not edit it there is a highlighter without CodeMirror:
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
-		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-highlight.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-highlight.js"></script>
 
 		<pre><code class="language-stxt">Recipe (com.example.cooking): Pancakes
 			Serves: 4</code></pre>
@@ -271,7 +300,7 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		of `stxt-editor.css`:
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor-dark.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor-dark.css">
 
 	Content >>
 		With a bundler, the import is `@stxt-lang/editor/stxt-editor-dark.css`.
@@ -279,8 +308,8 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		To follow the colour scheme of the system, both are loaded, each with its `media`:
 
 	Xml >>
-		<link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
-		<link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor-dark.css">
+		<link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor.css">
+		<link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor-dark.css">
 
 	Content >>
 		The dark palette is the same properties with other values, and they are changed the

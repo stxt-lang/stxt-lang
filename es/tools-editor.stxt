@@ -12,8 +12,8 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		autocompletado y hover guiados por la gramática.
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
-		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor.js"></script>
 
 		<textarea id="doc" name="doc">
 		Receta (com.example.cocina): Tortitas
@@ -54,7 +54,7 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		* **Coloreado**: sale del parseo del documento. Los bloques que la gramática declara `MARKDOWN` se colorean como Markdown.
 		* **Errores durante la edición**: de sintaxis y de validación contra las gramáticas.
 		* **Autocompletado**: al escribir o con Ctrl+Espacio. Ofrece los nodos que la gramática permite en ese punto y los valores de un `ENUM`.
-		* **Hover**: sobre un nodo, lo que el parser y su gramática dicen de él.
+		* **Hover**: sobre un nodo, lo que el parser y su gramática dicen de él, o solo lo que dice la gramática.
 		* **Ir a la definición**: con Ctrl+Clic o Ctrl+B sobre el nombre de un nodo, a la línea de la gramática que lo declara.
 		* **Tabulador**: inserta un tabulador o cuatro espacios. Al cambiar de uno a otro se reindenta el documento.
 		* **Formularios**: el `<textarea>` queda oculto y sincronizado, y su formulario sigue enviando el texto.
@@ -62,15 +62,15 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 	Subheader: Instalación
 
 	Content >>
-		La versión actual es la 0.3.0. La API puede cambiar antes de la 1.0.
+		La versión actual es la 0.4.0. La API puede cambiar antes de la 1.0.
 
 		Con `<script>` no hay instalación. El paquete incluye los ficheros listos para una
 		página, minificados, y los sirve cualquier CDN de paquetes npm. Están en
-		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/`:
+		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/`:
 
 		| Fichero                     | Global          | Tamaño (gzip)   | Contenido                                                                    |
 		|-----------------------------|-----------------|-----------------|------------------------------------------------------------------------------|
-		| `dist/stxt-editor.js`       | `StxtEditor`    | 421 kB (133 kB) | El editor y el coloreado estático, con CodeMirror y `@stxt-lang/core` dentro |
+		| `dist/stxt-editor.js`       | `StxtEditor`    | 422 kB (134 kB) | El editor y el coloreado estático, con CodeMirror y `@stxt-lang/core` dentro |
 		| `dist/stxt-highlight.js`    | `StxtHighlight` | 76 kB (21 kB)   | Solo el coloreado estático, sin CodeMirror                                   |
 		| `dist/stxt-editor.css`      |                 | 6 kB (2 kB)     | Los estilos de ambos                                                         |
 		| `dist/stxt-editor-dark.css` |                 | 7 kB (2 kB)     | Los mismos estilos con el tema oscuro                                        |
@@ -106,6 +106,8 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		| `validation`       | `true`                            | Valida contra las gramáticas. Los errores de sintaxis se muestran siempre     |
 		| `indent`           | `"tabs"`                          | Qué inserta el tabulador: `"tabs"` o `"spaces"`                               |
 		| `readOnly`         | `false`                           | El texto se puede leer y no editar                                            |
+		| `lineNumbers`      | `true`                            | Muestra los números de línea                                                  |
+		| `developerInfo`    | `true`                            | El hover muestra la ficha técnica. Con `false`, solo lo que dice la gramática |
 		| `onChange`         |                                   | `(text, diagnostics) => void`. Se llama al crear el editor y tras cada cambio |
 		| `onGoToDefinition` |                                   | `(location) => void`. Se llama al ir a la definición de un nodo de `grammars` |
 
@@ -142,6 +144,8 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		| `setValidation(enabled)`        | Activa o desactiva la validación                                          |
 		| `setIndent(mode)`               | Cambia lo que inserta el tabulador y reindenta el documento               |
 		| `setReadOnly(readOnly)`         | Solo lectura o editable                                                   |
+		| `setLineNumbers(show)`          | Muestra u oculta los números de línea                                     |
+		| `setDeveloperInfo(show)`        | Cambia lo que muestra el hover                                            |
 		| `getDiagnostics()`              | Los problemas del documento                                               |
 		| `getGrammarDiagnostics()`       | Los problemas de cada gramática, en el orden de `grammars`                |
 		| `focus()`                       | Da el foco al editor                                                      |
@@ -164,6 +168,31 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		* **`Analyzer`**: parsea y valida un conjunto de documentos. No usa el DOM ni CodeMirror.
 		* **`createStxtEditor`, `createStxtExtensions`**: las extensiones de CodeMirror.
 		* **`setTokensEffect`, `toCmDiagnostics`**: llevan un análisis a una vista.
+
+	Subheader: Hover
+
+	Content >>
+		Con el puntero sobre un nodo, el editor muestra una ficha. La opción `developerInfo`
+		decide cuál:
+
+		| `developerInfo` | Qué muestra                                                                                        | Nodo que ninguna gramática declara |
+		|-----------------|----------------------------------------------------------------------------------------------------|------------------------------------|
+		| `true`          | La ficha técnica: del parser, forma, nivel, valor y nombre canónico; de la gramática, todo         | La ficha, sin la gramática         |
+		| `false`         | Lo que la gramática dice del nodo: la descripción, el tipo y, en un `ENUM`, los valores            | No hay hover                       |
+
+	TypeScript >>
+		const editor = mount(document.getElementById('holder'), {
+		    value: text,
+		    grammars: [plantilla],
+		    developerInfo: false,
+		});
+
+	Content >>
+		La descripción es el `Description` del nodo en un esquema, o su entrada en el
+		`Description` de una plantilla.
+
+		Sin números de línea (`lineNumbers: false`), las marcas de las líneas con problemas
+		se siguen mostrando.
 
 	Subheader: Ir a la definición
 
@@ -201,8 +230,8 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		Para las páginas que muestran @STXT@ y no lo editan hay un coloreado sin CodeMirror:
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
-		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-highlight.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-highlight.js"></script>
 
 		<pre><code class="language-stxt">Receta (com.example.cocina): Tortitas
 			Raciones: 4</code></pre>
@@ -271,7 +300,7 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		lugar de `stxt-editor.css`:
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor-dark.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor-dark.css">
 
 	Content >>
 		Con un bundler se importa `@stxt-lang/editor/stxt-editor-dark.css`.
@@ -279,8 +308,8 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		Para seguir el esquema de color del sistema se cargan las dos, cada una con su `media`:
 
 	Xml >>
-		<link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
-		<link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor-dark.css">
+		<link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor.css">
+		<link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor-dark.css">
 
 	Content >>
 		La paleta oscura son las mismas propiedades con otros valores, y se cambian igual. El

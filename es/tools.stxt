@@ -175,8 +175,8 @@ Document (dev.stxt.website): Herramientas | STXT
 		está en [el editor para páginas web](tools-editor).
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
-		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.4.0/dist/stxt-editor.js"></script>
 
 		<textarea id="doc"></textarea>
 
