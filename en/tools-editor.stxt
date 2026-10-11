@@ -55,6 +55,7 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		* **Errors while editing**: syntax errors, and validation errors against the grammars.
 		* **Completion**: while typing or with Ctrl+Space. It offers the nodes the grammar allows at that point and the values of an `ENUM`.
 		* **Hover**: over a node, what the parser and its grammar say about it.
+		* **Go to definition**: with Ctrl+Click or Ctrl+B on the name of a node, to the line of the grammar that declares it.
 		* **Tab key**: it inserts a tab or four spaces. Switching from one to the other re-indents the document.
 		* **Forms**: the `<textarea>` stays hidden and in sync, and its form still submits the text.
 
@@ -98,14 +99,15 @@ Document (dev.stxt.website): The editor for web pages | STXT
 
 		Both return an `Editor`. No option is required:
 
-		| Option       | Default                             | Description                                                                |
-		|--------------|-------------------------------------|----------------------------------------------------------------------------|
-		| `value`      | The value of the `<textarea>`, or `""` | The initial text                                                        |
-		| `grammars`   | `[]`                                | Texts of `@stxt.schema` or `@stxt.template` documents                      |
-		| `validation` | `true`                              | Validates against the grammars. Syntax errors are always shown             |
-		| `indent`     | `"tabs"`                            | What the Tab key inserts: `"tabs"` or `"spaces"`                           |
-		| `readOnly`   | `false`                             | The text can be read and not edited                                        |
-		| `onChange`   |                                     | `(text, diagnostics) => void`. Called on creation and after every change   |
+		| Option             | Default                                | Description                                                                     |
+		|--------------------|----------------------------------------|---------------------------------------------------------------------------------|
+		| `value`            | The value of the `<textarea>`, or `""` | The initial text                                                                |
+		| `grammars`         | `[]`                                   | Texts of `@stxt.schema` or `@stxt.template` documents                           |
+		| `validation`       | `true`                                 | Validates against the grammars. Syntax errors are always shown                  |
+		| `indent`           | `"tabs"`                               | What the Tab key inserts: `"tabs"` or `"spaces"`                                |
+		| `readOnly`         | `false`                                | The text can be read and not edited                                             |
+		| `onChange`         |                                        | `(text, diagnostics) => void`. Called on creation and after every change        |
+		| `onGoToDefinition` |                                        | `(location) => void`. Called on going to the definition of a node of `grammars` |
 
 		A grammar written inside the document itself works too.
 
@@ -162,6 +164,36 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		* **`Analyzer`**: parses and validates a set of documents. It uses neither the DOM nor CodeMirror.
 		* **`createStxtEditor`, `createStxtExtensions`**: the CodeMirror extensions.
 		* **`setTokensEffect`, `toCmDiagnostics`**: they take an analysis to a view.
+
+	Subheader: Go to definition
+
+	Content >>
+		Ctrl+Click or Ctrl+B (Cmd on macOS) on the name of a node goes to the line of the
+		grammar that declares it. On the namespace, it goes to the root of the grammar.
+
+		| Where the grammar is   | What happens                                                       |
+		|------------------------|--------------------------------------------------------------------|
+		| In the document itself | The cursor goes to the line                                        |
+		| In `grammars`          | The editor calls `onGoToDefinition`. The page decides what to show |
+
+	TypeScript >>
+		const editor = mount(document.getElementById('holder'), {
+		    value: text,
+		    grammars: [template],
+		    onGoToDefinition: (location) => console.log(location),
+		});
+
+		// Ctrl+Click on "Serves":
+		// { grammar: 0, line: 4, namespace: "com.example.cooking" }
+
+	Content >>
+		| Field       | Value                                             |
+		|-------------|---------------------------------------------------|
+		| `grammar`   | The position of the grammar in `grammars`, from 0 |
+		| `line`      | The line of that grammar, from 0                  |
+		| `namespace` | The namespace the grammar defines                 |
+
+		Without `onGoToDefinition`, the gesture does nothing with the grammars of `grammars`.
 
 	Subheader: Static highlighting
 
