@@ -67,11 +67,12 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		for a page, minified, and any CDN of npm packages serves them. They are under
 		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/`:
 
-		| File                     | Global          | Size (gzip)     | Contents                                                                             |
-		|--------------------------|-----------------|-----------------|--------------------------------------------------------------------------------------|
-		| `dist/stxt-editor.js`    | `StxtEditor`    | 421 kB (133 kB) | The editor and the static highlighting, with CodeMirror and `@stxt-lang/core` inside |
-		| `dist/stxt-highlight.js` | `StxtHighlight` | 76 kB (21 kB)   | Only the static highlighting, without CodeMirror                                     |
-		| `dist/stxt-editor.css`   |                 | 6 kB (2 kB)     | The styles of both                                                                   |
+		| File                        | Global          | Size (gzip)     | Contents                                                                             |
+		|-----------------------------|-----------------|-----------------|--------------------------------------------------------------------------------------|
+		| `dist/stxt-editor.js`       | `StxtEditor`    | 421 kB (133 kB) | The editor and the static highlighting, with CodeMirror and `@stxt-lang/core` inside |
+		| `dist/stxt-highlight.js`    | `StxtHighlight` | 76 kB (21 kB)   | Only the static highlighting, without CodeMirror                                     |
+		| `dist/stxt-editor.css`      |                 | 6 kB (2 kB)     | The styles of both                                                                   |
+		| `dist/stxt-editor-dark.css` |                 | 7 kB (2 kB)     | The same styles with the dark theme                                                  |
 
 		With a bundler:
 
@@ -229,5 +230,30 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		| `--stxt-selected`, `--stxt-code-background`, `--stxt-separator`          | The selected completion, Markdown code and the rule of the hover              |
 		| `--stxt-font-mono`, `--stxt-font-body`, `--stxt-font-size`               | The fonts                                                                     |
 
-		The defaults are the palette of this site. The code and the changes of each version
-		are in the [repository](https://github.com/stxt-lang/stxt-editor).
+		The defaults are the palette of this site.
+
+	Subheader: Dark theme
+
+	Content >>
+		`stxt-editor-dark.css` is the same stylesheet with a dark palette. It is loaded instead
+		of `stxt-editor.css`:
+
+	Xml >>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor-dark.css">
+
+	Content >>
+		With a bundler, the import is `@stxt-lang/editor/stxt-editor-dark.css`.
+
+		To follow the colour scheme of the system, both are loaded, each with its `media`:
+
+	Xml >>
+		<link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.css">
+		<link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor-dark.css">
+
+	Content >>
+		The dark palette is the same properties with other values, and they are changed the
+		same way. The static highlighting only sets the colour of the text: the dark background
+		of a `<pre>` belongs to the page.
+
+		The code and the changes of each version are in the
+		[repository](https://github.com/stxt-lang/stxt-editor).
