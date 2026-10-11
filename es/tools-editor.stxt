@@ -12,8 +12,8 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		autocompletado y hover guiados por la gramática.
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.css">
-		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.js"></script>
 
 		<textarea id="doc" name="doc">
 		Receta (com.example.cocina): Tortitas
@@ -55,17 +55,18 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		* **Errores durante la edición**: de sintaxis y de validación contra las gramáticas.
 		* **Autocompletado**: al escribir o con Ctrl+Espacio. Ofrece los nodos que la gramática permite en ese punto y los valores de un `ENUM`.
 		* **Hover**: sobre un nodo, lo que el parser y su gramática dicen de él.
+		* **Ir a la definición**: con Ctrl+Clic o Ctrl+B sobre el nombre de un nodo, a la línea de la gramática que lo declara.
 		* **Tabulador**: inserta un tabulador o cuatro espacios. Al cambiar de uno a otro se reindenta el documento.
 		* **Formularios**: el `<textarea>` queda oculto y sincronizado, y su formulario sigue enviando el texto.
 
 	Subheader: Instalación
 
 	Content >>
-		La versión actual es la 0.2.0. La API puede cambiar antes de la 1.0.
+		La versión actual es la 0.3.0. La API puede cambiar antes de la 1.0.
 
 		Con `<script>` no hay instalación. El paquete incluye los ficheros listos para una
 		página, minificados, y los sirve cualquier CDN de paquetes npm. Están en
-		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/`:
+		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/`:
 
 		| Fichero                     | Global          | Tamaño (gzip)   | Contenido                                                                    |
 		|-----------------------------|-----------------|-----------------|------------------------------------------------------------------------------|
@@ -98,14 +99,15 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 
 		Las dos devuelven un `Editor`. Ninguna opción es obligatoria:
 
-		| Opción       | Por defecto                       | Descripción                                                                   |
-		|--------------|-----------------------------------|-------------------------------------------------------------------------------|
-		| `value`      | El valor del `<textarea>`, o `""` | El texto inicial                                                              |
-		| `grammars`   | `[]`                              | Textos de documentos `@stxt.schema` o `@stxt.template`                        |
-		| `validation` | `true`                            | Valida contra las gramáticas. Los errores de sintaxis se muestran siempre     |
-		| `indent`     | `"tabs"`                          | Qué inserta el tabulador: `"tabs"` o `"spaces"`                               |
-		| `readOnly`   | `false`                           | El texto se puede leer y no editar                                            |
-		| `onChange`   |                                   | `(text, diagnostics) => void`. Se llama al crear el editor y tras cada cambio |
+		| Opción             | Por defecto                       | Descripción                                                                   |
+		|--------------------|-----------------------------------|-------------------------------------------------------------------------------|
+		| `value`            | El valor del `<textarea>`, o `""` | El texto inicial                                                              |
+		| `grammars`         | `[]`                              | Textos de documentos `@stxt.schema` o `@stxt.template`                        |
+		| `validation`       | `true`                            | Valida contra las gramáticas. Los errores de sintaxis se muestran siempre     |
+		| `indent`           | `"tabs"`                          | Qué inserta el tabulador: `"tabs"` o `"spaces"`                               |
+		| `readOnly`         | `false`                           | El texto se puede leer y no editar                                            |
+		| `onChange`         |                                   | `(text, diagnostics) => void`. Se llama al crear el editor y tras cada cambio |
+		| `onGoToDefinition` |                                   | `(location) => void`. Se llama al ir a la definición de un nodo de `grammars` |
 
 		Una gramática escrita dentro del propio documento también vale.
 
@@ -163,14 +165,44 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		* **`createStxtEditor`, `createStxtExtensions`**: las extensiones de CodeMirror.
 		* **`setTokensEffect`, `toCmDiagnostics`**: llevan un análisis a una vista.
 
+	Subheader: Ir a la definición
+
+	Content >>
+		Ctrl+Clic o Ctrl+B (Cmd en macOS) sobre el nombre de un nodo va a la línea de la
+		gramática que lo declara. Sobre el namespace, va a la raíz de la gramática.
+
+		| Dónde está la gramática | Qué pasa                                                           |
+		|-------------------------|--------------------------------------------------------------------|
+		| En el propio documento  | El cursor va a la línea                                            |
+		| En `grammars`           | El editor llama a `onGoToDefinition`. La página decide qué mostrar |
+
+	TypeScript >>
+		const editor = mount(document.getElementById('holder'), {
+		    value: text,
+		    grammars: [plantilla],
+		    onGoToDefinition: (location) => console.log(location),
+		});
+
+		// Ctrl+Clic sobre «Raciones»:
+		// { grammar: 0, line: 4, namespace: "com.example.cocina" }
+
+	Content >>
+		| Campo       | Valor                                              |
+		|-------------|----------------------------------------------------|
+		| `grammar`   | La posición de la gramática en `grammars`, desde 0 |
+		| `line`      | La línea de esa gramática, desde 0                 |
+		| `namespace` | El namespace que define la gramática               |
+
+		Sin `onGoToDefinition`, el gesto no hace nada con las gramáticas de `grammars`.
+
 	Subheader: Coloreado estático
 
 	Content >>
 		Para las páginas que muestran @STXT@ y no lo editan hay un coloreado sin CodeMirror:
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.css">
-		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-highlight.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-highlight.js"></script>
 
 		<pre><code class="language-stxt">Receta (com.example.cocina): Tortitas
 			Raciones: 4</code></pre>
@@ -239,7 +271,7 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		lugar de `stxt-editor.css`:
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor-dark.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor-dark.css">
 
 	Content >>
 		Con un bundler se importa `@stxt-lang/editor/stxt-editor-dark.css`.
@@ -247,8 +279,8 @@ Document (dev.stxt.website): El editor para páginas web | STXT
 		Para seguir el esquema de color del sistema se cargan las dos, cada una con su `media`:
 
 	Xml >>
-		<link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.css">
-		<link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor-dark.css">
+		<link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
+		<link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor-dark.css">
 
 	Content >>
 		La paleta oscura son las mismas propiedades con otros valores, y se cambian igual. El

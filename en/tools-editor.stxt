@@ -12,8 +12,8 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		grammar-driven completion and hover.
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.css">
-		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.js"></script>
 
 		<textarea id="doc" name="doc">
 		Recipe (com.example.cooking): Pancakes
@@ -61,11 +61,11 @@ Document (dev.stxt.website): The editor for web pages | STXT
 	Subheader: Installation
 
 	Content >>
-		The current version is 0.2.0. The API may change before 1.0.
+		The current version is 0.3.0. The API may change before 1.0.
 
 		With a `<script>` there is nothing to install. The package carries its files ready
 		for a page, minified, and any CDN of npm packages serves them. They are under
-		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/`:
+		`https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/`:
 
 		| File                        | Global          | Size (gzip)     | Contents                                                                             |
 		|-----------------------------|-----------------|-----------------|--------------------------------------------------------------------------------------|
@@ -169,8 +169,8 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		For pages that show @STXT@ and do not edit it there is a highlighter without CodeMirror:
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.css">
-		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-highlight.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
+		<script src="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-highlight.js"></script>
 
 		<pre><code class="language-stxt">Recipe (com.example.cooking): Pancakes
 			Serves: 4</code></pre>
@@ -239,7 +239,7 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		of `stxt-editor.css`:
 
 	Xml >>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor-dark.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor-dark.css">
 
 	Content >>
 		With a bundler, the import is `@stxt-lang/editor/stxt-editor-dark.css`.
@@ -247,8 +247,8 @@ Document (dev.stxt.website): The editor for web pages | STXT
 		To follow the colour scheme of the system, both are loaded, each with its `media`:
 
 	Xml >>
-		<link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor.css">
-		<link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.2.0/dist/stxt-editor-dark.css">
+		<link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor.css">
+		<link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/@stxt-lang/editor@0.3.0/dist/stxt-editor-dark.css">
 
 	Content >>
 		The dark palette is the same properties with other values, and they are changed the
