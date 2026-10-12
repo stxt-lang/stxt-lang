@@ -34,7 +34,7 @@ Template (@stxt.template): dev.stxt.website
 			Meta descripción de la página para buscadores (~150-160 caracteres, sin
 			comillas dobles). El CMS la emite como meta description y og:description.
 		Status >>
-			Estado de estabilidad de una especificación (solo en las cinco specs): Genesis,
+			Estado de estabilidad de una especificación (solo en las specs): Genesis,
 			Aurora, Zenith o Twilight, con el significado de STXT-SPEC 1.1. Junto con
 			Last modif sustituye al número de versión. El CMS lo pinta bajo el título.
 		Content >>

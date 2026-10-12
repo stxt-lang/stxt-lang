@@ -52,6 +52,9 @@ Document (dev.stxt.website): STXT: The Book
 			
 	Link: @STXT@ Tree
 		Page: stxt-tree-ref
+
+	Link: @STXT@ Transform
+		Page: stxt-transform-ref
 		
 	Subheader: Tools reference
 

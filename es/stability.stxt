@@ -1,7 +1,7 @@
 Document (dev.stxt.website): Estabilidad y versiones | STXT
 
 	Metadata:
-		Last modif: 2026-09-20
+		Last modif: 2026-10-11
 		Description: STXT es un lenguaje vivo con un núcleo estable. Cada especificación lleva una fecha y un estado (Genesis, Aurora, Zenith o Twilight) en lugar de un número de versión; el estado define el nivel de estabilidad.
 
 	Header: Estabilidad y versiones
@@ -39,6 +39,7 @@ Document (dev.stxt.website): Estabilidad y versiones | STXT
 		| [STXT-SCHEMA-SPEC](stxt-schema-ref), los esquemas | **Aurora** | 2026-09-07 |
 		| [STXT-TEMPLATE-SPEC](stxt-template-ref), las plantillas | **Aurora** | 2026-09-07 |
 		| [STXT-DISCOVERY-SPEC](stxt-discovery-ref), la localización de definiciones | **Aurora** | 2026-09-07 |
+		| [STXT-TRANSFORM-SPEC](stxt-transform-ref), la exportación, la importación y el relleno de Slots | **Genesis** | 2026-10-06 |
 
 	Subheader: Un poco de historia
 
@@ -54,3 +55,5 @@ Document (dev.stxt.website): Estabilidad y versiones | STXT
 		> y el árbol ya estables.
 		>
 		> El 7 de septiembre de 2026 los números de versión se sustituyen por fecha y estado.
+		>
+		> **STXT-TRANSFORM-SPEC** nace el 6 de octubre de 2026.

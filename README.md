@@ -1,7 +1,7 @@
 # stxt-lang
 
 **STXT** is a **Human-First** language, designed for documents and structured data.
-This repository holds its five specifications, the conformance kit and the source of the
+This repository holds its six specifications, the conformance kit and the source of the
 portal, <https://stxt.dev>. Everything here is written in STXT.
 
 ```stxt
@@ -26,6 +26,7 @@ They live in `es/` (the canonical version, in Spanish), with an English mirror i
 | `stxt-schema-ref.stxt` | **STXT-SCHEMA-SPEC** | `@stxt.schema`: semantic validation with `Node`/`Children`/`Child`, types and cardinalities |
 | `stxt-template-ref.stxt` | **STXT-TEMPLATE-SPEC** | `@stxt.template`: the simplified authoring form, compilable to an equivalent schema |
 | `stxt-discovery-ref.stxt` | **STXT-DISCOVERY-SPEC** | How tools locate schemas and templates (`.stxt/` directories, `$HOME/.stxt`, `/etc/stxt`, `STXT_PATH`) |
+| `stxt-transform-ref.stxt` | **STXT-TRANSFORM-SPEC** | Export to JSON and other formats, import from them, and fill: the Slots of a document filled with data. In `Genesis`: under construction |
 
 They carry no version number. Each one carries two values in its `Metadata`:
 
