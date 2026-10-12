@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 	Metadata:
 		Status: Genesis
 		Last modif: 2026-10-12
-		Description: STXT-TRANSFORM-SPEC: cómo se exporta un documento STXT a JSON y otros formatos, cómo se importa desde ellos y cómo se rellenan con datos los Slots de un documento, a partir de su schema.
+		Description: STXT-TRANSFORM-SPEC: cómo se exporta un documento STXT a JSON y otros formatos y cómo se importa desde ellos, a partir de su schema, y cómo se rellenan con datos los Slots de un documento.
 
 	Header: @STXT@ Transform
 
@@ -29,12 +29,15 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		JSON, YAML o XML, y que los datos que ya existen en esos formatos puedan pasar a @STXT@,
 		sin escribir una conversión propia para cada namespace.
 
-		Las tres operaciones se apoyan en la **definición** del namespace del documento, sea un
-		schema o un template. El texto de un documento no dice qué valor es un número, qué nodo
-		es una lista ni cómo se llaman sus elementos: lo dice su definición. Por eso una
-		transformación apenas necesita más información que el documento y su definición, y por
-		eso mismo esta especificación exige, de momento, que el documento tenga namespace y que
-		ese namespace tenga definición.
+		La exportación y la importación se apoyan en la **definición** del namespace del
+		documento, sea un schema o un template. El texto de un documento no dice qué valor es
+		un número, qué nodo es una lista ni cómo se llaman sus elementos: lo dice su
+		definición. Por eso estas dos operaciones apenas necesitan más información que el
+		documento y su definición, y por eso mismo esta especificación exige para ellas, de
+		momento, que el documento tenga namespace y que ese namespace tenga definición.
+
+		El relleno no necesita definición ni namespace: lo que hace cada Slot está escrito en
+		el propio documento.
 
 		Esta especificación no cambia la sintaxis de [*STXT-SPEC*](stxt-core-ref) ni la
 		validación de [*STXT-SCHEMA-SPEC*](stxt-schema-ref): es una capa posterior al parseo y a
@@ -72,7 +75,7 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		Un documento con Slots no es un `@stxt.template`. Un template
 		([*STXT-TEMPLATE-SPEC*](stxt-template-ref)) describe la estructura de **todos** los
 		documentos de un namespace y sirve para validarlos. Un **documento con Slots** es
-		**un** documento de ese namespace al que le faltan valores: sus Slots se rellenan con
+		**un** documento, con namespace o sin él, al que le faltan valores: sus Slots se rellenan con
 		unos datos externos, por ejemplo un JSON, y el resultado es un documento completo, que
 		se valida como cualquier otro.
 
