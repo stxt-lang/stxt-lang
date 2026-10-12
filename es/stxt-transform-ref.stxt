@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 
 	Metadata:
 		Status: Genesis
-		Last modif: 2026-10-11
+		Last modif: 2026-10-12
 		Description: STXT-TRANSFORM-SPEC: cómo se exporta un documento STXT a JSON y otros formatos, cómo se importa desde ellos y cómo se rellenan con datos los Slots de un documento, a partir de su schema.
 
 	Header: @STXT@ Transform
@@ -49,8 +49,9 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		construcción, y cualquier parte de ella puede cambiar sin aviso.
 		Depende de [*STXT-SPEC*](stxt-core-ref) y de [*STXT-SCHEMA-SPEC*](stxt-schema-ref).
 
-		Hoy contiene la presentación de las tres operaciones y un ejemplo de exportación e
-		importación con JSON. Las reglas de cada formato y las de los Slots están por escribir.
+		Hoy contiene la presentación de las tres operaciones y dos ejemplos: la exportación y la
+		importación con JSON, y un primer esbozo del relleno de Slots. Las reglas de cada
+		formato y las de los Slots están por escribir.
 
 	Subsubheader: 1.2 Relación con el árbol canónico
 
@@ -228,3 +229,91 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 
 		El documento importado tiene el mismo árbol que el original. Solo se ha perdido el
 		comentario.
+
+	Subheader: 4. Un ejemplo: relleno de Slots
+
+	Content >>
+		Esta sección no es normativa. Es un primer esbozo de los Slots y de cómo se combinan.
+
+		Un documento con Slots:
+
+	Code >>
+		Pedido (com.example.pedidos): $numero$
+			Fecha: $fecha$
+			Moneda: EUR
+			Cliente: {cliente}
+				Nombre: $nombre$
+				Correo: $correo$
+				# El teléfono es opcional
+				Teléfono: ?$telefono$
+			Línea: [lineas]$producto$
+				Cantidad: $cantidad$
+				Precio: $precio$
+				Nota: ?$nota$
+			Envío: [envios]
+				Transportista: $transportista$
+				Bulto: [bultos]
+
+	Content >>
+		Los datos, en JSON:
+
+	Json >>
+		{
+			"numero": "2026-0142",
+			"fecha": "2026-10-12",
+			"cliente": {
+				"nombre": "Librería Atenea",
+				"correo": "pedidos@atenea.example"
+			},
+			"lineas": [
+				{ "producto": "Cuaderno A5", "cantidad": 40, "precio": 3.25, "nota": "Tapa azul" },
+				{ "producto": "Lápiz HB", "cantidad": 200, "precio": 0.45 }
+			],
+			"envios": [
+				{ "transportista": "Correos", "bultos": ["C-01", "C-02"] },
+				{ "transportista": "MRW", "bultos": ["M-07"] }
+			]
+		}
+
+	Content >>
+		Y el documento que produce el relleno:
+
+	Code >>
+		Pedido (com.example.pedidos): 2026-0142
+			Fecha: 2026-10-12
+			Moneda: EUR
+			Cliente:
+				Nombre: Librería Atenea
+				Correo: pedidos@atenea.example
+			Línea: Cuaderno A5
+				Cantidad: 40
+				Precio: 3.25
+				Nota: Tapa azul
+			Línea: Lápiz HB
+				Cantidad: 200
+				Precio: 0.45
+			Envío:
+				Transportista: Correos
+				Bulto: C-01
+				Bulto: C-02
+			Envío:
+				Transportista: MRW
+				Bulto: M-07
+
+	Content >>
+		Los Slots del ejemplo:
+
+		| Slot        | Qué hace                                                                                  | En el ejemplo                 |
+		|-------------|-------------------------------------------------------------------------------------------|-------------------------------|
+		| `$var$`     | Pone el valor del dato `var`                                                              | `Fecha: $fecha$`              |
+		| `?$var$`    | Lo mismo, y es opcional: si el dato no existe, el nodo no aparece                         | `Teléfono`, `Nota`            |
+		| `{objeto}`  | Entra en el objeto `objeto`: los Slots del nodo y de sus hijos se buscan dentro de él     | `Cliente: {cliente}`          |
+		| `[lista]`   | Repite el nodo, con sus hijos, una vez por cada elemento del array `lista`                | `Línea`, `Envío`, `Bulto`     |
+
+		* Si el elemento de un array es un objeto, el relleno entra en él: cada `Envío` busca su `transportista` y sus `bultos` en su propio elemento.
+		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`.
+		* Un nodo puede combinar Slots: `Línea: [lineas]$producto$` repite el nodo y pone en cada uno su `producto`. Primero se evalúa `[lista]`, después `{objeto}` y por último `$var$`.
+		* Un valor sin Slots se copia tal cual: `Moneda: EUR`.
+		* `Teléfono` no aparece porque el cliente no tiene `telefono`. `Nota` aparece en la primera `Línea` y no en la segunda.
+		* Un `$var$` sin `?` es obligatorio: si faltara `cantidad` en una línea, el relleno fallaría.
+		* El comentario no pasa al documento rellenado.

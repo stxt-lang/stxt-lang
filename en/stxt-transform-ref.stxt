@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 
 	Metadata:
 		Status: Genesis
-		Last modif: 2026-10-11
+		Last modif: 2026-10-12
 		Description: STXT-TRANSFORM-SPEC: how an STXT document is exported to JSON and other formats, how it is imported from them and how the Slots of a document are filled with data, driven by its schema.
 
 	Header: @STXT@ Transform
@@ -49,8 +49,9 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 		construction, and any part of it may change without notice.
 		It depends on [*STXT-SPEC*](stxt-core-ref) and [*STXT-SCHEMA-SPEC*](stxt-schema-ref).
 
-		Today it holds the presentation of the three operations and an example of export and
-		import with JSON. The rules of each format and those of Slots are still to be written.
+		Today it holds the presentation of the three operations and two examples: export and
+		import with JSON, and a first sketch of the fill of Slots. The rules of each format
+		and those of Slots are still to be written.
 
 	Subsubheader: 1.2 Relation to the canonical tree
 
@@ -229,3 +230,91 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 
 		The imported document has the same tree as the original. Only the comment has been
 		lost.
+
+	Subheader: 4. An example: fill of Slots
+
+	Content >>
+		This section is not normative. It is a first sketch of Slots and of how they combine.
+
+		A document with Slots:
+
+	Code >>
+		Order (com.example.orders): $number$
+			Date: $date$
+			Currency: EUR
+			Customer: {customer}
+				Name: $name$
+				Email: $email$
+				# The phone is optional
+				Phone: ?$phone$
+			Line: [lines]$product$
+				Quantity: $quantity$
+				Price: $price$
+				Note: ?$note$
+			Shipment: [shipments]
+				Carrier: $carrier$
+				Parcel: [parcels]
+
+	Content >>
+		The data, in JSON:
+
+	Json >>
+		{
+			"number": "2026-0142",
+			"date": "2026-10-12",
+			"customer": {
+				"name": "Athena Bookshop",
+				"email": "orders@athena.example"
+			},
+			"lines": [
+				{ "product": "A5 notebook", "quantity": 40, "price": 3.25, "note": "Blue cover" },
+				{ "product": "HB pencil", "quantity": 200, "price": 0.45 }
+			],
+			"shipments": [
+				{ "carrier": "Royal Mail", "parcels": ["R-01", "R-02"] },
+				{ "carrier": "DHL", "parcels": ["D-07"] }
+			]
+		}
+
+	Content >>
+		And the document that fill produces:
+
+	Code >>
+		Order (com.example.orders): 2026-0142
+			Date: 2026-10-12
+			Currency: EUR
+			Customer:
+				Name: Athena Bookshop
+				Email: orders@athena.example
+			Line: A5 notebook
+				Quantity: 40
+				Price: 3.25
+				Note: Blue cover
+			Line: HB pencil
+				Quantity: 200
+				Price: 0.45
+			Shipment:
+				Carrier: Royal Mail
+				Parcel: R-01
+				Parcel: R-02
+			Shipment:
+				Carrier: DHL
+				Parcel: D-07
+
+	Content >>
+		The Slots of the example:
+
+		| Slot       | What it does                                                                             | In the example                |
+		|------------|------------------------------------------------------------------------------------------|-------------------------------|
+		| `$var$`    | Puts the value of the data item `var`                                                     | `Date: $date$`                |
+		| `?$var$`   | The same, and it is optional: if the data item does not exist, the node does not appear   | `Phone`, `Note`               |
+		| `{object}` | Enters the object `object`: the Slots of the node and of its children are looked up in it | `Customer: {customer}`        |
+		| `[list]`   | Repeats the node, with its children, once for every element of the array `list`           | `Line`, `Shipment`, `Parcel`  |
+
+		* If the element of an array is an object, fill enters it: every `Shipment` looks up its `carrier` and its `parcels` in its own element.
+		* If the element is a value, it is the value of the node: `Parcel: [parcels]` produces `Parcel: R-01` and `Parcel: R-02`.
+		* A node can combine Slots: `Line: [lines]$product$` repeats the node and puts in each one its `product`. `[list]` is evaluated first, then `{object}` and `$var$` last.
+		* A value with no Slots is copied as it is: `Currency: EUR`.
+		* `Phone` does not appear because the customer has no `phone`. `Note` appears in the first `Line` and not in the second.
+		* A `$var$` without `?` is required: if `quantity` were missing in a line, fill would fail.
+		* The comment does not pass to the filled document.
