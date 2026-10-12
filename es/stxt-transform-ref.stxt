@@ -309,14 +309,17 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		| Slot        | Qué hace                                                                                  | En el ejemplo                 |
 		|-------------|-------------------------------------------------------------------------------------------|-------------------------------|
 		| `$var$`     | Pone el valor del dato `var`                                                              | `Fecha: $fecha$`              |
-		| `?$var$`    | Lo mismo, y es opcional: si el dato no existe, el nodo no aparece                         | `Teléfono`, `Nota`            |
 		| `{objeto}`  | Entra en el objeto `objeto`: los Slots del nodo y de sus hijos se buscan dentro de él     | `Cliente: {cliente}`          |
 		| `[lista]`   | Repite el nodo, con sus hijos, una vez por cada elemento del array `lista`                | `Línea`, `Envío`, `Bulto`     |
+		| `?` delante | Hace opcional el Slot: si el dato no existe, el nodo no aparece                           | `Teléfono: ?$telefono$`       |
 
 		* Si el elemento de un array es un objeto, el relleno entra en él: cada `Envío` busca su `transportista` y sus `bultos` en su propio elemento.
 		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`.
 		* Un nodo puede combinar Slots: `Línea: [lineas]$producto$` repite el nodo y pone en cada uno su `producto`. Primero se evalúa `[lista]`, después `{objeto}` y por último `$var$`.
 		* Un valor sin Slots se copia tal cual: `Moneda: EUR`.
+		* Todo Slot es obligatorio, sea `$var$`, `{objeto}` o `[lista]`, salvo que lleve `?` delante: si faltara `cantidad` en una línea, o `cliente` en los datos, el relleno fallaría.
 		* `Teléfono` no aparece porque el cliente no tiene `telefono`. `Nota` aparece en la primera `Línea` y no en la segunda.
-		* Un `$var$` sin `?` es obligatorio: si faltara `cantidad` en una línea, el relleno fallaría.
+		* Un array vacío no produce ningún nodo y no es un error del relleno. Si el nodo era obligatorio, lo dirá la validación del documento rellenado.
+		* Un dato que no encaja con su Slot es un error: un objeto donde `$var$` espera un valor, o un valor donde `[lista]` espera un array.
 		* El comentario no pasa al documento rellenado.
+		* Un documento con Slots no se valida. El que se valida es siempre el documento rellenado.
