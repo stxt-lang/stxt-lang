@@ -324,12 +324,14 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 		| Leading `?` | Makes the Slot optional: if the data item does not exist, the node does not appear       | `Phone: ?<phone>`             |
 
 		* The name of a Slot can only have ASCII letters, digits, `-` and `_`, and at least one character: `<number>`, `[lines]`, `{customer-data}`. Everything that has that form is a Slot, also inside a text or a block: `Format: <html>` expects a data item `html`. What does not have it, such as `</p>` or `<a href="x">`, is text.
+		* There is no way to write as text something that has the form of a Slot. In a block with HTML or XML, `<p>` and `<br>` are Slots and need the data items `p` and `br`.
+		* The name of a Slot is looked up as it is among the keys of the data, case-sensitively: `<Date>` does not find `date`.
 		* If the element of an array is an object, fill enters it: every `Shipment` looks up its `carrier` and its `parcels` in its own element.
 		* If the element is a value, it is the value of the node: `Parcel: [parcels]` produces `Parcel: R-01` and `Parcel: R-02`.
 		* A Slot looks up its data item first in the current element and, if it is not there, goes up through the context: the object or element that contains it, and so on up to the root of the data. Every `Shipment` finds `carrier` in its element and `number` in the root.
 		* A data item whose value is `null` counts as absent: the lookup keeps going up.
-		* A node can combine Slots: `Line: [lines]<product>` repeats the node and puts in each one its `product`. `[list]` is evaluated first, then `{object}` and `<var>` last.
-		* `[list]` and `{object}` act on the whole node and can only go at the start of the value. In the middle of a text or in the lines of a block they are an error: `Label: See [note]` cannot be filled.
+		* The value of a node with Slots has two parts. At the start go only `[list]` and `{object}`, as many as needed and in any order. They apply from left to right, and each one repeats or enters over what the previous one leaves: `Address: {customer}[addresses]` enters the customer and repeats the node for each of their addresses. What follows is text, in which `<var>` puts values: `Line: [lines]<product>` repeats the node and puts in each one its `product`.
+		* In the text it is no longer possible to repeat or enter: `Line: <product>[lines]` and `Label: See [note]` are errors, and so is a `[list]` or an `{object}` in the lines of a block.
 		* A `<var>` can go inside a text, and a value can carry several: `Reference: <number>/<carrier>` produces `Reference: 2026-0142/Royal Mail`. The text around them is copied as it is.
 		* A `>>` block can also carry `<var>` Slots, in any of its lines: each one is replaced by its data item and the rest of the text is copied as it is.
 		* A value with no Slots is copied as it is: `Currency: EUR`.
