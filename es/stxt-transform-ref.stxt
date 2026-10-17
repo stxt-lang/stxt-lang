@@ -255,7 +255,11 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 				Nota: ?<nota>
 			Envío: [envios]
 				Transportista: <transportista>
+				Referencia: <numero>/<transportista>
 				Bulto: [bultos]
+			Instrucciones >>
+				Pedido <numero>, con fecha <fecha>.
+				Entregar por la mañana.
 
 	Content >>
 		Los datos, en JSON:
@@ -297,11 +301,16 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 				Precio: 0.45
 			Envío:
 				Transportista: Correos
+				Referencia: 2026-0142/Correos
 				Bulto: C-01
 				Bulto: C-02
 			Envío:
 				Transportista: MRW
+				Referencia: 2026-0142/MRW
 				Bulto: M-07
+			Instrucciones >>
+				Pedido 2026-0142, con fecha 2026-10-12.
+				Entregar por la mañana.
 
 	Content >>
 		Los Slots del ejemplo:
@@ -313,12 +322,19 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		| `[lista]`   | Repite el nodo, con sus hijos, una vez por cada elemento del array `lista`                | `Línea`, `Envío`, `Bulto`     |
 		| `?` delante | Hace opcional el Slot: si el dato no existe, el nodo no aparece                           | `Teléfono: ?<telefono>`       |
 
+		* El nombre de un Slot solo puede tener letras ASCII, dígitos, `-` y `_`, y al menos un carácter: `<numero>`, `[lineas]`, `{datos-cliente}`. Todo lo que tiene esa forma es un Slot, también dentro de un texto o de un bloque: `Formato: <html>` espera un dato `html`. Lo que no la tiene, como `</p>` o `<a href="x">`, es texto.
 		* Si el elemento de un array es un objeto, el relleno entra en él: cada `Envío` busca su `transportista` y sus `bultos` en su propio elemento.
 		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`.
+		* Un Slot busca su dato primero en el elemento en curso y, si no está, va subiendo por el contexto: el objeto o el elemento que lo contiene, y así hasta la raíz de los datos. Cada `Envío` encuentra `transportista` en su elemento y `numero` en la raíz.
+		* Un dato que vale `null` cuenta como ausente: la búsqueda sigue subiendo.
 		* Un nodo puede combinar Slots: `Línea: [lineas]<producto>` repite el nodo y pone en cada uno su `producto`. Primero se evalúa `[lista]`, después `{objeto}` y por último `<var>`.
+		* `[lista]` y `{objeto}` actúan sobre el nodo entero y solo pueden ir al principio del valor. En medio de un texto o en las líneas de un bloque son un error: `Etiqueta: Ver [nota]` no se puede rellenar.
+		* Un `<var>` puede ir dentro de un texto, y un valor puede llevar varios: `Referencia: <numero>/<transportista>` produce `Referencia: 2026-0142/Correos`. El texto que los rodea se copia tal cual.
+		* Un bloque `>>` también puede llevar Slots `<var>`, en cualquiera de sus líneas: cada uno se sustituye por su dato y el resto del texto se copia tal cual.
 		* Un valor sin Slots se copia tal cual: `Moneda: EUR`.
-		* Todo Slot es obligatorio, sea `<var>`, `{objeto}` o `[lista]`, salvo que lleve `?` delante: si faltara `cantidad` en una línea, o `cliente` en los datos, el relleno fallaría.
-		* `Teléfono` no aparece porque el cliente no tiene `telefono`. `Nota` aparece en la primera `Línea` y no en la segunda.
+		* Todo Slot es obligatorio, sea `<var>`, `{objeto}` o `[lista]`, salvo que lleve `?` delante: si una línea no tuviera `cantidad` y los datos tampoco la tuvieran más arriba, o si faltara `cliente`, el relleno fallaría.
+		* `Teléfono` no aparece porque no hay `telefono` ni en el cliente ni en la raíz de los datos. `Nota` aparece en la primera `Línea` y no en la segunda.
+		* Dentro de un texto o de un bloque, un `?<var>` sin dato solo quita su trozo y el resto del texto se queda: `Referencia: <numero>?<revision>` produce `Referencia: 2026-0142` si no hay `revision`.
 		* Un array vacío no produce ningún nodo y no es un error del relleno. Si el nodo era obligatorio, lo dirá la validación del documento rellenado.
 		* Un dato que no encaja con su Slot es un error: un objeto donde `<var>` espera un valor, o un valor donde `[lista]` espera un array.
 		* El comentario no pasa al documento rellenado.

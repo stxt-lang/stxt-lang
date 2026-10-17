@@ -256,7 +256,11 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 				Note: ?<note>
 			Shipment: [shipments]
 				Carrier: <carrier>
+				Reference: <number>/<carrier>
 				Parcel: [parcels]
+			Instructions >>
+				Order <number>, dated <date>.
+				Deliver in the morning.
 
 	Content >>
 		The data, in JSON:
@@ -298,11 +302,16 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 				Price: 0.45
 			Shipment:
 				Carrier: Royal Mail
+				Reference: 2026-0142/Royal Mail
 				Parcel: R-01
 				Parcel: R-02
 			Shipment:
 				Carrier: DHL
+				Reference: 2026-0142/DHL
 				Parcel: D-07
+			Instructions >>
+				Order 2026-0142, dated 2026-10-12.
+				Deliver in the morning.
 
 	Content >>
 		The Slots of the example:
@@ -314,12 +323,19 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 		| `[list]`   | Repeats the node, with its children, once for every element of the array `list`           | `Line`, `Shipment`, `Parcel`  |
 		| Leading `?` | Makes the Slot optional: if the data item does not exist, the node does not appear       | `Phone: ?<phone>`             |
 
+		* The name of a Slot can only have ASCII letters, digits, `-` and `_`, and at least one character: `<number>`, `[lines]`, `{customer-data}`. Everything that has that form is a Slot, also inside a text or a block: `Format: <html>` expects a data item `html`. What does not have it, such as `</p>` or `<a href="x">`, is text.
 		* If the element of an array is an object, fill enters it: every `Shipment` looks up its `carrier` and its `parcels` in its own element.
 		* If the element is a value, it is the value of the node: `Parcel: [parcels]` produces `Parcel: R-01` and `Parcel: R-02`.
+		* A Slot looks up its data item first in the current element and, if it is not there, goes up through the context: the object or element that contains it, and so on up to the root of the data. Every `Shipment` finds `carrier` in its element and `number` in the root.
+		* A data item whose value is `null` counts as absent: the lookup keeps going up.
 		* A node can combine Slots: `Line: [lines]<product>` repeats the node and puts in each one its `product`. `[list]` is evaluated first, then `{object}` and `<var>` last.
+		* `[list]` and `{object}` act on the whole node and can only go at the start of the value. In the middle of a text or in the lines of a block they are an error: `Label: See [note]` cannot be filled.
+		* A `<var>` can go inside a text, and a value can carry several: `Reference: <number>/<carrier>` produces `Reference: 2026-0142/Royal Mail`. The text around them is copied as it is.
+		* A `>>` block can also carry `<var>` Slots, in any of its lines: each one is replaced by its data item and the rest of the text is copied as it is.
 		* A value with no Slots is copied as it is: `Currency: EUR`.
-		* Every Slot is required, whether `<var>`, `{object}` or `[list]`, unless it carries a leading `?`: if `quantity` were missing in a line, or `customer` in the data, fill would fail.
-		* `Phone` does not appear because the customer has no `phone`. `Note` appears in the first `Line` and not in the second.
+		* Every Slot is required, whether `<var>`, `{object}` or `[list]`, unless it carries a leading `?`: if a line had no `quantity` and the data had none further up either, or if `customer` were missing, fill would fail.
+		* `Phone` does not appear because there is no `phone` either in the customer or in the root of the data. `Note` appears in the first `Line` and not in the second.
+		* Inside a text or a block, a `?<var>` with no data item only removes its own piece and the rest of the text stays: `Reference: <number>?<revision>` produces `Reference: 2026-0142` if there is no `revision`.
 		* An empty array produces no node and is not an error of fill. If the node was required, the validation of the filled document will say so.
 		* A data item that does not fit its Slot is an error: an object where `<var>` expects a value, or a value where `[list]` expects an array.
 		* The comment does not pass to the filled document.
