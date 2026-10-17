@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 
 	Metadata:
 		Status: Genesis
-		Last modif: 2026-10-12
+		Last modif: 2026-10-17
 		Description: STXT-TRANSFORM-SPEC: how an STXT document is exported to JSON and other formats and how it is imported from them, driven by its schema, and how the Slots of a document are filled with data.
 
 	Header: @STXT@ Transform
@@ -242,20 +242,20 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 		A document with Slots:
 
 	Code >>
-		Order (com.example.orders): $number$
-			Date: $date$
+		Order (com.example.orders): <number>
+			Date: <date>
 			Currency: EUR
 			Customer: {customer}
-				Name: $name$
-				Email: $email$
+				Name: <name>
+				Email: <email>
 				# The phone is optional
-				Phone: ?$phone$
-			Line: [lines]$product$
-				Quantity: $quantity$
-				Price: $price$
-				Note: ?$note$
+				Phone: ?<phone>
+			Line: [lines]<product>
+				Quantity: <quantity>
+				Price: <price>
+				Note: ?<note>
 			Shipment: [shipments]
-				Carrier: $carrier$
+				Carrier: <carrier>
 				Parcel: [parcels]
 
 	Content >>
@@ -309,18 +309,18 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 
 		| Slot       | What it does                                                                             | In the example                |
 		|------------|------------------------------------------------------------------------------------------|-------------------------------|
-		| `$var$`    | Puts the value of the data item `var`                                                     | `Date: $date$`                |
+		| `<var>`    | Puts the value of the data item `var`                                                     | `Date: <date>`                |
 		| `{object}` | Enters the object `object`: the Slots of the node and of its children are looked up in it | `Customer: {customer}`        |
 		| `[list]`   | Repeats the node, with its children, once for every element of the array `list`           | `Line`, `Shipment`, `Parcel`  |
-		| Leading `?` | Makes the Slot optional: if the data item does not exist, the node does not appear       | `Phone: ?$phone$`             |
+		| Leading `?` | Makes the Slot optional: if the data item does not exist, the node does not appear       | `Phone: ?<phone>`             |
 
 		* If the element of an array is an object, fill enters it: every `Shipment` looks up its `carrier` and its `parcels` in its own element.
 		* If the element is a value, it is the value of the node: `Parcel: [parcels]` produces `Parcel: R-01` and `Parcel: R-02`.
-		* A node can combine Slots: `Line: [lines]$product$` repeats the node and puts in each one its `product`. `[list]` is evaluated first, then `{object}` and `$var$` last.
+		* A node can combine Slots: `Line: [lines]<product>` repeats the node and puts in each one its `product`. `[list]` is evaluated first, then `{object}` and `<var>` last.
 		* A value with no Slots is copied as it is: `Currency: EUR`.
-		* Every Slot is required, whether `$var$`, `{object}` or `[list]`, unless it carries a leading `?`: if `quantity` were missing in a line, or `customer` in the data, fill would fail.
+		* Every Slot is required, whether `<var>`, `{object}` or `[list]`, unless it carries a leading `?`: if `quantity` were missing in a line, or `customer` in the data, fill would fail.
 		* `Phone` does not appear because the customer has no `phone`. `Note` appears in the first `Line` and not in the second.
 		* An empty array produces no node and is not an error of fill. If the node was required, the validation of the filled document will say so.
-		* A data item that does not fit its Slot is an error: an object where `$var$` expects a value, or a value where `[list]` expects an array.
+		* A data item that does not fit its Slot is an error: an object where `<var>` expects a value, or a value where `[list]` expects an array.
 		* The comment does not pass to the filled document.
 		* A document with Slots is not validated. The one that is validated is always the filled document.
