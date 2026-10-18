@@ -261,6 +261,10 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 			Instructions >>
 				Order <number>, dated <date>.
 				Deliver in the morning.
+			Label >>
+				[shipments]
+				Order <number>
+				Carrier: <carrier>
 
 	Content >>
 		The data, in JSON:
@@ -312,6 +316,12 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 			Instructions >>
 				Order 2026-0142, dated 2026-10-12.
 				Deliver in the morning.
+			Label >>
+				Order 2026-0142
+				Carrier: Royal Mail
+			Label >>
+				Order 2026-0142
+				Carrier: DHL
 
 	Content >>
 		The Slots of the example:
@@ -328,12 +338,16 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 		* The name of a Slot is looked up as it is among the keys of the data, case-sensitively: `<Date>` does not find `date`.
 		* If the element of an array is an object, fill enters it: every `Shipment` looks up its `carrier` and its `parcels` in its own element.
 		* If the element is a value, it is the value of the node: `Parcel: [parcels]` produces `Parcel: R-01` and `Parcel: R-02`.
+		* An array that mixes values and objects is an error. A `null` element is as if it were not there: it produces no node.
 		* A Slot looks up its data item first in the current element and, if it is not there, goes up through the context: the object or element that contains it, and so on up to the root of the data. Every `Shipment` finds `carrier` in its element and `number` in the root.
 		* A data item whose value is `null` counts as absent: the lookup keeps going up.
 		* The value of a node with Slots has two parts. At the start go only `[list]` and `{object}`, as many as needed and in any order. They apply from left to right, and each one repeats or enters over what the previous one leaves: `Address: {customer}[addresses]` enters the customer and repeats the node for each of their addresses. What follows is text, in which `<var>` puts values: `Line: [lines]<product>` repeats the node and puts in each one its `product`.
-		* In the text it is no longer possible to repeat or enter: `Line: <product>[lines]` and `Label: See [note]` are errors, and so is a `[list]` or an `{object}` in the lines of a block.
+		* In the text it is no longer possible to repeat or enter: `Line: <product>[lines]` and `Label: See [note]` are errors.
 		* A `<var>` can go inside a text, and a value can carry several: `Reference: <number>/<carrier>` produces `Reference: 2026-0142/Royal Mail`. The text around them is copied as it is.
-		* A `>>` block can also carry `<var>` Slots, in any of its lines: each one is replaced by its data item and the rest of the text is copied as it is.
+		* In a `>>` block, the first line plays the role of the start of the value. If it only has `[list]` and `{object}`, it is the navigation of the node: it applies as in an inline node and does not pass to the filled document. `Label >>` starts with `[shipments]` and produces one block per shipment. What follows is text.
+		* If the first line of a block has anything else, the whole block is text, and a `[list]` or an `{object}` in any of its lines is an error.
+		* In the text of a block, each `<var>` is replaced by its data item and the rest is copied as it is. Inside the block, `Carrier: <carrier>` is text, not a node.
+		* The filled node has the form it has in the document with Slots: `Node: <var>` comes out inline and `Node >>` comes out as a block. A data item with line breaks in an inline node is an error. In a block, it produces several lines.
 		* A value with no Slots is copied as it is: `Currency: EUR`.
 		* Every Slot is required, whether `<var>`, `{object}` or `[list]`, unless it carries a leading `?`: if a line had no `quantity` and the data had none further up either, or if `customer` were missing, fill would fail.
 		* `Phone` does not appear because there is no `phone` either in the customer or in the root of the data. `Note` appears in the first `Line` and not in the second.

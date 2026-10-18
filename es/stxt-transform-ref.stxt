@@ -260,6 +260,10 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 			Instrucciones >>
 				Pedido <numero>, con fecha <fecha>.
 				Entregar por la mañana.
+			Etiqueta >>
+				[envios]
+				Pedido <numero>
+				Transportista: <transportista>
 
 	Content >>
 		Los datos, en JSON:
@@ -311,6 +315,12 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 			Instrucciones >>
 				Pedido 2026-0142, con fecha 2026-10-12.
 				Entregar por la mañana.
+			Etiqueta >>
+				Pedido 2026-0142
+				Transportista: Correos
+			Etiqueta >>
+				Pedido 2026-0142
+				Transportista: MRW
 
 	Content >>
 		Los Slots del ejemplo:
@@ -327,12 +337,16 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		* El nombre de un Slot se busca tal cual entre las claves de los datos, distinguiendo mayúsculas y minúsculas: `<Fecha>` no encuentra `fecha`.
 		* Si el elemento de un array es un objeto, el relleno entra en él: cada `Envío` busca su `transportista` y sus `bultos` en su propio elemento.
 		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`.
+		* Un array que mezcla valores y objetos es un error. Un elemento `null` es como si no estuviera: no produce ningún nodo.
 		* Un Slot busca su dato primero en el elemento en curso y, si no está, va subiendo por el contexto: el objeto o el elemento que lo contiene, y así hasta la raíz de los datos. Cada `Envío` encuentra `transportista` en su elemento y `numero` en la raíz.
 		* Un dato que vale `null` cuenta como ausente: la búsqueda sigue subiendo.
 		* El valor de un nodo con Slots tiene dos partes. Al principio van solo `[lista]` y `{objeto}`, tantos como hagan falta y en cualquier orden. Se aplican de izquierda a derecha, y cada uno repite o entra sobre lo que deja el anterior: `Dirección: {cliente}[direcciones]` entra en el cliente y repite el nodo por cada una de sus direcciones. Lo que sigue es texto, en el que `<var>` pone valores: `Línea: [lineas]<producto>` repite el nodo y pone en cada uno su `producto`.
-		* En el texto ya no se puede repetir ni entrar: `Línea: <producto>[lineas]` y `Etiqueta: Ver [nota]` son errores, y también un `[lista]` o un `{objeto}` en las líneas de un bloque.
+		* En el texto ya no se puede repetir ni entrar: `Línea: <producto>[lineas]` y `Etiqueta: Ver [nota]` son errores.
 		* Un `<var>` puede ir dentro de un texto, y un valor puede llevar varios: `Referencia: <numero>/<transportista>` produce `Referencia: 2026-0142/Correos`. El texto que los rodea se copia tal cual.
-		* Un bloque `>>` también puede llevar Slots `<var>`, en cualquiera de sus líneas: cada uno se sustituye por su dato y el resto del texto se copia tal cual.
+		* En un bloque `>>`, la primera línea hace el papel del principio del valor. Si solo tiene `[lista]` y `{objeto}`, es la navegación del nodo: se aplica igual que en un nodo inline y no pasa al documento rellenado. `Etiqueta >>` empieza con `[envios]` y produce un bloque por envío. Lo que sigue es texto.
+		* Si la primera línea de un bloque tiene algo más, todo el bloque es texto, y un `[lista]` o un `{objeto}` en cualquiera de sus líneas es un error.
+		* En el texto de un bloque, cada `<var>` se sustituye por su dato y el resto se copia tal cual. Dentro del bloque, `Transportista: <transportista>` es texto, no un nodo.
+		* El nodo rellenado tiene la forma que tiene en el documento con Slots: `Nodo: <var>` sale inline y `Nodo >>` sale como bloque. Un dato con saltos de línea en un nodo inline es un error. En un bloque, produce varias líneas.
 		* Un valor sin Slots se copia tal cual: `Moneda: EUR`.
 		* Todo Slot es obligatorio, sea `<var>`, `{objeto}` o `[lista]`, salvo que lleve `?` delante: si una línea no tuviera `cantidad` y los datos tampoco la tuvieran más arriba, o si faltara `cliente`, el relleno fallaría.
 		* `Teléfono` no aparece porque no hay `telefono` ni en el cliente ni en la raíz de los datos. `Nota` aparece en la primera `Línea` y no en la segunda.
