@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 
 	Metadata:
 		Status: Genesis
-		Last modif: 2026-10-17
+		Last modif: 2026-10-18
 		Description: STXT-TRANSFORM-SPEC: cómo se exporta un documento STXT a JSON y otros formatos y cómo se importa desde ellos, a partir de su schema, y cómo se rellenan con datos los Slots de un documento.
 
 	Header: @STXT@ Transform
@@ -296,6 +296,7 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 			Cliente:
 				Nombre: Librería Atenea
 				Correo: pedidos@atenea.example
+				Teléfono:
 			Línea: Cuaderno A5
 				Cantidad: 40
 				Precio: 3.25
@@ -303,6 +304,7 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 			Línea: Lápiz HB
 				Cantidad: 200
 				Precio: 0.45
+				Nota:
 			Envío:
 				Transportista: Correos
 				Referencia: 2026-0142/Correos
@@ -330,13 +332,13 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		| `<var>`     | Pone el valor del dato `var`                                                              | `Fecha: <fecha>`              |
 		| `{objeto}`  | Entra en el objeto `objeto`: los Slots del nodo y de sus hijos se buscan dentro de él     | `Cliente: {cliente}`          |
 		| `[lista]`   | Repite el nodo, con sus hijos, una vez por cada elemento del array `lista`                | `Línea`, `Envío`, `Bulto`     |
-		| `?` delante | Hace opcional el Slot: si el dato no existe, el nodo no aparece                           | `Teléfono: ?<telefono>`       |
+		| `?` delante | Hace opcional el Slot: si el dato no existe, `[lista]` y `{objeto}` quitan el nodo y `<var>` no pone nada | `Teléfono: ?<telefono>`       |
 
 		* El nombre de un Slot solo puede tener letras ASCII, dígitos, `-` y `_`, y al menos un carácter: `<numero>`, `[lineas]`, `{datos-cliente}`. Todo lo que tiene esa forma es un Slot, también dentro de un texto o de un bloque: `Formato: <html>` espera un dato `html`. Lo que no la tiene, como `</p>` o `<a href="x">`, es texto.
 		* No hay forma de escribir como texto algo que tiene forma de Slot. En un bloque con HTML o XML, `<p>` y `<br>` son Slots y necesitan los datos `p` y `br`.
 		* El nombre de un Slot se busca tal cual entre las claves de los datos, distinguiendo mayúsculas y minúsculas: `<Fecha>` no encuentra `fecha`.
 		* Si el elemento de un array es un objeto, el relleno entra en él: cada `Envío` busca su `transportista` y sus `bultos` en su propio elemento.
-		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`. Solo vale en un nodo que no tiene nada más que la navegación: ni texto, ni hijos, ni más líneas de bloque. Si `bultos` trae valores, `Bulto: [bultos] (caja)` es un error, y también `Bulto: [bultos]` con un hijo `Peso: <peso>`.
+		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`. Solo vale en un nodo que no tiene nada más que la navegación: ni texto, ni hijos, ni más líneas de bloque. Si `bultos` trae valores, `Bulto: [bultos] (caja)` es un error, y también `Bulto: [bultos]` con un hijo `Peso: <peso>`. Tampoco puede seguirle otra navegación: `Bulto: [bultos]{medidas}` es un error.
 		* Un array que mezcla valores y objetos es un error, y también un array dentro de otro array. Un elemento `null` es como si no estuviera: no produce ningún nodo.
 		* Un Slot busca su dato primero en el elemento en curso y, si no está, va subiendo por el contexto: el objeto o el elemento que lo contiene, y así hasta la raíz de los datos. Cada `Envío` encuentra `transportista` en su elemento y `numero` en la raíz.
 		* Un dato que vale `null` cuenta como ausente: la búsqueda sigue subiendo.
@@ -348,9 +350,9 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		* En el texto de un bloque, cada `<var>` se sustituye por su dato y el resto se copia tal cual. Dentro del bloque, `Transportista: <transportista>` es texto, no un nodo.
 		* El nodo rellenado tiene la forma que tiene en el documento con Slots: `Nodo: <var>` sale inline y `Nodo >>` sale como bloque. Un dato con saltos de línea en un nodo inline es un error. En un bloque, produce varias líneas.
 		* Un valor sin Slots se copia tal cual: `Moneda: EUR`.
-		* Todo Slot es obligatorio, sea `<var>`, `{objeto}` o `[lista]`, salvo que lleve `?` delante: si una línea no tuviera `cantidad` y los datos tampoco la tuvieran más arriba, o si faltara `cliente`, el relleno fallaría.
-		* `Teléfono` no aparece porque no hay `telefono` ni en el cliente ni en la raíz de los datos. `Nota` aparece en la primera `Línea` y no en la segunda.
-		* Dentro de un texto o de un bloque, un `?<var>` sin dato solo quita su trozo y el resto del texto se queda: `Referencia: <numero>?<revision>` produce `Referencia: 2026-0142` si no hay `revision`.
+		* Todo Slot es obligatorio, sea `<var>`, `{objeto}` o `[lista]`, salvo que lleve `?` delante: si una línea no tuviera `cantidad` y los datos tampoco la tuvieran más arriba, o si faltara `cliente`, el relleno fallaría. Un `?[lista]` o un `?{objeto}` sin dato quita el nodo, con sus hijos. Un `?<var>` sin dato no pone nada, y el nodo sigue apareciendo.
+		* `Teléfono` sale vacío porque no hay `telefono` ni en el cliente ni en la raíz de los datos. `Nota` tiene valor en la primera `Línea` y sale vacía en la segunda. Solo `[lista]` y `{objeto}` deciden si un nodo aparece y cuántas veces.
+		* Un `?<var>` sin dato solo quita su trozo y el resto del texto se queda: `Referencia: <numero>?<revision>` produce `Referencia: 2026-0142` si no hay `revision`.
 		* Un array vacío no produce ningún nodo y no es un error del relleno. Si el nodo era obligatorio, lo dirá la validación del documento rellenado.
 		* Un dato que no encaja con su Slot es un error: un objeto donde `<var>` espera un valor, o un valor donde `[lista]` espera un array.
 		* El comentario no pasa al documento rellenado.
