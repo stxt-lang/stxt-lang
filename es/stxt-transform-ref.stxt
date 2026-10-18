@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 	Metadata:
 		Status: Genesis
 		Last modif: 2026-10-18
-		Description: STXT-TRANSFORM-SPEC: cómo se exporta un documento STXT a JSON y otros formatos y cómo se importa desde ellos, a partir de su schema, y cómo se rellenan con datos los Slots de un documento.
+		Description: STXT-TRANSFORM-SPEC: cómo se exporta un documento STXT a JSON y cómo se importa desde JSON, a partir de su schema, y cómo se rellenan con datos los Slots de un documento.
 
 	Header: @STXT@ Transform
 
@@ -13,21 +13,30 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		Este documento es **STXT-TRANSFORM-SPEC**; las demás especificaciones lo citan con ese nombre.
 
 		Este documento define **@STXT@ Transform**: las operaciones que llevan el contenido de
-		un documento @STXT@ a otro formato de datos, lo traen desde él y lo completan con datos
-		externos. Son tres:
+		un documento @STXT@ a JSON, lo traen desde JSON y lo completan con datos externos. Son tres:
 
-		| Operación                  | Entrada                                         | Salida                                              |
-		|----------------------------|-------------------------------------------------|-----------------------------------------------------|
-		| **Exportación** (*export*) | Un documento @STXT@                             | El mismo contenido en otro formato: JSON, YAML, XML |
-		| **Importación** (*import*) | Un documento en otro formato                    | El mismo contenido como documento @STXT@            |
-		| **Relleno** (*fill*)       | Un documento @STXT@ con Slots y unos datos      | Un documento @STXT@ completo                        |
+		| Operación                  | Entrada                                         | Salida                                   |
+		|----------------------------|-------------------------------------------------|------------------------------------------|
+		| **Exportación** (*export*) | Un documento @STXT@                             | El mismo contenido en JSON               |
+		| **Importación** (*import*) | Un documento JSON                               | El mismo contenido como documento @STXT@ |
+		| **Relleno** (*fill*)       | Un documento @STXT@ con Slots y unos datos JSON | Un documento @STXT@ completo             |
 
 		Un **Slot** es el lugar de un documento que espera un dato. El relleno pone en cada Slot
 		el dato que le corresponde.
 
 		Su propósito es que un documento @STXT@ pueda ser la fuente de los programas que ya leen
-		JSON, YAML o XML, y que los datos que ya existen en esos formatos puedan pasar a @STXT@,
-		sin escribir una conversión propia para cada namespace.
+		JSON, y que los datos que ya existen en JSON puedan pasar a @STXT@, sin escribir una
+		conversión propia para cada namespace.
+
+		Las tres operaciones se definen sobre **JSON**: la exportación lo produce, la importación
+		lo lee y el relleno toma de él sus datos. Los formatos que representan los mismos datos (objetos,
+		listas y valores), como YAML o NestedText, pasan por JSON con sus propias herramientas:
+		esta especificación no los trata, y una implementación no necesita leerlos ni
+		escribirlos. Los formatos de nodos, como XML o KDL, no tienen una correspondencia única
+		con JSON y se tratarán en apartados propios, probablemente solo para la exportación:
+		escribirlos a partir del documento y su definición es sencillo, y leerlos pide un parser
+		de cada formato. La exportación basta para el uso que se busca: escribir en @STXT@ y
+		llevar el contenido como entrada a programas que leen otros formatos.
 
 		La exportación y la importación se apoyan en la **definición** del namespace del
 		documento, sea un schema o un template. El texto de un documento no dice qué valor es
@@ -53,8 +62,8 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		Depende de [*STXT-SPEC*](stxt-core-ref) y de [*STXT-SCHEMA-SPEC*](stxt-schema-ref).
 
 		Hoy contiene la presentación de las tres operaciones y dos ejemplos: la exportación y la
-		importación con JSON, y un primer esbozo del relleno de Slots. Las reglas de cada
-		formato y las de los Slots están por escribir.
+		importación con JSON, y un primer esbozo del relleno de Slots. Las reglas de JSON y
+		las de los Slots están por escribir.
 
 	Subsubheader: 1.2 Relación con el árbol canónico
 
@@ -94,9 +103,8 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		Definiciones adicionales:
 
 		* **Definición**: el schema o el template del namespace de un documento, como en [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
-		* **Formato externo**: un formato de datos distinto de @STXT@, como JSON, YAML o XML.
-		* **Exportación**: la operación que produce, a partir de un documento @STXT@ y su definición, un documento en un formato externo.
-		* **Importación**: la operación que produce, a partir de un documento en un formato externo y una definición, un documento @STXT@.
+		* **Exportación**: la operación que produce, a partir de un documento @STXT@ y su definición, un documento JSON.
+		* **Importación**: la operación que produce, a partir de un documento JSON y una definición, un documento @STXT@.
 		* **Slot**: el lugar de un documento @STXT@ que el relleno sustituye por un dato.
 		* **Documento con Slots**: un documento @STXT@ que contiene uno o más Slots.
 		* **Relleno**: la operación que produce un documento @STXT@ completo a partir de un documento con Slots y unos datos.
@@ -105,7 +113,7 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 
 	Content >>
 		Esta sección no es normativa. Muestra la dirección de la exportación y la importación
-		con el formato más sencillo.
+		con un documento sencillo.
 
 		Un documento:
 
@@ -229,6 +237,12 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		* El nombre `Puerto` de cada elemento del array `Puertos`.
 		* El namespace de cada nodo.
 		* La forma de cada nodo. Si la definición solo admite una, es esa. Si admite las dos, como `TEXT`, se elige la que pierde menos: bloque si el texto tiene saltos de línea o empieza por blancos, que un valor inline recortaría; inline en los demás casos. `Notas` se escribe como bloque `>>` porque su texto tiene más de una línea.
+
+		La importación acepta un string, un número o un booleano como valor de cualquier nodo sin
+		hijos, sea cual sea su tipo en la definición, y lo escribe como texto: `Puerto` recibe lo
+		mismo de `80` que de `"80"`. Así se importan también los datos de formatos sin tipos, como
+		NestedText, en los que todo valor es un string. Lo que no encaja con su tipo, como `"abc"`
+		en `Puerto`, lo rechaza la validación del documento importado.
 
 		El documento importado tiene el mismo árbol que el original. Solo se ha perdido el
 		comentario.

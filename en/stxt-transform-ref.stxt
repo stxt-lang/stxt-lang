@@ -3,7 +3,7 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 	Metadata:
 		Status: Genesis
 		Last modif: 2026-10-18
-		Description: STXT-TRANSFORM-SPEC: how an STXT document is exported to JSON and other formats and how it is imported from them, driven by its schema, and how the Slots of a document are filled with data.
+		Description: STXT-TRANSFORM-SPEC: how an STXT document is exported to JSON and how it is imported from JSON, driven by its schema, and how the Slots of a document are filled with data.
 
 	Header: @STXT@ Transform
 
@@ -13,21 +13,30 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 		This document is **STXT-TRANSFORM-SPEC**; the other specifications cite it by that name.
 
 		This document defines **@STXT@ Transform**: the operations that take the content of an
-		@STXT@ document to another data format, bring it back from one and complete it with
-		external data. There are three:
+		@STXT@ document to JSON, bring it back from JSON and complete it with external data. There are three:
 
-		| Operation  | Input                                    | Output                                              |
-		|------------|------------------------------------------|-----------------------------------------------------|
-		| **Export** | An @STXT@ document                       | The same content in another format: JSON, YAML, XML |
-		| **Import** | A document in another format             | The same content as an @STXT@ document              |
-		| **Fill**   | An @STXT@ document with Slots, and data  | A complete @STXT@ document                          |
+		| Operation  | Input                                        | Output                                 |
+		|------------|----------------------------------------------|----------------------------------------|
+		| **Export** | An @STXT@ document                           | The same content in JSON               |
+		| **Import** | A JSON document                              | The same content as an @STXT@ document |
+		| **Fill**   | An @STXT@ document with Slots, and JSON data | A complete @STXT@ document             |
 
 		A **Slot** is the place of a document that waits for a piece of data. Fill puts in every
 		Slot the data that belongs to it.
 
 		Its purpose is that an @STXT@ document can be the source of the programs that already
-		read JSON, YAML or XML, and that the data already existing in those formats can move to
-		@STXT@, without writing a conversion of its own for every namespace.
+		read JSON, and that the data already existing in JSON can move to @STXT@, without writing
+		a conversion of its own for every namespace.
+
+		The three operations are defined on **JSON**: export produces it, import reads it and
+		fill takes its data from it. The formats that represent the same data (objects, lists and values),
+		such as YAML or NestedText, go through JSON with their own tools: this specification
+		does not deal with them, and an implementation does not need to read or write them. Node
+		formats, such as XML or KDL, have no single correspondence with JSON and will be dealt
+		with in sections of their own, probably for export only: writing them from the document
+		and its definition is simple, and reading them needs a parser for each format. Export is
+		enough for the intended use: writing in @STXT@ and taking the content as input to
+		programs that read other formats.
 
 		Export and import rely on the **definition** of the namespace of the document, whether
 		a schema or a template. The text of a document does not say which value is a number,
@@ -53,8 +62,8 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 		It depends on [*STXT-SPEC*](stxt-core-ref) and [*STXT-SCHEMA-SPEC*](stxt-schema-ref).
 
 		Today it holds the presentation of the three operations and two examples: export and
-		import with JSON, and a first sketch of the fill of Slots. The rules of each format
-		and those of Slots are still to be written.
+		import with JSON, and a first sketch of the fill of Slots. The rules of JSON and
+		those of Slots are still to be written.
 
 	Subsubheader: 1.2 Relation to the canonical tree
 
@@ -95,9 +104,8 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 		Additional definitions:
 
 		* **Definition**: the schema or the template of the namespace of a document, as in [*STXT-DISCOVERY-SPEC*](stxt-discovery-ref).
-		* **External format**: a data format other than @STXT@, such as JSON, YAML or XML.
-		* **Export**: the operation that produces, from an @STXT@ document and its definition, a document in an external format.
-		* **Import**: the operation that produces, from a document in an external format and a definition, an @STXT@ document.
+		* **Export**: the operation that produces, from an @STXT@ document and its definition, a JSON document.
+		* **Import**: the operation that produces, from a JSON document and a definition, an @STXT@ document.
 		* **Slot**: the place of an @STXT@ document that fill replaces with a piece of data.
 		* **Document with Slots**: an @STXT@ document that contains one or more Slots.
 		* **Fill**: the operation that produces a complete @STXT@ document from a document with Slots and some data.
@@ -105,8 +113,8 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 	Subheader: 3. An example: @STXT@ and JSON
 
 	Content >>
-		This section is not normative. It shows the direction of export and import with the
-		simplest format.
+		This section is not normative. It shows the direction of export and import with a
+		simple document.
 
 		A document:
 
@@ -230,6 +238,12 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 		* The name `Port` of every element of the `Ports` array.
 		* The namespace of every node.
 		* The form of every node. If the definition only allows one, it is that one. If it allows both, as `TEXT` does, the one that loses less is chosen: a block if the text has line breaks or starts with blanks, which an inline value would trim; inline otherwise. `Notes` is written as a `>>` block because its text has more than one line.
+
+		Import accepts a string, a number or a boolean as the value of any node with no children,
+		whatever its type in the definition, and writes it as text: `Port` gets the same from `80`
+		as from `"80"`. That way the data of formats with no types, such as NestedText, where
+		every value is a string, is imported too. What does not fit its type, such as `"abc"` in
+		`Port`, is rejected by the validation of the imported document.
 
 		The imported document has the same tree as the original. Only the comment has been
 		lost.
