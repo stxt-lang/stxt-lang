@@ -229,7 +229,7 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 
 		* The name `Port` of every element of the `Ports` array.
 		* The namespace of every node.
-		* The form of every node: `Notes` is written as a `>>` block because its text has more than one line and `TEXT` allows both forms.
+		* The form of every node. If the definition only allows one, it is that one. If it allows both, as `TEXT` does, the one that loses less is chosen: a block if the text has line breaks or starts with blanks, which an inline value would trim; inline otherwise. `Notes` is written as a `>>` block because its text has more than one line.
 
 		The imported document has the same tree as the original. Only the comment has been
 		lost.
@@ -337,8 +337,8 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 		* There is no way to write as text something that has the form of a Slot. In a block with HTML or XML, `<p>` and `<br>` are Slots and need the data items `p` and `br`.
 		* The name of a Slot is looked up as it is among the keys of the data, case-sensitively: `<Date>` does not find `date`.
 		* If the element of an array is an object, fill enters it: every `Shipment` looks up its `carrier` and its `parcels` in its own element.
-		* If the element is a value, it is the value of the node: `Parcel: [parcels]` produces `Parcel: R-01` and `Parcel: R-02`.
-		* An array that mixes values and objects is an error. A `null` element is as if it were not there: it produces no node.
+		* If the element is a value, it is the value of the node: `Parcel: [parcels]` produces `Parcel: R-01` and `Parcel: R-02`. This only holds in a node that has nothing but the navigation: no text, no children, no more block lines. If `parcels` brings values, `Parcel: [parcels] (box)` is an error, and so is `Parcel: [parcels]` with a child `Weight: <weight>`.
+		* An array that mixes values and objects is an error, and so is an array inside another array. A `null` element is as if it were not there: it produces no node.
 		* A Slot looks up its data item first in the current element and, if it is not there, goes up through the context: the object or element that contains it, and so on up to the root of the data. Every `Shipment` finds `carrier` in its element and `number` in the root.
 		* A data item whose value is `null` counts as absent: the lookup keeps going up.
 		* The value of a node with Slots has two parts. At the start go only `[list]` and `{object}`, as many as needed and in any order. They apply from left to right, and each one repeats or enters over what the previous one leaves: `Address: {customer}[addresses]` enters the customer and repeats the node for each of their addresses. What follows is text, in which `<var>` puts values: `Line: [lines]<product>` repeats the node and puts in each one its `product`.

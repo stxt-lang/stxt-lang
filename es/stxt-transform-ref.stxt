@@ -228,7 +228,7 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 
 		* El nombre `Puerto` de cada elemento del array `Puertos`.
 		* El namespace de cada nodo.
-		* La forma de cada nodo: `Notas` se escribe como bloque `>>` porque su texto tiene más de una línea y `TEXT` admite las dos formas.
+		* La forma de cada nodo. Si la definición solo admite una, es esa. Si admite las dos, como `TEXT`, se elige la que pierde menos: bloque si el texto tiene saltos de línea o empieza por blancos, que un valor inline recortaría; inline en los demás casos. `Notas` se escribe como bloque `>>` porque su texto tiene más de una línea.
 
 		El documento importado tiene el mismo árbol que el original. Solo se ha perdido el
 		comentario.
@@ -336,8 +336,8 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		* No hay forma de escribir como texto algo que tiene forma de Slot. En un bloque con HTML o XML, `<p>` y `<br>` son Slots y necesitan los datos `p` y `br`.
 		* El nombre de un Slot se busca tal cual entre las claves de los datos, distinguiendo mayúsculas y minúsculas: `<Fecha>` no encuentra `fecha`.
 		* Si el elemento de un array es un objeto, el relleno entra en él: cada `Envío` busca su `transportista` y sus `bultos` en su propio elemento.
-		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`.
-		* Un array que mezcla valores y objetos es un error. Un elemento `null` es como si no estuviera: no produce ningún nodo.
+		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`. Solo vale en un nodo que no tiene nada más que la navegación: ni texto, ni hijos, ni más líneas de bloque. Si `bultos` trae valores, `Bulto: [bultos] (caja)` es un error, y también `Bulto: [bultos]` con un hijo `Peso: <peso>`.
+		* Un array que mezcla valores y objetos es un error, y también un array dentro de otro array. Un elemento `null` es como si no estuviera: no produce ningún nodo.
 		* Un Slot busca su dato primero en el elemento en curso y, si no está, va subiendo por el contexto: el objeto o el elemento que lo contiene, y así hasta la raíz de los datos. Cada `Envío` encuentra `transportista` en su elemento y `numero` en la raíz.
 		* Un dato que vale `null` cuenta como ausente: la búsqueda sigue subiendo.
 		* El valor de un nodo con Slots tiene dos partes. Al principio van solo `[lista]` y `{objeto}`, tantos como hagan falta y en cualquier orden. Se aplican de izquierda a derecha, y cada uno repite o entra sobre lo que deja el anterior: `Dirección: {cliente}[direcciones]` entra en el cliente y repite el nodo por cada una de sus direcciones. Lo que sigue es texto, en el que `<var>` pone valores: `Línea: [lineas]<producto>` repite el nodo y pone en cada uno su `producto`.
