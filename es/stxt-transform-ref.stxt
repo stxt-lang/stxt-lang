@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 
 	Metadata:
 		Status: Genesis
-		Last modif: 2026-10-18
+		Last modif: 2026-10-24
 		Description: STXT-TRANSFORM-SPEC: cómo se exporta un documento STXT a JSON y cómo se importa desde JSON, a partir de su schema, y cómo se rellenan con datos los Slots de un documento.
 
 	Header: @STXT@ Transform
@@ -269,15 +269,15 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 				Nota: ?<nota>
 			Envío: [envios]
 				Transportista: <transportista>
-				Referencia: <numero>/<transportista>
+				Referencia: ${numero}/${transportista}
 				Bulto: [bultos]
 			Instrucciones >>
-				Pedido <numero>, con fecha <fecha>.
+				Pedido ${numero}, con fecha ${fecha}.
 				Entregar por la mañana.
 			Etiqueta >>
 				[envios]
-				Pedido <numero>
-				Transportista: <transportista>
+				Pedido ${numero}
+				Transportista: ${transportista}
 
 	Content >>
 		Los datos, en JSON:
@@ -310,7 +310,6 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 			Cliente:
 				Nombre: Librería Atenea
 				Correo: pedidos@atenea.example
-				Teléfono:
 			Línea: Cuaderno A5
 				Cantidad: 40
 				Precio: 3.25
@@ -318,7 +317,6 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 			Línea: Lápiz HB
 				Cantidad: 200
 				Precio: 0.45
-				Nota:
 			Envío:
 				Transportista: Correos
 				Referencia: 2026-0142/Correos
@@ -341,34 +339,38 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 	Content >>
 		Los Slots del ejemplo:
 
-		| Slot        | Qué hace                                                                                  | En el ejemplo                 |
-		|-------------|-------------------------------------------------------------------------------------------|-------------------------------|
-		| `<var>`     | Pone el valor del dato `var`                                                              | `Fecha: <fecha>`              |
-		| `{objeto}`  | Entra en el objeto `objeto`: los Slots del nodo y de sus hijos se buscan dentro de él     | `Cliente: {cliente}`          |
-		| `[lista]`   | Repite el nodo, con sus hijos, una vez por cada elemento del array `lista`                | `Línea`, `Envío`, `Bulto`     |
-		| `?` delante | Hace opcional el Slot: si el dato no existe, `[lista]` y `{objeto}` quitan el nodo y `<var>` no pone nada | `Teléfono: ?<telefono>`       |
+		| Slot        | Qué hace                                                                                       | En el ejemplo                            |
+		|-------------|------------------------------------------------------------------------------------------------|------------------------------------------|
+		| `[lista]`   | Repite el nodo, con sus hijos, una vez por cada elemento del array `lista`                     | `Línea`, `Envío`, `Bulto`                |
+		| `{objeto}`  | Entra en el objeto `objeto`: los Slots del nodo y de sus hijos se buscan dentro de él          | `Cliente: {cliente}`                     |
+		| `<var>`     | Pone el dato `var` como valor del nodo; cierra el valor                                        | `Fecha: <fecha>`                         |
+		| `${var}`    | Pone el dato `var` dentro de un texto                                                          | `Referencia: ${numero}/${transportista}` |
+		| `?`         | Hace opcional el Slot: si el dato no existe, `?[lista]`, `?{objeto}` y `?<var>` quitan el nodo, y `${?var}` no pone nada | `Teléfono: ?<telefono>` |
 
-		* El nombre de un Slot solo puede tener letras ASCII, dígitos, `-` y `_`, y al menos un carácter: `<numero>`, `[lineas]`, `{datos-cliente}`. Todo lo que tiene esa forma es un Slot, también dentro de un texto o de un bloque: `Formato: <html>` espera un dato `html`. Lo que no la tiene, como `</p>` o `<a href="x">`, es texto.
-		* No hay forma de escribir como texto algo que tiene forma de Slot. En un bloque con HTML o XML, `<p>` y `<br>` son Slots y necesitan los datos `p` y `br`.
+		* El nombre de un Slot solo puede tener letras ASCII, dígitos, `-` y `_`, y al menos un carácter: `<numero>`, `[lineas]`, `{datos-cliente}`, `${id_2}`.
 		* El nombre de un Slot se busca tal cual entre las claves de los datos, distinguiendo mayúsculas y minúsculas: `<Fecha>` no encuentra `fecha`.
+		* El valor de un nodo con Slots tiene dos partes. Al principio va la **navegación**: `[lista]` y `{objeto}`, tantos como hagan falta y en cualquier orden, y como mucho un `<var>` al final. Se aplican de izquierda a derecha, y cada uno repite o entra sobre lo que deja el anterior: `Dirección: {cliente}[direcciones]` entra en el cliente y repite el nodo por cada una de sus direcciones. Puede haber blancos entre ellos y antes del texto: `{cliente} [direcciones]` es lo mismo que `{cliente}[direcciones]`. Lo que sigue es texto.
+		* `<var>` pone el dato como valor del nodo y cierra el valor: detrás solo puede haber blancos. `Línea: [lineas]<producto>` repite el nodo y pone en cada uno su `producto`. `Línea: [lineas]<producto> (uds.)` y `Línea: <producto>[lineas]` son errores. El nodo puede tener hijos: `Pedido: <numero>` tiene `Fecha`, `Cliente` y los demás.
+		* En el texto, `${var}` pone un dato, y un valor puede llevar varios: `Referencia: ${numero}/${transportista}` produce `Referencia: 2026-0142/Correos`. El texto que los rodea se copia tal cual. `Fecha: ${fecha}` produce lo mismo que `Fecha: <fecha>`.
+		* En el texto, `<x>`, `[x]` y `{x}` son texto: ya no se repite, ni se entra, ni se pone un valor. `Etiqueta: Ver [nota]` se copia tal cual, y en un bloque con HTML o XML `<p>` y `<br>` son texto.
+		* Todo lo que tiene la forma `${nombre}` es un Slot, también en un bloque: `echo "${HOME}"` espera un dato `HOME`. Para escribir `${` como texto se escribe `$${`: `echo "$${HOME}"` produce `echo "${HOME}"`. Es el único escape. Un `$$` que no va seguido de `{` se copia tal cual, y lo que no tiene forma de Slot, como `${}` o `${a b}`, es texto.
 		* Si el elemento de un array es un objeto, el relleno entra en él: cada `Envío` busca su `transportista` y sus `bultos` en su propio elemento.
-		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`. Solo vale en un nodo que no tiene nada más que la navegación: ni texto, ni hijos, ni más líneas de bloque. Si `bultos` trae valores, `Bulto: [bultos] (caja)` es un error, y también `Bulto: [bultos]` con un hijo `Peso: <peso>`. Tampoco puede seguirle otra navegación: `Bulto: [bultos]{medidas}` es un error.
+		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`. Solo vale en un nodo que no tiene nada más que la navegación: ni texto, ni hijos, ni más líneas de bloque. Si `bultos` trae valores, `Bulto: [bultos] (caja)` es un error, y también `Bulto: [bultos]` con un hijo `Peso: <peso>`. Tampoco puede seguirle otra navegación: `Bulto: [bultos]{medidas}` y `Bulto: [bultos]<peso>` son errores.
 		* Un array que mezcla valores y objetos es un error, y también un array dentro de otro array. Un elemento `null` es como si no estuviera: no produce ningún nodo.
 		* Un Slot busca su dato primero en el elemento en curso y, si no está, va subiendo por el contexto: el objeto o el elemento que lo contiene, y así hasta la raíz de los datos. Cada `Envío` encuentra `transportista` en su elemento y `numero` en la raíz.
 		* Un dato que vale `null` cuenta como ausente: la búsqueda sigue subiendo.
-		* El valor de un nodo con Slots tiene dos partes. Al principio van solo `[lista]` y `{objeto}`, tantos como hagan falta y en cualquier orden. Se aplican de izquierda a derecha, y cada uno repite o entra sobre lo que deja el anterior: `Dirección: {cliente}[direcciones]` entra en el cliente y repite el nodo por cada una de sus direcciones. Puede haber blancos entre ellos y antes del texto: `{cliente} [direcciones]` es lo mismo que `{cliente}[direcciones]`, y `Línea: [lineas] <producto>` lo mismo que `Línea: [lineas]<producto>`. Lo que sigue es texto, en el que `<var>` pone valores: `Línea: [lineas]<producto>` repite el nodo y pone en cada uno su `producto`.
-		* En el texto ya no se puede repetir ni entrar: `Línea: <producto>[lineas]` y `Etiqueta: Ver [nota]` son errores.
-		* Un `<var>` puede ir dentro de un texto, y un valor puede llevar varios: `Referencia: <numero>/<transportista>` produce `Referencia: 2026-0142/Correos`. El texto que los rodea se copia tal cual.
 		* En un bloque `>>`, la primera línea hace el papel del principio del valor. Si solo tiene `[lista]` y `{objeto}`, es la navegación del nodo: se aplica igual que en un nodo inline y no pasa al documento rellenado. `Etiqueta >>` empieza con `[envios]` y produce un bloque por envío. Lo que sigue es texto.
-		* Si la primera línea de un bloque tiene algo más, todo el bloque es texto, y un `[lista]` o un `{objeto}` en cualquiera de sus líneas es un error.
-		* En el texto de un bloque, cada `<var>` se sustituye por su dato y el resto se copia tal cual. Dentro del bloque, `Transportista: <transportista>` es texto, no un nodo.
+		* En un bloque, `<var>` nunca es navegación: una primera línea `<html>` es texto. Un dato se pone en un bloque con `${var}`.
+		* Si la primera línea de un bloque tiene algo más, todo el bloque es texto, también los `[lista]` y `{objeto}` de cualquiera de sus líneas.
+		* En el texto de un bloque, cada `${var}` se sustituye por su dato y el resto se copia tal cual. Dentro del bloque, `Transportista: ${transportista}` es texto, no un nodo.
 		* El nodo rellenado tiene la forma que tiene en el documento con Slots: `Nodo: <var>` sale inline y `Nodo >>` sale como bloque. Un dato con saltos de línea en un nodo inline es un error. En un bloque, produce varias líneas.
-		* El documento rellenado tiene el árbol que daría su texto al parsearlo, con los valores normalizados como en cualquier documento: un valor inline sin blancos al principio ni al final ([*STXT-SPEC* §5.1](stxt-core-ref#s5-1)), y un bloque sin blancos al final de sus líneas ni líneas vacías al final ([§10.2](stxt-core-ref#s10-2) y [§10.3](stxt-core-ref#s10-3)). Vale igual para lo que pone el dato que para el texto que lo rodea: `A: <t> ?<falta>` sin `falta` deja `A: x`, sin el blanco final. Los blancos del principio de una línea de bloque y las líneas vacías intermedias son contenido y se conservan.
+		* El documento rellenado tiene el árbol que daría su texto al parsearlo, con los valores normalizados como en cualquier documento: un valor inline sin blancos al principio ni al final ([*STXT-SPEC* §5.1](stxt-core-ref#s5-1)), y un bloque sin blancos al final de sus líneas ni líneas vacías al final ([§10.2](stxt-core-ref#s10-2) y [§10.3](stxt-core-ref#s10-3)). Vale igual para lo que pone el dato que para el texto que lo rodea: `A: ${t} ${?falta}` sin `falta` deja `A: x`, sin el blanco final. Los blancos del principio de una línea de bloque y las líneas vacías intermedias son contenido y se conservan.
 		* Un valor sin Slots se copia tal cual: `Moneda: EUR`.
-		* Todo Slot es obligatorio, sea `<var>`, `{objeto}` o `[lista]`, salvo que lleve `?` delante: si una línea no tuviera `cantidad` y los datos tampoco la tuvieran más arriba, o si faltara `cliente`, el relleno fallaría. Un `?[lista]` o un `?{objeto}` sin dato quita el nodo, con sus hijos. Un `?<var>` sin dato no pone nada, y el nodo sigue apareciendo.
-		* `Teléfono` sale vacío porque no hay `telefono` ni en el cliente ni en la raíz de los datos. `Nota` tiene valor en la primera `Línea` y sale vacía en la segunda. Solo `[lista]` y `{objeto}` deciden si un nodo aparece y cuántas veces.
-		* Un `?<var>` sin dato solo quita su trozo y el resto del texto se queda: `Referencia: <numero>?<revision>` produce `Referencia: 2026-0142` si no hay `revision`.
+		* Todo Slot es obligatorio salvo que lleve `?`: `?[lista]`, `?{objeto}`, `?<var>` y `${?var}`. Si una línea no tuviera `cantidad` y los datos tampoco la tuvieran más arriba, o si faltara `cliente`, el relleno fallaría.
+		* Sin dato, `?[lista]`, `?{objeto}` y `?<var>` quitan el nodo, con sus hijos. `${?var}` no pone nada, y el nodo sigue apareciendo: `Teléfono: ${?telefono}` daría `Teléfono:` vacío.
+		* `Teléfono` no sale porque no hay `telefono` ni en el cliente ni en la raíz de los datos. `Nota` sale en la primera `Línea` y no en la segunda. Solo la navegación decide si un nodo aparece y cuántas veces.
+		* Un `${?var}` sin dato solo quita su trozo y el resto del texto se queda: `Referencia: ${numero}${?revision}` produce `Referencia: 2026-0142` si no hay `revision`.
 		* Un array vacío no produce ningún nodo y no es un error del relleno. Si el nodo era obligatorio, lo dirá la validación del documento rellenado.
-		* Un dato que no encaja con su Slot es un error: un objeto donde `<var>` espera un valor, o un valor donde `[lista]` espera un array.
+		* Un dato que no encaja con su Slot es un error: un objeto donde `<var>` o `${var}` esperan un valor, o un valor donde `[lista]` espera un array.
 		* El comentario no pasa al documento rellenado.
 		* Un documento con Slots no se valida. El que se valida es siempre el documento rellenado.

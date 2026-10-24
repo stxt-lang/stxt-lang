@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 
 	Metadata:
 		Status: Genesis
-		Last modif: 2026-10-18
+		Last modif: 2026-10-24
 		Description: STXT-TRANSFORM-SPEC: how an STXT document is exported to JSON and how it is imported from JSON, driven by its schema, and how the Slots of a document are filled with data.
 
 	Header: @STXT@ Transform
@@ -270,15 +270,15 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 				Note: ?<note>
 			Shipment: [shipments]
 				Carrier: <carrier>
-				Reference: <number>/<carrier>
+				Reference: ${number}/${carrier}
 				Parcel: [parcels]
 			Instructions >>
-				Order <number>, dated <date>.
+				Order ${number}, dated ${date}.
 				Deliver in the morning.
 			Label >>
 				[shipments]
-				Order <number>
-				Carrier: <carrier>
+				Order ${number}
+				Carrier: ${carrier}
 
 	Content >>
 		The data, in JSON:
@@ -311,7 +311,6 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 			Customer:
 				Name: Athena Bookshop
 				Email: orders@athena.example
-				Phone:
 			Line: A5 notebook
 				Quantity: 40
 				Price: 3.25
@@ -319,7 +318,6 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 			Line: HB pencil
 				Quantity: 200
 				Price: 0.45
-				Note:
 			Shipment:
 				Carrier: Royal Mail
 				Reference: 2026-0142/Royal Mail
@@ -342,34 +340,38 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 	Content >>
 		The Slots of the example:
 
-		| Slot       | What it does                                                                             | In the example                |
-		|------------|------------------------------------------------------------------------------------------|-------------------------------|
-		| `<var>`    | Puts the value of the data item `var`                                                     | `Date: <date>`                |
-		| `{object}` | Enters the object `object`: the Slots of the node and of its children are looked up in it | `Customer: {customer}`        |
-		| `[list]`   | Repeats the node, with its children, once for every element of the array `list`           | `Line`, `Shipment`, `Parcel`  |
-		| Leading `?` | Makes the Slot optional: if the data item does not exist, `[list]` and `{object}` remove the node and `<var>` puts nothing | `Phone: ?<phone>`             |
+		| Slot       | What it does                                                                              | In the example                    |
+		|------------|-------------------------------------------------------------------------------------------|-----------------------------------|
+		| `[list]`   | Repeats the node, with its children, once for every element of the array `list`          | `Line`, `Shipment`, `Parcel`      |
+		| `{object}` | Enters the object `object`: the Slots of the node and of its children are looked up in it | `Customer: {customer}`            |
+		| `<var>`    | Puts the data item `var` as the value of the node; it closes the value                    | `Date: <date>`                    |
+		| `${var}`   | Puts the data item `var` inside a text                                                    | `Reference: ${number}/${carrier}` |
+		| `?`        | Makes the Slot optional: if the data item does not exist, `?[list]`, `?{object}` and `?<var>` remove the node, and `${?var}` puts nothing | `Phone: ?<phone>` |
 
-		* The name of a Slot can only have ASCII letters, digits, `-` and `_`, and at least one character: `<number>`, `[lines]`, `{customer-data}`. Everything that has that form is a Slot, also inside a text or a block: `Format: <html>` expects a data item `html`. What does not have it, such as `</p>` or `<a href="x">`, is text.
-		* There is no way to write as text something that has the form of a Slot. In a block with HTML or XML, `<p>` and `<br>` are Slots and need the data items `p` and `br`.
+		* The name of a Slot can only have ASCII letters, digits, `-` and `_`, and at least one character: `<number>`, `[lines]`, `{customer-data}`, `${id_2}`.
 		* The name of a Slot is looked up as it is among the keys of the data, case-sensitively: `<Date>` does not find `date`.
+		* The value of a node with Slots has two parts. At the start goes the **navigation**: `[list]` and `{object}`, as many as needed and in any order, and at most one `<var>` at the end. They apply from left to right, and each one repeats or enters over what the previous one leaves: `Address: {customer}[addresses]` enters the customer and repeats the node for each of their addresses. There can be blanks between them and before the text: `{customer} [addresses]` is the same as `{customer}[addresses]`. What follows is text.
+		* `<var>` puts the data item as the value of the node and closes the value: only blanks can follow it. `Line: [lines]<product>` repeats the node and puts in each one its `product`. `Line: [lines]<product> (units)` and `Line: <product>[lines]` are errors. The node can have children: `Order: <number>` has `Date`, `Customer` and the rest.
+		* In the text, `${var}` puts a data item, and a value can carry several: `Reference: ${number}/${carrier}` produces `Reference: 2026-0142/Royal Mail`. The text around them is copied as it is. `Date: ${date}` produces the same as `Date: <date>`.
+		* In the text, `<x>`, `[x]` and `{x}` are text: nothing is repeated, entered or put there any more. `Label: See [note]` is copied as it is, and in a block with HTML or XML `<p>` and `<br>` are text.
+		* Everything that has the form `${name}` is a Slot, also in a block: `echo "${HOME}"` expects a data item `HOME`. To write `${` as text, write `$${`: `echo "$${HOME}"` produces `echo "${HOME}"`. It is the only escape. A `$$` not followed by `{` is copied as it is, and what does not have the form of a Slot, such as `${}` or `${a b}`, is text.
 		* If the element of an array is an object, fill enters it: every `Shipment` looks up its `carrier` and its `parcels` in its own element.
-		* If the element is a value, it is the value of the node: `Parcel: [parcels]` produces `Parcel: R-01` and `Parcel: R-02`. This only holds in a node that has nothing but the navigation: no text, no children, no more block lines. If `parcels` brings values, `Parcel: [parcels] (box)` is an error, and so is `Parcel: [parcels]` with a child `Weight: <weight>`. No further navigation can follow it either: `Parcel: [parcels]{size}` is an error.
+		* If the element is a value, it is the value of the node: `Parcel: [parcels]` produces `Parcel: R-01` and `Parcel: R-02`. This only holds in a node that has nothing but the navigation: no text, no children, no more block lines. If `parcels` brings values, `Parcel: [parcels] (box)` is an error, and so is `Parcel: [parcels]` with a child `Weight: <weight>`. No further navigation can follow it either: `Parcel: [parcels]{size}` and `Parcel: [parcels]<weight>` are errors.
 		* An array that mixes values and objects is an error, and so is an array inside another array. A `null` element is as if it were not there: it produces no node.
 		* A Slot looks up its data item first in the current element and, if it is not there, goes up through the context: the object or element that contains it, and so on up to the root of the data. Every `Shipment` finds `carrier` in its element and `number` in the root.
 		* A data item whose value is `null` counts as absent: the lookup keeps going up.
-		* The value of a node with Slots has two parts. At the start go only `[list]` and `{object}`, as many as needed and in any order. They apply from left to right, and each one repeats or enters over what the previous one leaves: `Address: {customer}[addresses]` enters the customer and repeats the node for each of their addresses. There can be blanks between them and before the text: `{customer} [addresses]` is the same as `{customer}[addresses]`, and `Line: [lines] <product>` the same as `Line: [lines]<product>`. What follows is text, in which `<var>` puts values: `Line: [lines]<product>` repeats the node and puts in each one its `product`.
-		* In the text it is no longer possible to repeat or enter: `Line: <product>[lines]` and `Label: See [note]` are errors.
-		* A `<var>` can go inside a text, and a value can carry several: `Reference: <number>/<carrier>` produces `Reference: 2026-0142/Royal Mail`. The text around them is copied as it is.
 		* In a `>>` block, the first line plays the role of the start of the value. If it only has `[list]` and `{object}`, it is the navigation of the node: it applies as in an inline node and does not pass to the filled document. `Label >>` starts with `[shipments]` and produces one block per shipment. What follows is text.
-		* If the first line of a block has anything else, the whole block is text, and a `[list]` or an `{object}` in any of its lines is an error.
-		* In the text of a block, each `<var>` is replaced by its data item and the rest is copied as it is. Inside the block, `Carrier: <carrier>` is text, not a node.
+		* In a block, `<var>` is never navigation: a first line `<html>` is text. A data item goes into a block with `${var}`.
+		* If the first line of a block has anything else, the whole block is text, including the `[list]` and `{object}` of any of its lines.
+		* In the text of a block, each `${var}` is replaced by its data item and the rest is copied as it is. Inside the block, `Carrier: ${carrier}` is text, not a node.
 		* The filled node has the form it has in the document with Slots: `Node: <var>` comes out inline and `Node >>` comes out as a block. A data item with line breaks in an inline node is an error. In a block, it produces several lines.
-		* The filled document has the tree its text would give when parsed, with the values normalized as in any document: an inline value with no blanks at the start or the end ([*STXT-SPEC* §5.1](stxt-core-ref#s5-1)), and a block with no blanks at the end of its lines and no empty lines at the end ([§10.2](stxt-core-ref#s10-2) and [§10.3](stxt-core-ref#s10-3)). This applies alike to what the data puts and to the text around it: `A: <t> ?<missing>` with no `missing` leaves `A: x`, without the trailing blank. The blanks at the start of a block line and the empty lines in between are content and are kept.
+		* The filled document has the tree its text would give when parsed, with the values normalized as in any document: an inline value with no blanks at the start or the end ([*STXT-SPEC* §5.1](stxt-core-ref#s5-1)), and a block with no blanks at the end of its lines and no empty lines at the end ([§10.2](stxt-core-ref#s10-2) and [§10.3](stxt-core-ref#s10-3)). This applies alike to what the data puts and to the text around it: `A: ${t} ${?missing}` with no `missing` leaves `A: x`, without the trailing blank. The blanks at the start of a block line and the empty lines in between are content and are kept.
 		* A value with no Slots is copied as it is: `Currency: EUR`.
-		* Every Slot is required, whether `<var>`, `{object}` or `[list]`, unless it carries a leading `?`: if a line had no `quantity` and the data had none further up either, or if `customer` were missing, fill would fail. A `?[list]` or a `?{object}` with no data item removes the node, with its children. A `?<var>` with no data item puts nothing, and the node still appears.
-		* `Phone` comes out empty because there is no `phone` either in the customer or in the root of the data. `Note` has a value in the first `Line` and comes out empty in the second. Only `[list]` and `{object}` decide whether a node appears and how many times.
-		* A `?<var>` with no data item only removes its own piece and the rest of the text stays: `Reference: <number>?<revision>` produces `Reference: 2026-0142` if there is no `revision`.
+		* Every Slot is required unless it carries a `?`: `?[list]`, `?{object}`, `?<var>` and `${?var}`. If a line had no `quantity` and the data had none further up either, or if `customer` were missing, fill would fail.
+		* With no data item, `?[list]`, `?{object}` and `?<var>` remove the node, with its children. `${?var}` puts nothing, and the node still appears: `Phone: ${?phone}` would give an empty `Phone:`.
+		* `Phone` does not come out because there is no `phone` either in the customer or in the root of the data. `Note` comes out in the first `Line` and not in the second. Only the navigation decides whether a node appears and how many times.
+		* A `${?var}` with no data item only removes its own piece and the rest of the text stays: `Reference: ${number}${?revision}` produces `Reference: 2026-0142` if there is no `revision`.
 		* An empty array produces no node and is not an error of fill. If the node was required, the validation of the filled document will say so.
-		* A data item that does not fit its Slot is an error: an object where `<var>` expects a value, or a value where `[list]` expects an array.
+		* A data item that does not fit its Slot is an error: an object where `<var>` or `${var}` expects a value, or a value where `[list]` expects an array.
 		* The comment does not pass to the filled document.
 		* A document with Slots is not validated. The one that is validated is always the filled document.
