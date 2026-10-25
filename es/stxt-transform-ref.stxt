@@ -250,8 +250,12 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 	Subheader: 4. Un ejemplo: relleno de Slots
 
 	Content >>
-		Esta sección no es normativa. Es un primer esbozo de los Slots y de cómo se combinan.
+		Esta sección no es normativa. Es un primer esbozo de los Slots y de cómo se combinan: un
+		ejemplo completo y, después, las reglas que sigue, agrupadas por temas.
 
+	Subsubheader: 4.1 El ejemplo
+
+	Content >>
 		Un documento con Slots:
 
 	Code >>
@@ -337,44 +341,75 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 				Transportista: MRW
 
 	Content >>
-		Los Slots del ejemplo:
+		`Línea` y `Envío` se repiten una vez por elemento, y cada `Envío` busca su `transportista`
+		y sus `bultos` en su propio elemento; `${numero}` lo encuentra en la raíz de los datos.
+		`Teléfono` no sale porque el cliente no tiene `telefono`, y la navegación no lo busca en la
+		raíz. `Nota` sale en la primera `Línea` y no en la segunda.
 
-		| Slot        | Qué hace                                                                                       | En el ejemplo                            |
-		|-------------|------------------------------------------------------------------------------------------------|------------------------------------------|
-		| `[lista]`   | Repite el nodo, con sus hijos, una vez por cada elemento del array `lista`                     | `Línea`, `Envío`, `Bulto`                |
-		| `{objeto}`  | Entra en el objeto `objeto`: los Slots del nodo y de sus hijos se buscan dentro de él          | `Cliente: {cliente}`                     |
-		| `<var>`     | Pone el dato `var` como valor del nodo; cierra el valor                                        | `Fecha: <fecha>`                         |
-		| `${var}`    | Pone el dato `var` dentro de un texto                                                          | `Referencia: ${numero}/${transportista}` |
-		| `?`         | Hace opcional el Slot: si el dato no existe, `[?lista]`, `{?objeto}` y `<?var>` quitan el nodo, y `${?var}` no pone nada | `Teléfono: <?telefono>` |
+	Subsubheader: 4.2 Los Slots
 
-		* El nombre de un Slot solo puede tener letras ASCII, dígitos, `-` y `_`, y al menos un carácter: `<numero>`, `[lineas]`, `{datos-cliente}`, `${id_2}`.
-		* El nombre de un Slot se busca tal cual entre las claves de los datos, distinguiendo mayúsculas y minúsculas: `<Fecha>` no encuentra `fecha`.
-		* El valor de un nodo con Slots tiene dos partes. Al principio va la **navegación**: `[lista]` y `{objeto}`, tantos como hagan falta y en cualquier orden, y como mucho un `<var>` al final. Se aplican de izquierda a derecha, y cada uno repite o entra sobre lo que deja el anterior: `Dirección: {cliente}[direcciones]` entra en el cliente y repite el nodo por cada una de sus direcciones. Puede haber blancos entre ellos y antes del texto: `{cliente} [direcciones]` es lo mismo que `{cliente}[direcciones]`. Lo que sigue es texto.
-		* `<var>` pone el dato como valor del nodo y cierra el valor: detrás solo puede haber blancos. `Línea: [lineas]<producto>` repite el nodo y pone en cada uno su `producto`. `Línea: [lineas]<producto> (uds.)` y `Línea: <producto>[lineas]` son errores. El nodo puede tener hijos: `Pedido: <numero>` tiene `Fecha`, `Cliente` y los demás.
-		* En el texto, `${var}` pone un dato, y un valor puede llevar varios: `Referencia: ${numero}/${transportista}` produce `Referencia: 2026-0142/Correos`. El texto que los rodea se copia tal cual. `Fecha: ${fecha}` produce lo mismo que `Fecha: <fecha>` cuando el dato está en el elemento en curso; si está más arriba, solo lo encuentra `${fecha}`.
-		* En el texto, `<x>`, `[x]` y `{x}` son texto: ya no se repite, ni se entra, ni se pone un valor. `Etiqueta: Ver [nota]` se copia tal cual, y en un bloque con HTML o XML `<p>` y `<br>` son texto.
-		* Todo lo que tiene la forma `${nombre}` es un Slot, también en un bloque: `echo "${HOME}"` espera un dato `HOME`. Para escribir `${` como texto se escribe `$${`: `echo "$${HOME}"` produce `echo "${HOME}"`. Es el único escape. Un `$$` que no va seguido de `{` se copia tal cual, y lo que no tiene forma de Slot, como `${}` o `${a b}`, es texto.
-		* Si el elemento de un array es un objeto, el relleno entra en él: cada `Envío` busca su `transportista` y sus `bultos` en su propio elemento.
-		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`. Solo vale en un nodo que no tiene nada más que la navegación: ni texto, ni hijos, ni más líneas de bloque. Si `bultos` trae valores, `Bulto: [bultos] (caja)` es un error, y también `Bulto: [bultos]` con un hijo `Peso: <peso>`. Tampoco puede seguirle otra navegación: `Bulto: [bultos]{medidas}` y `Bulto: [bultos]<peso>` son errores.
-		* Un array que mezcla valores y objetos es un error, y también un array dentro de otro array. Un elemento `null` es como si no estuviera: no produce ningún nodo.
+	Content >>
+		| Slot        | Qué hace                                                                              | En el ejemplo                            |
+		|-------------|---------------------------------------------------------------------------------------|------------------------------------------|
+		| `[lista]`   | Repite el nodo, con sus hijos, una vez por cada elemento del array `lista`            | `Línea`, `Envío`, `Bulto`                |
+		| `{objeto}`  | Entra en el objeto `objeto`: los Slots del nodo y de sus hijos se buscan dentro de él | `Cliente: {cliente}`                     |
+		| `<var>`     | Pone el dato `var` como valor del nodo; cierra el valor                               | `Fecha: <fecha>`                         |
+		| `${var}`    | Pone el dato `var` dentro de un texto                                                 | `Referencia: ${numero}/${transportista}` |
+		| `?`         | Hace opcional el Slot ([§4.7](#s4-7))                                                 | `Teléfono: <?telefono>`                  |
+
+		Los tres primeros son la **navegación** del nodo y van al principio de su valor; `${var}` va
+		en el texto que la sigue.
+
+		* El nombre de un Slot tiene al menos un carácter, y solo letras ASCII, dígitos, `-` y `_`: `<numero>`, `[lineas]`, `{datos-cliente}`, `${id_2}`. Se busca tal cual entre las claves de los datos, distinguiendo mayúsculas y minúsculas: `<Fecha>` no encuentra `fecha`.
+
+	Subsubheader: 4.3 Navegación
+
+	Content >>
+		* El valor de un nodo con Slots empieza por su navegación: `[lista]` y `{objeto}`, tantos como hagan falta y en cualquier orden, y como mucho un `<var>` al final. Se aplican de izquierda a derecha, y cada uno repite o entra sobre lo que deja el anterior: `Dirección: {cliente}[direcciones]` entra en el cliente y repite el nodo por cada una de sus direcciones. Puede haber blancos entre ellos y antes del texto: `{cliente} [direcciones]` es lo mismo que `{cliente}[direcciones]`. Lo que sigue es texto ([§4.4](#s4-4)).
+		* `<var>` pone el dato como valor del nodo y cierra el valor: detrás solo puede haber blancos. `Línea: [lineas]<producto>` repite el nodo y pone en cada uno su `producto`; `Línea: [lineas]<producto> (uds.)` y `Línea: <producto>[lineas]` son errores. El nodo puede tener hijos: `Pedido: <numero>` tiene `Fecha`, `Cliente` y los demás.
+		* Si el elemento de un array es un objeto, el relleno entra en él. Si es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`. Ese nodo no puede tener nada más que la navegación: ni texto, ni hijos, ni más líneas de bloque, ni otra navegación detrás. Si `bultos` trae valores, `Bulto: [bultos] (caja)`, `Bulto: [bultos]` con un hijo `Peso: <peso>`, `Bulto: [bultos]{medidas}` y `Bulto: [bultos]<peso>` son errores.
+
+	Subsubheader: 4.4 Texto
+
+	Content >>
+		* En el texto, `${var}` pone un dato, y un valor puede llevar varios: `Referencia: ${numero}/${transportista}` produce `Referencia: 2026-0142/Correos`. Todo lo que tiene la forma `${nombre}` es un Slot, también en un bloque: `echo "${HOME}"` espera un dato `HOME`. `Fecha: ${fecha}` produce lo mismo que `Fecha: <fecha>` cuando el dato está en el elemento en curso; si está más arriba, solo lo encuentra `${fecha}` ([§4.6](#s4-6)).
+		* Para escribir `${` como texto se escribe `$${`: `echo "$${HOME}"` produce `echo "${HOME}"`. Es el único escape. Un `$$` que no va seguido de `{` se copia tal cual.
+		* El resto del texto se copia tal cual: un valor sin Slots (`Moneda: EUR`), lo que no tiene forma de Slot (`${}`, `${a b}`) y también `<x>`, `[x]` y `{x}`, que en el texto no repiten, ni entran, ni ponen un valor. `Etiqueta: Ver [nota]` se copia tal cual, y en un bloque con HTML o XML `<p>` y `<br>` son texto.
+
+	Subsubheader: 4.5 Bloques
+
+	Content >>
+		* En un bloque `>>`, la primera línea hace el papel del principio del valor. Si empieza por `[lista]`, `{objeto}` o `<var>`, es la navegación del nodo: tiene que ser navegación válida entera, sin nada más, se aplica igual que en un nodo inline y no pasa al documento rellenado. `Etiqueta >>` empieza con `[envios]` y produce un bloque por envío. Si la primera línea empieza por cualquier otra cosa, todo el bloque es texto, también los `[lista]`, `{objeto}` y `<var>` de cualquiera de sus líneas.
+
+		| Primera línea                                                                              | Resultado                                     |
+		|--------------------------------------------------------------------------------------------|-----------------------------------------------|
+		| `[envios]`, `{cliente} [direcciones]`, `<?notas>`                                          | Navegación                                    |
+		| `[envios] Pedido`, `<numero> Pedido`, `{cliente} ${nombre}`, `[parece]{navegacion} x`       | Error: hay algo detrás de la navegación       |
+		| Un enlace de Markdown, como `[Inicio](index)`; `<html>` o `<p>Hola</p>` en un bloque HTML   | Error: empiezan por algo con forma de Slot    |
+		| `<!DOCTYPE html>`, `<html lang="es">`, `<?xml version="1.0"?>`, `Ver <b>[nota]</b>`         | Texto: no empiezan por un Slot de navegación  |
+
+		* `<var>` pone el dato como contenido del bloque y cierra el valor, igual que en un nodo inline: el bloque no puede tener más líneas. Un bloque `Notas >>` cuya única línea es `<?notas>` pone las notas, con sus saltos de línea, o quita el nodo si no hay notas; con la línea `${notas}` produce lo mismo cuando hay dato.
+		* En el texto de un bloque, cada `${var}` se sustituye por su dato y el resto se copia tal cual: dentro del bloque, `Transportista: ${transportista}` es texto, no un nodo.
+
+	Subsubheader: 4.6 Los datos
+
+	Content >>
 		* La navegación busca su dato solo en el elemento en curso: la raíz de los datos, o el objeto o el elemento de array en el que ha entrado la navegación anterior, del propio nodo o de los que lo contienen. Si los datos tuvieran una `nota` en la raíz, `Nota: <?nota>` no la cogería, y la segunda `Línea` seguiría sin `Nota`.
-		* `${var}` busca su dato primero en el elemento en curso y, si la clave no está, va subiendo por el contexto: el objeto o el elemento que lo contiene, y así hasta la raíz de los datos. Cada `Envío` encuentra `transportista` en su elemento y, en `Referencia: ${numero}/${transportista}`, `numero` en la raíz.
+		* `${var}` busca su dato primero en el elemento en curso y, si la clave no está, va subiendo: el objeto o el elemento que lo contiene, y así hasta la raíz de los datos. Así encuentra cada `Envío` el `numero` de `Referencia: ${numero}/${transportista}`.
 		* Un dato que vale `null` cuenta como ausente. En el texto, además, termina la búsqueda: `${?nota}` en un elemento con `"nota": null` no pone nada, aunque haya una `nota` más arriba.
-		* En un bloque `>>`, la primera línea hace el papel del principio del valor. Si empieza por `[lista]`, `{objeto}` o `<var>`, es la navegación del nodo: se aplica igual que en un nodo inline y no pasa al documento rellenado. `Etiqueta >>` empieza con `[envios]` y produce un bloque por envío. Lo que sigue es texto.
-		* En un bloque, `<var>` pone el dato como contenido del bloque y cierra el valor, igual que en un nodo inline: el bloque no puede tener más líneas. Un bloque `Notas >>` cuya única línea es `<?notas>` pone las notas, con sus saltos de línea, o quita el nodo si no hay notas. `Notas >>` con la línea `${notas}` produce lo mismo cuando hay dato.
-		* Una primera línea de bloque que empieza por navegación no puede tener nada más: o es navegación válida entera, o es un error. `[envios] Pedido`, `<numero> Pedido`, `{cliente} ${nombre}` y `[parece]{navegacion} x` son errores, y también un enlace de Markdown al principio del bloque, como `[Inicio](index)`.
-		* Por lo mismo, un bloque HTML o XML no puede empezar por una etiqueta con forma de Slot: una primera línea `<html>` o `<p>Hola</p>` es un error. Sí puede empezar por `<!DOCTYPE html>`, `<html lang="es">` o `<?xml version="1.0"?>`, que no tienen forma de Slot.
-		* Si la primera línea de un bloque empieza por cualquier otra cosa, todo el bloque es texto, también los `[lista]`, `{objeto}` y `<var>` de cualquiera de sus líneas: `Ver <b>[nota]</b>` es texto.
-		* En el texto de un bloque, cada `${var}` se sustituye por su dato y el resto se copia tal cual. Dentro del bloque, `Transportista: ${transportista}` es texto, no un nodo.
+		* Un array vacío no produce ningún nodo y no es un error del relleno: si el nodo era obligatorio, lo dirá la validación del documento rellenado. Un elemento `null` es como si no estuviera: no produce ningún nodo. Un array que mezcla valores y objetos es un error, y también un array dentro de otro array.
+		* Un dato que no encaja con su Slot es un error: un objeto donde `<var>` o `${var}` esperan un valor, o un valor donde `[lista]` espera un array.
+
+	Subsubheader: 4.7 Slots opcionales
+
+	Content >>
+		* Todo Slot es obligatorio salvo que lleve `?` justo detrás del delimitador de apertura: `[?lista]`, `{?objeto}`, `<?var>` y `${?var}`. Si una línea no tuviera `cantidad`, o si faltara `cliente`, el relleno fallaría. Un `?` fuera de los delimitadores es texto: `Nota: ?<nota>` se copia tal cual, y `Enlace: https://example.com/buscar?${consulta}` conserva su `?`.
+		* Sin dato, `[?lista]`, `{?objeto}` y `<?var>` quitan el nodo, con sus hijos. `${?var}` solo quita su trozo, y el resto del texto y el nodo se quedan: `Referencia: ${numero}${?revision}` produce `Referencia: 2026-0142` si no hay `revision`, y `Teléfono: ${?telefono}` daría `Teléfono:` vacío. Solo la navegación decide si un nodo aparece y cuántas veces.
+
+	Subsubheader: 4.8 El documento rellenado
+
+	Content >>
 		* El nodo rellenado tiene la forma que tiene en el documento con Slots: `Nodo: <var>` sale inline y `Nodo >>` sale como bloque. Un dato con saltos de línea en un nodo inline es un error. En un bloque, produce varias líneas.
 		* El documento rellenado tiene el árbol que daría su texto al parsearlo, con los valores normalizados como en cualquier documento: un valor inline sin blancos al principio ni al final ([*STXT-SPEC* §5.1](stxt-core-ref#s5-1)), y un bloque sin blancos al final de sus líneas ni líneas vacías al final ([§10.2](stxt-core-ref#s10-2) y [§10.3](stxt-core-ref#s10-3)). Vale igual para lo que pone el dato que para el texto que lo rodea: `A: ${t} ${?falta}` sin `falta` deja `A: x`, sin el blanco final. Los blancos del principio de una línea de bloque y las líneas vacías intermedias son contenido y se conservan.
-		* Un valor sin Slots se copia tal cual: `Moneda: EUR`.
-		* Todo Slot es obligatorio salvo que lleve `?` justo detrás del delimitador de apertura: `[?lista]`, `{?objeto}`, `<?var>` y `${?var}`. Si una línea no tuviera `cantidad`, o si faltara `cliente`, el relleno fallaría.
-		* Un `?` fuera de los delimitadores es texto: `Nota: ?<nota>` se copia tal cual, y `Enlace: https://example.com/buscar?${consulta}` conserva su `?`.
-		* Sin dato, `[?lista]`, `{?objeto}` y `<?var>` quitan el nodo, con sus hijos. `${?var}` no pone nada, y el nodo sigue apareciendo: `Teléfono: ${?telefono}` daría `Teléfono:` vacío.
-		* `Teléfono` no sale porque el cliente no tiene `telefono`, y la navegación no lo busca en la raíz de los datos. `Nota` sale en la primera `Línea` y no en la segunda. Solo la navegación decide si un nodo aparece y cuántas veces.
-		* Un `${?var}` sin dato solo quita su trozo y el resto del texto se queda: `Referencia: ${numero}${?revision}` produce `Referencia: 2026-0142` si no hay `revision`.
-		* Un array vacío no produce ningún nodo y no es un error del relleno. Si el nodo era obligatorio, lo dirá la validación del documento rellenado.
-		* Un dato que no encaja con su Slot es un error: un objeto donde `<var>` o `${var}` esperan un valor, o un valor donde `[lista]` espera un array.
 		* El comentario no pasa al documento rellenado.
 		* Un documento con Slots no se valida. El que se valida es siempre el documento rellenado.
