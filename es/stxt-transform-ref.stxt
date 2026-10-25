@@ -262,11 +262,11 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 				Nombre: <nombre>
 				Correo: <correo>
 				# El teléfono es opcional
-				Teléfono: ?<telefono>
+				Teléfono: <?telefono>
 			Línea: [lineas]<producto>
 				Cantidad: <cantidad>
 				Precio: <precio>
-				Nota: ?<nota>
+				Nota: <?nota>
 			Envío: [envios]
 				Transportista: <transportista>
 				Referencia: ${numero}/${transportista}
@@ -345,7 +345,7 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		| `{objeto}`  | Entra en el objeto `objeto`: los Slots del nodo y de sus hijos se buscan dentro de él          | `Cliente: {cliente}`                     |
 		| `<var>`     | Pone el dato `var` como valor del nodo; cierra el valor                                        | `Fecha: <fecha>`                         |
 		| `${var}`    | Pone el dato `var` dentro de un texto                                                          | `Referencia: ${numero}/${transportista}` |
-		| `?`         | Hace opcional el Slot: si el dato no existe, `?[lista]`, `?{objeto}` y `?<var>` quitan el nodo, y `${?var}` no pone nada | `Teléfono: ?<telefono>` |
+		| `?`         | Hace opcional el Slot: si el dato no existe, `[?lista]`, `{?objeto}` y `<?var>` quitan el nodo, y `${?var}` no pone nada | `Teléfono: <?telefono>` |
 
 		* El nombre de un Slot solo puede tener letras ASCII, dígitos, `-` y `_`, y al menos un carácter: `<numero>`, `[lineas]`, `{datos-cliente}`, `${id_2}`.
 		* El nombre de un Slot se busca tal cual entre las claves de los datos, distinguiendo mayúsculas y minúsculas: `<Fecha>` no encuentra `fecha`.
@@ -357,20 +357,21 @@ Document (dev.stxt.website): STXT Transform: exportación, importación y rellen
 		* Si el elemento de un array es un objeto, el relleno entra en él: cada `Envío` busca su `transportista` y sus `bultos` en su propio elemento.
 		* Si el elemento es un valor, es el valor del nodo: `Bulto: [bultos]` produce `Bulto: C-01` y `Bulto: C-02`. Solo vale en un nodo que no tiene nada más que la navegación: ni texto, ni hijos, ni más líneas de bloque. Si `bultos` trae valores, `Bulto: [bultos] (caja)` es un error, y también `Bulto: [bultos]` con un hijo `Peso: <peso>`. Tampoco puede seguirle otra navegación: `Bulto: [bultos]{medidas}` y `Bulto: [bultos]<peso>` son errores.
 		* Un array que mezcla valores y objetos es un error, y también un array dentro de otro array. Un elemento `null` es como si no estuviera: no produce ningún nodo.
-		* La navegación busca su dato solo en el elemento en curso: la raíz de los datos, o el objeto o el elemento de array en el que ha entrado la navegación anterior, del propio nodo o de los que lo contienen. Si los datos tuvieran una `nota` en la raíz, `Nota: ?<nota>` no la cogería, y la segunda `Línea` seguiría sin `Nota`.
+		* La navegación busca su dato solo en el elemento en curso: la raíz de los datos, o el objeto o el elemento de array en el que ha entrado la navegación anterior, del propio nodo o de los que lo contienen. Si los datos tuvieran una `nota` en la raíz, `Nota: <?nota>` no la cogería, y la segunda `Línea` seguiría sin `Nota`.
 		* `${var}` busca su dato primero en el elemento en curso y, si la clave no está, va subiendo por el contexto: el objeto o el elemento que lo contiene, y así hasta la raíz de los datos. Cada `Envío` encuentra `transportista` en su elemento y, en `Referencia: ${numero}/${transportista}`, `numero` en la raíz.
 		* Un dato que vale `null` cuenta como ausente. En el texto, además, termina la búsqueda: `${?nota}` en un elemento con `"nota": null` no pone nada, aunque haya una `nota` más arriba.
 		* En un bloque `>>`, la primera línea hace el papel del principio del valor. Si empieza por `[lista]`, `{objeto}` o `<var>`, es la navegación del nodo: se aplica igual que en un nodo inline y no pasa al documento rellenado. `Etiqueta >>` empieza con `[envios]` y produce un bloque por envío. Lo que sigue es texto.
-		* En un bloque, `<var>` pone el dato como contenido del bloque y cierra el valor, igual que en un nodo inline: el bloque no puede tener más líneas. Un bloque `Notas >>` cuya única línea es `?<notas>` pone las notas, con sus saltos de línea, o quita el nodo si no hay notas. `Notas >>` con la línea `${notas}` produce lo mismo cuando hay dato.
+		* En un bloque, `<var>` pone el dato como contenido del bloque y cierra el valor, igual que en un nodo inline: el bloque no puede tener más líneas. Un bloque `Notas >>` cuya única línea es `<?notas>` pone las notas, con sus saltos de línea, o quita el nodo si no hay notas. `Notas >>` con la línea `${notas}` produce lo mismo cuando hay dato.
 		* Una primera línea de bloque que empieza por navegación no puede tener nada más: o es navegación válida entera, o es un error. `[envios] Pedido`, `<numero> Pedido`, `{cliente} ${nombre}` y `[parece]{navegacion} x` son errores, y también un enlace de Markdown al principio del bloque, como `[Inicio](index)`.
-		* Por lo mismo, un bloque HTML o XML no puede empezar por una etiqueta con forma de Slot: una primera línea `<html>` o `<p>Hola</p>` es un error. Sí puede empezar por `<!DOCTYPE html>` o `<html lang="es">`, que no tienen forma de Slot.
+		* Por lo mismo, un bloque HTML o XML no puede empezar por una etiqueta con forma de Slot: una primera línea `<html>` o `<p>Hola</p>` es un error. Sí puede empezar por `<!DOCTYPE html>`, `<html lang="es">` o `<?xml version="1.0"?>`, que no tienen forma de Slot.
 		* Si la primera línea de un bloque empieza por cualquier otra cosa, todo el bloque es texto, también los `[lista]`, `{objeto}` y `<var>` de cualquiera de sus líneas: `Ver <b>[nota]</b>` es texto.
 		* En el texto de un bloque, cada `${var}` se sustituye por su dato y el resto se copia tal cual. Dentro del bloque, `Transportista: ${transportista}` es texto, no un nodo.
 		* El nodo rellenado tiene la forma que tiene en el documento con Slots: `Nodo: <var>` sale inline y `Nodo >>` sale como bloque. Un dato con saltos de línea en un nodo inline es un error. En un bloque, produce varias líneas.
 		* El documento rellenado tiene el árbol que daría su texto al parsearlo, con los valores normalizados como en cualquier documento: un valor inline sin blancos al principio ni al final ([*STXT-SPEC* §5.1](stxt-core-ref#s5-1)), y un bloque sin blancos al final de sus líneas ni líneas vacías al final ([§10.2](stxt-core-ref#s10-2) y [§10.3](stxt-core-ref#s10-3)). Vale igual para lo que pone el dato que para el texto que lo rodea: `A: ${t} ${?falta}` sin `falta` deja `A: x`, sin el blanco final. Los blancos del principio de una línea de bloque y las líneas vacías intermedias son contenido y se conservan.
 		* Un valor sin Slots se copia tal cual: `Moneda: EUR`.
-		* Todo Slot es obligatorio salvo que lleve `?`: `?[lista]`, `?{objeto}`, `?<var>` y `${?var}`. Si una línea no tuviera `cantidad`, o si faltara `cliente`, el relleno fallaría.
-		* Sin dato, `?[lista]`, `?{objeto}` y `?<var>` quitan el nodo, con sus hijos. `${?var}` no pone nada, y el nodo sigue apareciendo: `Teléfono: ${?telefono}` daría `Teléfono:` vacío.
+		* Todo Slot es obligatorio salvo que lleve `?` justo detrás del delimitador de apertura: `[?lista]`, `{?objeto}`, `<?var>` y `${?var}`. Si una línea no tuviera `cantidad`, o si faltara `cliente`, el relleno fallaría.
+		* Un `?` fuera de los delimitadores es texto: `Nota: ?<nota>` se copia tal cual, y `Enlace: https://example.com/buscar?${consulta}` conserva su `?`.
+		* Sin dato, `[?lista]`, `{?objeto}` y `<?var>` quitan el nodo, con sus hijos. `${?var}` no pone nada, y el nodo sigue apareciendo: `Teléfono: ${?telefono}` daría `Teléfono:` vacío.
 		* `Teléfono` no sale porque el cliente no tiene `telefono`, y la navegación no lo busca en la raíz de los datos. `Nota` sale en la primera `Línea` y no en la segunda. Solo la navegación decide si un nodo aparece y cuántas veces.
 		* Un `${?var}` sin dato solo quita su trozo y el resto del texto se queda: `Referencia: ${numero}${?revision}` produce `Referencia: 2026-0142` si no hay `revision`.
 		* Un array vacío no produce ningún nodo y no es un error del relleno. Si el nodo era obligatorio, lo dirá la validación del documento rellenado.
