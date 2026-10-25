@@ -2,7 +2,7 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 
 	Metadata:
 		Status: Genesis
-		Last modif: 2026-10-24
+		Last modif: 2026-10-25
 		Description: STXT-TRANSFORM-SPEC: how an STXT document is exported to JSON and how it is imported from JSON, driven by its schema, and how the Slots of a document are filled with data.
 
 	Header: @STXT@ Transform
@@ -360,10 +360,11 @@ Document (dev.stxt.website): STXT Transform: export, import and fill of Slots
 		* An array that mixes values and objects is an error, and so is an array inside another array. A `null` element is as if it were not there: it produces no node.
 		* A Slot looks up its data item first in the current element and, if it is not there, goes up through the context: the object or element that contains it, and so on up to the root of the data. Every `Shipment` finds `carrier` in its element and `number` in the root.
 		* A data item whose value is `null` counts as absent: the lookup keeps going up.
-		* In a `>>` block, the first line plays the role of the start of the value. If it starts with `[list]` or `{object}`, it is the navigation of the node: it applies as in an inline node and does not pass to the filled document. `Label >>` starts with `[shipments]` and produces one block per shipment. What follows is text.
-		* In a block, `<var>` is never navigation: a first line `<html>` is text. A data item goes into a block with `${var}`.
-		* A first block line that starts with navigation cannot have anything else: either it is valid navigation as a whole, or it is an error. `[shipments] Order`, `[shipments]<number>`, `{customer} ${name}` and `[looks]{like-navigation} x` are errors, and so is a Markdown link at the start of the block, such as `[Home](index)`.
-		* If the first line of a block starts with anything else, the whole block is text, including the `[list]` and `{object}` of any of its lines: `<b>[note]</b>` is text.
+		* In a `>>` block, the first line plays the role of the start of the value. If it starts with `[list]`, `{object}` or `<var>`, it is the navigation of the node: it applies as in an inline node and does not pass to the filled document. `Label >>` starts with `[shipments]` and produces one block per shipment. What follows is text.
+		* In a block, `<var>` puts the data item as the content of the block and closes the value, as in an inline node: the block cannot have more lines. A `Notes >>` block whose only line is `?<notes>` puts the notes, with their line breaks, or removes the node if there are no notes. `Notes >>` with the line `${notes}` produces the same when there is a data item.
+		* A first block line that starts with navigation cannot have anything else: either it is valid navigation as a whole, or it is an error. `[shipments] Order`, `<number> Order`, `{customer} ${name}` and `[looks]{like-navigation} x` are errors, and so is a Markdown link at the start of the block, such as `[Home](index)`.
+		* For the same reason, an HTML or XML block cannot start with a tag that has the form of a Slot: a first line `<html>` or `<p>Hello</p>` is an error. It can start with `<!DOCTYPE html>` or `<html lang="en">`, which do not have the form of a Slot.
+		* If the first line of a block starts with anything else, the whole block is text, including the `[list]`, `{object}` and `<var>` of any of its lines: `See <b>[note]</b>` is text.
 		* In the text of a block, each `${var}` is replaced by its data item and the rest is copied as it is. Inside the block, `Carrier: ${carrier}` is text, not a node.
 		* The filled node has the form it has in the document with Slots: `Node: <var>` comes out inline and `Node >>` comes out as a block. A data item with line breaks in an inline node is an error. In a block, it produces several lines.
 		* The filled document has the tree its text would give when parsed, with the values normalized as in any document: an inline value with no blanks at the start or the end ([*STXT-SPEC* §5.1](stxt-core-ref#s5-1)), and a block with no blanks at the end of its lines and no empty lines at the end ([§10.2](stxt-core-ref#s10-2) and [§10.3](stxt-core-ref#s10-3)). This applies alike to what the data puts and to the text around it: `A: ${t} ${?missing}` with no `missing` leaves `A: x`, without the trailing blank. The blanks at the start of a block line and the empty lines in between are content and are kept.
