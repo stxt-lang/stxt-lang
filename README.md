@@ -93,10 +93,13 @@ change here is exercised by every port. What they check:
 | [stxt-js](https://github.com/stxt-lang/stxt-js) | TypeScript reference port, [`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) |
 | [stxt-java](https://github.com/stxt-lang/stxt-java) | Java port, [`dev.stxt:stxt-core`](https://central.sonatype.com/artifact/dev.stxt/stxt-core) |
 | [stxt-python](https://github.com/stxt-lang/stxt-python) | Python port, [`stxt`](https://pypi.org/project/stxt/) |
+| [stxt-java-transform](https://github.com/stxt-lang/stxt-java-transform) | Transforms in Java: export to JSON, import from JSON and fill of Slots, [`dev.stxt:stxt-transform`](https://central.sonatype.com/artifact/dev.stxt/stxt-transform) |
 | [stxt-cli](https://github.com/stxt-lang/stxt-cli) | The `stxt` command, [`@stxt-lang/cli`](https://www.npmjs.com/package/@stxt-lang/cli) |
 | [stxt-vscode](https://github.com/stxt-lang/stxt-vscode) | VS Code extension, [`stxt-lang.stxt`](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt) |
 | [stxt-play](https://github.com/stxt-lang/stxt-play) | The playground, <https://play.stxt.dev> |
 | [stxt-editor](https://github.com/stxt-lang/stxt-editor) | The editor for any web page, [`@stxt-lang/editor`](https://www.npmjs.com/package/@stxt-lang/editor) |
+| [stxt-pdf](https://github.com/stxt-lang/stxt-pdf) | Layout engine and PDF generator for STXT documents, [`dev.stxt:stxt-pdf`](https://central.sonatype.com/artifact/dev.stxt/stxt-pdf) |
+| [stxt-press](https://github.com/stxt-lang/stxt-press) | PDF and SVG service on stxt-pdf: HTTP API, web editor and command line, [Docker image](https://github.com/stxt-lang/stxt-press/pkgs/container/stxt-press) |
 
 ## License
 
