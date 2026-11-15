@@ -1,0 +1,398 @@
+Document (dev.stxt.website): PDF y Press | STXT
+
+	Metadata:
+		Last modif: 2026-11-15
+		Description: stxt-pdf, el motor de maquetación y PDF para documentos STXT en Java, y stxt-press, el servicio que genera PDF y SVG sobre él, con plantillas rellenadas con datos JSON.
+
+	Header: PDF y Press
+
+	Assert >>
+		[stxt-pdf](https://github.com/stxt-lang/stxt-pdf) convierte un documento @STXT@ en un
+		PDF accesible. [stxt-press](https://github.com/stxt-lang/stxt-press) lo ofrece como
+		servicio HTTP, con un editor web y una línea de comandos, y rellena plantillas con
+		datos JSON.
+
+	Code >>
+		Document (dev.stxt.pdf):
+			Language: es
+			Title: Informe del trimestre
+			Page:
+				Paper: A4
+				Margin: 50
+			Styles:
+				For element: Document
+					Typography:
+						Font: IBM Plex Sans
+						Size: 10
+			Section:
+				Heading 1:
+					Text: Informe del trimestre
+				Paragraph: Las ventas han crecido un 12 % respecto al trimestre anterior.
+
+	Content >>
+		El namespace `dev.stxt.pdf` describe el documento:
+
+		* **`Page`**: el papel y los márgenes.
+		* **`Styles`**: el aspecto, con reglas por elemento, por estilo o por identificador.
+		* **`Section`**: el contenido, con encabezados, párrafos, tablas, imágenes, listas...
+
+		El motor calcula dónde va cada cosa, reparte el contenido en páginas y escribe el PDF.
+		Los dos proyectos leen el @STXT@ con la [biblioteca Java](tools-java) y no son
+		implementaciones del lenguaje: los errores de sintaxis y de esquema llevan los códigos
+		de la biblioteca (`NODE_NOT_DEFINED_IN_SCHEMA`...), y los del motor, los suyos.
+
+	Subheader: El PDF
+
+	Content >>
+		* **Fuentes incrustadas**, con los caracteres que se usan.
+		* **Etiquetado para accesibilidad**: PDF/UA-1, o PDF/UA-2 si se pide.
+		* **PDF/A** (2 y 3, `b` y `a`) si se pide, con ficheros adjuntos para Factur-X.
+		* **Marcadores**, uno por encabezado.
+		* **SVG**: además del PDF, una imagen por página.
+
+		**El motor es estricto.** Cada elemento solo admite las propiedades que tienen sentido
+		en él, y ninguno tiene un aspecto propio: un `Heading 1` no es más grande que un
+		`Paragraph` si un estilo no lo dice. Lo que no tendría efecto, se contradice o no cabe
+		es un error con su línea.
+
+	Subheader: stxt-pdf
+
+	Content >>
+		El motor, como biblioteca Java. Se publica en Maven Central como
+		[`dev.stxt:stxt-pdf`](https://central.sonatype.com/artifact/dev.stxt/stxt-pdf).
+
+	Subsubheader: Instalación
+
+	Content >>
+		Java 17 o superior. La versión actual es la 0.18.0.
+
+	Xml >>
+		<dependency>
+		    <groupId>dev.stxt</groupId>
+		    <artifactId>stxt-pdf</artifactId>
+		    <version>0.18.0</version>
+		</dependency>
+
+	Content >>
+		O con Gradle:
+
+	Listing >>
+		implementation 'dev.stxt:stxt-pdf:0.18.0'
+
+	Subsubheader: Convertir un documento
+
+	Java >>
+		import java.io.OutputStream;
+		import java.nio.file.Files;
+		import java.nio.file.Path;
+
+		import dev.stxt.InlineNode;
+		import dev.stxt.pdf.convert.Converter;
+		import dev.stxt.pdf.stxt.DocumentReader;
+
+		InlineNode doc = new DocumentReader().read(Path.of("informe.stxt"));
+		try (OutputStream out = Files.newOutputStream(Path.of("informe.pdf"))) {
+		    Converter.create().toPdf(doc, out);
+		}
+
+	Content >>
+		`DocumentReader` lee y valida el documento. `Converter` lo maqueta y escribe el PDF.
+		Un `Converter` se crea una vez y se puede usar desde varios hilos a la vez.
+
+	Subsubheader: Opciones
+
+	Java >>
+		Converter converter = Converter.builder()
+		        .resources(new Resources(Path.of("mis-recursos")))   // otra carpeta de recursos
+		        .styles(Path.of("estilos.stxt"))                      // un fichero de estilos aparte
+		        .pdfA(PdfA.A3B)                                       // PDF/A-3b
+		        .build();
+
+	Content >>
+		| Opción         | Por defecto                                                                          |
+		|----------------|--------------------------------------------------------------------------------------|
+		| `resources`    | La carpeta `resources/` del directorio de trabajo                                    |
+		| `styles`       | Ninguno. Cada llamada añade un fichero de estilos, y gana el último                  |
+		| `limits`       | 2000 páginas, 25 millones de píxeles por imagen y 20 MB por PDF, entre otros         |
+		| `debug`        | `false`. Con `true`, pinta el contorno de cada caja                                  |
+		| `pdfUa`        | `1`: PDF/UA-1. Con `2`, PDF/UA-2, en PDF 2.0                                         |
+		| `pdfA`         | Ninguno. `PdfA.A2B`, `A2A`, `A3B` o `A3A`                                            |
+		| `exclude`      | Ninguna. Las comprobaciones que dejan de ser un error, como `Check.CONTRAST`         |
+		| `cancellation` | Ninguna. Cuándo parar todas las conversiones, por ejemplo tras un plazo              |
+
+	Subsubheader: Recursos
+
+	Content >>
+		Las fuentes y las imágenes de un documento están en una carpeta de recursos:
+
+	Listing >>
+		resources/
+		    fonts/      fuentes .ttf y .otf
+		    images/     imágenes .png, .jpg y .svg
+
+	Content >>
+		* Solo se usan las fuentes de `fonts/`, nunca las del sistema. Cada fichero se
+		  reconoce por la familia, el peso y el estilo que declara dentro.
+		* Una variante que no tiene fichero (un peso que la familia no trae) es un error: no se
+		  usa la más parecida.
+		* `Image: logos/acme.png` es `resources/images/logos/acme.png`. No se admiten rutas
+		  absolutas, `..` ni enlaces que salgan de la carpeta.
+		* El repositorio incluye IBM Plex Sans, Serif y Mono, con licencia SIL Open Font
+		  License.
+
+	Subsubheader: Errores
+
+	Content >>
+		Todo error es un `StxtPdfException` con su tipo (`kind()`), su código (`code()`) y su
+		línea (`line()`, 0 si no es de una línea):
+
+		| `kind()`           | Qué es                                                                   |
+		|--------------------|--------------------------------------------------------------------------|
+		| `INVALID_DOCUMENT` | Un error del documento: sintaxis, esquema o reglas del motor             |
+		| `LIMIT`            | El documento supera un límite: páginas, píxeles de una imagen, tamaño    |
+		| `CANCELLED`        | La conversión se paró por su `cancellation`                              |
+		| `RESOURCE`         | La configuración de quien convierte: la carpeta de recursos, un fichero  |
+		| `INTERNAL`         | Un error del motor                                                       |
+
+	Subsubheader: Documentación
+
+	Content >>
+		Todo está en el repositorio, en castellano y en inglés:
+
+		* [Manual](https://github.com/stxt-lang/stxt-pdf/blob/master/docs/es/manual/README.md):
+		  cómo se escribe un documento, del primero a cada elemento.
+		* [Referencia](https://github.com/stxt-lang/stxt-pdf/blob/master/docs/es/reference/README.md):
+		  la regla exacta de cada comportamiento y las decisiones de diseño.
+		* [Ejemplos](https://github.com/stxt-lang/stxt-pdf/blob/master/test/examples/README.es.md):
+		  documentos reales (factura, carta, contrato, informe anual...) con su PDF.
+
+	Subheader: stxt-press
+
+	Content >>
+		El servicio, en un solo jar: una API HTTP, un editor web y una línea de comandos. La
+		maquetación es la de stxt-pdf, y el relleno de los Slots, el de
+		[stxt-transform](https://github.com/stxt-lang/stxt-java-transform). La versión actual
+		es la 0.6.0.
+
+	Subsubheader: Arrancar
+
+	Content >>
+		Con Docker, la imagen
+		[`ghcr.io/stxt-lang/stxt-press`](https://github.com/stxt-lang/stxt-press/pkgs/container/stxt-press),
+		para `linux/amd64` y `linux/arm64`:
+
+	Listing >>
+		docker run --rm -p 127.0.0.1:8080:8080 ghcr.io/stxt-lang/stxt-press:0.6.0
+
+	Content >>
+		En `http://127.0.0.1:8080/` están el índice y el editor, con plantillas y documentos
+		de ejemplo. La imagen responde sin token a quien llegue a su puerto: `127.0.0.1` la
+		deja en la máquina.
+
+		Las plantillas, los documentos o los recursos propios sustituyen a los de la imagen:
+
+	Listing >>
+		docker run --rm -p 127.0.0.1:8080:8080 \
+		    -v "$PWD/templates:/opt/stxt-press/templates:ro" \
+		    -v "$PWD/documents:/opt/stxt-press/documents:ro" \
+		    -v "$PWD/resources:/opt/stxt-press/resources:ro" \
+		    ghcr.io/stxt-lang/stxt-press:0.6.0
+
+	Content >>
+		Sin Docker, la carpeta
+		[`server/`](https://github.com/stxt-lang/stxt-press/tree/master/server) del
+		repositorio es un servidor completo (el jar, su configuración, las fuentes y los
+		ejemplos). Necesita Java 17 o superior:
+
+	Listing >>
+		server/start.sh
+
+	Subsubheader: Plantillas y Slots
+
+	Content >>
+		Una plantilla es un documento `dev.stxt.pdf` con **Slots**, los lugares que esperan
+		un dato:
+
+	Code >>
+		Document (dev.stxt.pdf):
+			Language: es
+			Title: Factura ${numero}
+			Page:
+				Paper: A4
+				Margin: 50
+			Styles:
+				For element: Document
+					Typography:
+						Font: IBM Plex Sans
+						Size: 10
+			Section:
+				Heading 1:
+					Text: Factura ${numero}
+				Paragraph: Cliente: ${cliente}
+				Paragraph: [lineas]${concepto}: ${importe} €
+
+	Content >>
+		Con estos datos:
+
+	Json >>
+		{
+		    "numero": "2026-0142",
+		    "cliente": "Librería Atenea",
+		    "lineas": [
+		        { "concepto": "Cuadernos A5", "importe": "120,00" },
+		        { "concepto": "Lápices HB", "importe": "36,00" }
+		    ]
+		}
+
+	Content >>
+		El documento relleno, el que se maqueta, termina así:
+
+	Listing >>
+		Section:
+			Heading 1:
+				Text: Factura 2026-0142
+			Paragraph: Cliente: Librería Atenea
+			Paragraph: Cuadernos A5: 120,00 €
+			Paragraph: Lápices HB: 36,00 €
+
+	Content >>
+		| Slot                                         | Qué hace                                                                    |
+		|----------------------------------------------|-----------------------------------------------------------------------------|
+		| `<var>`                                      | Pone un valor, y termina el valor del nodo                                  |
+		| `{objeto}`                                   | Entra en un objeto                                                          |
+		| `[lista]`                                    | Repite el nodo una vez por cada elemento                                    |
+		| `${var}`                                     | Pone un valor dentro de un texto, buscándolo desde el elemento hacia la raíz |
+		| `<?var>`, `{?objeto}`, `[?lista]`, `${?var}` | Opcional: sin datos, se quita el nodo (o el texto no recibe nada)           |
+		| `$${`                                        | Un `${` literal                                                             |
+
+		Un Slot obligatorio sin datos es un error (`SLOT_NO_DATA`). Los Slots siguen
+		[@STXT@ Transform](stxt-transform-ref), que está en `Genesis`: pueden cambiar con ella.
+
+	Subsubheader: Plantillas y documentos del servidor
+
+	Content >>
+		El servidor imprime dos clases de ficheros, cada una desde su carpeta:
+
+		* **Una plantilla** (`/print`): se rellena con los datos JSON de la petición, o con sus
+		  datos de ejemplo.
+		* **Un documento** (`/documents`): se imprime tal cual, sin datos.
+
+	Listing >>
+		templates/
+		    .styles.stxt                los estilos de todas las plantillas
+		    facturas/
+		        .styles.stxt            los estilos de las plantillas de facturas/
+		        factura.stxt            la plantilla facturas/factura
+		        factura.styles.stxt     sus estilos propios
+		        factura.json            sus datos de ejemplo
+
+	Content >>
+		Una plantilla se nombra por su ruta sin extensión (`facturas/factura`). Los estilos se
+		aplican desde la raíz hasta la plantilla, y gana el más cercano. Los documentos siguen
+		las mismas reglas, sin datos. Las carpetas se leen en cada petición: un fichero
+		cambiado cuenta sin reiniciar.
+
+	Subsubheader: Rutas
+
+	Content >>
+		| Ruta                     | Qué hace                                                                                         |
+		|--------------------------|--------------------------------------------------------------------------------------------------|
+		| `GET /print/{ruta}`      | La plantilla, rellenada con sus datos de ejemplo                                                 |
+		| `POST /print/{ruta}`     | La plantilla, rellenada con el cuerpo: los datos JSON tal cual                                   |
+		| `GET /documents/{ruta}`  | El documento, tal cual                                                                           |
+		| `POST /render`           | Cualquier documento: `{"document": "...", "styles": ["..."], "data": {...}, "options": {...}}`   |
+		| `GET /schema`            | El esquema `dev.stxt.pdf` del motor                                                              |
+		| `GET /health`            | El estado y las versiones, sin token                                                             |
+
+		`/print`, `/documents` y `/render` responden con un PDF (`?format=pdf`, por defecto),
+		un SVG por página (`?format=svg`) o el documento relleno (`?format=stxt`).
+		`&debug=true` pinta el contorno de las cajas. La factura de ejemplo del servidor, con
+		sus datos de ejemplo y con los de un fichero:
+
+	Listing >>
+		curl -o factura.pdf http://127.0.0.1:8080/print/examples/invoice
+		curl -o factura.pdf -d @datos.json http://127.0.0.1:8080/print/examples/invoice
+
+	Content >>
+		Un error es un cuerpo JSON con su código. Los de una conversión llevan también su
+		tipo, su línea y la entrada a la que pertenece la línea (`document`, `data`, `filled`,
+		un fichero de estilos...):
+
+	Json >>
+		{"kind": "INVALID_DOCUMENT", "code": "JSON_NOT_VALID", "line": 2, "source": "data", "message": "..."}
+
+	Subsubheader: Línea de comandos
+
+	Content >>
+		Los comandos del jar tienen los nombres de las rutas:
+
+		| Comando                              | Qué hace                                                                         |
+		|--------------------------------------|----------------------------------------------------------------------------------|
+		| `start`                              | Arranca el servicio HTTP con su `server.stxt`                                    |
+		| `render <documento> -o <fichero>`    | Convierte un documento a PDF, con `--styles`, `--data`, `--pdf-ua`, `--pdf-a`... |
+		| `print <plantilla> -o <fichero>`     | Convierte una plantilla de la carpeta de plantillas                              |
+		| `documents <documento> -o <fichero>` | Convierte un documento de la carpeta de documentos                               |
+		| `fill <documento> --data <fichero>`  | Escribe el documento con sus Slots rellenos                                      |
+
+		Desde la raíz del repositorio, con la factura de arriba:
+
+	Listing >>
+		java -jar server/stxt-press.jar fill factura.stxt --data factura.json
+		java -jar server/stxt-press.jar render factura.stxt --data factura.json -o factura.pdf --config server/server.stxt
+
+	Content >>
+		Un error se escribe en stderr con su fichero y su línea:
+
+	Listing >>
+		stxt-press: factura.stxt:15: SLOT_NO_DATA: Node 'Paragraph': No data for ${cliente}
+
+	Content >>
+		El código de salida es `0` si el trabajo termina bien, `1` si falla (el documento, sus
+		datos, un recurso, un límite) y `2` si la invocación no es válida. Un fichero de `-o`
+		solo se sustituye si el trabajo termina bien.
+
+	Subsubheader: Configuración
+
+	Content >>
+		Un servidor se configura con un fichero `server.stxt`, validado con el esquema
+		`dev.stxt.press` del jar:
+
+	Code >>
+		Server (dev.stxt.press):
+			Host: 0.0.0.0
+			Port: 8080
+			Token env: STXT_PRESS_TOKEN
+			Resource folder: resources
+			Template folder: templates
+			Document folder: documents
+			Routes:
+				Render: false
+				Save: true
+			Limits:
+				Timeout: 20
+				Max pages: 500
+
+	Content >>
+		Sin fichero, el servidor escucha en `127.0.0.1:8080`, sin token y sin plantillas ni
+		documentos. Las rutas relativas lo son a la carpeta de `server.stxt`. Todos los nodos
+		están en el [README](https://github.com/stxt-lang/stxt-press#configuration).
+
+	Subsubheader: Seguridad
+
+	Content >>
+		El servidor no tiene TLS ni usuarios: está pensado para ir detrás de un proxy inverso
+		que los añada.
+
+		* **Token**: con `Token env`, todas las rutas salvo `/health` y las páginas piden
+		  `Authorization: Bearer <token>`.
+		* **Nombres locales**: sin token y en una dirección local, solo responde a peticiones
+		  cuyo `Host` es local, contra el *DNS rebinding*.
+		* **Rutas apagadas**: `Render: false`, `Files: false` y `Editor: false` en `Routes`
+		  dejan solo la impresión de las plantillas y los documentos.
+
+	Subheader: Versiones
+
+	Content >>
+		Los dos proyectos están en 0.x. Hasta la 1.0, el namespace `dev.stxt.pdf`, la API Java,
+		las rutas y `server.stxt` pueden cambiar entre versiones menores, y el PDF de un
+		documento válido también. Cada cambio está en el `CHANGELOG.md` de su repositorio.

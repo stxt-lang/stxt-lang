@@ -1,14 +1,14 @@
 Document (dev.stxt.website): Herramientas | STXT
 
 	Metadata:
-		Last modif: 2026-10-11
-		Description: Herramientas de STXT: playground, extensión de VS Code, línea de comandos y bibliotecas TypeScript, Java y Python, todas con las mismas cinco especificaciones.
+		Last modif: 2026-11-15
+		Description: Herramientas de STXT: playground, extensión de VS Code, línea de comandos, bibliotecas TypeScript, Java y Python con las mismas cinco especificaciones, y generación de PDF.
 
 	Header: Herramientas
 
 	Assert >>
-		Todas las herramientas de esta página implementan las mismas cinco especificaciones
-		y devuelven los mismos códigos de error.
+		El playground, la extensión, la línea de comandos, las bibliotecas y el editor
+		implementan las mismas cinco especificaciones y devuelven los mismos códigos de error.
 
 	Content >>
 		Según el uso:
@@ -20,6 +20,7 @@ Document (dev.stxt.website): Herramientas | STXT
 		| Validar en un script, un `Makefile` o en CI   | La línea de comandos `stxt`                                |
 		| Leer o generar @STXT@ desde un programa       | Una biblioteca: TypeScript, Java o Python                  |
 		| Editar o colorear @STXT@ en una página web    | El editor `@stxt-lang/editor`                              |
+		| Generar PDF a partir de documentos @STXT@     | `stxt-pdf` (biblioteca Java) o `stxt-press` (servicio)     |
 
 	Subheader: Playground
 
@@ -184,6 +185,106 @@ Document (dev.stxt.website): Herramientas | STXT
 		    StxtEditor.fromTextArea(document.getElementById('doc'));
 		</script>
 
+	Subheader: Generación de PDF
+
+	Content >>
+		Dos proyectos generan PDF a partir de documentos con el namespace `dev.stxt.pdf`, que
+		describe las páginas, el contenido y sus estilos:
+
+	Code >>
+		Document (dev.stxt.pdf):
+			Language: es
+			Title: Informe del trimestre
+			Page:
+				Paper: A4
+				Margin: 50
+			Styles:
+				For element: Document
+					Typography:
+						Font: IBM Plex Sans
+						Size: 10
+			Section:
+				Heading 1:
+					Text: Informe del trimestre
+				Paragraph: Las ventas han crecido un 12 % respecto al trimestre anterior.
+
+	Content >>
+		Los dos leen el @STXT@ con la biblioteca Java y no son implementaciones del lenguaje.
+		Están en 0.x: el namespace `dev.stxt.pdf` y su API todavía pueden cambiar entre
+		versiones menores. La guía está en [PDF y Press](tools-pdf).
+
+	Subsubheader: stxt-pdf
+
+	Content >>
+		[stxt-pdf](https://github.com/stxt-lang/stxt-pdf) es el motor: una biblioteca Java
+		que maqueta el documento, lo reparte en páginas y escribe el PDF, con las fuentes
+		incrustadas, etiquetado para accesibilidad (PDF/UA) y PDF/A si se pide. Se publica en
+		Maven Central como
+		[`dev.stxt:stxt-pdf`](https://central.sonatype.com/artifact/dev.stxt/stxt-pdf) y
+		necesita Java 17 o superior. El manual, la referencia y los ejemplos, con su PDF,
+		están en el repositorio.
+
+	Xml >>
+		<dependency>
+		    <groupId>dev.stxt</groupId>
+		    <artifactId>stxt-pdf</artifactId>
+		    <version>0.18.0</version>
+		</dependency>
+
+	Content >>
+		O con Gradle:
+
+	Listing >>
+		implementation 'dev.stxt:stxt-pdf:0.18.0'
+
+	Content >>
+		Un ejemplo mínimo, que convierte el documento de arriba:
+
+	Java >>
+		import java.io.OutputStream;
+		import java.nio.file.Files;
+		import java.nio.file.Path;
+
+		import dev.stxt.InlineNode;
+		import dev.stxt.pdf.convert.Converter;
+		import dev.stxt.pdf.stxt.DocumentReader;
+
+		InlineNode doc = new DocumentReader().read(Path.of("informe.stxt"));
+		try (OutputStream out = Files.newOutputStream(Path.of("informe.pdf"))) {
+		    Converter.create().toPdf(doc, out);
+		}
+
+	Content >>
+		Las fuentes y las imágenes se buscan en la carpeta `resources/` del directorio de
+		trabajo, en `fonts/` e `images/`. Solo se usan las fuentes de esa carpeta, nunca las
+		del sistema. El repositorio incluye IBM Plex Sans, Serif y Mono.
+
+	Subsubheader: stxt-press
+
+	Content >>
+		[stxt-press](https://github.com/stxt-lang/stxt-press) es un servicio sobre stxt-pdf:
+		genera PDF y SVG a partir de plantillas, con sus Slots rellenados con datos JSON, o de
+		documentos sin datos. Tiene una API HTTP, un editor web y una línea de comandos, en un
+		solo jar. Se publica como imagen Docker en
+		[`ghcr.io/stxt-lang/stxt-press`](https://github.com/stxt-lang/stxt-press/pkgs/container/stxt-press):
+
+	Listing >>
+		docker run --rm -p 127.0.0.1:8080:8080 ghcr.io/stxt-lang/stxt-press:0.6.0
+
+	Content >>
+		En `http://127.0.0.1:8080/` están el índice y el editor, con plantillas y documentos
+		de ejemplo. Una plantilla, rellenada con sus datos de ejemplo o con los de un fichero
+		JSON:
+
+	Listing >>
+		curl -o invoice.pdf http://127.0.0.1:8080/print/examples/invoice
+		curl -o invoice.pdf -d @invoice.json http://127.0.0.1:8080/print/examples/invoice
+
+	Content >>
+		Sin Docker, la carpeta `server/` del repositorio es un servidor completo (el jar, su
+		configuración, las fuentes y los ejemplos) y se arranca con `server/start.sh` y
+		Java 17 o superior.
+
 	Subheader: Código fuente
 
 	Content >>
@@ -200,6 +301,8 @@ Document (dev.stxt.website): Herramientas | STXT
 		| [stxt-vscode](https://github.com/stxt-lang/stxt-vscode)         | La extensión de VS Code                              |
 		| [stxt-play](https://github.com/stxt-lang/stxt-play)             | El playground                                        |
 		| [stxt-editor](https://github.com/stxt-lang/stxt-editor)         | `@stxt-lang/editor`, el editor para páginas web      |
+		| [stxt-pdf](https://github.com/stxt-lang/stxt-pdf)               | `dev.stxt:stxt-pdf`, el motor de PDF                 |
+		| [stxt-press](https://github.com/stxt-lang/stxt-press)           | El servicio de PDF y SVG                             |
 
 		Las preguntas y las ideas sobre el lenguaje van a las
 		[discusiones](https://github.com/orgs/stxt-lang/discussions) de la organización; los

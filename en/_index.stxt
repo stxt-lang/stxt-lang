@@ -73,6 +73,9 @@ Document (dev.stxt.website): STXT: The Book
 	Link: Editor for web pages
 		Page: tools-editor
 
+	Link: PDF and Press
+		Page: tools-pdf
+
 	Subheader: Use cases
 	
 	Link: Corporate Documents
