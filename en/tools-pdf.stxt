@@ -64,20 +64,20 @@ Document (dev.stxt.website): PDF and Press | STXT
 	Subsubheader: Installation
 
 	Content >>
-		Java 17 or later. The current version is 0.18.0.
+		Java 17 or later. The current version is 0.18.1.
 
 	Xml >>
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-pdf</artifactId>
-		    <version>0.18.0</version>
+		    <version>0.18.1</version>
 		</dependency>
 
 	Content >>
 		Or with Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-pdf:0.18.0'
+		implementation 'dev.stxt:stxt-pdf:0.18.1'
 
 	Subsubheader: Converting a document
 
@@ -172,7 +172,7 @@ Document (dev.stxt.website): PDF and Press | STXT
 		The service, in a single jar: an HTTP API, a web editor and a command line. The
 		layout is that of stxt-pdf, and the fill of the Slots, that of
 		[stxt-transform](https://github.com/stxt-lang/stxt-java-transform). The current
-		version is 0.6.0.
+		version is 0.6.1.
 
 	Subsubheader: Starting
 
@@ -182,7 +182,7 @@ Document (dev.stxt.website): PDF and Press | STXT
 		for `linux/amd64` and `linux/arm64`:
 
 	Listing >>
-		docker run --rm -p 127.0.0.1:8080:8080 ghcr.io/stxt-lang/stxt-press:0.6.0
+		docker run --rm -p 127.0.0.1:8080:8080 ghcr.io/stxt-lang/stxt-press:0.6.1
 
 	Content >>
 		The index and the editor are at `http://127.0.0.1:8080/`, with example templates and
@@ -196,7 +196,7 @@ Document (dev.stxt.website): PDF and Press | STXT
 		    -v "$PWD/templates:/opt/stxt-press/templates:ro" \
 		    -v "$PWD/documents:/opt/stxt-press/documents:ro" \
 		    -v "$PWD/resources:/opt/stxt-press/resources:ro" \
-		    ghcr.io/stxt-lang/stxt-press:0.6.0
+		    ghcr.io/stxt-lang/stxt-press:0.6.1
 
 	Content >>
 		Without Docker, the folder

@@ -27,7 +27,7 @@ Document (dev.stxt.website): The command line | STXT
 		npm install -g @stxt-lang/cli
 		stxt --version
 
-		stxt 1.0.4 (@stxt-lang/core 1.0.3, spec 2026-09-07)
+		stxt 1.0.4 (@stxt-lang/core 1.0.4, spec 2026-09-07)
 
 	Content >>
 		`--version` prints the version of the command, that of the library and the date of

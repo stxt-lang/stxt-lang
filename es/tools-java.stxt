@@ -25,14 +25,14 @@ Document (dev.stxt.website): La biblioteca Java | STXT
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>1.0.3</version>
+		    <version>1.0.4</version>
 		</dependency>
 
 	Content >>
 		O con Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:1.0.3'
+		implementation 'dev.stxt:stxt-core:1.0.4'
 
 	Content >>
 		El javadoc está en [javadoc.io](https://javadoc.io/doc/dev.stxt/stxt-core).

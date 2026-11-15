@@ -133,14 +133,14 @@ Document (dev.stxt.website): Tools | STXT
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-core</artifactId>
-		    <version>1.0.3</version>
+		    <version>1.0.4</version>
 		</dependency>
 
 	Content >>
 		Or with Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-core:1.0.3'
+		implementation 'dev.stxt:stxt-core:1.0.4'
 
 	Subsubheader: Python
 
@@ -226,14 +226,14 @@ Document (dev.stxt.website): Tools | STXT
 		<dependency>
 		    <groupId>dev.stxt</groupId>
 		    <artifactId>stxt-pdf</artifactId>
-		    <version>0.18.0</version>
+		    <version>0.18.1</version>
 		</dependency>
 
 	Content >>
 		Or with Gradle:
 
 	Listing >>
-		implementation 'dev.stxt:stxt-pdf:0.18.0'
+		implementation 'dev.stxt:stxt-pdf:0.18.1'
 
 	Content >>
 		A minimal example, which converts the document above:
@@ -267,7 +267,7 @@ Document (dev.stxt.website): Tools | STXT
 		[`ghcr.io/stxt-lang/stxt-press`](https://github.com/stxt-lang/stxt-press/pkgs/container/stxt-press):
 
 	Listing >>
-		docker run --rm -p 127.0.0.1:8080:8080 ghcr.io/stxt-lang/stxt-press:0.6.0
+		docker run --rm -p 127.0.0.1:8080:8080 ghcr.io/stxt-lang/stxt-press:0.6.1
 
 	Content >>
 		The index and the editor are at `http://127.0.0.1:8080/`, with example templates and
